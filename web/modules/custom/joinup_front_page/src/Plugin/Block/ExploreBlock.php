@@ -26,9 +26,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * using the `explore_item` view mode which is exclusive for this block.
  *
  * A final tab lists the content that has most recently been commented on. That
- * tab is not restricted to a single bundle, so it renders its items with the
- * site-wide `view_mode_tile` view mode instead: `explore_item` only exists for
- * collections and solutions.
+ * tab is not restricted to a single bundle, but its items use the same view
+ * mode as the others so that the tiles look alike: `explore_item` is defined
+ * for every bundle that accepts comments as well.
  *
  * The user can switch between the types by clicking on tabs.
  */
@@ -44,14 +44,6 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
    * @var string
    */
   protected string $viewMode = 'explore_item';
-
-  /**
-   * View mode for the items of the "recently commented" tab.
-   *
-   * The site-wide tile, because that tab mixes bundles and `explore_item` is
-   * only defined for collections and solutions.
-   */
-  protected const string COMMENTED_VIEW_MODE = 'view_mode_tile';
 
   /**
    * Number of items shown per tab.
@@ -211,7 +203,8 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
    * Every bundle that accepts comments is eligible: the query filters on the
    * commented entity type rather than on a list of bundles or comment fields,
    * so a bundle that gains a comment field later is picked up without a code
-   * change.
+   * change. It does need an `explore_item` view display of its own, or it falls
+   * back to the default one and renders as a full page inside the tile.
    *
    * @return array
    *   Render arrays for the commented content, most recently commented first.
@@ -279,7 +272,7 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
         continue;
       }
       $node = $this->entityRepository->getTranslationFromContext($nodes[$nid]);
-      $build = $view_builder->view($node, static::COMMENTED_VIEW_MODE);
+      $build = $view_builder->view($node, $this->viewMode);
       // Consumed by joinup_front_page_preprocess_node(), which turns it into
       // the "See comment" link and the comment date in the tile footer.
       $build['#joinup_latest_comment'] = $newest_comments[$nid];

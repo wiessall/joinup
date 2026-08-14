@@ -281,6 +281,18 @@ class HomepageContext extends RawDrupalContext {
         sprintf('The "User Comments" tab does not show "%s" in the expected position.', $title),
       );
 
+      // The tab mixes bundles but must not look like it: every tile is the
+      // same explore item as the ones the collections and solutions tabs show,
+      // abstract included.
+      $this->assertCondition(
+        str_contains((string) $tile->getAttribute('class'), '--explore-item'),
+        sprintf('The tile for "%s" is not rendered as an explore item.', $title),
+      );
+      $this->assertCondition(
+        !empty($tile->find('css', '.explore-item__description')),
+        sprintf('The tile for "%s" does not show an abstract.', $title),
+      );
+
       // The date of the newest comment, in the tile footer.
       $this->assertCondition(
         !empty($tile->find('xpath', '//*[text() = "' . $expected['date'] . '"]')),
