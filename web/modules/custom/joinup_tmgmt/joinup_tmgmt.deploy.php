@@ -38,50 +38,28 @@ function joinup_tmgmt_deploy_201600(array &$sandbox): string {
  */
 function joinup_tmgmt_deploy_201601(array &$sandbox): string {
   $connection = \Drupal::database();
-  $storage = \Drupal::service('entity_type.manager')
-    ->getStorage('tmgmt_job_item');
-  $batch_size = 50;
+  $batch_size = 500;
 
   if (!isset($sandbox['total'])) {
-    $sandbox['total'] = (int) $connection->select('tmgmt_message', 'tm')
+    $sandbox['items'] = $connection->select('tmgmt_message', 'tm')
       ->fields('tm', ['tjiid'])
       ->condition('message', 'Aborted. No translation received after 6 hours')
       ->distinct()
-      ->countQuery()
       ->execute()
-      ->fetchField();
-    $sandbox['current'] = 0;
+      ->fetchCol();
+    $sandbox['total'] = count($sandbox['items']);
+    $sandbox['processed'] = 0;
   }
 
-  $items = $connection->select('tmgmt_message', 'tm')
-    ->fields('tm', ['tjiid'])
-    ->condition('message', 'Aborted. No translation received after 6 hours')
-    ->distinct()
-    ->range($sandbox['current'], $batch_size)
-    ->execute()
-    ->fetchCol();
+  $batch = array_splice($sandbox['items'], 0, $batch_size);
 
-  if (empty($items)) {
-    $sandbox['#finished'] = 1;
-    return 'Completed processing all job items.';
-  }
+  $connection->update('tmgmt_job_item')
+    ->fields(['state' => JobItemInterface::STATE_INACTIVE])
+    ->condition('tjiid', $batch, 'IN')
+    ->execute();
 
-  $jobItems = $storage->loadMultiple($items);
+  $sandbox['processed'] += count($batch);
+  $sandbox['#finished'] = $sandbox['processed'] / $sandbox['total'];
 
-  foreach ($jobItems as $jobItem) {
-    $jobItem->setState(JobItemInterface::STATE_ACTIVE);
-    $jobItem->updateData(
-      ['#tmgmt_ec_etranslation'],
-      [
-        'attempted' => 1,
-      ]
-    );
-    $jobItem->save();
-    $sandbox['current']++;
-  }
-
-  $storage->resetCache($items);
-  $sandbox['#finished'] = empty($sandbox['total']) ? 1 : ($sandbox['current'] / $sandbox['total']);
-
-  return sprintf('Processed %d of %d job items.', $sandbox['current'], $sandbox['total']);
+  return sprintf('Processed %d of %d job items.', $sandbox['processed'], $sandbox['total']);
 }
