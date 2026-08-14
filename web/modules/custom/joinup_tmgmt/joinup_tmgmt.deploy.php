@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\tmgmt\JobInterface;
+use Drupal\tmgmt\JobItemInterface;
 
 /**
  * Deletes obsolete continuous job item messages.
@@ -34,7 +35,7 @@ function joinup_tmgmt_deploy_201600(array &$sandbox): string {
 }
 
 /**
- * Delete approved and aborted continuous job items and their recorded messages.
+ * Delete old accepted continuous job items and their recorded messages.
  */
 function joinup_tmgmt_deploy_201601(array &$sandbox): string {
   if (!isset($sandbox['continuous_job_ids'])) {
@@ -60,6 +61,7 @@ function joinup_tmgmt_deploy_201601(array &$sandbox): string {
   $jobItemIds = $connection->select('tmgmt_job_item', 'tmi')
     ->fields('tmi', ['tjiid'])
     ->condition('tmi.tjid', $jobId)
+    ->condition('tmi.state', JobItemInterface::STATE_ACCEPTED)
     ->condition('tmi.changed', $sandbox['changed_limit'], '<=')
     ->execute()
     ->fetchCol();
@@ -84,14 +86,14 @@ function joinup_tmgmt_deploy_201601(array &$sandbox): string {
   $processedCountPadded = strlen("{$sandbox['jobs_total']}")
     |> (fn(int $digitsInTotal): string => str_pad("$processed", $digitsInTotal, ' ', STR_PAD_LEFT));
   $message = sprintf(
-    'Cleaned %s / %s continuous jobs. Deleted %s job item(s) and %s message(s).',
+    'Cleaned %s / %s continuous jobs. Deleted %s job item(s) and %s message(s) since last message.',
     $processedCountPadded,
     $sandbox['jobs_total'],
     $jobItemDeletedCount,
     $msgDeletedCount,
   );
   $messageTotal = sprintf(
-    'Deleted %s TMGMT job items and %s messages in total. Operation took %s sec.',
+    'Deleted %s accepted TMGMT continuous job items and %s messages in total. Operation took %s sec.',
     $sandbox['items_deleted'],
     $sandbox['messages_deleted'],
     time() - $sandbox['start'],
