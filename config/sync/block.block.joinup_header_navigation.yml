@@ -1,0 +1,20 @@
+uuid: 5ff6c19e-c1c2-4652-87a5-686ee42c6388
+langcode: en
+status: true
+dependencies:
+  module:
+    - ventuno_helper
+  theme:
+    - ventuno
+id: joinup_header_navigation
+theme: ventuno
+region: header_navigation
+weight: 10
+provider: null
+plugin: joinup_header_navigation
+settings:
+  id: joinup_header_navigation
+  label: 'Header navigation'
+  label_display: '0'
+  provider: ventuno_helper
+visibility: {  }
