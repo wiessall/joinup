@@ -29,6 +29,8 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\search_api\Query\QueryInterface;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_theme().
@@ -549,6 +551,26 @@ function assessments_query_explore_block_solution_alter(AlterableInterface $quer
   if ($collector) {
     $query->join('node__og_audience', 'oa', 'oa.entity_id = node_field_data.nid');
     $query->condition('og_audience_target_id', $collector->id(), '<>');
+  }
+}
+
+/**
+ * Implements hook_search_api_query_alter().
+ */
+function assessments_search_api_query_alter(QueryInterface $query): void {
+  if ($query->getIndex()->id() !== 'published') {
+    return;
+  }
+
+  $view = $query->getOption('search_api_view');
+  if ($view instanceof ViewExecutable && $view->id() === 'assessment_solutions_browser') {
+    return;
+  }
+
+  $collector = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
+  if ($collector) {
+    $query->addCondition('entity_groups', $collector->id(), '<>');
+    $query->addCondition('nid', $collector->id(), '<>');
   }
 }
 
