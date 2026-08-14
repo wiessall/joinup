@@ -69,7 +69,7 @@ Feature: Archived content on content listings - groups and paragraphs.
 
     When I am logged in as a moderator
     And I go to the edit form of the "Some page" "custom page"
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Content listing"
     And I fill in "Query presets" with "entity_bundle|news"
@@ -125,7 +125,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     When I am logged in as a moderator
     And I go to the edit form of the "IOP page" "custom page"
     And I select "Demography" options from "Topic"
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Carousel"
     And I fill in "Query presets" with "entity_bundle|news" in the "Modal content" region

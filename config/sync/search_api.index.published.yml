@@ -122,7 +122,7 @@ third_party_settings:
         sl: '0'
         es: '0'
         sv: '0'
-      use_universal_collation: false
+      use_universal_collation: true
 id: published
 name: 'Published entities index'
 description: ''
@@ -401,16 +401,6 @@ field_settings:
     dependencies:
       module:
         - node
-  node_featured:
-    label: 'Featured site-wide'
-    datasource_id: 'entity:node'
-    property_path: 'featured:entity:featured'
-    type: string
-    dependencies:
-      config:
-        - field.storage.meta_entity.featured
-      module:
-        - meta_entity
   node_pinned_in:
     label: 'Pinned in'
     datasource_id: 'entity:node'
@@ -439,17 +429,6 @@ field_settings:
       config:
         - field.storage.node.owner
       module:
-        - node
-  pinned_in:
-    label: 'Pinned in'
-    datasource_id: 'entity:node'
-    property_path: 'pinned_in:entity:field_pinned_in:entity:nid'
-    type: string
-    dependencies:
-      config:
-        - field.storage.meta_entity.field_pinned_in
-      module:
-        - meta_entity
         - node
   processed:
     label: 'Body » Paragraph » Body » Processed text'
@@ -631,6 +610,7 @@ datasource_settings:
       default: false
       selected:
         - report
+    track_changes_only_affected_translations: false
     languages:
       default: true
       selected: {  }
@@ -649,10 +629,12 @@ datasource_settings:
         - news
         - release
         - solution
+    track_changes_only_affected_translations: true
     languages:
       default: true
       selected: {  }
   'entity:user':
+    track_changes_only_affected_translations: false
     languages:
       default: true
       selected: {  }
@@ -697,8 +679,7 @@ processor_settings:
   interoperable_flag: {  }
   joinup_entity_bundle: {  }
   joinup_entity_published_revision: {  }
-  joinup_entity_status:
-    inverse: false
+  joinup_entity_status: {  }
   language_with_fallback: {  }
   release_solution_data:
     weights:

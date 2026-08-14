@@ -11,6 +11,7 @@ use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -40,7 +41,6 @@ function joinup_search_theme($existing, $type, $theme, $path): array {
     'joinup_search_filter' => [
       'variables' => [
         'name' => '',
-        'bcl_icon_path' => '',
       ],
     ],
   ];
@@ -178,9 +178,11 @@ function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_
           $form['list'] = [
             '#theme' => 'joinup_search_filter',
             '#name' => $group->label(),
-            '#bcl_icon_path' => base_path() . \Drupal::service('extension.path.resolver')->getPath('theme', 'ventuno') . '/assets/icons/icons.svg',
             '#weight' => -5,
           ];
+          CacheableMetadata::createFromRenderArray($form)
+            ->addCacheableDependency($group)
+            ->applyTo($form);
         }
       }
     }

@@ -24,7 +24,7 @@ Feature:
 
     Given I am logged in as a moderator
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
-    And I click the last "Choose component" link
+    And I add a component to section 2
     And a modal should open
     And I click "IFrame"
     Then I press "Save" in the "Modal buttons" region
@@ -43,7 +43,7 @@ Feature:
     And the response should contain "src=\"http://example.com\""
 
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
-    And I click "Choose component"
+    And I add a component to section 2
     And a modal should open
     And I click "Map"
     # As the Webtools Map a webservice, we only test a fake JSON.
