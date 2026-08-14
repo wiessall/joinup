@@ -650,7 +650,6 @@ processor_settings:
   auto_aggregated_fulltext_field: {  }
   custom_value: {  }
   entity_type: {  }
-  exclude_assessment_solutions: {  }
   html_filter:
     weights:
       preprocess_index: -43
