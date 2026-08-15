@@ -1,0 +1,141 @@
+diff --git a/src/Access/OauthClientRequestAccessControlHandler.php b/src/Access/OauthClientRequestAccessControlHandler.php
+index d3fd30752de00d865a590302f8aebbc6f1a71947..7e0cb067479f6960355399c674da2e01d1ee0298 100644
+--- a/src/Access/OauthClientRequestAccessControlHandler.php
++++ b/src/Access/OauthClientRequestAccessControlHandler.php
+@@ -27,8 +27,8 @@ class OauthClientRequestAccessControlHandler extends EntityAccessControlHandler
+ 
+   public function __construct(
+     EntityTypeInterface $entityType,
+-    protected readonly EntityTypeManagerInterface $entityTypeManager,
+-    protected readonly OauthClientRequestTypeHelper $typeHelper,
++    protected EntityTypeManagerInterface $entityTypeManager,
++    protected OauthClientRequestTypeHelper $typeHelper,
+   ) {
+     parent::__construct($entityType);
+   }
+diff --git a/src/Entity/OauthClientTypeListBuilder.php b/src/Entity/OauthClientTypeListBuilder.php
+index 793ba92d604458e79ef11862ed1cdcdaed844dc2..44483c2554c1e3215cd653f20928a5939501280d 100644
+--- a/src/Entity/OauthClientTypeListBuilder.php
++++ b/src/Entity/OauthClientTypeListBuilder.php
+@@ -4,6 +4,7 @@ declare(strict_types=1);
+ 
+ namespace Drupal\oauth_client\Entity;
+ 
++use Drupal\Core\Cache\CacheableMetadata;
+ use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
+ use Drupal\Core\Entity\EntityInterface;
+ 
+@@ -41,8 +42,8 @@ class OauthClientTypeListBuilder extends ConfigEntityListBuilder {
+   /**
+    * {@inheritdoc}
+    */
+-  public function getDefaultOperations(EntityInterface $entity): array {
+-    $operations = parent::getDefaultOperations($entity);
++  public function getDefaultOperations(EntityInterface $entity, ?CacheableMetadata $cacheability = NULL): array {
++    $operations = parent::getDefaultOperations($entity, $cacheability);
+ 
+     $operations['edit'] = [
+       'title' => $this->t('Edit'),
+diff --git a/src/Plugin/Menu/AddRequestAction.php b/src/Plugin/Menu/AddRequestAction.php
+index ced7cc362f0483c047066e5f6445ffa3eadc92d1..85b70265641f723b6e4a23b56dcb50af0d1bb06f 100644
+--- a/src/Plugin/Menu/AddRequestAction.php
++++ b/src/Plugin/Menu/AddRequestAction.php
+@@ -25,7 +25,7 @@ class AddRequestAction extends LocalActionDefault {
+     $pluginId,
+     $pluginDefinition,
+     RouteProviderInterface $routeProvider,
+-    protected readonly AccountInterface $currentUser,
++    protected AccountInterface $currentUser,
+   ) {
+     parent::__construct($configuration, $pluginId, $pluginDefinition, $routeProvider);
+   }
+diff --git a/src/Plugin/views/filter/OauthClientRequestScope.php b/src/Plugin/views/filter/OauthClientRequestScope.php
+index 72c56e73c53e40cfbad2f2ab8c160e3c0b8805a7..dcad19b76a7c71a76c12c1e30e23eda9185fc7b8 100644
+--- a/src/Plugin/views/filter/OauthClientRequestScope.php
++++ b/src/Plugin/views/filter/OauthClientRequestScope.php
+@@ -32,8 +32,8 @@ class OauthClientRequestScope extends InOperator implements ContainerFactoryPlug
+     array $configuration,
+     $plugin_id,
+     $plugin_definition,
+-    protected readonly EntityTypeManagerInterface $entityTypeManager,
+-    protected readonly ScopeProviderManagerInterface $scopeProviderManager,
++    protected EntityTypeManagerInterface $entityTypeManager,
++    protected ScopeProviderManagerInterface $scopeProviderManager,
+   ) {
+     parent::__construct($configuration, $plugin_id, $plugin_definition);
+   }
+diff --git a/src/Service/OauthClientConsumerService.php b/src/Service/OauthClientConsumerService.php
+index 2fc8566ab79158cf2b0892e62958d270483dac38..47311a56e7fa1d8cd32aed9872451bc9a9ae2037 100644
+--- a/src/Service/OauthClientConsumerService.php
++++ b/src/Service/OauthClientConsumerService.php
+@@ -16,27 +16,10 @@ use Drupal\user\UserInterface;
+  */
+ class OauthClientConsumerService {
+ 
+-  /**
+-   * The consumer storage.
+-   *
+-   * @var \Drupal\Core\Entity\EntityStorageInterface
+-   */
+-  protected $consumerStorage;
+-
+-  /**
+-   * The request type storage.
+-   *
+-   * @var \Drupal\oauth_client\Entity\OauthClientRequestTypeInterface
+-   */
+-  protected $requestTypeStorage;
+-
+   public function __construct(
+-    protected EntityTypeManagerInterface $entityTypeManager,
+-    protected PasswordGeneratorInterface $passwordGenerator,
+-  ) {
+-    $this->consumerStorage = $entityTypeManager->getStorage('consumer');
+-    $this->requestTypeStorage = $entityTypeManager->getStorage('oauth_client_request_type');
+-  }
++    protected readonly EntityTypeManagerInterface $entityTypeManager,
++    protected readonly PasswordGeneratorInterface $passwordGenerator,
++  ) {}
+ 
+   /**
+    * Creates a Consumer from an OauthClientRequest.
+@@ -56,7 +39,7 @@ class OauthClientConsumerService {
+     $clientId = Crypt::randomBytesBase64();
+     $secret = $this->passwordGenerator->generate();
+     $requestTypeId = $clientRequest->bundle();
+-    $requestType = $this->requestTypeStorage->load($requestTypeId);
++    $requestType = $this->entityTypeManager->getStorage('oauth_client_request_type')->load($requestTypeId);
+     $scope_id = $requestType->getScopeId();
+     // Filter out the enabled grant types.
+     $grantTypes = array_keys(array_filter($requestType->getGrantTypes(), fn($info) => $info['enabled'] ?? FALSE));
+@@ -68,8 +51,7 @@ class OauthClientConsumerService {
+       throw new \LogicException('Client request user does not exist.');
+     }
+ 
+-    /** @var \Drupal\consumers\Entity\ConsumerInterface $consumer */
+-    $consumer = $this->consumerStorage->create([
++    $consumer = $this->entityTypeManager->getStorage('consumer')->create([
+       'client_id' => $clientId,
+       'owner_id' => $clientRequest->getOwner(),
+       'user_id' => $clientRequestUser,
+@@ -79,6 +61,7 @@ class OauthClientConsumerService {
+       'secret' => $secret,
+       'confidential' => TRUE,
+     ]);
++    assert($consumer instanceof ConsumerInterface);
+     $consumer->save();
+ 
+     return $consumer;
+diff --git a/tests/src/Functional/OauthClientFunctionalTestBase.php b/tests/src/Functional/OauthClientFunctionalTestBase.php
+index ad6f84a50f27da5f5322f17d1cbae9cd7ca129ca..8e1b67fbb0bc86626a6346b5a62f2e43f4eea40e 100644
+--- a/tests/src/Functional/OauthClientFunctionalTestBase.php
++++ b/tests/src/Functional/OauthClientFunctionalTestBase.php
+@@ -10,7 +10,7 @@ use GuzzleHttp\ClientInterface;
+ /**
+  * A base class for functional tests of the OAuth Client module.
+  */
+-class OauthClientFunctionalTestBase extends BrowserTestBase {
++abstract class OauthClientFunctionalTestBase extends BrowserTestBase {
+ 
+   /**
+    * {@inheritdoc}
