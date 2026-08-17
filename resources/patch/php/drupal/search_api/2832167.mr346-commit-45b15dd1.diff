@@ -22,7 +22,7 @@ index e8ee565715c7844504b6f87db136f85cca4ebf00..2946e941d2c8cdba6f534b7e06647565
        ];
 +      $default_configuration['track_changes_only_affected_translations'] = FALSE;
      }
- 
+
      return $default_configuration;
 @@ -604,6 +605,13 @@ class ContentEntity extends DatasourcePluginBase implements PluginFormInterface
          '#default_value' => $this->configuration['languages']['selected'],
@@ -36,10 +36,10 @@ index e8ee565715c7844504b6f87db136f85cca4ebf00..2946e941d2c8cdba6f534b7e06647565
 +        '#default_value' => $this->configuration['track_changes_only_affected_translations'],
 +      ];
      }
- 
+
      return $form;
 diff --git a/src/Plugin/search_api/datasource/ContentEntityTrackingManager.php b/src/Plugin/search_api/datasource/ContentEntityTrackingManager.php
-index 71e93000b8733c317153bc5e4923648b79b30cbe..0e29671b9449a51105c1ed953589846381069016 100644
+index 71e93000b8733c317153bc5e4923648b79b30cbe..1ccdd21f4cd60d14ca025a5c32b3beae8ca381d4 100644
 --- a/src/Plugin/search_api/datasource/ContentEntityTrackingManager.php
 +++ b/src/Plugin/search_api/datasource/ContentEntityTrackingManager.php
 @@ -162,7 +162,11 @@ class ContentEntityTrackingManager {
@@ -49,16 +49,16 @@ index 71e93000b8733c317153bc5e4923648b79b30cbe..0e29671b9449a51105c1ed9535898463
 -        $filtered_item_ids = static::filterValidItemIds($index, $datasource_id, $updated_ids);
 +        $ids_to_update = $updated_ids;
 +        if ($this->shouldLimitToAffectedTranslations($entity, $index, $datasource_id)) {
-+          $ids_to_update = $this->getAffectedTranslations($entity, $ids_to_update, $inserted_ids);
++          $ids_to_update = $this->getAffectedTranslations($entity, $ids_to_update, $inserted_translations, $deleted_translations);
 +        }
 +        $filtered_item_ids = static::filterValidItemIds($index, $datasource_id, $ids_to_update);
          if ($filtered_item_ids) {
            $index->trackItemsUpdated($datasource_id, $filtered_item_ids);
          }
-@@ -176,6 +180,80 @@ class ContentEntityTrackingManager {
+@@ -176,6 +180,127 @@ class ContentEntityTrackingManager {
      }
    }
- 
+
 +  /**
 +   * Determines whether to narrow the "updated" translations down.
 +   *
@@ -94,13 +94,15 @@ index 71e93000b8733c317153bc5e4923648b79b30cbe..0e29671b9449a51105c1ed9535898463
 +   *   The updated entity, already containing the new field values.
 +   * @param string[] $updated_ids
 +   *   The item IDs to narrow down (the "updated" bucket).
-+   * @param string[] $inserted_ids
-+   *   The item IDs for translations newly inserted in the same pass.
++   * @param string[] $inserted_langcodes
++   *   The langcodes of the translations inserted in the same pass.
++   * @param string[] $deleted_langcodes
++   *   The langcodes of the translations deleted in the same pass.
 +   *
 +   * @return string[]
 +   *   The item IDs that should actually be queued for re-indexing.
 +   */
-+  protected function getAffectedTranslations(ContentEntityInterface $entity, array $updated_ids, array $inserted_ids = []): array {
++  protected function getAffectedTranslations(ContentEntityInterface $entity, array $updated_ids, array $inserted_langcodes = [], array $deleted_langcodes = []): array {
 +    $original = DeprecationHelper::backwardsCompatibleCall(
 +      \Drupal::VERSION,
 +      '11.2',
@@ -128,22 +130,67 @@ index 71e93000b8733c317153bc5e4923648b79b30cbe..0e29671b9449a51105c1ed9535898463
 +    if ($default_affected && $entity->isDefaultTranslationAffectedOnly()) {
 +      return $updated_ids;
 +    }
-+    // If a translation was just inserted, trust an empty result; otherwise
-+    // fall back to the full set, since detection may have missed something.
-+    return $affected_ids ?: ($inserted_ids ? [] : $updated_ids);
++    $fallback_ids = array_merge(
++      $this->getFallbackItemIds($original, $inserted_langcodes),
++      $this->getFallbackItemIds($entity, $deleted_langcodes),
++    );
++    $affected_ids = array_unique(array_merge($affected_ids, array_intersect($fallback_ids, $updated_ids)));
++    // If a translation was just inserted or deleted, trust an empty result;
++    // otherwise fall back to the full set, since detection may have missed
++    // something.
++    if (!$affected_ids && !$inserted_langcodes && !$deleted_langcodes) {
++      return $updated_ids;
++    }
++    return array_values($affected_ids);
++  }
++
++  /**
++   * Retrieves the item IDs of the fallback translations for some languages.
++   *
++   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
++   *   The entity, in the state in which the fallbacks should be resolved.
++   * @param string[] $langcodes
++   *   The langcodes to resolve the fallback translations for.
++   *
++   * @return string[]
++   *   The item IDs of the fallback translations.
++   *
++   * @see \Drupal\search_api\Plugin\search_api\processor\LanguageWithFallback
++   */
++  protected function getFallbackItemIds(ContentEntityInterface $entity, array $langcodes): array {
++    $item_ids = [];
++    foreach ($langcodes as $langcode) {
++      if ($entity->hasTranslation($langcode)) {
++        continue;
++      }
++      $candidates = $this->languageManager->getFallbackCandidates([
++        'data' => $entity,
++        'operation' => 'entity_upcast',
++        'langcode' => $langcode,
++      ]);
++      $candidates[$entity->getUntranslated()->language()->getId()] = LanguageInterface::LANGCODE_DEFAULT;
++      foreach ($candidates as $candidate) {
++        if ($entity->hasTranslation($candidate)) {
++          $fallback_langcode = $entity->getTranslation($candidate)->language()->getId();
++          $item_ids[] = static::formatItemId($entity->getEntityTypeId(), $entity->id(), $fallback_langcode);
++          break;
++        }
++      }
++    }
++    return $item_ids;
 +  }
 +
    /**
     * Implements hook_entity_delete().
     *
 diff --git a/tests/src/Kernel/Datasource/NodeTrackingTest.php b/tests/src/Kernel/Datasource/NodeTrackingTest.php
-index ccdd8bbf5bc2d5ef744349961cedeb631a1c73c6..190ae14c56fd08694b9f24226e0c0e27d7cd56fa 100644
+index ccdd8bbf5bc2d5ef744349961cedeb631a1c73c6..de26a593e65b691e1db9a27473ae291bc5c6e7d8 100644
 --- a/tests/src/Kernel/Datasource/NodeTrackingTest.php
 +++ b/tests/src/Kernel/Datasource/NodeTrackingTest.php
-@@ -154,4 +154,158 @@ class NodeTrackingTest extends KernelTestBase {
+@@ -154,4 +154,200 @@ class NodeTrackingTest extends KernelTestBase {
      $this->assertTrue(TRUE);
    }
- 
+
 +  /**
 +   * Tests that only changed translations are re-indexed, if enabled.
 +   *
@@ -182,18 +229,23 @@ index ccdd8bbf5bc2d5ef744349961cedeb631a1c73c6..190ae14c56fd08694b9f24226e0c0e27
 +  }
 +
 +  /**
-+   * Tests that inserting a translation doesn't re-index the other ones.
++   * Tests that inserting a translation re-indexes its fallback source.
++   *
++   * "l1" used to fall back to "en", which is part of the data indexed for
++   * "en", but it never fell back to "l0".
 +   *
 +   * @covers ::trackEntityChange
 +   * @covers ::getAffectedTranslations
++   * @covers ::getFallbackItemIds
 +   */
-+  public function testInsertedTranslationDoesNotAffectOthers(): void {
++  public function testInsertedTranslationAffectsItsFallbackSource(): void {
 +    $entity = Node::create([
 +      'nid' => 1,
 +      'type' => 'node',
 +      'langcode' => 'en',
 +      'title' => 'English title',
 +    ]);
++    $entity->addTranslation('l0')->setTitle('Language 0 title');
 +    $entity->save();
 +
 +    // Enable the setting, then index everything it marked for re-indexing.
@@ -205,8 +257,45 @@ index ccdd8bbf5bc2d5ef744349961cedeb631a1c73c6..190ae14c56fd08694b9f24226e0c0e27
 +    $entity = Node::load($entity->id());
 +    $entity->addTranslation('l1')->setTitle('Language 1 title')->save();
 +
-+    $this->assertEquals(
-+      ['entity:node/1:l1'],
++    $this->assertEqualsCanonicalizing(
++      ['entity:node/1:en', 'entity:node/1:l1'],
++      $this->index->getTrackerInstance()->getRemainingItems()
++    );
++  }
++
++  /**
++   * Tests that deleting a translation re-indexes its new fallback source.
++   *
++   * "l1" falls back to "en" once its own translation is gone, but never to
++   * "l0".
++   *
++   * @covers ::trackEntityChange
++   * @covers ::getAffectedTranslations
++   * @covers ::getFallbackItemIds
++   */
++  public function testDeletedTranslationAffectsItsFallbackSource(): void {
++    $entity = Node::create([
++      'nid' => 1,
++      'type' => 'node',
++      'langcode' => 'en',
++      'title' => 'English title',
++    ]);
++    $entity->addTranslation('l0')->setTitle('Language 0 title');
++    $entity->addTranslation('l1')->setTitle('Language 1 title');
++    $entity->save();
++
++    // Enable the setting, then index everything it marked for re-indexing.
++    $datasource = $this->index->getDatasource('entity:node');
++    $datasource->setConfiguration(['track_changes_only_affected_translations' => TRUE] + $datasource->getConfiguration());
++    $this->index->save();
++    $this->triggerPostRequestIndexing();
++
++    $entity = Node::load($entity->id());
++    $entity->removeTranslation('l1');
++    $entity->save();
++
++    $this->assertEqualsCanonicalizing(
++      ['entity:node/1:en'],
 +      $this->index->getTrackerInstance()->getRemainingItems()
 +    );
 +  }

@@ -516,7 +516,7 @@
             },
             "drupal/search_api": {
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199-42e0e284.diff",
-                "Consider to just re-index affected translations instead of all translations": "resources/patch/php/drupal/search_api/2832167.mr346-commit-26c2d2ae.diff"
+                "Consider to just re-index affected translations instead of all translations": "resources/patch/php/drupal/search_api/2832167.mr346-commit-45b15dd1.diff"
             },
             "drupal/search_api_spellcheck": {
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
