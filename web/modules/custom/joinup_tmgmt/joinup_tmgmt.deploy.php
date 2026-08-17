@@ -68,7 +68,7 @@ function joinup_tmgmt_deploy_201601(array &$sandbox): string {
 
   // Delete all messages which belong to the job item IDs.
   $msgDeletedCount = 0;
-  while ($jobItemIdSubset = array_splice($jobItemIds, 0, 1000)) {
+  while ($jobItemIdSubset = array_splice($jobItemIds, 0, 500)) {
     $msgDeletedCount += $connection->delete('tmgmt_message')
       ->condition('tjiid', $jobItemIdSubset, 'IN')
       ->execute();
