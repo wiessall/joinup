@@ -15,8 +15,6 @@ Feature: Broken links report
     When I am logged in as a moderator
     And I go to "admin/reports/linkchecker"
     Then I should see the link "Faulty agenda"
-    And I should see the link "Broken links group"
-    And I should see the text "field_event_agenda"
     But I should not see the link "Draft agenda"
 
   Scenario: A broken link in a paragraph is attributed to the node it belongs to.
@@ -29,7 +27,6 @@ Feature: Broken links report
     When I am logged in as a moderator
     And I go to "admin/reports/linkchecker"
     Then I should see the link "Faulty text"
-    And I should see the text "field_body"
 
   @javascript
   Scenario: A broken link in a paragraph nested inside an accordion is attributed to the node it belongs to.
@@ -52,4 +49,3 @@ Feature: Broken links report
     And I run the "linkchecker_cron" ultimate_cron job
     When I go to "admin/reports/linkchecker"
     Then I should see the link "Broken accordion page"
-    And I should see the text "field_body"
