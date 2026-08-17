@@ -544,7 +544,7 @@
                 "Non-translatable fields are exported when the bundle is not enabled for content translation @see https://www.drupal.org/i/3382356": "resources/patch/php/drupal/tmgmt/3382356.mr172.commitd2294f18.diff",
                 "Delete job item when corresponding entity is being deleted @see https://www.drupal.org/i/2998143": "resources/patch/php/drupal/tmgmt/2998143.mr35.commitdd0ee714.diff",
                 "Messages flooded @see https://www.drupal.org/i/3611439": "resources/patch/php/drupal/tmgmt/3611439.mr175-commitfff006f2.diff",
-                "Add purge continuous jobs item @see https://drupal.org/i/3134985": "resources/patch/php/drupal/tmgmt/3134985.mr178-df57ea42e3.diff",
+                "Add purge continuous jobs item @see https://drupal.org/i/3134985": "resources/patch/php/drupal/tmgmt/3134985.mr178-b680b1b9c9.diff",
                 "Hook to allow modules to alter translation @see https://www.drupal.org/i/2998143": "resources/patch/php/drupal/tmgmt/3298245.mr58.commit6976599d.diff"
             },
             "drupal/token": {

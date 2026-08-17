@@ -11,7 +11,7 @@ index 0dd1361dfb17b18c9d1130bc356c930e294eea59..2c0f5926c3b0bdefc30111bc98da1ab1
  word_count_exclude_tags: true
  source_list_limit: 20
 diff --git a/config/schema/tmgmt.schema.yml b/config/schema/tmgmt.schema.yml
-index e11ccebff26e44290f49b2b3bd4bde2be9b47493..d9d21577c5710396bcbac60dbbb16e9ee4b6c596 100644
+index e11ccebff26e44290f49b2b3bd4bde2be9b47493..7bfed30197bbdb018efb4a47fdf5165d3e3b6572 100644
 --- a/config/schema/tmgmt.schema.yml
 +++ b/config/schema/tmgmt.schema.yml
 @@ -11,6 +11,21 @@ tmgmt.settings:
@@ -20,7 +20,7 @@ index e11ccebff26e44290f49b2b3bd4bde2be9b47493..d9d21577c5710396bcbac60dbbb16e9e
        label: 'Purge finished jobs'
 +    purge_continuous:
 +      type: string
-+      label: 'After how many seconds should approved and aborted continuous jobs be cleared'
++      label: 'After how many seconds should accepted and aborted continuous jobs be cleared'
 +      constraints:
 +        Choice:
 +          choices:
@@ -91,17 +91,16 @@ index 96f4df1c6c33904329ba2f6b4ede00c7fd72e282..196edd0a26e25af2cabef9f098e9a1c8
        '#title' => $this->t('Purge stale job items and jobs'),
 diff --git a/src/Plugin/QueueWorker/JobItemCleanupWorker.php b/src/Plugin/QueueWorker/JobItemCleanupWorker.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..aef52f9266db6bab67393bd8163390b1a7dd6ac6
+index 0000000000000000000000000000000000000000..e2d317fe962107a6620265c6937d4b6a88ea5745
 --- /dev/null
 +++ b/src/Plugin/QueueWorker/JobItemCleanupWorker.php
-@@ -0,0 +1,61 @@
+@@ -0,0 +1,60 @@
 +<?php
 +
 +declare(strict_types=1);
 +
 +namespace Drupal\tmgmt\Plugin\QueueWorker;
 +
-+use Drupal\Core\Annotation\QueueWorker;
 +use Drupal\Core\Entity\EntityTypeManagerInterface;
 +use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 +use Drupal\Core\Queue\QueueWorkerBase;
@@ -336,7 +335,7 @@ index 5e714376c9f88eae0294372d46cbbeb1f2b3a8f4..8f75c6e113170d2082be3f2de82d6f38
 +/**
 + * Add default values of new continuous cleanup keys in TMGMT setting.
 + */
-+function tmgmt_update_8014(): void {
++function tmgmt_update_8013(): void {
 +  // Install queue.
 +  \Drupal::queue('tmgmt_job_item_cleanup')->createQueue();
 +
