@@ -7,15 +7,15 @@ index bb33814b4f4cb01ba106631c690c81037a88fbe8..55d0f533ae435dfed0ccf27627dcba81
  webform
  webforms
 +prova
-
+ 
  # Organic Group Menu support
  ogmenu
 diff --git a/modules/babel_tmgmt/src/BabelTmgmtIntegration.php b/modules/babel_tmgmt/src/BabelTmgmtIntegration.php
-index 73c1eae5d232535807908fb3789cb077581fe00d..c7e84d170c888a642e5a790dd6adef0186b34574 100644
+index 73c1eae5d232535807908fb3789cb077581fe00d..62ec5872da49bcbdf73c690cf02c7d685b409d24 100644
 --- a/modules/babel_tmgmt/src/BabelTmgmtIntegration.php
 +++ b/modules/babel_tmgmt/src/BabelTmgmtIntegration.php
 @@ -6,7 +6,6 @@ namespace Drupal\babel_tmgmt;
-
+ 
  use Drupal\babel\BabelStorageInterface;
  use Drupal\babel\BabelStringsRepositoryInterface;
 -use Drupal\Core\Entity\ContentEntityStorageInterface;
@@ -25,7 +25,7 @@ index 73c1eae5d232535807908fb3789cb077581fe00d..c7e84d170c888a642e5a790dd6adef01
 @@ -20,11 +19,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
   */
  class BabelTmgmtIntegration {
-
+ 
 -  /**
 -   * Static cache of job item storage.
 -   */
@@ -34,7 +34,7 @@ index 73c1eae5d232535807908fb3789cb077581fe00d..c7e84d170c888a642e5a790dd6adef01
    public function __construct(
      protected readonly EntityTypeManagerInterface $entityTypeManager,
      protected readonly BabelStorageInterface $storage,
-@@ -44,27 +38,31 @@ class BabelTmgmtIntegration {
+@@ -44,29 +38,21 @@ class BabelTmgmtIntegration {
     *   The source string hash.
     *
     * @return \Drupal\tmgmt\JobItemInterface|null
@@ -46,7 +46,7 @@ index 73c1eae5d232535807908fb3789cb077581fe00d..c7e84d170c888a642e5a790dd6adef01
      if (!$job->isContinuous()) {
        throw new \InvalidArgumentException(__METHOD__ . '() handles only continuous jobs');
      }
-
+ 
 -    // Skip strings that are either disabled or locked for translation.
 -    $translation = $this->stringsRepository->getStringTranslationByHash($job->getTargetLangcode(), $hash);
 -    if (!$translation || !$translation->source->getStatus() || $translation->isLocked()) {
@@ -56,25 +56,21 @@ index 73c1eae5d232535807908fb3789cb077581fe00d..c7e84d170c888a642e5a790dd6adef01
 +    if (!$string || $string->isTranslated() || !$string->source->getStatus() || $string->isLocked()) {
        return NULL;
      }
-
+ 
 -    // Remove any existing job item for this hash.
 -    $existingJobItems = $job->getItems([
-+    // Aborted items are a dead end. Items in any other state are left to the
-+    // continuous manager, which skips creation while the last one is live.
-+    $abortedJobItems = $job->getItems([
-       'plugin' => 'babel',
-       'item_type' => 'default',
-       'item_id' => $hash,
-+      'state' => JobItemInterface::STATE_ABORTED,
-     ]);
+-      'plugin' => 'babel',
+-      'item_type' => 'default',
+-      'item_id' => $hash,
+-    ]);
 -    if ($existingJobItems) {
 -      $this->getJobItemStorage()->delete($existingJobItems);
-+    if ($abortedJobItems) {
-+      $this->entityTypeManager->getStorage('tmgmt_job_item')->delete($abortedJobItems);
-     }
-
+-    }
+-
      try {
-@@ -96,23 +94,8 @@ class BabelTmgmtIntegration {
+       return $this->continuousManager->addItem($job, 'babel', 'default', $hash);
+     }
+@@ -96,23 +82,8 @@ class BabelTmgmtIntegration {
        ]);
      }
      if ($jobItems) {
@@ -97,14 +93,14 @@ index 73c1eae5d232535807908fb3789cb077581fe00d..c7e84d170c888a642e5a790dd6adef01
      }
 -    return $this->jobItemStorage;
    }
-
+ 
  }
 diff --git a/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php b/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
 index 568d9be1ba001e091508fa2318285a58ea070d90..8eff80c8b8c49c56b68255c4129678c19918fb7a 100644
 --- a/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
 +++ b/modules/babel_tmgmt/src/Hook/BabelTmgmtHooks.php
 @@ -6,7 +6,6 @@ namespace Drupal\babel_tmgmt\Hook;
-
+ 
  use Drupal\babel\BabelStringsRepositoryInterface;
  use Drupal\babel_tmgmt\Plugin\QueueWorker\ContinuousJobItemCreationWorker;
 -use Drupal\Core\Database\Connection;
@@ -118,7 +114,7 @@ index 568d9be1ba001e091508fa2318285a58ea070d90..8eff80c8b8c49c56b68255c4129678c1
 -use Drupal\tmgmt\JobItemInterface;
  use Drupal\tmgmt\TranslatorInterface;
  use Symfony\Component\DependencyInjection\Attribute\Autowire;
-
+ 
 @@ -29,7 +27,6 @@ class BabelTmgmtHooks {
    public function __construct(
      protected EntityTypeManagerInterface $entityTypeManager,
@@ -130,12 +126,12 @@ index 568d9be1ba001e091508fa2318285a58ea070d90..8eff80c8b8c49c56b68255c4129678c1
 @@ -111,12 +108,9 @@ class BabelTmgmtHooks {
        return;
      }
-
+ 
 -    $storage = $this->entityTypeManager->getStorage('tmgmt_job_item');
 -
      foreach ($this->continuousManager->getContinuousJobs('en') as $job) {
        assert($job instanceof JobInterface);
-
+ 
 -      // All untranslated, enabled and unlocked strings for the target langcode.
        $hashes = array_keys($this->stringsRepository->getStrings(
          langcode: $job->getTargetLangcode(),
@@ -143,7 +139,7 @@ index 568d9be1ba001e091508fa2318285a58ea070d90..8eff80c8b8c49c56b68255c4129678c1
 @@ -124,34 +118,7 @@ class BabelTmgmtHooks {
          lockStatus: FALSE,
        ));
-
+ 
 -      // Remove existing job items in a dead-end state (aborted, in review).
 -      $jobItemsToDelete = $job->getItems([
 -        'plugin' => 'babel',
@@ -183,7 +179,7 @@ index 7bf23dbf93ead8521b257131ae678080beefb7dc..b418853fde4f446a14c885b03b53e6c0
 @@ -78,12 +78,6 @@ class ContinuousJobItemCreationWorker extends QueueWorkerBase implements Contain
        return;
      }
-
+ 
 -    $jobItem = $job->getMostRecentItem('babel', 'default', $data['hash']);
 -    if ($jobItem && $jobItem->isInactive()) {
 -      // A job item has been created in the meantime by another process.
@@ -192,13 +188,13 @@ index 7bf23dbf93ead8521b257131ae678080beefb7dc..b418853fde4f446a14c885b03b53e6c0
 -
      $this->babelTmgmt->createContinuousJobItemForJob($job, $data['hash']);
    }
-
+ 
 diff --git a/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php b/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php
-index 760de187a7d7402a4c4ce8dd0a8abac407bdab88..c0e87f2f5047190e30721508d553dc858850b1c7 100644
+index 760de187a7d7402a4c4ce8dd0a8abac407bdab88..169af72752ffc6816938c6907c7b7f0d9b24166a 100644
 --- a/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php
 +++ b/modules/babel_tmgmt/tests/src/Kernel/BabelTmgmtIntegrationTest.php
 @@ -6,7 +6,9 @@ namespace Drupal\Tests\babel_tmgmt\Kernel;
-
+ 
  use Drupal\babel\BabelLockServiceInterface;
  use Drupal\babel\BabelStorageInterface;
 +use Drupal\babel\BabelStringsRepositoryInterface;
@@ -214,11 +210,11 @@ index 760de187a7d7402a4c4ce8dd0a8abac407bdab88..c0e87f2f5047190e30721508d553dc85
 +use Drupal\tmgmt\JobItemInterface;
  use PHPUnit\Framework\Attributes\Group;
  use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
-
-@@ -161,6 +164,134 @@ class BabelTmgmtIntegrationTest extends KernelTestBase {
+ 
+@@ -161,6 +164,131 @@ class BabelTmgmtIntegrationTest extends KernelTestBase {
      $this->assertNotEmpty($queriedJobItems);
    }
-
+ 
 +  /**
 +   * Tests that a purged, already-translated string is not re-created.
 +   *
@@ -323,28 +319,25 @@ index 760de187a7d7402a4c4ce8dd0a8abac407bdab88..c0e87f2f5047190e30721508d553dc85
 +      $this->assertSame($state, (int) reset($jobItems)->getState());
 +    }
 +
-+    // An aborted request is a dead end and is replaced by a fresh job item.
++    // An aborted request no longer blocks a new one, but it is left in place
++    // for the site's purge policy to deal with.
 +    $jobItem->setState(JobItemInterface::STATE_ABORTED);
 +    $this->populateAndConsumeQueue();
 +    $jobItems = $job->getItems($filter);
-+    $this->assertCount(1, $jobItems);
-+    $this->assertNotSame($jobItem->id(), reset($jobItems)->id());
-+    $this->assertNotSame(JobItemInterface::STATE_ABORTED, (int) reset($jobItems)->getState());
++    $this->assertCount(2, $jobItems);
++    $this->assertSame(JobItemInterface::STATE_ABORTED, (int) $jobItems[$jobItem->id()]->getState());
++    unset($jobItems[$jobItem->id()]);
++    $freshJobItem = reset($jobItems);
++    $this->assertNotSame(JobItemInterface::STATE_ABORTED, (int) $freshJobItem->getState());
 +
-+    // An accepted request no longer blocks a new one, but it is left in place
-+    // for the site's purge policy to deal with.
-+    $acceptedJobItem = reset($jobItems);
-+    $acceptedJobItem->setState(JobItemInterface::STATE_ACCEPTED);
++    // The same goes for an accepted request.
++    $freshJobItem->setState(JobItemInterface::STATE_ACCEPTED);
 +    $this->populateAndConsumeQueue();
 +    $jobItems = $job->getItems($filter);
-+    $this->assertCount(2, $jobItems);
-+    $states = [];
-+    foreach ($jobItems as $item) {
-+      $states[$item->id()] = (int) $item->getState();
-+    }
-+    $this->assertSame(JobItemInterface::STATE_ACCEPTED, $states[$acceptedJobItem->id()]);
-+    unset($states[$acceptedJobItem->id()]);
-+    $this->assertNotSame(JobItemInterface::STATE_ACCEPTED, reset($states));
++    $this->assertCount(3, $jobItems);
++    $this->assertSame(JobItemInterface::STATE_ACCEPTED, (int) $jobItems[$freshJobItem->id()]->getState());
++    unset($jobItems[$jobItem->id()], $jobItems[$freshJobItem->id()]);
++    $this->assertNotSame(JobItemInterface::STATE_ACCEPTED, (int) reset($jobItems)->getState());
 +  }
 +
    /**
