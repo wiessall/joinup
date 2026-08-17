@@ -303,24 +303,6 @@ function joinup_core_theme_suggestions_views_exposed_form_alter(array &$suggesti
 }
 
 /**
- * Implements hook_views_data_alter().
- */
-function joinup_core_views_data_alter(array &$data): void {
-  // Autocomplete filter for the "Groups audience" field, used only by the
-  // broken links report.
-  // @see \Drupal\joinup_core\Plugin\views\filter\OgAudienceAutocomplete
-  $data['node__og_audience']['og_audience_target_id_autocomplete'] = [
-    'group' => t('Content'),
-    'title' => t('Groups audience (autocomplete)'),
-    'help' => t('The group audience, exposed with an entity autocomplete filter.'),
-    'real field' => 'og_audience_target_id',
-    'filter' => [
-      'id' => 'og_audience_autocomplete',
-    ],
-  ];
-}
-
-/**
  * Implements hook_preprocess_HOOK().
  *
  * Ensures views exposed filter blocks have unique form IDs by using the block
