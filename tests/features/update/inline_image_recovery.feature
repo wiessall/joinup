@@ -5,8 +5,9 @@ Feature: Recover legacy inline images and clean up the content editor
   The legacy <img> markup is converted to media and <img> is removed from the
   content editor, without breaking images that are already embedded as media.
 
-  # These assert the post-deploy state of three real cloned pages, after
-  # joinup_core_deploy_201602 has run and the config has been imported.
+  # These assert the post-deploy state of real cloned pages, after
+  # joinup_core_deploy_201602 and joinup_core_deploy_201603 have run and the
+  # config has been imported.
 
   @update:joinup_core_deploy_201602
   Scenario: An image embedded as media still renders after <img> is removed from the editor.
@@ -35,4 +36,29 @@ Feature: Recover legacy inline images and clean up the content editor
     Given I am logged in as a user with the "moderator" role
     When I go to "/collection/portal-support/metrics"
     Then the response status code should be 200
+    And the response should not contain "Image removed."
+
+  @update:joinup_core_deploy_201603
+  Scenario: An image pasted inline as base64 is converted into a rendered media image.
+    # The body of this news item ended with a 6240x4160 photo carried inline as
+    # base64, repeated across all 24 translations. It rendered as nothing,
+    # leaving the Unsplash credit under an invisible image.
+    Given I am logged in as a user with the "moderator" role
+    When I go to "/collection/open-source-observatory-osor/news/france-digital-strategy-education-0"
+    Then the response status code should be 200
+    And I should see the "img" element with the "alt" attribute set to "France Digital Strategy for Education" in the "Content" region
+    # The payload must be gone from the stored markup, not merely hidden.
+    And the response should not contain "base64,"
+
+  @update:joinup_core_deploy_201603
+  Scenario: Spacer icons pasted inline as base64 are dropped rather than converted.
+    # 15x15 and 16x16 bullets and social icons from Word and webmail pastes are
+    # not content; promoting them to media would fill the library with noise.
+    # This page carried two of them and nothing else in base64, so the text
+    # around them has to survive their removal untouched.
+    Given I am logged in as a user with the "moderator" role
+    When I go to "/collection/sharing-and-reuse-it-solutions/gertrud-ingestad"
+    Then the response status code should be 200
+    And I should see the text "Gertrud Ingestad was born in Sweden in 1958" in the "Content" region
+    And the response should not contain "base64,"
     And the response should not contain "Image removed."

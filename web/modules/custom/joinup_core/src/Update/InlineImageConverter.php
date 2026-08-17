@@ -13,9 +13,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\file\FileInterface;
-use Drupal\media\MediaInterface;
-use Drupal\og\OgGroupAudienceHelperInterface;
-use Drupal\paragraphs\ParagraphInterface;
 use Drupal\user\EntityOwnerInterface;
 
 /**
@@ -43,9 +40,10 @@ use Drupal\user\EntityOwnerInterface;
  * current value has already lost every `src`, the revision history is searched
  * for the last revision that still had them.
  *
- * Deliberately out of scope, counted and logged rather than guessed at:
- * genuinely remote images (many hosts are long dead) and base64 `data:` URIs,
- * which `filter_html` mangles beyond repair anyway.
+ * Out of scope here, counted and logged rather than guessed at: genuinely
+ * remote images, whose hosts are in many cases long dead. Base64 `data:` URIs
+ * carry their own bytes and need no file to be found, so they are handled
+ * separately by \Drupal\joinup_core\Update\Base64ImageConverter.
  *
  * Saving is body-only and does not touch the state field. The notification
  * subscribers do fire on every update, but they resolve a message from the
@@ -60,6 +58,7 @@ use Drupal\user\EntityOwnerInterface;
 final class InlineImageConverter implements ContainerInjectionInterface {
 
   use AutowireTrait;
+  use LegacyImageEmbedTrait;
 
   /**
    * The shape of the per-run counters.
@@ -74,32 +73,6 @@ final class InlineImageConverter implements ContainerInjectionInterface {
     'skipped_empty' => 0,
     'skipped_missing_file' => 0,
   ];
-
-  /**
-   * Fields that may hold `content_editor` markup, keyed by entity type id.
-   *
-   * Only `content_editor` is affected: `simple_html` still allows `<img src>`
-   * (mitigated by `filter_html_image_secure`) so its images render fine, and
-   * `text_html` allows no `<img>` at all.
-   */
-  protected const array FIELDS = [
-    'node' => ['body', 'description', 'field_event_agenda'],
-    'paragraph' => ['field_body'],
-    'comment' => ['field_body'],
-  ];
-
-  /**
-   * The text format whose stored `<img src>` markup is broken on output.
-   */
-  protected const string FORMAT = 'content_editor';
-
-  /**
-   * The media embed view mode for converted images.
-   *
-   * Legacy inline images rendered full width; this is the closest view mode
-   * allowed by the `media_embed` filter settings.
-   */
-  protected const string VIEW_MODE = 'media_library_full_width';
 
   /**
    * How far back to look for a revision that still holds a `src`.
@@ -168,33 +141,7 @@ final class InlineImageConverter implements ContainerInjectionInterface {
    *   A list of ['entity_type' => string, 'id' => int|string] work items.
    */
   public function collect(): array {
-    $items = [];
-    foreach (self::FIELDS as $entity_type_id => $fields) {
-      if (!$this->entityTypeManager->hasDefinition($entity_type_id)) {
-        continue;
-      }
-      $storage = $this->entityTypeManager->getStorage($entity_type_id);
-      $ids = [];
-      foreach ($fields as $field) {
-        $query = $storage->getQuery()
-          ->accessCheck(FALSE)
-          ->condition("{$field}.format", self::FORMAT)
-          ->condition("{$field}.value", '<img', 'CONTAINS');
-        foreach ($query->execute() as $id) {
-          $ids[$id] = $id;
-        }
-      }
-      foreach ($ids as $id) {
-        if ($entity_type_id === 'paragraph') {
-          $paragraph = $storage->load($id);
-          if (!$paragraph instanceof ParagraphInterface || !$this->isLive($paragraph)) {
-            continue;
-          }
-        }
-        $items[] = ['entity_type' => $entity_type_id, 'id' => $id];
-      }
-    }
-    return $items;
+    return $this->collectEntities('<img');
   }
 
   /**
@@ -343,93 +290,6 @@ final class InlineImageConverter implements ContainerInjectionInterface {
     }
 
     return $changed ? Html::serialize($document) : NULL;
-  }
-
-  /**
-   * Moves a media embed out of the paragraph the original image sat in.
-   *
-   * `<drupal-media>` is replaced by block-level markup, which is not valid
-   * inside a `<p>`: the parser closes the paragraph before it, and the embed
-   * lands outside the flow it was written into. This is why a converted image
-   * can still fail to render. The paragraph is split around the embed, and
-   * dropped altogether when the image was all it held.
-   */
-  protected function liftFromParagraph(\DOMElement $embed): void {
-    $paragraph = $embed->parentNode;
-    while ($paragraph instanceof \DOMElement && strtolower($paragraph->nodeName) !== 'p') {
-      $paragraph = $paragraph->parentNode;
-    }
-    if (!$paragraph instanceof \DOMElement || $paragraph->parentNode === NULL) {
-      return;
-    }
-
-    // The direct child of the paragraph whose subtree holds the embed: the
-    // embed itself, unless the image sat inside further inline markup.
-    $branch = $embed;
-    while ($branch->parentNode !== $paragraph) {
-      $branch = $branch->parentNode;
-    }
-
-    $before = [];
-    $after = [];
-    $passed = FALSE;
-    foreach (iterator_to_array($paragraph->childNodes) as $child) {
-      if ($child === $branch) {
-        $passed = TRUE;
-        continue;
-      }
-      if ($passed) {
-        $after[] = $child;
-      }
-      else {
-        $before[] = $child;
-      }
-    }
-
-    // Detach the embed from whatever wrapped it. Emptied of the image, that
-    // wrapper may still hold text, which stays with the preceding paragraph.
-    $embed->parentNode->removeChild($embed);
-    if ($branch !== $embed && $this->hasContent($branch)) {
-      $before[] = $branch;
-    }
-
-    $parent = $paragraph->parentNode;
-    $this->insertSlice($before, $paragraph);
-    $parent->insertBefore($embed, $paragraph);
-    $this->insertSlice($after, $paragraph);
-    $parent->removeChild($paragraph);
-  }
-
-  /**
-   * Re-inserts one side of a split paragraph, unless it holds nothing.
-   *
-   * @param \DOMNode[] $nodes
-   *   The nodes belonging to this side of the split.
-   * @param \DOMElement $paragraph
-   *   The paragraph being split, used as both template and insert position.
-   */
-  protected function insertSlice(array $nodes, \DOMElement $paragraph): void {
-    if (!$nodes) {
-      return;
-    }
-    // A shallow clone keeps the original paragraph's attributes.
-    $slice = $paragraph->cloneNode(FALSE);
-    foreach ($nodes as $node) {
-      $slice->appendChild($node);
-    }
-    if ($this->hasContent($slice)) {
-      $paragraph->parentNode->insertBefore($slice, $paragraph);
-    }
-  }
-
-  /**
-   * Returns whether a node holds anything worth keeping.
-   */
-  protected function hasContent(\DOMNode $node): bool {
-    if (trim($node->textContent) !== '') {
-      return TRUE;
-    }
-    return $node instanceof \DOMElement && $node->getElementsByTagName('*')->length > 0;
   }
 
   /**
@@ -607,119 +467,6 @@ final class InlineImageConverter implements ContainerInjectionInterface {
     }
 
     return $path !== '' ? 'public://' . $path : NULL;
-  }
-
-  /**
-   * Gets the `media:image` wrapping a file within a group, or creates it.
-   *
-   * The lookup is scoped to the group: media are group content, so reusing one
-   * from another group would leak it across group boundaries. Group-less media
-   * are likewise only ever reused by other group-less embeds, which is why the
-   * absence of a group has to be matched explicitly rather than ignored.
-   */
-  protected function getOrCreateMedia(FileInterface $file, string $alt, int|string|NULL $group_id, int $uid, array &$stats): MediaInterface {
-    $storage = $this->entityTypeManager->getStorage('media');
-    $query = $storage->getQuery()
-      ->accessCheck(FALSE)
-      ->condition('bundle', 'image')
-      ->condition('image.target_id', $file->id())
-      ->range(0, 1);
-    if ($group_id === NULL) {
-      $query->notExists(OgGroupAudienceHelperInterface::DEFAULT_FIELD);
-    }
-    else {
-      $query->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $group_id);
-    }
-    $existing = $query->execute();
-    if ($existing) {
-      /** @var \Drupal\media\MediaInterface $media */
-      $media = $storage->load(reset($existing));
-      return $media;
-    }
-
-    // The referenced file must be permanent, or file garbage collection could
-    // reap it out from under the new media entity.
-    if (!$file->isPermanent()) {
-      $file->setPermanent();
-      $file->save();
-    }
-
-    $values = [
-      'bundle' => 'image',
-      'name' => $file->getFilename(),
-      'status' => 1,
-      // Alt is required on the image field; fall back to the file name.
-      'image' => [
-        'target_id' => $file->id(),
-        'alt' => $alt !== '' ? $alt : $file->getFilename(),
-      ],
-    ];
-    if ($group_id !== NULL) {
-      $values[OgGroupAudienceHelperInterface::DEFAULT_FIELD] = $group_id;
-    }
-    /** @var \Drupal\media\MediaInterface $media */
-    $media = $storage->create($values);
-    if ($uid) {
-      $media->setOwnerId($uid);
-    }
-    $media->setSyncing(TRUE);
-    $media->save();
-    $stats['media_created']++;
-
-    return $media;
-  }
-
-  /**
-   * Resolves the group a converted image should belong to.
-   *
-   * @return int|string|null
-   *   The group id, or NULL when the entity belongs to no group.
-   */
-  protected function resolveGroupId(ContentEntityInterface $entity): int|string|NULL {
-    // A group is its own audience: collections and solutions own their media.
-    if ($entity->getEntityTypeId() === 'node' && in_array($entity->bundle(), ['collection', 'solution'], TRUE)) {
-      return $entity->id();
-    }
-
-    if ($entity->hasField(OgGroupAudienceHelperInterface::DEFAULT_FIELD)) {
-      $target = $entity->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->target_id;
-      if (!empty($target)) {
-        return $target;
-      }
-    }
-
-    // Paragraphs and comments inherit the group of whatever hosts them.
-    $host = match (TRUE) {
-      $entity instanceof ParagraphInterface => $entity->getParentEntity(),
-      $entity->getEntityTypeId() === 'comment' => $entity->getCommentedEntity(),
-      default => NULL,
-    };
-
-    return $host instanceof ContentEntityInterface ? $this->resolveGroupId($host) : NULL;
-  }
-
-  /**
-   * Returns whether a paragraph is still referenced by its parent.
-   *
-   * `parent_id` records lineage only: a paragraph dropped from a later revision
-   * keeps pointing at the node it was created under.
-   */
-  protected function isLive(ParagraphInterface $paragraph): bool {
-    $parent = $paragraph->getParentEntity();
-    if (!$parent instanceof ContentEntityInterface) {
-      return FALSE;
-    }
-    $field = $paragraph->get('parent_field_name')->value;
-    if (!$field || !$parent->hasField($field)) {
-      return FALSE;
-    }
-    foreach ($parent->get($field) as $item) {
-      if ((string) $item->target_id === (string) $paragraph->id()) {
-        // A live child of a dead parent is still dead.
-        return $parent instanceof ParagraphInterface ? $this->isLive($parent) : TRUE;
-      }
-    }
-    return FALSE;
   }
 
   /**
