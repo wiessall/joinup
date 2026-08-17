@@ -23,7 +23,7 @@ class IopFooterBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function build(): array {
-    $icons = [
+    $social = [
       'linkedin' => [
         'title' => $this->t('LinkedIn', [], ['context' => 'Logo']),
         'url' => 'https://www.linkedin.com/groups/12907049/',
@@ -38,27 +38,25 @@ class IopFooterBlock extends BlockBase {
       ],
     ];
 
-    foreach ($icons as $class => $data) {
-      $build[$class] = [
-        '#type' => 'inline_template',
-        '#template' => '<a class="btn btn-sm rounded-circle join__btn join__btn--' . $class . '" href="{{ url }}" target="_blank" rel="noopener" title="{{ title }}"></a>',
-        '#context' => [
-          'icon' => $class,
-          'title' => $this->t('Follow us on @media', ['@media' => $data['title']]),
-          'url' => Url::fromUri($data['url']),
-        ],
+    $items = [];
+    foreach ($social as $class => $data) {
+      $items[] = [
+        'class' => $class,
+        'url' => Url::fromUri($data['url']),
+        'title' => $this->t('Follow us on @media', ['@media' => $data['title']]),
       ];
     }
 
-    $build['newsletter'] = [
-      '#type' => 'inline_template',
-      '#template' => '<a class="btn btn-sm rounded-circle join__btn join__btn--newsletter" href="{{ url }}" target="_blank" rel="noopener" title="{{ title }}"></a>',
-      '#context' => [
-        'title' => $this->t('Subscribe to the interoperable europe newsletter'),
-        'url' => Url::fromUri('https://ec.europa.eu/newsroom/informatics/user-subscriptions/1115/create'),
-      ],
+    $items[] = [
+      'class' => 'newsletter',
+      'url' => Url::fromUri('https://ec.europa.eu/newsroom/informatics/user-subscriptions/1115/create'),
+      'title' => $this->t('Subscribe to the interoperable europe newsletter'),
     ];
-    return $build;
+
+    return [
+      '#theme' => 'iop_footer',
+      '#items' => $items,
+    ];
   }
 
 }

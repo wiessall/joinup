@@ -127,22 +127,25 @@ Feature: OSS catalogue search
       |               | ~~~       | ~~~        | ~~~               | ~~~              | de       | 0                   | Starke Sicherheitsmaßnahmen, einfachere Skalierbarkeit, umfangreiche Analysen und Überwachung | Der Multi-Cloud-Datenbankdienst im Herzen unserer Entwicklerdatenplattform, der die Erstellung mit Daten beschleunigt und vereinfacht.                       | Atlas vereinfacht die Bereitstellung und Verwaltung Ihrer Datenbanken und bietet gleichzeitig die Vielseitigkeit, die Sie zum Erstellen belastbarer und leistungsstarker globaler Anwendungen bei den Cloud-Anbietern Ihrer Wahl benötigen. | ~~~                        |
       |               | ~~~       | ~~~        | ~~~               | ~~~              | it       | 0                   | Forti misure di sicurezza, scalabilità più semplice, analisi e monitoraggio estesi            | Il servizio di database multi-cloud al centro della nostra piattaforma dati per sviluppatori che accelera e semplifica il modo in cui costruisci con i dati. | Atlas semplifica la distribuzione e la gestione dei tuoi database offrendo al contempo la versatilità necessaria per creare applicazioni globali resilienti e performanti sui provider cloud di tua scelta.                                 | ~~~                        |
 
-    # Search by oss_features.
+    # Search in English (oss_features, oss_short_description, oss_long_description).
     Then I visit the OSS search page
     And I fill in "Search catalogue" with "measures"
     And I press "Search OSS catalogue"
     When I should see the "MongoDB Atlas" tile
 
-    Then I fill in "Search catalogue" with "Sicherheitsmaßnahmen"
-    And I press "Search OSS catalogue"
-    When I should see the "MongoDB Atlas" tile
-
-    Then I fill in "Search catalogue" with "scalabilità"
-    And I press "Search OSS catalogue"
-    When I should see the "MongoDB Atlas" tile
-
-    # Search by oss_short_description.
     Then I fill in "Search catalogue" with "accelerates"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
+
+    Then I fill in "Search catalogue" with "versatility"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
+
+    # Search in German (oss_features, oss_short_description, oss_long_description).
+    Given I am logged in as a moderator
+    When I visit the OSS search page
+    And I click "German" in the "Language picker" region
+    Then I fill in "Search catalogue" with "Sicherheitsmaßnahmen"
     And I press "Search OSS catalogue"
     When I should see the "MongoDB Atlas" tile
 
@@ -150,16 +153,17 @@ Feature: OSS catalogue search
     And I press "Search OSS catalogue"
     When I should see the "MongoDB Atlas" tile
 
-    Then I fill in "Search catalogue" with "piattaforma"
-    And I press "Search OSS catalogue"
-    When I should see the "MongoDB Atlas" tile
-
-    # Search by oss_long_description.
-    Then I fill in "Search catalogue" with "versatility"
-    And I press "Search OSS catalogue"
-    When I should see the "MongoDB Atlas" tile
-
     Then I fill in "Search catalogue" with "Vielseitigkeit"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
+
+    # Search in Italian (oss_features, oss_short_description, oss_long_description).
+    When I click "Italian" in the "Language picker" region
+    Then I fill in "Search catalogue" with "scalabilità"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
+
+    Then I fill in "Search catalogue" with "piattaforma"
     And I press "Search OSS catalogue"
     When I should see the "MongoDB Atlas" tile
 
