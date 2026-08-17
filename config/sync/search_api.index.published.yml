@@ -55,9 +55,9 @@ dependencies:
     - user
 third_party_settings:
   search_api_solr:
-    finalize: true
+    finalize: false
     commit_before_finalize: false
-    commit_after_finalize: true
+    commit_after_finalize: false
     debug_finalize: false
     highlighter:
       maxAnalyzedChars: 51200
@@ -650,7 +650,6 @@ processor_settings:
   auto_aggregated_fulltext_field: {  }
   custom_value: {  }
   entity_type: {  }
-  exclude_assessment_solutions: {  }
   html_filter:
     weights:
       preprocess_index: -43
@@ -679,8 +678,7 @@ processor_settings:
   interoperable_flag: {  }
   joinup_entity_bundle: {  }
   joinup_entity_published_revision: {  }
-  joinup_entity_status:
-    inverse: false
+  joinup_entity_status: {  }
   language_with_fallback: {  }
   release_solution_data:
     weights:

@@ -184,22 +184,6 @@ entity.node.announcement_view:
           - announcement
     _og_entity_type_id: node
 
-entity.node.unpublished_content:
-  path: 'node/{node}/unpublished'
-  defaults:
-    _controller: '\Drupal\joinup_group\Controller\UnpublishedContentPageController::unpublishedContent'
-    _title: 'Unpublished content'
-  requirements:
-    _custom_access: Drupal\joinup_group\Controller\UnpublishedContentPageController::access
-    _archived_group: 'TRUE'
-  options:
-    parameters:
-      node:
-        type: entity:node
-        bundle:
-          - collection
-          - solution
-
 joinup_group.share_content_form:
   path: '/node/{node}/share'
   defaults:

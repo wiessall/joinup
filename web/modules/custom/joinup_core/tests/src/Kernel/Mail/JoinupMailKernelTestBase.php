@@ -56,6 +56,7 @@ abstract class JoinupMailKernelTestBase extends KernelTestBase {
     'interoperable_europe',
     'joinup_menu',
     'joinup_collection',
+    'ventuno_helper',
   ];
 
   /**

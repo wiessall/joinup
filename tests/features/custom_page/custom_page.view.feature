@@ -30,9 +30,10 @@ Feature:
 
     When I go to the homepage of the "Drafty things" <group>
     Then I should not see the "About means" tile
-    And I click "Unpublished content" in the "Entity actions" region
-    Then I should see the "About means" tile
-    And the logo should be shown in the "About means" custom page tile
+    And I click "Manage content" in the "Entity actions" region
+    Given I select "published" from "State"
+    And I press "Apply"
+    Then I should see the text "About means"
 
     Examples:
       | group      |

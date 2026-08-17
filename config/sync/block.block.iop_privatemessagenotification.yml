@@ -1,0 +1,30 @@
+uuid: 812bf887-3224-4f06-b0bb-14c6fae58b50
+langcode: en
+status: true
+dependencies:
+  module:
+    - private_message
+    - user
+  theme:
+    - iop
+id: iop_privatemessagenotification
+theme: iop
+region: header_navigation
+weight: 5
+provider: null
+plugin: private_message_notification_block
+settings:
+  id: private_message_notification_block
+  label: 'Private Message Notification'
+  label_display: '0'
+  provider: private_message
+  ajax_refresh_rate: 15
+  count_method: messages
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      authenticated: authenticated
