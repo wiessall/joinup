@@ -7,7 +7,6 @@
 
 declare(strict_types=1);
 
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -94,13 +93,6 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
     // page, hide the "Sort by" select.
     unset($form['sort_by']);
   }
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function ventuno_preprocess_views_exposed_form__block_exposedformsearchpage_header(&$variables): void {
-  $variables['form']['keys']['#id'] = Html::getUniqueId('search-box');
 }
 
 /**

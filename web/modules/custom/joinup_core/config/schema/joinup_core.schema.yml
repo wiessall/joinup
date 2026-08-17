@@ -186,20 +186,6 @@ block.settings.joinup_local_tasks_block:
       type: boolean
       label: 'Whether secondary tabs are shown'
 
-block.settings.entity_unpublished:
-  type: block_settings
-  label: 'Unpublished content block settings'
-  mapping:
-    states_filter:
-      type: sequence
-      label: 'States filter'
-      sequence:
-        type: string
-        label: 'State'
-    negate_states_filter:
-      type: boolean
-      label: 'Negate states filter'
-
 filter_settings.joinup_iframe:
   type: filter
   label: 'Joinup iframe filter'

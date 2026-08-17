@@ -10,6 +10,7 @@ use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Drupal\Component\Render\MarkupInterface;
+use Drupal\Component\Utility\Variable;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\TagTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
@@ -383,7 +384,12 @@ class JoinupNotificationContext extends RawDrupalContext {
   public function assertNumberOfEmailSent(int $count, ?string $recipients = NULL): void {
     $mails = $this->getMails();
     if (count($mails) != $count) {
-      throw new \Exception("Invalid number of e-mail sent. Expected $count, sent " . count($mails));
+      throw new \Exception(sprintf(
+        "Invalid number of e-mail sent. Expected %s, sent %s. Emails: %s",
+        $count,
+        count($mails),
+        Variable::export($mails),
+      ));
     }
     if ($recipients) {
       $expected_recipients = $this->explodeDelimitedSeparatedStepArgument($recipients);
