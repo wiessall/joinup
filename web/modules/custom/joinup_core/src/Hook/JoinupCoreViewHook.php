@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_core\Hook;
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
-use Drupal\node\NodeInterface;
 
 /**
  * Hook implementations for node entities.
@@ -17,7 +15,7 @@ final class JoinupCoreViewHook {
    * Implements hook_views_data_alter().
    */
   #[Hook('views_data_alter')]
-  function viewsDataAlter(array &$data): void {
+  public function viewsDataAlter(array &$data): void {
     // Autocomplete filter for the "Groups audience" field, used only by the
     // broken links report.
     // @see \Drupal\joinup_core\Plugin\views\filter\OgAudienceAutocomplete
@@ -31,4 +29,5 @@ final class JoinupCoreViewHook {
       ],
     ];
   }
+
 }
