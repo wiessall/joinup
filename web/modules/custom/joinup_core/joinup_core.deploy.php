@@ -126,3 +126,118 @@ function _joinup_core_get_internal_uri(string $uri): ?string {
     . (isset($parts['query']) ? '?' . $parts['query'] : '')
     . (isset($parts['fragment']) ? '#' . $parts['fragment'] : '');
 }
+
+/**
+ * Repair revisions data after ISAICP-11533.
+ */
+function joinup_core_deploy_201601(array &$sandbox): string {
+  $db = \Drupal::database();
+
+  if (!isset($sandbox['data'])) {
+    $sql = <<<SQL
+      SELECT
+        nfr.nid,
+        nfr.vid,
+        -- Will create values such as 'fr:1,de:,ro:1' indicating which language
+        -- is affected. The empty value indicates NULL.
+        GROUP_CONCAT(
+            CONCAT(
+                nfr.langcode,
+                ':',
+                COALESCE(nfr.revision_translation_affected, '')
+            ) ORDER BY nfr.langcode
+        ) AS langcodes
+      FROM {node_field_revision} nfr
+      INNER JOIN {node_revision} nr ON nfr.vid = nr.vid
+      INNER JOIN {node__og_audience} og ON nfr.nid = og.entity_id
+      WHERE
+        -- Only consider nodes created by TMGMT.
+        nr.revision_log LIKE 'Created by translation job <a href="/admin/tmgmt/jobs/%'
+        -- Don't include OSS catalogue nodes, they have a different translation.
+        AND og.og_audience_target_id <> 723282
+      GROUP BY nfr.nid, nfr.vid
+      ORDER BY nfr.nid, nfr.vid
+      SQL;
+    $rows = $db->query($sql)->fetchAll();
+
+    // Convert to a structured array and normalize data.
+    $sandbox['data'] = [];
+    foreach ($rows as $row) {
+      $affected = [];
+      foreach (array_filter(explode(',', (string) $row->langcodes)) as $item) {
+        [$langcode, $value] = explode(':', $item, 2);
+        $affected[$langcode] = $value === '' ? NULL : intval($value);
+      }
+      foreach ($affected as $langcode => $value) {
+        $sandbox['data'][$row->nid][$row->vid][$langcode] = $value;
+      }
+    }
+
+    // Compute the correct values and remove unchanged revisions from the set.
+    foreach ($sandbox['data'] as $nid => &$item) {
+      $progress = [];
+
+      foreach ($item as $vid => &$affected) {
+        $changed = FALSE;
+
+        foreach ($affected as $langcode => &$value) {
+          if ($value === 1) {
+            // Mark the 1st non-English `revision_translation_affected` which is
+            // 1 (TRUE). We keep that as the correct value for this revision.
+            if (!isset($progress[$langcode]) && $langcode !== 'en') {
+              $progress[$langcode] = TRUE;
+              continue;
+            }
+
+            // There's already a translation revision affected for this node,
+            // mark all others, wrongly set to 1, as NULL.
+            $value = NULL;
+            $changed = TRUE;
+            continue;
+          }
+
+          // This revision has a correct translation_affected value. Delete it
+          // from the set to avoid useless update queries.
+          unset($affected[$langcode]);
+        }
+
+        // Remove node revisions correctly created.
+        if (!$changed || empty($affected)) {
+          unset($sandbox['data'][$nid][$vid]);
+        }
+      }
+    }
+    // Remove empty entries.
+    $sandbox['data'] = array_filter($sandbox['data']);
+
+    $sandbox['total'] = count($sandbox['data']);
+    $sandbox['progress'] = 0;
+  }
+
+  $data = array_slice($sandbox['data'], 0, 100, TRUE);
+  $sandbox['data'] = array_diff_key($sandbox['data'], $data);
+  $sandbox['progress'] += count($data);
+
+  $sql = <<<SQL
+      UPDATE {node_field_revision}
+      SET revision_translation_affected = :value
+      WHERE nid = :nid AND vid = :vid AND langcode = :langcode
+      SQL;
+
+  foreach ($data as $nid => $revisions) {
+    foreach ($revisions as $vid => $affected) {
+      foreach ($affected as $langcode => $affectedValue) {
+        $db->query($sql, [
+          ':nid' => $nid,
+          ':vid' => $vid,
+          ':langcode' => $langcode,
+          ':value' => $affectedValue,
+        ]);
+      }
+    }
+  }
+
+  $sandbox['#finished'] = (int) empty($sandbox['data']);
+
+  return "Repaired revisions for $sandbox[progress] out of $sandbox[total] nodes";
+}
