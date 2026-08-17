@@ -5,7 +5,7 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..585511718ffcd09e90bf30d1dc9b7076
 @@ -33,6 +33,13 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
     */
    protected $paragraphsReferenceField;
-
+ 
 +  /**
 +   * Cached list of paragraphs found in the current field.
 +   *
@@ -23,7 +23,7 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..585511718ffcd09e90bf30d1dc9b7076
 +    $this->resetCachedParagraphs();
      return $this;
    }
-
+ 
 @@ -216,11 +224,8 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
     *   The component.
     */
@@ -33,10 +33,10 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..585511718ffcd09e90bf30d1dc9b7076
 -        return $this->getComponent($entity);
 -      }
 -    }
-+    $paragraph = $this->getEntities()[$uuid ?? ''] ?? NULL;
++    $paragraph = $this->getEntities()[$uuid] ?? NULL;
 +    return $paragraph ? $this->getComponent($paragraph) : NULL;
    }
-
+ 
    /**
 @@ -275,17 +280,24 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
    /**
@@ -68,7 +68,7 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..585511718ffcd09e90bf30d1dc9b7076
 -    return $items;
 +    return $this->paragraphs;
    }
-
+ 
    /**
 @@ -329,6 +334,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
          $this->paragraphsReferenceField[] = $paragraph;
@@ -77,7 +77,7 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..585511718ffcd09e90bf30d1dc9b7076
 +    $this->resetCachedParagraphs();
      return $this;
    }
-
+ 
 @@ -367,6 +374,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
        }
      }
@@ -85,7 +85,7 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..585511718ffcd09e90bf30d1dc9b7076
 +    $this->resetCachedParagraphs();
      return $this;
    }
-
+ 
 @@ -532,6 +540,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
    public function appendComponent(ParagraphInterface $new_paragraph) {
      $new_paragraph->setParentEntity($this->getEntity(), $this->getFieldName());
@@ -93,7 +93,7 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..585511718ffcd09e90bf30d1dc9b7076
 +    $this->resetCachedParagraphs();
      return $this;
    }
-
+ 
 @@ -560,6 +569,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
      if (isset($this->paragraphsReferenceField[$delta])) {
        unset($this->paragraphsReferenceField[$delta]);
@@ -101,7 +101,7 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..585511718ffcd09e90bf30d1dc9b7076
 +    $this->resetCachedParagraphs();
      return $this;
    }
-
+ 
 @@ -577,12 +583,8 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
     *   The component's delta, or -1 if no match.
     */
@@ -115,12 +115,12 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..585511718ffcd09e90bf30d1dc9b7076
 +    $delta = array_search($uuid, array_keys($this->getEntities()), TRUE);
 +    return $delta === FALSE ? -1 : $delta;
    }
-
+ 
    /**
 @@ -623,4 +629,11 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
      return array_keys($this->thirdPartySettings);
    }
-
+ 
 +  /**
 +   * Reset the list of the paragraphs.
 +   */
