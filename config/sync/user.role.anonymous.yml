@@ -56,6 +56,7 @@ permissions:
   - 'view paragraph content accordion'
   - 'view paragraph content accordion_item'
   - 'view paragraph content accordion_item'
+  - 'view paragraph content binding_requirement'
   - 'view paragraph content block'
   - 'view paragraph content call_to_action'
   - 'view paragraph content carousel'
