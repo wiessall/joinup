@@ -394,7 +394,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: search_api_string
+          plugin_id: search_api_numeric
           operator: 'not empty'
           value:
             min: ''

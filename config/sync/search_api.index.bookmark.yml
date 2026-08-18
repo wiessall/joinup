@@ -115,7 +115,7 @@ field_settings:
     label: Entity
     datasource_id: 'entity:flagging'
     property_path: flagged_entity
-    type: string
+    type: integer
     dependencies:
       module:
         - flag
