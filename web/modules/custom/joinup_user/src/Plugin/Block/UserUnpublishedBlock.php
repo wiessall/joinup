@@ -16,9 +16,6 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\node\NodeInterface;
-use Drupal\search_api\Query\ResultSetInterface;
-use Drupal\search_api\SearchApiException;
-use Drupal\state_machine_revisions\RevisionManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -36,6 +33,24 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 )]
 class UserUnpublishedBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
+  /**
+   * The node bundle IDs that are listed in the block.
+   *
+   * @var array
+   */
+  const LISTED_BUNDLES = [
+    'collection',
+    'custom_page',
+    'discussion',
+    'distribution',
+    'document',
+    'event',
+    'glossary',
+    'news',
+    'release',
+    'solution',
+  ];
+
   public function __construct(
     array $configuration,
     string $plugin_id,
@@ -43,7 +58,6 @@ class UserUnpublishedBlock extends BlockBase implements ContainerFactoryPluginIn
     protected readonly AccountInterface $currentUser,
     protected readonly RouteMatchInterface $currentRouteMatch,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
-    protected readonly RevisionManagerInterface $revisionManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -58,8 +72,7 @@ class UserUnpublishedBlock extends BlockBase implements ContainerFactoryPluginIn
       $plugin_definition,
       $container->get('current_user'),
       $container->get('current_route_match'),
-      $container->get('entity_type.manager'),
-      $container->get('state_machine_revisions.revision_manager')
+      $container->get('entity_type.manager')
     );
   }
 
@@ -93,19 +106,12 @@ class UserUnpublishedBlock extends BlockBase implements ContainerFactoryPluginIn
    *   An array of rows to render.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   *   Thrown if the Search API Index entity storage definition is invalid.
+   *   Thrown if the node entity storage definition is invalid.
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   *   Thrown if the Search API Index entity storage definition is not found.
-   * @throws \Drupal\search_api\SearchApiException
-   *   Thrown if an error occurs during the execution of the search query.
+   *   Thrown if the node entity storage definition is not found.
    */
   protected function getRows(): array {
-    $index = $this->entityTypeManager->getStorage('search_api_index')->load('unpublished');
-    /** @var \Drupal\search_api\Query\QueryInterface $query */
-    $query = $index->query();
-    $query->addCondition('entity_author', [$this->currentUser->id()], 'IN');
-    $results = $query->execute();
-    $entities = $this->getResultEntities($results);
+    $entities = $this->getUnpublishedNodes();
     $rows = [];
 
     foreach ($entities as $weight => $entity) {
@@ -121,41 +127,42 @@ class UserUnpublishedBlock extends BlockBase implements ContainerFactoryPluginIn
   }
 
   /**
-   * Returns the entities listed in the given query result set.
+   * Returns the nodes of the user whose latest revision is unpublished.
    *
-   * @param \Drupal\search_api\Query\ResultSetInterface $result
-   *   The query results object.
+   * Content that has been published but has a newer, unpublished revision is
+   * included as well, since the pending revision is what the user still has to
+   * act upon.
    *
-   * @return \Drupal\Core\Entity\EntityInterface[]
-   *   The render array for the search results.
+   * @return \Drupal\node\NodeInterface[]
+   *   The unpublished node revisions the user has access to.
    *
-   * @throws \Exception
-   *    Thrown if the item loaded is not a node or an rdf entity.
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   *   Thrown if the node entity storage definition is invalid.
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   *   Thrown if the node entity storage definition is not found.
    */
-  protected function getResultEntities(ResultSetInterface $result): array {
+  protected function getUnpublishedNodes(): array {
+    $storage = $this->entityTypeManager->getStorage('node');
+    $revision_ids = $storage->getQuery()
+      // Access is checked below, on the loaded revision.
+      ->accessCheck(FALSE)
+      ->latestRevision()
+      ->condition('type', self::LISTED_BUNDLES, 'IN')
+      ->condition('uid', $this->currentUser->id())
+      ->condition('status', NodeInterface::NOT_PUBLISHED)
+      ->sort('created', 'DESC')
+      ->execute();
+
+    // ::loadMultipleRevisions() does not guarantee the order of the returned
+    // revisions, so walk the sorted query results instead.
+    $nodes = $storage->loadMultipleRevisions(array_keys($revision_ids));
     $results = [];
-    foreach ($result->getResultItems() as $item) {
-      try {
-        $entity = $item->getOriginalObject()->getValue();
-        if ($entity instanceof NodeInterface) {
-          $entity = $this->revisionManager->loadLatestRevision($entity);
-        }
-        else {
-          throw new \Exception('Only nodes should be loaded.');
-        }
-      }
-      catch (SearchApiException $e) {
-        $entity = NULL;
-      }
-      // Search results might be stale, so we check if the entity has been
-      // found in the system.
-      if (!$entity) {
+    foreach (array_keys($revision_ids) as $revision_id) {
+      $node = $nodes[$revision_id] ?? NULL;
+      if (!$node || !$node->access('view')) {
         continue;
       }
-      if (!$entity->access('view')) {
-        continue;
-      }
-      $results[] = $entity;
+      $results[] = $node;
     }
     return $results;
   }

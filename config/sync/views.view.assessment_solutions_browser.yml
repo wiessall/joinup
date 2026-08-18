@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - field.storage.node.abstract
-    - search_api.index.entity_browser
+    - search_api.index.published
     - taxonomy.vocabulary.domain
   module:
     - better_exposed_filters
@@ -16,7 +16,7 @@ label: 'Assessment solutions browser'
 module: views
 description: 'Entity browser view for selecting interoperability solutions with IES prioritization'
 tag: ''
-base_table: search_api_index_entity_browser
+base_table: search_api_index_published
 base_field: search_api_id
 display:
   default:
@@ -29,7 +29,7 @@ display:
       fields:
         entity_browser_select:
           id: entity_browser_select
-          table: search_api_index_entity_browser
+          table: search_api_index_published
           field: entity_browser_select
           relationship: none
           group_type: group
@@ -78,7 +78,7 @@ display:
           hide_alter_empty: true
         title:
           id: title
-          table: search_api_index_entity_browser
+          table: search_api_index_published
           field: title
           relationship: none
           group_type: group
@@ -141,7 +141,7 @@ display:
           field_api_classes: false
         description:
           id: description
-          table: search_api_index_entity_browser
+          table: search_api_index_published
           field: description
           relationship: none
           group_type: group
@@ -194,7 +194,7 @@ display:
           multi_separator: ', '
         abstract:
           id: abstract
-          table: search_api_index_entity_browser
+          table: search_api_index_published
           field: abstract
           relationship: none
           group_type: group
@@ -376,7 +376,7 @@ display:
       sorts:
         title:
           id: title
-          table: search_api_index_entity_browser
+          table: search_api_index_published
           field: title
           relationship: none
           group_type: group
@@ -390,15 +390,17 @@ display:
       filters:
         entity_bundle:
           id: entity_bundle
-          table: search_api_index_entity_browser
+          table: search_api_index_published
           field: entity_bundle
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: search_api_options
-          operator: or
+          plugin_id: search_api_string
+          operator: '='
           value:
-            solution: solution
+            min: ''
+            max: ''
+            value: solution
           group: 1
           exposed: false
           expose:
@@ -415,7 +417,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-            reduce: false
           is_grouped: false
           group_info:
             label: ''
@@ -428,10 +429,9 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          reduce_duplicates: false
         entity_status:
           id: entity_status
-          table: search_api_index_entity_browser
+          table: search_api_index_published
           field: entity_status
           relationship: none
           group_type: group
@@ -475,7 +475,7 @@ display:
             group_items: {  }
         interoperable_flag:
           id: interoperable_flag
-          table: search_api_index_entity_browser
+          table: search_api_index_published
           field: interoperable_flag
           relationship: none
           group_type: group
@@ -513,7 +513,7 @@ display:
             group_items: {  }
         domain:
           id: domain
-          table: search_api_index_entity_browser
+          table: search_api_index_published
           field: domain
           relationship: none
           group_type: group
@@ -558,7 +558,7 @@ display:
           error_message: true
         search_api_fulltext:
           id: search_api_fulltext
-          table: search_api_index_entity_browser
+          table: search_api_index_published
           field: search_api_fulltext
           relationship: none
           group_type: group
@@ -608,7 +608,7 @@ display:
             - title
         language_with_fallback:
           id: language_with_fallback
-          table: search_api_index_entity_browser
+          table: search_api_index_published
           field: language_with_fallback
           relationship: none
           group_type: group
@@ -716,8 +716,8 @@ display:
         - user.permissions
       tags:
         - 'config:field.storage.node.abstract'
-        - 'config:search_api.index.entity_browser'
-        - 'search_api_list:entity_browser'
+        - 'config:search_api.index.published'
+        - 'search_api_list:published'
   entity_browser_assessment_solutions:
     id: entity_browser_assessment_solutions
     display_title: 'Entity browser'
@@ -739,5 +739,5 @@ display:
         - user.permissions
       tags:
         - 'config:field.storage.node.abstract'
-        - 'config:search_api.index.entity_browser'
-        - 'search_api_list:entity_browser'
+        - 'config:search_api.index.published'
+        - 'search_api_list:published'

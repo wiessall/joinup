@@ -16,7 +16,7 @@ Feature:
 
     Then I am logged in as a moderator
     And I go to the edit form of the "Tiles paragraph example" "custom page"
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Tiles"
     And I fill in "Title" with "Card title" in the "Modal content" region
@@ -38,7 +38,7 @@ Feature:
 
     Then I am logged in as a moderator
     And I go to the edit form of the "Tiles paragraph example" "custom page"
-    And I click the last "Choose component" link
+    And I add a component to the "second" region of section 1
     And a modal should open
 
     When I should not see the link "Tiles" in the "Modal content" region
@@ -52,7 +52,7 @@ Feature:
 
     Then I am logged in as a moderator
     And I go to the edit form of the "Tiles regression example" "custom page"
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Tiles"
     And I fill in "Title" with "Board" in the "Modal content" region

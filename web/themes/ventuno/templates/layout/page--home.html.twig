@@ -29,7 +29,6 @@
  *
  * Regions:
  * - page.top_bar: Items for the top_bar region.
- * - page.search_bar: Items for the search_bar region (very custom region).
  * - page.header: Items for the header region.
  * - page.featured: Items for the featured content region.
  * - page.content_top: Items for the region displayed above the main content.
@@ -46,16 +45,9 @@
 
 <div class="layout-container">
   {{ include('@ventuno/parts/header.html.twig', {
-    user_name: user_name,
-    landing_page_links: landing_page_links,
-    profile_links: profile_links,
-    anonymous_links: anonymous_links,
-    hide_searchbar: hide_searchbar,
-    searchbar: page.search_bar,
-    bookmark_link: bookmark_link,
-    private_message: private_message,
     top_bar: page.top_bar,
   }) }}
+  {{ page.header_navigation }}
   {% if page.header %}
     {{ page.header }}
   {% endif %}

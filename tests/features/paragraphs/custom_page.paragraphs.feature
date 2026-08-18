@@ -41,7 +41,7 @@ Feature:
 
     Then I open the header local tasks menu
     And I click "Edit"
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     Then I should not see the link "Simple paragraph"
 
@@ -67,7 +67,7 @@ Feature:
     # Author.
     When I am logged in as "Zohan"
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
-    And I click "Choose component"
+    And I add a component to section 2
     And a modal should open
     Then I should see the following paragraph types in the modal in order:
       | Heading           |
@@ -89,7 +89,7 @@ Feature:
     # Facilitator.
     When I am logged in as "Gilfoyle"
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
-    And I click "Choose component"
+    And I add a component to section 2
     And a modal should open
     Then I should see the following paragraph types in the modal in order:
       | Heading           |
@@ -114,7 +114,7 @@ Feature:
     # Moderator.
     Given I am logged in as a moderator
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
-    And I click "Choose component"
+    And I add a component to section 2
     And a modal should open
     Then I should see the following paragraph types in the modal in order:
       | Heading           |
