@@ -52,6 +52,7 @@ function joinup_tmgmt_deploy_201601(array &$sandbox): string {
 
   $jobId = array_shift($sandbox['continuous_job_ids']);
   if (!$jobId) {
+    $sandbox['#finished'] = 1;
     return 'There are no items to remove.';
   }
 
@@ -66,20 +67,24 @@ function joinup_tmgmt_deploy_201601(array &$sandbox): string {
     ->execute()
     ->fetchCol();
 
-  // Delete all messages which belong to the job item IDs.
+  // Delete the job items together with the rows referencing them.
   $msgDeletedCount = 0;
-  while ($jobItemIdSubset = array_splice($jobItemIds, 0, 500)) {
+  $jobItemDeletedCount = 0;
+  foreach (array_chunk($jobItemIds, 500) as $jobItemIdSubset) {
     $msgDeletedCount += $connection->delete('tmgmt_message')
+      ->condition('tjiid', $jobItemIdSubset, 'IN')
+      ->execute();
+    // Remote mappings are cascaded by JobItem::postDelete(); the entity API is
+    // bypassed here, so they have to be removed explicitly.
+    $connection->delete('tmgmt_remote')
+      ->condition('tjiid', $jobItemIdSubset, 'IN')
+      ->execute();
+    $jobItemDeletedCount += $connection->delete('tmgmt_job_item')
       ->condition('tjiid', $jobItemIdSubset, 'IN')
       ->execute();
   }
   $sandbox['messages_deleted'] += $msgDeletedCount;
-
-  // Delete the job items.
-  $sandbox['items_deleted'] += $jobItemDeletedCount = $connection->delete('tmgmt_job_item')
-    ->condition('tjid', $jobId)
-    ->condition('changed', $sandbox['changed_limit'], '<=')
-    ->execute();
+  $sandbox['items_deleted'] += $jobItemDeletedCount;
 
   $sandbox['#finished'] = (int) empty($sandbox['continuous_job_ids']);
   $processed = $sandbox['jobs_total'] - count($sandbox['continuous_job_ids']);
