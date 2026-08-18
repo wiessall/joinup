@@ -85,7 +85,7 @@ final class RevisionTranslationAffectedRepair implements ContainerInjectionInter
     if ($sandbox['skipped']) {
       $message .= sprintf(' %d skipped, no language changed in them.', $sandbox['skipped']);
     }
-    $message .= "\nSummary:\n" . $this->buildReport($sandbox);
+    $message .= "\nReport:\n" . $this->buildReport($sandbox);
 
     return $message;
   }
