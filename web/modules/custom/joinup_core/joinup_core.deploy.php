@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Database\Database;
+use Drupal\joinup_core\Update\NodeTranslationsRollback;
 use Drupal\joinup_core\Update\RevisionTranslationAffectedRepair;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 
@@ -137,9 +138,16 @@ function joinup_core_deploy_201601(array &$sandbox): string {
 }
 
 /**
- * Queues nodes with more than 10 revisions in a language for revision delete.
+ * Rolls back nodes that lost paragraph references during translation saves.
  */
 function joinup_core_deploy_201602(): string {
+  return \Drupal::classResolver(NodeTranslationsRollback::class)->run();
+}
+
+/**
+ * Queues nodes with more than 10 revisions in a language for revision delete.
+ */
+function joinup_core_deploy_201603(): string {
   $threshold = 10;
 
   $connection = Database::getConnection();
