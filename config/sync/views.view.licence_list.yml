@@ -168,7 +168,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: search_api_term
+          plugin_id: search_api_string
           operator: 'not empty'
           value:
             min: ''
