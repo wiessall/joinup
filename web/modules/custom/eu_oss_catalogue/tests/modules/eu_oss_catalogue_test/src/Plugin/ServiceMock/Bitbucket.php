@@ -32,7 +32,7 @@ class Bitbucket extends PluginBase implements ServiceMockPluginInterface {
   /**
    * Static cache for response fixture.
    */
-  private static ?array $fixture;
+  protected static ?array $fixture;
 
   /**
    * {@inheritdoc}

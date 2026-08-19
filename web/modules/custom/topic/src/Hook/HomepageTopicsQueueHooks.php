@@ -24,9 +24,9 @@ final class HomepageTopicsQueueHooks {
   use StringTranslationTrait;
 
   public function __construct(
-    private readonly EntityTypeManagerInterface $entityTypeManager,
-    private readonly RendererInterface $renderer,
-    private readonly RouteMatchInterface $routeMatch,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly RendererInterface $renderer,
+    protected readonly RouteMatchInterface $routeMatch,
   ) {}
 
   /**
