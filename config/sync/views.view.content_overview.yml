@@ -34,7 +34,7 @@ display:
           admin_label: ''
           entity_type: null
           entity_field: null
-          plugin_id: search_api
+          plugin_id: language
           label: ''
           exclude: false
           alter:
@@ -86,7 +86,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: numeric
+          plugin_id: standard
           label: ''
           exclude: true
           alter:
@@ -260,7 +260,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: search_api_field
+          plugin_id: search_api
           label: ''
           exclude: false
           alter:
