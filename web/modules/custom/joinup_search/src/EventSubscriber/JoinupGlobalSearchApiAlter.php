@@ -128,19 +128,12 @@ class JoinupGlobalSearchApiAlter implements EventSubscriberInterface {
     // Set the "sticky" property on all documents that are missing it. The
     // property is prefixed with "bs_" because "b" stands for boolean
     // and "s" for single value, as they are used for sorting.
-    // Set the "state" property on all documents that are missing it and are
-    // stored in the unpublished index. The property is prefixed with "ss_"
-    // because the first "s" stands for 'string' and the second one stands
-    // for single value.
     $documents = $event->getSolariumDocuments();
     foreach ($documents as $document) {
       if (empty($document->getFields()['bs_sticky'])) {
         $document->setField('bs_sticky', FALSE);
       }
 
-      if (empty($document->getFields()['sm_entity_status']) && $document->getFields()['index_id'] === 'unpublished') {
-        $document->setField('sm_entity_status', 'unpublished');
-      }
       if (empty($document->getFields()['sm_entity_status']) && $document->getFields()['index_id'] === 'published') {
         // Because of the way the search API works, when we
         // perform a search, it only returns items *with* a value for the

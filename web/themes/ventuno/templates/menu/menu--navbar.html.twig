@@ -1,0 +1,55 @@
+{#
+/**
+ * @file
+ * Theme override for the navbar (landing pages) menu in the header.
+ *
+ * Renders the inline navbar items for large screens. The single mobile "mmenu"
+ * drawer is rendered by the header navigation block.
+ * @see \Drupal\ventuno_helper\Plugin\Block\HeaderNavigationBlock
+ *
+ * The oe_bootstrap_theme base theme preprocesses the menu items into the BCL
+ * navigation structure: items with children become
+ * {standalone, dropdown, link, trigger, items}, where "trigger" is the parent
+ * link and "items" are the children; every link exposes "label" and "path".
+ * @see \Drupal\oe_bootstrap_theme\MenuPreprocess::preprocessMenu()
+ *
+ * Available variables:
+ * - items: A nested list of menu items in the BCL navigation structure.
+ * - attributes: HTML attributes for the menu.
+ */
+#}
+{% for item in items %}
+  {% set item_id = 'navbar-item-' ~ loop.index %}
+  {% set is_dropdown = item.dropdown is defined and item.dropdown %}
+  {% set link = is_dropdown ? item.trigger : item %}
+  {% set children = is_dropdown ? item.items : [] %}
+  {% set desktop_li_classes = [
+    'nav-item',
+    'd-none',
+    'd-xl-inline-block',
+    is_dropdown ? 'dropdown',
+    link.in_active_trail ? 'is-active',
+  ] %}
+  <li{{ create_attribute({class: desktop_li_classes}) }}>
+    {% set link_classes = [
+      'nav-link',
+      'nav-link--underline',
+      is_dropdown ? 'dropdown-toggle',
+      link.in_active_trail ? 'is-active',
+    ] %}
+    {% set link_attributes = create_attribute() %}
+    {% if is_dropdown %}
+      {% set link_attributes = link_attributes.setAttribute('aria-expanded', 'false').setAttribute('id', item_id).setAttribute('role', 'button') %}
+    {% endif %}
+    <a href="{{ link.path }}"{{ link_attributes.addClass(link_classes) }}>{{ link.label }}</a>
+    {% if is_dropdown %}
+      <ul class="dropdown-menu dropdown-menu--sub" aria-labelledby="{{ item_id }}">
+        {% for child in children %}
+          <li>
+            <a href="{{ child.path }}" class="dropdown-item{{ child.in_active_trail ? ' is-active' }}">{{ child.label }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </li>
+{% endfor %}

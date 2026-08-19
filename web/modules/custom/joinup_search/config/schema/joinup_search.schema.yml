@@ -13,14 +13,6 @@ joinup_search_filter_plugin_entity_autocomplete:
       type: string
       label: 'Target id'
 
-plugin.plugin_configuration.search_api_processor.joinup_entity_status:
-  type: search_api.default_processor_configuration
-  label: 'Joinup entity status processor'
-  mapping:
-    inverse:
-      type: boolean
-      label: 'Inverse'
-
 # @todo Is this used anywhere?
 search_api_field.plugin.filter.node_entity_autocomplete:
   type: joinup_search_filter_plugin_entity_autocomplete
