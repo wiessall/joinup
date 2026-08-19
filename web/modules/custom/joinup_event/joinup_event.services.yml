@@ -3,5 +3,3 @@ services:
   _defaults:
     autoconfigure: true
     autowire: true
-
-  Drupal\joinup_event\EventSubscriber\UpcomingEventsSortOverwriteSubscriber: { }
