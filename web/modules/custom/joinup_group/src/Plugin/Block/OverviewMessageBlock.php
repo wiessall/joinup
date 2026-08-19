@@ -23,13 +23,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 )]
 class OverviewMessageBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * Static cache of the RDF Entity Type storage.
-   *
-   * @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface
-   */
-  protected ConfigEntityStorageInterface $nodeStorage;
-
   public function __construct(
     array $configuration,
     string $plugin_id,
@@ -100,10 +93,9 @@ class OverviewMessageBlock extends BlockBase implements ContainerFactoryPluginIn
    *   The node type storage.
    */
   protected function getNodeStorage(): ConfigEntityStorageInterface {
-    if (!isset($this->nodeStorage)) {
-      $this->nodeStorage = $this->entityTypeManager->getStorage('node_type');
-    }
-    return $this->nodeStorage;
+    $storage = $this->entityTypeManager->getStorage('node_type');
+    assert($storage instanceof ConfigEntityStorageInterface);
+    return $storage;
   }
 
 }
