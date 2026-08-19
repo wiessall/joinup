@@ -9,8 +9,3 @@ services:
   Drupal\joinup_eulogin\Routing\JoinupEuLoginRouteSubscriber: { }
 
   Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginAnonymous403Subscriber: { }
-
-  path_processor_joinup_eulogin:
-    class: Drupal\joinup_eulogin\PathProcessor\CasRandomParameterProcessor
-    tags:
-      - { name: path_processor_outbound }
