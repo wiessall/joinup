@@ -12,7 +12,6 @@ use Drupal\cas\Event\CasPreRegisterEvent;
 use Drupal\cas\Event\CasPreValidateEvent;
 use Drupal\Component\Utility\Random;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -35,16 +34,6 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * The module's settings.
-   */
-  protected ImmutableConfig $settings;
-
-  /**
-   * The CAS settings.
-   */
-  protected ImmutableConfig $casSettings;
-
   public function __construct(
     protected readonly ConfigFactoryInterface $configFactory,
     protected readonly UserDataInterface $userData,
@@ -56,8 +45,6 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
     protected readonly Authmap $authmap,
     protected readonly RouteMatchInterface $routeMatch,
   ) {
-    $this->settings = $this->configFactory->get('oe_authentication.settings');
-    $this->casSettings = $this->configFactory->get('cas.settings');
   }
 
   /**
@@ -96,15 +83,14 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
    *   The CAS event.
    */
   public function handleBrowserCache(CasPreRedirectEvent $event): void {
-    if (!$destination = $event->getCasRedirectData()->getServiceParameter('destination')) {
-      $destination = $this->configFactory->get('system.site')->get('page.front');
-    }
+    $casRedirectData = $event->getCasRedirectData();
+    $destination = $casRedirectData->getServiceParameter('destination') ?: $this->configFactory->get('system.site')->get('page.front');
 
     $key = strtolower((new Random())->machineName(3));
     $value = bin2hex(random_bytes(3));
-    $new_destination = http_build_url($destination, ['query' => "$key=$value"], HTTP_URL_JOIN_QUERY);
+    $newDestination = http_build_url($destination, ['query' => "$key=$value"], HTTP_URL_JOIN_QUERY);
 
-    $event->getCasRedirectData()->setServiceParameter('destination', $new_destination);
+    $casRedirectData->setServiceParameter('destination', $newDestination);
   }
 
   /**
@@ -118,13 +104,14 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
    *   The CAS pre-validate event object.
    */
   public function alterValidationUrl(CasPreValidateEvent $event): void {
+    $settings = $this->configFactory->get('oe_authentication.settings');
     $parameters = [
-      'assuranceLevel' => $this->settings->get('assurance_level'),
-      'ticketTypes' => $this->settings->get('ticket_types'),
+      'assuranceLevel' => $settings->get('assurance_level'),
+      'ticketTypes' => $settings->get('ticket_types'),
       'userDetails' => 'true',
     ];
 
-    $event->setValidationPath($this->settings->get('validation_path'));
+    $event->setValidationPath($settings->get('validation_path'));
     $event->addParameters($parameters);
   }
 
@@ -177,7 +164,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
    *   The CAS pre user register event object.
    */
   public function handleDrupalUsernameCollision(CasPreRegisterEvent $event): void {
-    if (!$this->casSettings->get('user_accounts.auto_register')) {
+    if (!$this->configFactory->get('cas.settings')->get('user_accounts.auto_register')) {
       return;
     }
 
