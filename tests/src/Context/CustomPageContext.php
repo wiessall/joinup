@@ -179,37 +179,4 @@ class CustomPageContext extends RawDrupalContext {
     throw new \InvalidArgumentException("No menu link with title $title exists in the $menu menu for the $label $type.");
   }
 
-  /**
-   * Asserts that a custom page tile has the logo properly set.
-   *
-   * @param string $title
-   *   The title of the custom page tile to inspect.
-   *
-   * @throws \Exception
-   *   Thrown when the logo is not found or not correct.
-   */
-  #[Then('the logo should be shown in the :title custom page tile')]
-  public function assertCustomPageTileHasLogo(string $title): void {
-    // Retrieve the URL of the logo in the tile.
-    $tile = $this->getTileByHeading($title);
-    $actual_url = $tile->find('xpath', '//img')->getAttribute('src');
-    if (!$actual_url) {
-      throw new \Exception("No logo link found in the '$title' tile.");
-    }
-
-    // Retrieve the image entity from the custom page logo.
-    /** @var \Drupal\custom_page\Entity\CustomPageInterface $node */
-    $node = $this->getEntityByLabel('node', $title, 'custom_page');
-    $image = $node->getLogoAsFile();
-
-    $entity_type_manager = \Drupal::entityTypeManager();
-    // Generate the expected URL of the logo using the right image style.
-    // @see \Drupal\image\Plugin\Field\FieldFormatter\ImageUrlFormatter::viewElements()
-    /** @var \Drupal\image\ImageStyleInterface $image_style */
-    $image_style = $entity_type_manager->getStorage('image_style')->load('tile_md_1x');
-    $expected_url = \Drupal::service('file_url_generator')->transformRelative($image_style->buildUrl($image->getFileUri()));
-
-    $this->assertSameValues($expected_url, $actual_url, 'The logo shown is not the correct one.');
-  }
-
 }

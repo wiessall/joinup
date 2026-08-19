@@ -44,14 +44,9 @@
 {% set node_attributes = create_attribute() %}
 <div{{ node_attributes.addClass(node_classes, 'layout-container') }}>
   {{ include('@ventuno/parts/header.html.twig', {
-    user_name: user_name,
-    landing_page_links: landing_page_links,
-    profile_links: profile_links,
-    anonymous_links: anonymous_links,
-    hide_searchbar: hide_searchbar,
-    searchbar: page.search_bar,
     top_bar: page.top_bar
   }) }}
+  {{ page.header_navigation }}
   {% if page.header %}
     {{ page.header }}
   {% endif %}

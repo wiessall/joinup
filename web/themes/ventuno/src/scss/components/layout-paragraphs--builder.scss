@@ -10,6 +10,10 @@ $wireframe-opacity: 0.5;
 
 .lp-builder {
   .js-lpb-component {
+    // The buttons that insert a component before or after this one straddle its
+    // edges, so a paragraph clipping its own overflow, as the iframe one does,
+    // cuts them in half and puts them out of reach.
+    overflow: visible;
     outline: $wireframe-width $wireframe-style
       rgba($wireframe-color, $wireframe-opacity);
   }
@@ -34,8 +38,10 @@ $wireframe-opacity: 0.5;
     outline: none;
   }
 
-  // Hide the region when the add button is visually hidden.
-  div.layout:has(a.lpb-btn--add.visually-hidden) {
+  // Binding requirements are layout sections that take no nested components.
+  // Their region holds no add button, so collapse the empty region away.
+  // @see assessments_element_info_alter()
+  .js-lpb-component[data-type="binding_requirement"] div.layout {
     overflow: hidden !important;
     clip: rect(0, 0, 0, 0) !important;
     width: 1px !important;

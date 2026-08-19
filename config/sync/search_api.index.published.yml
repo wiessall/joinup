@@ -55,9 +55,9 @@ dependencies:
     - user
 third_party_settings:
   search_api_solr:
-    finalize: true
+    finalize: false
     commit_before_finalize: false
-    commit_after_finalize: true
+    commit_after_finalize: false
     debug_finalize: false
     highlighter:
       maxAnalyzedChars: 51200
@@ -401,16 +401,6 @@ field_settings:
     dependencies:
       module:
         - node
-  node_featured:
-    label: 'Featured site-wide'
-    datasource_id: 'entity:node'
-    property_path: 'featured:entity:featured'
-    type: string
-    dependencies:
-      config:
-        - field.storage.meta_entity.featured
-      module:
-        - meta_entity
   node_pinned_in:
     label: 'Pinned in'
     datasource_id: 'entity:node'
@@ -439,17 +429,6 @@ field_settings:
       config:
         - field.storage.node.owner
       module:
-        - node
-  pinned_in:
-    label: 'Pinned in'
-    datasource_id: 'entity:node'
-    property_path: 'pinned_in:entity:field_pinned_in:entity:nid'
-    type: string
-    dependencies:
-      config:
-        - field.storage.meta_entity.field_pinned_in
-      module:
-        - meta_entity
         - node
   processed:
     label: 'Body » Paragraph » Body » Processed text'
@@ -671,7 +650,6 @@ processor_settings:
   auto_aggregated_fulltext_field: {  }
   custom_value: {  }
   entity_type: {  }
-  exclude_assessment_solutions: {  }
   html_filter:
     weights:
       preprocess_index: -43
@@ -700,8 +678,7 @@ processor_settings:
   interoperable_flag: {  }
   joinup_entity_bundle: {  }
   joinup_entity_published_revision: {  }
-  joinup_entity_status:
-    inverse: false
+  joinup_entity_status: {  }
   language_with_fallback: {  }
   release_solution_data:
     weights:

@@ -7,8 +7,8 @@ namespace Drupal\joinup_search\EventSubscriber;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\facets\Utility\FacetsDateHandler;
 use Drupal\joinup_group\Entity\GroupContentInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
-use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 use Drupal\search_api_solr\Event\PreQueryEvent;
@@ -51,9 +51,9 @@ readonly class SearchApiFieldListingOrder implements EventSubscriberInterface {
       return;
     }
 
-    $entity = $this->getEntityFromQuery($searchApiQuery);
-    if ($entity) {
-      $this->addPinnedSorting($solariumApiQuery, $entity);
+    $group = $this->getGroupFromQuery($searchApiQuery);
+    if ($group) {
+      $this->addPinnedSorting($solariumApiQuery, $group);
     }
 
     // Sort by score.
@@ -105,15 +105,15 @@ readonly class SearchApiFieldListingOrder implements EventSubscriberInterface {
   }
 
   /**
-   * Gets the RDF entity from query.
+   * Gets the group the query is running in.
    *
    * @param \Drupal\search_api\Query\QueryInterface $searchApiQuery
    *   Search API query.
    *
-   * @return \Drupal\node\NodeInterface|null
-   *   The related node entity of the query.
+   * @return \Drupal\joinup_group\Entity\GroupInterface|null
+   *   The listing's group, or NULL if there is no group.
    */
-  protected function getEntityFromQuery(SearchApiQueryInterface $searchApiQuery): ?NodeInterface {
+  protected function getGroupFromQuery(SearchApiQueryInterface $searchApiQuery): ?GroupInterface {
     $entity = $searchApiQuery->getOption('search_api_field entity');
     while ($entity instanceof ParagraphInterface) {
       $entity = $entity->getParentEntity();
@@ -123,7 +123,7 @@ readonly class SearchApiFieldListingOrder implements EventSubscriberInterface {
       $entity = $entity->getGroup();
     }
 
-    return $entity instanceof NodeInterface ? $entity : NULL;
+    return $entity instanceof GroupInterface ? $entity : NULL;
   }
 
   /**
@@ -131,50 +131,20 @@ readonly class SearchApiFieldListingOrder implements EventSubscriberInterface {
    *
    * @param \Solarium\Core\Query\QueryInterface $solariumApiQuery
    *   Solarium query.
-   * @param \Drupal\node\NodeInterface $entity
-   *   The related node entity of the query.
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   *   The group the listing belongs to.
    */
-  protected function addPinnedSorting(SolariumApiQueryInterface $solariumApiQuery, NodeInterface $entity): void {
-    // In order to sort by the pinned status of the entity, we need to create a
-    // sort function query. The values that are used for sort are evaluated at
-    // runtime instead of being retrieved from the index.
-    // An entity is pinned when:
-    // - for nodes, when they are belong to the current group and the sticky
-    //   field is set to true;
-    // - for solutions, when they are pinned inside the current collection.
-    // The query() Solr function query is a good candidate for doing custom
-    // sorts, but it will return the score of the subquery. The score can be
-    // different between single results and can range from a small fraction
-    // above zero to infinite.
-    // Example:
-    // @codingStandardsIgnoreStart
-    // "or(and(bs_sticky, query({!v='sm_entity_groups:<id>'},0)), query({!v='sm_node_pinned_in:<id>'},0))"
-    // "query({!v='(bs_sticky:true AND sm_entity_groups:<id>) OR (sm_node_pinned_in:<id>)'})"
-    // @codingStandardsIgnoreEnd
-    // The and() operator will return false when the subquery score is lower
-    // than 1, so both of the above will fail the sorting.
-    // Solr 6.x has the gt(x,y) function, that will return true if x is greater
-    // than y. By using gt(), any positive score can be transformed to true.
-    // Example:
-    // @codingStandardsIgnoreStart
-    // "or(and(bs_sticky, gt(query({!v='sm_entity_groups:<id>'},0),0)), gt(query({!v='sm_node_pinned_in:<id>'},0),0))"
-    // "gt(query({!v='(bs_sticky:true AND sm_entity_groups:<id>) OR (sm_node_pinned_in:<id>)'}),0)"
-    // @codingStandardsIgnoreEnd
-    // Unfortunately, Solr 5.x doesn't support the gt() function.
-    // Both Solr versions support the termfreq() function, which will return the
-    // number of occurrences of a term in a field of the document.
-    // Alternatively, also the exists() function could be used in conjunction
-    // with the query() function, but it looks more expensive.
-    // Example:
-    // @codingStandardsIgnoreLine
-    // "or(and(bs_sticky,exists(query({!v='sm_entity_groups:<id>'},0))),exists(query({!v='sm_node_pinned_in:<id>'},0)))"
-    // @see https://lucene.apache.org/solr/guide/6_6/function-queries.html#function-queries
-    // @see http://archive.apache.org/dist/lucene/solr/ref-guide/apache-solr-ref-guide-5.5.pdf
-    $computed_sort = sprintf(
-      "or(termfreq(sm_node_pinned_in,%1\$s))",
-      $solariumApiQuery->getHelper()->escapePhrase($entity->id())
+  protected function addPinnedSorting(SolariumApiQueryInterface $solariumApiQuery, GroupInterface $group): void {
+    // `termfreq()` counts the occurrences of the group ID in the multi-valued
+    // `sm_node_pinned_in` field, so it returns 1 for content pinned in this
+    // group and 0 for everything else. Sorting on it descending brings the
+    // pinned content to the top. The field is kept up to date by the commit
+    // that the pin and unpin routes issue.
+    $computedSort = sprintf(
+      'termfreq(sm_node_pinned_in,%s)',
+      $solariumApiQuery->getHelper()->escapePhrase($group->id())
     );
-    $solariumApiQuery->addSort($computed_sort, Query::SORT_DESC);
+    $solariumApiQuery->addSort($computedSort, Query::SORT_DESC);
   }
 
 }

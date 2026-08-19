@@ -12,13 +12,13 @@ Feature: Dark blue background accessibility
     When I am logged in as a moderator
     And I go to the edit form of the "Dark blue background" "custom page"
 
-    Then I click "Choose component"
+    Then I add a component to section 1
     And a modal should open
     And I click "Text"
     And I enter "Lorem Ipsum is simply dummy text of the printing and typesetting industry. <a href='https://interoperable-europe.ec.europa.eu/'>Lorem Ipsum</a> has been the industry's standard dummy text ever since the 1500s, " in the "Body" wysiwyg editor
     And I press "Save" in the "Modal buttons" region
 
-    Then I click "Choose component"
+    Then I add a component to section 1
     And a modal should open
     And I click "Heading"
     And I fill in "Heading text" with "Heading example" in the "Modal content" region
