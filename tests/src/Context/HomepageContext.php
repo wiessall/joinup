@@ -290,4 +290,9 @@ class HomepageContext extends RawDrupalContext {
     }
   }
 
+  #[Given('I print the page')]
+  public function printThePage(): void {
+    fwrite(STDERR, $this->getSession()->getPage()->getHtml());
+  }
+
 }

@@ -256,6 +256,7 @@ Feature: Homepage
   Scenario: The /news path redirects to the search page filtered on news.
     When I go to "/news"
     Then I should be on the advanced search page
+    Then I print the page
     And I should see the following facet summary "News"
 
     # Verify that the /news path respects the language prefix.
