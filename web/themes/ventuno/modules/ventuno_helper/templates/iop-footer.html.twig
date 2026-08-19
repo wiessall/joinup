@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * Theme override for the Interoperable Europe footer social/newsletter links.
+ *
+ * Available variables:
+ * - items: List of footer links; each has a class suffix, url and title.
+ */
+#}
+{% for item in items %}
+  <a class="btn btn-sm rounded-circle join__btn join__btn--{{ item.class }}" href="{{ item.url }}" target="_blank" rel="noopener" title="{{ item.title }}"></a>
+{% endfor %}

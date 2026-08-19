@@ -21,7 +21,7 @@ Feature:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     Then I click "Accordion"
     And press "Add Accordion item"
@@ -69,7 +69,7 @@ Feature:
 
     Then I am logged in as a moderator
     And I go to the edit form of the "Nested paragraphs" "custom page"
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Accordion"
     And press "Add Accordion item"

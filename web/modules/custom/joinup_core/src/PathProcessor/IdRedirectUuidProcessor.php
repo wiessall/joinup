@@ -32,6 +32,15 @@ class IdRedirectUuidProcessor implements InboundPathProcessorInterface {
         return '/data/' . $matches['namespace'] . '/' . urlencode($matches['uuid']);
       }
     }
+
+    // The EU persistent URI resolver redirects the 'w21' namespace to a path
+    // that misses the '/data' prefix, as opposed to the other namespaces, which
+    // are correctly resolved to '/data/{namespace}/{uuid}'. Mimic the above
+    // chunk to maintain the way it is calculated.
+    if (str_starts_with($path, '/w21/') && !$request->query->has('uuid')) {
+      return $this->processInbound('/data' . $path, $request);
+    }
+
     return $path;
   }
 

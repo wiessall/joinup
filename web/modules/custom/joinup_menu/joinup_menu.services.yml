@@ -1,8 +1,0 @@
-services:
-
-  _defaults:
-    autowire: true
-
-  joinup_menu.menu_helper:
-    class: Drupal\joinup_menu\MenuHelper
-  Drupal\joinup_menu\MenuHelperInterface: '@joinup_menu.menu_helper'
