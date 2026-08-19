@@ -16,7 +16,7 @@ Feature: Github feed paragraph tests.
 
     When I am logged in as a moderator
     And I go to the edit form of the "Catalogue of paragraphs" "custom page"
-    Then I click "Choose component"
+    Then I add a component to section 1
     And a modal should open
     And I click "Github feed"
     And I fill in "Repository" with "https://github.com/openeuropa/oe_bootstrap_theme.git" in the "Modal content" region
@@ -89,7 +89,7 @@ Feature: Github feed paragraph tests.
 
     When I am logged in as a facilitator of the "Paragraphs <group>" <group>
     And I go to the edit form of the "Catalogue of paragraphs" "custom page"
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Github feed"
     And I fill in the following:
