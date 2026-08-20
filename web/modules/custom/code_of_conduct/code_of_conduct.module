@@ -10,11 +10,13 @@ declare(strict_types=1);
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Entity\GroupMembership;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Hook\Attribute\LegacyHook;
 use Drupal\custom_page\Entity\CustomPageInterface;
 
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
+#[LegacyHook]
 function code_of_conduct_node_update(EntityInterface $entity): void {
   if ($entity instanceof CollectionInterface) {
     \Drupal::service('code_of_conduct.crud_handler')->onGroupUpdate($entity);
@@ -27,6 +29,7 @@ function code_of_conduct_node_update(EntityInterface $entity): void {
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
+#[LegacyHook]
 function code_of_conduct_meta_entity_update(EntityInterface $entity): void {
   // For now, we only handle collection settings.
   if ($entity->bundle() !== 'collection_settings') {
@@ -38,6 +41,7 @@ function code_of_conduct_meta_entity_update(EntityInterface $entity): void {
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
+#[LegacyHook]
 function code_of_conduct_meta_entity_delete(EntityInterface $entity): void {
   if ($entity->bundle() !== 'collection_settings') {
     return;
@@ -48,6 +52,7 @@ function code_of_conduct_meta_entity_delete(EntityInterface $entity): void {
 /**
  * Implements hook_entity_display_build_alter().
  */
+#[LegacyHook]
 function code_of_conduct_entity_display_build_alter(array &$build, array $context): void {
   // Views use the \Drupal\views\Entity\Render\EntityFieldRenderer::buildFields
   // in order to build the labels of a reference field. It does this by
