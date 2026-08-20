@@ -4,10 +4,11 @@
  * Default theme implementation for the "Get started" call to action.
  *
  * Available variables:
- * - url: The CAS login URL carrying the redirect destination.
+ * - url: The CAS login URL. The post login redirect destination is appended
+ *   client side by the 'ventuno_helper/destination-link' library.
  */
 #}
-<a class="get-started__cta fw-bold" href="{{ url }}" tabindex="0">
+<a class="get-started__cta fw-bold" href="{{ url }}" tabindex="0" data-destination>
   {{ 'Create an account'|t }}
   <svg class="bi icon--s ms-2">
     <use xlink:href="{{ bcl_icon_path }}#arrow-right"></use>
