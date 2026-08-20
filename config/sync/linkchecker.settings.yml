@@ -5,6 +5,7 @@ check_links_types: 0
 default_url_scheme: 'http://'
 base_path: ''
 search_published_contents_only: true
+check_translations: false
 extract:
   from_a: true
   from_audio: false
