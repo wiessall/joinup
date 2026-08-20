@@ -51,4 +51,11 @@ class PrivateMessagesPageMenuLink extends MenuLinkDefault implements ContainerFa
     return parent::getTitle();
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheMaxAge(): int {
+    return 0;
+  }
+
 }

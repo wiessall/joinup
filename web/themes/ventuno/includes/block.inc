@@ -25,10 +25,6 @@ function ventuno_preprocess_block(array &$variables): void {
     case 'local_actions_block':
       $variables['attributes']['class'][] = 'my-3';
       break;
-
-    case 'entity_unpublished':
-      $variables['attributes']['class'][] = 'my-5';
-      break;
   }
 
   // List of the "layout-blocks" (mainly in the Home page) that share common
@@ -76,6 +72,8 @@ function ventuno_preprocess_block(array &$variables): void {
   // List of the blocks to render without contextual links.
   $no_contextual_links_blocks = [
     'add_content',
+    'ventuno_privatemessagenotification',
+    'iop_privatemessagenotification',
   ];
   if (in_array($block_id, $no_contextual_links_blocks)
     && isset($variables['title_suffix']['contextual_links'])) {
@@ -120,6 +118,15 @@ function ventuno_theme_suggestions_block_alter(array &$suggestions, array $varia
     && preg_match('/extra_field_block:.*:read_more/', $elements['#plugin_id'])
   ) {
     $suggestions[] = 'block__extra_field_block__read_more';
+  }
+
+  $bare_plugins = [
+    'system_menu_block:navbar',
+    'system_menu_block:account',
+    'joinup_header_navigation',
+  ];
+  if (in_array($elements['#plugin_id'], $bare_plugins, TRUE)) {
+    $suggestions[] = 'block__bare';
   }
 }
 
