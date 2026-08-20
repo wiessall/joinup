@@ -395,6 +395,9 @@
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.mr3.commit-9d2fe508.diff"
             },
+            "drupal/entityqueue": {
+                "Undefined array key target_id @see https://www.drupal.org/i/3618249": "resources/patch/php/drupal/entityqueue/3618249.mr65.commit-7718aa20.diff"
+            },
             "drupal/entity_form_field_label": {
                 "Add possibility to alter field's description @see https://www.drupal.org/i/3420361": "resources/patch/php/drupal/entity_form_field_label/3420361.mr10-note563504.diff",
                 "Illegal argument NULL @see https://www.drupal.org/i/3558750": "resources/patch/php/drupal/entity_form_field_label/3558750.diff"
