@@ -1,0 +1,116 @@
+diff --git a/core/modules/menu_link_content/src/Form/MenuLinkContentForm.php b/core/modules/menu_link_content/src/Form/MenuLinkContentForm.php
+index 732887a85d681dd1ad808e53edb3aaedfb02adcc..72e668fb778c75f33efb367989ee94a24111a9a6 100644
+--- a/core/modules/menu_link_content/src/Form/MenuLinkContentForm.php
++++ b/core/modules/menu_link_content/src/Form/MenuLinkContentForm.php
+@@ -3,6 +3,7 @@
+ namespace Drupal\menu_link_content\Form;
+ 
+ use Drupal\Component\Datetime\TimeInterface;
++use Drupal\Component\Utility\UrlHelper;
+ use Drupal\Core\Entity\ContentEntityForm;
+ use Drupal\Core\Entity\EntityRepositoryInterface;
+ use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+@@ -114,10 +115,54 @@ public function buildEntity(array $form, FormStateInterface $form_state) {
+     $entity->menu_name->value = $menu_name;
+     $entity->enabled->value = (!$form_state->isValueEmpty(['enabled', 'value']));
+     $entity->expanded->value = (!$form_state->isValueEmpty(['expanded', 'value']));
++    $entity->link->uri = $this->reformatInternalLinkIfEnteredAsExternal($entity->link->uri);
+ 
+     return $entity;
+   }
+ 
++  /**
++   * Reformat an internal link if it was entered as an external one.
++   *
++   * @param string $uri
++   *   The URI to possibly reformat.
++   *
++   * @return string
++   *   The possibly reformatted link.
++   */
++  protected function reformatInternalLinkIfEnteredAsExternal(string $uri): string {
++    // Schemes such as mailto: and tel: are external but carry no host for
++    // UrlHelper::externalIsLocal() to compare, which would make it throw
++    // an exception.
++    $parts = UrlHelper::isExternal($uri) ? parse_url($uri) : FALSE;
++    if (!$parts || empty($parts['host'])) {
++      return $uri;
++    }
++
++    $request = $this->getRequest();
++    $base_path = $request->getBasePath();
++    $path = $parts['path'] ?? '';
++    // A URL pointing at the site root may be entered without its trailing
++    // slash, leaving no path for the base path to be matched against below.
++    if ($path === '' || $path === $base_path) {
++      $path .= '/';
++    }
++
++    // The trailing slash anchors the base path so that a partial match, such
++    // as /subdirectory against /subdir, is not mistaken for a local URL. Only
++    // the host and the path take part in the comparison, so passing a URL
++    // rebuilt from those two is enough.
++    $base_url = $request->getSchemeAndHttpHost() . $base_path . '/';
++    if (!UrlHelper::externalIsLocal('//' . $parts['host'] . $path, $base_url)) {
++      return $uri;
++    }
++
++    // The entered URL points at this site, so drop the base path and keep the
++    // rest.
++    return 'internal:' . substr($path, strlen($base_path))
++      . (isset($parts['query']) ? '?' . $parts['query'] : '')
++      . (isset($parts['fragment']) ? '#' . $parts['fragment'] : '');
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+diff --git a/core/modules/menu_link_content/tests/src/Functional/MenuLinkContentFormTest.php b/core/modules/menu_link_content/tests/src/Functional/MenuLinkContentFormTest.php
+index 3f3179df84a2a52b4111b95392fb60358d6a59a9..8584de2ac2ea3656e91cb07275e70d9901a91f6a 100644
+--- a/core/modules/menu_link_content/tests/src/Functional/MenuLinkContentFormTest.php
++++ b/core/modules/menu_link_content/tests/src/Functional/MenuLinkContentFormTest.php
+@@ -134,4 +134,44 @@ public function testMenuLinkContentOperationsLink(): void {
+     $this->assertSession()->linkExists('Custom Home');
+   }
+ 
++  /**
++   * Tests that absolute URLs pointing at this site are saved as internal.
++   */
++  public function testReformatInternalLinkIfEnteredAsExternal(): void {
++    $base_url = rtrim($this->getAbsoluteUrl('/'), '/');
++
++    // Each case is the string entered in the link field, followed by the URI
++    // the menu link is expected to be saved with.
++    $cases = [
++      // An absolute URL for this site is rewritten as an internal URI.
++      [$base_url . '/user/login', 'internal:/user/login'],
++      // The query and the fragment are preserved.
++      [$base_url . '/user/login?foo=bar#baz', 'internal:/user/login?foo=bar#baz'],
++      // The site root is rewritten as the front page.
++      [$base_url, 'internal:/'],
++      // A host that merely starts with this site's host is left untouched.
++      [$base_url . '.example.com/user/login', $base_url . '.example.com/user/login'],
++      // Genuinely external URLs are left untouched.
++      ['https://www.example.com/user/login', 'https://www.example.com/user/login'],
++      // Schemes carrying no host are left untouched, and do not error.
++      ['mailto:test@example.com', 'mailto:test@example.com'],
++      ['tel:+15551234567', 'tel:+15551234567'],
++    ];
++
++    $storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
++    foreach ($cases as $delta => [$entered, $expected]) {
++      $title = 'Test link ' . $delta;
++      $this->drupalGet('admin/structure/menu/manage/admin/add');
++      $this->submitForm([
++        'title[0][value]' => $title,
++        'link[0][uri]' => $entered,
++      ], 'Save');
++
++      $links = $storage->loadByProperties(['title' => $title]);
++      $link = reset($links);
++      $this->assertNotFalse($link, "The menu link entered as '$entered' was saved.");
++      $this->assertSame($expected, $link->link->uri, "The link entered as '$entered' was saved with the expected URI.");
++    }
++  }
++
+ }

@@ -16,7 +16,7 @@ Feature: Video paragraph tests.
 
     When I am logged in as a facilitator of the "Paragraphs collection" collection
     And I go to the edit form of the "Video page" "custom page"
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Video"
 
@@ -46,7 +46,7 @@ Feature: Video paragraph tests.
     # Delete and add the same video again, this should reuse the media entity.
     # @see \Drupal\joinup_media\Plugin\Field\FieldWidget\MediaVideoUrlWidget
     And I "delete" from the "Custom page body" field the child 1 paragraph of 1 layout
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Video"
     And I fill in "Remote video URL" with "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
@@ -101,7 +101,7 @@ Feature: Video paragraph tests.
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Video"
     And I fill in "Remote video URL" with "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
