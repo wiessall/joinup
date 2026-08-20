@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_core\Update;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
@@ -39,6 +40,7 @@ final class NodeTranslationsRollback implements ContainerInjectionInterface {
     protected Connection $database,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected EntityFieldManagerInterface $entityFieldManager,
+    protected TimeInterface $time,
   ) {}
 
   /**
@@ -152,7 +154,8 @@ final class NodeTranslationsRollback implements ContainerInjectionInterface {
     $source = $this->entityTypeManager->getStorage('node')->loadRevision($source_vid);
     $source->setNewRevision();
     $source->isDefaultRevision(TRUE);
-    $source->setRevisionLogMessage('Rolled back paragraph references lost while saving translations.');
+    $source->setRevisionCreationTime($this->time->getRequestTime());
+    $source->setRevisionLogMessage('Automated maintenance: no content changes.');
     $source->setRevisionTranslationAffected(TRUE);
     $source->setSyncing(TRUE);
     $source->skip_notification = TRUE;
