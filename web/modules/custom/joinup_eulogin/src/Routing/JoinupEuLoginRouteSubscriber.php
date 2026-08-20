@@ -36,6 +36,11 @@ class JoinupEuLoginRouteSubscriber extends RouteSubscriberBase {
     if ($route = $collection->get('user.login')) {
       $route->setRequirements(['_access' => 'FALSE']);
     }
+
+    // Necessary because otherwise, the cache buster query argument added in
+    // JoinupEuLoginCasEventsSubscriber::handleBrowserCache will be cached by
+    // page cache (or by any other proxy).
+    $collection->get('cas.login')?->setOption('no_cache', TRUE);
   }
 
 }
