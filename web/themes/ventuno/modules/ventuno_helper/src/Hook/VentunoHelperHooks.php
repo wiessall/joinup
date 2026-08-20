@@ -42,6 +42,14 @@ class VentunoHelperHooks {
   }
 
   /**
+   * Implements hook_page_attachments().
+   */
+  #[Hook('page_attachments')]
+  public function pageAttachments(array &$attachments): void {
+    $attachments['#attached']['library'][] = 'ventuno_helper/destination-link';
+  }
+
+  /**
    * Implements hook_link_alter().
    */
   #[Hook('link_alter')]
