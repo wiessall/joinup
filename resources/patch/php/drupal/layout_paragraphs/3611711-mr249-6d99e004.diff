@@ -1,5 +1,5 @@
 diff --git a/src/LayoutParagraphsLayout.php b/src/LayoutParagraphsLayout.php
-index 1c528773903ccb36f80f68fe5ad10e260020be6f..585511718ffcd09e90bf30d1dc9b7076519fd7fa 100644
+index 1c528773903ccb36f80f68fe5ad10e260020be6f..191636714a5c9376252912fed97cf1b216f1de9d 100644
 --- a/src/LayoutParagraphsLayout.php
 +++ b/src/LayoutParagraphsLayout.php
 @@ -33,6 +33,13 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
@@ -33,7 +33,7 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..585511718ffcd09e90bf30d1dc9b7076
 -        return $this->getComponent($entity);
 -      }
 -    }
-+    $paragraph = $this->getEntities()[$uuid] ?? NULL;
++    $paragraph = $this->getEntities()[$uuid ?? ''] ?? NULL;
 +    return $paragraph ? $this->getComponent($paragraph) : NULL;
    }
  
@@ -70,7 +70,19 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..585511718ffcd09e90bf30d1dc9b7076
    }
  
    /**
-@@ -329,6 +334,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
+@@ -329,17 +341,12 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
+       // Only append if no existing entity in the field shares this UUID.
+       // This prevents duplicate paragraphs caused by tempstore sync issues
+       // between Mercury Editor and Layout Paragraphs.
+-      $dominated = FALSE;
+-      foreach ($this->paragraphsReferenceField as $item) {
+-        if (isset($item->entity) && $item->entity->uuid() === $paragraph->uuid()) {
+-          $dominated = TRUE;
+-          break;
+-        }
+-      }
++      $dominated = array_key_exists($paragraph->uuid(), $this->getEntities());
+       if (!$dominated) {
          $this->paragraphsReferenceField[] = $paragraph;
        }
      }
@@ -78,7 +90,7 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..585511718ffcd09e90bf30d1dc9b7076
      return $this;
    }
  
-@@ -367,6 +374,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
+@@ -374,6 +381,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
        }
      }
      $this->paragraphsReferenceField->setValue($reordered_items);
@@ -86,7 +98,7 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..585511718ffcd09e90bf30d1dc9b7076
      return $this;
    }
  
-@@ -532,6 +540,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
+@@ -539,6 +547,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
    public function appendComponent(ParagraphInterface $new_paragraph) {
      $new_paragraph->setParentEntity($this->getEntity(), $this->getFieldName());
      $this->paragraphsReferenceField->appendItem(['entity' => $new_paragraph]);
@@ -94,7 +106,7 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..585511718ffcd09e90bf30d1dc9b7076
      return $this;
    }
  
-@@ -560,6 +569,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
+@@ -567,6 +576,7 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
      if (isset($this->paragraphsReferenceField[$delta])) {
        unset($this->paragraphsReferenceField[$delta]);
      }
@@ -102,7 +114,7 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..585511718ffcd09e90bf30d1dc9b7076
      return $this;
    }
  
-@@ -577,12 +583,8 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
+@@ -580,12 +590,8 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
     *   The component's delta, or -1 if no match.
     */
    protected function getComponentDeltaByUuid(string $uuid) {
@@ -117,7 +129,7 @@ index 1c528773903ccb36f80f68fe5ad10e260020be6f..585511718ffcd09e90bf30d1dc9b7076
    }
  
    /**
-@@ -623,4 +629,11 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
+@@ -630,4 +636,11 @@ class LayoutParagraphsLayout implements ThirdPartySettingsInterface {
      return array_keys($this->thirdPartySettings);
    }
  
