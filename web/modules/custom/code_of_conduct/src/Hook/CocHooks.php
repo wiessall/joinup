@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\collection\Hook;
+namespace Drupal\code_of_conduct\Hook;
 
 use Drupal\code_of_conduct\CocEntityCrudHandlerInterface;
 use Drupal\code_of_conduct\CocMembershipHandlerInterface;
