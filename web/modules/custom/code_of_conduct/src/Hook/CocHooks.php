@@ -15,11 +15,12 @@ use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
- * Collection module hook implementations.
+ * Code of Conduct  module hook implementations.
  */
 class CocHooks {
 
   public function __construct(
+    #[Autowire(service: 'code_of_conduct.crud_handler')]
     readonly protected CocEntityCrudHandlerInterface $cocEntityCrudHandler,
     #[Autowire(service: 'code_of_conduct.membership_handler')]
     readonly protected CocMembershipHandlerInterface $cocMembershipHandler,
