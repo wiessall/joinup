@@ -257,6 +257,7 @@ Feature: Homepage
     When I go to "/news"
     Then I should be on the advanced search page
     And the site should not have log records with level lower than "warning"
+    Then I print the search index status for "published"
     Then I print the page
     And I should see the following facet summary "News"
 
