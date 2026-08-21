@@ -462,7 +462,7 @@ display:
           set_precision: false
           precision: 0
           decimal: .
-          separator: ','
+          separator: ''
           format_plural: true
           format_plural_string: !!binary MSBwbGFjZQNAY291bnQgcGxhY2Vz
           prefix: ''
@@ -1349,7 +1349,7 @@ display:
           set_precision: false
           precision: 0
           decimal: .
-          separator: ','
+          separator: ''
           format_plural: true
           format_plural_string: !!binary MSBwbGFjZQNAY291bnQgcGxhY2Vz
           prefix: ''
