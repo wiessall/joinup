@@ -8,6 +8,8 @@
 declare(strict_types=1);
 
 use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Database\Database;
+use Drupal\joinup_core\Update\RevisionTranslationAffectedRepair;
 use Drupal\joinup_core\Archiver;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 
@@ -129,9 +131,49 @@ function _joinup_core_get_internal_uri(string $uri): ?string {
 }
 
 /**
- * Archives solutions having less than 10 members.
+ * Clears revision_translation_affected where no translation was affected.
  */
 function joinup_core_deploy_201601(array &$sandbox): string {
+  return \Drupal::classResolver(RevisionTranslationAffectedRepair::class)->run($sandbox);
+}
+
+/**
+ * Queues nodes with more than 10 revisions in a language for revision delete.
+ */
+function joinup_core_deploy_201602(): string {
+  $threshold = 10;
+
+  $connection = Database::getConnection();
+  $query = $connection->select('node_field_revision', 'nfr');
+  $query->addField('nfr', 'nid');
+  $query->addExpression('COUNT(nfr.vid)', 'revision_count');
+  $query->condition('nfr.revision_translation_affected', 1);
+  $query->groupBy('nfr.nid');
+  $query->groupBy('nfr.langcode');
+  $query->havingCondition('revision_count', $threshold, '>');
+  $nids = array_unique($query->execute()->fetchCol());
+
+  if (!$nids) {
+    return sprintf('No nodes found with more than %d revisions in a language.', $threshold);
+  }
+
+  /** @var \Drupal\node_revision_delete\NodeRevisionDeleteInterface $node_revision_delete */
+  $node_revision_delete = \Drupal::service('node_revision_delete');
+
+  $queued = 0;
+  foreach ($nids as $nid) {
+    if ($node_revision_delete->createQueueItem((int) $nid)->queued()) {
+      $queued++;
+    }
+  }
+
+  return sprintf('Queued %d out of %d node(s) with more than %d revisions in a language for revision deletion.', $queued, count($nids), $threshold);
+}
+
+/**
+ * Archives solutions having less than 10 members.
+ */
+function joinup_core_deploy_201603(array &$sandbox): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
   $archiver->archiveGroupsWithFewMembers($sandbox);
@@ -147,7 +189,7 @@ function joinup_core_deploy_201601(array &$sandbox): string {
 /**
  * Archives content which wasn't updated in the last 3 years.
  */
-function joinup_core_deploy_201602(array &$sandbox): string {
+function joinup_core_deploy_201604(array &$sandbox): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
   $archiver->archivePotentiallyOutdatedContent($sandbox);
@@ -163,7 +205,7 @@ function joinup_core_deploy_201602(array &$sandbox): string {
 /**
  * Archives solutions which have no releases or distributions.
  */
-function joinup_core_deploy_201603(array &$sandbox): string {
+function joinup_core_deploy_201605(array &$sandbox): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
   $archiver->archiveSolutionsWithoutReleaseOrDistro($sandbox);
