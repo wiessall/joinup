@@ -21,8 +21,8 @@ final class CuratedContentListingHooks {
    */
   #[Hook('contextual_links_view_alter')]
   public function contextualLinksViewAlter(&$element, $items): void {
-    // Change the title of the contextual links to edit entity subqueues. In our
-    // business language these are called 'Curated content listings'.
+    // Change the title of the contextual links to edit entity subqueues.
+    // In our business language these are called 'Curated content listings'.
     if (!empty($element['#links']['entityentity-subqueueedit-form']['title'])) {
       $element['#links']['entityentity-subqueueedit-form']['title'] = $this->t('Update curated content');
     }
@@ -31,8 +31,8 @@ final class CuratedContentListingHooks {
   /**
    * Implements hook_form_BASE_FORM_ID_alter().
    *
-   *  Updates the title of the entity subqueue edit form. In our business
-   *  language the subqueues are known as 'Curated content listings'.
+   * Updates the title of the entity subqueue edit form. In our business
+   * language the subqueues are known as 'Curated content listings'.
    */
   #[Hook('form_entity_subqueue_form_alter')]
   public function formAlter(array &$form, FormStateInterface $form_state, string $form_id): void {
@@ -42,7 +42,8 @@ final class CuratedContentListingHooks {
     // Set a generic fallback title.
     $form['#title'] = $this->t('Update curated content listing.');
 
-    // If we have the original subqueue label available,include it in the title.
+    // If we have the original subqueue label available,
+    // include it in the title.
     if ($label instanceof TranslatableMarkup) {
       $arguments = $label->getArguments();
       if (!empty($arguments['%label'])) {
