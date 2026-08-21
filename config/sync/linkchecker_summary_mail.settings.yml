@@ -1,0 +1,8 @@
+_core:
+  default_config_hash: ILA7RH8CQx07492s8OT8-5EywBTCHj0P4MHcmkxcRb8
+interval: weekly
+enable_global: true
+mail_address: DIGIT-JOINUP-SUPPORT@ec.europa.eu
+notify_author: false
+notify_latest_editor: false
+summarize_all: false
