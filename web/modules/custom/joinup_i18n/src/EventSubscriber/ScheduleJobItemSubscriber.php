@@ -40,8 +40,7 @@ final readonly class ScheduleJobItemSubscriber implements EventSubscriberInterfa
    *   The event instance.
    */
   public function scheduleJobItemCreation(ShouldCreateJobEvent $event): void {
-    if (!$event->shouldCreateItem()) {
-      // An upstream subscriber has denied the creation of the job item.
+    if (!$event->shouldCreateItem() || $event->getPlugin() !== 'content') {
       return;
     }
 
@@ -64,8 +63,7 @@ final readonly class ScheduleJobItemSubscriber implements EventSubscriberInterfa
 
     // Only continuous content jobs handled by eTranslation are scheduled here.
     if (
-      $event->getPlugin() !== 'content'
-      || !$job->isContinuous()
+      !$job->isContinuous()
       || $job->getState() != JobInterface::STATE_CONTINUOUS
       || $job->getTranslator()->id() !== ETranslationTranslator::ID
     ) {

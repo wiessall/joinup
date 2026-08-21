@@ -11,4 +11,7 @@ test ! -f vendor/bin/run || vendor/bin/run toolkit:build-dev
 if [ ! -f .env ] || [ "$(grep 'COMPOSER_DISABLE_NODE_DEPENDENCIES=1' .env)" = "" ]
 then
   npm ci --no-progress
+  # See scripts/composer/post_install: npm lifecycle scripts do not run on the
+  # corporate pipelines, so the former 'postinstall' is invoked explicitly.
+  npm run install:libraries
 fi

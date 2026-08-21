@@ -68,7 +68,7 @@
         "drupal/l10n_pconfig": "^2.0",
         "drupal/layout_builder_component_attributes": "^2.1",
         "drupal/layout_custom_section_classes": "^2.0",
-        "drupal/layout_paragraphs": "^2.0",
+        "drupal/layout_paragraphs": "^3.0",
         "drupal/linkit": "^7.0",
         "drupal/markdown_easy": "^2.0",
         "drupal/masquerade": "^2.2",
@@ -324,7 +324,8 @@
             "drupal/babel": {
                 "Error in TranslationType\\MenuLinkContent when called from tmgmt BabelSource @see https://www.drupal.org/i/3592919": "resources/patch/php/drupal/babel/3592919.mr89-commit024dc285.diff",
                 "OG menu link translation @see https://drupal.org/i/3585681 and https://drupal.org/i/3587828": "resources/patch/php/drupal/babel/3587828-mr88-commit5f52606c.diff",
-                "False passed to rtrim() @see https://drupal.org/i/3604132": "resources/patch/php/drupal/babel/3604132.mr91-commitb3a9b6e0f.diff"
+                "False passed to rtrim() @see https://drupal.org/i/3604132": "resources/patch/php/drupal/babel/3604132.mr91-commitb3a9b6e0f.diff",
+                "Refactor BabelTmgmtHooks::cron() to not rely on existing job items @see https://drupal.org/i/3604133": "resources/patch/php/drupal/babel/3604133.mr93-commit52a9dbc4.diff"
             },
             "drupal/calendar_view": {
                 "missing config schema @see https://www.drupal.org/i/3488649": "resources/patch/php/drupal/calendar_view/3488649.diff",
@@ -370,7 +371,9 @@
                 "[site:url] token omits trailing slash in other languages @see https://www.drupal.org/i/2163913": "resources/patch/php/drupal/core/2163913.mr15511.commit58a97130.diff",
                 "Fatal error when saving translation configuration @see https://www.drupal.org/i/3549469": "resources/patch/php/drupal/core/3549469.diff",
                 "Translations of nodes with comment settings field set to non-translatable returns EntityUntranslatableFieldsConstraint @see https://www.drupal.org/i/3015675": "resources/patch/php/drupal/core/3015675-83bb966c.diff",
-                "Plugin manager with fallback when the plugin ID is null @see https://www.drupal.org/project/drupal/issues/3581628": "resources/patch/php/drupal/core/3581628.diff"
+                "Plugin manager with fallback when the plugin ID is null @see https://www.drupal.org/project/drupal/issues/3581628": "resources/patch/php/drupal/core/3581628.diff",
+                "Convert local absolute menu link URLs into internal paths @see https://www.drupal.org/i/483150": "resources/patch/php/drupal/core/483150.mr11507-commit2e0599ae.diff",
+                "HTML (all languages) appearing in error messages of multilingual sites @see https://www.drupal.org/i/3395366": "resources/patch/php/drupal/core/3395366.mr11035-commit83c08bfd.diff"
             },
             "drupal/csv_serialization": {
                 "Replace League\\Csv methods deprecated since league/csv 9.27.0 @see https://www.drupal.org/i/3562555": "resources/patch/php/drupal/csv_serialization/3562555.diff"
@@ -454,9 +457,9 @@
                 "Utilize layout preview mode https://drupal.org/i/3392735": "resources/patch/php/drupal/layout_paragraphs/layout_paragraphs-utilize_layout_preview-3392735-5--fix-only.patch",
                 "Allow to drag and drop nested paragraphs @see https://www.drupal.org/project/layout_paragraphs/issues/3401176": "resources/patch/php/drupal/layout_paragraphs/3401176.patch",
                 "Integrity constraint violation @see https://www.drupal.org/project/layout_paragraphs/issues/3528058": "resources/patch/php/drupal/layout_paragraphs/3528058.patch",
-                "Prevent moving components on Translate edit page @see https://drupal.org/i/3540040": "resources/patch/php/drupal/layout_paragraphs/3540040-mr234-commit97ffc2d1.diff",
-                "Provide more info to component add buttons to help customization @see https://drupal.org/i/3611607": "resources/patch/php/drupal/layout_paragraphs/3611607-mr248-1356ffbb58--on-top-of-3540040.diff",
-                "Cache loaded paragraphs in LayoutParagraphsLayout @see https://drupal.org/i/3611711": "resources/patch/php/drupal/layout_paragraphs/3611711-mr249-9ec8d4282c--v2.diff",
+                "Prevent moving components on Translate edit page @see https://drupal.org/i/3540040": "resources/patch/php/drupal/layout_paragraphs/3540040.mr242.diff",
+                "Provide more info to component add buttons to help customization @see https://drupal.org/i/3611607": "resources/patch/php/drupal/layout_paragraphs/3611607-mr248-1356ffbb58--on-top-of-3540040.mr242.diff",
+                "Cache loaded paragraphs in LayoutParagraphsLayout @see https://drupal.org/i/3611711": "resources/patch/php/drupal/layout_paragraphs/3611711-mr249-6d99e004.diff",
                 "Maximum call stack size reached in serialize() @see https://www.drupal.org/i/3599833": "resources/patch/php/drupal/layout_paragraphs/3599833.mr241.commitd4c9beff1108.diff"
             },
             "drupal/memcache": {
@@ -481,7 +484,9 @@
             },
             "drupal/oauth_client": {
                 "Add post-update hook to install OAuth Client Minimal filter format. @see https://www.drupal.org/i/3555048": "resources/patch/php/drupal/oauth_client/3555048v2.diff",
-                "Notifications per request type. @see https://www.drupal.org/i/3567235": "resources/patch/php/drupal/oauth_client/3567235-c17f91608.diff"
+                "Notifications per request type. @see https://www.drupal.org/i/3567235": "resources/patch/php/drupal/oauth_client/3567235-c17f91608.diff",
+                "Fix errors revealed by PHPStan @see https://git.drupalcode.org/project/oauth_client/-/work_items/3601643": "resources/patch/php/drupal/oauth_client/3601643-mr32.diff",
+                "Notification refactor @see https://git.drupalcode.org/project/oauth_client/-/work_items/3601642": "resources/patch/php/drupal/oauth_client/3601642-mr31-1d8dc229af.diff"
             },
             "drupal/og": {
                 "Performance hit from OG permission compilation @see https://git.drupalcode.org/project/og/-/work_items/3594172": "resources/patch/php/drupal/og/3594172.mr75-commita75d7be4.diff"
@@ -511,7 +516,7 @@
             },
             "drupal/search_api": {
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199-42e0e284.diff",
-                "Consider to just re-index affected translations instead of all translations": "resources/patch/php/drupal/search_api/2832167.mr346-commit-26c2d2ae.diff"
+                "Consider to just re-index affected translations instead of all translations": "resources/patch/php/drupal/search_api/2832167.mr346-commit-b2b1e12f.diff"
             },
             "drupal/search_api_spellcheck": {
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
@@ -539,7 +544,11 @@
                 "Non-translatable fields are exported when the bundle is not enabled for content translation @see https://www.drupal.org/i/3382356": "resources/patch/php/drupal/tmgmt/3382356.mr172.commitd2294f18.diff",
                 "Delete job item when corresponding entity is being deleted @see https://www.drupal.org/i/2998143": "resources/patch/php/drupal/tmgmt/2998143.mr35.commitdd0ee714.diff",
                 "Messages flooded @see https://www.drupal.org/i/3611439": "resources/patch/php/drupal/tmgmt/3611439.mr175-commitfff006f2.diff",
-                "Hook to allow modules to alter translation @see https://www.drupal.org/i/2998143": "resources/patch/php/drupal/tmgmt/3298245.mr58.commit6976599d.diff"
+                "Add purge continuous jobs item @see https://drupal.org/i/3134985": "resources/patch/php/drupal/tmgmt/3134985.mr178-b680b1b9c9.diff",
+                "Hook to allow modules to alter translation @see https://www.drupal.org/i/3298245": "resources/patch/php/drupal/tmgmt/3298245.mr58.commit6976599d.diff"
+            },
+            "drupal/tmgmt_ec_etranslation": {
+                "Reschedule timeouted items few times @see https://www.drupal.org/i/3609037": "resources/patch/php/drupal/tmgmt_ec_etranslation/3609037.mr3609037-commit55c6c018.diff"
             },
             "drupal/token": {
                 "PHP 8.5 @see https://www.drupal.org/i/3581883": "resources/patch/php/drupal/token/3581883.mr123.commit-710b94c1.diff"

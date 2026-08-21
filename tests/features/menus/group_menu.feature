@@ -250,24 +250,24 @@ Feature: Group navigation menu links
     # Move solution to another collection.
     Given I am logged in as a moderator
     And I go to the homepage of the "Imperial Library" collection
-    When I click "Manage solutions"
+    When I click "Manage content"
     When I select the "Solution1" row
-    And I select "Move to other collection" from "Action"
+    And I select "Move to other group" from "Action"
     When I press "Apply to selected items"
     And I fill in "Select the destination collection" with "Target"
-    When I press "Move solutions"
+    When I press "Apply"
     When I go to the homepage of the "Solution1" solution
     Then I should see the link "Glossary"
     And the response should contain "/collection/target/glossary"
 
     # Move solution back.
     And I go to the homepage of the "Target" collection
-    When I click "Manage solutions"
+    When I click "Manage content"
     When I select the "Solution1" row
-    And I select "Move to other collection" from "Action"
+    And I select "Move to other group" from "Action"
     When I press "Apply to selected items"
     And I fill in "Select the destination collection" with "Imperial Library"
-    When I press "Move solutions"
+    When I press "Apply"
     When I go to the homepage of the "Solution1" solution
     Then I should see the link "Glossary"
     And the response should contain "/collection/imperial-library/glossary"
@@ -275,12 +275,12 @@ Feature: Group navigation menu links
     # Delete the Neutral glossary
     Given I delete the "Neutral" content
     When I go to the homepage of the "Imperial Library" collection
-    When I click "Manage solutions"
+    When I click "Manage content"
     When I select the "Solution1" row
-    And I select "Move to other collection" from "Action"
+    And I select "Move to other group" from "Action"
     When I press "Apply to selected items"
     And I fill in "Select the destination collection" with "Target"
-    And I press "Move solutions"
+    And I press "Apply"
     When I go to the homepage of the "Target" collection
     Then I should not see the link "Glossary"
     When I go to the homepage of the "Solution1" solution

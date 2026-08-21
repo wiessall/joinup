@@ -63,7 +63,7 @@ Feature: Assessment report permissions and access control
     When I select "Test Organization" from "Select organisation"
 
     # Binding requirements
-    When I click "New binding requirement"
+    When I add a section
     And a modal should open
 
     When I click "Initiative" in the "Modal content" region
@@ -123,6 +123,47 @@ Feature: Assessment report permissions and access control
     And I am logged in as pol2025
     And I go to "/collection/assessments/report/create"
     Then I should see the button "Publish"
+
+  Scenario: Anonymous users see the whole published assessment report
+    Given expression assessments:
+      | name             |
+      | Public Test Expr |
+    And public_service assessments:
+      | name            |
+      | Public Test Svc |
+    And participation assessments:
+      | name               |
+      | Public Test Partic |
+    And report assessments:
+      | name                    | state     | provider          | remaining_barriers        | other_comment          |
+      | Publicly Visible Report | published | Test Organization | Some barriers remain here | This is a test comment |
+    And the "Publicly Visible Report" report has assessment statements of types:
+      | type           |
+      | legal          |
+      | organisational |
+      | semantic       |
+      | technical      |
+    And the following report has binding requirement:
+      | report        | Publicly Visible Report                |
+      | expression    | Public Test Expr                       |
+      | service       | Public Test Svc                        |
+      | participation | Public Test Partic                     |
+      | description   | This binding requirement is public     |
+      | documented_in | https://example.com/public-requirement |
+
+    # The binding requirements are paragraphs, which are governed by their own
+    # 'view paragraph content binding_requirement' permission. Without it the
+    # page still returns a 200 but silently drops the section.
+    When I am an anonymous user
+    And I go to the "Publicly Visible Report" report
+    Then I should see the heading "Publicly Visible Report"
+    And I should see the text "General information"
+    And I should see the text "Binding requirements"
+    And I should see the text "This binding requirement is public"
+    And I should see the text "Results"
+    And I should see the text "Some barriers remain here"
+    And I should see the text "Supporting documents and general comments"
+    And I should see the text "This is a test comment"
 
   Scenario: Assessment add page shows only accessible bundles for authenticated users
     Given I am logged in as an "authenticated user"

@@ -129,6 +129,7 @@ class ShareForm extends ShareFormBase {
       $group_labels[] = $groups[$id]->label();
     }
     $this->shareOnGroups($groups);
+    $this->searchIndexCommitter->commitPendingChanges();
 
     // Show a message if the content was shared on at least one group.
     if (!empty($groups)) {

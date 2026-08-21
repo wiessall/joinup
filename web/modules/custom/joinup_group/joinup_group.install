@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Deploy hooks for the Joinup Group module.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Remove all manage_collection_solutions from config.
+ */
+function joinup_group_update_201605(): void {
+  \Drupal::database()
+    ->delete('config')
+    ->condition('name', 'views.view.manage_collection_solutions')
+    ->execute();
+}
