@@ -546,6 +546,7 @@
                 "Messages flooded @see https://www.drupal.org/i/3611439": "resources/patch/php/drupal/tmgmt/3611439.mr175-commitfff006f2.diff",
                 "Add purge continuous jobs item @see https://drupal.org/i/3134985": "resources/patch/php/drupal/tmgmt/3134985.mr178-b680b1b9c9.diff",
                 "Hook to allow modules to alter translation @see https://www.drupal.org/i/3298245": "resources/patch/php/drupal/tmgmt/3298245.mr58.commit6976599d.diff",
+                "Data loss when the same source is accepted concurrently @see https://www.drupal.org/i/3618383": "resources/patch/php/drupal/tmgmt/3618383.mr180.commit445d31a6.diff",
                 "Major performance problem @see https://www.drupal.org/i/3534961": "resources/patch/php/drupal/tmgmt/3534961.mr125.commit-d5e00810.diff"
             },
             "drupal/tmgmt_ec_etranslation": {
