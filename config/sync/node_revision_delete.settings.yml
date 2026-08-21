@@ -4,7 +4,7 @@ defaults:
   amount:
     status: true
     settings:
-      amount: 30
+      amount: 10
   created:
     status: false
     settings:
