@@ -12,6 +12,7 @@ use Drupal\Core\Database\Database;
 use Drupal\joinup_core\Archiver;
 use Drupal\joinup_core\Update\RevisionTranslationAffectedRepair;
 use Drupal\menu_link_content\MenuLinkContentInterface;
+use Drupal\search_api\Entity\Index;
 
 /**
  * Converts absolute internal menu link URLs into internal paths.
@@ -176,7 +177,11 @@ function joinup_core_deploy_201602(): string {
 function joinup_core_deploy_201603(array &$sandbox): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
+  \Drupal::service('rdf_sync.synchronizer')->disableSynchronization();
+  Index::load('published')->startBatchTracking();
   $archiver->archiveGroupsWithFewMembers($sandbox);
+  Index::load('published')->stopBatchTracking();
+  \Drupal::service('rdf_sync.synchronizer')->enableSynchronization();
 
   return sprintf(
     "Archived %s from %s items of %s total.",
@@ -192,7 +197,11 @@ function joinup_core_deploy_201603(array &$sandbox): string {
 function joinup_core_deploy_201604(array &$sandbox): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
+  \Drupal::service('rdf_sync.synchronizer')->disableSynchronization();
+  Index::load('published')->startBatchTracking();
   $archiver->archivePotentiallyOutdatedContent($sandbox);
+  Index::load('published')->stopBatchTracking();
+  \Drupal::service('rdf_sync.synchronizer')->enableSynchronization();
 
   return sprintf(
     "Archived %s from %s items of %s total.",
@@ -208,7 +217,11 @@ function joinup_core_deploy_201604(array &$sandbox): string {
 function joinup_core_deploy_201605(array &$sandbox): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
+  \Drupal::service('rdf_sync.synchronizer')->disableSynchronization();
+  Index::load('published')->startBatchTracking();
   $archiver->archiveSolutionsWithoutReleaseOrDistro($sandbox);
+  Index::load('published')->stopBatchTracking();
+  \Drupal::service('rdf_sync.synchronizer')->enableSynchronization();
 
   return sprintf(
     "Archived %s from %s items of %s total.",
@@ -224,7 +237,31 @@ function joinup_core_deploy_201605(array &$sandbox): string {
 function joinup_core_deploy_201606(array &$sandbox): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
+  \Drupal::service('rdf_sync.synchronizer')->disableSynchronization();
+  Index::load('published')->startBatchTracking();
   $archiver->archiveGroupsWithoutContent($sandbox);
+  Index::load('published')->stopBatchTracking();
+  \Drupal::service('rdf_sync.synchronizer')->enableSynchronization();
+
+  return sprintf(
+    "Archived %s from %s items of %s total.",
+    $sandbox['archived'],
+    $sandbox['processed'],
+    $sandbox['total'],
+  );
+}
+
+/**
+ * Archives collections which have no solutions.
+ */
+function joinup_core_deploy_201607(array &$sandbox): string {
+  $archiver = \Drupal::service(Archiver::class);
+  assert($archiver instanceof Archiver);
+  \Drupal::service('rdf_sync.synchronizer')->disableSynchronization();
+  Index::load('published')->startBatchTracking();
+  $archiver->archiveCollectionsWithoutSolutions($sandbox);
+  Index::load('published')->stopBatchTracking();
+  \Drupal::service('rdf_sync.synchronizer')->enableSynchronization();
 
   return sprintf(
     "Archived %s from %s items of %s total.",
