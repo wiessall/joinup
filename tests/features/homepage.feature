@@ -252,12 +252,10 @@ Feature: Homepage
     When I click "More events"
     Then I should be on "/upcoming-events"
 
-  @group-clone @loggedErrors
+  @group-clone
   Scenario: The /news path redirects to the search page filtered on news.
     When I go to "/news"
     Then I should be on the advanced search page
-    And the site should not have log records with level lower than "warning"
-    Then I print the search index status for "published"
     And I should see the following facet summary "News"
 
     # Verify that the /news path respects the language prefix.

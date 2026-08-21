@@ -290,38 +290,4 @@ class HomepageContext extends RawDrupalContext {
     }
   }
 
-  /**
-   * Prints tracking/indexing counters for a Search API index.
-   *
-   * Useful to debug a Solr clone where content is tracked but not (yet)
-   * indexed, e.g. after the index or server was reset.
-   */
-  #[Given('I print the search index status for :indexId')]
-  public function printSearchIndexStatus(string $indexId): void {
-    /** @var \Drupal\search_api\IndexInterface|null $index */
-    $index = \Drupal::entityTypeManager()->getStorage('search_api_index')->load($indexId);
-    if (!$index) {
-      fwrite(STDERR, "Search API index '$indexId' not found.\n");
-      return;
-    }
-
-    $tracker = $index->getTrackerInstance();
-    $lines = ["Search API index '$indexId' status:"];
-    $lines[] = sprintf('  Total tracked items: %d', $tracker->getTotalItemsCount());
-    $lines[] = sprintf('  Indexed items: %d', $tracker->getIndexedItemsCount());
-    $lines[] = sprintf('  Remaining (not yet indexed) items: %d', $tracker->getRemainingItemsCount());
-
-    foreach ($index->getDatasources() as $datasource_id => $datasource) {
-      $lines[] = sprintf(
-        '  [%s] total: %d, indexed: %d, remaining: %d',
-        $datasource_id,
-        $tracker->getTotalItemsCount($datasource_id),
-        $tracker->getIndexedItemsCount($datasource_id),
-        $tracker->getRemainingItemsCount($datasource_id)
-      );
-    }
-
-    fwrite(STDERR, implode("\n", $lines) . "\n");
-  }
-
 }
