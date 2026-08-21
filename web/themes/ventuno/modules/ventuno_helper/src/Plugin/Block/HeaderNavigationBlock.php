@@ -176,6 +176,12 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
             'element' => [
               '#theme' => 'joinup_header_get_started_cta',
               '#url' => Url::fromRoute('cas.login'),
+              '#attributes' => [
+                'class' => ['get-started__cta', 'fw-bold'],
+                'tabindex' => 0,
+                'data-destination' => TRUE,
+              ],
+              '#attached' => ['library' => ['ventuno_helper/destination-link']],
             ],
           ],
           'description' => $this->t('As a signed-in user you can create content, become a member of a community, receive notifications on your favourite solutions and topics, and access all other features available on the platform.'),
@@ -202,6 +208,7 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
       '#title' => $this->t('Sign in'),
       '#url' => Url::fromRoute('cas.login'),
       '#attributes' => ['data-destination' => TRUE],
+      '#attached' => ['library' => ['ventuno_helper/destination-link']],
     ];
     if ($classes) {
       $element['#attributes']['class'] = $classes;

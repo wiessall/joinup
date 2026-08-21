@@ -1,5 +1,4 @@
 destination-link:
-  version: VERSION
   js:
     js/destination-link.js: { minified: false }
   dependencies:

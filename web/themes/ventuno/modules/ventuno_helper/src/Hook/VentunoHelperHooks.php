@@ -36,17 +36,10 @@ class VentunoHelperHooks {
       'joinup_header_get_started_cta' => [
         'variables' => [
           'url' => NULL,
+          'attributes' => [],
         ],
       ],
     ];
-  }
-
-  /**
-   * Implements hook_page_attachments().
-   */
-  #[Hook('page_attachments')]
-  public function pageAttachments(array &$attachments): void {
-    $attachments['#attached']['library'][] = 'ventuno_helper/destination-link';
   }
 
   /**

@@ -17,9 +17,6 @@
       once("destination-link", "[data-destination]", context).forEach(
         (link) => {
           const url = new URL(link.href);
-          if (url.searchParams.has("t")) {
-            url.searchParams.set("t", Math.random().toString(16).slice(2));
-          }
           url.searchParams.set("destination", destination);
           link.href = `${url.pathname}${url.search}`;
         },
