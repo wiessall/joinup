@@ -3,6 +3,8 @@ _core:
 quick_checkout: true
 anonymous_access: true
 purge_finished: _never
+purge_continuous: '604800'
+purge_continuous_aborted: false
 respect_text_format: true
 allowed_formats: {  }
 word_count_exclude_tags: true
