@@ -221,7 +221,7 @@ function joinup_core_deploy_201605(array &$sandbox): string {
 /**
  * Archives groups without group content.
  */
-function joinup_core_deploy_201604(array &$sandbox): string {
+function joinup_core_deploy_201606(array &$sandbox): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
   $archiver->archiveGroupsWithoutContent($sandbox);
