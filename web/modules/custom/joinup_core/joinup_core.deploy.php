@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Database\Database;
-use Drupal\joinup_core\Update\RevisionTranslationAffectedRepair;
 use Drupal\joinup_core\Archiver;
+use Drupal\joinup_core\Update\RevisionTranslationAffectedRepair;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 
 /**
