@@ -6,6 +6,7 @@ dependencies:
     - taxonomy
 id: homepage_topics
 label: 'Homepage topics'
+description: ''
 handler: simple
 handler_configuration: {  }
 entity_settings:

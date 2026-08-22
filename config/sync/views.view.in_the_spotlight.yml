@@ -201,7 +201,8 @@ display:
           entity_type: node
           plugin_id: entity_queue
           required: true
-          limit_queue: spotlight
+          limit_queue:
+            - spotlight
       header: {  }
       footer: {  }
       rendering_language: '***LANGUAGE_language_interface***'
