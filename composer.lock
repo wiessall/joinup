@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "113bf617db19b73b634892e91e358191",
+    "content-hash": "6b8f3f7f04903271255a076d06a957ed",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -24435,16 +24435,16 @@
         },
         {
             "name": "mglaman/phpstan-drupal",
-            "version": "2.0.15",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mglaman/phpstan-drupal.git",
-                "reference": "b61426dddc69862d652abe87cae40848e28caa7d"
+                "reference": "6b4fd0485597d34903efd6a66a6516b659461d2c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/b61426dddc69862d652abe87cae40848e28caa7d",
-                "reference": "b61426dddc69862d652abe87cae40848e28caa7d",
+                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/6b4fd0485597d34903efd6a66a6516b659461d2c",
+                "reference": "6b4fd0485597d34903efd6a66a6516b659461d2c",
                 "shasum": ""
             },
             "require": {
@@ -24453,7 +24453,7 @@
                 "phpstan/phpstan-deprecation-rules": "^2.0",
                 "symfony/finder": "^6.2 || ^7.0 || ^8.0",
                 "symfony/yaml": "^6.2 || ^7.0 || ^8.0",
-                "webflo/drupal-finder": "^1.3.1"
+                "webflo/drupal-finder": "^1.3.1 || ^2.0"
             },
             "require-dev": {
                 "behat/mink": "^1.10",
@@ -24516,7 +24516,7 @@
             "description": "Drupal extension and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/mglaman/phpstan-drupal/issues",
-                "source": "https://github.com/mglaman/phpstan-drupal/tree/2.0.15"
+                "source": "https://github.com/mglaman/phpstan-drupal/tree/2.1.2"
             },
             "funding": [
                 {
@@ -24532,7 +24532,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-04-24T10:47:34+00:00"
+            "time": "2026-08-13T15:38:26+00:00"
         },
         {
             "name": "mikey179/vfsstream",

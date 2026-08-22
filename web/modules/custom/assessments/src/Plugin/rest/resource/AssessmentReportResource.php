@@ -77,11 +77,6 @@ class AssessmentReportResource extends ResourceBase {
   use ProvidedByHelperTrait;
 
   /**
-   * Assessment storage static cache.
-   */
-  protected ContentEntityStorageInterface $assessmentStorage;
-
-  /**
    * An array of errors encountered during processing.
    */
   protected array $errors = [];
@@ -1208,18 +1203,15 @@ class AssessmentReportResource extends ResourceBase {
   }
 
   /**
-   * Returns and statically caches the assessments entity storage.
+   * Returns the assessments entity storage.
    *
    * @returns \Drupal\Core\Entity\ContentEntityStorageInterface
    *   The assessments entity storage.
    */
   protected function getAssessmentStorage(): ContentEntityStorageInterface {
-    if (!isset($this->assessmentStorage)) {
-      $storage = $this->entityTypeManager->getStorage('assessment');
-      assert($storage instanceof ContentEntityStorageInterface);
-      $this->assessmentStorage = $storage;
-    }
-    return $this->assessmentStorage;
+    $storage = $this->entityTypeManager->getStorage('assessment');
+    assert($storage instanceof ContentEntityStorageInterface);
+    return $storage;
   }
 
   /**
