@@ -21,9 +21,9 @@ class ScheduleTranslationForm extends FormBase {
   use AutowireTrait;
 
   public function __construct(
-    private readonly EntityTypeManagerInterface $entityTypeManager,
-    private readonly TranslationScheduler $translationScheduler,
-    private readonly DateFormatterInterface $dateFormatter,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly TranslationScheduler $translationScheduler,
+    protected readonly DateFormatterInterface $dateFormatter,
   ) {}
 
   /**

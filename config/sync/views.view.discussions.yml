@@ -8,7 +8,6 @@ dependencies:
     - search_api.index.published
   module:
     - joinup_discussion
-    - joinup_group
     - joinup_tiles
     - search_api
 id: discussions
@@ -167,7 +166,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: search_api_group
+          plugin_id: search_api
           default_action: default
           exception:
             value: all

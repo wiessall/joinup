@@ -22,6 +22,7 @@ use Drupal\assessments\Render\LayoutParagraphsBuilderAlter;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -313,7 +314,7 @@ function _assessments_can_moderate(EntityInterface $entity, AccountInterface $ac
 /**
  * Implements hook_entity_operation().
  */
-function assessments_entity_operation(EntityInterface $entity): array {
+function assessments_entity_operation(EntityInterface $entity, CacheableMetadata $cacheability): array {
   $operations = [];
 
   if (!$entity instanceof AssessmentReport) {
@@ -321,6 +322,7 @@ function assessments_entity_operation(EntityInterface $entity): array {
   }
 
   $access = _assessments_can_moderate($entity, \Drupal::service('current_user')->getAccount());
+  $cacheability->addCacheableDependency($access);
 
   // Only add the operation if access is explicitly allowed.
   if (!$access->isAllowed()) {
