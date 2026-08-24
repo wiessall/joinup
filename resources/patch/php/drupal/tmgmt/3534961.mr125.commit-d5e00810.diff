@@ -1,0 +1,22 @@
+diff --git a/src/ContinuousManager.php b/src/ContinuousManager.php
+index bcbc4ae413129f68fdc2889d97acd919f0a3974e..45cfea160a2f5488aec8eb2337c4e940ee259cc5 100644
+--- a/src/ContinuousManager.php
++++ b/src/ContinuousManager.php
+@@ -131,8 +131,6 @@ class ContinuousManager {
+    * @see \Drupal\tmgmt\Events\ContinuousEvents::SHOULD_CREATE_JOB
+    */
+   public function addItem(Job $job, $plugin, $item_type, $item_id) {
+-    // Check if a job item should be created.
+-    $most_recent_job_item = $job->getMostRecentItem($plugin, $item_type, $item_id);
+     $should_create_item = $this->sourcePluginManager->createInstance($plugin)->shouldCreateContinuousItem($job, $plugin, $item_type, $item_id);
+ 
+     // Some modules might want to filter out candidates for items.
+@@ -140,6 +138,8 @@ class ContinuousManager {
+     $this->eventDispatcher->dispatch($event, ContinuousEvents::SHOULD_CREATE_JOB);
+ 
+     if ($event->shouldCreateItem()) {
++      // Check if a job item should be created.
++      $most_recent_job_item = $job->getMostRecentItem($plugin, $item_type, $item_id);
+       if ($most_recent_job_item) {
+         // If the most recent job item is active do nothing.
+         if (!$most_recent_job_item->isAborted() && !$most_recent_job_item->isAccepted()) {
