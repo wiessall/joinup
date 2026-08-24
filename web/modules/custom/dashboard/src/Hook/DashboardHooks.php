@@ -6,23 +6,25 @@ namespace Drupal\dashboard\Hook;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
-use Drupal\Core\Routing\UrlGeneratorInterface;
+use Drupal\Core\Url;
 
 /**
  * Hook implementations for dashboard.
  */
 final class DashboardHooks {
 
-  public function __construct(
-    protected readonly UrlGeneratorInterface $urlGenerator,
-  ) {}
-
   /**
-   * Implements hook_form_FORM_ID_alter() for the spotlight subqueue form.
+   * Implements hook_form_alter().
    */
-  #[Hook('entity_subqueue_spotlight_edit_form')]
+  #[Hook('form_alter')]
   public function formAlter(array &$form, FormStateInterface $form_state, string $form_id,): void {
-    $form['actions']['submit']['#submit'][] = 'dashboardRedirectCuratedContentListing';
+    $ids = [
+      'entity_subqueue_spotlight_edit_form',
+    ];
+    if (!in_array($form_id, $ids)) {
+      return;
+    }
+    $form['actions']['submit']['#submit'][] = static::class . ':dashboardRedirectCuratedContentListing';
   }
 
   /**
@@ -34,7 +36,8 @@ final class DashboardHooks {
    *   The form state.
    */
   public function dashboardRedirectCuratedContentListing(array &$form, FormStateInterface $form_state,): void {
-    $form_state->setRedirectUrl($this->urlGenerator->generateFromRoute('view.curated_content_listings.page'));
+    $url = Url::fromRoute('view.curated_content_listings.page');
+    $form_state->setRedirectUrl($url);
   }
 
 }
