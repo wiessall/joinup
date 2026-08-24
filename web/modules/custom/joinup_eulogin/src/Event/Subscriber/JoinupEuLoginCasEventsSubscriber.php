@@ -15,6 +15,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
@@ -24,6 +25,8 @@ use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Listens to CAS events.
@@ -51,6 +54,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
     protected readonly StateInterface $state,
     #[Autowire(service: 'externalauth.authmap')]
     protected readonly Authmap $authmap,
+    protected readonly RouteMatchInterface $routeMatch,
   ) {
     $this->settings = $this->configFactory->get('oe_authentication.settings');
     $this->casSettings = $this->configFactory->get('cas.settings');
@@ -78,6 +82,9 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
       CasPostLoginEvent::class => [
         ['storeAttributes'],
         ['setRedirectAndStatusOnNewAccount', -20],
+      ],
+      KernelEvents::RESPONSE => [
+        ['noStoreForCasService'],
       ],
     ];
   }
@@ -271,6 +278,23 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
         $this->t('Fill in the fields below to let the Interoperable Europe Portal community learn more about you!')
       );
     }
+  }
+
+  /**
+   * Make sure CAS login response does not get cached by browser or proxy.
+   *
+   * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
+   *   The response event.
+   */
+  public function noStoreForCasService(ResponseEvent $event): void {
+    if ($this->routeMatch->getRouteName() !== 'cas.service') {
+      return;
+    }
+    $headers = $event->getResponse()->headers;
+    if (!$headers->hasCacheControlDirective('no-cache')) {
+      return;
+    }
+    $headers->set('Cache-Control', 'no-store', FALSE);
   }
 
   /**
