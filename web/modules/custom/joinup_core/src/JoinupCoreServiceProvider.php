@@ -35,6 +35,20 @@ class JoinupCoreServiceProvider implements ServiceModifierInterface {
       }
     }
 
+    // Append the Joinup processors to the ones provided by the monolog module.
+    // Setting the parameter, instead of appending to it, would drop the
+    // module's own processors, as the site service files are loaded after the
+    // module ones.
+    // @see \Drupal\Core\DrupalKernel::compileContainer()
+    if ($container->hasParameter('monolog.processors')) {
+      $monolog_processors = $container->getParameter('monolog.processors');
+      $monolog_processors[] = 'error_page_error_uuid';
+      // Processors run in reverse order, so this one runs first and strips the
+      // heavy context entries before anything tries to serialize them.
+      $monolog_processors[] = 'backtrace';
+      $container->setParameter('monolog.processors', $monolog_processors);
+    }
+
     // If dblog module is enabled, log also in the {watchdog} table. The dblog
     // module is not enabled on production for performance reasons but is useful
     // on local development and testing environments for debug purposes.

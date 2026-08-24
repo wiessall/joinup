@@ -4,14 +4,6 @@ parameters:
     default: ['default_handler']
     php: ['php_handler', 'mail']
 
-  monolog.processors:
-    - message_placeholder
-    - current_user
-    - request_uri
-    - ip
-    - referer
-    - error_page_error_uuid
-
   # These two parameters settings are overridden with values stored in
   # environment variables, in JoinupCoreServiceProvider::alter(), and are here
   # only to provide sane defaults.
@@ -37,3 +29,7 @@ services:
 
   monolog.processor.error_page_error_uuid:
     class: Drupal\joinup_core\Logger\Processor\ErrorPageErrorUuidProcessor
+
+  monolog.processor.backtrace:
+    class: Drupal\joinup_core\Logger\Processor\BacktraceProcessor
+    shared: false
