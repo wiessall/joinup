@@ -457,7 +457,7 @@ class JoinupSearchContext extends RawDrupalContext {
       $expected_values = array_map('trim', explode(',', $row[1]));
       if ($field_name === 'topic') {
         foreach ($expected_values as $index => $value) {
-          $expected_values[$index] = $this->getEntityByLabel('taxonomy_term', $value)->id();
+          $expected_values[$index] = (int) $this->getEntityByLabel('taxonomy_term', $value)->id();
         }
       }
       $actual_values = $document->getField($field_name)->getValues();

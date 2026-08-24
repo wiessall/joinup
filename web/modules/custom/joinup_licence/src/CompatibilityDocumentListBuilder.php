@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_licence;
 
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
-use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\joinup_licence\Entity\CompatibilityDocument;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -18,11 +19,11 @@ class CompatibilityDocumentListBuilder extends EntityListBuilder {
 
   public function __construct(
     EntityTypeInterface $entity_type,
-    EntityStorageInterface $storage,
+    EntityTypeManagerInterface $entity_type_manager,
     protected $redirectDestination,
     protected readonly JoinupLicenceCompatibilityRulePluginManager $pluginManager,
   ) {
-    parent::__construct($entity_type, $storage);
+    parent::__construct($entity_type, $entity_type_manager->getStorage($entity_type->id()));
   }
 
   /**
@@ -31,7 +32,7 @@ class CompatibilityDocumentListBuilder extends EntityListBuilder {
   public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type): CompatibilityDocumentListBuilder {
     return new static(
       $entity_type,
-      $container->get('entity_type.manager')->getStorage($entity_type->id()),
+      $container->get('entity_type.manager'),
       $container->get('redirect.destination'),
       $container->get('plugin.manager.joinup_licence_compatibility_rule')
     );
@@ -74,8 +75,8 @@ class CompatibilityDocumentListBuilder extends EntityListBuilder {
   /**
    * {@inheritdoc}
    */
-  protected function getDefaultOperations(EntityInterface $entity): array {
-    $operations = parent::getDefaultOperations($entity);
+  protected function getDefaultOperations(EntityInterface $entity, ?CacheableMetadata $cacheability = NULL): array {
+    $operations = parent::getDefaultOperations($entity, $cacheability);
     $destination = $this->redirectDestination->getAsArray();
     foreach ($operations as $key => $operation) {
       $operations[$key]['query'] = $destination;

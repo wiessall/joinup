@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Plugin\QueueWorker;
 
-use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\Attribute\QueueWorker;
@@ -37,11 +36,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 )]
 class SendGroupAnnouncementsQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * Static cache for message entity storage.
-   */
-  protected EntityStorageInterface $storage;
-
   public function __construct(
     array $configuration,
     string $plugin_id,
@@ -72,7 +66,7 @@ class SendGroupAnnouncementsQueueWorker extends QueueWorkerBase implements Conta
    */
   public function processItem($data): void {
     /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
-    if (!$announcement = $this->getMessageStorage()->load($data['announcement'])) {
+    if (!$announcement = $this->entityTypeManager->getStorage('message')->load($data['announcement'])) {
       // The entity might have been deleted in the meantime.
       return;
     }
@@ -108,22 +102,6 @@ class SendGroupAnnouncementsQueueWorker extends QueueWorkerBase implements Conta
       $accounts = $this->entityTypeManager->getStorage('user')->loadMultiple($data['recipients']);
       $this->messageDelivery->sendMessageToMultipleUsers($announcement, $accounts);
     }
-  }
-
-  /**
-   * Returns the message entity type storage.
-   *
-   * Since the worker processor is called many times in a single request, it
-   * makes sense to statically cache the message entity type storage.
-   *
-   * @return \Drupal\Core\Entity\EntityStorageInterface
-   *   The message entity type storage.
-   */
-  protected function getMessageStorage(): EntityStorageInterface {
-    if (!isset($this->storage)) {
-      $this->storage = $this->entityTypeManager->getStorage('message');
-    }
-    return $this->storage;
   }
 
 }

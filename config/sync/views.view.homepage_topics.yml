@@ -309,7 +309,8 @@ display:
           entity_type: taxonomy_term
           plugin_id: entity_queue
           required: true
-          limit_queue: homepage_topics
+          limit_queue:
+            - homepage_topics
       header: {  }
       footer: {  }
       rendering_language: '***LANGUAGE_language_interface***'

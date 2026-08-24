@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_i18n\Hook;
 
 use Drupal\babel_og_menu_link\BabelOgMenuLinkManager;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ConfigInstallerInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
@@ -206,7 +207,7 @@ final class JoinupI18nHooks {
    * Implements hook_entity_operation().
    */
   #[Hook('entity_operation')]
-  public function entityOperation(EntityInterface $entity): array {
+  public function entityOperation(EntityInterface $entity, CacheableMetadata $cacheability): array {
     $operations = [];
     if ($entity->getEntityTypeId() === 'tmgmt_job_item') {
       $operations['job_item_messages'] = [
