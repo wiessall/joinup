@@ -24,9 +24,9 @@ final class HomepageTopicsQueueHooks {
   use StringTranslationTrait;
 
   public function __construct(
-    private readonly EntityTypeManagerInterface $entityTypeManager,
-    private readonly RendererInterface $renderer,
-    private readonly RouteMatchInterface $routeMatch,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly RendererInterface $renderer,
+    protected readonly RouteMatchInterface $routeMatch,
   ) {}
 
   /**
@@ -101,13 +101,13 @@ final class HomepageTopicsQueueHooks {
       }
     }
     if (in_array($new_item_id, $existing_items)) {
-      $form_state->setErrorByName('items', $this->t('The %topic topic is already in the list.', [
+      $form_state->setErrorByName('items][add_more][new_item][target_id', $this->t('The %topic topic is already in the list.', [
         '%topic' => $entity->label(),
       ]));
     }
 
     if ($entity->get('abstract')->isEmpty()) {
-      $form_state->setErrorByName('items', $this->t('The %topic topic cannot be added to the list because its Abstract field is empty. Please edit the topic and fill in the Abstract field first.', [
+      $form_state->setErrorByName('items][add_more][new_item][target_id', $this->t('The %topic topic cannot be added to the list because its Abstract field is empty. Please edit the topic and fill in the Abstract field first.', [
         '%topic' => $entity->label(),
       ]));
     }

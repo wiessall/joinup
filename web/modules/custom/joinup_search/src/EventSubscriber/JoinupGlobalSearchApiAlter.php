@@ -105,7 +105,6 @@ class JoinupGlobalSearchApiAlter implements EventSubscriberInterface {
     $fields = $event->getFieldMapping();
     $mappings = [
       'entity_created' => 'ds_entity_created',
-      'published_on' => 'ds_published_on',
     ];
 
     foreach ($mappings as $alias => $solr_field) {
@@ -134,13 +133,17 @@ class JoinupGlobalSearchApiAlter implements EventSubscriberInterface {
         $document->setField('bs_sticky', FALSE);
       }
 
-      if (empty($document->getFields()['sm_entity_status']) && $document->getFields()['index_id'] === 'published') {
+      if (empty($document->getFields()['ss_entity_status']) && $document->getFields()['index_id'] === 'published') {
         // Because of the way the search API works, when we
         // perform a search, it only returns items *with* a value for the
         // conditions. Thus, when we search for an item that is not archived, if
         // items do not have a value for the state field, they will not be
         // included in the results. This is why we set the value to a special
-        // value that will never be used for the state field.
+        // value that will never be used for the state field. The field is
+        // single valued, so queries and facets resolve it to "ss_entity_status"
+        // while "sm_entity_status" only exists to mirror what the backend
+        // writes for single valued fields.
+        $document->setField('ss_entity_status', 'published');
         $document->setField('sm_entity_status', 'published');
       }
     }

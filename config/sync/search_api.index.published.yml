@@ -165,7 +165,7 @@ field_settings:
     label: 'Solution classification'
     datasource_id: 'entity:node'
     property_path: classification
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.node.classification
@@ -210,7 +210,7 @@ field_settings:
     label: Domain
     datasource_id: 'entity:node'
     property_path: domain
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.node.domain
@@ -218,7 +218,7 @@ field_settings:
     label: 'EIF perspective reference'
     datasource_id: 'entity:node'
     property_path: eif_perspective
-    type: string
+    type: integer
     dependencies:
       module:
         - meta_entity
@@ -263,11 +263,10 @@ field_settings:
   entity_groups:
     label: Groups
     property_path: aggregated_field
-    type: string
+    type: integer
     configuration:
       type: union
       fields:
-        - 'entity:node/collection'
         - 'entity:node/og_audience'
   entity_status:
     label: Status
@@ -330,7 +329,7 @@ field_settings:
     label: Scope
     datasource_id: 'entity:node'
     property_path: field_scope
-    type: text
+    type: string
     dependencies:
       config:
         - field.storage.node.field_scope
@@ -405,7 +404,7 @@ field_settings:
     label: 'Pinned in'
     datasource_id: 'entity:node'
     property_path: 'pinned_in:entity:field_pinned_in:entity:nid'
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.meta_entity.field_pinned_in
@@ -416,7 +415,7 @@ field_settings:
     label: Organization
     datasource_id: 'entity:node'
     property_path: organization
-    type: string
+    type: text
     dependencies:
       config:
         - field.storage.node.organization
@@ -480,7 +479,7 @@ field_settings:
     label: 'Shared on'
     datasource_id: 'entity:node'
     property_path: 'shared_in:entity:field_shared_in:entity:nid'
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.meta_entity.field_shared_in
@@ -501,7 +500,7 @@ field_settings:
     label: 'Solution type'
     datasource_id: 'entity:node'
     property_path: solution_type
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.node.solution_type
@@ -509,7 +508,7 @@ field_settings:
     label: 'Geographical coverage'
     datasource_id: 'entity:node'
     property_path: spatial_coverage
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.node.spatial_coverage
@@ -590,7 +589,7 @@ field_settings:
   topic:
     label: Topic
     property_path: aggregated_field
-    type: string
+    type: integer
     configuration:
       type: union
       fields:
