@@ -16,6 +16,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\node\NodeStorageInterface;
 
 /**
  * Form that allows to display and filter the content moderation overview.
@@ -24,19 +25,10 @@ class ContentModerationOverviewForm extends FormBase {
 
   use AutowireTrait;
 
-  /**
-   * The node storage class.
-   *
-   * @var \Drupal\node\NodeStorageInterface
-   */
-  protected $nodeStorage;
-
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected EntityTypeBundleInfoInterface $bundleInfo,
-  ) {
-    $this->nodeStorage = $this->entityTypeManager->getStorage('node');
-  }
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -271,7 +263,9 @@ class ContentModerationOverviewForm extends FormBase {
    *   The related entities.
    */
   protected function getModerationItems(GroupInterface $node): array {
-    $entities = $this->nodeStorage->getQuery()->accessCheck(FALSE)
+    $nodeStorage = $this->entityTypeManager->getStorage('node');
+    assert($nodeStorage instanceof NodeStorageInterface);
+    $entities = $nodeStorage->getQuery()->accessCheck(FALSE)
       ->condition('og_audience.target_id', $node->id())
       ->condition('field_state', CommunityContentHelper::getModeratorAttentionNeededStates(), 'IN')
       ->condition('type', CommunityContentHelper::BUNDLES, 'IN')
@@ -282,7 +276,7 @@ class ContentModerationOverviewForm extends FormBase {
     // Filter out the non-latest versions.
     foreach ($entities as $vid => $nid) {
       if ($this->isLatestRevision($vid, $nid)) {
-        $return[$nid] = $this->nodeStorage->loadRevision($vid);
+        $return[$nid] = $nodeStorage->loadRevision($vid);
       }
     }
 

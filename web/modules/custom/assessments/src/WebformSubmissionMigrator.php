@@ -93,11 +93,6 @@ class WebformSubmissionMigrator {
   ];
 
   /**
-   * Assessment entity storage.
-   */
-  protected ContentEntityStorageInterface $assessmentStorage;
-
-  /**
    * The logger.
    */
   protected readonly LoggerInterface $logger;
@@ -661,15 +656,12 @@ class WebformSubmissionMigrator {
   }
 
   /**
-   * Returns and statically caches the assessment entity storage.
+   * Returns the assessment entity storage.
    */
   protected function getAssessmentStorage(): ContentEntityStorageInterface {
-    if (!isset($this->assessmentStorage)) {
-      $storage = $this->entityTypeManager->getStorage('assessment');
-      \assert($storage instanceof ContentEntityStorageInterface);
-      $this->assessmentStorage = $storage;
-    }
-    return $this->assessmentStorage;
+    $storage = $this->entityTypeManager->getStorage('assessment');
+    \assert($storage instanceof ContentEntityStorageInterface);
+    return $storage;
   }
 
   /**
