@@ -30,10 +30,10 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
-use Drupal\search_api\Query\QueryInterface;
-use Drupal\views\ViewExecutable;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\og\Og;
+use Drupal\search_api\Query\QueryInterface;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_theme().
