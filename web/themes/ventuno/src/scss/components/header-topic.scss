@@ -47,6 +47,10 @@
     &.see-more--long {
       min-height: 48px;
       -webkit-line-clamp: 2;
+
+      &.show {
+        -webkit-line-clamp: unset;
+      }
     }
   }
   .header-topic__see-more-btn {

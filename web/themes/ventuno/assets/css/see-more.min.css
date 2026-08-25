@@ -1,1 +1,2 @@
-.see-more{display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}.see-more p:last-child{margin-bottom:0}.see-more--long{-webkit-line-clamp:5;min-height:120px}.see-more--long.show{-webkit-line-clamp:unset}
+.see-more{display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}.see-more p:last-child{margin-bottom:0}.see-more--long{-webkit-line-clamp:5;min-height:120px;transition:max-height .35s ease}@media (prefers-reduced-motion:reduce){.see-more--long{transition:none}}.see-more--long.show{-webkit-line-clamp:unset}
+/*# sourceMappingURL=see-more.min.css.map */

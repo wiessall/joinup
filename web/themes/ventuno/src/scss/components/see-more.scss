@@ -12,6 +12,13 @@
   &--long {
     min-height: 120px;
     -webkit-line-clamp: 5;
+    // The expanded height is set as an inline max-height by
+    // toggle-text-seemore-btn.js, which is what this transitions.
+    transition: max-height 0.35s ease;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
 
     &.show {
       -webkit-line-clamp: unset;
