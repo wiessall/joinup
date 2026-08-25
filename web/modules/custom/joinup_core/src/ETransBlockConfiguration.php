@@ -7,7 +7,6 @@ namespace Drupal\joinup_core;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Entity\GlossaryTermInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
-use Drupal\joinup_assessment\Entity\AssessmentReportInterface;
 use Drupal\joinup_discussion\Entity\DiscussionInterface;
 use Drupal\joinup_document\Entity\DocumentInterface;
 use Drupal\joinup_event\Entity\EventInterface;
@@ -41,10 +40,6 @@ class ETransBlockConfiguration {
    */
   public const CONFIG_MAPPING = [
     'bundles' => [
-      AssessmentReportInterface::class => [
-        'include' => '.page-title,.page__content,.fieldset--separated .page__content',
-        'exclude' => '.page-title .details__element > a,.fieldset__field--files,.action-link__wrapper',
-      ],
       CustomPageInterface::class => [
         'include' => 'h1.page-title__title,#block-ventuno-content',
         'exclude' => '.action-link',
