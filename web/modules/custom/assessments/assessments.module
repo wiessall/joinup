@@ -30,6 +30,8 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
+use Drupal\og\Og;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\views\ViewExecutable;
 
@@ -585,4 +587,51 @@ function assessments_ajax_render_alter(array &$commands): void {
       $command['dialogOptions']['draggable'] = FALSE;
     }
   }
+}
+
+/**
+ * Implements hook_entity_insert().
+ *
+ * Overrides the subscriptions that collection_node_insert() granted to the
+ * collection owner, keeping the assessment report subscription only on the
+ * assessments group.
+ *
+ * This deliberately implements hook_entity_insert() rather than
+ * hook_node_insert(): collection_module_implements_alter() forces the
+ * 'collection' implementation of hook_node_insert() to run last, and core
+ * invokes every hook_node_insert() implementation before any
+ * hook_entity_insert() one. Implementing hook_node_insert() here would run
+ * before the membership exists.
+ *
+ * @see collection_node_insert()
+ * @see \Drupal\Core\Entity\EntityStorageBase::invokeHook()
+ */
+function assessments_entity_insert(EntityInterface $entity): void {
+  if ($entity->getEntityTypeId() !== 'node' || $entity->bundle() !== 'collection') {
+    return;
+  }
+
+  // The membership only exists when the collection was proposed by a real
+  // user. It is absent when the entity was created by a batch process or by
+  // some importing, in which case there is nothing to override.
+  if (empty($entity->getOwner()) || $entity->getOwner()->isAnonymous()) {
+    return;
+  }
+
+  $membership = Og::getMembership($entity, $entity->getOwner());
+  if (!$membership) {
+    return;
+  }
+
+  $subscriptionBundles = JoinupSubscriptionsHelper::provideDataForField('collection');
+  // Remove the assessment report subscription for all collections, except the
+  // assessments group.
+  if ($entity->uuid() !== AssessmentInterface::GROUP_UUID) {
+    $subscriptionBundles = array_values(array_filter(
+      $subscriptionBundles,
+      fn(array $bundle): bool => $bundle['entity_type'] !== 'assessment' || $bundle['bundle'] !== 'report',
+    ));
+  }
+
+  $membership->set('subscription_bundles', $subscriptionBundles)->save();
 }
