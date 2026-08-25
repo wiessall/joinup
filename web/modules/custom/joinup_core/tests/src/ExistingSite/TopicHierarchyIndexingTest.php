@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\ExistingSite;
 
+use Drupal\joinup_search\SearchIndexCommitter;
 use Drupal\search_api\Entity\Index;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
@@ -42,8 +43,9 @@ class TopicHierarchyIndexingTest extends JoinupExistingSiteTestBase {
       'field_state' => 'published',
       'field_topic' => $this->terms['child']->id(),
     ]);
+    \Drupal::service(SearchIndexCommitter::class)->commitPendingChanges();
+
     $index = Index::load('published');
-    $index->indexItems();
 
     foreach ($this->terms as $term) {
       $query = $index->query();

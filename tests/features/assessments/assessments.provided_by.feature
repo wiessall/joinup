@@ -26,7 +26,7 @@ Feature: Provided by widget functionality
     Then the public_organisation assessment "GR1" should not exist
 
     # Binding requirements
-    When I click "New binding requirement"
+    When I add a section
     And a modal should open
 
     When I click "Initiative" in the "Modal content" region

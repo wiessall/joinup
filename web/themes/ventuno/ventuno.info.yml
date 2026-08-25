@@ -5,6 +5,9 @@ type: theme
 core_version_requirement: "^10.4 || ^11"
 base theme: oe_bootstrap_theme
 
+dependencies:
+  - ventuno_helper
+
 libraries:
   - ventuno/base
   - ventuno/components
@@ -69,7 +72,7 @@ libraries-override:
 
 regions:
   top_bar: 'Top bar'
-  search_bar: 'Search bar'
+  header_navigation: 'Header navigation'
   header: 'Header'
   featured: 'Featured'
   messages: 'Messages'

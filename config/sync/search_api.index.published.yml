@@ -53,9 +53,9 @@ dependencies:
     - user
 third_party_settings:
   search_api_solr:
-    finalize: true
+    finalize: false
     commit_before_finalize: false
-    commit_after_finalize: true
+    commit_after_finalize: false
     debug_finalize: false
     highlighter:
       maxAnalyzedChars: 51200
@@ -163,7 +163,7 @@ field_settings:
     label: 'Solution classification'
     datasource_id: 'entity:node'
     property_path: classification
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.node.classification
@@ -208,7 +208,7 @@ field_settings:
     label: Domain
     datasource_id: 'entity:node'
     property_path: domain
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.node.domain
@@ -216,7 +216,7 @@ field_settings:
     label: 'EIF perspective reference'
     datasource_id: 'entity:node'
     property_path: eif_perspective
-    type: string
+    type: integer
     dependencies:
       module:
         - meta_entity
@@ -261,11 +261,10 @@ field_settings:
   entity_groups:
     label: Groups
     property_path: aggregated_field
-    type: string
+    type: integer
     configuration:
       type: union
       fields:
-        - 'entity:node/collection'
         - 'entity:node/og_audience'
   entity_status:
     label: Status
@@ -328,7 +327,7 @@ field_settings:
     label: Scope
     datasource_id: 'entity:node'
     property_path: field_scope
-    type: text
+    type: string
     dependencies:
       config:
         - field.storage.node.field_scope
@@ -399,21 +398,11 @@ field_settings:
     dependencies:
       module:
         - node
-  node_featured:
-    label: 'Featured site-wide'
-    datasource_id: 'entity:node'
-    property_path: 'featured:entity:featured'
-    type: string
-    dependencies:
-      config:
-        - field.storage.meta_entity.featured
-      module:
-        - meta_entity
   node_pinned_in:
     label: 'Pinned in'
     datasource_id: 'entity:node'
     property_path: 'pinned_in:entity:field_pinned_in:entity:nid'
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.meta_entity.field_pinned_in
@@ -429,17 +418,6 @@ field_settings:
       config:
         - field.storage.node.owner
       module:
-        - node
-  pinned_in:
-    label: 'Pinned in'
-    datasource_id: 'entity:node'
-    property_path: 'pinned_in:entity:field_pinned_in:entity:nid'
-    type: string
-    dependencies:
-      config:
-        - field.storage.meta_entity.field_pinned_in
-      module:
-        - meta_entity
         - node
   processed:
     label: 'Body » Paragraph » Body » Processed text'
@@ -491,7 +469,7 @@ field_settings:
     label: 'Shared on'
     datasource_id: 'entity:node'
     property_path: 'shared_in:entity:field_shared_in:entity:nid'
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.meta_entity.field_shared_in
@@ -512,7 +490,7 @@ field_settings:
     label: 'Solution type'
     datasource_id: 'entity:node'
     property_path: solution_type
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.node.solution_type
@@ -520,7 +498,7 @@ field_settings:
     label: 'Geographical coverage'
     datasource_id: 'entity:node'
     property_path: spatial_coverage
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.node.spatial_coverage
@@ -593,7 +571,7 @@ field_settings:
   topic:
     label: Topic
     property_path: aggregated_field
-    type: string
+    type: integer
     configuration:
       type: union
       fields:
@@ -613,6 +591,7 @@ datasource_settings:
       default: false
       selected:
         - report
+    track_changes_only_affected_translations: false
     languages:
       default: true
       selected: {  }
@@ -631,10 +610,12 @@ datasource_settings:
         - news
         - release
         - solution
+    track_changes_only_affected_translations: true
     languages:
       default: true
       selected: {  }
   'entity:user':
+    track_changes_only_affected_translations: false
     languages:
       default: true
       selected: {  }
@@ -650,7 +631,6 @@ processor_settings:
   auto_aggregated_fulltext_field: {  }
   custom_value: {  }
   entity_type: {  }
-  exclude_assessment_solutions: {  }
   html_filter:
     weights:
       preprocess_index: -43
@@ -679,8 +659,7 @@ processor_settings:
   interoperable_flag: {  }
   joinup_entity_bundle: {  }
   joinup_entity_published_revision: {  }
-  joinup_entity_status:
-    inverse: false
+  joinup_entity_status: {  }
   language_with_fallback: {  }
   release_solution_data:
     weights:

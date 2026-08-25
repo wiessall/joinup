@@ -1,29 +1,20 @@
 @import "../partials/core";
 
 .see-more {
-  display: -webkit-box !important;
+  display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  margin-bottom: 0;
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+
   &--long {
-    overflow: hidden;
     min-height: 120px;
     -webkit-line-clamp: 5;
+
     &.show {
-      -webkit-line-clamp: unset !important;
+      -webkit-line-clamp: unset;
     }
-    p {
-      display: inline;
-      &:not(:last-child)::after {
-        content: " \A\A";
-        white-space: pre;
-      }
-    }
-  }
-  p {
-    display: inline;
-  }
-  ul {
-    display: inline-block;
   }
 }

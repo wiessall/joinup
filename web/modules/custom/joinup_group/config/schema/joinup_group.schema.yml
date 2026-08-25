@@ -23,10 +23,6 @@ group_menu_block_default:
       type: integer
       label: 'Maximum number of levels'
 
-views.argument.search_api_group:
-  type: views.argument.search_api
-  label: 'Search API group'
-
 condition.plugin.group_context:
   type: condition.plugin
   label: Group context condition

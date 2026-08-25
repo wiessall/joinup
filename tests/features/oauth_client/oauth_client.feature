@@ -44,6 +44,7 @@ Feature: Oauth client
       | Test API Client 2 | For automated testing | Lee Requester | assessments |
 
     Given I am logged in as "Test Requester"
+    And I mark all emails as read
     And I go to the edit page of the "Test API Client 1" oauth client request
     When I select the radio button "Rejected"
     And I fill in "Reject reason" with "You are not permitted to do it"

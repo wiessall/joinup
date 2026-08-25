@@ -119,6 +119,8 @@ class UnshareForm extends ShareFormBase {
       $groups,
     );
     $this->removeFromGroups($groups);
+    $this->searchIndexCommitter->commitPendingChanges();
+
     if (!empty($groupLabels)) {
       $this->messenger()->addStatus(
         $this->t('Item was unshared from the following groups: @groups.', ['@groups' => implode(', ', $groupLabels)])

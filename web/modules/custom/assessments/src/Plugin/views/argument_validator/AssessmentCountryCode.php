@@ -25,7 +25,7 @@ final class AssessmentCountryCode extends ArgumentValidatorPluginBase implements
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    private readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }

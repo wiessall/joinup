@@ -190,6 +190,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
       LEFT JOIN {node_field_data} n ON og.entity_id = n.nid
       LEFT JOIN {node__field_state} s ON n.nid = s.entity_id AND n.vid = s.revision_id
       WHERE og.og_audience_target_id = :parent_entity_id
+      AND n.default_langcode = 1
       GROUP BY n.type, s.field_state_value
       QUERY;
   }
