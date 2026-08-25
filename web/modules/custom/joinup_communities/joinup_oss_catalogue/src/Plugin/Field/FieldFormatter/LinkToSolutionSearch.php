@@ -203,7 +203,7 @@ class LinkToSolutionSearch extends FormatterBase {
   public static function isApplicable(FieldDefinitionInterface $fieldDefinition): bool {
     $entityBundleInfo = \Drupal::service('entity_type.bundle.info');
     $currentBundleInfo = $entityBundleInfo->getBundleInfo($fieldDefinition->getTargetEntityTypeId());
-    $targetBundle = $fieldDefinition->getTargetBundle();
+    $targetBundle = $fieldDefinition->getTargetBundle() ?? '';
     return array_key_exists($targetBundle, $currentBundleInfo)
       && isset($currentBundleInfo[$targetBundle]['class'])
       && $currentBundleInfo[$targetBundle]['class'] === JoinupOssSolution::class;

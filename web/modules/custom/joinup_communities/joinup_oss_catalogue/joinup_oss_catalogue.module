@@ -23,17 +23,6 @@ use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\node\NodeInterface;
 
 /**
- * Implements hook_views_plugins_argument_alter().
- */
-function joinup_oss_catalogue_views_plugins_argument_alter(array &$plugins): void {
-  // We don't want to apply a group contextual filter for search_oss_catalogue
-  // view. The contextual filter is added only for validation.
-  // @see joinup_group_views_data_alter()
-  // @see \Drupal\joinup_group\Plugin\views\argument\SearchApiGroupArgument
-  $plugins['search_api_group']['exceptions'][] = 'search_oss_catalogue';
-}
-
-/**
  * Implements hook_entity_bundle_info_alter().
  */
 function joinup_oss_catalogue_entity_bundle_info_alter(array &$bundles): void {
