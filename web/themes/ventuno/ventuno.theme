@@ -20,10 +20,6 @@ function ventuno_theme(array $existing, string $type, string $theme, string $pat
       'render element' => 'form',
       'path' => $path . '/templates/form',
     ],
-    'block__entityqueue_block' => [
-      'render element' => 'elements',
-      'base hook' => 'block',
-    ],
   ];
 }
 
