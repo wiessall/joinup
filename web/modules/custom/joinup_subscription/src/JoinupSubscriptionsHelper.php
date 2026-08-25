@@ -19,12 +19,14 @@ class JoinupSubscriptionsHelper {
   const array SUBSCRIPTION_BUNDLES = [
     'collection' => [
       'node' => [
-        'assessment_report',
         'discussion',
         'document',
         'event',
         'news',
         'solution',
+      ],
+      'assessment' => [
+        'report',
       ],
     ],
     'solution' => [
