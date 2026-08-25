@@ -10,23 +10,11 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
- * Hook implementations for curated content listing.
+ * Hook implementations for curated content listing forms..
  */
-final class CuratedContentListingHooks {
+final class CuratedContentListingFormHooks {
 
   use StringTranslationTrait;
-
-  /**
-   * Implements hook_contextual_links_view_alter().
-   */
-  #[Hook('contextual_links_view_alter')]
-  public function contextualLinksViewAlter(&$element, $items): void {
-    // Change the title of the contextual links to edit entity subqueues. In our
-    // business language these are called 'Curated content listings'.
-    if (!empty($element['#links']['entityentity-subqueueedit-form']['title'])) {
-      $element['#links']['entityentity-subqueueedit-form']['title'] = $this->t('Update curated content');
-    }
-  }
 
   /**
    * Implements hook_form_BASE_FORM_ID_alter().
@@ -35,7 +23,7 @@ final class CuratedContentListingHooks {
    *  language the subqueues are known as 'Curated content listings'.
    */
   #[Hook('form_entity_subqueue_form_alter')]
-  public function formAlter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  public function formAlter(array &$form, FormStateInterface $formState, string $formId): void {
     // Retrieve the original title.
     $label = $form['#title'];
 
