@@ -12,6 +12,8 @@ use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Entity\RevisionableStorageInterface;
+use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
+use Drupal\Core\KeyValueStore\KeyValueStoreInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountSwitcherInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -32,6 +34,14 @@ class Archiver {
 
   use StringTranslationTrait;
 
+  const METHODS_ALLOWED = [
+    'doArchiveGroupsWithFewMembers',
+    'doArchiveCollectionsWithoutSolutions' .
+    'doArchivePotentiallyOutdatedContent',
+    'doArchiveSolutionsWithoutReleaseOrDistro',
+    'doArchiveGroupsWithoutContent',
+  ];
+
   /**
    * The workflow helper service, if available.
    *
@@ -39,13 +49,23 @@ class Archiver {
    */
   protected ?WorkflowHelperInterface $workflowHelper;
 
+  private const QUEUE_STATS_COLLECTION = 'joinup_core_queue_stats';
+
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     #[Autowire(service: 'logger.channel.joinup_core')]
     protected readonly LoggerChannelInterface $logger,
     protected readonly AccountSwitcherInterface $accountSwitcher,
     protected readonly Connection $database,
+    protected KeyValueFactoryInterface $keyValue,
   ) {}
+
+  /**
+   * Gets stats store.
+   */
+  private function getQueueStatsStore(): KeyValueStoreInterface {
+    return $this->keyValue->get(self::QUEUE_STATS_COLLECTION);
+  }
 
   /**
    * Sets the workflow helper service.
@@ -58,248 +78,131 @@ class Archiver {
   }
 
   /**
-   * Archives groups from CSV with the service account.
-   */
-  public function archiveGroupsWithFewMembers(array &$sandbox): void {
-    $this->switchToServiceAccount();
-    try {
-      $this->doArchiveGroupsWithFewMembers($sandbox);
-    }
-    finally {
-      $this->switchBack();
-    }
-  }
-
-  /**
    * Archives groups from CSV which have less than 10 members.
    */
-  protected function doArchiveGroupsWithFewMembers(array &$sandbox): void {
-    if (!isset($sandbox['groupIds'])) {
-      $sandbox['groupIds'] = static::getIdsFromCsvColumn(dirname(__DIR__) . '/deploy/archival-csv/WITH-NID Collections & Solutions with less than 10 members.csv');
-      $sandbox['archived'] = 0;
-      $sandbox['processed'] = 0;
-      $sandbox['total'] = count($sandbox['groupIds']);
+  protected function doArchiveGroupsWithFewMembers(int $groupId): void {
+    $this->incrementStats(__FUNCTION__, 'total');
+    $group = $this->entityTypeManager->getStorage('node')->load($groupId);
+    if (!$group instanceof GroupInterface) {
+      return;
     }
 
-    $groupIds = array_splice($sandbox['groupIds'], 0, 100);
-    foreach ($groupIds as $groupId) {
-      $group = $this->entityTypeManager->getStorage('node')->load($groupId);
-      if (!$group instanceof GroupInterface) {
-        continue;
-      }
-
-      if (!$group->isPublished()) {
-        continue;
-      }
-
-      if ($group->getActiveMemberCount() >= 10) {
-        continue;
-      }
-
-      $sandbox['archived'] += (int) $this->archiveContent($group);
+    if (!$group->isPublished()) {
+      return;
     }
 
-    $sandbox['processed'] += count($groupIds);
-    $sandbox['#finished'] = $sandbox['processed'] / $sandbox['total'];
-  }
-
-  /**
-   * Archives collections from CSV with the service account.
-   */
-  public function archiveCollectionsWithoutSolutions(array &$sandbox): void {
-    $this->switchToServiceAccount();
-    try {
-      $this->doArchiveCollectionsWithoutSolutions($sandbox);
+    if ($group->getActiveMemberCount() >= 10) {
+      return;
     }
-    finally {
-      $this->switchBack();
+
+    if ($this->archiveContent($group)) {
+      $this->incrementStats(__FUNCTION__, 'archived');
     }
   }
 
   /**
    * Archives collections from CSV which have no solutions.
    */
-  protected function doArchiveCollectionsWithoutSolutions(array &$sandbox): void {
-    if (!isset($sandbox['collectionIds'])) {
-      $sandbox['collectionIds'] = static::getIdsFromCsvColumn(dirname(__DIR__) . '/deploy/archival-csv/WITH-NID Collections with no solutions.csv');
-      $sandbox['archived'] = 0;
-      $sandbox['processed'] = 0;
-      $sandbox['total'] = count($sandbox['collectionIds']);
+  protected function doArchiveCollectionsWithoutSolutions(int $groupId): void {
+    $this->incrementStats(__FUNCTION__, 'total');
+    $collection = $this->entityTypeManager->getStorage('node')->load($groupId);
+    if (!$collection instanceof CollectionInterface) {
+      return;
     }
 
-    $collectionIds = array_splice($sandbox['collectionIds'], 0, 50);
-    foreach ($collectionIds as $collectionId) {
-      $collection = $this->entityTypeManager->getStorage('node')->load($collectionId);
-      if (!$collection instanceof CollectionInterface) {
-        continue;
-      }
-
-      if (!$collection->isPublished()) {
-        continue;
-      }
-
-      if ($collection->getSolutions()) {
-        continue;
-      }
-
-      $sandbox['archived'] += (int) $this->archiveContent($collection);
+    if (!$collection->isPublished()) {
+      return;
     }
 
-    $sandbox['processed'] += count($collectionIds);
-    $sandbox['#finished'] = $sandbox['processed'] / $sandbox['total'];
-  }
-
-  /**
-   * Archives groups from CSV with the service account.
-   */
-  public function archivePotentiallyOutdatedContent(array &$sandbox): void {
-    $this->switchToServiceAccount();
-    try {
-      $this->doArchivePotentiallyOutdatedContent($sandbox);
+    if ($collection->getSolutions()) {
+      return;
     }
-    finally {
-      $this->switchBack();
+
+    if ($this->archiveContent($collection)) {
+      $this->incrementStats(__FUNCTION__, 'archived');
     }
   }
 
   /**
    * Archives content from CSV which wasn't updated in the last 3 years.
    */
-  protected function doArchivePotentiallyOutdatedContent(array &$sandbox): void {
-    if (!isset($sandbox['contentIds'])) {
-      $sandbox['contentIds'] = static::getIdsFromCsvColumn(dirname(__DIR__) . '/deploy/archival-csv/WITH-NID Last update - 3 years ago.csv');
-      $sandbox['archived'] = 0;
-      $sandbox['processed'] = 0;
-      $sandbox['total'] = count($sandbox['contentIds']);
-      $sandbox['threeYearsAgo'] = strtotime('-3 years');
+  protected function doArchivePotentiallyOutdatedContent(int $nid): void {
+    $this->incrementStats(__FUNCTION__, 'total');
+    $storage = $this->entityTypeManager->getStorage('node');
+    assert($storage instanceof RevisionableStorageInterface);
+    $content = $storage->load($nid);
+    if (!$content instanceof NodeInterface) {
+      return;
+    }
+    if (!$content->isPublished()) {
+      return;
+    }
+    $latestRevision = $storage->loadRevision(
+      $storage->getLatestRevisionId($nid)
+    );
+    if ($latestRevision->getChangedTimeAcrossTranslations() >= strtotime('-3 years')) {
+      return;
     }
 
-    $contentIds = array_splice($sandbox['contentIds'], 0, 50);
-    foreach ($contentIds as $nid) {
-      $storage = $this->entityTypeManager->getStorage('node');
-      assert($storage instanceof RevisionableStorageInterface);
-      $content = $storage->load($nid);
-      if (!$content instanceof NodeInterface) {
-        continue;
-      }
-      if (!$content->isPublished()) {
-        continue;
-      }
-      $latestRevision = $storage->loadRevision(
-        $storage->getLatestRevisionId($nid)
-      );
-      if ($latestRevision->getChangedTimeAcrossTranslations() >= $sandbox['threeYearsAgo']) {
-        continue;
-      }
-
-      $sandbox['archived'] += (int) $this->archiveContent($content);
-    }
-
-    $sandbox['processed'] += count($contentIds);
-    $sandbox['#finished'] = $sandbox['processed'] / $sandbox['total'];
-  }
-
-  /**
-   * Archives groups from CSV with the service account.
-   */
-  public function archiveSolutionsWithoutReleaseOrDistro(array &$sandbox): void {
-    $this->switchToServiceAccount();
-    try {
-      $this->doArchiveSolutionsWithoutReleaseOrDistro($sandbox);
-    }
-    finally {
-      $this->switchBack();
+    if ($this->archiveContent($content)) {
+      $this->incrementStats(__FUNCTION__, 'archived');
     }
   }
 
   /**
    * Archives solutions from CSV which have no releases or distributions.
    */
-  protected function doArchiveSolutionsWithoutReleaseOrDistro(array &$sandbox): void {
-    if (!isset($sandbox['solutionIds'])) {
-      $sandbox['solutionIds'] = static::getIdsFromCsvColumn(dirname(__DIR__) . '/deploy/archival-csv/WITH-NID No releases or distributions.csv');
-      $sandbox['archived'] = 0;
-      $sandbox['processed'] = 0;
-      $sandbox['total'] = count($sandbox['solutionIds']);
+  protected function doArchiveSolutionsWithoutReleaseOrDistro(int $solutionId): void {
+    $this->incrementStats(__FUNCTION__, 'total');
+    $solution = $this->entityTypeManager->getStorage('node')->load($solutionId);
+    if (!$solution instanceof SolutionInterface) {
+      return;
     }
-
-    $solutionIds = array_splice($sandbox['solutionIds'], 0, 100);
-    foreach ($solutionIds as $solutionId) {
-      $solution = $this->entityTypeManager->getStorage('node')->load($solutionId);
-      if (!$solution instanceof SolutionInterface) {
-        continue;
-      }
-      if (!$solution->isPublished()) {
-        continue;
-      }
-      if ($solution->getDistributionIds() || $solution->getReleaseIds()) {
-        continue;
-      }
-      $sandbox['archived'] += (int) $this->archiveContent($solution);
+    if (!$solution->isPublished()) {
+      return;
     }
-
-    $sandbox['processed'] += count($solutionIds);
-    $sandbox['#finished'] = $sandbox['processed'] / $sandbox['total'];
-  }
-
-  /**
-   * Archives groups from CSV with the service account.
-   */
-  public function archiveGroupsWithoutContent(array &$sandbox): void {
-    $this->switchToServiceAccount();
-    try {
-      $this->doArchiveGroupsWithoutContent($sandbox);
+    if ($solution->getDistributionIds() || $solution->getReleaseIds()) {
+      return;
     }
-    finally {
-      $this->switchBack();
+    if ($this->archiveContent($solution)) {
+      $this->incrementStats(__FUNCTION__, 'archived');
     }
   }
 
   /**
    * Archives groups from CSV which have no group content.
    */
-  protected function doArchiveGroupsWithoutContent(array &$sandbox): void {
-    if (!isset($sandbox['groupIds'])) {
-      $sandbox['groupIds'] = static::getIdsFromCsvColumn(dirname(__DIR__) . '/deploy/archival-csv/WITH-NID Solutions & Collections with no content items.csv');
-      $sandbox['archived'] = 0;
-      $sandbox['processed'] = 0;
-      $sandbox['total'] = count($sandbox['groupIds']);
-    }
+  protected function doArchiveGroupsWithoutContent(int $groupId): void {
+    $this->incrementStats(__FUNCTION__, 'total');
     $nodeStorage = $this->entityTypeManager->getStorage('node');
-
-    $groupIds = array_splice($sandbox['groupIds'], 0, 100);
-    foreach ($groupIds as $groupId) {
-      $group = $nodeStorage->load($groupId);
-      if (!$group instanceof GroupInterface) {
-        continue;
-      }
-      if (!$group->isPublished()) {
-        continue;
-      }
-
-      $bundles = ['custom_page', 'discussion', 'document', 'event', 'news'];
-      $groupContentIdsRaw = $group->getGroupContentIds();
-      $groupContentNodeIds = array_intersect_key(
-        $groupContentIdsRaw['node'] ?? [],
-        array_combine($bundles, $bundles)
-      );
-      $groupContentIds = array_merge(...array_values($groupContentNodeIds));
-      $notArchivedGroupContentIds = array_filter(
-        $groupContentIds,
-        function ($groupContentId) use ($nodeStorage): bool {
-          $node = $nodeStorage->load($groupContentId);
-          return !$node instanceof ArchivableEntityInterface || !$node->isArchived();
-        },
-      );
-      if (array_filter($notArchivedGroupContentIds)) {
-        continue;
-      }
-
-      $sandbox['archived'] += (int) $this->archiveContent($group);
+    $group = $nodeStorage->load($groupId);
+    if (!$group instanceof GroupInterface) {
+      return;
+    }
+    if (!$group->isPublished()) {
+      return;
     }
 
-    $sandbox['processed'] += count($groupIds);
-    $sandbox['#finished'] = $sandbox['processed'] / $sandbox['total'];
+    $bundles = ['custom_page', 'discussion', 'document', 'event', 'news'];
+    $groupContentIdsRaw = $group->getGroupContentIds();
+    $groupContentNodeIds = array_intersect_key(
+      $groupContentIdsRaw['node'] ?? [],
+      array_combine($bundles, $bundles)
+    );
+    $groupContentIds = array_merge(...array_values($groupContentNodeIds));
+    $notArchivedGroupContentIds = array_filter(
+      $groupContentIds,
+      function ($groupContentId) use ($nodeStorage): bool {
+        $node = $nodeStorage->load($groupContentId);
+        return !$node instanceof ArchivableEntityInterface || !$node->isArchived();
+      },
+    );
+    if (array_filter($notArchivedGroupContentIds)) {
+      return;
+    }
+    if ($this->archiveContent($group)) {
+      $this->incrementStats(__FUNCTION__, 'archived');
+    }
   }
 
   /**
@@ -308,7 +211,7 @@ class Archiver {
    * @param \Drupal\Core\Entity\ContentEntityInterface $entity
    *   The content entity to be archived.
    */
-  protected function archiveContent(ContentEntityInterface $entity): bool {
+  public function archiveContent(ContentEntityInterface $entity): bool {
     if (
       !$entity instanceof EntityPublishedInterface ||
       !$entity instanceof ArchivableEntityInterface
@@ -326,7 +229,8 @@ class Archiver {
     }
 
     // Current user cannot change the state to "archived".
-    $allowedTransitions = $entity->getWorkflow()->getAllowedTransitions($entity->getWorkflowState(), $entity);
+    $allowedTransitions = $entity->getWorkflow()
+      ->getAllowedTransitions($entity->getWorkflowState(), $entity);
     if (!array_key_exists('archive', $allowedTransitions)) {
       $this->logger->warning('Cannot archive content with ID @content-id: content does not have any available transition with "archived" target state.', [
         '@content-id' => $entity->id(),
@@ -371,7 +275,7 @@ class Archiver {
    * @return int[]
    *   The integer values of the given CSV's first column.
    */
-  protected static function getIdsFromCsvColumn(string $csvPath, bool $filter = TRUE): array {
+  public static function getIdsFromCsvColumn(string $csvPath, bool $filter = TRUE): array {
     $ids = [];
     $csvHandle = fopen($csvPath, 'r');
     if ($csvHandle) {
@@ -470,6 +374,58 @@ class Archiver {
         '@state-new' => $newState,
       ]
     );
+  }
+
+  /**
+   * Switches account.
+   *
+   * @param int $groupId
+   *   Processed item nid.
+   * @param string $method
+   *   Source method.
+   */
+  public function callMethodSafely(int $groupId, string $method): void {
+    if (!in_array($method, self::METHODS_ALLOWED, TRUE)) {
+      throw new \Exception(sprintf(
+        'Calling method %s is not allowed.',
+        $method,
+      ));
+    }
+    if (!is_callable([$this, $method])) {
+      throw new \Exception(sprintf(
+        'Method %s does not exist on class %s or it is not callable.',
+        $method,
+        __CLASS__,
+      ));
+    }
+
+    $this->switchToServiceAccount();
+    try {
+      $args = [$groupId];
+      call_user_func_array([$this, $method], $args);
+    }
+    finally {
+      $this->switchBack();
+    }
+  }
+
+  /**
+   * Increments total and archived items count per method.
+   *
+   * @param string $method
+   *   Source function, statd identifier.
+   * @param string $stat
+   *   Total and archived items count.
+   */
+  private function incrementStats(string $method, string $stat): void {
+    $store = $this->getQueueStatsStore();
+    $stats = $store->get($method, [
+      'total' => 0,
+      'archived' => 0,
+    ]);
+
+    $stats[$stat]++;
+    $store->set($method, $stats);
   }
 
 }

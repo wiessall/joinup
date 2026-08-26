@@ -12,7 +12,6 @@ use Drupal\Core\Database\Database;
 use Drupal\joinup_core\Archiver;
 use Drupal\joinup_core\Update\RevisionTranslationAffectedRepair;
 use Drupal\menu_link_content\MenuLinkContentInterface;
-use Drupal\search_api\Entity\Index;
 
 /**
  * Converts absolute internal menu link URLs into internal paths.
@@ -174,80 +173,104 @@ function joinup_core_deploy_201602(): string {
 /**
  * Archives solutions having less than 10 members.
  */
-function joinup_core_deploy_201603(array &$sandbox): string {
+function joinup_core_deploy_201603(): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
-  \Drupal::service('rdf_sync.synchronizer')->disableSynchronization();
-  Index::load('published')->startBatchTracking();
-  $archiver->archiveGroupsWithFewMembers($sandbox);
-  Index::load('published')->stopBatchTracking();
-  \Drupal::service('rdf_sync.synchronizer')->enableSynchronization();
+  $queue = \Drupal::queue('joinup_core_archive_groups');
+  $groupIds = Archiver::getIdsFromCsvColumn(
+    dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID Collections & Solutions with less than 10 members.csv',
+  );
+
+  foreach ($groupIds as $groupId) {
+    $queue->createItem([
+      'group_id' => $groupId,
+      'method' => 'doArchiveGroupsWithFewMembers',
+      // For future logs.
+      'total' => count($groupIds),
+    ]);
+  }
 
   return sprintf(
-    "Archived %s from %s items of %s total.",
-    $sandbox['archived'],
-    $sandbox['processed'],
-    $sandbox['total'],
+    'Queued %s groups with less than 10 members for archiving.',
+    count($groupIds),
   );
 }
 
 /**
  * Archives content which wasn't updated in the last 3 years.
  */
-function joinup_core_deploy_201604(array &$sandbox): string {
+function joinup_core_deploy_201604(): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
-  \Drupal::service('rdf_sync.synchronizer')->disableSynchronization();
-  Index::load('published')->startBatchTracking();
-  $archiver->archivePotentiallyOutdatedContent($sandbox);
-  Index::load('published')->stopBatchTracking();
-  \Drupal::service('rdf_sync.synchronizer')->enableSynchronization();
+  $queue = \Drupal::queue('joinup_core_archive_groups');
+  $groupIds = Archiver::getIdsFromCsvColumn(
+    dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID Last update - 3 years ago.csv',
+  );
+
+  foreach ($groupIds as $groupId) {
+    $queue->createItem([
+      'group_id' => $groupId,
+      'method' => 'doArchivePotentiallyOutdatedContent',
+      // For future logs.
+      'total' => count($groupIds),
+    ]);
+  }
 
   return sprintf(
-    "Archived %s from %s items of %s total.",
-    $sandbox['archived'],
-    $sandbox['processed'],
-    $sandbox['total'],
+    'Queued %s groups not updated in the last 3 years',
+    count($groupIds),
   );
 }
 
 /**
  * Archives solutions which have no releases or distributions.
  */
-function joinup_core_deploy_201605(array &$sandbox): string {
+function joinup_core_deploy_201605(): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
-  \Drupal::service('rdf_sync.synchronizer')->disableSynchronization();
-  Index::load('published')->startBatchTracking();
-  $archiver->archiveSolutionsWithoutReleaseOrDistro($sandbox);
-  Index::load('published')->stopBatchTracking();
-  \Drupal::service('rdf_sync.synchronizer')->enableSynchronization();
+  $queue = \Drupal::queue('joinup_core_archive_groups');
+  $groupIds = Archiver::getIdsFromCsvColumn(
+    dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID No releases or distributions.csv',
+  );
+
+  foreach ($groupIds as $groupId) {
+    $queue->createItem([
+      'group_id' => $groupId,
+      'method' => 'doArchiveSolutionsWithoutReleaseOrDistro',
+      // For future logs.
+      'total' => count($groupIds),
+    ]);
+  }
 
   return sprintf(
-    "Archived %s from %s items of %s total.",
-    $sandbox['archived'],
-    $sandbox['processed'],
-    $sandbox['total'],
+    'Queued %s groups which have no releases or distributions',
+    count($groupIds),
   );
 }
 
 /**
  * Archives groups without group content.
  */
-function joinup_core_deploy_201606(array &$sandbox): string {
+function joinup_core_deploy_201606(): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
-  \Drupal::service('rdf_sync.synchronizer')->disableSynchronization();
-  Index::load('published')->startBatchTracking();
-  $archiver->archiveGroupsWithoutContent($sandbox);
-  Index::load('published')->stopBatchTracking();
-  \Drupal::service('rdf_sync.synchronizer')->enableSynchronization();
+  $queue = \Drupal::queue('joinup_core_archive_groups');
+  $groupIds = Archiver::getIdsFromCsvColumn(
+    dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID Solutions & Collections with no content items.csv',
+  );
+
+  foreach ($groupIds as $groupId) {
+    $queue->createItem([
+      'group_id' => $groupId,
+      'method' => 'doArchiveGroupsWithoutContent',
+      // For future logs.
+      'total' => count($groupIds),
+    ]);
+  }
 
   return sprintf(
-    "Archived %s from %s items of %s total.",
-    $sandbox['archived'],
-    $sandbox['processed'],
-    $sandbox['total'],
+    'Queued %s groups without content',
+    count($groupIds),
   );
 }
 
@@ -257,16 +280,22 @@ function joinup_core_deploy_201606(array &$sandbox): string {
 function joinup_core_deploy_201607(array &$sandbox): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
-  \Drupal::service('rdf_sync.synchronizer')->disableSynchronization();
-  Index::load('published')->startBatchTracking();
-  $archiver->archiveCollectionsWithoutSolutions($sandbox);
-  Index::load('published')->stopBatchTracking();
-  \Drupal::service('rdf_sync.synchronizer')->enableSynchronization();
+  $queue = \Drupal::queue('joinup_core_archive_groups');
+  $groupIds = Archiver::getIdsFromCsvColumn(
+    dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID Collections with no solutions.csv',
+  );
+
+  foreach ($groupIds as $groupId) {
+    $queue->createItem([
+      'group_id' => $groupId,
+      'method' => 'doArchiveCollectionsWithoutSolutions',
+      // For future logs.
+      'total' => count($groupIds),
+    ]);
+  }
 
   return sprintf(
-    "Archived %s from %s items of %s total.",
-    $sandbox['archived'],
-    $sandbox['processed'],
-    $sandbox['total'],
+    'Queued %s collections without solutions',
+    count($groupIds),
   );
 }
