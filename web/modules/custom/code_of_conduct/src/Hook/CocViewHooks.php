@@ -24,15 +24,14 @@ class CocViewHooks {
    */
   #[Hook('entity_display_build_alter')]
   public function entityDisplayBuildAlter(array &$build, array $context): void {
-    // Views use  \Drupal\views\Entity\Render\EntityFieldRenderer::buildFields
-    // in order to build the labels of a reference field. It does this by
-    // building a custom entity view component and dynamically generating a
-    // rendered view of the entity with the component and extracting the values
-    // from it. With the code below, we are stripping the full member role from
-    // the roles field in the group membership view and any other place in the
-    // website as it mainly is the same role with the default `member`.
+    // Views use \Drupal\views\Entity\Render\EntityFieldRenderer::buildFields
+    // to build the labels of a reference field. It does this by building a
+    // custom entity view component and dynamically generating a rendered view
+    // of the entity with the component, then extracting the values from it.
+    // With the code below, we strip the full member role from the roles field
+    // in the group membership view and anywhere else on the website, as it is
+    // essentially the same role as the default `member`.
     $groupMembership = $context['entity'];
-    /** @var \Drupal\collection\Entity\GroupMembership $groupMembership */
     if (!$groupMembership instanceof GroupMembership) {
       return;
     }
