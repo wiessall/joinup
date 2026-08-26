@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Database\Database;
+use Drupal\joinup_core\Update\NodeTranslationsRollback;
 use Drupal\joinup_core\Archiver;
 use Drupal\joinup_core\Update\RevisionTranslationAffectedRepair;
 use Drupal\menu_link_content\MenuLinkContentInterface;
@@ -138,9 +139,16 @@ function joinup_core_deploy_201601(array &$sandbox): string {
 }
 
 /**
- * Queues nodes with more than 10 revisions in a language for revision delete.
+ * Rolls back nodes that lost paragraph references during translation saves.
  */
 function joinup_core_deploy_201602(): string {
+  return \Drupal::classResolver(NodeTranslationsRollback::class)->run();
+}
+
+/**
+ * Queues nodes with more than 10 revisions in a language for revision delete.
+ */
+function joinup_core_deploy_201603(): string {
   $threshold = 10;
 
   $connection = Database::getConnection();
@@ -173,7 +181,7 @@ function joinup_core_deploy_201602(): string {
 /**
  * Archives solutions having less than 10 members.
  */
-function joinup_core_deploy_201603(): string {
+function joinup_core_deploy_201604(): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
   $queue = \Drupal::queue('joinup_core_archive_groups');
@@ -199,7 +207,7 @@ function joinup_core_deploy_201603(): string {
 /**
  * Archives content which wasn't updated in the last 3 years.
  */
-function joinup_core_deploy_201604(): string {
+function joinup_core_deploy_201605(): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
   $queue = \Drupal::queue('joinup_core_archive_groups');
@@ -225,7 +233,7 @@ function joinup_core_deploy_201604(): string {
 /**
  * Archives solutions which have no releases or distributions.
  */
-function joinup_core_deploy_201605(): string {
+function joinup_core_deploy_201606(): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
   $queue = \Drupal::queue('joinup_core_archive_groups');
@@ -251,7 +259,7 @@ function joinup_core_deploy_201605(): string {
 /**
  * Archives groups without group content.
  */
-function joinup_core_deploy_201606(): string {
+function joinup_core_deploy_201607(): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
   $queue = \Drupal::queue('joinup_core_archive_groups');
@@ -277,7 +285,7 @@ function joinup_core_deploy_201606(): string {
 /**
  * Archives collections which have no solutions.
  */
-function joinup_core_deploy_201607(array &$sandbox): string {
+function joinup_core_deploy_201608(array &$sandbox): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
   $queue = \Drupal::queue('joinup_core_archive_groups');
