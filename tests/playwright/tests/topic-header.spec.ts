@@ -50,11 +50,15 @@ test.describe("Topic header", () => {
     await button.click();
 
     // Expanded: the whole description is visible and the clamp is released.
+    // The height is polled rather than read once, as expanding is animated.
     await expect
-      .poll(async () => (await describeBox(description)).lineClamp)
-      .toBe("none");
+      .poll(async () => {
+        const state = await describeBox(description);
+        return state.clientHeight >= state.scrollHeight;
+      })
+      .toBe(true);
     const expanded = await describeBox(description);
-    expect(expanded.clientHeight).toBeGreaterThanOrEqual(expanded.scrollHeight);
+    expect(expanded.lineClamp).toBe("none");
     expect(expanded.clientHeight).toBeGreaterThan(collapsed.clientHeight);
     await expect(button).toHaveAttribute("aria-expanded", "true");
     await expect(page.locator(".header-topic")).toHaveScreenshot(
