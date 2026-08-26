@@ -10,7 +10,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
- * Hook implementations for curated content listing forms..
+ * Hook implementations for curated content listing forms.
  */
 final class CuratedContentListingFormHooks {
 
@@ -19,8 +19,8 @@ final class CuratedContentListingFormHooks {
   /**
    * Implements hook_form_BASE_FORM_ID_alter().
    *
-   *  Updates the title of the entity subqueue edit form. In our business
-   *  language the subqueues are known as 'Curated content listings'.
+   * Updates the title of the entity subqueue edit form. In our business
+   * language the subqueues are known as 'Curated content listings'.
    */
   #[Hook('form_entity_subqueue_form_alter')]
   public function formAlter(array &$form, FormStateInterface $formState, string $formId): void {

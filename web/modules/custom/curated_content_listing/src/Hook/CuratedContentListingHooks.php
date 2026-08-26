@@ -10,7 +10,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 /**
  * Hook implementations for curated content listing views.
  */
-final class CuratedContentListingViewHooks {
+final class CuratedContentListingHooks {
 
   use StringTranslationTrait;
 
