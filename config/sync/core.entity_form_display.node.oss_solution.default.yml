@@ -356,6 +356,7 @@ content:
       placeholder: ''
       link_to_entity: false
       link_to_edit_form: true
+      show_publish_status: unpublished
     third_party_settings: {  }
   oss_publiccode_yml_content:
     type: string_textarea

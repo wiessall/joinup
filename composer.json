@@ -44,7 +44,7 @@
         "drupal/entity_form_field_label": "^2.1",
         "drupal/entity_legal": "^4.0",
         "drupal/entity_print": "^2.15",
-        "drupal/entityqueue": "1.10.0",
+        "drupal/entityqueue": "^1.12",
         "drupal/error_page": "^2.1@beta",
         "drupal/facets": "^3.0",
         "drupal/facets_block": "^2.0@beta",
@@ -179,7 +179,7 @@
         "ec-europa/toolkit": "^10.5",
         "lovers-of-behat/table-extension": "^1.4",
         "lullabot/mink-selenium2-driver": "^1.7",
-        "mglaman/phpstan-drupal": "2.0.15",
+        "mglaman/phpstan-drupal": "^2.0",
         "mikey179/vfsstream": "~1.6",
         "nicwortel/behat-unused-step-definitions-extension": "^1.2",
         "phpro/grumphp-shim": "^2.19",
@@ -394,6 +394,9 @@
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.mr3.commit-9d2fe508.diff"
+            },
+            "drupal/entityqueue": {
+                "Undefined array key target_id @see https://www.drupal.org/i/3618249": "resources/patch/php/drupal/entityqueue/3618249.mr65.commit-7718aa20.diff"
             },
             "drupal/entity_form_field_label": {
                 "Add possibility to alter field's description @see https://www.drupal.org/i/3420361": "resources/patch/php/drupal/entity_form_field_label/3420361.mr10-note563504.diff",
