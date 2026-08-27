@@ -78,7 +78,7 @@ paths:
               example:
                 token_type: Bearer
                 expires_in: 300
-                access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                access_token: your_access_token
         '401':
           description: Unauthorized
 components:
