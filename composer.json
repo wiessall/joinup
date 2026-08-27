@@ -605,10 +605,6 @@
     },
     "repositories": [
         {
-            "type": "vcs",
-            "url": "https://github.com/openeuropa/oe_dashboard_agent.git"
-        },
-        {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
         },
