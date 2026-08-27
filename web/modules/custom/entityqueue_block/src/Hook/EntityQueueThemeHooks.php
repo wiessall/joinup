@@ -7,7 +7,7 @@ namespace Drupal\entityqueue_block\Hook;
 use Drupal\Core\Hook\Attribute\Hook;
 
 /**
- * Hook implementations for entityqueue_block theme.
+ * Hook implementations for entityqueue_block module.
  */
 final class EntityQueueThemeHooks {
 
