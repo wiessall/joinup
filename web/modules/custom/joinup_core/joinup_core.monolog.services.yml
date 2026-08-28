@@ -1,5 +1,14 @@
 parameters:
 
+  monolog.processors:
+    - message_placeholder
+    - current_user
+    - request_uri
+    - ip
+    - referer
+    - error_page_error_uuid
+    - backtrace
+
   monolog.channel_handlers:
     default: ['default_handler']
     php: ['php_handler', 'mail']

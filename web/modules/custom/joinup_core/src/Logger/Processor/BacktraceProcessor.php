@@ -13,8 +13,9 @@ use Monolog\LogRecord;
  * \Drupal\Core\Utility\Error::decodeException(), carry the full object graph of
  * every stack frame. Serializing them exhausts the memory limit, which turns a
  * trivial PHP warning into a fatal error that is never logged. Only the
- * '@backtrace_string' entry is kept, as an extra, because the message
- * placeholders are stripped from the context before the record is formatted.
+ * '@backtrace_string' entry is kept, and only for the records that would
+ * otherwise lose it, as the message placeholders are stripped from the context
+ * before the record is formatted.
  *
  * @see \Drupal\monolog\Logger\Processor\MessagePlaceholderProcessor
  */
@@ -24,8 +25,9 @@ class BacktraceProcessor {
    * {@inheritdoc}
    */
   public function __invoke(LogRecord $record): LogRecord {
-    if (!empty($record->context['@backtrace_string'])) {
-      $record->extra['backtrace'] = $record->context['@backtrace_string'];
+    $trace = $record->context['@backtrace_string'] ?? NULL;
+    if (!empty($trace) && !str_contains($record->message, '@backtrace_string')) {
+      $record->extra['backtrace'] = $trace;
     }
 
     $context = $record->context;
