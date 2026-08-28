@@ -556,6 +556,9 @@
             "drupal/ui_patterns_settings": {
                 "PHP 8.4 @see https://www.drupal.org/i/3564894": "resources/patch/php/drupal/ui_patterns_settings/3564894.mr58.commit-17615e84.diff"
             },
+            "drupal/ultimate_cron": {
+                "Queue processing runs without a lock @see https://www.drupal.org/i/3618809": "resources/patch/php/drupal/ultimate_cron/3618809.mr90.commitd9d7113.diff"
+            },
             "drupal/views_block_area": {
                 "Render logic not working @see https://www.drupal.org/i/3499861": "resources/patch/php/drupal/views_block_area/3499861.patch"
             },
