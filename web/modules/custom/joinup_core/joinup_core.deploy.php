@@ -180,7 +180,7 @@ function joinup_core_deploy_201603(): string {
 /**
  * Changes eif_description format from basic_html to content_editor.
  */
-function joinup_core_deploy_201604() {
+function joinup_core_deploy_201604(): void {
   $database = \Drupal::database();
   $updated = $database->update('meta_entity__eif_description')
     ->fields([
