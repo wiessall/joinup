@@ -176,3 +176,21 @@ function joinup_core_deploy_201603(): string {
 
   return sprintf('Queued %d out of %d node(s) with more than %d revisions in a language for revision deletion.', $queued, count($nids), $threshold);
 }
+
+/**
+ * Changes eif_description format from basic_html to content_editor.
+ */
+function joinup_core_deploy_201604() {
+  $database = \Drupal::database();
+  $updated = $database->update('meta_entity__eif_description')
+    ->fields([
+      'eif_description_format' => 'content_editor',
+    ])
+    ->condition('eif_description_format', 'basic_html')
+    ->execute();
+
+  \Drupal::logger('mymodule')->notice(
+    'Updated @count eif_description format value(s) from "basic_html" to "content_editor".',
+    ['@count' => $updated]
+  );
+}

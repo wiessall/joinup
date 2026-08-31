@@ -564,8 +564,7 @@
             },
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
-                "Webform referenced and rendered in paragraph @see https://www.drupal.org/i/3230135": "resources/patch/php/drupal/webform/3230135.diff",
-                "Using null as an array offset is deprecated, use an empty string instead in Drupal\\webform\\Element\\WebformHtmlEditor::processTextFormat() @see https://www.drupal.org/project/webform/issues/3619716": "resources/patch/php/drupal/webform/3619716-mr-934-e90bc0b2.diff"
+                "Webform referenced and rendered in paragraph @see https://www.drupal.org/i/3230135": "resources/patch/php/drupal/webform/3230135.diff"
             },
             "m4tthumphrey/php-gitlab-api": {
                 "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/m4tthumphrey/php-gitlab-api/772.diff",
