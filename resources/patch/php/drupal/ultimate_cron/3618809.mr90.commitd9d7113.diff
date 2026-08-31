@@ -1,0 +1,122 @@
+diff --git a/src/UltimateCron.php b/src/UltimateCron.php
+index 4f4b068886d5a2a1c75f90a7882ae74aff321b83..e2a7628c12f5580464daa214c0bbfcb7809a32f7 100644
+--- a/src/UltimateCron.php
++++ b/src/UltimateCron.php
+@@ -18,6 +18,11 @@ use Psr\Log\LoggerInterface;
+  */
+ class UltimateCron extends Cron {
+ 
++  /**
++   * The name of the lock held while the queues are processed.
++   */
++  const QUEUE_LOCK_NAME = 'ultimate_cron_queues';
++
+   /**
+    * @var \Drupal\Core\Config\ConfigFactoryInterface
+    */
+@@ -72,4 +77,22 @@ class UltimateCron extends Cron {
+ 
+     return TRUE;
+   }
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function processQueues() {
++    if (!$this->lock->acquire(static::QUEUE_LOCK_NAME, 900.0)) {
++      $this->logger->warning('Attempting to process the queues while another cron run is already processing them.');
++      return;
++    }
++
++    try {
++      parent::processQueues();
++    }
++    finally {
++      $this->lock->release(static::QUEUE_LOCK_NAME);
++    }
++  }
++
+ }
+diff --git a/tests/src/Kernel/QueueLockTest.php b/tests/src/Kernel/QueueLockTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..c4769755ba579af496b4b6d11cadbacae51060ea
+--- /dev/null
++++ b/tests/src/Kernel/QueueLockTest.php
+@@ -0,0 +1,77 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\ultimate_cron\Kernel;
++
++use Drupal\Core\DependencyInjection\ContainerBuilder;
++use Drupal\Core\Lock\DatabaseLockBackend;
++use Drupal\KernelTests\KernelTestBase;
++use Drupal\ultimate_cron\UltimateCron;
++use Symfony\Component\DependencyInjection\Reference;
++
++/**
++ * Tests the lock held while the queues are processed.
++ *
++ * @group ultimate_cron
++ */
++class QueueLockTest extends KernelTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = ['ultimate_cron', 'cron_queue_test'];
++
++  /**
++   * {@inheritdoc}
++   */
++  public function register(ContainerBuilder $container): void {
++    parent::register($container);
++
++    // Change container to use database lock backends.
++    $container
++      ->register('lock', 'Drupal\Core\Lock\DatabaseLockBackend')
++      ->addArgument(new Reference('database'));
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++
++    $this->installSchema('ultimate_cron', ['ultimate_cron_log', 'ultimate_cron_lock']);
++    \Drupal::service('ultimate_cron.discovery')->discoverCronJobs();
++    \Drupal::service('queue')
++      ->get('cron_queue_test_deriver:foo')
++      ->createItem([$this->randomMachineName() => $this->randomMachineName()]);
++  }
++
++  /**
++   * Tests that the queues are left to the run holding the lock.
++   */
++  public function testQueuesAreSkippedWhileLocked(): void {
++    // A second backend has a lock ID of its own, so it stands in for the run
++    // that already holds the lock.
++    $other_run = new DatabaseLockBackend($this->container->get('database'));
++    $this->assertTrue($other_run->acquire(UltimateCron::QUEUE_LOCK_NAME, 100));
++
++    \Drupal::service('cron')->run();
++
++    $this->assertNull(\Drupal::state()->get('cron_queue_test_deriver'));
++  }
++
++  /**
++   * Tests that the queues are processed and the lock released again.
++   */
++  public function testQueuesAreProcessedAndTheLockReleased(): void {
++    \Drupal::service('cron')->run();
++
++    $this->assertEquals(1, \Drupal::state()->get('cron_queue_test_deriver'));
++
++    // The next run can take the lock, so this one released it.
++    $next_run = new DatabaseLockBackend($this->container->get('database'));
++    $this->assertTrue($next_run->acquire(UltimateCron::QUEUE_LOCK_NAME, 100));
++  }
++
++}
