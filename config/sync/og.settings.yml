@@ -21,5 +21,4 @@ group_resolvers:
   - group_from_layout_paragraphs
   - group_from_invite
   - assessments_group
-  - joinup_assessment_routes
 auto_add_group_owner_membership: true

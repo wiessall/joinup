@@ -1,0 +1,19 @@
+# Gitleaks configuration for toolkit:run-gitleaks.
+# Extends the default gitleaks rule set, but skips third-party code that is
+# composer/npm-managed (and gitignored): any secret there is upstream's, not a
+# leak from this repository, and findings in it are not actionable here.
+
+[extend]
+useDefault = true
+
+[allowlist]
+paths = [
+  '''(^|/)vendor/''',
+  '''(^|/)web/core/''',
+  '''(^|/)web/libraries/''',
+  '''(^|/)web/modules/contrib/''',
+  '''(^|/)web/profiles/contrib/''',
+  '''(^|/)web/themes/contrib/''',
+  '''(^|/)drush/contrib/''',
+  '''(^|/)node_modules/''',
+]

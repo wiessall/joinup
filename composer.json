@@ -44,7 +44,7 @@
         "drupal/entity_form_field_label": "^2.1",
         "drupal/entity_legal": "^4.0",
         "drupal/entity_print": "^2.15",
-        "drupal/entityqueue": "1.10.0",
+        "drupal/entityqueue": "^1.12",
         "drupal/error_page": "^2.1@beta",
         "drupal/facets": "^3.0",
         "drupal/facets_block": "^2.0@beta",
@@ -179,7 +179,7 @@
         "ec-europa/toolkit": "^10.5",
         "lovers-of-behat/table-extension": "^1.4",
         "lullabot/mink-selenium2-driver": "^1.7",
-        "mglaman/phpstan-drupal": "2.0.15",
+        "mglaman/phpstan-drupal": "^2.0",
         "mikey179/vfsstream": "~1.6",
         "nicwortel/behat-unused-step-definitions-extension": "^1.2",
         "phpro/grumphp-shim": "^2.19",
@@ -395,6 +395,9 @@
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.mr3.commit-9d2fe508.diff"
             },
+            "drupal/entityqueue": {
+                "Undefined array key target_id @see https://www.drupal.org/i/3618249": "resources/patch/php/drupal/entityqueue/3618249.mr65.commit-7718aa20.diff"
+            },
             "drupal/entity_form_field_label": {
                 "Add possibility to alter field's description @see https://www.drupal.org/i/3420361": "resources/patch/php/drupal/entity_form_field_label/3420361.mr10-note563504.diff",
                 "Illegal argument NULL @see https://www.drupal.org/i/3558750": "resources/patch/php/drupal/entity_form_field_label/3558750.diff"
@@ -459,7 +462,7 @@
                 "Integrity constraint violation @see https://www.drupal.org/project/layout_paragraphs/issues/3528058": "resources/patch/php/drupal/layout_paragraphs/3528058.patch",
                 "Prevent moving components on Translate edit page @see https://drupal.org/i/3540040": "resources/patch/php/drupal/layout_paragraphs/3540040.mr242.diff",
                 "Provide more info to component add buttons to help customization @see https://drupal.org/i/3611607": "resources/patch/php/drupal/layout_paragraphs/3611607-mr248-1356ffbb58--on-top-of-3540040.mr242.diff",
-                "Cache loaded paragraphs in LayoutParagraphsLayout @see https://drupal.org/i/3611711": "resources/patch/php/drupal/layout_paragraphs/3611711-mr249-9ec8d4282c--v2.diff",
+                "Cache loaded paragraphs in LayoutParagraphsLayout @see https://drupal.org/i/3611711": "resources/patch/php/drupal/layout_paragraphs/3611711-mr249-6d99e004.diff",
                 "Maximum call stack size reached in serialize() @see https://www.drupal.org/i/3599833": "resources/patch/php/drupal/layout_paragraphs/3599833.mr241.commitd4c9beff1108.diff"
             },
             "drupal/memcache": {
@@ -538,16 +541,8 @@
                 "Ignore specific paths @see https://www.drupal.org/i/2964786": "resources/patch/php/drupal/subpathauto/2964786.mr3-commit6174fa47.diff"
             },
             "drupal/tmgmt": {
-                "Filtering job items crashes @see https://www.drupal.org/i/3578626": "resources/patch/php/drupal/tmgmt/3578626.mr159.commit3ee8064a.diff",
-                "Data too long for column 'message' - https://www.drupal.org/i/3552683": "resources/patch/php/drupal/tmgmt/3552683.mr135.commit597ae8cd.diff",
-                "Add a configurable fallback for translations that exceed the target field length @see https://www.drupal.org/i/2960458 + Callers don't account the scenario in which JobItem::acceptTranslation() fails softly @see https://www.drupal.org/i/3580841": "resources/patch/php/drupal/tmgmt/2960458.mr170.commit4b643297-plus-3580841.mr161.commit7baf8367.diff",
-                "Non-translatable fields are exported when the bundle is not enabled for content translation @see https://www.drupal.org/i/3382356": "resources/patch/php/drupal/tmgmt/3382356.mr172.commitd2294f18.diff",
-                "Delete job item when corresponding entity is being deleted @see https://www.drupal.org/i/2998143": "resources/patch/php/drupal/tmgmt/2998143.mr35.commitdd0ee714.diff",
-                "Messages flooded @see https://www.drupal.org/i/3611439": "resources/patch/php/drupal/tmgmt/3611439.mr175-commitfff006f2.diff",
-                "Add purge continuous jobs item @see https://drupal.org/i/3134985": "resources/patch/php/drupal/tmgmt/3134985.mr178-b680b1b9c9.diff",
                 "Hook to allow modules to alter translation @see https://www.drupal.org/i/3298245": "resources/patch/php/drupal/tmgmt/3298245.mr58.commit6976599d.diff",
-                "Data loss when the same source is accepted concurrently @see https://www.drupal.org/i/3618383": "resources/patch/php/drupal/tmgmt/3618383.mr180.commit445d31a6.diff",
-                "Major performance problem @see https://www.drupal.org/i/3534961": "resources/patch/php/drupal/tmgmt/3534961.mr125.commit-d5e00810.diff"
+                "Data loss when the same source is accepted concurrently @see https://www.drupal.org/i/3618383": "resources/patch/php/drupal/tmgmt/3618383.mr180.commita40a65ff.diff"
             },
             "drupal/tmgmt_ec_etranslation": {
                 "Reschedule timeouted items few times @see https://www.drupal.org/i/3609037": "resources/patch/php/drupal/tmgmt_ec_etranslation/3609037.mr3609037-commit55c6c018.diff"
@@ -560,6 +555,9 @@
             },
             "drupal/ui_patterns_settings": {
                 "PHP 8.4 @see https://www.drupal.org/i/3564894": "resources/patch/php/drupal/ui_patterns_settings/3564894.mr58.commit-17615e84.diff"
+            },
+            "drupal/ultimate_cron": {
+                "Queue processing runs without a lock @see https://www.drupal.org/i/3618809": "resources/patch/php/drupal/ultimate_cron/3618809.mr90.commitd9d7113.diff"
             },
             "drupal/views_block_area": {
                 "Render logic not working @see https://www.drupal.org/i/3499861": "resources/patch/php/drupal/views_block_area/3499861.patch"
@@ -601,10 +599,6 @@
         }
     },
     "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/openeuropa/oe_dashboard_agent.git"
-        },
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"

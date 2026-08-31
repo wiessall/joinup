@@ -6,6 +6,7 @@ dependencies:
     - node
 id: spotlight
 label: 'In the spotlight'
+description: ''
 handler: simple
 handler_configuration: {  }
 entity_settings:
