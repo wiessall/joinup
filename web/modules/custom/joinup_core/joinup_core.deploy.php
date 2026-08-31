@@ -189,7 +189,7 @@ function joinup_core_deploy_201604(): void {
     ->condition('eif_description_format', 'basic_html')
     ->execute();
 
-  \Drupal::logger('mymodule')->notice(
+  \Drupal::logger('joinup_core')->notice(
     'Updated @count eif_description format value(s) from "basic_html" to "content_editor".',
     ['@count' => $updated]
   );
