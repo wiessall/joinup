@@ -10,7 +10,6 @@ declare(strict_types=1);
 use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\joinup_assessment\Entity\AssessmentReportInterface;
 use Drupal\joinup_bundle_class\AbstractInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
@@ -99,7 +98,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   $variables['info']['icon'] = 'calendar-event';
   if ($changed_time = $entity->getChangedTime()) {
     $variables['info']['label'] = t('@label: @changed', [
-      '@label' => ($entity instanceof AssessmentReportInterface) ? t('Published') : t('Last update'),
+      '@label' => t('Last update'),
       '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
     ]);
   }

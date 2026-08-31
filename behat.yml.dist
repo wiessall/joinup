@@ -100,6 +100,7 @@
   - Drupal\joinup\Context\SolutionContext
   - Drupal\joinup\Context\SpdxContext
   - Drupal\joinup\Context\TagifyContext
+  - Drupal\joinup\Context\TmgmtContext
   - Drupal\joinup\Context\UpdateContext
   - Drupal\joinup\Context\WebformContext
   - Drupal\joinup\Context\WysiwygContext
@@ -178,7 +179,6 @@ default:
         'licence comparer': 'table[data-drupal-selector="licence-comparer"]'
         'subscribers report': 'table'
         'media admin': 'form[data-drupal-selector="views-form-media-media-page-list"] table'
-        'manage solutions': '.view-id-manage_collection_solutions.view-display-id-manage_solutions table'
         'Ventuno media library': '.view-id-media_library.view-display-id-widget form table'
         'OSS catalogue list': '.oss-catalogue-list table'
         'Owner IEF': '.field--name-owner .ief-entity-table'
@@ -235,9 +235,6 @@ default:
         Table of contents: '#block-ventuno-table-of-contents'
         Table of contents outline: '#block-ventuno-toc-outline'
         Top Bar: '.region-top-bar'
-        Draft unpublished block: '#block-ventuno-unpublished-draft'
-        Proposed unpublished block: '#block-ventuno-unpublished-proposed'
-        Other unpublished block: '#block-ventuno-unpublished-other'
         Visually hidden title: '#block-ventuno-pagetitle .visually-hidden'
         Private messages inbox: '#block-ventuno-privatemessage-inbox .private-message-thread--full-container'
         Private messages conversation: '#private-message-page .private-message-thread-messages'

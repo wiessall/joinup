@@ -28,4 +28,3 @@ Feature: Variety tests for the developer role.
       | /admin/config/search/search-api                    |
       | /admin/config/search/search-api/server/joinup      |
       | /admin/config/search/search-api/index/published    |
-      | /admin/config/search/search-api/index/unpublished  |

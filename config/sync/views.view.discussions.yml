@@ -8,7 +8,6 @@ dependencies:
     - search_api.index.published
   module:
     - joinup_discussion
-    - joinup_group
     - joinup_tiles
     - search_api
 id: discussions
@@ -133,10 +132,10 @@ display:
           content: 'No discussions available.'
           tokenize: false
       sorts:
-        pinned_in:
-          id: pinned_in
+        node_pinned_in:
+          id: node_pinned_in
           table: search_api_index_published
-          field: pinned_in
+          field: node_pinned_in
           relationship: none
           group_type: group
           admin_label: ''
@@ -167,7 +166,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: search_api_group
+          plugin_id: search_api
           default_action: default
           exception:
             value: all

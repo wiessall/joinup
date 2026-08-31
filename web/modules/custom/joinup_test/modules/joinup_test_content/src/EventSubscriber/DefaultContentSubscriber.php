@@ -9,6 +9,7 @@ use Drupal\cas_mock_server\UserManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\default_content\Event\DefaultContentEvents;
 use Drupal\default_content\Event\ImportEvent;
+use Drupal\joinup_search\SearchIndexCommitter;
 use Drupal\joinup_test_content\DefaultContentManager;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -25,6 +26,7 @@ final class DefaultContentSubscriber implements EventSubscriberInterface {
     protected readonly CasUserManager $casUserManager,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly DefaultContentManager $defaultContentManager,
+    protected readonly SearchIndexCommitter $searchIndexCommitter,
   ) {
   }
 
@@ -82,6 +84,9 @@ final class DefaultContentSubscriber implements EventSubscriberInterface {
       /** @var \Drupal\search_api\IndexInterface $index */
       $index->indexItems();
     }
+
+    // Ensure all documents are committed to Solr and immediately searchable.
+    $this->searchIndexCommitter->commitPendingChanges();
   }
 
 }

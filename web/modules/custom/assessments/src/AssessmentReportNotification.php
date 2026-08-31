@@ -124,23 +124,45 @@ final readonly class AssessmentReportNotification implements AssessmentReportNot
   }
 
   /**
-   * Returns users with an active subscription to assessment_report content.
+   * Returns the members who asked to hear about published assessment reports.
+   *
+   * Two separate settings ask for this, and either is enough:
+   *
+   * - `announcements`, the group-wide setting that predates the content
+   *   subscription and has always driven this notification;
+   * - a `report` entry in `subscription_bundles`, which is the subscription
+   *   the "My subscriptions" form offers for the assessments group.
+   *
+   * The second one used to be handled elsewhere: while reports were
+   * `assessment_report` nodes they reached subscribers through the group
+   * content digest, which only carries nodes. Since ISAICP-11605 turned them
+   * into `assessment` entities the digest can no longer reference them, so the
+   * subscription would otherwise be stored and never acted upon.
+   *
+   * Matching on the entity type alone is exact here: `assessment` contributes
+   * exactly one subscribable bundle, and testing a second property of the same
+   * multi-value field would match across deltas rather than within one.
    *
    * @param \Drupal\Core\Entity\EntityInterface $collection
    *   The collection node.
    *
    * @return \Drupal\user\UserInterface[]
    *   Subscribed active members, keyed by user ID.
+   *
+   * @see \Drupal\joinup_subscription\JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES
    */
   protected function getSubscribedUsers(EntityInterface $collection): array {
     $membershipStorage = $this->entityTypeManager->getStorage('og_membership');
-    $membershipIds = $membershipStorage->getQuery()
+    $query = $membershipStorage->getQuery()
       ->accessCheck(FALSE)
       ->condition('entity_type', 'node')
       ->condition('entity_id', $collection->id())
-      ->condition('state', OgMembershipInterface::STATE_ACTIVE)
+      ->condition('state', OgMembershipInterface::STATE_ACTIVE);
+    $query->condition($query->orConditionGroup()
       ->condition('announcements', 1)
-      ->execute();
+      ->condition('subscription_bundles.entity_type', 'assessment')
+    );
+    $membershipIds = $query->execute();
 
     if (empty($membershipIds)) {
       return [];

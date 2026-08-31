@@ -1,0 +1,52 @@
+{#
+/**
+ * @file
+ * Theme override to display the front-page "Explore" block.
+ *
+ * Available variables:
+ * - data: Keyed list of content-type tabs; each tab has a label, plural_type,
+ *   url and a rendered list of items.
+ */
+#}
+{{ attach_library('ventuno/explore-block') }}
+
+<div class="explore-block wrapper-class">
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    {% for key, tab in data %}
+      <li class="nav-item" role="presentation">
+        <button class="nav-link{% if loop.first %} active{% endif %}" id="{{ key }}-tab" data-bs-toggle="tab" data-bs-target="#{{ key }}" type="button" role="tab" aria-controls="{{ key }}" aria-selected="true">{{ tab.label }}</button>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <div class="tab-content">
+    {% for key, tab in data %}
+      <div class="tab-pane{% if loop.first %} active{% endif %}" id="{{ key }}" role="tabpanel" aria-labelledby="{{ key }}-tab">
+        {% if tab.data is not empty %}
+          <div class="tab-data glide__outer">
+            <div class="glide">
+              {# A flex row, so that the height comes from the arrows rather
+                 than from the button beside them: the arrows float, and the
+                 recently commented tab has no listing to continue into and so
+                 no button to hold the row open. #}
+              <div class="explore-controls d-flex align-items-center mb-2">
+                <div class="glide__arrows me-4" data-glide-el="controls">
+                  <button class="glide__arrow glide__arrow--left rounded-circle" data-glide-dir="<" title="{{ 'Previous item'|t }}"><span class="icon"></span></button>
+                  <button class="glide__arrow glide__arrow--right rounded-circle" data-glide-dir=">" title="{{ 'Next item'|t }}"><span class="icon"></span></button>
+                </div>
+                {% if tab.url is not empty %}
+                  <a href="{{ tab.url }}" class="btn btn-secondary explore-see-more">{{ 'See more @plural_type'|t({'@plural_type': tab.plural_type}) }}</a>
+                {% endif %}
+              </div>
+              <div class="explore-slider explore-slider-{{ key }} mt-3 glide__track" data-glide-el="track">
+                <div class="glide__slides">
+                  {{ tab.data }}
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>

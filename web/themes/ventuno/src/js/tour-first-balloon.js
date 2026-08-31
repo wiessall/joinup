@@ -16,15 +16,12 @@
       if (!navbarList) return;
 
       const loggedIn = settings.user.uid !== 0;
-      // 1200px is the breakpoint from which the menu is expanded.
-      const isMobile = window.innerWidth < 1200;
 
-      // Determine first balloon based on user login status and screen width.
+      // Determine first balloon based on user login status. The sign in link is
+      // shown on every breakpoint, so it is the anonymous target throughout.
       const spot = loggedIn
         ? navbarList.querySelector("button#account")
-        : navbarList.querySelector(
-            isMobile ? "button#navbar-toggler" : "li.nav-item .sign-in-link",
-          );
+        : navbarList.querySelector("li.nav-item .sign-in-link");
       if (!spot) return;
       spot.classList.add("tour-first-balloon");
     },

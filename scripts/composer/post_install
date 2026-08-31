@@ -6,6 +6,11 @@ set -e
 if [ "$BUILD_DISTRO" = "1" ] || [ ! -f .env ] || [ "$(grep 'COMPOSER_DISABLE_NODE_DEPENDENCIES=1' .env)" = "" ]
 then
   npm ci --no-progress
+  # Explicitly run what used to be the 'postinstall' script. The corporate
+  # pipelines set NPM_CONFIG_IGNORE_SCRIPTS=true, which silently skips npm
+  # lifecycle scripts, leaving the node patches unapplied and web/libraries/
+  # unpopulated. Calling it here keeps dev and CI on the same path.
+  npm run install:libraries
 fi
 
 source scripts/composer/download_licences

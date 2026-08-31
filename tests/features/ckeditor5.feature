@@ -311,7 +311,7 @@ Feature: CKEditor5
 
     When I am logged in as a moderator
     And I go to the edit form of the "Contact us text check" "custom page"
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     # Not used anymore.
     And I should not see the link "Simple paragraph"

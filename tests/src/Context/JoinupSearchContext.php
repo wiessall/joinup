@@ -21,11 +21,10 @@ use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
+use Drupal\joinup_search\SearchIndexCommitter;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
-use Drupal\search_api_solr\SolrBackendInterface;
-use Drupal\search_api_solr\Utility\SolrCommitTrait;
 
 /**
  * Behat step definitions for testing searches.
@@ -37,7 +36,6 @@ class JoinupSearchContext extends RawDrupalContext {
   use JavascriptTrait;
   use KeyboardInteractionTrait;
   use SearchTrait;
-  use SolrCommitTrait;
   use TraversingTrait;
   use UtilityTrait;
 
@@ -56,12 +54,7 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   #[AfterStep]
   public function afterStepIndexing(): void {
-    \Drupal::service('search_api.post_request_indexing')->destruct();
-    foreach (Index::loadMultiple() as $index) {
-      if ($index->status() && $index->getServerInstance()?->getBackend() instanceof SolrBackendInterface) {
-        $this->ensureCommit($index);
-      }
-    }
+    \Drupal::service(SearchIndexCommitter::class)->commitPendingChanges();
   }
 
   /**
@@ -464,7 +457,7 @@ class JoinupSearchContext extends RawDrupalContext {
       $expected_values = array_map('trim', explode(',', $row[1]));
       if ($field_name === 'topic') {
         foreach ($expected_values as $index => $value) {
-          $expected_values[$index] = $this->getEntityByLabel('taxonomy_term', $value)->id();
+          $expected_values[$index] = (int) $this->getEntityByLabel('taxonomy_term', $value)->id();
         }
       }
       $actual_values = $document->getField($field_name)->getValues();
