@@ -58,7 +58,6 @@ module:
   entity_print: 0
   entity_reference_revisions: 0
   entityqueue: 0
-  entityqueue_block: 0
   error_page: 0
   eu_oss_catalogue: 0
   eu_oss_vitality_index: 0
