@@ -26,12 +26,10 @@ dependencies:
     - field.storage.node.field_state
     - field.storage.node.field_type
     - field.storage.node.keywords
-    - field.storage.node.organization
     - field.storage.node.owner
     - field.storage.node.solution_type
     - field.storage.node.spatial_coverage
     - field.storage.node.spdx_licence
-    - field.storage.node.submission
     - field.storage.paragraph.affects
     - field.storage.paragraph.field_body
     - field.storage.user.field_user_family_name
@@ -411,14 +409,6 @@ field_settings:
       module:
         - meta_entity
         - node
-  organization:
-    label: Organization
-    datasource_id: 'entity:node'
-    property_path: organization
-    type: text
-    dependencies:
-      config:
-        - field.storage.node.organization
   owner_title:
     label: 'Related Owner » Title'
     datasource_id: 'entity:node'
@@ -547,14 +537,6 @@ field_settings:
     dependencies:
       module:
         - node
-  submission:
-    label: Submission
-    datasource_id: 'entity:node'
-    property_path: submission
-    type: integer
-    dependencies:
-      config:
-        - field.storage.node.submission
   thematic_area:
     label: 'Identification of binding requirement(s) assessed » Paragraph » Affected service » Assessment » Functions'
     datasource_id: 'entity:assessment'

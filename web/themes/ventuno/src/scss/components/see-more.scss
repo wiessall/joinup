@@ -1,7 +1,7 @@
 @import "../partials/core";
 
 .see-more {
-  display: -webkit-box;
+  display: -webkit-box !important;
   -webkit-box-orient: vertical;
   overflow: hidden;
 
@@ -14,7 +14,7 @@
     -webkit-line-clamp: 5;
 
     &.show {
-      -webkit-line-clamp: unset;
+      -webkit-line-clamp: unset !important;
     }
   }
 }

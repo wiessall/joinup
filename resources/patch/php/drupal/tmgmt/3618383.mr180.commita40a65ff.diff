@@ -1,8 +1,8 @@
 diff --git a/sources/content/src/Plugin/tmgmt/Source/ContentEntitySource.php b/sources/content/src/Plugin/tmgmt/Source/ContentEntitySource.php
-index 8bae8dc5..05cd0c1a 100644
+index 8bae8dc58a2d035280ea618ac2955f9b8cd5d734..05cd0c1a11cb46464c3a6583f12daaab7b75a060 100644
 --- a/sources/content/src/Plugin/tmgmt/Source/ContentEntitySource.php
 +++ b/sources/content/src/Plugin/tmgmt/Source/ContentEntitySource.php
-@@ -51,6 +51,24 @@ protected function getEntity(JobItemInterface $job_item) {
+@@ -51,6 +51,24 @@ class ContentEntitySource extends SourcePluginBase implements SourcePreviewInter
      return \Drupal::entityTypeManager()->getStorage($job_item->getItemType())->load($job_item->getItemId());
    }
  
@@ -27,7 +27,7 @@ index 8bae8dc5..05cd0c1a 100644
    /**
     * Loads a list of entities for the given entity type ID.
     *
-@@ -375,8 +393,11 @@ public static function getEmbeddableFields(ContentEntityInterface $entity) {
+@@ -375,8 +393,11 @@ class ContentEntitySource extends SourcePluginBase implements SourcePreviewInter
     * {@inheritdoc}
     */
    public function saveTranslation(JobItemInterface $job_item, $target_langcode) {
@@ -42,7 +42,7 @@ index 8bae8dc5..05cd0c1a 100644
          '%id' => $job_item->getItemId(),
 diff --git a/sources/content/tests/src/Kernel/ConcurrentAcceptTest.php b/sources/content/tests/src/Kernel/ConcurrentAcceptTest.php
 new file mode 100644
-index 00000000..167da6d3
+index 0000000000000000000000000000000000000000..167da6d3fc8ad2cba5a50cfce175173610da257e
 --- /dev/null
 +++ b/sources/content/tests/src/Kernel/ConcurrentAcceptTest.php
 @@ -0,0 +1,213 @@
@@ -260,10 +260,10 @@ index 00000000..167da6d3
 +
 +}
 diff --git a/src/Entity/JobItem.php b/src/Entity/JobItem.php
-index 8783bf97..ef92dd58 100644
+index 9a5fc4bd74d7157e295bb0f642fe4481d7c163e2..55aa73d020ee6c7dab66dd79bfd6312db8763945 100644
 --- a/src/Entity/JobItem.php
 +++ b/src/Entity/JobItem.php
-@@ -87,6 +87,29 @@
+@@ -87,6 +87,29 @@ use Drupal\Core\Render\Element;
  )]
  class JobItem extends ContentEntityBase implements JobItemInterface {
  
@@ -293,12 +293,12 @@ index 8783bf97..ef92dd58 100644
    /**
     * Holds the unserialized source data.
     *
-@@ -935,17 +958,95 @@ public function acceptTranslation(?string &$rejection_reason = NULL) {
+@@ -932,17 +955,95 @@ class JobItem extends ContentEntityBase implements JobItemInterface {
        return FALSE;
      }
  
 -    if (!$plugin->saveTranslation($this, $this->getJob()->getTargetLangcode())) {
--      $rejection_reason = "Unknown error while saving translation for job item {$this->id()}";
+-      $this->addMessage("Unknown error while saving translation for job item {$this->id()}");
 +    // Hold the source lock while saving: translations of one source accepted
 +    // at the same time overwrite each other.
 +    if (!$this->acquireSourceLock()) {
@@ -311,7 +311,7 @@ index 8783bf97..ef92dd58 100644
 -    $this->accepted();
 +    try {
 +      if (!$plugin->saveTranslation($this, $this->getJob()->getTargetLangcode())) {
-+        $rejection_reason = "Unknown error while saving translation for job item {$this->id()}";
++        $this->addMessage("Unknown error while saving translation for job item {$this->id()}");
 +        return FALSE;
 +      }
 +
@@ -395,10 +395,10 @@ index 8783bf97..ef92dd58 100644
     * Applies the configured policy for translations longer than their field.
     *
 diff --git a/src/JobItemInterface.php b/src/JobItemInterface.php
-index 50fe5b2a..58160242 100644
+index 24b9064355f7c028ae1cfbaa9e161e04c03605c3..4730902380e1337bc8d902629866f1b7ce9f2838 100644
 --- a/src/JobItemInterface.php
 +++ b/src/JobItemInterface.php
-@@ -464,6 +464,10 @@ public function addTranslatedData(array $translation, $key = array(), $status =
+@@ -464,6 +464,10 @@ interface JobItemInterface extends ContentEntityInterface {
    /**
     * Propagates the returned job item translations to the sources.
     *
@@ -406,6 +406,6 @@ index 50fe5b2a..58160242 100644
 +   * blocks waiting for it, and is refused after 30s with an error message
 +   * recorded on the job item.
 +   *
-    * @param string|null $rejection_reason
-    *   The method can inform the caller about the reason why the translation was
-    *   not accepted by setting this variable.
+    * @return bool
+    *   TRUE if we were able to propagate the translated data and the item could
+    *   be saved, FALSE otherwise.

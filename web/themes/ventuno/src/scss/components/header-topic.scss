@@ -19,25 +19,15 @@
   &__description {
     margin-bottom: 0;
     color: $white;
-    &--long {
-      display: -webkit-box !important;
-      overflow: hidden;
-      min-height: 48px;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      &.show {
-        -webkit-line-clamp: unset;
-      }
-      p {
-        display: inline;
-        &:not(:last-child)::after {
-          content: " \A\A";
-          white-space: pre;
-        }
-      }
-    }
     p {
       display: inline;
+
+      // The paragraphs are inlined so that the line clamp counts lines rather
+      // than children, which leaves the blank line between them to be drawn.
+      &:not(:last-child)::after {
+        content: " \A\A";
+        white-space: pre;
+      }
     }
     a {
       text-decoration: underline;
