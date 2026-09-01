@@ -97,7 +97,7 @@ Feature: Machine translation
     Then I should not see any Webtools eTrans elements
     When I visit the solution overview page
     Then I should not see any Webtools eTrans elements
-    And I visit the content overview page
+    And I visit the advanced search page
     Then I should not see any Webtools eTrans elements
 
     # Pages that are not content focused should not be translatable.
