@@ -40,10 +40,9 @@ class CocCrudHooks {
    */
   #[Hook('meta_entity_update')]
   public function updateCollectionSettings(MetaEntityInterface $settings): void {
-    if ($settings->bundle() !== 'collection_settings') {
-      return;
+    if ($settings->bundle() === 'collection_settings') {
+      $this->cocEntityCrudHandler->onGroupSettingsInsertOrUpdate($settings);
     }
-    $this->cocEntityCrudHandler->onGroupSettingsInsertOrUpdate($settings);
   }
 
   /**
@@ -51,10 +50,9 @@ class CocCrudHooks {
    */
   #[Hook('meta_entity_delete')]
   public function deleteCollectionSettings(MetaEntityInterface $settings): void {
-    if ($settings->bundle() !== 'collection_settings') {
-      return;
+    if ($settings->bundle() === 'collection_settings') {
+      $this->cocEntityCrudHandler->onGroupSettingsDelete($settings);
     }
-    $this->cocEntityCrudHandler->onGroupSettingsDelete($settings);
   }
 
 }
