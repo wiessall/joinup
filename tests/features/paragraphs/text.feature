@@ -45,7 +45,7 @@ Feature:
 
     When I am logged in as a moderator
     And I go to the edit form of the "Table icon check" "custom page"
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Text"
     And the "Insert table" button should be available in the "Body" wysiwyg editor

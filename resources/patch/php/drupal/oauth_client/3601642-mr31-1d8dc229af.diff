@@ -1,0 +1,950 @@
+diff --git a/composer.json b/composer.json
+index 7d9b12aed9f1ce877cee16e29581896bc1772bfb..e49e7483a02d202e041f9169ee825cc763f53459 100644
+--- a/composer.json
++++ b/composer.json
+@@ -17,9 +17,6 @@
+         "ext-sodium": "*",
+         "drupal/simple_oauth": "^6.0"
+     },
+-    "require-dev": {
+-        "drush/drush": "^12 || ^13.5.1"
+-    },
+     "config": {
+         "allow-plugins": {
+             "php-http/discovery": true,
+diff --git a/oauth_client.module b/oauth_client.module
+index ed2c9006d57f1fd275320b0b04c2cbbe26cc6f04..64684eb9033848fbb249c98380966d8b5c57cae7 100644
+--- a/oauth_client.module
++++ b/oauth_client.module
+@@ -10,7 +10,6 @@ declare(strict_types=1);
+ use Drupal\Core\Entity\EntityInterface;
+ use Drupal\Core\Hook\Attribute\LegacyHook;
+ use Drupal\Core\Render\BubbleableMetadata;
+-use Drupal\oauth_client\Entity\OauthClientRequestInterface;
+ use Drupal\oauth_client\Hook\OauthClientHooks;
+ use Drupal\oauth_client\Hook\OauthClientEntityDeleteHandler;
+ use Drupal\oauth_client\Hook\OauthClientTokenHooks;
+@@ -27,26 +26,6 @@ function oauth_client_entity_delete(EntityInterface $entity): void {
+     ->entityDelete($entity);
+ }
+ 
+-/**
+- * Implements hook_ENTITY_TYPE_insert().
+- *
+- * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
+- */
+-#[LegacyHook]
+-function oauth_client_oauth_client_request_insert(OauthClientRequestInterface $entity): void {
+-  \Drupal::service(OauthClientHooks::class)->onInsert($entity);
+-}
+-
+-/**
+- * Implements hook_ENTITY_TYPE_update().
+- *
+- * @phpstan-ignore-next-line as Attribute class Drupal\Core\Hook\Attribute\LegacyHook does not exist.
+- */
+-#[LegacyHook]
+-function oauth_client_oauth_client_request_update(OauthClientRequestInterface $entity): void {
+-  \Drupal::service(OauthClientHooks::class)->onUpdate($entity);
+-}
+-
+ /**
+  * Implements hook_token_info().
+  *
+diff --git a/src/Controller/OauthClientRequestAddController.php b/src/Controller/OauthClientRequestAddController.php
+index 3933b67e3563fe3a7f2b38ca56c3c2a66d10dbad..d976114a3f90a8d53872d9f958ca2bd88500d843 100644
+--- a/src/Controller/OauthClientRequestAddController.php
++++ b/src/Controller/OauthClientRequestAddController.php
+@@ -7,6 +7,7 @@ namespace Drupal\oauth_client\Controller;
+ use Drupal\Core\Controller\ControllerBase;
+ use Drupal\Core\DependencyInjection\ClassResolverInterface;
+ use Drupal\Core\Entity\Controller\EntityController;
++use Drupal\Core\Render\RendererInterface;
+ use Drupal\oauth_client\Access\AccessTrait;
+ use Drupal\user\UserInterface;
+ use Symfony\Component\HttpFoundation\RedirectResponse;
+@@ -25,6 +26,7 @@ class OauthClientRequestAddController extends ControllerBase {
+ 
+   public function __construct(
+     protected readonly ClassResolverInterface $classResolver,
++    protected readonly RendererInterface $renderer,
+   ) {
+     $this->original = $this->classResolver->getInstanceFromDefinition(EntityController::class);
+   }
+@@ -44,7 +46,13 @@ class OauthClientRequestAddController extends ControllerBase {
+       $bundle['add_link']->getUrl()->setRouteParameter('user', $user->id());
+       // Format non-empty string descriptions with oauth_client_minimal.
+       if (!empty($bundle['description'])) {
+-        $bundle['description'] = check_markup($bundle['description'], 'oauth_client_minimal');
++        $renderable = [
++          '#type' => 'processed_text',
++          '#text' => $bundle['description'],
++          '#format' => 'oauth_client_minimal',
++          '#filter_types_to_skip' => [],
++        ];
++        $bundle['description'] = $this->renderer->renderInIsolation($renderable);
+       }
+     }
+ 
+diff --git a/src/Entity/OauthClientRequest.php b/src/Entity/OauthClientRequest.php
+index b77478e01a263143fe192b6e5f17120ca35e1cdb..37203978c904d1c736f7c09ba491f8644ca94835 100644
+--- a/src/Entity/OauthClientRequest.php
++++ b/src/Entity/OauthClientRequest.php
+@@ -4,20 +4,24 @@ declare(strict_types=1);
+ 
+ namespace Drupal\oauth_client\Entity;
+ 
++use Drupal\Component\Utility\DeprecationHelper;
+ use Drupal\consumers\Entity\ConsumerInterface;
+ use Drupal\Core\Entity\Attribute\ContentEntityType;
+ use Drupal\Core\Entity\ContentEntityBase;
+ use Drupal\Core\Entity\EntityChangedTrait;
+ use Drupal\Core\Entity\EntityListBuilder;
++use Drupal\Core\Entity\EntityStorageInterface;
+ use Drupal\Core\Entity\EntityTypeInterface;
+ use Drupal\Core\Field\BaseFieldDefinition;
+ use Drupal\Core\Field\FieldStorageDefinitionInterface;
+ use Drupal\Core\StringTranslation\TranslatableMarkup;
+ use Drupal\oauth_client\Access\OauthClientRequestAccessControlHandler;
++use Drupal\oauth_client\Event\NotificationEvent;
+ use Drupal\oauth_client\Form\OauthClientRequestDeleteForm;
+ use Drupal\oauth_client\Form\OauthClientRequestForm;
+ use Drupal\oauth_client\Routing\OauthClientRequestHtmlRouteProvider;
+ use Drupal\oauth_client\OauthClientRequestViewsData;
++use Drupal\oauth_client\Service\OauthClientConsumerService;
+ use Drupal\simple_oauth\Entity\Oauth2ScopeEntityInterface;
+ use Drupal\user\EntityOwnerTrait;
+ use Drupal\user\UserInterface;
+@@ -427,4 +431,102 @@ class OauthClientRequest extends ContentEntityBase implements OauthClientRequest
+     return $fields;
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function postSave(EntityStorageInterface $storage, $update = TRUE): void {
++    parent::postSave($storage, $update);
++    // Don't do anything if entity was saved by a synchronization operation.
++    if ($this->isSyncing()) {
++      return;
++    }
++
++    $this->ensureClientIfActive($update);
++
++    $notificationEvent = $this->getNotificationEvent($update);
++    if (is_null($notificationEvent)) {
++      return;
++    }
++
++    \Drupal::service('event_dispatcher')->dispatch($notificationEvent);
++  }
++
++  /**
++   * Ensures that an active request has a client.
++   *
++   * @param bool $update
++   *   Whether the current entity was updated. FALSE if it was a new entity.
++   */
++  protected function ensureClientIfActive(bool $update): void {
++    // Return early if the request already have a client.
++    if ($this->getClient()) {
++      return;
++    }
++
++    // Only active requests must have a client.
++    if ($this->getStatus() !== OauthClientRequestStatus::Active) {
++      return;
++    }
++
++    $original = DeprecationHelper::backwardsCompatibleCall(
++      \Drupal::VERSION,
++      '11.2.0',
++      // @phpstan-ignore-next-line
++      fn() => $this->getOriginal(),
++      fn() => $this->original,
++    );
++
++    // Check if the status changed from pending or rejected to active.
++    $previousStatuses = [
++      OauthClientRequestStatus::Pending,
++      OauthClientRequestStatus::Rejected,
++    ];
++    $isPendingOrRejected = in_array($original?->getStatus(), $previousStatuses, TRUE);
++
++    if (!$update || $isPendingOrRejected) {
++      $consumer = \Drupal::service(OauthClientConsumerService::class)->createConsumerFromRequest($this);
++      $this->setClient($consumer)->save();
++    }
++  }
++
++  /**
++   * Creates a notification event based on the current state of the entity.
++   *
++   * @param bool $update
++   *   Whether the entity was updated. FALSE if the request was created just
++   *   now.
++   *
++   * @return object|null
++   *   An object representing the event, or NULL if there is dispatching an
++   *   event is not needed.
++   */
++  protected function getNotificationEvent(bool $update): ?object {
++    $original = DeprecationHelper::backwardsCompatibleCall(
++      \Drupal::VERSION,
++      '11.2.0',
++      // @phpstan-ignore-next-line
++      fn() => $this->getOriginal(),
++      fn() => $this->original,
++    );
++    $previousStatus = $original?->getStatus();
++    $newStatus = $this->getStatus();
++
++    $notificationType = match ([$previousStatus, $newStatus]) {
++      // Pattern: from, to.
++      [OauthClientRequestStatus::Pending, OauthClientRequestStatus::Active] => NotificationType::Approve,
++      [OauthClientRequestStatus::Pending, OauthClientRequestStatus::Rejected] => NotificationType::Reject,
++      default => NULL,
++    };
++
++    // In case of a new request, we want to dispatch the request notification
++    // type's event if the target status is not "Active".
++    if (!$update && $newStatus !== OauthClientRequestStatus::Active) {
++      $notificationType = NotificationType::Request;
++    }
++
++    return $notificationType instanceof NotificationType
++      ? new NotificationEvent($this, $notificationType)
++      : NULL;
++  }
++
+ }
+diff --git a/src/Form/OauthClientRequestForm.php b/src/Form/OauthClientRequestForm.php
+index 60662e09e3b4377d26aae5f9211a4ac208468a84..b3e7eeea6b600cf3adf30d9f004ab1b5fab6fe5d 100644
+--- a/src/Form/OauthClientRequestForm.php
++++ b/src/Form/OauthClientRequestForm.php
+@@ -4,23 +4,15 @@ declare(strict_types=1);
+ 
+ namespace Drupal\oauth_client\Form;
+ 
+-use Drupal\Component\Datetime\TimeInterface;
+-use Drupal\Core\DependencyInjection\AutowireTrait;
+ use Drupal\Core\Entity\ContentEntityForm;
+-use Drupal\Core\Entity\EntityRepositoryInterface;
+-use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\Core\Routing\RouteMatchInterface;
+ use Drupal\oauth_client\Access\AccessTrait;
+-use Drupal\oauth_client\Entity\NotificationType;
+ use Drupal\oauth_client\Entity\OauthClientRequestInterface;
+ use Drupal\oauth_client\Entity\OauthClientRequestStatus;
+ use Drupal\oauth_client\Entity\OauthClientRequestTypeInterface;
+-use Drupal\oauth_client\Event\NotificationEvent;
+ use Drupal\oauth_client\Plugin\Validation\Constraint\OauthClientRequestTransitionHelper;
+ use Drupal\user\UserInterface;
+-use Symfony\Component\DependencyInjection\ContainerInterface;
+-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+ 
+ /**
+  * Form controller for the OAuth Client Request entity edit forms.
+@@ -28,34 +20,12 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+ class OauthClientRequestForm extends ContentEntityForm {
+ 
+   use AccessTrait;
+-  use AutowireTrait;
+ 
+   /**
+    * The target user from the route parameter.
+    */
+   protected ?UserInterface $userFromRoute = NULL;
+ 
+-  public function __construct(
+-    EntityRepositoryInterface $entity_repository,
+-    EntityTypeBundleInfoInterface $entity_type_bundle_info,
+-    TimeInterface $time,
+-    protected EventDispatcherInterface $eventDispatcher,
+-  ) {
+-    parent::__construct($entity_repository, $entity_type_bundle_info, $time);
+-  }
+-
+-  /**
+-   * {@inheritdoc}
+-   */
+-  public static function create(ContainerInterface $container): static {
+-    return new static(
+-      $container->get('entity.repository'),
+-      $container->get('entity_type.bundle.info'),
+-      $container->get('datetime.time'),
+-      $container->get('event_dispatcher'),
+-    );
+-  }
+-
+   /**
+    * {@inheritdoc}
+    */
+@@ -70,15 +40,11 @@ class OauthClientRequestForm extends ContentEntityForm {
+   public function form(array $form, FormStateInterface $form_state): array {
+     $form = parent::form($form, $form_state);
+ 
+-    /**
+-     * @var \Drupal\oauth_client\Entity\OauthClientRequestInterface $entity
+-     */
+-    $entity = $this->entity;
+     $isManager = $this->isManager($this->currentUser());
+-    $isNew = $entity->isNew();
++    $isNew = $this->entity->isNew();
+ 
+     // Add request type information at the top of the form.
+-    $this->addRequestTypeInformation($form, $entity);
++    $this->addRequestTypeInformation($form);
+ 
+     // Set user field from route parameter.
+     $this->setUserFromRoute($form);
+@@ -86,8 +52,8 @@ class OauthClientRequestForm extends ContentEntityForm {
+     // Configure form based on user type and entity state.
+     match (TRUE) {
+       $isManager && $isNew => $this->configureManagerAddForm($form),
+-      $isManager && !$isNew => $this->configureManagerEditForm($form, $entity),
+-      default => $this->configureUserAddForm($form, $isNew),
++      $isManager && !$isNew => $this->configureManagerEditForm($form),
++      default => $this->configureUserAddForm($form),
+     };
+ 
+     return $form;
+@@ -141,17 +107,18 @@ class OauthClientRequestForm extends ContentEntityForm {
+   /**
+    * Configures the form for managers editing existing requests.
+    */
+-  protected function configureManagerEditForm(array &$form, OauthClientRequestInterface $entity): void {
++  protected function configureManagerEditForm(array &$form): void {
+     $this->disableFields($form, ['user', 'label', 'request_reason', 'user']);
+-    $this->configureStatusField($form, $entity);
++    $this->configureStatusField($form);
+     $this->configureRejectReasonField($form);
+   }
+ 
+   /**
+    * Configures status field options based on current status.
+    */
+-  protected function configureStatusField(array &$form, OauthClientRequestInterface $entity): void {
+-    $currentStatus = $entity->getStatus();
++  protected function configureStatusField(array &$form): void {
++    assert($this->entity instanceof OauthClientRequestInterface);
++    $currentStatus = $this->entity->getStatus();
+     $allowedNext = OauthClientRequestTransitionHelper::getAllowedTransitions($currentStatus);
+ 
+     $statusOptions = [];
+@@ -186,9 +153,9 @@ class OauthClientRequestForm extends ContentEntityForm {
+   /**
+    * Configures the form for regular users adding a new request.
+    */
+-  protected function configureUserAddForm(array &$form, bool $isNew): void {
++  protected function configureUserAddForm(array &$form): void {
+     $this->hideFields($form, ['user', 'reject_reason', 'status']);
+-    if ($isNew) {
++    if ($this->entity->isNew()) {
+       $form['status']['widget']['#default_value'] = OauthClientRequestStatus::Pending->value;
+     }
+     $form['request_reason']['widget'][0]['value']['#required'] = TRUE;
+@@ -212,22 +179,6 @@ class OauthClientRequestForm extends ContentEntityForm {
+     }
+   }
+ 
+-  /**
+-   * {@inheritdoc}
+-   */
+-  public function submitForm(array &$form, FormStateInterface $form_state): void {
+-    $entity = $this->entity;
+-    $originalStatus = $entity->isNew() ? NULL : $entity->getStatus();
+-
+-    parent::submitForm($form, $form_state);
+-
+-    $newStatus = $this->getEntity()->getStatus();
+-    $notificationAction = $this->calculateNotificationAction($newStatus, $originalStatus);
+-    // Store the action temporarily to be able to dispatch it after the entity
+-    // is saved.
+-    $form_state->setTemporaryValue('notification_action', $notificationAction);
+-  }
+-
+   /**
+    * {@inheritdoc}
+    */
+@@ -244,38 +195,9 @@ class OauthClientRequestForm extends ContentEntityForm {
+       'user' => $this->userFromRoute->id(),
+     ]);
+ 
+-    $notificationAction = $form_state->getTemporaryValue('notification_action');
+-    if ($notificationAction) {
+-      $this->eventDispatcher->dispatch(new NotificationEvent($entity, $notificationAction));
+-    }
+-
+     return $result;
+   }
+ 
+-  /**
+-   * Calculates the action for the emails.
+-   *
+-   * @param \Drupal\oauth_client\Entity\OauthClientRequestStatus $newStatus
+-   *   The new status of the entity.
+-   * @param \Drupal\oauth_client\Entity\OauthClientRequestStatus|null $originalStatus
+-   *   The original status of the entity.
+-   *
+-   * @return \Drupal\oauth_client\Entity\NotificationType|null
+-   *   The action for the email.
+-   */
+-  protected function calculateNotificationAction(OauthClientRequestStatus $newStatus, ?OauthClientRequestStatus $originalStatus = NULL): ?NotificationType {
+-    if ($originalStatus === NULL) {
+-      return NotificationType::Request;
+-    }
+-
+-    $statuses = [$newStatus, $originalStatus];
+-    return match ($statuses) {
+-      [OauthClientRequestStatus::Active, OauthClientRequestStatus::Pending] => NotificationType::Approve,
+-      [OauthClientRequestStatus::Rejected, OauthClientRequestStatus::Pending] => NotificationType::Reject,
+-      default => NULL,
+-    };
+-  }
+-
+   /**
+    * Adds appropriate status message based on save result.
+    */
+diff --git a/src/Hook/OauthClientHooks.php b/src/Hook/OauthClientHooks.php
+index e48c0064d6130e18cdd77093686dddcd9169d85d..000e67dc9630a9aa071fa5ea4d725e5752d57c1f 100644
+--- a/src/Hook/OauthClientHooks.php
++++ b/src/Hook/OauthClientHooks.php
+@@ -4,76 +4,19 @@ declare(strict_types=1);
+ 
+ namespace Drupal\oauth_client\Hook;
+ 
+-use Drupal\Core\Entity\EntityInterface;
+ use Drupal\Core\Hook\Attribute\Hook;
+ use Drupal\oauth_client\Entity\NotificationType;
+-use Drupal\oauth_client\Entity\OauthClientRequestInterface;
+-use Drupal\oauth_client\Entity\OauthClientRequestStatus;
+ use Drupal\oauth_client\Service\OauthClientConsumerService;
+ 
+ /**
+  * OAuth Client hooks.
+  */
+-class OauthClientHooks {
++readonly class OauthClientHooks {
+ 
+   public function __construct(
+     protected OauthClientConsumerService $oauthClientConsumerService,
+   ) {}
+ 
+-  /**
+-   * Acts after creating an oauth_client_request entity.
+-   *
+-   * @phpstan-ignore-next-line as Attribute class
+-   *   Drupal\Core\Hook\Attribute\Hook does not exist.
+-   */
+-  #[Hook('oauth_client_request_insert')]
+-  public function onInsert(EntityInterface $entity): void {
+-    if (!$entity instanceof OauthClientRequestInterface || $entity->getClient()) {
+-      return;
+-    }
+-
+-    if ($entity->getStatus() !== OauthClientRequestStatus::Active) {
+-      return;
+-    }
+-
+-    $consumer = $this->oauthClientConsumerService->createConsumerFromRequest($entity);
+-    $entity->setClient($consumer);
+-    $entity->save();
+-  }
+-
+-  /**
+-   * Acts after updating an oauth_client_request entity.
+-   *
+-   * @phpstan-ignore-next-line as Attribute class
+-   *   Drupal\Core\Hook\Attribute\Hook does not exist.
+-   */
+-  #[Hook('oauth_client_request_update')]
+-  public function onUpdate(EntityInterface $entity): void {
+-    if (!$entity instanceof OauthClientRequestInterface || $entity->getClient()) {
+-      return;
+-    }
+-
+-    $original = $entity->original;
+-
+-    if (!$original instanceof OauthClientRequestInterface) {
+-      return;
+-    }
+-
+-    // Check if the status changed from pending or rejected to active.
+-    $previousStatuses = [
+-      OauthClientRequestStatus::Pending,
+-      OauthClientRequestStatus::Rejected,
+-    ];
+-    $isPendingOrRejected = in_array($original->getStatus(), $previousStatuses);
+-    $isActive = $entity->getStatus() === OauthClientRequestStatus::Active;
+-
+-    if ($isActive && $isPendingOrRejected) {
+-      $consumer = $this->oauthClientConsumerService->createConsumerFromRequest($entity);
+-      $entity->setClient($consumer);
+-      $entity->save();
+-    }
+-  }
+-
+   /**
+    * Prepares notification mail message.
+    *
+diff --git a/src/NotificationSender.php b/src/NotificationSender.php
+index 498d0c206f1b934e8d64562bf855680144dcea61..7b9ba71ef95e761e0ead4fe2f657b4060bcda8c0 100644
+--- a/src/NotificationSender.php
++++ b/src/NotificationSender.php
+@@ -11,7 +11,6 @@ use Drupal\Core\Mail\MailManagerInterface;
+ use Drupal\Core\Utility\Token;
+ use Drupal\oauth_client\Entity\NotificationType;
+ use Drupal\oauth_client\Entity\OauthClientRequestInterface;
+-use Drupal\oauth_client\Entity\OauthClientRequestStatus;
+ use Drupal\oauth_client\Entity\OauthClientRequestTypeInterface;
+ use Drupal\user\Entity\Role;
+ 
+@@ -43,11 +42,6 @@ class NotificationSender implements NotificationSenderInterface {
+       return;
+     }
+ 
+-    // Active status does not need further managing.
+-    if ($entity->getStatus() === OauthClientRequestStatus::Active) {
+-      return;
+-    }
+-
+     if ($uids = $this->getManagerUids()) {
+       $this->sendEmailToUsers($entity, $uids, NotificationType::Request);
+     }
+@@ -64,12 +58,7 @@ class NotificationSender implements NotificationSenderInterface {
+     if (!$requestType?->isNotificationEnabled(NotificationType::Approve)) {
+       return;
+     }
+-    $requestUserId = $entity->getUser()?->id();
+-    // Don't try to send notification when user account was deleted.
+-    if (!$requestUserId) {
+-      return;
+-    }
+-    $this->sendEmailToUsers($entity, [$requestUserId], NotificationType::Approve);
++    $this->sendEmailToUsers($entity, [$entity->getUser()?->id()], NotificationType::Approve);
+   }
+ 
+   /**
+@@ -83,12 +72,7 @@ class NotificationSender implements NotificationSenderInterface {
+     if (!$requestType?->isNotificationEnabled(NotificationType::Reject)) {
+       return;
+     }
+-    $requestUserId = $entity->getUser()?->id();
+-    // Don't try to send notification when user account was deleted.
+-    if (!$requestUserId) {
+-      return;
+-    }
+-    $this->sendEmailToUsers($entity, [$requestUserId], NotificationType::Reject);
++    $this->sendEmailToUsers($entity, [$entity->getUser()?->id()], NotificationType::Reject);
+   }
+ 
+   /**
+@@ -137,17 +121,17 @@ class NotificationSender implements NotificationSenderInterface {
+    *
+    * @param \Drupal\oauth_client\Entity\OauthClientRequestInterface $entity
+    *   The OAuth client request entity.
+-   * @param int[] $uids
++   * @param array<int,string,null> $uids
+    *   An array of user IDs to send the email to.
+    * @param \Drupal\oauth_client\Entity\NotificationType $action
+    *   The action triggering the email.
+    */
+   protected function sendEmailToUsers(OauthClientRequestInterface $entity, array $uids, NotificationType $action): void {
+-    $requestType = $this->getRequestType($entity);
+-    if (!$requestType) {
++    $uids = array_filter($uids);
++    if (empty($uids)) {
+       return;
+     }
+-
++    $requestType = $this->getRequestType($entity);
+     $subjectTemplate = $requestType->getNotificationSetting($action, 'subject') ?? '';
+     $bodyTemplate = $requestType->getNotificationSetting($action, 'body') ?? '';
+     $userStorage = $this->entityTypeManager->getStorage('user');
+diff --git a/tests/src/Functional/NotificationFunctionalTest.php b/tests/src/Functional/NotificationFunctionalTest.php
+index 32b7eb1f4f5c4cefb8822bbf32c49c30c0e95546..46cf4cd14f217a71e53e4a65d2f34c9102a4bbba 100644
+--- a/tests/src/Functional/NotificationFunctionalTest.php
++++ b/tests/src/Functional/NotificationFunctionalTest.php
+@@ -92,7 +92,7 @@ class NotificationFunctionalTest extends OauthClientFunctionalTestBase {
+     ]);
+     $requestType->save();
+ 
+-    $requester = user_load_by_name('requester');
++    $requester = $this->userLoadByName('requester');
+     $requesterId = $requester->id();
+ 
+     // Create two requests by submitting the form as the requester.
+@@ -115,7 +115,7 @@ class NotificationFunctionalTest extends OauthClientFunctionalTestBase {
+ 
+     // Approve the request via the edit form as a manager.
+     $requestId = $this->getRequestByLabel('Test 1')->id();
+-    $this->drupalLogin(user_load_by_name('manager1'));
++    $this->drupalLogin($this->userLoadByName('manager1'));
+     $this->drupalGet("/user/$requesterId/edit/oauth/manage/$requestId");
+     $page->selectFieldOption('status', 'active');
+     $page->pressButton('Save');
+@@ -203,7 +203,7 @@ class NotificationFunctionalTest extends OauthClientFunctionalTestBase {
+     $this->container->get('state')->set('system.test_mail_collector', []);
+ 
+     // Approve the first request through the edit form as a manager.
+-    $this->drupalLogin(user_load_by_name('manager1'));
++    $this->drupalLogin($this->userLoadByName('manager1'));
+     $this->drupalGet("/user/$requesterId/edit/oauth/manage/$firstId");
+     $page = $this->getSession()->getPage();
+     $page->selectFieldOption('status', 'active');
+@@ -243,7 +243,7 @@ class NotificationFunctionalTest extends OauthClientFunctionalTestBase {
+     $this->container->get('state')->set('system.test_mail_collector', []);
+ 
+     // Assert no email is sent if the request is active already.
+-    $this->drupalLogin(user_load_by_name('manager1'));
++    $this->drupalLogin($this->userLoadByName('manager1'));
+ 
+     $this->drupalGet("/user/{$this->manager1->id()}/edit/oauth/add");
+     $page = $this->getSession()->getPage();
+diff --git a/tests/src/Functional/OauthClientFunctionalTestBase.php b/tests/src/Functional/OauthClientFunctionalTestBase.php
+index 8e1b67fbb0bc86626a6346b5a62f2e43f4eea40e..c49b7c25674de3326ca940b35da7fa7781d1fb1a 100644
+--- a/tests/src/Functional/OauthClientFunctionalTestBase.php
++++ b/tests/src/Functional/OauthClientFunctionalTestBase.php
+@@ -5,6 +5,7 @@ declare(strict_types=1);
+ namespace Drupal\Tests\oauth_client\Functional;
+ 
+ use Drupal\Tests\BrowserTestBase;
++use Drupal\Tests\oauth_client\Traits\OauthClientTestTrait;
+ use GuzzleHttp\ClientInterface;
+ 
+ /**
+@@ -12,6 +13,8 @@ use GuzzleHttp\ClientInterface;
+  */
+ abstract class OauthClientFunctionalTestBase extends BrowserTestBase {
+ 
++  use OauthClientTestTrait;
++
+   /**
+    * {@inheritdoc}
+    */
+diff --git a/tests/src/Functional/OauthClientTest.php b/tests/src/Functional/OauthClientTest.php
+index 5c459f51c1f1635860473cdc2599c7dc62b1d721..ea7109fdaa62b20147f1d4dfa15b2acc1326e8c2 100644
+--- a/tests/src/Functional/OauthClientTest.php
++++ b/tests/src/Functional/OauthClientTest.php
+@@ -119,7 +119,7 @@ class OauthClientTest extends OauthClientFunctionalTestBase {
+       ->save();
+ 
+     // User with no permissions cannot create requests.
+-    $regular = user_load_by_name('regular');
++    $regular = $this->userLoadByName('regular');
+     $this->drupalLogin($regular);
+     $this->drupalGet(Url::fromRoute('oauth_client.user', ['user' => $regular->id()]));
+     $assert->statusCodeEquals(403);
+@@ -134,7 +134,7 @@ class OauthClientTest extends OauthClientFunctionalTestBase {
+     // User with permissions cannot create requests for 'type1' because the
+     // bundle is malformed. This could happen after a scope entity deletion.
+     // @see \Drupal\oauth_client\Entity\OauthClientRequestType::onDependencyRemoval()
+-    $qualified = user_load_by_name('qualified');
++    $qualified = $this->userLoadByName('qualified');
+     $uid = $qualified->id();
+     $this->drupalLogin($qualified);
+     $this->drupalGet(Url::fromRoute('entity.user.edit_form', [
+@@ -188,7 +188,7 @@ class OauthClientTest extends OauthClientFunctionalTestBase {
+     $this->assertSame('My mobile app', $request->label());
+     $this->assertSame('I want to build a mobile app that consumes your APIs', $request->getRequestReason());
+     $this->assertSame($uid, $request->getOwnerId());
+-    $this->assertSame(user_load_by_name('qualified')->id(), $request->getUser()->id());
++    $this->assertSame($this->userLoadByName('qualified')->id(), $request->getUser()->id());
+     $this->assertSame([['value' => 'http://example.com']], $request->get('redirect')->getValue());
+     // Regular users always create pending new requests.
+     $this->assertTrue($request->isStatus(OauthClientRequestStatus::Pending));
+@@ -202,17 +202,17 @@ class OauthClientTest extends OauthClientFunctionalTestBase {
+     $assert->statusCodeEquals(403);
+ 
+     // A user tries to access other user's section. It fails.
+-    $this->drupalLogin(user_load_by_name('otherQualified'));
++    $this->drupalLogin($this->userLoadByName('otherQualified'));
+     $this->drupalGet(Url::fromRoute('oauth_client.user', ['user' => $uid]));
+     $assert->statusCodeEquals(403);
+ 
+     // An administrator tries to access other user's section.
+-    $this->drupalLogin(user_load_by_name('administrator'));
++    $this->drupalLogin($this->userLoadByName('administrator'));
+     $this->drupalGet(Url::fromRoute('oauth_client.user', ['user' => $uid]));
+     $assert->statusCodeEquals(200);
+ 
+     // A manager tries to access other user's section.
+-    $this->drupalLogin(user_load_by_name('manager'));
++    $this->drupalLogin($this->userLoadByName('manager'));
+     $this->drupalGet(Url::fromRoute('oauth_client.user', ['user' => $uid]));
+     $assert->statusCodeEquals(200);
+ 
+@@ -260,7 +260,7 @@ class OauthClientTest extends OauthClientFunctionalTestBase {
+     $this->assertNotEmpty($consumer->get('secret')->getValue());
+ 
+     // Switch back to the user that created the request.
+-    $this->drupalLogin(user_load_by_name('qualified'));
++    $this->drupalLogin($this->userLoadByName('qualified'));
+ 
+     // The user cannot delete its own request which was once activated.
+     $this->drupalGet(Url::fromRoute('entity.oauth_client_request.delete_form', [
+@@ -417,8 +417,8 @@ class OauthClientTest extends OauthClientFunctionalTestBase {
+   public function testManagerAccess(): void {
+     $assert = $this->assertSession();
+     $page = $this->getSession()->getPage();
+-    $manager = user_load_by_name('manager');
+-    $qualified = user_load_by_name('qualified');
++    $manager = $this->userLoadByName('manager');
++    $qualified = $this->userLoadByName('qualified');
+ 
+     // Login as manager.
+     $this->drupalLogin($manager);
+@@ -488,7 +488,7 @@ class OauthClientTest extends OauthClientFunctionalTestBase {
+     $assert = $this->assertSession();
+ 
+     // Create some test requests.
+-    $qualified = user_load_by_name('qualified');
++    $qualified = $this->userLoadByName('qualified');
+     $request1 = OauthClientRequest::create([
+       'label' => 'Admin View Test 1',
+       'type' => 'type1',
+@@ -512,12 +512,12 @@ class OauthClientTest extends OauthClientFunctionalTestBase {
+     $assert->statusCodeEquals(403);
+ 
+     // Regular users without permission should not have access.
+-    $this->drupalLogin(user_load_by_name('regular'));
++    $this->drupalLogin($this->userLoadByName('regular'));
+     $this->drupalGet(Url::fromRoute('view.oauth_client_request.admin_page'));
+     $assert->statusCodeEquals(403);
+ 
+     // Manager with 'manage oauth clients' permission should have access.
+-    $this->drupalLogin(user_load_by_name('manager'));
++    $this->drupalLogin($this->userLoadByName('manager'));
+     $this->drupalGet(Url::fromRoute('view.oauth_client_request.admin_page'));
+     $assert->statusCodeEquals(200);
+ 
+@@ -544,9 +544,9 @@ class OauthClientTest extends OauthClientFunctionalTestBase {
+    */
+   public function testOauthClientEditDeleteAccess(): void {
+     $assert = $this->assertSession();
+-    $qualified = user_load_by_name('qualified');
+-    $other_qualified = user_load_by_name('otherQualified');
+-    $manager = user_load_by_name('manager');
++    $qualified = $this->userLoadByName('qualified');
++    $other_qualified = $this->userLoadByName('otherQualified');
++    $manager = $this->userLoadByName('manager');
+ 
+     // Create and activate a client for the qualified user.
+     $request = OauthClientRequest::create([
+diff --git a/tests/src/Functional/TextFormatAccessTest.php b/tests/src/Functional/TextFormatAccessTest.php
+index 341d2fddfb765e2bb76da4764086bc741bd6f359..f102cef49878106ea7789675125a7c343148f920 100644
+--- a/tests/src/Functional/TextFormatAccessTest.php
++++ b/tests/src/Functional/TextFormatAccessTest.php
+@@ -4,6 +4,7 @@ declare(strict_types=1);
+ 
+ namespace Drupal\Tests\oauth_client\Functional;
+ 
++use Drupal\Component\Utility\DeprecationHelper;
+ use Drupal\filter\Entity\FilterFormat;
+ 
+ /**
+@@ -61,8 +62,9 @@ class TextFormatAccessTest extends OauthClientFunctionalTestBase {
+    * Tests line break and paragraph conversion.
+    */
+   public function testTextFormatting(): void {
+-    $text = "Single line\nbreak\n\nDouble line\nbreak";
+-    $processed = (string) check_markup($text, 'oauth_client_minimal');
++    $processed = $this->renderTextWithOauthClientFormat(
++      "Single line\nbreak\n\nDouble line\nbreak",
++    );
+ 
+     $this->assertStringContainsString('<br', $processed);
+     $this->assertStringContainsString('</p>', $processed);
+@@ -72,8 +74,9 @@ class TextFormatAccessTest extends OauthClientFunctionalTestBase {
+    * Tests URL conversion to links.
+    */
+   public function testUrlConversion(): void {
+-    $text = 'Visit https://example.com and www.test.com';
+-    $processed = (string) check_markup($text, 'oauth_client_minimal');
++    $processed = $this->renderTextWithOauthClientFormat(
++      'Visit https://example.com and www.test.com',
++    );
+ 
+     $this->assertStringContainsString('<a href="https://example.com">https://example.com</a>', $processed);
+     $this->assertStringContainsString('<a href="http://www.test.com">www.test.com</a>', $processed);
+@@ -83,8 +86,9 @@ class TextFormatAccessTest extends OauthClientFunctionalTestBase {
+    * Tests XSS prevention.
+    */
+   public function testXssPrevention(): void {
+-    $malicious = 'Text with <script>alert("xss")</script> and <img src=x onerror=alert(1)>';
+-    $processed = (string) check_markup($malicious, 'oauth_client_minimal');
++    $processed = $this->renderTextWithOauthClientFormat(
++      'Text with <script>alert("xss")</script> and <img src=x onerror=alert(1)>',
++    );
+ 
+     $this->assertStringNotContainsString('<script>', $processed);
+     $this->assertStringNotContainsString('<img', $processed);
+@@ -95,22 +99,46 @@ class TextFormatAccessTest extends OauthClientFunctionalTestBase {
+    * Tests complex content with URLs, paragraphs, and line breaks.
+    */
+   public function testComplexContent(): void {
+-    $text = "Paragraph with https://example.com link.\n\nSecond paragraph\nwith line break.";
+-    $processed = (string) check_markup($text, 'oauth_client_minimal');
++    $processed = $this->renderTextWithOauthClientFormat(
++      "Paragraph with https://example.com link.\n\nSecond paragraph\nwith line break.",
++    );
+ 
+     $this->assertStringContainsString('<p>', $processed);
+     $this->assertStringContainsString('<br', $processed);
+     $this->assertStringContainsString('<a href="https://example.com">https://example.com</a>', $processed);
+   }
+ 
++  /**
++   * Renders a string with the "oauth_client_minimal" format.
++   *
++   * @param string $text
++   *   Text to render.
++   *
++   * @return string
++   *   Rendered HTML.
++   */
++  protected function renderTextWithOauthClientFormat(string $text): string {
++    $processedArray = [
++      '#type' => 'processed_text',
++      '#text' => $text,
++      '#format' => 'oauth_client_minimal',
++      '#filter_types_to_skip' => [],
++    ];
++    return (string) \Drupal::service('renderer')->renderInIsolation($processedArray);
++  }
++
+   /**
+    * Tests internal use indication and access control.
+    */
+   public function testInternalUseIndication(): void {
+     $this->assertStringContainsString('(Internal)', (string) $this->format->label());
+-
+-    $roles = filter_get_roles_by_format($this->format);
+-    $this->assertEmpty($roles);
++    $formatRoles = DeprecationHelper::backwardsCompatibleCall(
++      \Drupal::VERSION,
++      '11.4.0',
++      fn () => $this->format->getRoles(),
++      fn () => filter_get_roles_by_format($this->format),
++    );
++    $this->assertEmpty($formatRoles);
+   }
+ 
+ }
+diff --git a/tests/src/Kernel/OauthClientKernelTest.php b/tests/src/Kernel/OauthClientKernelTest.php
+index 06821476f0c0a86877462bb43124b9d4b7367e87..a648494d7926d26ed1980bc58f97f696e5e9df5b 100644
+--- a/tests/src/Kernel/OauthClientKernelTest.php
++++ b/tests/src/Kernel/OauthClientKernelTest.php
+@@ -2,7 +2,7 @@
+ 
+ declare(strict_types=1);
+ 
+-namespace src\Kernel;
++namespace Drupal\Tests\oauth_client\Kernel;
+ 
+ use Drupal\consumers\Entity\ConsumerInterface;
+ use Drupal\KernelTests\KernelTestBase;
+@@ -13,6 +13,7 @@ use Drupal\oauth_client\Entity\OauthClientRequestTypeInterface;
+ use Drupal\oauth_client\Permission\OauthClientPermissions;
+ use Drupal\oauth_client\Service\OauthClientRequestTypeHelper;
+ use Drupal\simple_oauth\Entity\Oauth2Scope;
++use Drupal\Tests\oauth_client\Traits\OauthClientTestTrait;
+ use Drupal\Tests\user\Traits\UserCreationTrait;
+ 
+ /**
+@@ -22,6 +23,7 @@ use Drupal\Tests\user\Traits\UserCreationTrait;
+  */
+ class OauthClientKernelTest extends KernelTestBase {
+ 
++  use OauthClientTestTrait;
+   use UserCreationTrait;
+ 
+   /**
+@@ -86,13 +88,13 @@ class OauthClientKernelTest extends KernelTestBase {
+ 
+     $this->assertSame(Oauth2Scope::load('scope1')->id(), OauthClientRequestType::load('type1')->getScopeId());
+     $this->assertTrue($helper->isOauthClientRequestTypeValid(OauthClientRequestType::load('type1')));
+-    $this->assertTrue($accessHandler->createAccess('type1', user_load_by_name('qualified')));
++    $this->assertTrue($accessHandler->createAccess('type1', $this->userLoadByName('qualified')));
+ 
+     // Delete the scope and assert that the type was deleted too.
+     Oauth2Scope::load('scope1')->delete();
+     $accessHandler->resetCache();
+     $this->assertNull(OauthClientRequestType::load('type1'));
+-    $this->assertFalse($accessHandler->createAccess('type1', user_load_by_name('qualified')));
++    $this->assertFalse($accessHandler->createAccess('type1', $this->userLoadByName('qualified')));
+ 
+     // Recreate the scope and type.
+     Oauth2Scope::create(['name' => 'scope1'])->save();
+@@ -130,8 +132,8 @@ class OauthClientKernelTest extends KernelTestBase {
+     $request = OauthClientRequest::create([
+       'type' => 'type1',
+       'label' => 'Test Request',
+-      'uid' => user_load_by_name('qualified'),
+-      'user' => user_load_by_name('qualified'),
++      'uid' => $this->userLoadByName('qualified'),
++      'user' => $this->userLoadByName('qualified'),
+       'request_reason' => 'Testing purpose',
+     ]);
+     $request->save();
+@@ -196,7 +198,7 @@ class OauthClientKernelTest extends KernelTestBase {
+    * Tests deletion of request user (the actual user of the consumer).
+    */
+   public function testClientUserDeletion(): void {
+-    $account = user_load_by_name('qualified');
++    $account = $this->userLoadByName('qualified');
+     $admin = $this->createUser(['administer oauth clients']);
+     $request = OauthClientRequest::create([
+       'type' => 'type1',
+diff --git a/tests/src/Kernel/TokensKernelTest.php b/tests/src/Kernel/TokensKernelTest.php
+index 02948f60d55a660fba089eeb5f1f260e03c16f6d..5f97497b2a3b759bf9052bc58ae257bfeeaa19af 100644
+--- a/tests/src/Kernel/TokensKernelTest.php
++++ b/tests/src/Kernel/TokensKernelTest.php
+@@ -2,7 +2,7 @@
+ 
+ declare(strict_types=1);
+ 
+-namespace src\Kernel;
++namespace Drupal\Tests\oauth_client\Kernel;
+ 
+ use Drupal\Core\Url;
+ use Drupal\KernelTests\KernelTestBase;
+diff --git a/tests/src/Traits/OauthClientTestTrait.php b/tests/src/Traits/OauthClientTestTrait.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..440ab61486cc68d322a371f63c1a5a4b797c87d5
+--- /dev/null
++++ b/tests/src/Traits/OauthClientTestTrait.php
+@@ -0,0 +1,31 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\oauth_client\Traits;
++
++use Drupal\user\UserInterface;
++
++/**
++ * Trait of common methods used in OAuth Client tests.
++ */
++trait OauthClientTestTrait {
++
++  /**
++   * Fetches a user object by account name.
++   *
++   * @param string $name
++   *   String with the account's user name.
++   *
++   * @return \Drupal\user\UserInterface|false
++   *   A fully-loaded $user object upon successful user load or FALSE if user
++   *   cannot be loaded.
++   */
++  protected function userLoadByName(string $name): ?UserInterface {
++    $user = current(\Drupal::entityTypeManager()->getStorage('user')
++      ->loadByProperties(['name' => $name]));
++    assert(!$user || $user instanceof UserInterface);
++    return $user ?: NULL;
++  }
++
++}

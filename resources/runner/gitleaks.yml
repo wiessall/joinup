@@ -1,0 +1,6 @@
+# Gitleaks overrides.
+
+gitleaks:
+  # Same as the toolkit default, plus our config file, which excludes
+  # third-party code from the scan. See .gitleaks.toml.
+  options: '--no-banner -v --no-git --follow-symlinks --config=.gitleaks.toml'

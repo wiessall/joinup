@@ -97,11 +97,22 @@ Feature:
     Given I am on "data/w21/643a2a52-da3b-4594-92bb-295d8134e1fb"
     Then I should see the heading "Persistent distribution"
 
+    # The data portal resolves the 'w21' namespace to a path that misses the
+    # '/data' prefix, as opposed to the other namespaces.
+    Given I am on "w21/ffb0ffc9-7704-45d3-95b3-42706b6320e5"
+    Then I should see the text "Persistent solution"
+    And I should see the text "Persistent solution description"
+
+    Given I am on "w21/37b8103e-26e5-4c81-8ce5-43ced02ff7d0"
+    Then I should see the text "Persistent collection"
+
   @group-d
   Scenario: Test paths corresponding to EU persistent URI namespaces without a matching uuid
     Given I am on "data/dr8/non-existing-uiid"
     Then I should see the heading "Page not found"
     When I am on "data/w21/non-existing-uiid"
+    Then I should see the heading "Page not found"
+    When I am on "w21/non-existing-uiid"
     Then I should see the heading "Page not found"
 
   @group-clone
@@ -109,3 +120,7 @@ Feature:
     Given I am on "data/dr8/egovera/AccessRightsBusinessObject"
     Then I should see the heading "Access rights"
     And the url should match "/taxonomy/term/\d+"
+
+    # Only the 'w21' namespace is resolved without the '/data' prefix.
+    When I am on "dr8/egovera/AccessRightsBusinessObject"
+    Then I should see the heading "Page not found"

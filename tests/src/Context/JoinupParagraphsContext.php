@@ -609,6 +609,11 @@ class JoinupParagraphsContext extends RawDrupalContext {
       $layoutParagraphsLayout = $lpTempStore->getWithStorageKey($storageKey);
       // Fail loud if the layout object cannot be loaded...
       \assert($layoutParagraphsLayout instanceof LayoutParagraphsLayout);
+      if ($layoutParagraphsLayout->isTranslating() && !$layoutParagraphsLayout->layoutChangeAccess(FALSE)) {
+        $this->setTranslatedParagraphValues($layoutParagraphsLayout, $table);
+        $lpTempStore->set($layoutParagraphsLayout);
+        return;
+      }
       // ...And also when the layout is missing.
       $this->assertCondition($layoutDiscovery->hasDefinition($layoutId), "The layout '$layoutId' is not available.");
       $layoutInstance = $layoutDiscovery->createInstance($layoutId);
@@ -632,6 +637,64 @@ class JoinupParagraphsContext extends RawDrupalContext {
     finally {
       $accountSwitcher->switchBack();
     }
+  }
+
+  /**
+   * Sets translated values on existing components of a structure-locked layout.
+   *
+   * @param \Drupal\layout_paragraphs\LayoutParagraphsLayout $layout
+   *   The layout loaded from the tempstore.
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The translated paragraph values, keyed by field property.
+   */
+  protected function setTranslatedParagraphValues(LayoutParagraphsLayout $layout, TableNode $table): void {
+    $values = [];
+    foreach ($table->getRowsHash() as $field => $value) {
+      $values = array_replace_recursive($values, $this->transformParagraphField($field, $value));
+    }
+    $items = $layout->getParagraphsReferenceField();
+    $updated = FALSE;
+    foreach ($items as $delta => $item) {
+      $paragraph = $item->entity;
+      if (!$paragraph instanceof ParagraphInterface) {
+        continue;
+      }
+      if (!$this->paragraphHasFields($paragraph, array_keys($values))) {
+        continue;
+      }
+      foreach ($values as $name => $value) {
+        $current = $paragraph->get($name)->isEmpty() ? [] : $paragraph->get($name)->first()->getValue();
+        $paragraph->set($name, is_array($value) ? array_replace($current, $value) : $value);
+      }
+      $items[$delta]->setValue([
+        'entity' => $paragraph,
+        'target_id' => $paragraph->id(),
+        'target_revision_id' => $paragraph->getRevisionId(),
+      ], FALSE);
+      $updated = TRUE;
+    }
+    $this->assertCondition($updated, 'No translatable paragraph component matching the given fields was found in the layout.');
+    $layout->setParagraphsReferenceField($items);
+  }
+
+  /**
+   * Checks whether a paragraph has all of the given fields.
+   *
+   * @param \Drupal\paragraphs\ParagraphInterface $paragraph
+   *   The paragraph to check.
+   * @param string[] $names
+   *   The field names that must all be present.
+   *
+   * @return bool
+   *   TRUE if the paragraph has every field, FALSE otherwise.
+   */
+  protected function paragraphHasFields(ParagraphInterface $paragraph, array $names): bool {
+    foreach ($names as $name) {
+      if (!$paragraph->hasField($name)) {
+        return FALSE;
+      }
+    }
+    return TRUE;
   }
 
   /**

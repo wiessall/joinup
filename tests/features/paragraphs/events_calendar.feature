@@ -32,7 +32,7 @@ Feature:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Events calendar"
     And I select "Calendar by month" from "Block"
@@ -61,7 +61,7 @@ Feature:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Events calendar"
     And I select "Calendar by week" from "Block"
@@ -113,7 +113,7 @@ Feature:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Events calendar"
     And I select "Upcoming events (Group view)" from "Block"
@@ -134,7 +134,7 @@ Feature:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Events calendar"
     And I select "Upcoming events" from "Block"
@@ -157,7 +157,7 @@ Feature:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Events calendar"
     And I select "Upcoming EC events" from "Block"

@@ -7,6 +7,7 @@ dependencies:
   - drupal:default_content
   - cas_mock_server:cas_mock_server
   - joinup_test:joinup_test
+  - joinup:joinup_search
 
 default_content:
   file:
@@ -28,6 +29,9 @@ default_content:
     - fb9b35ca-8156-41a8-bd0e-6ec2c714dc45
     - b2b8122b-5c0e-4991-93f6-7c66d4ba1534
     - 8a9fa71a-28fa-488f-ae16-33a1e4b0673c
+  menu_link_content:
+    - 7a30c7c1-a812-4b8a-8e41-400000000001
+    - 7a30c7c1-a812-4b8a-8e41-400000000002
   meta_entity:
     - 501120ce-502c-4ed1-89d0-c61a6daaae78
   taxonomy_term:
