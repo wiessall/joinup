@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Hook implementations for contact form form.
+ * Hook implementations for contact form.
  */
 final class ContactFormFormHooks {
 
@@ -29,12 +29,12 @@ final class ContactFormFormHooks {
   public function __construct(
     protected readonly EventDispatcherInterface $eventDispatcher,
     protected readonly MessengerInterface $messenger,
-    #[Autowire(service: 'logger.channel.joinup_core')]
+    #[Autowire(service: 'logger.channel.contact')]
     protected readonly LoggerChannelInterface $logger,
     protected readonly AccountInterface $currentUser,
     protected readonly ModuleHandlerInterface $moduleHandler,
     #[Autowire(service: 'honeypot')]
-    protected readonly HoneypotServiceInterface $honeypotService,
+    protected readonly ?HoneypotServiceInterface $honeypotService = NULL,
   ) {}
 
   /**
@@ -55,7 +55,7 @@ final class ContactFormFormHooks {
     $arguments = [
       ':faq-url' => Url::fromUri('base:/collection/joinup/faq')->toString(),
     ];
-    $form['#prefix'] = '<p>' . (string) $this->t('Before you submit your request check our <a href=":faq-url">FAQ</a> section in case it covers your query/issue.', $arguments) . '</p>';
+    $form['#prefix'] = '<p>' . $this->t('Before you submit your request check our <a href=":faq-url">FAQ</a> section in case it covers your query/issue.', $arguments) . '</p>';
 
     // Fill in the credentials if the user is logged in.
     if ($this->currentUser->isAuthenticated()) {
@@ -120,12 +120,12 @@ final class ContactFormFormHooks {
     // Add a submit handler that sends a notification to moderators and shows a
     // success message informing user that their message has been successfully
     // sent.
-    $form['actions']['submit']['#submit'][] = static::class . ':submit';
-    $form['#validate'][] = static::class . ':validate';
+    $form['actions']['submit']['#submit'][] = self::class . ':submit';
+    $form['#validate'][] = self::class . ':validate';
 
     $form['#attached']['library'][] = 'contact_form/contact-form';
 
-    $form['actions']['#suffix'] = '<span class="d-block mt-2">' . (string) $this->t('Submissions of this form are processed by a contractor of the European Commission.') . '</span>';
+    $form['actions']['#suffix'] = '<span class="d-block mt-2">' . $this->t('Submissions of this form are processed by a contractor of the European Commission.') . '</span>';
     if ($this->moduleHandler->moduleExists('honeypot')) {
       $this->honeypotService->addFormProtection(
         $form,
