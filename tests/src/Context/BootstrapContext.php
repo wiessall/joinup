@@ -218,7 +218,7 @@ class BootstrapContext extends RawDrupalContext {
    *   If the collapse element is not found on the page.
    */
   protected function findCollapseElement(string $label): NodeElement {
-    $xpath = '//button[@data-bs-toggle="collapse" and contains(text(), "' . $label . '")]';
+    $xpath = '//button[@aria-expanded and contains(text(), "' . $label . '")]';
     if (!$collapse = $this->getSession()->getPage()->find('xpath', $xpath)) {
       throw new ElementNotFoundException($this->getSession()->getDriver(), 'Bootstrap collapse element', $label, 'label');
     }

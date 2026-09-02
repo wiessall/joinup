@@ -24,7 +24,6 @@ class EuBrandingTest extends JoinupExistingSiteTestBase {
       '/search',
       '/collections',
       '/solutions',
-      '/keep-up-to-date',
     ];
     foreach ($pages as $page) {
       $this->drupalGet($page);

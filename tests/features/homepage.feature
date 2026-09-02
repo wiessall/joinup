@@ -252,9 +252,11 @@ Feature: Homepage
     When I click "More events"
     Then I should be on "/upcoming-events"
 
-  @group-clone @wip
-  # There are issues with the index so we disable till ISAICP-11721 is resolved.
   Scenario: The /news path redirects to the search page filtered on news.
+    Given the following "news" content:
+      | title              | state     |
+      | Dummy news article | published |
+
     When I go to "/news"
     Then I should be on the advanced search page
     And I should see the following facet summary "News"

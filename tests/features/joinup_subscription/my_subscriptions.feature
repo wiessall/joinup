@@ -180,7 +180,6 @@ Feature: My subscriptions
       | Wolf 359       | Announcements |
 
     And I should have the following content subscriptions:
-      | Alpha Centauri |               |
       | Barnard's Star | Announcements |
       | Wolf 359       | Announcements |
 

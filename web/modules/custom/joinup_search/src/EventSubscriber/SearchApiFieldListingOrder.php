@@ -135,14 +135,14 @@ readonly class SearchApiFieldListingOrder implements EventSubscriberInterface {
    *   The group the listing belongs to.
    */
   protected function addPinnedSorting(SolariumApiQueryInterface $solariumApiQuery, GroupInterface $group): void {
-    // `termfreq()` counts the occurrences of the group ID in the multi-valued
-    // `sm_node_pinned_in` field, so it returns 1 for content pinned in this
-    // group and 0 for everything else. Sorting on it descending brings the
-    // pinned content to the top. The field is kept up to date by the commit
-    // that the pin and unpin routes issue.
+    // The subquery matches the group ID in the multi-valued
+    // `itm_node_pinned_in` field, so the expression returns 1 for content
+    // pinned in this group and 0 for everything else. Sorting on it descending
+    // brings the pinned content to the top. The field is kept up to date by the
+    // commit that the pin and unpin routes issue.
     $computedSort = sprintf(
-      'termfreq(sm_node_pinned_in,%s)',
-      $solariumApiQuery->getHelper()->escapePhrase($group->id())
+      'if(query({!term f=itm_node_pinned_in v=%d},0),1,0)',
+      $group->id()
     );
     $solariumApiQuery->addSort($computedSort, Query::SORT_DESC);
   }
