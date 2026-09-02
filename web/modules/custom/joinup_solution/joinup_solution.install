@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Joinup Solution module.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Fix related_solutions field tables.
+ */
+function joinup_solution_update_201600(): void {
+  // The `bundle` column of the tables `node__related_solutions` and
+  // `node_revision__related_solutions` has the value "node" instead of
+  // "solution". It might be the effect of a wrong update.
+  foreach (['node', 'node_revision'] as $table) {
+    \Drupal::database()->update("{$table}__related_solutions")
+      ->fields(['bundle' => 'solution'])
+      ->condition('bundle', 'solution', '<>')
+      ->execute();
+  }
+}
