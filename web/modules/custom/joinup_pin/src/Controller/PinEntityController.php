@@ -14,6 +14,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
+use Drupal\joinup_search\SearchIndexCommitter;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\og\OgAccessInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -27,6 +28,7 @@ class PinEntityController extends ControllerBase {
   public function __construct(
     #[Autowire(service: 'og.access')]
     protected readonly OgAccessInterface $ogAccess,
+    protected readonly SearchIndexCommitter $searchIndexCommitter,
   ) {}
 
   /**
@@ -42,6 +44,7 @@ class PinEntityController extends ControllerBase {
    */
   public function pin(PinnableGroupContentInterface $entity, GroupInterface $group): RedirectResponse {
     $entity->pin($group);
+    $this->searchIndexCommitter->commitPendingChanges();
 
     $this->messenger()->addMessage($this->t('@bundle %title has been pinned in the @group_bundle %group.', [
       '@bundle' => $entity->get($entity->getEntityType()->getKey('bundle'))->entity->label(),
@@ -66,6 +69,7 @@ class PinEntityController extends ControllerBase {
    */
   public function unpin(PinnableGroupContentInterface $entity, GroupInterface $group): RedirectResponse {
     $entity->unpin($group);
+    $this->searchIndexCommitter->commitPendingChanges();
 
     $this->messenger()->addMessage($this->t('@bundle %title has been unpinned in the @group_bundle %group.', [
       '@bundle' => $entity->get($entity->getEntityType()->getKey('bundle'))->entity->label(),

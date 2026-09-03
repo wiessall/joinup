@@ -16,6 +16,7 @@ Feature: Solution clone features
     And I am logged in as a user with the "moderator" role
     When I go to the homepage of the "Joinup source code" solution
     And I click "Share Solution reuse"
+    And I select the radio button "Short reuse information"
     Then I should see the text "Solution"
     And the "Solution" field should contain "Joinup source code (719986)"
 

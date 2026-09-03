@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.assessment.search_index
     - field.storage.assessment.binding_requirement
     - field.storage.assessment.thematic_area
     - field.storage.meta_entity.featured
@@ -26,16 +27,12 @@ dependencies:
     - field.storage.node.field_state
     - field.storage.node.field_type
     - field.storage.node.keywords
-    - field.storage.node.organization
     - field.storage.node.owner
     - field.storage.node.solution_type
     - field.storage.node.spatial_coverage
     - field.storage.node.spdx_licence
-    - field.storage.node.submission
     - field.storage.paragraph.affects
     - field.storage.paragraph.field_body
-    - field.storage.taxonomy_term.field_eif_identifier
-    - field.storage.taxonomy_term.field_eif_related_term
     - field.storage.user.field_user_family_name
     - field.storage.user.field_user_first_name
     - field.storage.user.field_user_organisation
@@ -57,9 +54,9 @@ dependencies:
     - user
 third_party_settings:
   search_api_solr:
-    finalize: true
+    finalize: false
     commit_before_finalize: false
-    commit_after_finalize: true
+    commit_after_finalize: false
     debug_finalize: false
     highlighter:
       maxAnalyzedChars: 51200
@@ -124,7 +121,7 @@ third_party_settings:
         sl: '0'
         es: '0'
         sv: '0'
-      use_universal_collation: false
+      use_universal_collation: true
 id: published
 name: 'Published entities index'
 description: ''
@@ -138,14 +135,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.abstract
-  abstract_spellcheck:
-    label: 'Abstract Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: abstract
-    type: solr_text_spellcheck
+  assessment_id:
+    label: ID
+    datasource_id: 'entity:assessment'
+    property_path: id
+    type: integer
     dependencies:
-      config:
-        - field.storage.node.abstract
+      module:
+        - assessments
   assessment_name:
     label: Name
     datasource_id: 'entity:assessment'
@@ -163,14 +160,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
-  body_spellcheck:
-    label: 'Body » Processed text - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: 'body:processed'
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.node.body
   certificate:
     label: Certificate
     datasource_id: 'entity:node'
@@ -183,7 +172,7 @@ field_settings:
     label: 'Solution classification'
     datasource_id: 'entity:node'
     property_path: classification
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.node.classification
@@ -192,16 +181,6 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: 'contact:entity:title'
     type: text
-    dependencies:
-      config:
-        - field.storage.node.contact
-      module:
-        - node
-  contact_title_spellcheck:
-    label: 'Related Contact » Title spellcheck'
-    datasource_id: 'entity:node'
-    property_path: 'contact:entity:title'
-    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.node.contact
@@ -234,19 +213,11 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.description
-  description_processed_spellcheck:
-    label: 'Description » Processed text - spellcheck'
-    datasource_id: 'entity:node'
-    property_path: 'description:processed'
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.node.description
   domain:
     label: Domain
     datasource_id: 'entity:node'
     property_path: domain
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.node.domain
@@ -254,7 +225,7 @@ field_settings:
     label: 'EIF perspective reference'
     datasource_id: 'entity:node'
     property_path: eif_perspective
-    type: string
+    type: integer
     dependencies:
       module:
         - meta_entity
@@ -299,11 +270,10 @@ field_settings:
   entity_groups:
     label: Groups
     property_path: aggregated_field
-    type: string
+    type: integer
     configuration:
       type: union
       fields:
-        - 'entity:node/collection'
         - 'entity:node/og_audience'
   entity_status:
     label: Status
@@ -313,51 +283,11 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_state
-  field_eif_identifier:
-    label: Identifier
-    datasource_id: 'entity:taxonomy_term'
-    property_path: field_eif_identifier
-    type: text
-    dependencies:
-      config:
-        - field.storage.taxonomy_term.field_eif_identifier
-  field_eif_identifier_spellcheck:
-    label: 'Identifier Spellcheck'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: field_eif_identifier
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.taxonomy_term.field_eif_identifier
-  field_eif_related_term:
-    label: 'Related term'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: field_eif_related_term
-    type: text
-    dependencies:
-      config:
-        - field.storage.taxonomy_term.field_eif_related_term
-  field_eif_related_term_spellcheck:
-    label: 'Related term - Spellcheck'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: field_eif_related_term
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.taxonomy_term.field_eif_related_term
   field_event_agenda:
     label: 'Agenda » Processed text'
     datasource_id: 'entity:node'
     property_path: 'field_event_agenda:processed'
     type: text
-    dependencies:
-      config:
-        - field.storage.node.field_event_agenda
-  field_event_agenda_spellcheck:
-    label: 'Agenda » Processed text - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: 'field_event_agenda:processed'
-    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.node.field_event_agenda
@@ -385,28 +315,11 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_location
-  field_location_spellcheck:
-    label: 'Location - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: field_location
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.node.field_location
   field_news_headline:
     label: Headline
     datasource_id: 'entity:node'
     property_path: field_news_headline
     type: text
-    boost: 5.0
-    dependencies:
-      config:
-        - field.storage.node.field_news_headline
-  field_news_headline_spellcheck:
-    label: 'Headline - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: field_news_headline
-    type: solr_text_spellcheck
     boost: 5.0
     dependencies:
       config:
@@ -419,27 +332,11 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_organisation
-  field_organisation_spellcheck:
-    label: 'Organisation - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: field_organisation
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.node.field_organisation
   field_scope:
     label: Scope
     datasource_id: 'entity:node'
     property_path: field_scope
-    type: text
-    dependencies:
-      config:
-        - field.storage.node.field_scope
-  field_scope_spellcheck:
-    label: 'Scope - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: field_scope
-    type: solr_text_spellcheck
+    type: string
     dependencies:
       config:
         - field.storage.node.field_scope
@@ -448,14 +345,6 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: field_short_title
     type: text
-    dependencies:
-      config:
-        - field.storage.node.field_short_title
-  field_short_title_spellcheck:
-    label: 'Short title - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: field_short_title
-    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.node.field_short_title
@@ -475,14 +364,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.user.field_user_family_name
-  field_user_family_name_spellcheck:
-    label: 'Family name - Spellcheck'
-    datasource_id: 'entity:user'
-    property_path: field_user_family_name
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.user.field_user_family_name
   field_user_first_name:
     label: 'First name'
     datasource_id: 'entity:user'
@@ -491,27 +372,11 @@ field_settings:
     dependencies:
       config:
         - field.storage.user.field_user_first_name
-  field_user_first_name_spellcheck:
-    label: 'First name - Spellcheck'
-    datasource_id: 'entity:user'
-    property_path: field_user_first_name
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.user.field_user_first_name
   field_user_organisation:
     label: Organisation
     datasource_id: 'entity:user'
     property_path: field_user_organisation
     type: text
-    dependencies:
-      config:
-        - field.storage.user.field_user_organisation
-  field_user_organisation_spellcheck:
-    label: 'Organisation - Spellcheck'
-    datasource_id: 'entity:user'
-    property_path: field_user_organisation
-    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.user.field_user_organisation
@@ -530,36 +395,10 @@ field_settings:
         - field.storage.node.keywords
       module:
         - taxonomy
-  keywords_spellcheck:
-    label: 'Keywords - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: 'keywords:entity:name'
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.node.keywords
-      module:
-        - taxonomy
   language_with_fallback:
     label: 'Language (with fallback)'
     property_path: language_with_fallback
     type: string
-  name:
-    label: Name
-    datasource_id: 'entity:taxonomy_term'
-    property_path: name
-    type: text
-    dependencies:
-      module:
-        - taxonomy
-  name_spellcheck:
-    label: 'Name - Spellcheck'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: name
-    type: solr_text_spellcheck
-    dependencies:
-      module:
-        - taxonomy
   nid:
     label: ID
     datasource_id: 'entity:node'
@@ -568,35 +407,17 @@ field_settings:
     dependencies:
       module:
         - node
-  node_featured:
-    label: 'Featured site-wide'
-    datasource_id: 'entity:node'
-    property_path: 'featured:entity:featured'
-    type: string
-    dependencies:
-      config:
-        - field.storage.meta_entity.featured
-      module:
-        - meta_entity
   node_pinned_in:
     label: 'Pinned in'
     datasource_id: 'entity:node'
     property_path: 'pinned_in:entity:field_pinned_in:entity:nid'
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.meta_entity.field_pinned_in
       module:
         - meta_entity
         - node
-  organization:
-    label: Organization
-    datasource_id: 'entity:node'
-    property_path: organization
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.organization
   owner_title:
     label: 'Related Owner » Title'
     datasource_id: 'entity:node'
@@ -607,51 +428,11 @@ field_settings:
         - field.storage.node.owner
       module:
         - node
-  owner_title_spellcheck:
-    label: 'Related Owner » Title spellcheck'
-    datasource_id: 'entity:node'
-    property_path: 'owner:entity:title'
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.node.owner
-      module:
-        - node
-  parent:
-    label: 'Term Parents'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: parent
-    type: string
-    dependencies:
-      module:
-        - taxonomy
-  pinned_in:
-    label: 'Pinned in'
-    datasource_id: 'entity:node'
-    property_path: 'pinned_in:entity:field_pinned_in:entity:nid'
-    type: string
-    dependencies:
-      config:
-        - field.storage.meta_entity.field_pinned_in
-      module:
-        - meta_entity
-        - node
   processed:
     label: 'Body » Paragraph » Body » Processed text'
     datasource_id: 'entity:node'
     property_path: 'field_paragraphs_body:entity:field_body:processed'
     type: text
-    dependencies:
-      config:
-        - field.storage.node.field_paragraphs_body
-        - field.storage.paragraph.field_body
-      module:
-        - paragraphs
-  processed_spellcheck:
-    label: 'Body » Paragraph » Body » Processed text - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: 'field_paragraphs_body:entity:field_body:processed'
-    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.node.field_paragraphs_body
@@ -675,7 +456,7 @@ field_settings:
         - anonymous
       view_mode:
         'entity:assessment':
-          ':default': default
+          ':default': search_index
           report: ':default'
         'entity:node':
           ':default': ''
@@ -690,42 +471,14 @@ field_settings:
           news: ':default'
           release: ':default'
           solution: ':default'
-        'entity:taxonomy_term':
-          ':default': ''
-          eif_conceptual_model: ':default'
-          eif_interoperability_layer: ':default'
-          eif_principle: ':default'
-          eif_recommendation: ':default'
-          oss_category: ':default'
-          topic: ':default'
         'entity:user':
           ':default': ''
           user: ':default'
-  reverse_eif_related_term_tid:
-    label: 'Reverse » Related term » Term ID'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:tid'
-    type: text
-  reverse_eif_related_term_tid_spellcheck:
-    label: 'Reverse » Related term » Term ID - Spellcheck'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:tid'
-    type: solr_text_spellcheck
-  reverse_field_eif_identifier:
-    label: 'Reverse » Related term » Identifier'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:field_eif_identifier'
-    type: text
-  reverse_field_eif_identifier_spellcheck:
-    label: 'Reverse » Related term » Identifier - Spellcheck'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:field_eif_identifier'
-    type: solr_text_spellcheck
   shared_in:
     label: 'Shared on'
     datasource_id: 'entity:node'
     property_path: 'shared_in:entity:field_shared_in:entity:nid'
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.meta_entity.field_shared_in
@@ -746,7 +499,7 @@ field_settings:
     label: 'Solution type'
     datasource_id: 'entity:node'
     property_path: solution_type
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.node.solution_type
@@ -754,7 +507,7 @@ field_settings:
     label: 'Geographical coverage'
     datasource_id: 'entity:node'
     property_path: spatial_coverage
-    type: string
+    type: integer
     dependencies:
       config:
         - field.storage.node.spatial_coverage
@@ -766,6 +519,17 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.spdx_licence
+  spellcheck_aggregation:
+    label: Spellcheck
+    property_path: aggregated_field
+    type: solr_text_spellcheck
+    configuration:
+      type: union
+      fields:
+        - 'entity:node/abstract'
+        - 'entity:node/field_news_headline'
+        - 'entity:node/field_short_title'
+        - 'entity:node/keywords:entity:name'
   status:
     label: Published
     datasource_id: 'entity:node'
@@ -782,14 +546,6 @@ field_settings:
     dependencies:
       module:
         - node
-  submission:
-    label: Submission
-    datasource_id: 'entity:node'
-    property_path: submission
-    type: integer
-    dependencies:
-      config:
-        - field.storage.node.submission
   thematic_area:
     label: 'Identification of binding requirement(s) assessed » Paragraph » Affected service » Assessment » Functions'
     datasource_id: 'entity:assessment'
@@ -803,14 +559,6 @@ field_settings:
       module:
         - assessments
         - paragraphs
-  tid:
-    label: 'Term ID'
-    datasource_id: 'entity:taxonomy_term'
-    property_path: tid
-    type: string
-    dependencies:
-      module:
-        - taxonomy
   title:
     label: Title
     datasource_id: 'entity:node'
@@ -832,7 +580,7 @@ field_settings:
   topic:
     label: Topic
     property_path: aggregated_field
-    type: string
+    type: integer
     configuration:
       type: union
       fields:
@@ -846,28 +594,13 @@ field_settings:
     dependencies:
       module:
         - user
-  vid:
-    label: Vocabulary
-    datasource_id: 'entity:taxonomy_term'
-    property_path: vid
-    type: string
-    dependencies:
-      module:
-        - taxonomy
-  weight:
-    label: Weight
-    datasource_id: 'entity:taxonomy_term'
-    property_path: weight
-    type: integer
-    dependencies:
-      module:
-        - taxonomy
 datasource_settings:
   'entity:assessment':
     bundles:
       default: false
       selected:
         - report
+    track_changes_only_affected_translations: false
     languages:
       default: true
       selected: {  }
@@ -885,26 +618,14 @@ datasource_settings:
         - event
         - licence
         - news
-        - owner
         - release
         - solution
-    languages:
-      default: true
-      selected: {  }
-  'entity:taxonomy_term':
-    bundles:
-      default: false
-      selected:
-        - eif_conceptual_model
-        - eif_interoperability_layer
-        - eif_principle
-        - eif_recommendation
-        - oss_category
-        - topic
+    track_changes_only_affected_translations: true
     languages:
       default: true
       selected: {  }
   'entity:user':
+    track_changes_only_affected_translations: false
     languages:
       default: true
       selected: {  }
@@ -914,16 +635,12 @@ processor_settings:
   aggregated_topic_hierarchy:
     weights:
       preprocess_index: -50
-  assessment_processor: {  }
+  assessment_processor:
+    weights:
+      preprocess_index: 0
   auto_aggregated_fulltext_field: {  }
   custom_value: {  }
   entity_type: {  }
-  exclude_assessment_solutions: {  }
-  hierarchy:
-    weights:
-      preprocess_index: -45
-    fields:
-      parent: taxonomy_term-parent
   html_filter:
     weights:
       preprocess_index: -43
@@ -931,11 +648,9 @@ processor_settings:
     all_fields: false
     fields:
       - body
-      - body_spellcheck
       - description
-      - description_processed_spellcheck
       - field_event_agenda
-      - field_event_agenda_spellcheck
+      - processed
       - rendered_assessment
     title: true
     alt: true
@@ -954,8 +669,7 @@ processor_settings:
   interoperable_flag: {  }
   joinup_entity_bundle: {  }
   joinup_entity_published_revision: {  }
-  joinup_entity_status:
-    inverse: false
+  joinup_entity_status: {  }
   language_with_fallback: {  }
   release_solution_data:
     weights:
@@ -984,16 +698,15 @@ processor_settings:
           news: 5.0
           release: 0.0
           solution: 13.0
-      'entity:taxonomy_term':
-        datasource_boost: 0.0
-        bundle_boosts:
-          eif_conceptual_model: 0.0
-          eif_interoperability_layer: 0.0
-          eif_principle: 0.0
-          eif_recommendation: 0.0
-          topic: 0.0
       'entity:user':
         datasource_boost: 0.0
+  unique_filter:
+    weights:
+      preprocess_index: -15
+      preprocess_query: -15
+    all_fields: false
+    fields:
+      - thematic_area
 tracker_settings:
   default:
     indexing_order: fifo

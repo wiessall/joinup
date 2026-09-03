@@ -2,9 +2,9 @@ _core:
   default_config_hash: u2tWnDfo9G_VSwUfP_APpK_z3VWWU6pCjoWmx4J0Amk
 defaults:
   amount:
-    status: false
+    status: true
     settings:
-      amount: 0
+      amount: 10
   created:
     status: false
     settings:

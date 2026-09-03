@@ -58,7 +58,6 @@ module:
   entity_print: 0
   entity_reference_revisions: 0
   entityqueue: 0
-  entityqueue_block: 0
   error_page: 0
   eu_oss_catalogue: 0
   eu_oss_vitality_index: 0
@@ -97,7 +96,6 @@ module:
   interoperable_europe: 0
   isa2_analytics: 0
   joinup_api: 0
-  joinup_assessment: 0
   joinup_badge: 0
   joinup_bookmark: 0
   joinup_bundle_class: 0
@@ -170,6 +168,7 @@ module:
   locale: 0
   mailsystem: 0
   markdown_easy: 0
+  masquerade: 0
   media: 0
   media_library: 0
   memcache: 0

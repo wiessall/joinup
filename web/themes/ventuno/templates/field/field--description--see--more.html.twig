@@ -22,14 +22,12 @@
         {{ _item_content }}
       </div>
     {% else %}
-      <div class="see-more see-more--long collapse" id="collapseSeeMore">
+      <div class="see-more see-more--long" id="collapseSeeMore">
         {{ _item_content }}
       </div>
       <button
         class="btn btn-link p-0 mt-3 js-see-more-btn"
         type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#collapseSeeMore"
         aria-expanded="false"
         aria-controls="collapseSeeMore">
         {{ 'See more'|t }}

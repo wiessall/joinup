@@ -110,7 +110,7 @@ function joinup_group_entity_bundle_info_alter(array &$bundles): void {
  */
 function joinup_group_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, ?string $bundle): void {
   if ($entity_type->id() === 'node') {
-    if (in_array($bundle, JoinupGroupHelper::GROUP_BUNDLES) && !empty($fields['short_id'])) {
+    if (in_array($bundle, JoinupGroupHelper::GROUP_BUNDLES, TRUE) && !empty($fields['short_id'])) {
       /** @var \Drupal\field\Entity\FieldConfig[] $fields */
       $fields['short_id']->addConstraint('UniqueShortIdInsensitive');
     }
@@ -358,10 +358,13 @@ function joinup_group_node_presave(EntityInterface $entity): void {
     $file_path = $file_system->copy($file_path, 'public://');
     $file = File::create(['uri' => $file_path]);
     $file->save();
+    $image = \Drupal::service('image.factory')->get($file_path);
     $entity->set('logo',
       [
         'target_id' => $file->id(),
         'alt' => $entity->label(),
+        'width' => $image->getWidth(),
+        'height' => $image->getHeight(),
       ]
     );
   }

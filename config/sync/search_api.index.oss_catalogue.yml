@@ -3,11 +3,10 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.search_index
     - field.storage.node.oss_archived
     - field.storage.node.oss_categories
     - field.storage.node.oss_development_status
-    - field.storage.node.oss_features
-    - field.storage.node.oss_git_description
     - field.storage.node.oss_release_date
     - field.storage.node.oss_scope
     - field.storage.node.oss_short_description
@@ -18,15 +17,14 @@ dependencies:
   module:
     - joinup_flag
     - joinup_oss_catalogue
-    - joinup_search
     - node
     - search_api_solr
     - taxonomy
 third_party_settings:
   search_api_solr:
-    finalize: true
+    finalize: false
     commit_before_finalize: false
-    commit_after_finalize: true
+    commit_after_finalize: false
     debug_finalize: false
     highlighter:
       maxAnalyzedChars: 51200
@@ -88,6 +86,14 @@ field_settings:
     label: 'Language (with fallback)'
     property_path: language_with_fallback
     type: string
+  nid:
+    label: ID
+    datasource_id: 'entity:node'
+    property_path: nid
+    type: integer
+    dependencies:
+      module:
+        - node
   node_grants:
     label: 'Node access information'
     property_path: search_api_node_grants
@@ -121,22 +127,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.oss_development_status
-  oss_features:
-    label: Features
-    datasource_id: 'entity:node'
-    property_path: oss_features
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.oss_features
-  oss_git_description:
-    label: 'GIT Description'
-    datasource_id: 'entity:node'
-    property_path: oss_git_description
-    type: 'solr_text_custom:ngram'
-    dependencies:
-      config:
-        - field.storage.node.oss_git_description
   oss_release_date:
     label: 'Release date'
     datasource_id: 'entity:node'
@@ -171,10 +161,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.oss_software_type
-  oss_solution_rendered_item:
-    label: 'Oss Solution rendered item'
-    property_path: oss_solution_rendered_item
-    type: text
   oss_source:
     label: 'Source catalogue'
     datasource_id: 'entity:node'
@@ -191,6 +177,17 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.oss_vitality_index
+  rendered_item:
+    label: 'Rendered HTML output'
+    property_path: rendered_item
+    type: text
+    configuration:
+      roles:
+        - anonymous
+      view_mode:
+        'entity:node':
+          ':default': ''
+          oss_solution: search_index
   status:
     label: Published
     datasource_id: 'entity:node'
@@ -233,20 +230,19 @@ datasource_settings:
       default: false
       selected:
         - oss_solution
+    track_changes_only_affected_translations: true
     languages:
       default: true
       selected: {  }
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
-  aggregated_topic_hierarchy:
-    weights:
-      preprocess_index: -50
   auto_aggregated_fulltext_field: {  }
   content_access:
     weights:
       preprocess_query: -30
   custom_value: {  }
+  entity_status: {  }
   entity_type: {  }
   html_filter:
     weights:
@@ -254,9 +250,8 @@ processor_settings:
       preprocess_query: -15
     all_fields: false
     fields:
-      - oss_git_description
       - oss_short_description
-      - oss_solution_rendered_item
+      - rendered_item
     title: true
     alt: true
     tags:
@@ -267,7 +262,9 @@ processor_settings:
       strong: 2.0
   joinup_entity_bundle: {  }
   language_with_fallback: {  }
+  oss_archived: {  }
   oss_solution_rendered_item: {  }
+  rendered_item: {  }
   solr_date_range:
     weights:
       preprocess_index: 0

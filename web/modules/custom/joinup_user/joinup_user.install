@@ -69,6 +69,9 @@ function joinup_user_schema(): array {
         ],
       ],
       'primary key' => ['uid', 'entity_type', 'entity_id'],
+      'indexes' => [
+        'entity' => ['entity_type', 'entity_id'],
+      ],
       'foreign keys' => [
         'data_user' => [
           'table' => 'users',
@@ -86,4 +89,31 @@ function joinup_user_schema(): array {
  */
 function joinup_user_install(): void {
   \Drupal::classResolver(JoinupUserDefaultAvatarImageHelper::class)->createOrUpdate();
+}
+
+/**
+ * Adds an index on (entity_type, entity_id) to the deleted user content table.
+ */
+function joinup_user_update_201600(): void {
+  $schema = \Drupal::database()->schema();
+  $table = JoinupUserDeletedInterface::TABLE_USER_CONTENT;
+  if ($schema->indexExists($table, 'entity')) {
+    return;
+  }
+
+  $spec = [
+    'fields' => [
+      'entity_type' => [
+        'type' => 'varchar',
+        'length' => EntityTypeInterface::ID_MAX_LENGTH,
+        'not null' => TRUE,
+      ],
+      'entity_id' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+    ],
+  ];
+  $schema->addIndex($table, 'entity', ['entity_type', 'entity_id'], $spec);
 }

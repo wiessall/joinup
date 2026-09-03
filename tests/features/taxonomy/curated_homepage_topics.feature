@@ -35,11 +35,11 @@ Feature:
     And I press "Add item"
 
     When I press "Save"
-    Then I should see the inline form error message "The E-justice topic is already in the list."
+    Then I should see the error message "The E-justice topic is already in the list."
 
     When I fill in "edit-items-add-more-new-item-target-id" with "E-health"
     And I press "Add item"
-    Then I should see the inline form error message "The E-health topic cannot be added to the list because its Abstract field is empty. Please edit the topic and fill in the Abstract field first."
+    Then I should see the error message "The E-health topic cannot be added to the list because its Abstract field is empty. Please edit the topic and fill in the Abstract field first."
 
     When I fill in "edit-items-add-more-new-item-target-id" with "Finance in EU"
     And I press "Add item"
@@ -434,6 +434,10 @@ Feature:
       | E-justice | el       | E-justice Greek |
     And the following topics are enabled in the homepage:
       | E-justice |
+    And news multilingual content:
+      | title             | headline          | topic     | langcode | default_translation |
+      | E-justice news    | E-justice news    | E-justice | en       | 1                    |
+      | E-justice news el | E-justice news el | ~~~       | el       | 0                    |
     And I append "layout" to "topics_paragraph" field in "taxonomy_term" entity with following "E-justice" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
     And I append "configurable_listing" to "topics_paragraph" field in "taxonomy_term" entity with following "E-justice" title:
@@ -446,12 +450,16 @@ Feature:
     When I go to the "E-justice" topic term page
     Then I should see the text "English listing heading"
     But I should not see the text "Greek listing heading"
+    And I should see the "E-justice news" tile
+    And I should not see the "E-justice" tile
 
     # The moderator reaches the Greek topic page from the Greek homepage.
     When I go to "/el"
     And I click "E-justice Greek"
     Then I should see the text "Greek listing heading"
     But I should not see the text "English listing heading"
+    And I should see the "E-justice news el" tile
+    And I should not see the "E-justice Greek" tile
 
     And the configurable listing of the "E-justice" topic should have a el translation
 

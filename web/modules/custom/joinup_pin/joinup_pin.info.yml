@@ -9,4 +9,5 @@ dependencies:
   - collection
   - joinup_solution
   - joinup_community_content
+  - joinup_search
   - meta_entity

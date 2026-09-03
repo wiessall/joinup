@@ -16,9 +16,6 @@ use Drupal\Core\Session\AccountInterface;
  * This cache context should be used in any render elements that have different
  * content when shown to community content authors.
  *
- * Example use case: the content overview (a.k.a. Keep Up To Date page) has a
- * "My content" facet that is shown only to content authors.
- *
  * This is similar to UserCacheContext but is much less granular, since the
  * number of content authors is small relative to the total number of users.
  *

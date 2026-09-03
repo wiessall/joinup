@@ -32,7 +32,7 @@ Feature: Assessment Report Entity Management
     And I fill in "Reference of the linked assessment" with "https://interoperable-europe.ec.europa.eu/report"
 
     # Binding requirements
-    When I click "New binding requirement"
+    When I add a section
     And a modal should open
     And I should see the button "Cancel" in the "Modal buttons" region
     And I press "Save" in the "Modal buttons" region
@@ -66,8 +66,8 @@ Feature: Assessment Report Entity Management
     When I click "Affected stakeholders" in the "Modal content" region
     Then I should see the text "Public and/or private stakeholders affected" in the "Modal content" region
     And the page should contain the html text 'aria-placeholder="Select or start typing..."'
-    When I fill in "has_participation[0][inline_entity_form][participant_type]" with "Local public sector body" in the "Modal content" region
-    And I fill in "has_participation[0][inline_entity_form][stakeholder_country]" with "Belgium" in the "Modal content" region
+    When I select "Local public sector body" option from "Participant type"
+    And I select "Belgium" option from "Stakeholder countries"
     And I should not see the text "Drag to re-order taxonomy terms." in the "Modal content" region
 
     When I click "Interoperability solution" in the "Modal content" region
@@ -95,16 +95,33 @@ Feature: Assessment Report Entity Management
 
     When I click "Affected stakeholders" in the "Modal content" region
     And I should see the text "Check this box to select all European Union countries" in the "Modal content" region
-    And I fill in "has_participation[0][inline_entity_form][participant_type]" with "Local public sector body" in the "Modal content" region
+    And I should see the text "Stakeholder’s countries" in the "Modal content" region
     And I check "Check this box to select all European Union countries"
-    Then I should not see the text "has_participation[0][inline_entity_form][stakeholder_country]" in the "Modal content" region
-    Then I uncheck "Check this box to select all European Union countries"
-    And I fill in "has_participation[0][inline_entity_form][stakeholder_country]" with "Belgium" in the "Modal content" region
+    Then I should not see the text "Stakeholder’s countries" in the "Modal content" region
+    And I uncheck "Check this box to select all European Union countries"
+    And I should see the text "Stakeholder’s countries" in the "Modal content" region
 
     When I click "Supporting document" in the "Modal content" region
     And I attach the file "text.pdf" to "Add a new file"
     And I should see the text "Maximum 5 files. 10 MB limit. Allowed types: txt doc docx pdf ppt pptx zip rar xls xlsx." in the "Modal content" region
     Then I press "Save" in the "Modal buttons" region
+    And the modal should be closed
+
+    # A just-saved binding requirement must render each of its sub-entities by
+    # label, not the "Participation #<id>" entity-ID fallback (ISAICP-11250).
+    When I click on element ".js-lpb-component .lpb-edit"
+    Then a modal should open
+    When I click "Initiative" in the "Modal content" region
+    Then I should see the text "Digital Transformation Initiative" in the "Modal content" region
+    When I click "Concerned public services" in the "Modal content" region
+    Then I should see the text "eIDAS Authentication Service" in the "Modal content" region
+    When I click "Affected stakeholders" in the "Modal content" region
+    Then I should see the text "Local public sector body, Belgium" in the "Modal content" region
+    And I should not see the text "Participation #" in the "Modal content" region
+    When I click "Interoperability solution" in the "Modal content" region
+    Then I should see the text "Test solution" in the "Modal content" region
+    Then I press "Cancel" in the "Modal buttons" region
+    And the modal should be closed
 
     # Identified effects on cross-border interoperability
     When I click "Legal" in the "Content" region
@@ -214,7 +231,7 @@ Feature: Assessment Report Entity Management
     And I fill in "New organisation name" with "Test Organisation"
 
     # Binding requirements with a very long initiative name (256+ characters)
-    When I click "New binding requirement"
+    When I add a section
     And a modal should open
 
     When I click "Initiative" in the "Modal content" region
@@ -252,7 +269,7 @@ Feature: Assessment Report Entity Management
     And I fill in "New organisation name" with "Test Organisation"
 
     # Add binding requirement with required fields but WITHOUT filling "Affected stakeholders"
-    When I click "New binding requirement"
+    When I add a section
     And a modal should open
 
     When I click "Initiative" in the "Modal content" region
@@ -288,7 +305,7 @@ Feature: Assessment Report Entity Management
 
     Given I am logged in as an "authenticated user"
     And I go to "/collection/assessments/report/create"
-    And I click "New binding requirement"
+    And I add a section
     When I click "Interoperability solution" in the "Modal content" region
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     Then I should not see the text "Interoperability Solutions Browser"
@@ -310,7 +327,7 @@ Feature: Assessment Report Entity Management
 
     Given I am logged in as an "authenticated user"
     And I go to "/collection/assessments/report/create"
-    And I click "New binding requirement"
+    And I add a section
     When I click "Interoperability solution" in the "Modal content" region
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
 
@@ -393,7 +410,7 @@ Feature: Assessment Report Entity Management
     And I wait for AJAX to finish
     And I fill in "New organisation name" with "Test Organisation"
 
-    When I click "New binding requirement"
+    When I add a section
     And a modal should open
 
     When I click "Initiative" in the "Modal content" region
@@ -432,7 +449,7 @@ Feature: Assessment Report Entity Management
     And I should see the text "Asset that should remain"
 
     When I go to the edit form of the "Test Entity Browser Remove Asset" assessment
-    And I click on element ".lpb-edit"
+    And I click the "edit" button in section 1
     And a modal should open
 
     When I click "Interoperability solution" in the "Modal content" region
@@ -464,7 +481,7 @@ Feature: Assessment Report Entity Management
 
     Given I am logged in as an "authenticated user"
     And I go to "/collection/assessments/report/create"
-    And I click "New binding requirement"
+    And I add a section
     When I click "Interoperability solution" in the "Modal content" region
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     # Solution with abstract: abstract is shown, description is not.
@@ -479,7 +496,7 @@ Feature: Assessment Report Entity Management
     Given I am logged in as a moderator
     And I go to "/collection/assessments/report/create"
 
-    When I click "New binding requirement"
+    When I add a section
     And a modal should open
 
     When I click "Initiative" in the "Modal content" region
@@ -493,18 +510,17 @@ Feature: Assessment Report Entity Management
     And I fill in "description[0][value]" with "Test binding requirement description" in the "Modal content" region
 
     When I click "Affected stakeholders" in the "Modal content" region
-    And I fill in "has_participation[0][inline_entity_form][participant_type]" with "Local public sector body" in the "Modal content" region
-    And I fill in "has_participation[0][inline_entity_form][stakeholder_country]" with "Belgium" in the "Modal content" region
+    And I select "Local public sector body" option from "Participant type"
+    And I select "Belgium" option from "Stakeholder countries"
 
     Then I press "Save" in the "Modal buttons" region
     And the modal should be closed
 
-    When I click on element ".lpb-duplicate"
+    When I click the "duplicate" button in section 1
     And I wait for AJAX to finish
 
-    # Click the second edit link by finding the first component and then
-    # getting the first sibling which is the duplicated component.
-    When I click on element ".js-lpb-component ~ .js-lpb-component .lpb-edit"
+    # Edit the duplicated component.
+    When I click the "edit" button in section 2
     Then a modal should open
 
   Scenario: Entity browser shows only solutions in the current interface language
@@ -516,7 +532,7 @@ Feature: Assessment Report Entity Management
 
     Given I am logged in as an "developer"
     And I go to "/collection/assessments/report/create"
-    And I click "New binding requirement"
+    And I add a section
     When I click "Interoperability solution" in the "Modal content" region
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     Then I should see "English Solution"
@@ -524,7 +540,7 @@ Feature: Assessment Report Entity Management
     And I should not see "BG Solution"
 
     When I go to "/bg/collection/assessments/report/create"
-    And I click "New binding requirement"
+    And I add a section
     When I click "Interoperability solution" in the "Modal content" region
     And I press "Add Interoperability Solution" in the "Modal content" region to open the entity browser
     Then I should see "English Solution"

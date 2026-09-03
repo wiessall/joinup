@@ -109,7 +109,7 @@ Feature: Sharing content between collections
     When I go to the homepage of the "Classic Rock" <group type>
     Then the page should show only the tiles "Rockabilly is still rocking, Interesting content"
     And the "Interesting content" tile should be marked as shared from "Hip-Hop"
-    When I visit the content overview page
+    When I visit the advanced search page
     Then the "Interesting content" tile should not be marked as shared
     # It should not be shared on the other group.
     When I go to the homepage of the "Drum'n'Bass" <group type>
@@ -200,12 +200,12 @@ Feature: Sharing content between collections
       | Essos city   | Arya Stark | facilitator |
 
     When I am logged in as "Arya Stark"
-    And I visit the content overview page
+    And I visit the advanced search page
     Then I should see the contextual link "Share" in the "Iron throne" tile
     And I should not see the contextual link "Unshare" in the "Iron throne" tile
 
     When I am logged in as "John Snow"
-    And I visit the content overview page
+    And I visit the advanced search page
     Then I should see the contextual link "Share" in the "Iron throne" tile
     But I should not see the contextual link "Unshare" in the "Iron throne" tile
 
@@ -217,13 +217,13 @@ Feature: Sharing content between collections
     And I press "Share" in the "Modal buttons" region
     Then I should see the success message "Item was shared on the following groups: Essos city."
 
-    When I visit the content overview page
+    When I visit the advanced search page
     Then I should see the contextual link "Share" in the "Iron throne" tile
     # Simple members can still not unshare content from any group.
     But I should not see the contextual link "Unshare" in the "Iron throne" tile
 
     When I am logged in as "Arya Stark"
-    And I visit the content overview page
+    And I visit the advanced search page
     # Link 'Unshare' vary by user og role since the 2 users up to now have the same permissions outside og.
     Then I should see the contextual links "Share, Unshare" in the "Iron throne" tile
     When I click the contextual link "Unshare" in the "Iron throne" tile
@@ -231,7 +231,7 @@ Feature: Sharing content between collections
     And the following fields should be present "Essos city"
 
     When I am logged in as "Jamie Lanister"
-    And I visit the content overview page
+    And I visit the advanced search page
     Then I should see the contextual link "Share" in the "Iron throne" tile
     # Moderators should be able to unshare from every group the content is shared on.
     And I should see the contextual link "Unshare" in the "Iron throne" tile
@@ -284,7 +284,7 @@ Feature: Sharing content between collections
       | Title | News carousel |
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout | one column |
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Carousel"
     And I check "Global search"

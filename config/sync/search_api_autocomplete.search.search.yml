@@ -30,13 +30,6 @@ suggester_settings:
         news: ''
         release: ''
         solution: ''
-      'entity:taxonomy_term':
-        eif_conceptual_model: ''
-        eif_interoperability_layer: ''
-        eif_principle: ''
-        eif_recommendation: ''
-        oss_category: ''
-        topic: ''
       'entity:user':
         user: ''
 suggester_weights:
