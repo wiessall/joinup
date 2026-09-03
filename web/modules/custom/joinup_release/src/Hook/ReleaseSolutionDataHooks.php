@@ -14,6 +14,7 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_release\Entity\ReleaseInterface;
+use Drupal\joinup_release\Plugin\NodeRevisionDelete\SolutionRevisionAmount;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\node\NodeInterface;
 
@@ -102,6 +103,18 @@ final class ReleaseSolutionDataHooks {
       'type' => 'release',
       'solution_data.target_revision_id' => $solution->getRevisionId(),
     ]);
+  }
+
+  /**
+   * Implements hook_node_revision_delete_info_alter().
+   */
+  #[Hook('node_revision_delete_info_alter')]
+  public function replaceNodeDeleteRevisionAmountPluginClass(array &$definitions): void {
+    if (isset($definitions['amount'])) {
+      // Extend the `amount` plugin to ensure protection of the release referred
+      // solution revisions.
+      $definitions['amount']['class'] = SolutionRevisionAmount::class;
+    }
   }
 
 }
