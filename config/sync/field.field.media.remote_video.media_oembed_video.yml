@@ -5,6 +5,11 @@ dependencies:
   config:
     - field.storage.media.media_oembed_video
     - media.type.remote_video
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: true
 id: media.remote_video.media_oembed_video
 field_name: media_oembed_video
 entity_type: media
