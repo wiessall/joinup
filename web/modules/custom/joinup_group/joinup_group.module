@@ -375,9 +375,6 @@ function joinup_group_node_presave(EntityInterface $entity): void {
  *
  * Re-index all group content when a group is saved with a changed status.
  *
- * The hasPublished flag ensures that this will occur only when an entity is
- * published for the first time.
- *
  * @see \joinup_group_node_presave()
  */
 function joinup_group_node_update(EntityInterface $entity): void {
@@ -392,7 +389,9 @@ function joinup_group_node_update(EntityInterface $entity): void {
     return;
   }
 
-  if ($entity->isPublished()) {
+  $original = $entity->getOriginal();
+
+  if ($original && !$original->isPublished() && $entity->isPublished()) {
     /** @var \Drupal\og\MembershipManagerInterface $membership_manager */
     $membership_manager = \Drupal::service('og.membership_manager');
     $content_ids = $membership_manager->getGroupContentIds($entity, ['node']);
@@ -408,7 +407,6 @@ function joinup_group_node_update(EntityInterface $entity): void {
   // Log an informational message if contact was changed.
   $contactInfoFieldName = $entity->getContactInformationFieldName();
   $contactInfoField = $entity->get($contactInfoFieldName);
-  $original = $entity->getOriginal();
   if (
     $original &&
     !$contactInfoField->equals($originalField = $original->get($contactInfoFieldName))
