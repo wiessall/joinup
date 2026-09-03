@@ -1,0 +1,18 @@
+diff --git a/src/LinkCheckerLinkAccessControlHandler.php b/src/LinkCheckerLinkAccessControlHandler.php
+index 4eee9aa073c3f871406b09e381e55c8d44e3f2ab..560cbcdaae7358d63eaddc881309acd1440d5e6c 100644
+--- a/src/LinkCheckerLinkAccessControlHandler.php
++++ b/src/LinkCheckerLinkAccessControlHandler.php
+@@ -88,8 +88,12 @@ class LinkCheckerLinkAccessControlHandler extends EntityAccessControlHandler {
+     }
+ 
+     // If user does not have access to field where link is stored - forbidden.
++    // Field access only distinguishes between "view" and "edit"; unlike
++    // entity access, there is no separate "update" operation at the field
++    // level (see EntityAccessControlHandlerInterface::fieldAccess()).
++    $field_operation = $operation === 'view' ? 'view' : 'edit';
+     $parentEntityField = $parentEntity->get($entity->getParentEntityFieldName());
+-    if (!$parentEntityField->access($operation, $account)) {
++    if (!$parentEntityField->access($field_operation, $account)) {
+       return AccessResult::forbidden()
+         ->addCacheableDependency($parentEntity)
+         ->cachePerPermissions();
