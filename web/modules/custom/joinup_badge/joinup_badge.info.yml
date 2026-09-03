@@ -8,3 +8,4 @@ dependencies:
   - drupal:user
   - flag:flag
   - interoperable_europe:interoperable_europe
+  - joinup:joinup_search

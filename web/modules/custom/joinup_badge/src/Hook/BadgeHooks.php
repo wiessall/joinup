@@ -13,6 +13,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\File\FileUrlGeneratorInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -21,6 +22,7 @@ use Drupal\joinup_badge\Entity\BadgeAwarding;
 use Drupal\joinup_badge\Entity\Certificate;
 use Drupal\joinup_badge\Entity\CertificateInterface;
 use Drupal\joinup_badge\Plugin\Field\FieldType\BadgeFieldItemList;
+use Drupal\joinup_search\SearchIndexCommitter;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\user\UserInterface;
@@ -177,6 +179,26 @@ class BadgeHooks implements DestructableInterface {
     else {
       $this->badgeService->revoke('certificate', $user);
     }
+  }
+
+  /**
+   * Implements hook_form_BASE_FORM_ID_alter() for the user form.
+   */
+  #[Hook('form_user_form_alter')]
+  public function userFormAlter(array &$form, FormStateInterface $formState): void {
+    $form['actions']['submit']['#submit'][] = [static::class, 'commitSearchIndex'];
+  }
+
+  /**
+   * Makes certificate changes searchable before the user profile is rendered.
+   *
+   * @param array $form
+   *   The user form.
+   * @param \Drupal\Core\Form\FormStateInterface $formState
+   *   The form state.
+   */
+  public static function commitSearchIndex(array &$form, FormStateInterface $formState): void {
+    \Drupal::service(SearchIndexCommitter::class)->commitPendingChanges();
   }
 
   /**
