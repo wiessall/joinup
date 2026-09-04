@@ -907,20 +907,49 @@ display:
           row_class: ''
           default_row_class: true
           columns:
-            url__uri: url__uri
+            entity_field: entity_field
+            entity_langcode: entity_langcode
+            linkcheckerlink_page_entity_label: linkcheckerlink_page_entity_label
+            url_1: url_1
+            url: url
             last_check: last_check
-            method: method
             code: code
             error: error
             fail_count: fail_count
-            entity_id__target_id: entity_id__target_id
-            entity_field__value: entity_field__value
-            entity_langcode: entity_langcode
-            status: status
+            nothing: nothing
+            og_audience: og_audience
             operations: operations
           default: '-1'
           info:
-            url__uri:
+            entity_field:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            entity_langcode:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            linkcheckerlink_page_entity_label:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            url_1:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            url:
               sortable: false
               default_sort_order: asc
               align: ''
@@ -929,13 +958,6 @@ display:
               responsive: ''
             last_check:
               sortable: true
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            method:
-              sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
@@ -962,29 +984,13 @@ display:
               separator: ''
               empty_column: false
               responsive: ''
-            entity_id__target_id:
-              sortable: false
-              default_sort_order: asc
+            nothing:
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
-            entity_field__value:
+            og_audience:
               sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            entity_langcode:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            status:
-              sortable: true
               default_sort_order: asc
               align: ''
               separator: ''
@@ -1001,6 +1007,7 @@ display:
           empty_table: false
           caption: ''
           description: ''
+          class: ''
       row:
         type: fields
       query:
