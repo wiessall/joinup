@@ -1,0 +1,17 @@
+diff --git a/css/builder.css b/css/builder.css
+index 3739251fbe469001b8b2ed061ffc74b10d5e43e1..9770533da02f7c54fd6f3f65452ce037b87aad0e 100644
+--- a/css/builder.css
++++ b/css/builder.css
+@@ -45,6 +45,12 @@
+   position: relative;
+   margin: 0 auto;
+ }
++.js-lpb-component iframe {
++  pointer-events: none;
++}
++.js-lpb-component[data-active="true"] iframe {
++  pointer-events: auto;
++}
+ .lpb-hover-label {
+   z-index: 1000;
+   padding: 2px 6px 2px 7px;
