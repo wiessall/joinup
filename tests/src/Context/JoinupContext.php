@@ -1928,8 +1928,10 @@ class JoinupContext extends RawDrupalContext {
    * Programmatically creates node revisions.
    *
    * Table format:
-   * | current title            | title            | body            |
-   * | <the current node title> | Revisioned title | Revisioned body |
+   * @code
+   * | current title            | title            | body            | log message          | revision date |
+   * | <the current node title> | Revisioned title | Revisioned body | Revision log message | Rrvision date |
+   * @endcode
    *
    * @param string $bundle
    *   The bundle of the node.
@@ -1942,7 +1944,12 @@ class JoinupContext extends RawDrupalContext {
       $node = $this->getEntityByLabel('node', $data['current title'], $bundle);
       unset($data['current title']);
 
-      // Crete a fake node object to be able to reuse hooks that help with
+      // The revision log message and date are metadata properties, not fields.
+      $revision_log_message = $data['log message'] ?? NULL;
+      $revision_date = $data['revision date'] ?? NULL;
+      unset($data['log message'], $data['revision date']);
+
+      // Create a fake node object to be able to reuse hooks that help with
       // preparing the field values.
       $fake_node = new EntityStub('node', $bundle, $data);
 
@@ -1979,6 +1986,15 @@ class JoinupContext extends RawDrupalContext {
 
       // Create a new revision.
       $node->setNewRevision();
+      if ($revision_log_message !== NULL) {
+        $node->setRevisionLogMessage($revision_log_message);
+      }
+      if ($revision_date !== NULL) {
+        if (($timestamp = strtotime($revision_date)) === FALSE) {
+          throw new \InvalidArgumentException("Cannot parse the revision date '$revision_date'.");
+        }
+        $node->setRevisionCreationTime($timestamp);
+      }
       // Finally save the node.
       $node->save();
     }
