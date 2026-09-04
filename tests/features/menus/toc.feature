@@ -6,7 +6,7 @@ Feature: Custom pages in Table of Contents
       | title          |
       | TOC Collection |
 
-  Scenario: Only the links below the topmost page are rendered in TOC.
+  Scenario: Links below the topmost page are rendered in the second level menu.
     And the following "custom_page" content:
       | title       | collection     | topic |
       | Page 1      | TOC Collection | HR    |
@@ -23,10 +23,10 @@ Feature: Custom pages in Table of Contents
       | Subpage 2-1 | Page 2 | 1      |
     When I am logged in as a member of the "TOC Collection" collection
     And I visit the "Page 1" "custom page"
-    Then I should see the link "Subpage 1-1" in the "Table of contents"
-    And I should see the link "Subpage 1-2" in the "Table of contents"
-    But I should not see the link "Page 2" in the "Table of contents"
-    And I should not see the link "Subpage 2-1" in the "Table of contents"
+    Then I should see the link "Subpage 1-1" in the "Second level navigation menu"
+    And I should see the link "Subpage 1-2" in the "Second level navigation menu"
+    But I should not see the link "Page 2" in the "Second level navigation menu"
+    And I should not see the link "Subpage 2-1" in the "Second level navigation menu"
 
   Scenario: Show appropriate menu entries in the table of contents outline.
     And the following "custom_page" content:
