@@ -3,7 +3,9 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_form_mode.node.inline
     - field.field.user.user.blocked_reason
+    - field.field.user.user.certificates
     - field.field.user.user.field_social_media
     - field.field.user.user.field_user_business_title
     - field.field.user.user.field_user_content
@@ -19,7 +21,9 @@ dependencies:
     - field.field.user.user.function_of_administration
     - image.style.thumbnail
   module:
+    - entity_browser_entity_form
     - entity_form_field_label
+    - inline_entity_form
     - path
     - search_api_field
     - social_media_links_field
@@ -42,9 +46,34 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  certificates:
+    type: inline_entity_form_complex
+    weight: 15
+    region: content
+    settings:
+      form_mode: inline
+      override_labels: true
+      label_singular: certificate
+      label_plural: certificates
+      allow_new: true
+      allow_existing: false
+      match_operator: CONTAINS
+      allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: delete
+    third_party_settings:
+      entity_browser_entity_form:
+        entity_browser_id: _none
+      entity_form_field_label:
+        new_label: ''
+        rewrite_label: 0
+        new_description: ''
+        rewrite_description: 0
   field_social_media:
     type: social_media_links_field_default
-    weight: 13
+    weight: 16
     region: content
     settings: {  }
     third_party_settings: {  }

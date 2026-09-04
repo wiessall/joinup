@@ -1,0 +1,15 @@
+uuid: 81fac0dd-bb0c-4dc6-99e7-3536a70407be
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.certificate
+  module:
+    - flag
+id: flag_action.certificate_unflag
+label: 'Unflag this item'
+type: user
+plugin: 'flag_action:certificate_unflag'
+configuration:
+  flag_id: certificate
+  flag_action: unflag

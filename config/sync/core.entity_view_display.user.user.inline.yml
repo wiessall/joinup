@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.user.inline
     - field.field.user.user.blocked_reason
+    - field.field.user.user.certificates
     - field.field.user.user.field_social_media
     - field.field.user.user.field_user_business_title
     - field.field.user.user.field_user_content
@@ -69,6 +70,7 @@ hidden:
   badges: true
   block_user: true
   blocked_reason: true
+  certificates: true
   field_social_media: true
   field_user_business_title: true
   field_user_content: true
