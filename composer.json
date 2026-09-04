@@ -373,7 +373,8 @@
                 "Translations of nodes with comment settings field set to non-translatable returns EntityUntranslatableFieldsConstraint @see https://www.drupal.org/i/3015675": "resources/patch/php/drupal/core/3015675-83bb966c.diff",
                 "Plugin manager with fallback when the plugin ID is null @see https://www.drupal.org/project/drupal/issues/3581628": "resources/patch/php/drupal/core/3581628.diff",
                 "Convert local absolute menu link URLs into internal paths @see https://www.drupal.org/i/483150": "resources/patch/php/drupal/core/483150.mr11507-commit2e0599ae.diff",
-                "HTML (all languages) appearing in error messages of multilingual sites @see https://www.drupal.org/i/3395366": "resources/patch/php/drupal/core/3395366.mr11035-commit83c08bfd.diff"
+                "HTML (all languages) appearing in error messages of multilingual sites @see https://www.drupal.org/i/3395366": "resources/patch/php/drupal/core/3395366.mr11035-commit83c08bfd.diff",
+                "Numeric views field passes the formatted value as the plural count, triggering a warning @see https://www.drupal.org/i/3620921": "resources/patch/php/drupal/core/3620921.mr17005-commit4142e548.diff"
             },
             "drupal/csv_serialization": {
                 "Replace League\\Csv methods deprecated since league/csv 9.27.0 @see https://www.drupal.org/i/3562555": "resources/patch/php/drupal/csv_serialization/3562555.diff"
