@@ -1,0 +1,158 @@
+diff --git a/core/modules/image/src/Plugin/Field/FieldType/ImageFieldItemList.php b/core/modules/image/src/Plugin/Field/FieldType/ImageFieldItemList.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..0d85916c2ba4072d82d90e54ff54c3a77e943f55
+--- /dev/null
++++ b/core/modules/image/src/Plugin/Field/FieldType/ImageFieldItemList.php
+@@ -0,0 +1,60 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\image\Plugin\Field\FieldType;
++
++use Drupal\Core\Field\FieldItemListInterface;
++use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
++
++/**
++ * Defines an item list class for image fields.
++ */
++class ImageFieldItemList extends FileFieldItemList {
++
++  /**
++   * The properties that hold the editable content of an image item.
++   */
++  protected const COMPARED_PROPERTIES = ['alt', 'target_id', 'title'];
++
++  /**
++   * {@inheritdoc}
++   */
++  public function hasAffectingChanges(FieldItemListInterface $original_items, $langcode): bool {
++    return static::getComparableValue($this) !== static::getComparableValue($original_items);
++  }
++
++  /**
++   * Returns the value of an item list, reduced to its editable content.
++   *
++   * The dimensions are left out because they are derived from the referenced
++   * file, which 'target_id' already accounts for, and because the image widget
++   * submits no value for them: they are only recomputed in
++   * ImageItem::preSave(), which runs after validation.
++   *
++   * The remaining properties are always present and cast to string, so that a
++   * property that is missing, NULL or an empty string compares as equal. The
++   * widget renders a NULL 'alt' or 'title' as an empty string, so an untouched
++   * field would otherwise be reported as changed.
++   *
++   * @param \Drupal\Core\Field\FieldItemListInterface $items
++   *   The field item list to reduce.
++   *
++   * @return array
++   *   The comparable value, keyed by delta.
++   *
++   * @see \Drupal\image\Plugin\Field\FieldType\ImageItem::preSave()
++   * @see \Drupal\image\Plugin\Field\FieldWidget\ImageWidget::process()
++   */
++  protected static function getComparableValue(FieldItemListInterface $items): array {
++    $values = [];
++    foreach ($items as $delta => $item) {
++      $value = $item->getValue();
++      foreach (static::COMPARED_PROPERTIES as $property) {
++        $values[$delta][$property] = (string) ($value[$property] ?? '');
++      }
++    }
++    return $values;
++  }
++
++}
+diff --git a/core/modules/image/src/Plugin/Field/FieldType/ImageItem.php b/core/modules/image/src/Plugin/Field/FieldType/ImageItem.php
+index e03a8b35b620eb5dc2b3e37ddad15b3ff2faf762..7333555193f3ef0c20aa5680e5975b93612a18c5 100644
+--- a/core/modules/image/src/Plugin/Field/FieldType/ImageItem.php
++++ b/core/modules/image/src/Plugin/Field/FieldType/ImageItem.php
+@@ -15,7 +15,6 @@
+ use Drupal\Core\StringTranslation\TranslatableMarkup;
+ use Drupal\Core\TypedData\DataDefinition;
+ use Drupal\file\Entity\File;
+-use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
+ use Drupal\file\Plugin\Field\FieldType\FileItem;
+ 
+ /**
+@@ -32,7 +31,7 @@
+   category: "file_upload",
+   default_widget: "image_image",
+   default_formatter: "image",
+-  list_class: FileFieldItemList::class,
++  list_class: ImageFieldItemList::class,
+   constraints: ["ReferenceAccess" => [], "FileValidation" => []],
+   column_groups: [
+     "file" => [
+diff --git a/core/modules/image/tests/src/Kernel/ImageItemTest.php b/core/modules/image/tests/src/Kernel/ImageItemTest.php
+index bd75fa501ed7cfbd6ea55fc781d75cc01d48a8ad..c8d682c9f96fb1eff1468253cc79627b241dd746 100644
+--- a/core/modules/image/tests/src/Kernel/ImageItemTest.php
++++ b/core/modules/image/tests/src/Kernel/ImageItemTest.php
+@@ -237,6 +237,66 @@ public function testDisplayDefaultValue(): void {
+     self::assertEquals(1, $form_state->getValue(['image_test', 0, 'display']));
+   }
+ 
++  /**
++   * Tests that resubmitting an unchanged image is not an affecting change.
++   *
++   * The widget renders no control for the dimensions, so a submission cannot
++   * carry them back, and they are only recomputed in ImageItem::preSave(),
++   * after validation has run. It also renders an empty string for a title that
++   * is stored as NULL. Either one on its own makes the submitted item compare
++   * as different from the stored one, so an untouched image field is reported
++   * as an untranslatable field change every time the entity form is saved.
++   *
++   * @see \Drupal\Core\Entity\Plugin\Validation\Constraint\EntityUntranslatableFieldsConstraintValidator
++   */
++  public function testUnchangedImageHasNoAffectingChanges(): void {
++    $entity = EntityTest::create([
++      'name' => $this->randomMachineName(),
++      'image_test' => [
++        'target_id' => $this->image->id(),
++        'alt' => $this->randomMachineName(),
++      ],
++    ]);
++    $entity->save();
++    $entity = EntityTest::load($entity->id());
++
++    // The dimensions are computed on save, while the title was never set.
++    $image = $this->imageFactory->get('public://example.jpg');
++    $this->assertEquals($image->getWidth(), $entity->image_test->width);
++    $this->assertEquals($image->getHeight(), $entity->image_test->height);
++    $this->assertNull($entity->image_test->title);
++
++    $form_object = $this->container->get(EntityTypeManagerInterface::class)->getFormObject('entity_test', 'default');
++    \assert($form_object instanceof ContentEntityForm);
++    $form_object->setEntity($entity);
++    $form_display = EntityFormDisplay::collectRenderDisplay($entity, 'default');
++    \assert($form_display instanceof EntityFormDisplay);
++    $form_state = new FormState();
++    $form_object->setFormDisplay($form_display, $form_state);
++    $form = $this->container->get(FormBuilderInterface::class)->buildForm($form_object, $form_state);
++    $element = $form['image_test']['widget'][0];
++
++    // The dimensions have no form control, so they are never submitted, while
++    // the title is submitted as an empty string.
++    $this->assertArrayNotHasKey('width', $element);
++    $this->assertArrayNotHasKey('height', $element);
++    $this->assertSame('', $element['title']['#default_value']);
++
++    // Submit the form exactly as it was rendered, without touching anything.
++    $edited = clone $entity;
++    $edited->get('image_test')->setValue([
++      [
++        'target_id' => reset($element['fids']['#value']),
++        'alt' => $element['alt']['#default_value'],
++        'title' => $element['title']['#default_value'],
++        'display' => $element['display']['#value'] ?? 1,
++      ],
++    ]);
++
++    $this->assertFalse($edited->get('image_test')->filterEmptyItems()
++      ->hasAffectingChanges($entity->get('image_test')->filterEmptyItems(), 'en'));
++  }
++
+   /**
+    * Validates the image file URI generated for a given file directory.
+    *

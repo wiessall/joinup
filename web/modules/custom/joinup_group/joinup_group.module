@@ -363,6 +363,7 @@ function joinup_group_node_presave(EntityInterface $entity): void {
       [
         'target_id' => $file->id(),
         'alt' => $entity->label(),
+        'title' => '',
         'width' => $image->getWidth(),
         'height' => $image->getHeight(),
       ]
