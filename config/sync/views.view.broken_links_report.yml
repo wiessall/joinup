@@ -714,6 +714,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 50
           total_pages: null
           id: 0
@@ -723,7 +724,7 @@ display:
             first: '« First'
             last: 'Last »'
           expose:
-            items_per_page: true
+            items_per_page: false
             items_per_page_label: 'Items per page'
             items_per_page_options: '10, 25, 50, 100'
             items_per_page_options_all: false
@@ -959,17 +960,7 @@ display:
           required: false
       show_admin_links: true
       header: {  }
-      footer:
-        result:
-          id: result
-          table: views
-          field: result
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: result
-          empty: false
-          content: 'Displaying @start - @end of @total'
+      footer: {  }
       display_extenders: {  }
     cache_metadata:
       max-age: -1
@@ -987,7 +978,10 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
       path: admin/reports/linkchecker
       menu:
         type: normal
