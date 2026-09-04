@@ -28,7 +28,7 @@ Feature:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Content listing"
     And I select "Discussion" from "Available filters"
@@ -70,7 +70,7 @@ Feature:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Content listing"
     And I select "Discussion" from "Available filters"
@@ -111,7 +111,7 @@ Feature:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Content listing"
     And I press "Save" in the "Modal buttons" region
@@ -132,7 +132,7 @@ Feature:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Content listing"
     And I select "Solution" from "Available filters"
@@ -141,7 +141,7 @@ Feature:
     And I press "Save" in the "Modal buttons" region
 
     # Add second paragraph.
-    When I click "Choose component"
+    When I add a component to section 1
     And a modal should open
     And I click "Content listing"
     And I select "Solution" from latest "Available filters"
@@ -150,7 +150,7 @@ Feature:
     And I press "Save" in the "Modal buttons" region
 
     # Verify first paragraph maintains its state.
-    And I "edit" from the "Custom page body" field the child 2 paragraph of 1 layout
+    And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     Then the 1st filter of the 1st content listing paragraph value is "Save the Planet"
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
@@ -171,7 +171,7 @@ Feature:
       | layout           | one column |
       | Background theme | light      |
       | Extra classes    | test-class |
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Content listing"
     And I select "Solution" from "Available filters"

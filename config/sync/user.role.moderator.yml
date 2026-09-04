@@ -6,11 +6,13 @@ dependencies:
     - entityqueue.entity_queue.homepage_topics
     - entityqueue.entity_queue.spotlight
     - filter.format.plain_text_glossary
+    - filter.format.webform_default
     - media.type.collection_logo
     - media.type.discussion_logo
     - media.type.event_logo
     - media.type.news_logo
     - media.type.solution_logo
+    - node.type.certificate
     - node.type.collection
     - node.type.contact_information
     - node.type.custom_page
@@ -166,6 +168,7 @@ permissions:
   - 'create solution_logo media'
   - 'create webform'
   - 'delete all sitewide alert revisions'
+  - 'delete any certificate content'
   - 'delete any collection_logo media'
   - 'delete any contact_information content'
   - 'delete any custom_page content'
@@ -203,6 +206,7 @@ permissions:
   - 'delete terms in tags'
   - 'download assessment PDFs'
   - 'download subscribers report'
+  - 'edit any certificate content'
   - 'edit any collection content'
   - 'edit any collection_logo media'
   - 'edit any contact_information content'
@@ -238,7 +242,6 @@ permissions:
   - 'manage group content'
   - 'manage newsroom newsletter subscriptions'
   - 'manage oauth clients'
-  - 'manage solutions'
   - 'perform announcement workflow approve transition on any entity'
   - 'perform announcement workflow reject transition on any entity'
   - 'perform announcement workflow send transition on any entity'
@@ -345,6 +348,7 @@ permissions:
   - 'update solution_settings meta-entity'
   - 'update spotlight entityqueue'
   - 'use text format plain_text_glossary'
+  - 'use text format webform_default'
   - 'vbo joinup archive action'
   - 'vbo joinup change group action'
   - 'vbo joinup unarchive action'

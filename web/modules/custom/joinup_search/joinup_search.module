@@ -11,6 +11,7 @@ use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -40,7 +41,6 @@ function joinup_search_theme($existing, $type, $theme, $path): array {
     'joinup_search_filter' => [
       'variables' => [
         'name' => '',
-        'bcl_icon_path' => '',
       ],
     ],
   ];
@@ -178,9 +178,11 @@ function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_
           $form['list'] = [
             '#theme' => 'joinup_search_filter',
             '#name' => $group->label(),
-            '#bcl_icon_path' => base_path() . \Drupal::service('extension.path.resolver')->getPath('theme', 'ventuno') . '/assets/icons/icons.svg',
             '#weight' => -5,
           ];
+          CacheableMetadata::createFromRenderArray($form)
+            ->addCacheableDependency($group)
+            ->applyTo($form);
         }
       }
     }
@@ -254,14 +256,6 @@ function joinup_search_entity_prepare_view(string $entity_type_id, array $entiti
     // Always force the display of archived content.
     if ($node instanceof GroupInterface && $node->isArchived()) {
       $fieldValue[0]['value']['show_archived'] = 'archived';
-    }
-
-    // Because we are forcing the facet to show the values even when they are
-    // not narrowing the results, and we are altering the query as well, we need
-    // to also dynamically hide the facet when the 'show_archived' option is set
-    // to anything else than 'all' - because it will not hide automatically.
-    elseif ($fieldValue[0]['value']['show_archived'] !== 'all') {
-      $fieldValue[0]['value']['fields'][$facetKey]['region'] = 'hidden';
     }
 
     $fieldHostEntity->{$fieldName}->setValue($fieldValue);

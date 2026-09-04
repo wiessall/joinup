@@ -4,26 +4,25 @@
   display: -webkit-box !important;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  margin-bottom: 0;
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+
   &--long {
-    overflow: hidden;
     min-height: 120px;
     -webkit-line-clamp: 5;
+
+    // The expanded height is set as an inline max-height by
+    // toggle-text-seemore-btn.js, which is what this transitions.
+    transition: max-height 0.35s ease;
+
     &.show {
       -webkit-line-clamp: unset !important;
     }
-    p {
-      display: inline;
-      &:not(:last-child)::after {
-        content: " \A\A";
-        white-space: pre;
-      }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
     }
-  }
-  p {
-    display: inline;
-  }
-  ul {
-    display: inline-block;
   }
 }

@@ -42,3 +42,49 @@ function assessments_schema(): array {
 
   return $schema;
 }
+
+/**
+ * Update config for online_form_for_assessments.
+ */
+function assessments_update_201601(): void {
+  $config = \Drupal::configFactory()
+    ->getEditable('webform.webform.online_form_for_assessments');
+
+  $dependencies = $config->get('dependencies');
+
+  if (!empty($dependencies['module'])) {
+    $dependencies['module'] = array_values(array_diff(
+      $dependencies['module'],
+      ['joinup_assessment']
+    ));
+
+    if (empty($dependencies['module'])) {
+      unset($dependencies['module']);
+    }
+
+    $config
+      ->set('dependencies', $dependencies)
+      ->save(TRUE);
+  }
+}
+
+/**
+ * Remove joinup_assessment_routes from OG settings group resolvers.
+ */
+function assessments_update_201602(): void {
+  $config = \Drupal::configFactory()
+    ->getEditable('og.settings');
+
+  $group_resolvers = $config->get('group_resolvers');
+
+  if (!empty($group_resolvers)) {
+    $group_resolvers = array_values(array_diff(
+      $group_resolvers,
+      ['joinup_assessment_routes']
+    ));
+
+    $config
+      ->set('group_resolvers', $group_resolvers)
+      ->save(TRUE);
+  }
+}

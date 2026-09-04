@@ -1,0 +1,26 @@
+uuid: 63c7ec9c-f629-4356-a68a-a9cb1fbc333c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.course
+    - node.type.certificate
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: node.certificate.course
+field_name: course
+entity_type: node
+bundle: certificate
+label: Course
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: joinup_badge
+  handler_settings: {  }
+field_type: entity_reference

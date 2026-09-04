@@ -10,6 +10,9 @@ Feature:
       | Decadent Art |
     And user:
       | Username | Vasundhara Commentator |
+    And the following "solution" content:
+      | title      | collection  |
+      | Solution 1 | Vintage Art |
     And the following "document" content:
       | title             | document type | collection  | state     | changed          |
       | The Panama Papers | Document      | Vintage Art | published | 2019-11-19 20:00 |
@@ -100,10 +103,11 @@ Feature:
 
     # Archive action.
     Given I select the "The Ultimate Debate" row
+    And I select the "Solution 1" row
     And I select "Archive content" from "Action"
     And I press "Apply to selected items"
     And I wait for the batch process to finish
-    Then I should see "Proceeded updates to 1 entity"
+    Then I should see "Proceeded updates to 2 entities"
     And I should see "12/06/2017 - 19:00"
     And the string value of the "revision_log" field in "The Ultimate Debate" content should be "Updated state to 'archived' by VBO action, from revision ID '<placeholder>' with state 'published'."
 
@@ -112,14 +116,16 @@ Feature:
     And I press "Apply"
     Then I should see the link "The Panama Papers"
     And I should see the link "The Ultimate Debate"
+    And I should see the link "Solution 1"
 
     # Unarchive action.
     Given I select the "The Panama Papers" row
     And I select the "The Ultimate Debate" row
+    And I select the "Solution 1" row
     And I select "Unarchive content" from "Action"
     And I press "Apply to selected items"
     And I wait for the batch process to finish
-    Then I should see the text "Proceeded updates to 2 entities"
+    Then I should see the text "Proceeded updates to 3 entities"
 
     # Check published state.
     Given I select "published" from "State"

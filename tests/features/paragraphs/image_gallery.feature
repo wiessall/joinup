@@ -18,7 +18,7 @@ Feature:
 
     When I am logged in as a "facilitator" of the "Paragraphs IG collection" collection
     And I go to the edit form of the "Image gallery paragraph page" "custom page"
-    And I click "Choose component"
+    And I add a component to section 1
     And a modal should open
     And I click "Image gallery"
 

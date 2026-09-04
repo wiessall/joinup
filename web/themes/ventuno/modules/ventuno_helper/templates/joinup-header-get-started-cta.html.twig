@@ -1,0 +1,15 @@
+{#
+/**
+ * @file
+ * Default theme implementation for the "Get started" call to action.
+ *
+ * Available variables:
+ * - url: The CAS login URL carrying the redirect destination.
+ */
+#}
+<a class="get-started__cta fw-bold" href="{{ url }}" tabindex="0">
+  {{ 'Create an account'|t }}
+  <svg class="bi icon--s ms-2">
+    <use xlink:href="{{ bcl_icon_path }}#arrow-right"></use>
+  </svg>
+</a>

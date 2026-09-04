@@ -16,6 +16,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\ShareableContentInterface;
+use Drupal\joinup_search\SearchIndexCommitter;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleManagerInterface;
@@ -44,6 +45,7 @@ abstract class ShareFormBase extends FormBase {
     protected readonly AccountInterface $currentUser,
     protected readonly EntityTypeBundleInfoInterface $bundleInfo,
     protected readonly CacheTagsInvalidatorInterface $invalidator,
+    protected readonly SearchIndexCommitter $searchIndexCommitter,
   ) {}
 
   /**

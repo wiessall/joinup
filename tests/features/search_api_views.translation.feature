@@ -62,9 +62,7 @@ Feature: Search API views show translated content with english as fallback
     Then I should see a valid RSS feed
     And the RSS feed items should be:
       | title                                 |
-      # @todo Remove "English Solution" once the re-indexing fix is removed,
-      # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-11121
-      | Solution: English Solution  |
+      | Solution: English Solution            |
       | Solution: BG Solution                 |
       | Custom page: BG custom page           |
 
@@ -98,15 +96,20 @@ Feature: Search API views show translated content with english as fallback
 
   Scenario: Test "solutions" view shows translated content
     Given I am logged in as an "developer"
+    And solution multilingual content:
+      | title              | collection      | topic      | langcode | default_translation |
+      | BG-native solution | Test collection | Demography | bg       | 1                   |
     Then I visit the solution overview page
     Then I should see the following lines of text:
       | English Solution    |
       | Bilingual Solution  |
+      | BG-native solution  |
     And I should not see the text "BG Solution"
     When I click "Bulgarian"
     Then I should see the following lines of text:
       | English Solution    |
       | BG Solution         |
+      | BG-native solution  |
     And I should not see the text "Bilingual Solution"
 
   Scenario: Test "content_overview" view shows translated content
@@ -116,7 +119,7 @@ Feature: Search API views show translated content with english as fallback
       | Test news        | Test collection | en       | 1                    |
       | Bilingual news   | Test collection | en       | 1                    |
       | BG news          | ~~~             | bg       | 0                    |
-    Given I visit the content overview page
+    Given I visit the advanced search page
     Then I should see the following lines of text:
       | Test news       |
       | Bilingual news  |

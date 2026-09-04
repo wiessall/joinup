@@ -1,0 +1,66 @@
+_meta:
+  version: '1.0'
+  entity_type: node
+  uuid: 1f5c9d2e-6a47-4b83-9c1e-2d70b4a85e39
+  bundle: news
+  default_langcode: en
+  depends:
+    b7af08b1-c271-4d58-a5a7-ec3db533c3d2: taxonomy_term
+    df34e3a2-207b-4910-a804-344931654e20: node
+default:
+  status:
+    -
+      value: true
+  title:
+    -
+      value: 'Consultation on the 2019 interoperability action plan has closed'
+  created:
+    -
+      value: 1681912500
+  changed:
+    -
+      value: 1682156700
+  published_at:
+    -
+      value: 1681912500
+  abstract:
+    -
+      value: 'The public consultation that fed into the 2019 interoperability action plan is no longer accepting contributions.'
+  field_news_headline:
+    -
+      value: 'Consultation closed after collecting contributions from twenty-two member states'
+  field_paragraphs_body:
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 4b6d0f38-52ac-4e71-8f39-c1a7d95e2604
+          bundle: simple_paragraph
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1681912500
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  parent_uuid: null
+                  region: null
+          field_body:
+            -
+              value: 'The outcome of the consultation is summarised in the action plan itself. This news item is kept for reference only.'
+              format: content_editor
+  field_state:
+    -
+      value: archived
+  field_topic:
+    -
+      entity: b7af08b1-c271-4d58-a5a7-ec3db533c3d2
+  og_audience:
+    -
+      entity: df34e3a2-207b-4910-a804-344931654e20

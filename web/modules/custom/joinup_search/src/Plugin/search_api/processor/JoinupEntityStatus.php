@@ -6,8 +6,6 @@ namespace Drupal\joinup_search\Plugin\search_api\processor;
 
 use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -16,7 +14,6 @@ use Drupal\node\NodeInterface;
 use Drupal\search_api\Attribute\SearchApiProcessor;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Item\ItemInterface;
-use Drupal\search_api\Plugin\PluginFormTrait;
 use Drupal\search_api\Processor\ProcessorPluginBase;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -32,9 +29,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
     "alter_items" => 0,
   ],
 )]
-class JoinupEntityStatus extends ProcessorPluginBase implements PluginFormInterface {
-
-  use PluginFormTrait;
+class JoinupEntityStatus extends ProcessorPluginBase {
 
   /**
    * The entity type manager.
@@ -82,34 +77,10 @@ class JoinupEntityStatus extends ProcessorPluginBase implements PluginFormInterf
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration(): array {
-    return [
-      'inverse' => FALSE,
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
-    $form['inverse'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Inverse'),
-      '#description' => $this->t('If checked, unpublished entities will be indexed instead.'),
-      '#default_value' => $this->configuration['inverse'],
-    ];
-
-    return $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function alterIndexedItems(array &$items): void {
     foreach ($items as $item_id => $item) {
       assert($item instanceof ItemInterface);
       $object = $item->getOriginalObject()->getValue();
-      $inverse = $this->getConfiguration()['inverse'];
       $enabled = TRUE;
       if ($object instanceof NodeInterface && $object instanceof GroupContentInterface) {
         $enabled = $object->isPublished();
@@ -136,8 +107,10 @@ class JoinupEntityStatus extends ProcessorPluginBase implements PluginFormInterf
       elseif ($object instanceof GroupInterface) {
         $enabled = $object->isPublished();
       }
+      elseif ($object instanceof EntityPublishedInterface) {
+        $enabled = $object->isPublished();
+      }
 
-      $enabled = $inverse ? !$enabled : $enabled;
       if (!$enabled) {
         unset($items[$item_id]);
       }

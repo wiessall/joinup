@@ -57,7 +57,7 @@ class CatalogueSourceProcessor implements ContainerInjectionInterface {
     return [
       'label' => (string) $definition['label'],
       'type' => $definition['type']?->getLabel(),
-      'country' => $list[$definition['country']] ?? NULL,
+      'country' => !empty($definition['country']) ? ($list[$definition['country']] ?? NULL) : NULL,
       'description' => [
         'data' => [
           '#type' => 'processed_text',

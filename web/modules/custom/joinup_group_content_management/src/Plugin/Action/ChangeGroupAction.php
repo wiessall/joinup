@@ -58,11 +58,6 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
    */
   protected array $message;
 
-  /**
-   * Node storage static cache.
-   */
-  protected NodeStorageInterface $nodeStorage;
-
   public function __construct(
     array $configuration,
     string $plugin_id,
@@ -363,10 +358,9 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
    *   The node storage.
    */
   protected function getNodeStorage(): NodeStorageInterface {
-    if (!isset($this->nodeStorage)) {
-      $this->nodeStorage = $this->entityTypeManager->getStorage('node');
-    }
-    return $this->nodeStorage;
+    $storage = $this->entityTypeManager->getStorage('node');
+    assert($storage instanceof NodeStorageInterface);
+    return $storage;
   }
 
 }

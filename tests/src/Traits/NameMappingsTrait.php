@@ -208,6 +208,13 @@ trait NameMappingsTrait {
         'published at' => 'published_at',
         'unpinned in' => 'unpinned_in_collection',
       ],
+      'certificate' => [
+        'title' => 'title',
+        'author' => 'uid',
+        'course' => 'course',
+        'certificate' => 'certificate',
+        'issuing date' => 'issuing_date',
+      ],
       'shared' => [
         'collection' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,
         'shared on' => 'field_shared_in',
@@ -351,6 +358,7 @@ trait NameMappingsTrait {
     return [
       'announcement' => 'message',
       'assessment' => 'assessment',
+      'certificate' => 'node',
       'collection' => 'node',
       'contact information' => 'node',
       'contact_information' => 'node',
@@ -405,6 +413,7 @@ trait NameMappingsTrait {
       'spdx licence' => 'spdx_licence',
       'solution' => 'solution',
       'keyword' => 'tags',
+      'user' => 'user',
     ];
   }
 

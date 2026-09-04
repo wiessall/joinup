@@ -13,10 +13,10 @@ dependencies:
     - filter.format.plain_text_glossary
     - filter.format.simple_html
     - filter.format.text_html
-    - filter.format.webform_default
     - media.type.file
     - media.type.image
     - media.type.remote_video
+    - node.type.certificate
     - node.type.collection
     - node.type.contact_information
     - node.type.custom_page
@@ -75,6 +75,7 @@ permissions:
   - 'cancel account'
   - 'cancel own vote'
   - 'create assessment report'
+  - 'create certificate content'
   - 'create collection content'
   - 'create contact_information content'
   - 'create content for any_user option'
@@ -108,6 +109,7 @@ permissions:
   - 'create polls'
   - 'create remote_video media'
   - 'create terms in tags'
+  - 'delete own certificate content'
   - 'delete own comments'
   - 'delete own draft assessment report'
   - 'delete paragraph content accordion'
@@ -134,6 +136,7 @@ permissions:
   - 'delete paragraph content video'
   - 'edit any polls'
   - 'edit behavior plugin settings'
+  - 'edit own certificate content'
   - 'edit own comments'
   - 'edit own contact_information content'
   - 'edit own custom_page content'
@@ -212,7 +215,6 @@ permissions:
   - 'use text format plain_text_glossary'
   - 'use text format simple_html'
   - 'use text format text_html'
-  - 'use text format webform_default'
   - 'view bookmark'
   - 'view collection_settings meta-entity'
   - 'view compatibility documents'

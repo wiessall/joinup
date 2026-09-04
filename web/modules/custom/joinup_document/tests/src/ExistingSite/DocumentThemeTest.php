@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_document\ExistingSite;
 
+use Drupal\joinup_search\SearchIndexCommitter;
 use Drupal\Tests\joinup_core\Traits\TestFileTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 
@@ -33,11 +34,10 @@ class DocumentThemeTest extends JoinupExistingSiteTestBase {
       'field_state' => 'published',
     ]);
 
-    /** @var \Drupal\Core\DestructableInterface $post_request_indexing */
-    $post_request_indexing = \Drupal::service('search_api.post_request_indexing');
+    $search_index_committer = \Drupal::service(SearchIndexCommitter::class);
     $assert = $this->assertSession();
 
-    $post_request_indexing->destruct();
+    $search_index_committer->commitPendingChanges();
     $this->drupalGet($collection->toUrl());
     $assert->pageTextContains('Document title');
     $assert->pageTextNotContains('Hello document body');
@@ -46,7 +46,7 @@ class DocumentThemeTest extends JoinupExistingSiteTestBase {
     $file->save();
     $document->set('field_document_logo', $file)->save();
 
-    $post_request_indexing->destruct();
+    $search_index_committer->commitPendingChanges();
     $this->getSession()->reload();
 
     $assert->pageTextContains('Document title');

@@ -124,3 +124,37 @@ Feature: Assessment report email notifications
       | recipient | Regular User                               |
       | subject   | Your assessment report needs updates       |
       | body      | Please add more details to the assessment. |
+
+  Scenario: Members subscribed to assessment reports are notified without group announcements
+    # Assessment reports used to reach subscribers through the group content
+    # digest, back when they were nodes. The digest only references nodes, so
+    # since they became `assessment` entities the "Assessment reports"
+    # subscription is served by this notification instead. Both members here
+    # have group announcements switched off, so only the content subscription
+    # can put mail in the queue.
+    Given the following users:
+      | Username              | E-mail                    | First name | Family name |
+      | Bundle Subscriber     | bundlesub@example.com     | Bundle     | Subscriber  |
+      | Bundle Non-subscriber | bundlenonsub@example.com  | Bundle     | Nonsub      |
+    And the following collection user memberships:
+      | collection                         | user                  |
+      | Interoperability assessments space | Bundle Subscriber     |
+      | Interoperability assessments space | Bundle Non-subscriber |
+    And the "Bundle Subscriber" user unsubscribes from "Interoperability assessments space" collection announcements
+    And the "Bundle Non-subscriber" user unsubscribes from "Interoperability assessments space" collection announcements
+    And the following collection content subscriptions:
+      | collection                         | user              | subscriptions |
+      | Interoperability assessments space | Bundle Subscriber | report        |
+    And report assessments:
+      | name                       | state     | provider          | uid                  |
+      | Bundle Subscription Report | published | Test Organization | Assessment Moderator |
+    And I mark all emails as read
+
+    When I run the "assessment_report_notify_members" queue worker
+    Then 1 e-mail should have been sent
+    And the following email should have been sent:
+      | recipient | Bundle Subscriber                          |
+      | subject   | IOPEU Assessment report has been published |
+    And the following email should not have been sent:
+      | recipient | Bundle Non-subscriber                      |
+      | subject   | IOPEU Assessment report has been published |

@@ -11,6 +11,10 @@ default:
   name:
     -
       value: ptGov
+  description:
+    -
+      value: '<p>Public administrations in Portugal share reusable building blocks, from authentication to document exchange, so that services can be assembled rather than rebuilt for every ministry and municipality.</p><p>The topic collects the specifications, the open source components and the guidance published by the participating bodies, together with the assessments carried out before each release is recommended for wider reuse.</p><p>Contributions are reviewed by the community, and every solution keeps a record of the interoperability requirements it satisfies so that reuse decisions can be traced afterwards.</p>'
+      format: content_editor
   topics_paragraph:
     -
       entity:

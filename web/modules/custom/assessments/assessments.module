@@ -18,9 +18,11 @@ use Drupal\assessments\Event\AssessmentReportEvent;
 use Drupal\assessments\NotificationEvents;
 use Drupal\assessments\Plugin\EntityBrowser\Widget\OgAwareEntityForm;
 use Drupal\assessments\Plugin\Field\FieldWidget\ProvidedByWidget;
+use Drupal\assessments\Render\LayoutParagraphsBuilderAlter;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -28,6 +30,10 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
+use Drupal\og\Og;
+use Drupal\search_api\Query\QueryInterface;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_theme().
@@ -115,6 +121,19 @@ function assessments_form_layout_paragraphs_component_form_alter(array &$form, F
 }
 
 /**
+ * Implements hook_element_info_alter().
+ */
+function assessments_element_info_alter(array &$info): void {
+  if (isset($info['layout_paragraphs_builder'])) {
+    // Runs after the module's own pre-render callback has built the components.
+    $info['layout_paragraphs_builder']['#pre_render'][] = [
+      LayoutParagraphsBuilderAlter::class,
+      'removeRegionInsertButtons',
+    ];
+  }
+}
+
+/**
  * Implements hook_preprocess_HOOK().
  */
 function assessments_preprocess_layout_paragraphs_insert_component_btn(&$variables): void {
@@ -127,17 +146,6 @@ function assessments_preprocess_layout_paragraphs_insert_component_btn(&$variabl
   }
 
   $variables['title'] = t('New binding requirement');
-  // Hide component selection buttons inside layout regions for
-  // binding_requirement field. Only hide if this is inside a region
-  // (has parent_uuid AND region parameters). Keep the root-level
-  // "Add section" buttons visible.
-  $queryParams = $variables['url']->getOption('query');
-  if (
-    isset($queryParams['parent_uuid']) &&
-    isset($queryParams['region'])
-  ) {
-    $variables['attributes']['class'][] = 'visually-hidden';
-  }
 }
 
 /**
@@ -308,7 +316,7 @@ function _assessments_can_moderate(EntityInterface $entity, AccountInterface $ac
 /**
  * Implements hook_entity_operation().
  */
-function assessments_entity_operation(EntityInterface $entity): array {
+function assessments_entity_operation(EntityInterface $entity, CacheableMetadata $cacheability): array {
   $operations = [];
 
   if (!$entity instanceof AssessmentReport) {
@@ -316,6 +324,7 @@ function assessments_entity_operation(EntityInterface $entity): array {
   }
 
   $access = _assessments_can_moderate($entity, \Drupal::service('current_user')->getAccount());
+  $cacheability->addCacheableDependency($access);
 
   // Only add the operation if access is explicitly allowed.
   if (!$access->isAllowed()) {
@@ -550,6 +559,26 @@ function assessments_query_explore_block_solution_alter(AlterableInterface $quer
 }
 
 /**
+ * Implements hook_search_api_query_alter().
+ */
+function assessments_search_api_query_alter(QueryInterface $query): void {
+  if ($query->getIndex()->id() !== 'published') {
+    return;
+  }
+
+  $view = $query->getOption('search_api_view');
+  if ($view instanceof ViewExecutable && $view->id() === 'assessment_solutions_browser') {
+    return;
+  }
+
+  $collector = \Drupal::service('entity.repository')->loadEntityByUuid('node', AssessmentInterface::SOLUTION_COLLECTOR);
+  if ($collector) {
+    $query->addCondition('entity_groups', $collector->id(), '<>');
+    $query->addCondition('nid', $collector->id(), '<>');
+  }
+}
+
+/**
  * Implements hook_ajax_render_alter().
  */
 function assessments_ajax_render_alter(array &$commands): void {
@@ -558,4 +587,51 @@ function assessments_ajax_render_alter(array &$commands): void {
       $command['dialogOptions']['draggable'] = FALSE;
     }
   }
+}
+
+/**
+ * Implements hook_entity_insert().
+ *
+ * Overrides the subscriptions that collection_node_insert() granted to the
+ * collection owner, keeping the assessment report subscription only on the
+ * assessments group.
+ *
+ * This deliberately implements hook_entity_insert() rather than
+ * hook_node_insert(): collection_module_implements_alter() forces the
+ * 'collection' implementation of hook_node_insert() to run last, and core
+ * invokes every hook_node_insert() implementation before any
+ * hook_entity_insert() one. Implementing hook_node_insert() here would run
+ * before the membership exists.
+ *
+ * @see collection_node_insert()
+ * @see \Drupal\Core\Entity\EntityStorageBase::invokeHook()
+ */
+function assessments_entity_insert(EntityInterface $entity): void {
+  if ($entity->getEntityTypeId() !== 'node' || $entity->bundle() !== 'collection') {
+    return;
+  }
+
+  // The membership only exists when the collection was proposed by a real
+  // user. It is absent when the entity was created by a batch process or by
+  // some importing, in which case there is nothing to override.
+  if (empty($entity->getOwner()) || $entity->getOwner()->isAnonymous()) {
+    return;
+  }
+
+  $membership = Og::getMembership($entity, $entity->getOwner());
+  if (!$membership) {
+    return;
+  }
+
+  $subscriptionBundles = JoinupSubscriptionsHelper::provideDataForField('collection');
+  // Remove the assessment report subscription for all collections, except the
+  // assessments group.
+  if ($entity->uuid() !== AssessmentInterface::GROUP_UUID) {
+    $subscriptionBundles = array_values(array_filter(
+      $subscriptionBundles,
+      fn(array $bundle): bool => $bundle['entity_type'] !== 'assessment' || $bundle['bundle'] !== 'report',
+    ));
+  }
+
+  $membership->set('subscription_bundles', $subscriptionBundles)->save();
 }
