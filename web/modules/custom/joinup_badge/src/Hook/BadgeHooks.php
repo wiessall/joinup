@@ -23,8 +23,10 @@ use Drupal\joinup_badge\Entity\Certificate;
 use Drupal\joinup_badge\Entity\CertificateInterface;
 use Drupal\joinup_badge\Plugin\Field\FieldType\BadgeFieldItemList;
 use Drupal\joinup_search\SearchIndexCommitter;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgMembershipInterface;
+use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
 use Drush\Commands\AutowireTrait;
 
@@ -223,6 +225,34 @@ class BadgeHooks implements DestructableInterface {
       foreach ($entity->get('certificate')->referencedEntities() as $file) {
         $file->delete();
       }
+    }
+    // Check, if user has some active certificates. If not, remove badge.
+    $uid = $entity->get('uid')->target_id;
+    $user = User::load($uid);
+    if (empty($this->getUserCertificates($user, '1'))) {
+      $this->badgeService->revoke('certificate', $user);
+    }
+
+  }
+
+  /**
+   * Implements hook_ENTITY_TYPE_delete() for solution (course) entities.
+   */
+  #[Hook('entity_delete')]
+  public function deleteCertificatesByCourse(EntityInterface $entity): void {
+    if (!$entity instanceof SolutionInterface) {
+      return;
+    }
+    $storage = $this->entityTypeManager->getStorage('node');
+
+    $nids = $storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'certificate')
+      ->condition('course', $entity->id())
+      ->execute();
+
+    if ($nids) {
+      $storage->delete($storage->loadMultiple($nids));
     }
   }
 

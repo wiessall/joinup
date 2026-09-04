@@ -45,6 +45,7 @@ Feature: User certificates
     And I attach the file "certificate_1.pdf" to "files[certificates_form_0_certificate_0]"
     And I press "Create certificate"
     And I press "Save"
+    Then break
     Then I go to the profile of "Sara the User"
     And I should see the link "1 Certificate"
     Then I should see the following tiles in the correct order:
@@ -164,3 +165,23 @@ Feature: User certificates
     And I press "Save"
     And I go to "/admin/content/files"
     Then I should not see the link "certificate_1.pdf"
+
+  @javascript
+  Scenario: Certificate and badge is deleted when course is deleted
+    Given I am logged in as a user with the "developer" role
+    And I go to the edit form of the "Sara the User" user
+    And I press the "Add new certificate" button
+    And I type "Archived IOPEU" in the Course autocomplete field
+    And I pick "Archived IOPEU Solution" from the Course autocomplete suggestions
+    And I attach the file "certificate_1.pdf" to "files[certificates_form_0_certificate_0]"
+    And I press "Create certificate"
+    And I press "Save"
+    Then I go to the profile of "Sara the User"
+    And I should see the link "1 Certificate"
+    And user "Sara the User" should have the "certificate" badge
+    Then I go to the edit form of the "Archived IOPEU Solution" solution
+    And I click "Delete"
+    And I press "Delete" in the "Modal buttons" region
+    Then I go to the profile of "Sara the User"
+    And I should not see the link "1 Certificate"
+    And user "Sara the User" should not have the "certificate" badge
