@@ -79,6 +79,7 @@ class BadgeHooks implements DestructableInterface {
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly TimeInterface $time,
     protected readonly FileUrlGeneratorInterface $fileUrlGenerator,
+    protected readonly SearchIndexCommitter $searchIndexCommitter,
   ) {}
 
   /**
@@ -186,7 +187,7 @@ class BadgeHooks implements DestructableInterface {
    */
   #[Hook('form_user_form_alter')]
   public function userFormAlter(array &$form, FormStateInterface $formState): void {
-    $form['actions']['submit']['#submit'][] = [static::class, 'commitSearchIndex'];
+    $form['actions']['submit']['#submit'][] = static::class . ':commitSearchIndex';
   }
 
   /**
@@ -197,8 +198,8 @@ class BadgeHooks implements DestructableInterface {
    * @param \Drupal\Core\Form\FormStateInterface $formState
    *   The form state.
    */
-  public static function commitSearchIndex(array &$form, FormStateInterface $formState): void {
-    \Drupal::service(SearchIndexCommitter::class)->commitPendingChanges();
+  public function commitSearchIndex(array &$form, FormStateInterface $formState): void {
+    $this->searchIndexCommitter->commitPendingChanges();
   }
 
   /**
