@@ -51,4 +51,13 @@ $wireframe-opacity: 0.5;
     white-space: nowrap !important;
     border: 0 !important;
   }
+
+  // The iframe swallows clicks, blocking the builder controls. Block clicks
+  // until selected, then let interaction through again once active.
+  .js-lpb-component[data-type="iframe"] iframe {
+    pointer-events: none;
+  }
+  .js-lpb-component[data-type="iframe"][data-active="true"] iframe {
+    pointer-events: auto;
+  }
 }
