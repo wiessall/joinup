@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace Drupal\joinup_tmgmt\Hook;
 
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Hook\Attribute\Hook;
+use Drupal\joinup_tmgmt\ExtractedDataMemo;
 use Drupal\joinup_tmgmt\PathAliasCleaner;
 use Drupal\joinup_tmgmt\Tmgmt\BlockFieldProcessor;
 use Drupal\joinup_tmgmt\Tmgmt\IframeFieldProcessor;
+use Drupal\joinup_tmgmt\Tmgmt\JoinupContentEntitySource;
 use Drupal\joinup_tmgmt\Tmgmt\SocialMediaFieldProcessor;
 use Drupal\tmgmt\JobItemInterface;
 
@@ -21,7 +24,31 @@ final class JoinupTmgmtHooks {
   public function __construct(
     protected readonly PathAliasCleaner $pathAliasCleaner,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly ExtractedDataMemo $extractedDataMemo,
   ) {}
+
+  /**
+   * Implements hook_tmgmt_source_plugin_info_alter().
+   */
+  #[Hook('tmgmt_source_plugin_info_alter')]
+  public function sourcePluginInfoAlter(array &$definitions): void {
+    if (isset($definitions['content'])) {
+      $definitions['content']['class'] = JoinupContentEntitySource::class;
+    }
+  }
+
+  /**
+   * Implements hook_entity_presave().
+   *
+   * Implements hook_entity_delete().
+   */
+  #[Hook('entity_presave')]
+  #[Hook('entity_delete')]
+  public function forgetExtractedData(EntityInterface $entity): void {
+    if ($entity instanceof ContentEntityInterface) {
+      $this->extractedDataMemo->forget($entity);
+    }
+  }
 
   /**
    * Implements hook_field_info_alter().

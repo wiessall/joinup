@@ -1,6 +1,9 @@
 services:
-  joinup_tmgmt.path_alias_cleaner:
-    class: Drupal\joinup_tmgmt\PathAliasCleaner
-    arguments:
-      - '@pathauto.alias_cleaner'
-  Drupal\joinup_tmgmt\PathAliasCleaner: '@joinup_tmgmt.path_alias_cleaner'
+
+  _defaults:
+    autoconfigure: true
+    autowire: true
+
+  Drupal\joinup_tmgmt\ExtractedDataMemo: {}
+
+  Drupal\joinup_tmgmt\PathAliasCleaner: {}
