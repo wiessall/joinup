@@ -72,14 +72,9 @@ function joinup_front_page_preprocess_node(array &$variables): void {
       '#type' => 'link',
       // The hidden half names the content, so the purpose of the link survives
       // being read out of context by a screen reader.
-      '#title' => [
-        '#type' => 'inline_template',
-        '#template' => '{{ text }}<span class="visually-hidden"> {{ context }}</span>',
-        '#context' => [
-          'text' => t('See comment'),
-          'context' => t('on @title', ['@title' => $variables['node']->label()]),
-        ],
-      ],
+      '#title' => t('See comment<span class="visually-hidden"> on @title</span>', [
+        '@title' => $variables['node']->label(),
+      ]),
       '#url' => $comment->permalink(),
       '#attributes' => [
         'class' => ['read-more', 'btn', 'btn-secondary'],
