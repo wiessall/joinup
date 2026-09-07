@@ -1930,7 +1930,7 @@ class JoinupContext extends RawDrupalContext {
    * Table format:
    * @code
    * | current title            | title            | body            | log message          | revision date |
-   * | <the current node title> | Revisioned title | Revisioned body | Revision log message | Rrvision date |
+   * | <the current node title> | Revisioned title | Revisioned body | Revision log message | Revision date |
    * @endcode
    *
    * @param string $bundle
