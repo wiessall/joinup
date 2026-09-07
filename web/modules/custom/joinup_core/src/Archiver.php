@@ -36,7 +36,7 @@ class Archiver {
 
   const METHODS_ALLOWED = [
     'doArchiveGroupsWithFewMembers',
-    'doArchiveCollectionsWithoutSolutions' .
+    'doArchiveCollectionsWithoutSolutions' ,
     'doArchivePotentiallyOutdatedContent',
     'doArchiveSolutionsWithoutReleaseOrDistro',
     'doArchiveGroupsWithoutContent',
@@ -222,12 +222,6 @@ class Archiver {
       return FALSE;
     }
 
-    $storage = $this->entityTypeManager->getStorage($entity->getEntityTypeId());
-    // Load the published version of the entity if the entity is published.
-    if (!$entity->isPublished()) {
-      $entity = $storage->load($entity->id()) ?? $entity;
-    }
-
     // Current user cannot change the state to "archived".
     $allowedTransitions = $entity->getWorkflow()
       ->getAllowedTransitions($entity->getWorkflowState(), $entity);
@@ -269,13 +263,11 @@ class Archiver {
    *
    * @param string $csvPath
    *   Path to the CSV file.
-   * @param bool $filter
-   *   Whether the exclusion should be applied or not.
    *
    * @return int[]
    *   The integer values of the given CSV's first column.
    */
-  public static function getIdsFromCsvColumn(string $csvPath, bool $filter = TRUE): array {
+  public static function getIdsFromCsvColumn(string $csvPath): array {
     $ids = [];
     $csvHandle = fopen($csvPath, 'r');
     if ($csvHandle) {
@@ -406,6 +398,37 @@ class Archiver {
     }
     finally {
       $this->switchBack();
+    }
+  }
+
+  /**
+   * Returns all gathered stats.
+   *
+   * @return array
+   *   The stats.
+   */
+  public function getStats(): array {
+    $store = $this->getQueueStatsStore();
+    $allStats = [];
+    foreach (self::METHODS_ALLOWED as $method) {
+      $allStats[$method] = $store->get($method, [
+        'total' => 0,
+        'archived' => 0,
+      ]);
+    }
+    return $allStats;
+  }
+
+  /**
+   * Logs all gathered stats.
+   */
+  public function logStats(): void {
+    foreach ($this->getStats() as $method => $stats) {
+      $this->logger->info('Method @method: @total total, @archived archived', [
+        '@method' => $method,
+        '@total' => $stats['total'],
+        '@archived' => $stats['archived'],
+      ]);
     }
   }
 

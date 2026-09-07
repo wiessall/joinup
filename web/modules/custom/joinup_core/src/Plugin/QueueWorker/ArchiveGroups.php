@@ -6,6 +6,7 @@ namespace Drupal\joinup_core\Plugin\QueueWorker;
 
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\Attribute\QueueWorker;
+use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_core\Archiver;
@@ -26,6 +27,7 @@ final class ArchiveGroups extends QueueWorkerBase implements ContainerFactoryPlu
     string $plugin_id,
     mixed $plugin_definition,
     protected Archiver $archiver,
+    protected QueueFactory $queueFactory,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -44,7 +46,7 @@ final class ArchiveGroups extends QueueWorkerBase implements ContainerFactoryPlu
       $plugin_id,
       $plugin_definition,
       $container->get(Archiver::class),
-
+      $container->get('queue'),
     );
   }
 
@@ -53,6 +55,9 @@ final class ArchiveGroups extends QueueWorkerBase implements ContainerFactoryPlu
    */
   public function processItem($data): void {
     $this->archiver->callMethodSafely($data['group_id'], $data['method']);
+    if ($this->queueFactory->get('joinup_core_archive_groups')->numberOfItems() === 0) {
+      $this->archiver->logStats();
+    }
   }
 
 }

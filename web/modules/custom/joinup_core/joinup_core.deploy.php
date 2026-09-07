@@ -236,8 +236,6 @@ function joinup_core_deploy_201605(): void {
  * Archives solutions having less than 10 members.
  */
 function joinup_core_deploy_201606(): string {
-  $archiver = \Drupal::service(Archiver::class);
-  assert($archiver instanceof Archiver);
   $queue = \Drupal::queue('joinup_core_archive_groups');
   $groupIds = Archiver::getIdsFromCsvColumn(
     dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID Collections & Solutions with less than 10 members.csv',
@@ -262,8 +260,6 @@ function joinup_core_deploy_201606(): string {
  * Archives content which wasn't updated in the last 3 years.
  */
 function joinup_core_deploy_201607(): string {
-  $archiver = \Drupal::service(Archiver::class);
-  assert($archiver instanceof Archiver);
   $queue = \Drupal::queue('joinup_core_archive_groups');
   $groupIds = Archiver::getIdsFromCsvColumn(
     dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID Last update - 3 years ago.csv',
@@ -288,8 +284,6 @@ function joinup_core_deploy_201607(): string {
  * Archives solutions which have no releases or distributions.
  */
 function joinup_core_deploy_201608(): string {
-  $archiver = \Drupal::service(Archiver::class);
-  assert($archiver instanceof Archiver);
   $queue = \Drupal::queue('joinup_core_archive_groups');
   $groupIds = Archiver::getIdsFromCsvColumn(
     dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID No releases or distributions.csv',
@@ -314,8 +308,6 @@ function joinup_core_deploy_201608(): string {
  * Archives groups without group content.
  */
 function joinup_core_deploy_201609(): string {
-  $archiver = \Drupal::service(Archiver::class);
-  assert($archiver instanceof Archiver);
   $queue = \Drupal::queue('joinup_core_archive_groups');
   $groupIds = Archiver::getIdsFromCsvColumn(
     dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID Solutions & Collections with no content items.csv',
@@ -339,9 +331,7 @@ function joinup_core_deploy_201609(): string {
 /**
  * Archives collections which have no solutions.
  */
-function joinup_core_deploy_201610(array &$sandbox): string {
-  $archiver = \Drupal::service(Archiver::class);
-  assert($archiver instanceof Archiver);
+function joinup_core_deploy_201610(): string {
   $queue = \Drupal::queue('joinup_core_archive_groups');
   $groupIds = Archiver::getIdsFromCsvColumn(
     dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID Collections with no solutions.csv',
