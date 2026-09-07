@@ -1,5 +1,4 @@
 diff --git a/sources/content/src/Plugin/tmgmt/Source/ContentEntitySource.php b/sources/content/src/Plugin/tmgmt/Source/ContentEntitySource.php
-index 8bae8dc58a2d035280ea618ac2955f9b8cd5d734..05cd0c1a11cb46464c3a6583f12daaab7b75a060 100644
 --- a/sources/content/src/Plugin/tmgmt/Source/ContentEntitySource.php
 +++ b/sources/content/src/Plugin/tmgmt/Source/ContentEntitySource.php
 @@ -51,6 +51,24 @@ class ContentEntitySource extends SourcePluginBase implements SourcePreviewInter
@@ -42,10 +41,9 @@ index 8bae8dc58a2d035280ea618ac2955f9b8cd5d734..05cd0c1a11cb46464c3a6583f12daaab
          '%id' => $job_item->getItemId(),
 diff --git a/sources/content/tests/src/Kernel/ConcurrentAcceptTest.php b/sources/content/tests/src/Kernel/ConcurrentAcceptTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..167da6d3fc8ad2cba5a50cfce175173610da257e
 --- /dev/null
 +++ b/sources/content/tests/src/Kernel/ConcurrentAcceptTest.php
-@@ -0,0 +1,213 @@
+@@ -0,0 +1,233 @@
 +<?php
 +
 +declare(strict_types=1);
@@ -162,6 +160,26 @@ index 0000000000000000000000000000000000000000..167da6d3fc8ad2cba5a50cfce1751736
 +  }
 +
 +  /**
++   * Tests that accepting keeps waiting when another waiter takes the lock.
++   *
++   * A single retry leaves every waiter but the winner refused.
++   */
++  public function testAcceptWaitsAgainWhenAnotherWaiterWins(): void {
++    $entity = EntityTestMul::create(['langcode' => 'en', 'uid' => 1, 'name' => 'Llama']);
++    $entity->save();
++    $job_item = $this->createTranslatedJobItem($entity, 'de');
++
++    $lock = $this->createMock(LockBackendInterface::class);
++    $lock->method('acquire')->willReturn(FALSE, FALSE, FALSE, TRUE);
++    $lock->method('wait')->willReturn(FALSE);
++    $this->container->set('lock', $lock);
++
++    $this->assertTrue($job_item->acceptTranslation());
++    $this->assertTrue($job_item->isAccepted());
++    $this->assertEquals(['en', 'de'], array_keys($this->loadStored($entity->id())->getTranslationLanguages()));
++  }
++
++  /**
 +   * Tests that a nested job item is accepted under the held source lock.
 +   */
 +  public function testNestedAcceptSharesTheSourceLock(): void {
@@ -260,7 +278,6 @@ index 0000000000000000000000000000000000000000..167da6d3fc8ad2cba5a50cfce1751736
 +
 +}
 diff --git a/src/Entity/JobItem.php b/src/Entity/JobItem.php
-index 9a5fc4bd74d7157e295bb0f642fe4481d7c163e2..55aa73d020ee6c7dab66dd79bfd6312db8763945 100644
 --- a/src/Entity/JobItem.php
 +++ b/src/Entity/JobItem.php
 @@ -87,6 +87,29 @@ use Drupal\Core\Render\Element;
@@ -293,7 +310,7 @@ index 9a5fc4bd74d7157e295bb0f642fe4481d7c163e2..55aa73d020ee6c7dab66dd79bfd6312d
    /**
     * Holds the unserialized source data.
     *
-@@ -932,17 +955,95 @@ class JobItem extends ContentEntityBase implements JobItemInterface {
+@@ -932,17 +955,93 @@ class JobItem extends ContentEntityBase implements JobItemInterface {
        return FALSE;
      }
  
@@ -342,8 +359,8 @@ index 9a5fc4bd74d7157e295bb0f642fe4481d7c163e2..55aa73d020ee6c7dab66dd79bfd6312d
 +   *   The array tracks the nesting depth, which no core lock backend does.
 +   *
 +   * @return bool
-+   *   TRUE if the lock is held, FALSE if another process holds it and did not
-+   *   release it within SOURCE_LOCK_WAIT seconds.
++   *   TRUE if the lock is held, FALSE if another process still held it when
++   *   the wait ran out.
 +   */
 +  protected function acquireSourceLock(): bool {
 +    $name = $this->getSourceLockName();
@@ -354,10 +371,8 @@ index 9a5fc4bd74d7157e295bb0f642fe4481d7c163e2..55aa73d020ee6c7dab66dd79bfd6312d
 +    }
 +
 +    $lock = \Drupal::lock();
-+    if (!$lock->acquire($name, static::SOURCE_LOCK_TIMEOUT)) {
-+      $lock->wait($name, static::SOURCE_LOCK_WAIT);
-+
-+      if (!$lock->acquire($name, static::SOURCE_LOCK_TIMEOUT)) {
++    while (!$lock->acquire($name, static::SOURCE_LOCK_TIMEOUT)) {
++      if ($lock->wait($name, static::SOURCE_LOCK_WAIT)) {
 +        return FALSE;
 +      }
 +    }
@@ -395,7 +410,6 @@ index 9a5fc4bd74d7157e295bb0f642fe4481d7c163e2..55aa73d020ee6c7dab66dd79bfd6312d
     * Applies the configured policy for translations longer than their field.
     *
 diff --git a/src/JobItemInterface.php b/src/JobItemInterface.php
-index 24b9064355f7c028ae1cfbaa9e161e04c03605c3..4730902380e1337bc8d902629866f1b7ce9f2838 100644
 --- a/src/JobItemInterface.php
 +++ b/src/JobItemInterface.php
 @@ -464,6 +464,10 @@ interface JobItemInterface extends ContentEntityInterface {
