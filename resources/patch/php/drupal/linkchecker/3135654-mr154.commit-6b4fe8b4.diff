@@ -1,0 +1,539 @@
+diff --git a/config/schema/linkchecker.schema.yml b/config/schema/linkchecker.schema.yml
+index 3dc25f5e3d576aeeee65ee9155df856d491b31c6..ed7184935eedbb4d8628f91c153c6c58c33a32c9 100644
+--- a/config/schema/linkchecker.schema.yml
++++ b/config/schema/linkchecker.schema.yml
+@@ -108,9 +108,12 @@ field.field.*.*.*.third_party.linkchecker:
+       type: string
+       label: 'Extractor plugin machine name'
+ 
++views.field.linkcheckerlink_page_entity_link:
++  type: views.field.entity_link
++
+ views.field.linkcheckerlink_page_entity_label:
+   type: views.field.field
+   mapping:
+     link_to_entity:
+-      type: integer
++      type: boolean
+       label: 'Link to entity.'
+diff --git a/src/Entity/LinkCheckerLink.php b/src/Entity/LinkCheckerLink.php
+index 90635f72fa0f7185a02f9c62d2bea1a5d391d48d..a72e0f92fa000aca1833ea168202f7330451883e 100644
+--- a/src/Entity/LinkCheckerLink.php
++++ b/src/Entity/LinkCheckerLink.php
+@@ -10,7 +10,9 @@ use Drupal\Core\Entity\EntityTypeInterface;
+ use Drupal\Core\Entity\FieldableEntityInterface;
+ use Drupal\Core\Field\BaseFieldDefinition;
+ use Drupal\Core\StringTranslation\TranslatableMarkup;
++use Drupal\Core\TypedData\TranslatableInterface;
+ use Drupal\linkchecker\LinkCheckerLinkInterface;
++use Drupal\paragraphs\ParagraphInterface;
+ 
+ /**
+  * Defines the linkcheckerlink type entity.
+@@ -180,13 +182,50 @@ class LinkCheckerLink extends ContentEntityBase implements LinkCheckerLinkInterf
+     return $this;
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function getTopMostParentEntity() {
++    if ($this->get('parent_entity_type_id')->isEmpty() || $this->get('parent_entity_id')->isEmpty()) {
++      return NULL;
++    }
++
++    $top_most_parent = $this->getParentEntity();
++
++    if (!$top_most_parent) {
++      return NULL;
++    }
++
++    // Walk up the parent chain for entities with a parent (e.g., paragraphs).
++    while ($top_most_parent instanceof ParagraphInterface) {
++      $parent_entity = $top_most_parent->getParentEntity();
++      if (!$parent_entity) {
++        break;
++      }
++      $top_most_parent = $parent_entity;
++    }
++
++    return $top_most_parent;
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+   public function getParentEntity() {
+     $entity_type_id = $this->get('parent_entity_type_id')->getString();
+     $entity_id = $this->get('parent_entity_id')->getString();
+-    return $this->entityTypeManager()->getStorage($entity_type_id)->load($entity_id);
++    $parent = $this->entityTypeManager()
++      ->getStorage($entity_type_id)
++      ->load($entity_id);
++
++    if ($parent instanceof TranslatableInterface) {
++      $langcode = $this->getParentEntityLangcode();
++      if ($parent->hasTranslation($langcode)) {
++        $parent = $parent->getTranslation($langcode);
++      }
++    }
++
++    return $parent;
+   }
+ 
+   /**
+@@ -195,6 +234,7 @@ class LinkCheckerLink extends ContentEntityBase implements LinkCheckerLinkInterf
+   public function setParentEntity(FieldableEntityInterface $entity) {
+     $this->set('parent_entity_type_id', $entity->getEntityTypeId());
+     $this->set('parent_entity_id', $entity->id());
++    $this->setParentEntityLangcode($entity->language()->getId());
+     return $this;
+   }
+ 
+diff --git a/src/LinkCheckerLinkInterface.php b/src/LinkCheckerLinkInterface.php
+index 2bd966747e1ac7fdf88f217b9e456d44a36147bd..1d21745edf20ecc6cdffc78b8cfc6f0c980425ae 100644
+--- a/src/LinkCheckerLinkInterface.php
++++ b/src/LinkCheckerLinkInterface.php
+@@ -159,11 +159,26 @@ interface LinkCheckerLinkInterface extends EntityPublishedInterface, ContentEnti
+   /**
+    * Gets entity where the link was found.
+    *
++   * Preserves language context with translated entities.
++   *
+    * @return \Drupal\Core\Entity\FieldableEntityInterface
+    *   Entity.
+    */
+   public function getParentEntity();
+ 
++  /**
++   * Gets the top-most entity where the link was found.
++   *
++   * If this link was attached to a Paragraph, then it'll resolve the top-most
++   * parent entity it's attached to (typically a Node).
++   *
++   * Preserves language context with translated entities.
++   *
++   * @return \Drupal\Core\Entity\FieldableEntityInterface|null
++   *   The top-most linked entity.
++   */
++  public function getTopMostParentEntity();
++
+   /**
+    * Sets a entity where the link was found.
+    *
+diff --git a/src/Plugin/views/field/LinkcheckerLinkPageEntityLabel.php b/src/Plugin/views/field/LinkcheckerLinkPageEntityLabel.php
+index 2678f26b61fae38e9cb3c5af17c0e14fcdf3a5c4..395daf56f06e471d30a22099a96cc54b834de2d3 100644
+--- a/src/Plugin/views/field/LinkcheckerLinkPageEntityLabel.php
++++ b/src/Plugin/views/field/LinkcheckerLinkPageEntityLabel.php
+@@ -6,7 +6,6 @@ use Drupal\Core\Entity\EntityInterface;
+ use Drupal\Core\Entity\EntityMalformedException;
+ use Drupal\Core\Entity\Exception\UndefinedLinkTemplateException;
+ use Drupal\Core\Form\FormStateInterface;
+-use Drupal\Core\TypedData\TranslatableInterface;
+ use Drupal\linkchecker\LinkCheckerLinkInterface;
+ use Drupal\views\Plugin\views\field\FieldPluginBase;
+ use Drupal\views\ResultRow;
+@@ -51,49 +50,31 @@ class LinkcheckerLinkPageEntityLabel extends FieldPluginBase {
+   /**
+    * {@inheritdoc}
+    */
+-  public function render(ResultRow $values) {
+-    $linkchecker_link = $this->getEntity($values);
+-
+-    if (!$linkchecker_link instanceof LinkCheckerLinkInterface) {
+-      return '';
+-    }
+-
+-    if (!$linkchecker_link->hasField('parent_entity_type_id')
+-    || $linkchecker_link->get('parent_entity_type_id')->isEmpty()) {
+-      return '';
++  public function getEntity(ResultRow $values) {
++    $entity = parent::getEntity($values);
++    if (!$entity instanceof LinkCheckerLinkInterface) {
++      return NULL;
+     }
+ 
+-    if (!$linkchecker_link->hasField('parent_entity_id')
+-    || $linkchecker_link->get('parent_entity_id')->isEmpty()) {
+-      return '';
+-    }
++    return $entity->getTopMostParentEntity();
++  }
+ 
+-    $linked_entity = $linkchecker_link->getParentEntity();
++  /**
++   * {@inheritdoc}
++   */
++  public function render(ResultRow $values) {
++    $linked_entity = $this->getEntity($values);
+ 
+     if (!$linked_entity instanceof EntityInterface) {
+       return '';
+     }
+ 
+-    if ($linked_entity->getEntityTypeId() === 'paragraph' && $linked_entity->getParentEntity() !== NULL) {
+-      $linked_entity = $linked_entity->getParentEntity();
+-    }
+-
+-    if ($linked_entity instanceof TranslatableInterface) {
+-      $langcode = $linkchecker_link->get('entity_langcode')->value;
+-      if ($linked_entity->hasTranslation($langcode)) {
+-        $linked_entity = $linked_entity->getTranslation($langcode);
+-      }
+-    }
+-
+     if (!empty($this->options['link_to_entity'])) {
+       try {
+         $this->options['alter']['url'] = $linked_entity->toUrl();
+         $this->options['alter']['make_link'] = TRUE;
+       }
+-      catch (UndefinedLinkTemplateException $e) {
+-        $this->options['alter']['make_link'] = FALSE;
+-      }
+-      catch (EntityMalformedException $e) {
++      catch (UndefinedLinkTemplateException | EntityMalformedException $e) {
+         $this->options['alter']['make_link'] = FALSE;
+       }
+     }
+diff --git a/src/Plugin/views/field/LinkcheckerLinkPageEntityLink.php b/src/Plugin/views/field/LinkcheckerLinkPageEntityLink.php
+index 6aa9a087d1a4d0683ea8974a3906017c7f15e7f1..8ad5ba71865d9e71c43bdbe0adbebc538e5b48e1 100644
+--- a/src/Plugin/views/field/LinkcheckerLinkPageEntityLink.php
++++ b/src/Plugin/views/field/LinkcheckerLinkPageEntityLink.php
+@@ -6,7 +6,6 @@ use Drupal\Core\Entity\EntityInterface;
+ use Drupal\Core\Entity\EntityMalformedException;
+ use Drupal\Core\Entity\Exception\UndefinedLinkTemplateException;
+ use Drupal\linkchecker\LinkCheckerLinkInterface;
+-use Drupal\paragraphs\ParagraphInterface;
+ use Drupal\views\Plugin\views\field\EntityLink;
+ use Drupal\views\ResultRow;
+ 
+@@ -28,24 +27,12 @@ class LinkcheckerLinkPageEntityLink extends EntityLink {
+       return NULL;
+     }
+ 
+-    if (!$linkchecker_link->hasField('entity_id')) {
+-      return NULL;
+-    }
+-
+-    if ($linkchecker_link->get('entity_id')->isEmpty()) {
+-      return NULL;
+-    }
+-
+-    $linked_entity = $linkchecker_link->get('entity_id')->entity;
++    $linked_entity = $linkchecker_link->getTopMostParentEntity();
+ 
+     if (!$linked_entity instanceof EntityInterface) {
+       return NULL;
+     }
+ 
+-    while ($linked_entity instanceof ParagraphInterface && $linked_entity->getParentEntity() !== NULL) {
+-      $linked_entity = $linked_entity->getParentEntity();
+-    }
+-
+     try {
+       $url = $linked_entity->toUrl();
+     }
+diff --git a/tests/src/Kernel/LinkcheckerPageEntityFieldsTest.php b/tests/src/Kernel/LinkcheckerPageEntityFieldsTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..d6f820f4aa48b609623ede85f5aba8a7db130acc
+--- /dev/null
++++ b/tests/src/Kernel/LinkcheckerPageEntityFieldsTest.php
+@@ -0,0 +1,298 @@
++<?php
++
++namespace Drupal\Tests\linkchecker\Kernel;
++
++use Drupal\Core\Entity\EntityInterface;
++use Drupal\Core\Render\RenderContext;
++use Drupal\KernelTests\KernelTestBase;
++use Drupal\language\Entity\ConfigurableLanguage;
++use Drupal\linkchecker\Entity\LinkCheckerLink;
++use Drupal\linkchecker\Plugin\views\field\LinkcheckerLinkPageEntityLabel;
++use Drupal\linkchecker\Plugin\views\field\LinkcheckerLinkPageEntityLink;
++use Drupal\node\Entity\NodeType;
++use Drupal\paragraphs\Entity\Paragraph;
++use Drupal\paragraphs\Entity\ParagraphsType;
++use Drupal\Tests\node\Traits\NodeCreationTrait;
++use Drupal\user\RoleInterface;
++use Drupal\views\Entity\View;
++use Drupal\views\Views;
++use PHPUnit\Framework\Attributes\CoversClass;
++use PHPUnit\Framework\Attributes\Group;
++use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
++
++/**
++ * Tests the "Page entity label" and "Page entity link" Views fields.
++ *
++ * Both fields must resolve the root parent entity, even when the link lives
++ * inside one or more nested paragraphs.
++ *
++ * @group linkchecker
++ */
++#[Group('linkchecker')]
++#[CoversClass(LinkcheckerLinkPageEntityLabel::class)]
++#[CoversClass(LinkcheckerLinkPageEntityLink::class)]
++#[RunTestsInSeparateProcesses]
++class LinkcheckerPageEntityFieldsTest extends KernelTestBase {
++
++  use NodeCreationTrait;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'system',
++    'user',
++    'field',
++    'filter',
++    'text',
++    'node',
++    'views',
++    'file',
++    'entity_reference_revisions',
++    'paragraphs',
++    'linkchecker',
++    'language',
++    'content_translation',
++  ];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++    $this->installEntitySchema('user');
++    $this->installEntitySchema('node');
++    $this->installEntitySchema('paragraph');
++    $this->installEntitySchema('linkcheckerlink');
++    $this->installConfig(['user', 'field', 'node', 'filter', 'paragraphs', 'linkchecker']);
++    $this->installSchema('linkchecker', 'linkchecker_index');
++    $this->installSchema('node', 'node_access');
++
++    // The "Page entity link" field checks view access on the canonical node
++    // URL before rendering it.
++    user_role_grant_permissions(RoleInterface::ANONYMOUS_ID, ['access content']);
++
++    NodeType::create(['type' => 'page', 'name' => 'Page'])->save();
++    ParagraphsType::create(['id' => 'test', 'label' => 'Test'])->save();
++    $this->createFieldsView();
++  }
++
++  /**
++   * A link on a node reports the node label and links to the node.
++   */
++  public function testNode() {
++    $node = $this->createNode(['type' => 'page', 'title' => 'Root page']);
++
++    $this->assertFieldsForLinkOn($node, $node);
++  }
++
++  /**
++   * A link on a paragraph reports its parent node label and links to it.
++   */
++  public function testParagraph() {
++    $node = $this->createNode(['type' => 'page', 'title' => 'Root page']);
++    $paragraph = $this->paragraphIn($node);
++
++    $this->assertFieldsForLinkOn($paragraph, $node);
++  }
++
++  /**
++   * A link on a nested paragraph reports the root node label.
++   */
++  public function testNestedParagraph() {
++    $node = $this->createNode(['type' => 'page', 'title' => 'Root page']);
++    $nested = $this->paragraphIn($this->paragraphIn($node));
++
++    $this->assertFieldsForLinkOn($nested, $node);
++  }
++
++  /**
++   * A link recorded against an existing translation resolves to it.
++   */
++  public function testNodeTranslation() {
++    $this->enableNodeTranslation();
++    $node = $this->createNode(['type' => 'page', 'title' => 'Root page']);
++    $node->addTranslation('es', ['title' => 'Spanish root page'])->save();
++
++    $this->assertFieldsForLinkOn($node, $node->getTranslation('es'), 'es');
++  }
++
++  /**
++   * A link recorded against a missing translation falls back to the default.
++   */
++  public function testNodeTranslationFallback() {
++    $this->enableNodeTranslation();
++    $node = $this->createNode(['type' => 'page', 'title' => 'Root page']);
++
++    $this->assertFieldsForLinkOn($node, $node, 'es');
++  }
++
++  /**
++   * A link on a translated paragraph resolves to the node's translation.
++   */
++  public function testTranslatedParagraph() {
++    $this->enableNodeTranslation();
++    $node = $this->createNode(['type' => 'page', 'title' => 'Root page']);
++    $node->addTranslation('es', ['title' => 'Spanish root page'])->save();
++    $paragraph = $this->paragraphIn($node, 'es');
++
++    $this->assertFieldsForLinkOn(
++      $paragraph->getTranslation('es'),
++      $node->getTranslation('es'),
++      'es'
++    );
++  }
++
++  /**
++   * A link on an untranslated paragraph falls back to the node's default.
++   */
++  public function testUntranslatedParagraphInTranslatedNode() {
++    $this->enableNodeTranslation();
++    $node = $this->createNode(['type' => 'page', 'title' => 'Root page']);
++    $node->addTranslation('es', ['title' => 'Spanish root page'])->save();
++    $paragraph = $this->paragraphIn($node);
++
++    // The paragraph has no 'es' translation, so Paragraph::getParentEntity()
++    // resolves the node using the paragraph's default (en) langcode.
++    $this->assertFieldsForLinkOn($paragraph, $node, 'es');
++  }
++
++  /**
++   * A link on a nested translated paragraph resolves to the node's translation.
++   */
++  public function testTranslatedNestedParagraph() {
++    $this->enableNodeTranslation();
++    $node = $this->createNode(['type' => 'page', 'title' => 'Root page']);
++    $node->addTranslation('es', ['title' => 'Spanish root page'])->save();
++    $nested = $this->paragraphIn($this->paragraphIn($node, 'es'), 'es');
++
++    $this->assertFieldsForLinkOn(
++      $nested->getTranslation('es'),
++      $node->getTranslation('es'),
++      'es'
++    );
++  }
++
++  /**
++   * Enables content translation for the 'page' node bundle.
++   */
++  protected function enableNodeTranslation(): void {
++    ConfigurableLanguage::createFromLangcode('es')->save();
++    $this->container->get('content_translation.manager')->setEnabled('node', 'page', TRUE);
++  }
++
++  /**
++   * Creates a paragraph nested inside the given parent entity.
++   *
++   * @param \Drupal\Core\Entity\EntityInterface $parent
++   *   The parent entity.
++   * @param string|null $langcode
++   *   If given, an additional translation is added in this langcode.
++   */
++  protected function paragraphIn(EntityInterface $parent, ?string $langcode = NULL): Paragraph {
++    $paragraph = Paragraph::create(['type' => 'test']);
++    $paragraph->setParentEntity($parent, 'field_paragraphs');
++    if ($langcode !== NULL) {
++      $paragraph->addTranslation($langcode);
++    }
++    $paragraph->save();
++
++    return $paragraph;
++  }
++
++  /**
++   * Asserts both fields resolve to the given root entity for a link on it.
++   *
++   * @param \Drupal\Core\Entity\EntityInterface $entity
++   *   The entity the link was found on (a node or a paragraph).
++   * @param \Drupal\Core\Entity\EntityInterface $expectedRoot
++   *   The entity both fields are expected to resolve to.
++   * @param string $langcode
++   *   The langcode to record on the link's "entity_langcode" field.
++   */
++  protected function assertFieldsForLinkOn(EntityInterface $entity, EntityInterface $expectedRoot, string $langcode = 'en'): void {
++    $rendered = $this->renderFieldsForLinkOn($entity, $langcode);
++
++    $this->assertSame($expectedRoot->label(), $rendered['label'], 'The "Page entity label" field reports the root entity label.');
++    $this->assertStringContainsString(
++      $expectedRoot->toUrl()->toString(),
++      $rendered['link'],
++      'The "Page entity link" field links to the root entity.'
++    );
++  }
++
++  /**
++   * Renders both Page entity fields for a link pointing at the given entity.
++   *
++   * @param \Drupal\Core\Entity\EntityInterface $entity
++   *   The entity the link was found on.
++   * @param string $langcode
++   *   The langcode to record on the link's "entity_langcode" field.
++   *
++   * @return array
++   *   An associative array with a 'label' and a 'link' key, holding the
++   *   rendered output of each field.
++   */
++  protected function renderFieldsForLinkOn(EntityInterface $entity, string $langcode = 'en'): array {
++    LinkCheckerLink::create([
++      'url' => 'https://example.com/broken',
++      'parent_entity_type_id' => $entity->getEntityTypeId(),
++      'parent_entity_id' => $entity->id(),
++      'entity_field' => 'field_link',
++      'entity_langcode' => $langcode,
++    ])->save();
++
++    $view = Views::getView('test_page_entity_fields');
++    $view->execute();
++    $row = $view->result[0];
++
++    $renderer = $this->container->get('renderer');
++    $rendered = [];
++    foreach ([
++      'linkcheckerlink_page_entity_label' => 'label',
++      'linkcheckerlink_page_entity_link' => 'link',
++    ] as $field_id => $key) {
++      $build = $renderer->executeInRenderContext(new RenderContext(), function () use ($view, $row, $field_id) {
++        return $view->field[$field_id]->render($row);
++      });
++      $rendered[$key] = is_array($build) ? (string) $renderer->renderInIsolation($build) : (string) $build;
++    }
++
++    return $rendered;
++  }
++
++  /**
++   * Creates the view used to render the fields under test.
++   */
++  protected function createFieldsView() {
++    View::create([
++      'id' => 'test_page_entity_fields',
++      'base_table' => 'linkchecker_link',
++      'base_field' => 'lid',
++      'display' => [
++        'default' => [
++          'display_plugin' => 'default',
++          'id' => 'default',
++          'display_options' => [
++            'fields' => [
++              'linkcheckerlink_page_entity_label' => [
++                'id' => 'linkcheckerlink_page_entity_label',
++                'table' => 'linkchecker_link',
++                'field' => 'linkcheckerlink_page_entity_label',
++                'plugin_id' => 'linkcheckerlink_page_entity_label',
++              ],
++              'linkcheckerlink_page_entity_link' => [
++                'id' => 'linkcheckerlink_page_entity_link',
++                'table' => 'linkchecker_link',
++                'field' => 'linkcheckerlink_page_entity_link',
++                'plugin_id' => 'linkcheckerlink_page_entity_link',
++                'output_url_as_text' => TRUE,
++              ],
++            ],
++          ],
++        ],
++      ],
++    ])->save();
++  }
++
++}
