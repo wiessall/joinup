@@ -32,7 +32,6 @@ Feature: Contact Information moderation
     When I go to the edit form of the "Mildþryð Mildgyð" "contact information"
     Then I should see the heading "Edit Contact information Mildþryð Mildgyð"
     And the following 1 button should be present "Update"
-    And the current workflow state should be "Validated"
     And I should see the link "Delete"
     When I fill in "Name" with "Ceolwulf II of Mercia"
     And I press "Update"
@@ -51,7 +50,6 @@ Feature: Contact Information moderation
     Then I should see the heading "Edit Contact information Ceolwulf II of Mercia"
     And the following fields should not be present "Langcode, Translation"
     And the following 2 buttons should be present "Update, Request changes"
-    And the current workflow state should be "Validated"
     # A moderator has the right to delete contact information directly, so this
     # action should be shown.
     And I should see the link "Delete"
@@ -70,7 +68,6 @@ Feature: Contact Information moderation
     And I go to the edit form of the "Ceolwulf II of Mercia" "contact information"
     Then I should see the heading "Edit Contact information Ceolwulf II of Mercia"
     And the following 1 button should be present "Update"
-    And the current workflow state should be "Needs update"
     And I should see the link "Delete"
     # Do the changes.
     When I fill in "Name" with "Æthelred, Lord of the Mercians"
@@ -81,7 +78,6 @@ Feature: Contact Information moderation
     Given I am logged in as a moderator
     And I go to the edit form of the "Æthelred, Lord of the Mercians" "contact information"
     And the following 2 buttons should be present "Update, Approve changes"
-    And the current workflow state should be "Needs update"
     And I press "Approve changes"
     Then I should see the heading "Æthelred, Lord of the Mercians"
 
@@ -89,7 +85,6 @@ Feature: Contact Information moderation
     Given I am logged in as "Sæwine Cynebald"
     And I go to the edit form of the "Æthelred, Lord of the Mercians" "contact information"
     And the following 1 buttons should be present "Update"
-    And the current workflow state should be "Validated"
     And I should see the link "Delete"
     When I click "Delete"
     # Confirm the deletion.

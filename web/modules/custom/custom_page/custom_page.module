@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -339,15 +340,28 @@ function custom_page_preprocess_menu__og__navigation(array &$variables): void {
     return;
   }
 
-  $has_active = array_filter($variables['items'], fn($item) => $item['in_active_trail']);
-  if ($has_active) {
+  $active_items = array_filter($variables['items'], fn($item) => $item['in_active_trail']);
+  if ($active_items) {
     return;
   }
 
-  foreach ($variables['items'] as $key => $item) {
-    if ($item['url']->isRouted()
-      && ($item['url']->getRouteParameters()['node'] ?? NULL) == $landing_page->id()) {
-      $variables['items'][$key]['in_active_trail'] = TRUE;
+  foreach ($variables['items'] as &$item) {
+    // When an item also has a deeper-level child items, and the menu is not one
+    // of the exceptional menus excluded by MenuPreprocess::preprocessMenu,
+    // then the array structure is different. In such cases, $item has a trigger
+    // and an items key; "trigger" contains the usual variables for the link,
+    // "items" contains the sub-items.
+    // @see \Drupal\oe_bootstrap_theme\MenuPreprocess::preprocessMenu
+    $item_has_trigger = array_key_exists('trigger', $item);
+    $url = $item_has_trigger ? $item['trigger']['url'] : $item['url'];
+    if (!$url->isRouted() || ($url->getRouteParameters()['node'] ?? NULL) != $landing_page->id()) {
+      continue;
     }
+
+    NestedArray::setValue(
+      $item,
+      $item_has_trigger ? ['trigger', 'in_active_trail'] : ['in_active_trail'],
+    TRUE,
+    );
   }
 }
