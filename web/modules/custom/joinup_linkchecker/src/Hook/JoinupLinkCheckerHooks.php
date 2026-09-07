@@ -9,6 +9,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_group\Entity\GroupContentInterface;
+use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_linkchecker\JoinupLinkCheckerLinkStorageSchema;
 use Drupal\linkchecker\LinkCheckerLinkInterface;
 use Drupal\paragraphs\ParagraphInterface;
@@ -66,9 +67,14 @@ final class JoinupLinkCheckerHooks {
     }
 
     if ($entity instanceof GroupContentInterface) {
-      $link->set('group', $entity->getGroupId());
+      try {
+        $link->set('group', $entity->getGroup());
+      }
+      catch (MissingGroupException) {
+        // Custom page is GroupContentInterface node, but it might also act as
+        // standalone content.
+      }
     }
-
   }
 
 }
