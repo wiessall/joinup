@@ -36,7 +36,7 @@ class Archiver {
 
   const METHODS_ALLOWED = [
     'doArchiveGroupsWithFewMembers',
-    'doArchiveCollectionsWithoutSolutions' ,
+    'doArchiveCollectionsWithoutSolutions',
     'doArchivePotentiallyOutdatedContent',
     'doArchiveSolutionsWithoutReleaseOrDistro',
     'doArchiveGroupsWithoutContent',
