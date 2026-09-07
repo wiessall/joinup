@@ -7,14 +7,13 @@ namespace Drupal\joinup_eulogin\Event\Subscriber;
 use Drupal\cas\Event\CasPostLoginEvent;
 use Drupal\cas\Event\CasPostValidateEvent;
 use Drupal\cas\Event\CasPreLoginEvent;
-use Drupal\cas\Event\CasPreRedirectEvent;
 use Drupal\cas\Event\CasPreRegisterEvent;
 use Drupal\cas\Event\CasPreValidateEvent;
 use Drupal\Component\Utility\Random;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
@@ -24,6 +23,8 @@ use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Listens to CAS events.
@@ -31,16 +32,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
-
-  /**
-   * The module's settings.
-   */
-  protected ImmutableConfig $settings;
-
-  /**
-   * The CAS settings.
-   */
-  protected ImmutableConfig $casSettings;
 
   public function __construct(
     protected readonly ConfigFactoryInterface $configFactory,
@@ -51,9 +42,8 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
     protected readonly StateInterface $state,
     #[Autowire(service: 'externalauth.authmap')]
     protected readonly Authmap $authmap,
+    protected readonly RouteMatchInterface $routeMatch,
   ) {
-    $this->settings = $this->configFactory->get('oe_authentication.settings');
-    $this->casSettings = $this->configFactory->get('cas.settings');
   }
 
   /**
@@ -61,7 +51,6 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      CasPreRedirectEvent::class => 'handleBrowserCache',
       CasPreValidateEvent::class => 'alterValidationUrl',
       CasPostValidateEvent::class => [
         ['prepareAttributes'],
@@ -79,25 +68,10 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
         ['storeAttributes'],
         ['setRedirectAndStatusOnNewAccount', -20],
       ],
+      KernelEvents::RESPONSE => [
+        ['noStoreForCasService'],
+      ],
     ];
-  }
-
-  /**
-   * Avoids a browser-cached destination page.
-   *
-   * @param \Drupal\cas\Event\CasPreRedirectEvent $event
-   *   The CAS event.
-   */
-  public function handleBrowserCache(CasPreRedirectEvent $event): void {
-    if (!$destination = $event->getCasRedirectData()->getServiceParameter('destination')) {
-      $destination = $this->configFactory->get('system.site')->get('page.front');
-    }
-
-    $key = strtolower((new Random())->machineName(3));
-    $value = bin2hex(random_bytes(3));
-    $new_destination = http_build_url($destination, ['query' => "$key=$value"], HTTP_URL_JOIN_QUERY);
-
-    $event->getCasRedirectData()->setServiceParameter('destination', $new_destination);
   }
 
   /**
@@ -111,13 +85,14 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
    *   The CAS pre-validate event object.
    */
   public function alterValidationUrl(CasPreValidateEvent $event): void {
+    $settings = $this->configFactory->get('oe_authentication.settings');
     $parameters = [
-      'assuranceLevel' => $this->settings->get('assurance_level'),
-      'ticketTypes' => $this->settings->get('ticket_types'),
+      'assuranceLevel' => $settings->get('assurance_level'),
+      'ticketTypes' => $settings->get('ticket_types'),
       'userDetails' => 'true',
     ];
 
-    $event->setValidationPath($this->settings->get('validation_path'));
+    $event->setValidationPath($settings->get('validation_path'));
     $event->addParameters($parameters);
   }
 
@@ -170,7 +145,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
    *   The CAS pre user register event object.
    */
   public function handleDrupalUsernameCollision(CasPreRegisterEvent $event): void {
-    if (!$this->casSettings->get('user_accounts.auto_register')) {
+    if (!$this->configFactory->get('cas.settings')->get('user_accounts.auto_register')) {
       return;
     }
 
@@ -271,6 +246,23 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
         $this->t('Fill in the fields below to let the Interoperable Europe Portal community learn more about you!')
       );
     }
+  }
+
+  /**
+   * Make sure CAS login response does not get cached by browser or proxy.
+   *
+   * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
+   *   The response event.
+   */
+  public function noStoreForCasService(ResponseEvent $event): void {
+    if ($this->routeMatch->getRouteName() !== 'cas.service') {
+      return;
+    }
+    $headers = $event->getResponse()->headers;
+    if (!$headers->hasCacheControlDirective('no-cache')) {
+      return;
+    }
+    $headers->set('Cache-Control', 'no-store', FALSE);
   }
 
   /**

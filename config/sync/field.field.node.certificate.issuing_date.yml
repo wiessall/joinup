@@ -1,0 +1,25 @@
+uuid: 569cc477-1524-44cf-8c4f-9fcb797ace2c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.issuing_date
+    - node.type.certificate
+  module:
+    - datetime
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: node.certificate.issuing_date
+field_name: issuing_date
+entity_type: node
+bundle: certificate
+label: 'Issuing date'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

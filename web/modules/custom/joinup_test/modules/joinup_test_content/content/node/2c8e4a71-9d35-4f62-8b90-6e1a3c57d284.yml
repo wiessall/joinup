@@ -1,0 +1,39 @@
+_meta:
+  version: '1.0'
+  entity_type: node
+  uuid: 2c8e4a71-9d35-4f62-8b90-6e1a3c57d284
+  bundle: discussion
+  default_langcode: en
+  depends:
+    b7af08b1-c271-4d58-a5a7-ec3db533c3d2: taxonomy_term
+    df34e3a2-207b-4910-a804-344931654e20: node
+default:
+  status:
+    -
+      value: true
+  title:
+    -
+      value: 'Retired guidance on legacy data exchange formats'
+  created:
+    -
+      value: 1681998900
+  changed:
+    -
+      value: 1682243100
+  published_at:
+    -
+      value: 1681998900
+  body:
+    -
+      value: '<p>This discussion collected feedback on the data exchange formats that were superseded by the current specifications. It is kept for reference only.</p>'
+      summary: ''
+      format: content_editor
+  field_state:
+    -
+      value: archived
+  field_topic:
+    -
+      entity: b7af08b1-c271-4d58-a5a7-ec3db533c3d2
+  og_audience:
+    -
+      entity: df34e3a2-207b-4910-a804-344931654e20

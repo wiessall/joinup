@@ -258,14 +258,6 @@ function joinup_search_entity_prepare_view(string $entity_type_id, array $entiti
       $fieldValue[0]['value']['show_archived'] = 'archived';
     }
 
-    // Because we are forcing the facet to show the values even when they are
-    // not narrowing the results, and we are altering the query as well, we need
-    // to also dynamically hide the facet when the 'show_archived' option is set
-    // to anything else than 'all' - because it will not hide automatically.
-    elseif ($fieldValue[0]['value']['show_archived'] !== 'all') {
-      $fieldValue[0]['value']['fields'][$facetKey]['region'] = 'hidden';
-    }
-
     $fieldHostEntity->{$fieldName}->setValue($fieldValue);
   }
 }

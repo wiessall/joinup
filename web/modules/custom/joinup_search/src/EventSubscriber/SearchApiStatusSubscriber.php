@@ -102,7 +102,6 @@ readonly class SearchApiStatusSubscriber implements EventSubscriberInterface {
     // 'unarchived'. The facet is only available when both archived and
     // unarchived content is available in order to give the user the ability to
     // further filter the results.
-    // @see \_joinup_search_apply_global_search_api_solr_settings
     if (empty($query->getOption('search_api_field item'))) {
       return;
     }
@@ -132,8 +131,10 @@ readonly class SearchApiStatusSubscriber implements EventSubscriberInterface {
       }
     }
 
-    if (!$hasStatus && !$query->getOption('search_api_field archived')) {
-      $query->addCondition('entity_status', 'archived', '<>');
+    if (!$hasStatus) {
+      $group = $query->createConditionGroup('AND', ['facet:entity_status']);
+      $group->addCondition('entity_status', 'archived', '<>');
+      $query->addConditionGroup($group);
     }
   }
 
@@ -154,10 +155,7 @@ readonly class SearchApiStatusSubscriber implements EventSubscriberInterface {
     $value = $item->getValue()['value'];
     $showArchived = $value['show_archived'] ?? 'all';
     $query->setOption('show_archived', $showArchived);
-    if ($archived = $query->getOption('search_api_field archived')) {
-      $query->addCondition('entity_status', 'archived');
-    }
-    if ($showArchived !== 'all' && !$archived) {
+    if ($showArchived !== 'all') {
       $query->addCondition('entity_status', 'archived', $showArchived === 'archived' ? '=' : '<>');
     }
     else {
@@ -235,12 +233,9 @@ readonly class SearchApiStatusSubscriber implements EventSubscriberInterface {
       }
     }
 
-    if ($hasStatus) {
-      $query->addCondition('entity_status', 'archived');
-    }
-    else {
-      $query->addCondition('entity_status', 'archived', '<>');
-    }
+    $group = $query->createConditionGroup('AND', ['facet:entity_status']);
+    $group->addCondition('entity_status', 'archived', $hasStatus ? '=' : '<>');
+    $query->addConditionGroup($group);
   }
 
 }

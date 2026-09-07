@@ -76,6 +76,19 @@ function ventuno_preprocess_links(array &$variables): void {
 function ventuno_preprocess_menu__og__navigation(&$variables): void {
   $searchRoute = 'view.search_oss_catalogue.search';
   $currentRoute = \Drupal::routeMatch()->getRouteName();
+
+  // Unify items after BCL's MenuPreprocess.
+  foreach ($variables['items'] as &$item) {
+    if (
+      empty($item['title']) &&
+      empty($item['url']) &&
+      !empty($item['trigger']['title']) &&
+      !empty($item['trigger']['url'])
+    ) {
+      $item = $item['trigger'];
+    }
+  }
+
   if ($currentRoute !== $searchRoute) {
     return;
   }

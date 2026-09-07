@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_test_content\DefaultContentManager;
 
 /**
@@ -16,5 +17,6 @@ function joinup_test_content_uninstall(): void {
   /** @var \Drupal\joinup_test_content\DefaultContentManager $service */
   $service = \Drupal::service(DefaultContentManager::class);
   $service->updateHomepageTopicsQueue('7a30c7c1-a812-4b8a-8e41-300000000001', FALSE);
+  $service->setGroupListingArchivedOption(JoinupCollectionHelper::JOINUP_COLLECTION_UUID, 'unarchived');
   $service->deleteDefaultContent('joinup_test_content');
 }

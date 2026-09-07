@@ -3,7 +3,6 @@
 
 .menu--og--navigation {
   position: relative;
-  z-index: 2;
   width: 100%;
   .nav {
     &:not(.nav-pills) {
@@ -50,6 +49,7 @@
     }
   }
   .p-plus {
+    z-index: unset;
     display: inline-flex;
     align-items: baseline;
     .p-plus__toggle-btn {

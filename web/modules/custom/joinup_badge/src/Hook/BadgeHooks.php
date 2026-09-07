@@ -8,22 +8,33 @@ use Drupal\assessments\AssessmentInterface;
 use Drupal\comment\CommentInterface;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\DestructableInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\File\FileUrlGeneratorInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_badge\BadgeService;
 use Drupal\joinup_badge\Entity\BadgeAwarding;
+use Drupal\joinup_badge\Entity\Certificate;
+use Drupal\joinup_badge\Entity\CertificateInterface;
 use Drupal\joinup_badge\Plugin\Field\FieldType\BadgeFieldItemList;
+use Drupal\joinup_search\SearchIndexCommitter;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\user\UserInterface;
+use Drush\Commands\AutowireTrait;
 
 /**
  * Hooks for the joinup_badge module.
  */
 class BadgeHooks implements DestructableInterface {
+
+  use StringTranslationTrait;
+  use AutowireTrait;
 
   /**
    * The UUID of the Interoperable Europe Community group.
@@ -67,6 +78,8 @@ class BadgeHooks implements DestructableInterface {
     protected readonly BadgeService $badgeService,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly TimeInterface $time,
+    protected readonly FileUrlGeneratorInterface $fileUrlGenerator,
+    protected readonly SearchIndexCommitter $searchIndexCommitter,
   ) {}
 
   /**
@@ -96,6 +109,10 @@ class BadgeHooks implements DestructableInterface {
       if (!empty($bundles['flagging'][$flagId])) {
         $bundles['flagging'][$flagId]['class'] = BadgeAwarding::class;
       }
+    }
+
+    if (!empty($bundles['node']['certificate'])) {
+      $bundles['node']['certificate']['class'] = Certificate::class;
     }
   }
 
@@ -145,9 +162,80 @@ class BadgeHooks implements DestructableInterface {
   #[Hook('og_membership_update')]
   public function revokeBadgesForBlockedMembership(OgMembershipInterface $membership): void {
     if ($membership->getGroup()?->uuid() === static::IEC_UUID
-    && $membership->getState() === OgMembershipInterface::STATE_BLOCKED) {
+      && $membership->getState() === OgMembershipInterface::STATE_BLOCKED) {
       $this->badgeService->revoke('iec_member', $membership->getOwner());
     }
+  }
+
+  /**
+   * Implements hook_ENTITY_TYPE_update() for user entities.
+   */
+  #[Hook('user_update')]
+  public function trackCertificate(UserInterface $user): void {
+    $this->updateUserCertificatesStatus($user);
+    $userCertificates = $this->getUserCertificates($user, '1');
+    if (!empty($userCertificates)) {
+      $this->badgeService->award('certificate', $user);
+    }
+    else {
+      $this->badgeService->revoke('certificate', $user);
+    }
+  }
+
+  /**
+   * Implements hook_form_BASE_FORM_ID_alter() for the user form.
+   */
+  #[Hook('form_user_form_alter')]
+  public function userFormAlter(array &$form, FormStateInterface $formState): void {
+    $form['actions']['submit']['#submit'][] = static::class . ':commitSearchIndex';
+  }
+
+  /**
+   * Makes certificate changes searchable before the user profile is rendered.
+   *
+   * @param array $form
+   *   The user form.
+   * @param \Drupal\Core\Form\FormStateInterface $formState
+   *   The form state.
+   */
+  public function commitSearchIndex(array &$form, FormStateInterface $formState): void {
+    $this->searchIndexCommitter->commitPendingChanges();
+  }
+
+  /**
+   * Implements hook_ENTITY_TYPE_delete() for user entities.
+   */
+  #[Hook('user_delete')]
+  public function deleteUserCertificates(UserInterface $user): void {
+    $certificates = $this->getUserCertificates($user);
+    $this->entityTypeManager->getStorage('node')->delete($certificates);
+  }
+
+  /**
+   * Implements hook_ENTITY_TYPE_delete() for certificate entities.
+   */
+  #[Hook('entity_delete')]
+  public function deleteCertificateFile(EntityInterface $entity): void {
+    if (!$entity instanceof Certificate) {
+      return;
+    }
+    if (!$entity->get('certificate')->isEmpty()) {
+      foreach ($entity->get('certificate')->referencedEntities() as $file) {
+        $file->delete();
+      }
+    }
+  }
+
+  /**
+   * Implements hook_ENTITY_TYPE_view_alter() for node entities.
+   */
+  #[Hook('node_view_alter')]
+  public function nodeViewAlter(array &$build, NodeInterface $node): void {
+    if (!$node instanceof CertificateInterface) {
+      return;
+    }
+
+    unset($build['#contextual_links']);
   }
 
   /**
@@ -179,6 +267,55 @@ class BadgeHooks implements DestructableInterface {
       $uid = (int) $entity->getOwnerId();
       $this->portalContributorAuthors[$uid] = $uid;
     }
+  }
+
+  /**
+   * Implements hook_inline_entity_form_table_fields_alter().
+   */
+  #[Hook('inline_entity_form_table_fields_alter')]
+  public function userCertificateIefTable(array &$fields, array $context): void {
+    if (
+      $context['parent_entity_type'] !== 'user' ||
+      $context['field_name'] !== 'certificates' ||
+      $context['entity_type'] !== 'node' ||
+      $context['allowed_bundles'] !== ['certificate']
+    ) {
+      return;
+    }
+
+    // Add course field column.
+    $fields['course'] = [
+      'type' => 'field',
+      'label' => $this->t('Course'),
+      'weight' => 10,
+      'display_options' => ['type' => 'entity_reference_label'],
+    ];
+    unset($fields['label']);
+    unset($fields['status']);
+  }
+
+  /**
+   * Implements hook_preprocess_HOOK().
+   */
+  #[Hook('preprocess_node__view_mode_tile')]
+  public function preprocessCertificateTile(array &$variables): void {
+    if (!($certificate = $variables['elements']['#node']) instanceof CertificateInterface) {
+      return;
+    }
+    $logo = $certificate->get('course')->entity?->get('logo');
+    $issuing_date = $certificate->get('issuing_date')->date?->format('d/m/Y');
+    $variables['url'] = $this->fileUrlGenerator->generateAbsoluteString($certificate->get('certificate')->entity?->getFileUri() ?? '');
+    $variables['label'] = $certificate->get('course')->entity?->getTitle();
+    if (!empty($issuing_date)) {
+      $variables['info']['label'] = $this->t('Issuing date:') . ' ' . $issuing_date;
+    }
+    else {
+      unset($variables['info']);
+    }
+    $variables['extra_data']['logo'] = [
+      'src' => $this->fileUrlGenerator->generateAbsoluteString($logo?->entity?->getFileUri() ?? ''),
+      'alt' => $logo?->first()?->get('alt')?->getString() ?? '',
+    ];
   }
 
   /**
@@ -236,6 +373,54 @@ class BadgeHooks implements DestructableInterface {
       }
     }
     return $total;
+  }
+
+  /**
+   * Gets all user certificates.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   Certificates owner.
+   * @param string|null $status
+   *   Status of certificates.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  protected function getUserCertificates(UserInterface $user, ?string $status = NULL): array {
+    $properties = [
+      'type' => 'certificate',
+      'uid' => $user->id(),
+    ];
+
+    if (!empty($status)) {
+      $properties['status'] = $status;
+    }
+
+    return $this->entityTypeManager
+      ->getStorage('node')
+      ->loadByProperties($properties);
+  }
+
+  /**
+   * Publish/unpublish user certificates.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   Certificate owner.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function updateUserCertificatesStatus(UserInterface $user): void {
+    $certificates = $this->getUserCertificates($user);
+    foreach ($certificates as $certificate) {
+      if ($user->isBlocked() && $certificate->isPublished()) {
+        $certificate->setUnpublished();
+      }
+      elseif ($user->isActive() && !$certificate->isPublished()) {
+        $certificate->setPublished();
+      }
+      $certificate->save();
+    }
   }
 
 }
