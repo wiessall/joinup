@@ -1,8 +1,0 @@
-services:
-
-  _defaults:
-    autoconfigure: true
-    autowire: true
-
-  ventuno_helper.header_navigation_lazy_builders:
-    class: Drupal\ventuno_helper\HeaderNavigationLazyBuilders
