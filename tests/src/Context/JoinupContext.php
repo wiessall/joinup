@@ -521,14 +521,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Navigates to the content overview, a.k.a. the "Keep up to date" page.
-   */
-  #[When('I visit the content overview page')]
-  public function visitContentOverviewPage(): void {
-    $this->visitPath('/keep-up-to-date');
-  }
-
-  /**
    * Navigates to the canonical page display of an entity.
    *
    * @param string $title

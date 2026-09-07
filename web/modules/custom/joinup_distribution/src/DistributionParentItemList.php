@@ -22,7 +22,7 @@ class DistributionParentItemList extends EntityReferenceFieldItemList {
     $distribution = $this->getEntity();
     assert($distribution instanceof DistributionInterface);
 
-    if (!$distribution->get('release')->isEmpty()) {
+    if (!$distribution->get('release')->isEmpty() && $distribution->get('release')->entity) {
       $value = $distribution->get('release')->target_id;
     }
     elseif (!$distribution->get('og_audience')->isEmpty()) {

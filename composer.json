@@ -371,9 +371,10 @@
                 "[site:url] token omits trailing slash in other languages @see https://www.drupal.org/i/2163913": "resources/patch/php/drupal/core/2163913.mr15511.commit58a97130.diff",
                 "Fatal error when saving translation configuration @see https://www.drupal.org/i/3549469": "resources/patch/php/drupal/core/3549469.diff",
                 "Translations of nodes with comment settings field set to non-translatable returns EntityUntranslatableFieldsConstraint @see https://www.drupal.org/i/3015675": "resources/patch/php/drupal/core/3015675-83bb966c.diff",
-                "Plugin manager with fallback when the plugin ID is null @see https://www.drupal.org/project/drupal/issues/3581628": "resources/patch/php/drupal/core/3581628.diff",
+                "HTML (all languages) appearing in error messages of multilingual sites @see https://www.drupal.org/i/3395366": "resources/patch/php/drupal/core/3395366.mr11035-commit83c08bfd.diff",
                 "Convert local absolute menu link URLs into internal paths @see https://www.drupal.org/i/483150": "resources/patch/php/drupal/core/483150.mr11507-commit2e0599ae.diff",
-                "HTML (all languages) appearing in error messages of multilingual sites @see https://www.drupal.org/i/3395366": "resources/patch/php/drupal/core/3395366.mr11035-commit83c08bfd.diff"
+                "Plugin manager with fallback when the plugin ID is null @see https://www.drupal.org/project/drupal/issues/3581628": "resources/patch/php/drupal/core/3581628.diff",
+                "MenuActiveTrail should ignore disabled menu links @see https://drupal.org/i/2973515": "resources/patch/php/drupal/core/2973515.diff"
             },
             "drupal/csv_serialization": {
                 "Replace League\\Csv methods deprecated since league/csv 9.27.0 @see https://www.drupal.org/i/3562555": "resources/patch/php/drupal/csv_serialization/3562555.diff"
@@ -541,16 +542,8 @@
                 "Ignore specific paths @see https://www.drupal.org/i/2964786": "resources/patch/php/drupal/subpathauto/2964786.mr3-commit6174fa47.diff"
             },
             "drupal/tmgmt": {
-                "Filtering job items crashes @see https://www.drupal.org/i/3578626": "resources/patch/php/drupal/tmgmt/3578626.mr159.commit3ee8064a.diff",
-                "Data too long for column 'message' - https://www.drupal.org/i/3552683": "resources/patch/php/drupal/tmgmt/3552683.mr135.commit597ae8cd.diff",
-                "Add a configurable fallback for translations that exceed the target field length @see https://www.drupal.org/i/2960458 + Callers don't account the scenario in which JobItem::acceptTranslation() fails softly @see https://www.drupal.org/i/3580841": "resources/patch/php/drupal/tmgmt/2960458.mr170.commit4b643297-plus-3580841.mr161.commit7baf8367.diff",
-                "Non-translatable fields are exported when the bundle is not enabled for content translation @see https://www.drupal.org/i/3382356": "resources/patch/php/drupal/tmgmt/3382356.mr172.commitd2294f18.diff",
-                "Delete job item when corresponding entity is being deleted @see https://www.drupal.org/i/2998143": "resources/patch/php/drupal/tmgmt/2998143.mr35.commitdd0ee714.diff",
-                "Messages flooded @see https://www.drupal.org/i/3611439": "resources/patch/php/drupal/tmgmt/3611439.mr175-commitfff006f2.diff",
-                "Add purge continuous jobs item @see https://drupal.org/i/3134985": "resources/patch/php/drupal/tmgmt/3134985.mr178-b680b1b9c9.diff",
                 "Hook to allow modules to alter translation @see https://www.drupal.org/i/3298245": "resources/patch/php/drupal/tmgmt/3298245.mr58.commit6976599d.diff",
-                "Data loss when the same source is accepted concurrently @see https://www.drupal.org/i/3618383": "resources/patch/php/drupal/tmgmt/3618383.mr180.commit445d31a6.diff",
-                "Major performance problem @see https://www.drupal.org/i/3534961": "resources/patch/php/drupal/tmgmt/3534961.mr125.commit-d5e00810.diff"
+                "Data loss when the same source is accepted concurrently @see https://www.drupal.org/i/3618383": "resources/patch/php/drupal/tmgmt/3618383.mr180.commita40a65ff.diff"
             },
             "drupal/tmgmt_ec_etranslation": {
                 "Reschedule timeouted items few times @see https://www.drupal.org/i/3609037": "resources/patch/php/drupal/tmgmt_ec_etranslation/3609037.mr3609037-commit55c6c018.diff"
@@ -563,6 +556,9 @@
             },
             "drupal/ui_patterns_settings": {
                 "PHP 8.4 @see https://www.drupal.org/i/3564894": "resources/patch/php/drupal/ui_patterns_settings/3564894.mr58.commit-17615e84.diff"
+            },
+            "drupal/ultimate_cron": {
+                "Queue processing runs without a lock @see https://www.drupal.org/i/3618809": "resources/patch/php/drupal/ultimate_cron/3618809.mr90.commitd9d7113.diff"
             },
             "drupal/views_block_area": {
                 "Render logic not working @see https://www.drupal.org/i/3499861": "resources/patch/php/drupal/views_block_area/3499861.patch"
@@ -604,10 +600,6 @@
         }
     },
     "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/openeuropa/oe_dashboard_agent.git"
-        },
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"

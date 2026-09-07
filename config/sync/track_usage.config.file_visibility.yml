@@ -18,6 +18,7 @@ source:
     - news
     - release
     - solution
+    - certificate
 traversable:
   comment: {  }
   media:

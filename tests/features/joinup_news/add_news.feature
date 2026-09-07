@@ -123,7 +123,7 @@ Feature: Managing and viewing news.
     Then I should see the "Dig do's and don'ts" tile
     And I should see the "Anvil test routines" tile
 
-    When I visit the content overview page
+    When I visit the advanced search page
     Then I should see the image "logo.png" in the "Ytterbium metal of the year" tile
 
   @javascript @generateMedia @generateMediaTypes:news_logo

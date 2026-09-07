@@ -18,7 +18,7 @@ settings:
   callback_hostname: ''
   use_queue: true
   retrials_after_timeout:
-    max_attempts: 0
+    max_attempts: 2
     interval: 86400
   non_translatable_parts:
     patterns: |

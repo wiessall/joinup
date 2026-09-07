@@ -9,10 +9,15 @@ declare(strict_types=1);
 
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Database\Database;
+use Drupal\Core\Menu\MenuLinkManagerInterface;
+use Drupal\Core\Menu\MenuTreeStorageInterface;
 use Drupal\joinup_core\Archiver;
 use Drupal\joinup_core\Update\NodeTranslationsRollback;
 use Drupal\joinup_core\Update\RevisionTranslationAffectedRepair;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
+use Drupal\meta_entity\Entity\MetaEntity;
+use Drupal\node\Entity\Node;
 
 /**
  * Converts absolute internal menu link URLs into internal paths.
@@ -179,9 +184,58 @@ function joinup_core_deploy_201603(): string {
 }
 
 /**
- * Archives solutions having less than 10 members.
+ * Changes eif_description format from basic_html to content_editor.
  */
 function joinup_core_deploy_201604(): string {
+  $database = \Drupal::database();
+  $updated = $database->update('meta_entity__eif_description')
+    ->fields([
+      'eif_description_format' => 'content_editor',
+    ])
+    ->condition('eif_description_format', 'basic_html')
+    ->execute();
+
+  return sprintf('Updated %d eif_description format value(s) from "basic_html" to "content_editor".', $updated);
+}
+
+/**
+ * Adjust menu links of SEMIC Conference collection.
+ */
+function joinup_core_deploy_201605(): void {
+  // Remove parent of the Overview link.
+  $menuTreeStorage = \Drupal::service(MenuTreeStorageInterface::class);
+  $menuLinkManager = \Drupal::service(MenuLinkManagerInterface::class);
+  $semicConferenceHome = $menuTreeStorage->load('group_link:node-734388-navigation');
+  $menuLinkManager->updateDefinition('group_link:overview-730634-navigation', [
+    'parent' => '',
+    'enabled' => 1,
+    'weight' => $semicConferenceHome['weight'],
+  ], FALSE);
+
+  // Move children of the custom landing page's menu link under the overview
+  // link.
+  foreach ($menuTreeStorage->loadAllChildren('group_link:node-734388-navigation') as $definition) {
+    $menuLinkManager->updateDefinition($definition['id'], [
+      'parent' => 'group_link:overview-730634-navigation',
+    ], FALSE);
+  }
+
+  // Disable menu link of the custom landing page.
+  $menuLinkManager->updateDefinition('group_link:node-734388-navigation', [
+    'enabled' => 0,
+  ], FALSE);
+
+  // Change "Overview" label to "Home".
+  $group = Node::load(730634);
+  assert($group instanceof GroupInterface);
+  $settings = MetaEntity::loadOrCreate('collection_settings', $group);
+  $settings->set('overview_label', 'Home')->save();
+}
+
+/**
+ * Archives solutions having less than 10 members.
+ */
+function joinup_core_deploy_201606(): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
   $queue = \Drupal::queue('joinup_core_archive_groups');
@@ -207,7 +261,7 @@ function joinup_core_deploy_201604(): string {
 /**
  * Archives content which wasn't updated in the last 3 years.
  */
-function joinup_core_deploy_201605(): string {
+function joinup_core_deploy_201607(): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
   $queue = \Drupal::queue('joinup_core_archive_groups');
@@ -233,7 +287,7 @@ function joinup_core_deploy_201605(): string {
 /**
  * Archives solutions which have no releases or distributions.
  */
-function joinup_core_deploy_201606(): string {
+function joinup_core_deploy_201608(): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
   $queue = \Drupal::queue('joinup_core_archive_groups');
@@ -259,7 +313,7 @@ function joinup_core_deploy_201606(): string {
 /**
  * Archives groups without group content.
  */
-function joinup_core_deploy_201607(): string {
+function joinup_core_deploy_201609(): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
   $queue = \Drupal::queue('joinup_core_archive_groups');
@@ -285,7 +339,7 @@ function joinup_core_deploy_201607(): string {
 /**
  * Archives collections which have no solutions.
  */
-function joinup_core_deploy_201608(array &$sandbox): string {
+function joinup_core_deploy_201610(array &$sandbox): string {
   $archiver = \Drupal::service(Archiver::class);
   assert($archiver instanceof Archiver);
   $queue = \Drupal::queue('joinup_core_archive_groups');

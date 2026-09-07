@@ -20,6 +20,9 @@ trait EntityTrait {
    * Finds an entity by label with the given type and bundle.
    */
   protected static function getEntityByLabel(string $entity_type_id, string $label, ?string $bundle = NULL): EntityInterface {
+    if ($entity_type_id === 'user') {
+      return user_load_by_name($label);
+    }
     return static::getEntityByKey('label', $entity_type_id, $label, $bundle);
   }
 

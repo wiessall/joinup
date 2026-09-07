@@ -64,7 +64,7 @@ Feature: SEO for news articles.
       | article:published_time | 2019-12-25T13:00:00+0000                                                                                          |
       | article:modified_time  | 2020-01-01T13:00:00+0000                                                                                          |
 
-    When I visit the content overview page
+    When I visit the advanced search page
     Then I should see the "Interoperable Europe Portal SEO news" tile
     # No metatags are defined for the keep up to date page.
     # No metatags JSON in general means also that the entity metatags of the news item

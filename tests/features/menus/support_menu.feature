@@ -70,33 +70,15 @@ Feature:
     And I press "Submit"
     Then I should be on "collections"
 
-    When I visit the content overview page
-    Then I should see the link "Take a tour"
-    And I should see the link "Contact Portal Support"
-    When I click "Contact Portal Support"
-    And I fill in the following:
-      | First name     | Roscof                      |
-      | Last name      | Vulvric                     |
-      | Organisation   | The Deaf-Mute Society       |
-      | E-mail address | roswine@example.za          |
-      | Category       | question_feature            |
-      | Subject        | Screen reader disponibility |
-      | Message        | Dear sir, madam, ...        |
-    And I press "Submit"
-    Then I should be on "keep-up-to-date"
-
     When I go to the homepage of the "Hotel California" collection
-    Then I should see the link "Take a tour"
     And I should see the link "Contact Portal Support"
-
     When I go to "/user"
-    Then I should <user page expectation> the link "Take a tour"
     And I should see the link "Contact Portal Support"
 
     Examples:
-      | role                                 | user page expectation | homepage expectation |
-      | an anonymous user                    | not see               | see                  |
-      | logged in as an "authenticated user" | see                   | not see              |
+      | role                                 | homepage expectation |
+      | an anonymous user                    | see                  |
+      | logged in as an "authenticated user" | not see              |
 
   Scenario: A moderator is able to administer the "Help and support" menu.
     Given I am logged in as a moderator
