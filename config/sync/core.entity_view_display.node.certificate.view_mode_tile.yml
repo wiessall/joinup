@@ -1,0 +1,57 @@
+uuid: 15c74e9a-f722-40d7-bd4e-c59170f06e14
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.view_mode_tile
+    - field.field.node.certificate.certificate
+    - field.field.node.certificate.course
+    - field.field.node.certificate.issuing_date
+    - node.type.certificate
+  module:
+    - datetime
+    - file
+    - layout_builder
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.certificate.view_mode_tile
+targetEntityType: node
+bundle: certificate
+mode: view_mode_tile
+content:
+  certificate:
+    type: file_default
+    label: hidden
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 103
+    region: content
+  course:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  issuing_date:
+    type: datetime_default
+    label: hidden
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 102
+    region: content
+hidden:
+  langcode: true
+  links: true
+  private_message_link: true
+  published_at: true
+  report: true
+  search_api_excerpt: true
+  uuid: true

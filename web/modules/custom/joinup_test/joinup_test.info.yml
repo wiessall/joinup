@@ -5,3 +5,4 @@ package: Joinup
 core_version_requirement: "^10.4 || ^11"
 dependencies:
   - http_request_mock:http_request_mock
+  - interoperable_europe:interoperable_europe

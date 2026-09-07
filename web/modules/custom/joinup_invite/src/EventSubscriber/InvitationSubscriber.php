@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_invite\EventSubscriber;
 
+use Drupal\assessments\AssessmentInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_invite\Entity\InvitationInterface;
 use Drupal\joinup_invite\Event\InvitationEventInterface;
 use Drupal\joinup_invite\Event\InvitationEvents;
@@ -93,12 +93,13 @@ class InvitationSubscriber implements EventSubscriberInterface {
     if ($event->getSubscribe()) {
       $group = $invitation->getEntity();
       $subscriptionBundles = JoinupSubscriptionsHelper::provideDataForField($group->bundle());
-      // Remove the 'assessment_report' subscription for all collections,
-      // except the assessment collection.
+      // Remove the assessment report subscription for all collections, except
+      // the assessments group.
       if ($group->bundle() === 'collection' && $group->uuid() !== AssessmentInterface::GROUP_UUID) {
-        $subscriptionBundles = array_values(array_filter($subscriptionBundles, function ($bundle) {
-          return $bundle['bundle'] !== 'assessment_report';
-        }));
+        $subscriptionBundles = array_values(array_filter(
+          $subscriptionBundles,
+          fn(array $bundle): bool => $bundle['entity_type'] !== 'assessment' || $bundle['bundle'] !== 'report',
+        ));
       }
       $membership->set('announcements', TRUE);
       $membership->set('subscription_bundles', $subscriptionBundles)->save();

@@ -11,6 +11,9 @@ use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueWorkerManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\meta_entity\Entity\MetaEntityInterface;
+use Drupal\meta_entity\MetaEntityRepositoryInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Service to handle default_content.
@@ -26,6 +29,8 @@ class DefaultContentManager {
     protected readonly InfoParserInterface $infoParser,
     protected readonly QueueFactory $queueFactory,
     protected readonly QueueWorkerManagerInterface $queueWorkerManager,
+    #[Autowire(service: 'meta_entity.repository')]
+    protected readonly MetaEntityRepositoryInterface $metaEntityRepository,
   ) {
   }
 
@@ -83,6 +88,35 @@ class DefaultContentManager {
     }
     $add ? $subqueue->addItem($term) : $subqueue->removeItem($term);
     $subqueue->save();
+  }
+
+  /**
+   * Sets the 'Show content' option of a group content listing.
+   *
+   * @param string $uuid
+   *   The UUID of the group node.
+   * @param string $option
+   *   One of 'all', 'archived' or 'unarchived'.
+   */
+  public function setGroupListingArchivedOption(string $uuid, string $option): void {
+    $nodes = $this->entityTypeManager->getStorage('node')
+      ->loadByProperties(['uuid' => $uuid]);
+    $node = reset($nodes);
+    if (!$node) {
+      return;
+    }
+    $meta_entity = $this->metaEntityRepository
+      ->getMetaEntityForEntity($node, $node->bundle() . '_settings');
+    if (!$meta_entity instanceof MetaEntityInterface) {
+      return;
+    }
+    $data = $meta_entity->get('listing_content')->getValue();
+    if (empty($data)) {
+      return;
+    }
+    $data[0]['value']['show_archived'] = $option;
+    $meta_entity->set('listing_content', $data);
+    $meta_entity->save();
   }
 
 }

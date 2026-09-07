@@ -24,7 +24,7 @@ settings:
   context_mapping:
     og: '@og.context:og'
   level: 1
-  depth: 1
+  depth: 2
 visibility:
   og_group_type:
     id: og_group_type

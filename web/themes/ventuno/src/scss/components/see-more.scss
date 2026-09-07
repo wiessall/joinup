@@ -1,7 +1,7 @@
 @import "../partials/core";
 
 .see-more {
-  display: -webkit-box;
+  display: -webkit-box !important;
   -webkit-box-orient: vertical;
   overflow: hidden;
 
@@ -13,8 +13,16 @@
     min-height: 120px;
     -webkit-line-clamp: 5;
 
+    // The expanded height is set as an inline max-height by
+    // toggle-text-seemore-btn.js, which is what this transitions.
+    transition: max-height 0.35s ease;
+
     &.show {
-      -webkit-line-clamp: unset;
+      -webkit-line-clamp: unset !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
     }
   }
 }

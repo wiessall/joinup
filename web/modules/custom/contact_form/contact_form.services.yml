@@ -8,3 +8,7 @@ services:
     parent: joinup_notification.notification_subscriber_base
 
   Drupal\contact_form\EventSubscriber\SenderNotificationSubscriber: { }
+
+  logger.channel.contact:
+    parent: logger.channel_base
+    arguments: ['contact']

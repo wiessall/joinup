@@ -450,7 +450,6 @@ function joinup_core_entity_bundle_field_info(EntityTypeInterface $entity_type, 
 
   $permalink_bundles = [
     'node' => [
-      'assessment_report',
       'custom_page',
       'discussion',
       'distribution',

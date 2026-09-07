@@ -9,8 +9,14 @@ declare(strict_types=1);
 
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Database\Database;
+use Drupal\Core\Menu\MenuLinkManagerInterface;
+use Drupal\Core\Menu\MenuTreeStorageInterface;
+use Drupal\joinup_core\Update\NodeTranslationsRollback;
 use Drupal\joinup_core\Update\RevisionTranslationAffectedRepair;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
+use Drupal\meta_entity\Entity\MetaEntity;
+use Drupal\node\Entity\Node;
 
 /**
  * Converts absolute internal menu link URLs into internal paths.
@@ -137,9 +143,16 @@ function joinup_core_deploy_201601(array &$sandbox): string {
 }
 
 /**
- * Queues nodes with more than 10 revisions in a language for revision delete.
+ * Rolls back nodes that lost paragraph references during translation saves.
  */
 function joinup_core_deploy_201602(): string {
+  return \Drupal::classResolver(NodeTranslationsRollback::class)->run();
+}
+
+/**
+ * Queues nodes with more than 10 revisions in a language for revision delete.
+ */
+function joinup_core_deploy_201603(): string {
   $threshold = 10;
 
   $connection = Database::getConnection();
@@ -167,4 +180,53 @@ function joinup_core_deploy_201602(): string {
   }
 
   return sprintf('Queued %d out of %d node(s) with more than %d revisions in a language for revision deletion.', $queued, count($nids), $threshold);
+}
+
+/**
+ * Changes eif_description format from basic_html to content_editor.
+ */
+function joinup_core_deploy_201604(): string {
+  $database = \Drupal::database();
+  $updated = $database->update('meta_entity__eif_description')
+    ->fields([
+      'eif_description_format' => 'content_editor',
+    ])
+    ->condition('eif_description_format', 'basic_html')
+    ->execute();
+
+  return sprintf('Updated %d eif_description format value(s) from "basic_html" to "content_editor".', $updated);
+}
+
+/**
+ * Adjust menu links of SEMIC Conference collection.
+ */
+function joinup_core_deploy_201605(): void {
+  // Remove parent of the Overview link.
+  $menuTreeStorage = \Drupal::service(MenuTreeStorageInterface::class);
+  $menuLinkManager = \Drupal::service(MenuLinkManagerInterface::class);
+  $semicConferenceHome = $menuTreeStorage->load('group_link:node-734388-navigation');
+  $menuLinkManager->updateDefinition('group_link:overview-730634-navigation', [
+    'parent' => '',
+    'enabled' => 1,
+    'weight' => $semicConferenceHome['weight'],
+  ], FALSE);
+
+  // Move children of the custom landing page's menu link under the overview
+  // link.
+  foreach ($menuTreeStorage->loadAllChildren('group_link:node-734388-navigation') as $definition) {
+    $menuLinkManager->updateDefinition($definition['id'], [
+      'parent' => 'group_link:overview-730634-navigation',
+    ], FALSE);
+  }
+
+  // Disable menu link of the custom landing page.
+  $menuLinkManager->updateDefinition('group_link:node-734388-navigation', [
+    'enabled' => 0,
+  ], FALSE);
+
+  // Change "Overview" label to "Home".
+  $group = Node::load(730634);
+  assert($group instanceof GroupInterface);
+  $settings = MetaEntity::loadOrCreate('collection_settings', $group);
+  $settings->set('overview_label', 'Home')->save();
 }
