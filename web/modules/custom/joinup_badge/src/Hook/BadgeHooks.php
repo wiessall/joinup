@@ -8,7 +8,6 @@ use Drupal\assessments\AssessmentInterface;
 use Drupal\comment\CommentInterface;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\DestructableInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
@@ -26,7 +25,6 @@ use Drupal\joinup_search\SearchIndexCommitter;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgMembershipInterface;
-use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
 use Drush\Commands\AutowireTrait;
 
@@ -216,20 +214,19 @@ class BadgeHooks implements DestructableInterface {
   /**
    * Implements hook_ENTITY_TYPE_delete() for certificate entities.
    */
-  #[Hook('entity_delete')]
-  public function deleteCertificateFile(EntityInterface $entity): void {
-    if (!$entity instanceof Certificate) {
+  #[Hook('node_delete')]
+  public function deleteCertificateFile(NodeInterface $node): void {
+    if (!$node instanceof Certificate) {
       return;
     }
-    if (!$entity->get('certificate')->isEmpty()) {
-      foreach ($entity->get('certificate')->referencedEntities() as $file) {
+    if (!$node->get('certificate')->isEmpty()) {
+      foreach ($node->get('certificate')->referencedEntities() as $file) {
         $file->delete();
       }
     }
     // Check, if user has some active certificates. If not, remove badge.
-    $uid = $entity->get('uid')->target_id;
-    $user = User::load($uid);
-    if (empty($this->getUserCertificates($user, '1'))) {
+    $user = $node->getOwner();
+    if ($user instanceof UserInterface && empty($this->getUserCertificates($user, '1'))) {
       $this->badgeService->revoke('certificate', $user);
     }
 
@@ -238,9 +235,9 @@ class BadgeHooks implements DestructableInterface {
   /**
    * Implements hook_ENTITY_TYPE_delete() for solution (course) entities.
    */
-  #[Hook('entity_delete')]
-  public function deleteCertificatesByCourse(EntityInterface $entity): void {
-    if (!$entity instanceof SolutionInterface) {
+  #[Hook('node_delete')]
+  public function deleteCertificatesByCourse(NodeInterface $node): void {
+    if (!$node instanceof SolutionInterface) {
       return;
     }
     $storage = $this->entityTypeManager->getStorage('node');
@@ -248,11 +245,11 @@ class BadgeHooks implements DestructableInterface {
     $nids = $storage->getQuery()
       ->accessCheck(FALSE)
       ->condition('type', 'certificate')
-      ->condition('course', $entity->id())
+      ->condition('course', $node->id())
       ->execute();
 
-    if ($nids) {
-      $storage->delete($storage->loadMultiple($nids));
+    foreach (array_chunk($nids, 50) as $nid_chunk) {
+      $storage->delete($storage->loadMultiple($nid_chunk));
     }
   }
 

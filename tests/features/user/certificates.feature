@@ -45,7 +45,6 @@ Feature: User certificates
     And I attach the file "certificate_1.pdf" to "files[certificates_form_0_certificate_0]"
     And I press "Create certificate"
     And I press "Save"
-    Then break
     Then I go to the profile of "Sara the User"
     And I should see the link "1 Certificate"
     Then I should see the following tiles in the correct order:
