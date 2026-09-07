@@ -1,0 +1,3 @@
+plugin.plugin_configuration.node_revision_delete.solution_revision_amount:
+  type: plugin.plugin_configuration.node_revision_delete.amount
+  label: 'Amount for solution revisions plugin'

@@ -3,7 +3,7 @@ Feature: Solution revisions referred by releases are never purged.
 
   Scenario: The revision purge queue keeps solution revisions referred by releases.
     # Set the amount to 5 for the scope of the test.
-    Given I set the configuration item "node_revision_delete.settings" with key "defaults.amount.settings.amount" to "5"
+    Given I set the configuration item "node.type.solution" with key "third_party_settings.node_revision_delete.solution_revision_amount.settings.amount" to "5"
     And the following "collection" content:
       | title            |
       | Space technology |
