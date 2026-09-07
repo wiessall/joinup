@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_core;
+namespace Drupal\joinup_linkchecker;
 
 use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\linkchecker\LinkCheckerLinkStorageSchema;
@@ -10,7 +10,7 @@ use Drupal\linkchecker\LinkCheckerLinkStorageSchema;
 /**
  * Add an index for the `group` column.
  */
-class JoinupCoreLinkCheckerLinkStorageSchema extends LinkCheckerLinkStorageSchema {
+class JoinupLinkCheckerLinkStorageSchema extends LinkCheckerLinkStorageSchema {
 
   /**
    * {@inheritdoc}

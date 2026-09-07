@@ -119,6 +119,7 @@ module:
   joinup_legal: 0
   joinup_licence: 0
   joinup_like: 0
+  joinup_linkchecker: 0
   joinup_log: 0
   joinup_media: 0
   joinup_menu: 0
