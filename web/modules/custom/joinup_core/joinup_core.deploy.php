@@ -244,17 +244,14 @@ function joinup_core_deploy_201606(): string {
   $deleted = 0;
   foreach ($rows as $row) {
     $data = unserialize($row->data, ['allowed_classes' => FALSE]);
-    if (($data['entity_type_id'] ?? NULL) !== 'node') {
+    if (($data['entity_type_id'] ?? NULL) === 'paragraph') {
       continue;
     }
 
-    $node = $node_storage->load($data['entity_id']);
-    if ($node && $node->bundle() === 'solution') {
-      $database->delete('queue')
-        ->condition('item_id', $row->item_id)
-        ->execute();
-      $deleted++;
-    }
+    $database->delete('queue')
+      ->condition('item_id', $row->item_id)
+      ->execute();
+    $deleted++;
   }
 
   return sprintf('Deleted %d stale entity_reference_revisions_orphan_purger queue item(s).', $deleted);
