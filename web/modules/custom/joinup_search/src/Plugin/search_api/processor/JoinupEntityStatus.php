@@ -107,6 +107,9 @@ class JoinupEntityStatus extends ProcessorPluginBase {
       elseif ($object instanceof GroupInterface) {
         $enabled = $object->isPublished();
       }
+      elseif ($object instanceof EntityPublishedInterface) {
+        $enabled = $object->isPublished();
+      }
 
       if (!$enabled) {
         unset($items[$item_id]);

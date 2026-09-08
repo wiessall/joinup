@@ -1,2 +1,1 @@
-.see-more{display:-webkit-box!important;-webkit-box-orient:vertical;overflow:hidden}.see-more p:last-child{margin-bottom:0}.see-more--long{-webkit-line-clamp:5;min-height:120px}.see-more--long.show{-webkit-line-clamp:unset!important}
-/*# sourceMappingURL=see-more.min.css.map */
+.see-more{display:-webkit-box!important;-webkit-box-orient:vertical;overflow:hidden}.see-more p:last-child{margin-bottom:0}.see-more--long{-webkit-line-clamp:5;min-height:120px;transition:max-height .35s ease}.see-more--long.show{-webkit-line-clamp:unset!important}@media (prefers-reduced-motion:reduce){.see-more--long{transition:none}}

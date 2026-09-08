@@ -1,0 +1,13 @@
+uuid: 542a9d93-fb6a-44b1-9d93-b6bb273dac7d
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.certificate
+id: node.certificate
+targetEntityType: node
+bundle: certificate
+action: page_not_found
+no_bypass: false
+bypass_message: true
+configuration: {  }

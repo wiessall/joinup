@@ -7,6 +7,7 @@ namespace Drupal\Tests\joinup_i18n\ExistingSite;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_i18n\Hook\JoinupI18nHooks;
+use Drupal\joinup_i18n\TranslationHelper;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\language\Entity\ContentLanguageSettings;
 use Drupal\meta_entity\Entity\MetaEntity;
@@ -399,6 +400,25 @@ final class JoinupI18nTest extends JoinupExistingSiteTestBase {
       ->condition('item_id', $settings->id())
       ->execute();
     $this->assertEmpty($jobItemIds);
+  }
+
+  /**
+   * Tests that remote videos are never handed to machine translation.
+   */
+  public function testRemoteVideoIsNotMachineTranslated(): void {
+    $media = \Drupal::entityTypeManager()->getStorage('media')->create([
+      'bundle' => 'remote_video',
+      'name' => 'Joinup promotional video',
+      'media_oembed_video' => 'https://www.youtube.com/watch?v=BA1jY8LJ8tM',
+    ]);
+
+    $definitions = $media->getFieldDefinitions();
+    $this->assertTrue($definitions['media_oembed_video']->isTranslatable());
+    foreach (['name', 'thumbnail', 'created', 'changed', 'status', 'uid', 'path', 'metatag'] as $fieldName) {
+      $this->assertFalse($definitions[$fieldName]->isTranslatable());
+    }
+
+    $this->assertFalse(\Drupal::service(TranslationHelper::class)->hasTranslatableFields($media));
   }
 
   /**

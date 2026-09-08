@@ -95,14 +95,6 @@ function search_api_field_entity_view(array &$build, EntityInterface $entity, En
       continue;
     }
 
-    // Check number of archived items.
-    if (isset($build['_layout_builder']) && count($build['_layout_builder']) > 1) {
-      $archived_items = _search_api_field_find_archived($build['_layout_builder'], $field_name) ?? 0;
-    }
-    else {
-      $archived_items = $build[$field_name]['#archived_items'] ?? 0;
-    }
-
     // The facets available for the facet source offered by this field have been
     // organized into pseudo fields. Loop over the configuration to render them
     // in the correct place.
@@ -119,23 +111,22 @@ function search_api_field_entity_view(array &$build, EntityInterface $entity, En
         // Render the facet only if the pseudo field is enabled for this view
         // mode.
         if ($display->getComponent($name)) {
-          if (
-            !in_array($facet_name, [
-              'collection_content_status',
-              'solution_content_status',
-            ])
-            || (
-              $settings['show_archived'] === 'all'
-              && $archived_items
-              && $archived_items > 0
-            )
-          ) {
-            // Let the facet_manager build the facets.
-            $build[$name][] = $facet_manager->build($facets[$facet_name]);
-            // Keep track of created pseudo-fields so we can add wrappers later
-            // on.
-            $pseudo_fields[$name] = $facet_data['region'];
+          $is_status_facet = in_array($facet_name, [
+            'collection_content_status',
+            'solution_content_status',
+          ], TRUE);
+          if ($is_status_facet && ($settings['show_archived'] ?? NULL) !== 'all') {
+            continue;
           }
+          // Let the facet_manager build the facets.
+          $facet_build = $facet_manager->build($facets[$facet_name]);
+          if ($is_status_facet && empty($facet_build)) {
+            continue;
+          }
+          $build[$name][] = $facet_build;
+          // Keep track of created pseudo-fields so we can add wrappers later
+          // on.
+          $pseudo_fields[$name] = $facet_data['region'];
         }
       }
     }
@@ -159,39 +150,6 @@ function search_api_field_entity_view(array &$build, EntityInterface $entity, En
       ];
     }
   }
-}
-
-/**
- * Get number of archived items.
- *
- * @param array $data
- *   Build data.
- * @param string $field
- *   Machine name of the Search API field.
- *
- * @return int|null
- *   Number of archived items.
- */
-function _search_api_field_find_archived(array $data, $field): ?int {
-  foreach ($data as $key => $item) {
-    if (!is_array($item)) {
-      continue;
-    }
-    if (str_starts_with((string) $key, '#')) {
-      continue;
-    }
-
-    if (isset($item['#archived_items']) && $item['#field_name'] === $field) {
-      return (int) $item['#archived_items'];
-    }
-
-    $archivedItem = _search_api_field_find_archived($item, $field);
-    if ($archivedItem) {
-      return $archivedItem;
-    }
-  }
-
-  return NULL;
 }
 
 /**
@@ -265,7 +223,6 @@ function search_api_field_theme(): array {
         'field_name' => NULL,
         'entity' => NULL,
         'view_mode' => NULL,
-        'archived_items' => NULL,
       ],
     ],
     'search_api_field_result' => [

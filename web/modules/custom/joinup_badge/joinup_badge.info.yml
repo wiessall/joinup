@@ -7,3 +7,5 @@ core_version_requirement: '*'
 dependencies:
   - drupal:user
   - flag:flag
+  - interoperable_europe:interoperable_europe
+  - joinup:joinup_search

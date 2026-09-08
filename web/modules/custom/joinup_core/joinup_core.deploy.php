@@ -9,11 +9,16 @@ declare(strict_types=1);
 
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Database\Database;
+use Drupal\Core\Menu\MenuLinkManagerInterface;
+use Drupal\Core\Menu\MenuTreeStorageInterface;
 use Drupal\joinup_core\Update\Base64ImageConverter;
 use Drupal\joinup_core\Update\InlineImageConverter;
 use Drupal\joinup_core\Update\NodeTranslationsRollback;
 use Drupal\joinup_core\Update\RevisionTranslationAffectedRepair;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
+use Drupal\meta_entity\Entity\MetaEntity;
+use Drupal\node\Entity\Node;
 
 /**
  * Converts absolute internal menu link URLs into internal paths.
@@ -180,11 +185,60 @@ function joinup_core_deploy_201603(): string {
 }
 
 /**
+ * Changes eif_description format from basic_html to content_editor.
+ */
+function joinup_core_deploy_201604(): string {
+  $database = \Drupal::database();
+  $updated = $database->update('meta_entity__eif_description')
+    ->fields([
+      'eif_description_format' => 'content_editor',
+    ])
+    ->condition('eif_description_format', 'basic_html')
+    ->execute();
+
+  return sprintf('Updated %d eif_description format value(s) from "basic_html" to "content_editor".', $updated);
+}
+
+/**
+ * Adjust menu links of SEMIC Conference collection.
+ */
+function joinup_core_deploy_201605(): void {
+  // Remove parent of the Overview link.
+  $menuTreeStorage = \Drupal::service(MenuTreeStorageInterface::class);
+  $menuLinkManager = \Drupal::service(MenuLinkManagerInterface::class);
+  $semicConferenceHome = $menuTreeStorage->load('group_link:node-734388-navigation');
+  $menuLinkManager->updateDefinition('group_link:overview-730634-navigation', [
+    'parent' => '',
+    'enabled' => 1,
+    'weight' => $semicConferenceHome['weight'],
+  ], FALSE);
+
+  // Move children of the custom landing page's menu link under the overview
+  // link.
+  foreach ($menuTreeStorage->loadAllChildren('group_link:node-734388-navigation') as $definition) {
+    $menuLinkManager->updateDefinition($definition['id'], [
+      'parent' => 'group_link:overview-730634-navigation',
+    ], FALSE);
+  }
+
+  // Disable menu link of the custom landing page.
+  $menuLinkManager->updateDefinition('group_link:node-734388-navigation', [
+    'enabled' => 0,
+  ], FALSE);
+
+  // Change "Overview" label to "Home".
+  $group = Node::load(730634);
+  assert($group instanceof GroupInterface);
+  $settings = MetaEntity::loadOrCreate('collection_settings', $group);
+  $settings->set('overview_label', 'Home')->save();
+}
+
+/**
  * Converts legacy inline <img> markup into <drupal-media> embeds.
  *
  * @see \Drupal\joinup_core\Update\InlineImageConverter
  */
-function joinup_core_deploy_201604(array &$sandbox): string {
+function joinup_core_deploy_201606(array &$sandbox): string {
   /** @var \Drupal\joinup_core\Update\InlineImageConverter $converter */
   $converter = \Drupal::classResolver(InlineImageConverter::class);
 
@@ -230,7 +284,7 @@ function joinup_core_deploy_201604(array &$sandbox): string {
  *
  * @see \Drupal\joinup_core\Update\Base64ImageConverter
  */
-function joinup_core_deploy_201605(array &$sandbox): string {
+function joinup_core_deploy_201607(array &$sandbox): string {
   /** @var \Drupal\joinup_core\Update\Base64ImageConverter $converter */
   $converter = \Drupal::classResolver(Base64ImageConverter::class);
 

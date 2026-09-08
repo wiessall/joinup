@@ -42,7 +42,7 @@ class SenderNotificationSubscriber implements EventSubscriberInterface {
     if (!$event->isSuccessful()) {
       // If the submission didn't succeed, we are not sending any notification
       // to the sender. Instead, the user will get an on-screen error message.
-      // @see contact_form_form_message_contact_form_submission_submit()
+      // @see ContactFormFormHooks::submit()
       return;
     }
 
