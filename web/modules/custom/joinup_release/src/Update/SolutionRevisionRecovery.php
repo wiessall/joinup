@@ -98,6 +98,10 @@ final class SolutionRevisionRecovery implements ContainerInjectionInterface {
    */
   protected function process(array &$sandbox): void {
     $vid = array_shift($sandbox['vids']);
+    if ($vid === NULL) {
+      $sandbox['#finished'] = 1;
+      return;
+    }
 
     $schema = $this->db->schema();
     foreach ($this->getAffectedTables() as $table => $field) {
