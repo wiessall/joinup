@@ -235,10 +235,29 @@ function joinup_core_deploy_201605(): void {
  * Removes stale entity_reference_revisions_orphan_purger queue items.
  */
 function joinup_core_deploy_201606(): string {
-  $deleted = \Drupal::database()->delete('queue')
+  $database = \Drupal::database();
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+  $rows = $database->select('queue', 'q')
+    ->fields('q', ['item_id', 'data'])
     ->condition('name', 'entity_reference_revisions_orphan_purger')
-    ->condition('expire', 0, '>')
     ->execute();
+
+  $deleted = 0;
+  foreach ($rows as $row) {
+    $data = unserialize($row->data);
+    if (($data['entity_type_id'] ?? NULL) !== 'node') {
+      continue;
+    }
+
+    $node = $node_storage->load($data['entity_id']);
+    if ($node && $node->bundle() === 'solution') {
+      $database->delete('queue')
+        ->condition('item_id', $row->item_id)
+        ->execute();
+      $deleted++;
+    }
+  }
 
   return sprintf('Deleted %d stale entity_reference_revisions_orphan_purger queue item(s).', $deleted);
 }
