@@ -230,3 +230,15 @@ function joinup_core_deploy_201605(): void {
   $settings = MetaEntity::loadOrCreate('collection_settings', $group);
   $settings->set('overview_label', 'Home')->save();
 }
+
+/**
+ * Removes stale entity_reference_revisions_orphan_purger queue items.
+ */
+function joinup_core_deploy_201606(): string {
+  $deleted = \Drupal::database()->delete('queue')
+    ->condition('name', 'entity_reference_revisions_orphan_purger')
+    ->condition('expire', 0, '>')
+    ->execute();
+
+  return sprintf('Deleted %d stale entity_reference_revisions_orphan_purger queue item(s).', $deleted);
+}
