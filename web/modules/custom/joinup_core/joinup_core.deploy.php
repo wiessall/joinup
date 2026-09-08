@@ -236,8 +236,6 @@ function joinup_core_deploy_201605(): void {
  */
 function joinup_core_deploy_201606(): string {
   $database = \Drupal::database();
-  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
-
   $rows = $database->select('queue', 'q')
     ->fields('q', ['item_id', 'data'])
     ->condition('name', 'entity_reference_revisions_orphan_purger')
