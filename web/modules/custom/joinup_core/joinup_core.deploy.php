@@ -245,7 +245,7 @@ function joinup_core_deploy_201606(): string {
 
   $deleted = 0;
   foreach ($rows as $row) {
-    $data = unserialize($row->data);
+    $data = unserialize($row->data, ['allowed_classes' => FALSE]);
     if (($data['entity_type_id'] ?? NULL) !== 'node') {
       continue;
     }
