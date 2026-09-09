@@ -106,7 +106,8 @@ function joinup_tmgmt_deploy_201601(array &$sandbox): string {
 /**
  * Reschedule all aborted that logged a warning.
  */
-function joinup_tmgmt_deploy_201602(): void {
+function joinup_tmgmt_deploy_201602(): string {
+  $now = new DateTime();
   $db = \Drupal::database();
   $schema = $db->schema();
   $tempTable = '_tmgmt_temp';
@@ -141,6 +142,27 @@ function joinup_tmgmt_deploy_201602(): void {
   $select->innerJoin('tmgmt_job', 'j', 'i.tjid = j.tjid');
   $db->insert($tempTable)->from($select)->execute();
 
+  $sql = <<<SQL
+    SELECT GROUP_CONCAT(i.tjiid ORDER BY i.tjiid DESC)
+    FROM {tmgmt_job_item} i
+    INNER JOIN {tmgmt_message} m ON i.tjiid = m.tjiid
+    WHERE m.message = 'Aborted. No translation received after 6 hours'
+    AND i.state = 4
+    GROUP BY i.plugin, i.item_type, i.item_id, m.tjid
+    HAVING COUNT(*) > 1
+    SQL;
+  $toDelete = [];
+  foreach ($db->query($sql)->fetchCol() as $tjiids) {
+    $tjiids = explode(',', $tjiids);
+    // Keep the most recent job item.
+    array_shift($tjiids);
+    $toDelete = [...$toDelete, ...$tjiids];
+  }
+  if ($toDelete) {
+    $db->delete('tmgmt_job_item')->condition('tjiid', $toDelete, 'IN')->execute();
+    $db->delete('tmgmt_message')->condition('tjiid', $toDelete, 'IN')->execute();
+  }
+
   // Update the state.
   $sql = <<<SQL
     UPDATE {tmgmt_job_item} i
@@ -162,4 +184,6 @@ function joinup_tmgmt_deploy_201602(): void {
 
   // Cleanup.
   $schema->dropTable($tempTable);
+
+  return "Took: {$now->diff(new DateTime())->format('%im %ss')}";
 }
