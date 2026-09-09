@@ -5,15 +5,34 @@ declare(strict_types=1);
 namespace Drupal\contact_form\EventSubscriber;
 
 use Drupal\contact_form\ContactFormEvents;
+use Drupal\contact_form\ContactFormUrlResolver;
+use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Session\AccountProxy;
 use Drupal\Core\Url;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\EventSubscriber\NotificationSubscriberBase;
+use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
+use Drupal\joinup_workflow\WorkflowHelperInterface;
+use Drupal\og\MembershipManagerInterface;
 
 /**
  * Class responsible to send the email after a contact form.
  */
 class NotificationSubscriber extends NotificationSubscriberBase {
+
+  public function __construct(
+    EntityTypeManagerInterface $entityTypeManager,
+    ConfigFactory $configFactory,
+    AccountProxy $currentUser,
+    MembershipManagerInterface $membershipManager,
+    WorkflowHelperInterface $workflowHelper,
+    JoinupMessageDeliveryInterface $messageDelivery,
+    protected readonly ContactFormUrlResolver $urlResolver,
+  ) {
+    parent::__construct($entityTypeManager, $configFactory, $currentUser, $membershipManager, $workflowHelper, $messageDelivery);
+  }
 
   /**
    * {@inheritdoc}
@@ -51,42 +70,6 @@ class NotificationSubscriber extends NotificationSubscriberBase {
   }
 
   /**
-   * Determines the entity object of the route matching a uri.
-   *
-   * @param string $uri
-   *   The internal or external uri.
-   *
-   * @return \Drupal\Core\Entity\EntityInterface|null
-   *   The entity object or null in any other case.
-   */
-  protected function getEntityFromUrl($uri): ?EntityInterface {
-    try {
-      $url = Url::fromUri($uri);
-    }
-    catch (\Exception $e) {
-      return NULL;
-    }
-
-    if (!$url->isRouted()) {
-      return NULL;
-    }
-
-    $route_parameters = $url->getRouteParameters();
-    $nid = $route_parameters['node'] ?? NULL;
-    if (!is_numeric($nid)) {
-      return NULL;
-    }
-
-    if ($url->getRouteName() !== 'entity.node.canonical') {
-      return NULL;
-    }
-
-    $entity = $this->entityTypeManager->getStorage('node')->load($nid);
-
-    return $entity;
-  }
-
-  /**
    * Sends a report message instead of the normal contact form email.
    *
    * @param \Drupal\joinup_notification\Event\NotificationEvent $event
@@ -97,7 +80,7 @@ class NotificationSubscriber extends NotificationSubscriberBase {
    */
   protected function sendReportMessage(NotificationEvent $event): bool {
     $message = $event->getEntity();
-    $entity = $this->getEntityFromUrl($message->get('field_contact_url')->first()->uri);
+    $entity = $this->urlResolver->getEntityFromUrl($message);
     // If there is no entity found, do not send an email.
     if (empty($entity)) {
       return FALSE;
@@ -167,8 +150,8 @@ class NotificationSubscriber extends NotificationSubscriberBase {
     $arguments['@legal_notice:url'] = Url::fromRoute('entity.entity_legal_document.canonical', ['entity_legal_document' => 'legal_notice'], ['absolute' => TRUE])->toString();
     $arguments['@message:subject'] = $message->get('field_contact_subject')->first()->value;
     $arguments['@message:message'] = strip_tags($message->get('field_contact_message')->first()->value);
-    if (!empty($message->get('field_contact_url')->first()->uri)) {
-      $reported = $this->getEntityFromUrl($message->get('field_contact_url')->first()->uri);
+    $reported = $this->urlResolver->getEntityFromUrl($message);
+    if ($reported !== NULL) {
       $arguments['@entity:title'] = $reported->label();
       $arguments['@entity:url'] = $reported->toUrl('canonical', ['absolute' => TRUE])->toString();
     }

@@ -234,11 +234,37 @@ function joinup_core_deploy_201605(): void {
 }
 
 /**
+ * Removes stale entity_reference_revisions_orphan_purger queue items.
+ */
+function joinup_core_deploy_201606(): string {
+  $database = \Drupal::database();
+  $rows = $database->select('queue', 'q')
+    ->fields('q', ['item_id', 'data'])
+    ->condition('name', 'entity_reference_revisions_orphan_purger')
+    ->execute();
+
+  $deleted = 0;
+  foreach ($rows as $row) {
+    $data = unserialize($row->data, ['allowed_classes' => FALSE]);
+    if (($data['entity_type_id'] ?? NULL) === 'paragraph') {
+      continue;
+    }
+
+    $database->delete('queue')
+      ->condition('item_id', $row->item_id)
+      ->execute();
+    $deleted++;
+  }
+
+  return sprintf('Deleted %d stale entity_reference_revisions_orphan_purger queue item(s).', $deleted);
+}
+
+/**
  * Converts legacy inline <img> markup into <drupal-media> embeds.
  *
  * @see \Drupal\joinup_core\Update\InlineImageConverter
  */
-function joinup_core_deploy_201606(array &$sandbox): string {
+function joinup_core_deploy_201607(array &$sandbox): string {
   /** @var \Drupal\joinup_core\Update\InlineImageConverter $converter */
   $converter = \Drupal::classResolver(InlineImageConverter::class);
 
@@ -284,7 +310,7 @@ function joinup_core_deploy_201606(array &$sandbox): string {
  *
  * @see \Drupal\joinup_core\Update\Base64ImageConverter
  */
-function joinup_core_deploy_201607(array &$sandbox): string {
+function joinup_core_deploy_201608(array &$sandbox): string {
   /** @var \Drupal\joinup_core\Update\Base64ImageConverter $converter */
   $converter = \Drupal::classResolver(Base64ImageConverter::class);
 
