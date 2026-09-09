@@ -14,7 +14,7 @@ Feature: Fill Page URL field in Technical problem / Bug report / Inappropriate
     And I fill in "Organisation" with "Vilcabamba State"
     And I fill in "E-mail address" with "tupac.amaru@free.pe"
     And I select "Technical problem / Bug report" from "Category"
-    And I fill in "Page URL" with "/collection/portal"
+    And I fill in "Page URL" with "/collection/portal-support"
     And I fill in "Subject" with "Friendly reminder"
     And I enter "I will be back..." in the "Message" wysiwyg editor
     Then I press "Submit"
@@ -28,7 +28,7 @@ Feature: Fill Page URL field in Technical problem / Bug report / Inappropriate
     And I fill in "Organisation" with "Kiolin State"
     And I fill in "E-mail address" with "josie.camaru@free.pe"
     And I select "Technical problem / Bug report" from "Category"
-    And I fill "Page URL" with the absolute URL "/collection/portal"
+    And I fill "Page URL" with the absolute URL "/collection/portal-support"
     And I fill in "Subject" with "Mistery reminder"
     And I enter "I will be back soon..." in the "Message" wysiwyg editor
     Then I press "Submit"
@@ -70,3 +70,18 @@ Feature: Fill Page URL field in Technical problem / Bug report / Inappropriate
     And I should see the following success messages:
       | success messages                                              |
       | Your message has been submitted. Thank you for your feedback. |
+
+  Scenario: Reporting a Page URL that does not resolve to content shows a
+  validation error.
+
+    Then I go to the contact form page
+    And I fill in "First name" with "Grace"
+    And I fill in "Last name" with "Hopper"
+    And I fill in "Organisation" with "Lucotores State"
+    And I fill in "E-mail address" with "grace.hopper@free.pe"
+    And I select "Inappropriate content" from "Category"
+    And I fill in "Page URL" with "/collection/dummy-url"
+    And I fill in "Subject" with "Reporting the wrong kind of page"
+    And I enter "This URL does not point to reportable content." in the "Message" wysiwyg editor
+    Then I press "Submit"
+    And I should see the inline form error message "Page URL field is invalid."
