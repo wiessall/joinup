@@ -124,6 +124,30 @@ class AccessibilityFilterTest extends TestCase {
         'input' => '<h1>Real Title</h1><p></p><h2>Subtitle</h2><p>Content here</p><h3></h3><p>&nbsp;</p>',
         'expected' => '<h1>Real Title</h1><h2>Subtitle</h2><p>Content here</p>',
       ],
+      'paragraph holding a media embed' => [
+        'input' => '<p><drupal-media data-entity-type="media" data-entity-uuid="e2c1" data-view-mode="media_library_full_width" alt="Performance_Overview"></drupal-media></p>',
+        'expected' => '<p><drupal-media data-entity-type="media" data-entity-uuid="e2c1" data-view-mode="media_library_full_width" alt="Performance_Overview"></drupal-media></p>',
+      ],
+      'paragraph holding an image' => [
+        'input' => '<p><img src="/sites/default/files/chart.png" alt="Performance_Overview" /></p>',
+        'expected' => '<p><img src="/sites/default/files/chart.png" alt="Performance_Overview"></p>',
+      ],
+      'paragraph holding an iframe' => [
+        'input' => '<p><iframe src="https://europa.eu/embed"></iframe></p>',
+        'expected' => '<p><iframe src="https://europa.eu/embed"></iframe></p>',
+      ],
+      'heading holding a media embed' => [
+        'input' => '<h2><drupal-media data-entity-type="media" data-entity-uuid="e2c1"></drupal-media></h2>',
+        'expected' => '<h2><drupal-media data-entity-type="media" data-entity-uuid="e2c1"></drupal-media></h2>',
+      ],
+      'media embed nested deeper in an otherwise empty paragraph' => [
+        'input' => '<p><span><drupal-media data-entity-type="media" data-entity-uuid="e2c1"></drupal-media></span></p>',
+        'expected' => '<p><span><drupal-media data-entity-type="media" data-entity-uuid="e2c1"></drupal-media></span></p>',
+      ],
+      'genuinely empty paragraph next to one holding a media embed' => [
+        'input' => '<p></p><p><drupal-media data-entity-type="media" data-entity-uuid="e2c1"></drupal-media></p>',
+        'expected' => '<p><drupal-media data-entity-type="media" data-entity-uuid="e2c1"></drupal-media></p>',
+      ],
       'unicode non-breaking space' => [
         'input' => '<p> </p>',
         'expected' => '',

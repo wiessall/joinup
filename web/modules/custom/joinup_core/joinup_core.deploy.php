@@ -12,6 +12,8 @@ use Drupal\Core\Database\Database;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
 use Drupal\Core\Menu\MenuTreeStorageInterface;
 use Drupal\joinup_core\Archiver;
+use Drupal\joinup_core\Update\Base64ImageConverter;
+use Drupal\joinup_core\Update\InlineImageConverter;
 use Drupal\joinup_core\Update\NodeTranslationsRollback;
 use Drupal\joinup_core\Update\RevisionTranslationAffectedRepair;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -259,9 +261,96 @@ function joinup_core_deploy_201606(): string {
 }
 
 /**
+ * Converts legacy inline <img> markup into <drupal-media> embeds.
+ *
+ * @see \Drupal\joinup_core\Update\InlineImageConverter
+ */
+function joinup_core_deploy_201607(array &$sandbox): string {
+  /** @var \Drupal\joinup_core\Update\InlineImageConverter $converter */
+  $converter = \Drupal::classResolver(InlineImageConverter::class);
+
+  if (!isset($sandbox['items'])) {
+    $sandbox['items'] = $converter->collect();
+    $sandbox['total'] = count($sandbox['items']);
+    $sandbox['stats'] = InlineImageConverter::STATS;
+  }
+
+  // Process a bounded slice per invocation: conversion loads and saves entities
+  // that can be large, and creates media entities along the way.
+  foreach (array_splice($sandbox['items'], 0, 25) as $item) {
+    foreach ($converter->convert($item['entity_type'], $item['id']) as $key => $count) {
+      $sandbox['stats'][$key] += $count;
+    }
+  }
+
+  $remaining = count($sandbox['items']);
+  $sandbox['#finished'] = $sandbox['total'] === 0 ? 1 : 1 - ($remaining / $sandbox['total']);
+
+  $stats = $sandbox['stats'];
+  return sprintf(
+    'Inline images: %d converted on %d entities (%d media created, %d recovered from revisions). Skipped %d remote, %d base64, %d unrecoverable, %d missing file. Processed %d/%d entities.',
+    $stats['converted'],
+    $stats['entities'],
+    $stats['media_created'],
+    $stats['recovered_from_revision'],
+    $stats['skipped_remote'],
+    $stats['skipped_base64'],
+    $stats['skipped_empty'],
+    $stats['skipped_missing_file'],
+    $sandbox['total'] - $remaining,
+    $sandbox['total']
+  );
+}
+
+/**
+ * Converts inline base64 images into <drupal-media> embeds.
+ *
+ * Runs after joinup_core_deploy_201604, which leaves these behind: an entity
+ * holding both a recoverable image and a base64 one is rewritten twice, and
+ * doing the cheaper, file-backed conversion first keeps this hook's work down.
+ *
+ * @see \Drupal\joinup_core\Update\Base64ImageConverter
+ */
+function joinup_core_deploy_201608(array &$sandbox): string {
+  /** @var \Drupal\joinup_core\Update\Base64ImageConverter $converter */
+  $converter = \Drupal::classResolver(Base64ImageConverter::class);
+
+  if (!isset($sandbox['items'])) {
+    $sandbox['items'] = $converter->collect();
+    $sandbox['total'] = count($sandbox['items']);
+    $sandbox['stats'] = Base64ImageConverter::STATS;
+  }
+
+  // A bounded slice per invocation: a single payload can be several megabytes,
+  // and one entity may repeat it across two dozen translations.
+  foreach (array_splice($sandbox['items'], 0, 10) as $item) {
+    foreach ($converter->convert($item['entity_type'], $item['id']) as $key => $count) {
+      $sandbox['stats'][$key] += $count;
+    }
+  }
+
+  $remaining = count($sandbox['items']);
+  $sandbox['#finished'] = $sandbox['total'] === 0 ? 1 : 1 - ($remaining / $sandbox['total']);
+
+  $stats = $sandbox['stats'];
+  return sprintf(
+    'Base64 images: %d converted on %d entities (%d files written, %d media created, %d icons dropped). Skipped %d undecodable, %d unsupported. Processed %d/%d entities.',
+    $stats['converted'],
+    $stats['entities'],
+    $stats['files_created'],
+    $stats['media_created'],
+    $stats['dropped_icon'],
+    $stats['skipped_undecodable'],
+    $stats['skipped_unsupported'],
+    $sandbox['total'] - $remaining,
+    $sandbox['total']
+  );
+}
+
+/**
  * Archives solutions having less than 10 members.
  */
-function joinup_core_deploy_201607(): string {
+function joinup_core_deploy_201609(): string {
   $queue = \Drupal::queue('joinup_core_archive_groups');
   $groupIds = Archiver::getIdsFromCsvColumn(
     dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID Collections & Solutions with less than 10 members.csv',
@@ -285,7 +374,7 @@ function joinup_core_deploy_201607(): string {
 /**
  * Archives content which wasn't updated in the last 3 years.
  */
-function joinup_core_deploy_201608(): string {
+function joinup_core_deploy_201610(): string {
   $queue = \Drupal::queue('joinup_core_archive_groups');
   $groupIds = Archiver::getIdsFromCsvColumn(
     dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID Last update - 3 years ago.csv',
@@ -309,7 +398,7 @@ function joinup_core_deploy_201608(): string {
 /**
  * Archives solutions which have no releases or distributions.
  */
-function joinup_core_deploy_201609(): string {
+function joinup_core_deploy_201611(): string {
   $queue = \Drupal::queue('joinup_core_archive_groups');
   $groupIds = Archiver::getIdsFromCsvColumn(
     dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID No releases or distributions.csv',
@@ -333,7 +422,7 @@ function joinup_core_deploy_201609(): string {
 /**
  * Archives groups without group content.
  */
-function joinup_core_deploy_201610(): string {
+function joinup_core_deploy_201612(): string {
   $queue = \Drupal::queue('joinup_core_archive_groups');
   $groupIds = Archiver::getIdsFromCsvColumn(
     dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID Solutions & Collections with no content items.csv',
@@ -357,7 +446,7 @@ function joinup_core_deploy_201610(): string {
 /**
  * Archives collections which have no solutions.
  */
-function joinup_core_deploy_201611(): string {
+function joinup_core_deploy_201613(): string {
   $queue = \Drupal::queue('joinup_core_archive_groups');
   $groupIds = Archiver::getIdsFromCsvColumn(
     dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID Collections with no solutions.csv',
