@@ -1,0 +1,6 @@
+patchedDependencies:
+  '@openeuropa/bcl-builder': resources/patch/pnpm/@openeuropa+bcl-builder.patch
+  mmenu-light: resources/patch/pnpm/mmenu-light.patch
+allowBuilds:
+  '@parcel/watcher': true
+  unrs-resolver: true
