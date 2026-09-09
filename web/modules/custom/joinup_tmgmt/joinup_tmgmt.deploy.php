@@ -111,7 +111,6 @@ function joinup_tmgmt_deploy_201602(): string {
   $db = \Drupal::database();
   $schema = $db->schema();
   $tempTable = '_tmgmt_temp';
-  $identifier = "CONCAT_WS(':', plugin, item_type, item_id, target_language)";
 
   // We use a temporary table to help later with the main update statement. The
   // sole colum contains a list of non-aborted items represented by an
@@ -122,12 +121,12 @@ function joinup_tmgmt_deploy_201602(): string {
     'fields' => [
       'id' => [
         'type' => 'varchar',
-        // Computed as max from $identifier:
-        // - plugin: 7 ('content' is longest)
+        // Computed as max from the unique identifier:
+        // - plugin: 7 ('content' is the longest)
         // - item_type: 32 (see EntityTypeInterface::ID_MAX_LENGTH)
         // - item_id: 255
         // - target_language: 2
-        // - separator: 3.
+        // - separator: 3x1.
         'length' => 299,
         'not null' => TRUE,
       ],
@@ -138,8 +137,7 @@ function joinup_tmgmt_deploy_201602(): string {
   $select = $db->select('tmgmt_job_item', 'i')
     ->distinct()
     ->condition('i.state', JobItemInterface::STATE_ABORTED, '<>');
-  $select->addExpression($identifier, 'id');
-  $select->innerJoin('tmgmt_job', 'j', 'i.tjid = j.tjid');
+  $select->addExpression("CONCAT_WS(':', plugin, item_type, item_id, tjid)", 'id');
   $db->insert($tempTable)->from($select)->execute();
 
   // Remove duplicate job items.
@@ -168,10 +166,9 @@ function joinup_tmgmt_deploy_201602(): string {
   $sql = <<<SQL
     UPDATE {tmgmt_job_item} i
     INNER JOIN {tmgmt_message} m ON i.tjiid = m.tjiid
-    INNER JOIN {tmgmt_job} j ON m.tjid = j.tjid
     -- Left join to exclude existing items in non-aborted states. This is more
     -- efficient than adding an IN() filter.
-    LEFT JOIN {{$tempTable}} t ON $identifier = t.id
+    LEFT JOIN {{$tempTable}} t ON CONCAT_WS(':', plugin, item_type, item_id, m.tjid) = t.id
     SET i.state = :new_state
     WHERE m.message = :message
     AND i.state = :state
