@@ -233,9 +233,35 @@ function joinup_core_deploy_201605(): void {
 }
 
 /**
- * Archives solutions having less than 10 members.
+ * Removes stale entity_reference_revisions_orphan_purger queue items.
  */
 function joinup_core_deploy_201606(): string {
+  $database = \Drupal::database();
+  $rows = $database->select('queue', 'q')
+    ->fields('q', ['item_id', 'data'])
+    ->condition('name', 'entity_reference_revisions_orphan_purger')
+    ->execute();
+
+  $deleted = 0;
+  foreach ($rows as $row) {
+    $data = unserialize($row->data, ['allowed_classes' => FALSE]);
+    if (($data['entity_type_id'] ?? NULL) === 'paragraph') {
+      continue;
+    }
+
+    $database->delete('queue')
+      ->condition('item_id', $row->item_id)
+      ->execute();
+    $deleted++;
+  }
+
+  return sprintf('Deleted %d stale entity_reference_revisions_orphan_purger queue item(s).', $deleted);
+}
+
+/**
+ * Archives solutions having less than 10 members.
+ */
+function joinup_core_deploy_201607(): string {
   $queue = \Drupal::queue('joinup_core_archive_groups');
   $groupIds = Archiver::getIdsFromCsvColumn(
     dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID Collections & Solutions with less than 10 members.csv',
@@ -259,7 +285,7 @@ function joinup_core_deploy_201606(): string {
 /**
  * Archives content which wasn't updated in the last 3 years.
  */
-function joinup_core_deploy_201607(): string {
+function joinup_core_deploy_201608(): string {
   $queue = \Drupal::queue('joinup_core_archive_groups');
   $groupIds = Archiver::getIdsFromCsvColumn(
     dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID Last update - 3 years ago.csv',
@@ -283,7 +309,7 @@ function joinup_core_deploy_201607(): string {
 /**
  * Archives solutions which have no releases or distributions.
  */
-function joinup_core_deploy_201608(): string {
+function joinup_core_deploy_201609(): string {
   $queue = \Drupal::queue('joinup_core_archive_groups');
   $groupIds = Archiver::getIdsFromCsvColumn(
     dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID No releases or distributions.csv',
@@ -307,7 +333,7 @@ function joinup_core_deploy_201608(): string {
 /**
  * Archives groups without group content.
  */
-function joinup_core_deploy_201609(): string {
+function joinup_core_deploy_201610(): string {
   $queue = \Drupal::queue('joinup_core_archive_groups');
   $groupIds = Archiver::getIdsFromCsvColumn(
     dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID Solutions & Collections with no content items.csv',
@@ -331,7 +357,7 @@ function joinup_core_deploy_201609(): string {
 /**
  * Archives collections which have no solutions.
  */
-function joinup_core_deploy_201610(): string {
+function joinup_core_deploy_201611(): string {
   $queue = \Drupal::queue('joinup_core_archive_groups');
   $groupIds = Archiver::getIdsFromCsvColumn(
     dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID Collections with no solutions.csv',
