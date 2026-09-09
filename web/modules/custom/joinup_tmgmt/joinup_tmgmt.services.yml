@@ -4,6 +4,4 @@ services:
     autoconfigure: true
     autowire: true
 
-  Drupal\joinup_tmgmt\ExtractedDataMemo: {}
-
   Drupal\joinup_tmgmt\PathAliasCleaner: {}
