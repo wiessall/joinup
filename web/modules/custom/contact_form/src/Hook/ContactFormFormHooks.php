@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\contact_form\Hook;
 
 use Drupal\contact_form\ContactFormEvents;
+use Drupal\contact_form\ContactFormUrlResolver;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
@@ -33,6 +34,7 @@ final class ContactFormFormHooks {
     protected readonly LoggerChannelInterface $logger,
     protected readonly AccountInterface $currentUser,
     protected readonly ModuleHandlerInterface $moduleHandler,
+    protected readonly ContactFormUrlResolver $urlResolver,
     #[Autowire(service: 'honeypot')]
     protected readonly ?HoneypotServiceInterface $honeypotService = NULL,
   ) {}
@@ -164,26 +166,52 @@ final class ContactFormFormHooks {
   public function validate(array &$form, FormStateInterface $formState): void {
     $values = $formState->getValues();
     $uri = $values['field_contact_url'][0]['uri'] ?? '';
+    $category = $values['field_contact_category'][0]['value'] ?? '';
 
-    if (!empty($values['field_contact_category']) && $values['field_contact_category'][0]['value'] === 'report' && $uri === '') {
+    if ($category === 'report' && $uri === '') {
       $formState->setErrorByName('field_contact_url', $this->t('Page URL field is required.'));
       return;
     }
-
-    // The link widget accepts the link module's special "magic" routes
-    // (<front>, <none>, <nolink>, <button>) as valid internal links, but none
-    // of them point to an actual Portal page. Reject them explicitly.
-    if ($uri !== '') {
-      try {
-        $url = Url::fromUri($uri);
-        if ($url->isRouted() && in_array($url->getRouteName(), ['<front>', '<none>', '<nolink>', '<button>'], TRUE)) {
-          $formState->setErrorByName('field_contact_url', $this->t('Please enter a valid Portal page URL.'));
-        }
-      }
-      catch (\InvalidArgumentException) {
-        // Malformed URIs are already rejected by the link field constraints.
-      }
+    if ($uri === '') {
+      return;
     }
+
+    if ($this->isMagicRouteUri($uri)) {
+      $formState->setErrorByName('field_contact_url', $this->t('Please enter a valid Portal page URL.'));
+      return;
+    }
+
+    $entity = $formState->getFormObject()->buildEntity($form, $formState);
+    if ($category === 'report' && $this->urlResolver->getEntityFromUrl($entity) === NULL) {
+      $formState->setErrorByName('field_contact_url', $this->t('Page URL field is invalid.'));
+    }
+  }
+
+  /**
+   * Checks whether a uri points to a "magic" route (<front>, <none>, etc.).
+   *
+   * These are valid internal links, but none of them is a Portal page.
+   *
+   * @param string $uri
+   *   The uri to check.
+   *
+   * @return bool
+   *   Whether the uri is a magic route.
+   */
+  private function isMagicRouteUri(string $uri): bool {
+    try {
+      $url = Url::fromUri($uri);
+    }
+    catch (\InvalidArgumentException) {
+      // Malformed URIs are already rejected by the link field constraints.
+      return FALSE;
+    }
+    return $url->isRouted()
+      && in_array(
+        $url->getRouteName(),
+        ['<front>', '<none>', '<nolink>', '<button>'],
+        TRUE
+      );
   }
 
 }
