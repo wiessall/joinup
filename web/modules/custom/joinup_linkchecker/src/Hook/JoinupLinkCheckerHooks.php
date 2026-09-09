@@ -77,4 +77,13 @@ final class JoinupLinkCheckerHooks {
     }
   }
 
+  /**
+   * Implements hook_views_data_alter().
+   */
+  #[Hook('views_data_alter')]
+  public function viewsDataAlter(array &$data): void {
+    // @see \Drupal\joinup_linkchecker\Plugin\views\filter\JoinupLinkCheckerGroupAutocomplete
+    $data['linkchecker_link']['group']['filter']['id'] = 'joinup_linkchecker_group_autocomplete';
+  }
+
 }

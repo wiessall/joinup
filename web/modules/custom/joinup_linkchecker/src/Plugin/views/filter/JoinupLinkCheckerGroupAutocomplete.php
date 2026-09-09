@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_core\Plugin\views\filter;
+namespace Drupal\joinup_linkchecker\Plugin\views\filter;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\Attribute\ViewsFilter;
 use Drupal\views\Plugin\views\filter\FilterPluginBase;
 
 /**
- * Filters by OG audience group using entity autocomplete.
+ * Filters by group using entity autocomplete.
  */
-#[ViewsFilter("og_audience_autocomplete")]
-class OgAudienceAutocomplete extends FilterPluginBase {
+#[ViewsFilter("joinup_linkchecker_group_autocomplete")]
+class JoinupLinkCheckerGroupAutocomplete extends FilterPluginBase {
 
   /**
    * {@inheritdoc}
@@ -41,16 +41,14 @@ class OgAudienceAutocomplete extends FilterPluginBase {
    * {@inheritdoc}
    */
   public function acceptExposedInput($input): bool {
-    $identifier = $this->options['expose']['identifier']
-      ?? 'og_audience_target_id';
+    $identifier = $this->options['expose']['identifier'] ?? 'group';
 
-    if (empty($input[$identifier])) {
-      return FALSE;
+    if (!empty($input[$identifier])) {
+      $this->value = (int) $input[$identifier];
+      return $this->value > 0;
     }
 
-    $this->value = (int) $input[$identifier];
-
-    return $this->value > 0;
+    return FALSE;
   }
 
   /**
@@ -58,16 +56,9 @@ class OgAudienceAutocomplete extends FilterPluginBase {
    */
   public function query(): void {
     $this->ensureMyTable();
-
-    if (empty($this->value)) {
-      return;
+    if (!empty($this->value)) {
+      $this->query->addWhere($this->options['group'], "$this->tableAlias.group", $this->value, '=');
     }
-
-    $this->query->addWhere(
-      $this->options['group'],
-      "$this->tableAlias.og_audience_target_id",
-      $this->value, '='
-    );
   }
 
 }
