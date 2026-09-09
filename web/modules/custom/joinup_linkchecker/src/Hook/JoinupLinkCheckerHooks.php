@@ -32,12 +32,14 @@ final class JoinupLinkCheckerHooks {
     $fields = [];
 
     if ($entityType->id() === 'linkcheckerlink') {
-      $fields['group'] = BaseFieldDefinition::create('og_standard_reference')
+      $fields['group'] = BaseFieldDefinition::create('entity_reference')
+        ->setTargetEntityTypeId('joinup_log')
         ->setLabel($this->t('Group'))
         ->setCardinality(1)
         ->setSetting('target_type', 'node')
         ->setRequired(FALSE)
-        ->setDefaultValue(NULL);
+        ->setDefaultValue(NULL)
+        ->setInitialValue(NULL);
     }
 
     return $fields;
