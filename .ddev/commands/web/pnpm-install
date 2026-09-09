@@ -1,0 +1,10 @@
+#!/bin/bash
+
+## Description: Installs the node dependencies exactly as the lock file records them
+## Usage: pnpm-install
+## Example: ddev pnpm-install
+## ExecRaw: true
+
+export COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+
+pnpm install --frozen-lockfile "$@"

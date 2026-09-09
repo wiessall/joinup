@@ -33,7 +33,7 @@
       "context": "..",
       "dockerFile": "../.ddev/Dockerfile",
       "workspaceFolder": "/var/www/html",
-      "postCreateCommand": "npm install",
+      "postCreateCommand": "pnpm install --frozen-lockfile",
       "remoteUser": "vscode",
       "customizations": {
         "vscode": {
