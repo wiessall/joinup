@@ -48,6 +48,7 @@
     "priority-plus": "^1.5.1",
     "slick-carousel": ">1.6.0 <1.8.1"
   },
+  "packageManager": "pnpm@10.34.5",
   "scripts": {
     "watch": "npm-watch",
     "clean:assets": "del-cli web/themes/ventuno/assets/* web/themes/iop/assets/*",
@@ -83,5 +84,15 @@
   "allowScripts": {
     "@parcel/watcher@2.5.6": true,
     "unrs-resolver@1.12.2": true
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@openeuropa/bcl-builder": "resources/patch/pnpm/@openeuropa+bcl-builder.patch",
+      "mmenu-light": "resources/patch/pnpm/mmenu-light.patch"
+    },
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "unrs-resolver"
+    ]
   }
 }
