@@ -100,8 +100,6 @@ settings:
         - '<dl>'
         - '<dt>'
         - '<dd>'
-        - '<map name>'
-        - '<area alt coords href hreflang rel shape>'
         - '<blockquote cite>'
         - '<h1>'
         - '<h2 id>'
@@ -109,7 +107,6 @@ settings:
         - '<h4 id>'
         - '<h5 id>'
         - '<h6 id>'
-        - '<img alt usemap>'
         - '<a hreflang accesskey id rel target title>'
         - '<iframe src allowfullscreen mozallowfullscreen webkitallowfullscreen width height frameborder>'
     ckeditor5_style:
@@ -129,10 +126,4 @@ settings:
     media_media:
       allow_view_mode_override: true
 image_upload:
-  status: true
-  scheme: private
-  directory: file-visibility/inline-images
-  max_size: '10 MB'
-  max_dimensions:
-    width: null
-    height: null
+  status: false

@@ -106,74 +106,82 @@ function joinup_tmgmt_deploy_201601(array &$sandbox): string {
 /**
  * Reschedule all aborted that logged a warning.
  */
-function joinup_tmgmt_deploy_201602(array &$sandbox): string {
-  $connection = \Drupal::database();
-  $batch_size = 500;
+function joinup_tmgmt_deploy_201602(): string {
+  $now = new DateTime();
+  $db = \Drupal::database();
+  $schema = $db->schema();
+  $tempTable = '_tmgmt_temp';
 
-  if (!isset($sandbox['total'])) {
-    $sandbox['items'] = $connection->select('tmgmt_message', 'tm')
-      ->fields('tm', ['tjiid'])
-      ->condition('message', 'Aborted. No translation received after 6 hours')
-      ->distinct()
-      ->execute()
-      ->fetchCol();
+  // We use a temporary table to help later with the main update statement. The
+  // sole colum contains a list of non-aborted items represented by an
+  // identifier obtained by concatenating the TMGMT source plugin, the item
+  // type, the item ID and the target language. Such an identifier helps to
+  // avoid rescheduling these job items, later in the main update statement.
+  $schema->createTable($tempTable, [
+    'fields' => [
+      'id' => [
+        'type' => 'varchar',
+        // Computed as max from the unique identifier:
+        // - plugin: 7 ('content' is the longest)
+        // - item_type: 32 (see EntityTypeInterface::ID_MAX_LENGTH)
+        // - item_id: 255
+        // - target_language: 2
+        // - separator: 3x1.
+        'length' => 299,
+        'not null' => TRUE,
+      ],
+    ],
+    'primary key' => ['id'],
+  ]);
+  // Insert all non-aborted job items in the temporary table.
+  $select = $db->select('tmgmt_job_item', 'i')
+    ->distinct()
+    ->condition('i.state', JobItemInterface::STATE_ABORTED, '<>');
+  $select->addExpression("CONCAT_WS(':', plugin, item_type, item_id, tjid)", 'id');
+  $db->insert($tempTable)->from($select)->execute();
 
-    $sandbox['total'] = count($sandbox['items']);
-    $sandbox['processed'] = 0;
+  // Remove duplicate job items.
+  $sql = <<<SQL
+    SELECT GROUP_CONCAT(i.tjiid ORDER BY i.tjiid DESC)
+    FROM {tmgmt_job_item} i
+    INNER JOIN {tmgmt_message} m ON i.tjiid = m.tjiid
+    WHERE m.message = 'Aborted. No translation received after 6 hours'
+    AND i.state = 4
+    GROUP BY i.plugin, i.item_type, i.item_id, m.tjid
+    HAVING COUNT(*) > 1
+    SQL;
+  $toDelete = [];
+  foreach ($db->query($sql)->fetchCol() as $tjiids) {
+    $tjiids = explode(',', $tjiids);
+    // Keep the most recent job item.
+    array_shift($tjiids);
+    $toDelete = [...$toDelete, ...$tjiids];
+  }
+  if ($toDelete) {
+    $db->delete('tmgmt_job_item')->condition('tjiid', $toDelete, 'IN')->execute();
+    $db->delete('tmgmt_message')->condition('tjiid', $toDelete, 'IN')->execute();
   }
 
-  $batch = array_splice($sandbox['items'], 0, $batch_size);
+  // Update the state.
+  $sql = <<<SQL
+    UPDATE {tmgmt_job_item} i
+    INNER JOIN {tmgmt_message} m ON i.tjiid = m.tjiid
+    -- Left join to exclude existing items in non-aborted states. This is more
+    -- efficient than adding an IN() filter.
+    LEFT JOIN {{$tempTable}} t ON CONCAT_WS(':', plugin, item_type, item_id, m.tjid) = t.id
+    SET i.state = :new_state
+    WHERE m.message = :message
+    AND i.state = :state
+    AND t.id IS NULL
+    SQL;
+  $db->query($sql, [
+    ':new_state' => JobItemInterface::STATE_INACTIVE,
+    ':message' => 'Aborted. No translation received after 6 hours',
+    ':state' => JobItemInterface::STATE_ABORTED,
+  ]);
 
-  foreach ($batch as $tjiid) {
-    $query = $connection->select('tmgmt_job_item', 'tji');
-    $query->innerJoin('tmgmt_job', 'tj', 'tji.tjid = tj.tjid');
+  // Cleanup.
+  $schema->dropTable($tempTable);
 
-    $item = $query
-      ->fields('tji', ['plugin', 'item_type', 'item_id', 'data'])
-      ->fields('tj', ['target_language'])
-      ->condition('tji.tjiid', $tjiid)
-      ->condition('tji.state', JobItemInterface::STATE_ABORTED)
-      ->execute()
-      ->fetchAssoc();
-
-    // The item does not exist or is no longer aborted.
-    if (!$item) {
-      continue;
-    }
-
-    $existsQuery = $connection->select('tmgmt_job_item', 'tji');
-    $existsQuery->innerJoin('tmgmt_job', 'tj', 'tji.tjid = tj.tjid');
-
-    $exists = (bool) $existsQuery
-      ->fields('tji', ['tjiid'])
-      ->condition('tji.plugin', $item['plugin'])
-      ->condition('tji.item_type', $item['item_type'])
-      ->condition('tji.item_id', $item['item_id'])
-      ->condition('tj.target_language', $item['target_language'])
-      ->condition('tji.state', JobItemInterface::STATE_ABORTED, '<>')
-      ->range(0, 1)
-      ->execute()
-      ->fetchField();
-
-    // Do not create duplicates.
-    if ($exists) {
-      continue;
-    }
-
-    $data = json_decode($item['data'], TRUE);
-    $data['#tmgmt_ec_etranslation']['attempted'] = 1;
-
-    $connection->update('tmgmt_job_item')
-      ->fields([
-        'state' => JobItemInterface::STATE_INACTIVE,
-        'data' => json_encode($data),
-      ])
-      ->condition('tjiid', $tjiid)
-      ->execute();
-  }
-
-  $sandbox['processed'] += count($batch);
-  $sandbox['#finished'] = $sandbox['processed'] / $sandbox['total'];
-
-  return sprintf('Processed %d of %d job items.', $sandbox['processed'], $sandbox['total']);
+  return "Took: {$now->diff(new DateTime())->format('%im %ss')}";
 }
