@@ -122,7 +122,7 @@ function joinup_tmgmt_deploy_201602(): string {
     'fields' => [
       'id' => [
         'type' => 'varchar',
-        // Computed as max from $idExpression:
+        // Computed as max from $identifier:
         // - plugin: 7 ('content' is longest)
         // - item_type: 32 (see EntityTypeInterface::ID_MAX_LENGTH)
         // - item_id: 255
@@ -142,6 +142,7 @@ function joinup_tmgmt_deploy_201602(): string {
   $select->innerJoin('tmgmt_job', 'j', 'i.tjid = j.tjid');
   $db->insert($tempTable)->from($select)->execute();
 
+  // Remove duplicate job items.
   $sql = <<<SQL
     SELECT GROUP_CONCAT(i.tjiid ORDER BY i.tjiid DESC)
     FROM {tmgmt_job_item} i
