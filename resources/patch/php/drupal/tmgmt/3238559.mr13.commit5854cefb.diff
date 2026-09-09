@@ -1,0 +1,94 @@
+diff --git a/src/ContinuousManager.php b/src/ContinuousManager.php
+index d14fe58108cee8521c88718d81c5d982515b4d85..fa2a9f0f1f81378a3555e776863b175ac48d1ee6 100644
+--- a/src/ContinuousManager.php
++++ b/src/ContinuousManager.php
+@@ -149,7 +149,12 @@ class ContinuousManager {
+         }
+       }
+       // If there are no job items or it's finished/aborted create new one.
+-      $job_item = $job->addItem($plugin, $item_type, $item_id);
++      try {
++        $job_item = $job->addItem($plugin, $item_type, $item_id);
++      }
++      catch (TMGMTNothingToTranslateException) {
++        return NULL;
++      }
+       $job_item->addMessage('Continuous job item created');
+ 
+       // Only submit the item if cron submission is disabled.
+diff --git a/src/Entity/Job.php b/src/Entity/Job.php
+index d2af0af7ea87819698e3a86764ee3a1009801118..1c291791cf75bea26710e2c7546db94bab2ab9ae 100644
+--- a/src/Entity/Job.php
++++ b/src/Entity/Job.php
+@@ -23,6 +23,7 @@ use Drupal\tmgmt\Form\JobResubmitForm;
+ use Drupal\tmgmt\JobInterface;
+ use Drupal\tmgmt\JobItemInterface;
+ use Drupal\tmgmt\TMGMTException;
++use Drupal\tmgmt\TMGMTNothingToTranslateException;
+ use Drupal\tmgmt\Translator\TranslatableResult;
+ use Drupal\user\EntityOwnerInterface;
+ use Drupal\user\UserInterface;
+@@ -373,31 +374,36 @@ class Job extends ContentEntityBase implements EntityOwnerInterface, JobInterfac
+    */
+   public function addItem($plugin, $item_type, $item_id) {
+ 
+-    $transaction = \Drupal::database()->startTransaction();
+-    $is_new = FALSE;
++    // Only the job itself can need undoing: the item is written after its
++    // word count is known.
++    $transaction = $this->isNew() ? \Drupal::database()->startTransaction() : NULL;
+ 
+-    if ($this->isNew()) {
++    if ($transaction) {
+       $this->save();
+-      $is_new = TRUE;
+     }
+ 
+     $item = tmgmt_job_item_create($plugin, $item_type, $item_id, array('tjid' => $this->id()));
+-    $item->save();
++
++    // The statistics are derived from the source data alone, so the word count
++    // is known before the item is written.
++    $item->recalculateStatistics();
+ 
+     if ($item->getWordCount() == 0) {
+-      $transaction->rollback();
++      if ($transaction) {
++        $transaction->rollback();
+ 
+-      // In case we got word count 0 for the first job item, NULL tjid so that
+-      // if there is another addItem() call the rolled back job object will get
+-      // persisted.
+-      if ($is_new) {
++        // In case we got word count 0 for the first job item, NULL tjid so
++        // that if there is another addItem() call the rolled back job object
++        // will get persisted.
+         $this->tjid = NULL;
+       }
+ 
+-      throw new TMGMTException('Job item @label (@type) has no translatable content.',
++      throw new TMGMTNothingToTranslateException('Job item @label (@type) has no translatable content.',
+         array('@label' => $item->label(), '@type' => $item->getSourceType()));
+     }
+ 
++    $item->save();
++
+     return $item;
+   }
+ 
+diff --git a/src/TMGMTNothingToTranslateException.php b/src/TMGMTNothingToTranslateException.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..8773108c3a5c63041d437b033235a142d6f565ec
+--- /dev/null
++++ b/src/TMGMTNothingToTranslateException.php
+@@ -0,0 +1,10 @@
++<?php
++
++namespace Drupal\tmgmt;
++
++/**
++ * Thrown when a source holds nothing to translate.
++ */
++class TMGMTNothingToTranslateException extends TMGMTException {
++
++}
