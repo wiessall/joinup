@@ -4,8 +4,11 @@ services:
     autoconfigure: true
     autowire: true
 
+  Drupal\contact_form\ContactFormUrlResolver: { }
+
   Drupal\contact_form\EventSubscriber\NotificationSubscriber:
     parent: joinup_notification.notification_subscriber_base
+    arguments: ['@Drupal\contact_form\ContactFormUrlResolver']
 
   Drupal\contact_form\EventSubscriber\SenderNotificationSubscriber: { }
 

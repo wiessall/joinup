@@ -1,0 +1,163 @@
+diff --git a/core/lib/Drupal/Core/StringTranslation/PluralTranslatableMarkup.php b/core/lib/Drupal/Core/StringTranslation/PluralTranslatableMarkup.php
+index c50a36c0f60f8576d3756fb705bd9fa60e24c051..15a3ac2d25f11fb7c20c66248b56deb0572d2552 100644
+--- a/core/lib/Drupal/Core/StringTranslation/PluralTranslatableMarkup.php
++++ b/core/lib/Drupal/Core/StringTranslation/PluralTranslatableMarkup.php
+@@ -43,8 +43,8 @@ class PluralTranslatableMarkup extends TranslatableMarkup {
+    *   (optional) An array with placeholder replacements, keyed by placeholder.
+    *   See \Drupal\Component\Render\FormattableMarkup::placeholderFormat() for
+    *   additional information about placeholders. Note that you do not need to
+-   *   include @count in this array; this replacement is done automatically
+-   *   for the plural cases.
++   *   include @count in this array; it defaults to the count. Pass it
++   *   explicitly to substitute a formatted representation of the count.
+    * @param array $options
+    *   (optional) An associative array of additional options. See t() for
+    *   allowed keys.
+@@ -75,8 +75,9 @@ public function __construct($count, $singular, $plural, array $args = [], array
+    *   of any key in this array are replaced with the corresponding value.
+    *   Based on the first character of the key, the value is escaped and/or
+    *   themed. See \Drupal\Component\Render\FormattableMarkup. Note that you
+-   *   do not need to include @count in this array; this replacement is done
+-   *   automatically for the plural cases.
++   *   do not need to include @count in this array; it defaults to the count.
++   *   Pass it explicitly to substitute a formatted representation of the
++   *   count.
+    * @param array $options
+    *   An associative array of additional options. See t() for allowed keys.
+    *
+@@ -104,7 +105,7 @@ public function render() {
+     }
+ 
+     $arguments = $this->getArguments();
+-    $arguments['@count'] = $this->count;
++    $arguments += ['@count' => $this->count];
+     $translated_array = explode(PoItem::DELIMITER, $this->translatedString);
+ 
+     $index = $this->getPluralIndex();
+diff --git a/core/modules/views/src/Plugin/views/field/NumericField.php b/core/modules/views/src/Plugin/views/field/NumericField.php
+index 5373238417dab4009f989d82eec1dea11a5c4fd4..27505567ef6b35ddd411b06805e9d26458a7fbab 100644
+--- a/core/modules/views/src/Plugin/views/field/NumericField.php
++++ b/core/modules/views/src/Plugin/views/field/NumericField.php
+@@ -176,12 +176,15 @@ public function render(ResultRow $values) {
+       return '';
+     }
+ 
++    $number = $value;
+     $value = number_format($value, $precision, $this->options['decimal'], $this->options['separator']);
+ 
+     // If we should format as plural, take the (possibly) translated plural
+-    // setting and format with the current language.
++    // setting and format with the current language. The plural variant is
++    // selected from the number itself, while the formatted number is what
++    // replaces @count.
+     if (!empty($this->options['format_plural'])) {
+-      $value = PluralTranslatableMarkup::createFromTranslatedString($value, $this->options['format_plural_string']);
++      $value = PluralTranslatableMarkup::createFromTranslatedString($number, $this->options['format_plural_string'], ['@count' => $value]);
+     }
+ 
+     return $this->sanitizeValue($this->options['prefix'], 'xss')
+diff --git a/core/modules/views/tests/src/Kernel/Handler/FieldNumericFormatPluralTest.php b/core/modules/views/tests/src/Kernel/Handler/FieldNumericFormatPluralTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..6be75cfe04d9106a60d5fb9f66fb236dff807737
+--- /dev/null
++++ b/core/modules/views/tests/src/Kernel/Handler/FieldNumericFormatPluralTest.php
+@@ -0,0 +1,99 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\views\Kernel\Handler;
++
++use Drupal\Component\Gettext\PoHeader;
++use Drupal\Component\Gettext\PoItem;
++use Drupal\Tests\views\Kernel\ViewsKernelTestBase;
++use Drupal\views\Views;
++use PHPUnit\Framework\Attributes\DataProvider;
++use PHPUnit\Framework\Attributes\Group;
++use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
++
++/**
++ * Tests the numeric field handler with a thousands separator and plurals.
++ *
++ * @see \Drupal\views\Plugin\views\field\NumericField
++ */
++#[Group('views')]
++#[RunTestsInSeparateProcesses]
++class FieldNumericFormatPluralTest extends ViewsKernelTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'filter',
++    'system',
++    'views',
++    'views_test_config',
++    'views_test_data',
++    'user',
++    'language',
++    'locale',
++  ];
++
++  /**
++   * Views used by this test.
++   *
++   * @var array
++   */
++  public static $testViews = ['test_view'];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp($import_test_views = TRUE): void {
++    parent::setUp($import_test_views);
++
++    $header = new PoHeader();
++    [$nplurals, $formula] = $header->parsePluralForms('nplurals=2; plural=(n != 1);');
++    $this->container->get('locale.plural.formula')->setPluralFormula('en', $nplurals, $formula);
++  }
++
++  /**
++   * Tests plural formatting of a value rendered with a thousands separator.
++   */
++  #[DataProvider('providerFormatPluralSeparator')]
++  public function testFormatPluralSeparator(int $value, string $expected): void {
++    $view = Views::getView('test_view');
++    $view->setDisplay();
++    $view->displayHandlers->get('default')->overrideOption('fields', [
++      'age' => [
++        'id' => 'age',
++        'table' => 'views_test_data',
++        'field' => 'age',
++        'relationship' => 'none',
++        'separator' => ',',
++        'format_plural' => TRUE,
++        'format_plural_string' => '1 place' . PoItem::DELIMITER . '@count places',
++      ],
++    ]);
++    $this->executeView($view);
++
++    $view->result[0]->views_test_data_age = $value;
++    $this->assertSame($expected, $view->field['age']->advancedRender($view->result[0]));
++  }
++
++  /**
++   * Data provider for testFormatPluralSeparator().
++   *
++   * @return array
++   *   Sets of a raw value and the expected rendered output.
++   */
++  public static function providerFormatPluralSeparator(): array {
++    return [
++      'singular' => [1, '1 place'],
++      'no separator' => [999, '999 places'],
++      'leading 1' => [1234, '1,234 places'],
++      'leading 2' => [2345, '2,345 places'],
++      'leading 9' => [9999, '9,999 places'],
++      'five digits, leading 1' => [12345, '12,345 places'],
++      'five digits, leading 2' => [20000, '20,000 places'],
++      'six digits, leading 1' => [123456, '123,456 places'],
++    ];
++  }
++
++}
