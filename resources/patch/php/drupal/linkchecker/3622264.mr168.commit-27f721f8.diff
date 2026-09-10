@@ -1,0 +1,285 @@
+diff --git a/linkchecker.module b/linkchecker.module
+index c79f8d090f972d46b48a3f592bc57989bcc46a66..8ae8692ba84b9ef24a5f20710cc9af837db7ea68 100644
+--- a/linkchecker.module
++++ b/linkchecker.module
+@@ -157,20 +157,8 @@ function linkchecker_cron() {
+  * Implements hook_entity_insert().
+  */
+ function linkchecker_entity_insert(EntityInterface $entity) {
+-  if ($entity instanceof LinkCheckerLinkInterface) {
+-    return;
+-  }
+-
+-  if ($entity instanceof FieldableEntityInterface && !$entity->isNew()) {
+-    /** @var \Drupal\linkchecker\LinkExtractorService $extractor */
+-    $extractor = \Drupal::service('linkchecker.extractor');
+-    $links = $extractor->extractFromEntity($entity);
+-
+-    if (!empty($links)) {
+-      $extractor->saveLinkMultiple($links);
+-      $extractor->updateEntityExtractIndex($entity);
+-    }
+-
++  if ($entity instanceof FieldableEntityInterface) {
++    \Drupal::service('linkchecker.extractor')->processEntity($entity);
+     \Drupal::service('linkchecker.clean_up')->cleanUpForEntity($entity);
+   }
+ }
+@@ -179,20 +167,8 @@ function linkchecker_entity_insert(EntityInterface $entity) {
+  * Implements hook_entity_update().
+  */
+ function linkchecker_entity_update(EntityInterface $entity) {
+-  if ($entity instanceof LinkCheckerLinkInterface) {
+-    return;
+-  }
+-
+   if ($entity instanceof FieldableEntityInterface) {
+-    /** @var \Drupal\linkchecker\LinkExtractorService $extractor */
+-    $extractor = \Drupal::service('linkchecker.extractor');
+-    $links = $extractor->extractFromEntity($entity);
+-
+-    if (!empty($links)) {
+-      $extractor->saveLinkMultiple($links);
+-      $extractor->updateEntityExtractIndex($entity);
+-    }
+-
++    \Drupal::service('linkchecker.extractor')->processEntity($entity);
+     \Drupal::service('linkchecker.clean_up')->cleanUpForEntity($entity);
+   }
+ }
+diff --git a/linkchecker.services.yml b/linkchecker.services.yml
+index 6751588df796a4301eb00365382f31013adf840c..e46f6820ac5588c52daa0e41861e1ceacc29a498 100644
+--- a/linkchecker.services.yml
++++ b/linkchecker.services.yml
+@@ -13,6 +13,8 @@ services:
+       - '@request_stack'
+       - '@database'
+       - '@datetime.time'
++    tags:
++      - { name: needs_destruction }
+
+   plugin.manager.link_extractor:
+     class: Drupal\linkchecker\Plugin\LinkExtractorManager
+@@ -56,6 +58,8 @@ services:
+       - '@entity_type.manager'
+       - '@linkchecker.extractor'
+       - '@database'
++    tags:
++      - { name: needs_destruction, priority: -10 }
+
+   linkchecker.response_codes:
+     class: Drupal\linkchecker\LinkCheckerResponseCodes
+diff --git a/src/LinkCleanUp.php b/src/LinkCleanUp.php
+index ad8101b6b39752d94ac217f4527ca46f2e3cce27..7b5048af14331926cc71583f891f6cdd7a1950c5 100644
+--- a/src/LinkCleanUp.php
++++ b/src/LinkCleanUp.php
+@@ -5,6 +5,7 @@ namespace Drupal\linkchecker;
+ use Drupal\Core\Batch\BatchBuilder;
+ use Drupal\Core\Database\Connection;
+ use Drupal\Core\DependencyInjection\DependencySerializationTrait;
++use Drupal\Core\DestructableInterface;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
+ use Drupal\Core\Entity\FieldableEntityInterface;
+ use Drupal\Core\Messenger\MessengerTrait;
+@@ -14,7 +15,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
+ /**
+  * Form to clean the links.
+  */
+-class LinkCleanUp {
++class LinkCleanUp implements DestructableInterface {
+
+   use DependencySerializationTrait;
+   use MessengerTrait;
+@@ -41,6 +42,20 @@ class LinkCleanUp {
+    */
+   protected $database;
+
++  /**
++   * Entity collector for entity-cleanup, to be consumed in `::destruct()`.
++   *
++   * @var array<int|string, FieldableEntityInterface>
++   */
++  protected array $entityStack = [];
++
++  /**
++   * Entity collector for queue-cleanup, to be consumed in `::destruct()`.
++   *
++   * @var array<int|string>
++   */
++  protected array $queueStack = [];
++
+   /**
+    * LinkCleanUp constructor.
+    */
+@@ -123,8 +138,61 @@ class LinkCleanUp {
+    *   The entity.
+    */
+   public function cleanUpForEntity(FieldableEntityInterface $entity) {
+-    // Trying to reload the entity
+-    // If it was removed then we should remove all links related to the entity.
++    $this->entityStack[$entity->id()] = $entity;
++  }
++
++  /**
++   * Clean up queues data per specified linkchecker entity id.
++   */
++  public function cleanUpQueues($id): void {
++    $this->queueStack[$id] = $id;
++  }
++
++  /**
++   * Deletes queue item by id.
++   */
++  protected function deleteQueueItemById($item_id): void {
++    $this->database
++      ->delete('queue')
++      ->condition('item_id', $item_id)
++      ->execute();
++  }
++
++  /**
++   * Finished callback for batch.
++   */
++  public function batchFinished($success) {
++    if ($success) {
++      $this->messenger()
++        ->addStatus($this->t('Links were successfully checked.'));
++    }
++    else {
++      $this->messenger()
++        ->addError($this->t('Links were not checked.'));
++    }
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function destruct(): void {
++    while ($entity = array_shift($this->entityStack)) {
++      $this->doCleanupForEntity($entity);
++    }
++    while ($id = array_shift($this->queueStack)) {
++      $this->doCleanupQueues($id);
++    }
++  }
++
++  /**
++   * Performs cleanup for a given entity.
++   *
++   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
++   *   The entity to perform cleanup for.
++   */
++  protected function doCleanupForEntity(FieldableEntityInterface $entity): void {
++    // Trying to reload the entity. If removed, then we should remove all links
++    // related to the entity.
+     $isEntityDeleted = !$this->entityTypeManager
+       ->getStorage($entity->getEntityTypeId())
+       ->load($entity->id());
+@@ -166,9 +234,12 @@ class LinkCleanUp {
+   }
+
+   /**
+-   * Clean up queues data per specified linkchecker entity id.
++   * Cleans up queues for a given link checker entity ID.
++   *
++   * @param int|string $id
++   *   The link checker entity ID to clean up queues for.
+    */
+-  public function cleanUpQueues($id): void {
++  protected function doCleanupQueues(int|string $id): void {
+     // Since both queues have different data structure - handle it using
+     // separate queries.
+     $queue_status_handle_items = $this->database
+@@ -227,28 +298,4 @@ class LinkCleanUp {
+     }
+   }
+
+-  /**
+-   * Deletes queue item by id.
+-   */
+-  protected function deleteQueueItemById($item_id): void {
+-    $this->database
+-      ->delete('queue')
+-      ->condition('item_id', $item_id)
+-      ->execute();
+-  }
+-
+-  /**
+-   * Finished callback for batch.
+-   */
+-  public function batchFinished($success) {
+-    if ($success) {
+-      $this->messenger()
+-        ->addStatus($this->t('Links were successfully checked.'));
+-    }
+-    else {
+-      $this->messenger()
+-        ->addError($this->t('Links were not checked.'));
+-    }
+-  }
+-
+ }
+diff --git a/src/LinkExtractorService.php b/src/LinkExtractorService.php
+index 3c382f67902541c4a6abb8c855cffc221d7a4608..3b9485d9019ba5e50a7587ba57d3a18c5004ea54 100644
+--- a/src/LinkExtractorService.php
++++ b/src/LinkExtractorService.php
+@@ -6,6 +6,7 @@ use Drupal\Component\Datetime\TimeInterface;
+ use Drupal\Component\Utility\UrlHelper;
+ use Drupal\Core\Config\ConfigFactory;
+ use Drupal\Core\Database\Connection;
++use Drupal\Core\DestructableInterface;
+ use Drupal\Core\Entity\EntityPublishedInterface;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
+ use Drupal\Core\Entity\FieldableEntityInterface;
+@@ -19,7 +20,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
+ /**
+  * Class LinkExtractor.
+  */
+-class LinkExtractorService {
++class LinkExtractorService implements DestructableInterface {
+
+   /**
+    * The extractor manager.
+@@ -70,6 +71,13 @@ class LinkExtractorService {
+    */
+   protected $pos;
+
++  /**
++   * Entity collector to be consumed in `::destruct()`.
++   *
++   * @var array<int|string, FieldableEntityInterface>
++   */
++  protected array $entities = [];
++
+   /**
+    * Constructs a new LinkExtractor object.
+    */
+@@ -497,4 +505,28 @@ class LinkExtractorService {
+     return $absoluteContentPath;
+   }
+
++  /**
++   * Queues an entity to be processed.
++   *
++   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
++   *   The entity to be processed.
++   */
++  public function processEntity(FieldableEntityInterface $entity): void {
++    $this->entities[$entity->id()] = $entity;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function destruct(): void {
++    while ($entity = array_shift($this->entities)) {
++      $links = $this->extractFromEntity($entity);
++
++      if ($links) {
++        $this->saveLinkMultiple($links);
++        $this->updateEntityExtractIndex($entity);
++      }
++    }
++  }
++
+ }
