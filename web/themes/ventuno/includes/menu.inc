@@ -78,14 +78,14 @@ function ventuno_preprocess_menu__og__navigation(&$variables): void {
   $currentRoute = \Drupal::routeMatch()->getRouteName();
 
   // Unify items after BCL's MenuPreprocess.
-  foreach ($variables['items'] as &$item) {
+  foreach ($variables['items'] as $key => $item) {
     if (
       empty($item['title']) &&
       empty($item['url']) &&
       !empty($item['trigger']['title']) &&
       !empty($item['trigger']['url'])
     ) {
-      $item = $item['trigger'];
+      $variables['items'][$key] = $item['trigger'];
     }
   }
 
