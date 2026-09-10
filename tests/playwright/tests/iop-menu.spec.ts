@@ -8,7 +8,7 @@ import pageUtils from "../utils/pageUtils";
 
 test.describe("IOP theme", () => {
   test("Group navigation menu", async ({ page }) => {
-    await page.goto("/collection/interoperable-europe-academy");
+    await page.goto("/interoperable-europe");
     await pageUtils.prepareForScreenshot(page);
 
     const navigation = page.locator("#block-iope-navigation");
