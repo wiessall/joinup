@@ -9,6 +9,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_group\Entity\GroupContentInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_linkchecker\JoinupLinkCheckerLinkStorageSchema;
 use Drupal\linkchecker\LinkCheckerLinkInterface;
@@ -62,6 +63,10 @@ final class JoinupLinkCheckerHooks {
   #[Hook('linkcheckerlink_presave')]
   public function addGroup(LinkCheckerLinkInterface $link): void {
     $entity = $link->getParentEntity();
+    if ($entity instanceof GroupInterface) {
+      $link->set('group', $entity->id());
+      return;
+    }
 
     // Climb to the topmost entity containing the link.
     while ($entity instanceof ParagraphInterface && $entity->getParentEntity() !== NULL) {
