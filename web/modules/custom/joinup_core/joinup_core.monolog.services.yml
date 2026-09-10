@@ -10,6 +10,7 @@ parameters:
     - request_uri
     - ip
     - referer
+    - filter_backtrace
     - error_page_error_uuid
 
   # These two parameters settings are overridden with values stored in

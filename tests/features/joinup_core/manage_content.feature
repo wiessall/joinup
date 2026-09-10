@@ -362,6 +362,20 @@ Feature:
     And I wait for the batch process to finish
     Then I should see "Proceeded updates to 1 entity"
 
+  Scenario: A facilitator can see other members' unpublished content in the content management UI.
+    Given the following "collection" content:
+      | title           |
+      | Renaissance Art |
+    And user:
+      | Username | Ottavia Painter |
+    And the following "discussion" content:
+      | title                   | collection      | state    | author          |
+      | Fresco Restoration Tips | Renaissance Art | proposed | Ottavia Painter |
+
+    Given I am logged in as a facilitator of the "Renaissance Art" collection
+    And I go to the manage content page of "Renaissance Art"
+    Then I should see the link "Fresco Restoration Tips"
+
   Scenario: Content management UI is properly filtered by language.
 
     Given the following "collection" content:
