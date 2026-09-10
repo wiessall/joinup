@@ -107,7 +107,7 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
         ],
       ]);
       $mobile_links[] = [
-        'element' => $this->signInLinkPlaceholder(''),
+        'element' => $this->buildSignInLink(),
       ];
       if ($about_us_link = $this->getAboutUsLink($cacheability)) {
         $mobile_links[] = $about_us_link;
@@ -166,7 +166,7 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
   protected function getAnonymousActions(): array {
     return [
       'sign_in' => [
-        'element' => $this->signInLinkPlaceholder('nav-link nav-link--underline sign-in-link'),
+        'element' => $this->buildSignInLink(['nav-link', 'nav-link--underline', 'sign-in-link']),
       ],
       'get_started' => [
         'id' => 'get-started',
@@ -174,8 +174,14 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
         'popover' => [
           'cta' => [
             'element' => [
-              '#lazy_builder' => ['ventuno_helper.header_navigation_lazy_builders:renderGetStartedCta', []],
-              '#create_placeholder' => TRUE,
+              '#theme' => 'joinup_header_get_started_cta',
+              '#url' => Url::fromRoute('cas.login'),
+              '#attributes' => [
+                'class' => ['get-started__cta', 'fw-bold'],
+                'tabindex' => 0,
+                'data-destination' => TRUE,
+              ],
+              '#attached' => ['library' => ['ventuno_helper/destination-link']],
             ],
           ],
           'description' => $this->t('As a signed-in user you can create content, become a member of a community, receive notifications on your favourite solutions and topics, and access all other features available on the platform.'),
@@ -185,19 +191,29 @@ class HeaderNavigationBlock extends BlockBase implements ContainerFactoryPluginI
   }
 
   /**
-   * Builds a placeholdered "Sign in" link carrying the redirect destination.
+   * Builds a "Sign in" link to the CAS login.
    *
-   * @param string $classes
-   *   A space separated list of classes for the anchor, or an empty string.
+   * The post login redirect destination is appended client side by the
+   * 'ventuno_helper/destination-link' library, so this link stays cacheable.
+   *
+   * @param string[] $classes
+   *   The classes for the anchor.
    *
    * @return array
-   *   The placeholder render array.
+   *   The render array for the sign in link.
    */
-  protected function signInLinkPlaceholder(string $classes): array {
-    return [
-      '#lazy_builder' => ['ventuno_helper.header_navigation_lazy_builders:renderSignInLink', [$classes]],
-      '#create_placeholder' => TRUE,
+  protected function buildSignInLink(array $classes = []): array {
+    $element = [
+      '#type' => 'link',
+      '#title' => $this->t('Sign in'),
+      '#url' => Url::fromRoute('cas.login'),
+      '#attributes' => ['data-destination' => TRUE],
+      '#attached' => ['library' => ['ventuno_helper/destination-link']],
     ];
+    if ($classes) {
+      $element['#attributes']['class'] = $classes;
+    }
+    return $element;
   }
 
   /**
