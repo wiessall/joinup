@@ -11,6 +11,7 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
 use Drupal\Core\Menu\MenuTreeStorageInterface;
+use Drupal\joinup_core\Archiver;
 use Drupal\joinup_core\Update\Base64ImageConverter;
 use Drupal\joinup_core\Update\InlineImageConverter;
 use Drupal\joinup_core\Update\NodeTranslationsRollback;
@@ -343,5 +344,125 @@ function joinup_core_deploy_201608(array &$sandbox): string {
     $stats['skipped_unsupported'],
     $sandbox['total'] - $remaining,
     $sandbox['total']
+  );
+}
+
+/**
+ * Archives solutions having less than 10 members.
+ */
+function joinup_core_deploy_201609(): string {
+  $queue = \Drupal::queue('joinup_core_archive_groups');
+  $groupIds = Archiver::getIdsFromCsvColumn(
+    dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID Collections & Solutions with less than 10 members.csv',
+  );
+
+  foreach ($groupIds as $groupId) {
+    $queue->createItem([
+      'group_id' => $groupId,
+      'method' => 'doArchiveGroupsWithFewMembers',
+      // For future logs.
+      'total' => count($groupIds),
+    ]);
+  }
+
+  return sprintf(
+    'Queued %s groups with less than 10 members for archiving.',
+    count($groupIds),
+  );
+}
+
+/**
+ * Archives content which wasn't updated in the last 3 years.
+ */
+function joinup_core_deploy_201610(): string {
+  $queue = \Drupal::queue('joinup_core_archive_groups');
+  $groupIds = Archiver::getIdsFromCsvColumn(
+    dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID Last update - 3 years ago.csv',
+  );
+
+  foreach ($groupIds as $groupId) {
+    $queue->createItem([
+      'group_id' => $groupId,
+      'method' => 'doArchivePotentiallyOutdatedContent',
+      // For future logs.
+      'total' => count($groupIds),
+    ]);
+  }
+
+  return sprintf(
+    'Queued %s groups not updated in the last 3 years',
+    count($groupIds),
+  );
+}
+
+/**
+ * Archives solutions which have no releases or distributions.
+ */
+function joinup_core_deploy_201611(): string {
+  $queue = \Drupal::queue('joinup_core_archive_groups');
+  $groupIds = Archiver::getIdsFromCsvColumn(
+    dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID No releases or distributions.csv',
+  );
+
+  foreach ($groupIds as $groupId) {
+    $queue->createItem([
+      'group_id' => $groupId,
+      'method' => 'doArchiveSolutionsWithoutReleaseOrDistro',
+      // For future logs.
+      'total' => count($groupIds),
+    ]);
+  }
+
+  return sprintf(
+    'Queued %s groups which have no releases or distributions',
+    count($groupIds),
+  );
+}
+
+/**
+ * Archives groups without group content.
+ */
+function joinup_core_deploy_201612(): string {
+  $queue = \Drupal::queue('joinup_core_archive_groups');
+  $groupIds = Archiver::getIdsFromCsvColumn(
+    dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID Solutions & Collections with no content items.csv',
+  );
+
+  foreach ($groupIds as $groupId) {
+    $queue->createItem([
+      'group_id' => $groupId,
+      'method' => 'doArchiveGroupsWithoutContent',
+      // For future logs.
+      'total' => count($groupIds),
+    ]);
+  }
+
+  return sprintf(
+    'Queued %s groups without content',
+    count($groupIds),
+  );
+}
+
+/**
+ * Archives collections which have no solutions.
+ */
+function joinup_core_deploy_201613(): string {
+  $queue = \Drupal::queue('joinup_core_archive_groups');
+  $groupIds = Archiver::getIdsFromCsvColumn(
+    dirname(__DIR__) . '/joinup_core/deploy/archival-csv/WITH-NID Collections with no solutions.csv',
+  );
+
+  foreach ($groupIds as $groupId) {
+    $queue->createItem([
+      'group_id' => $groupId,
+      'method' => 'doArchiveCollectionsWithoutSolutions',
+      // For future logs.
+      'total' => count($groupIds),
+    ]);
+  }
+
+  return sprintf(
+    'Queued %s collections without solutions',
+    count($groupIds),
   );
 }
