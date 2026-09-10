@@ -15,8 +15,9 @@ Feature: Broken links report
       | source        | language | field_event_agenda                                  |
       | Faulty agenda | hu       | <p><a href="/hu/broken-event-agenda">Agenda</a></p> |
     When I am logged in as a moderator
-    And I go to "admin/reports/linkchecker"
+    And I go to "admin/reports/linkchecker?code=All"
     Then I should see the link "Faulty agenda"
+    And I should see the link "Broken links group"
     But I should not see the link "Draft agenda"
     And I should not see the text "/hu/broken-event-agenda"
 
@@ -27,8 +28,9 @@ Feature: Broken links report
     And I append "text" to "field_paragraphs_body" field in "node" entity with following "Faulty text" title:
       | field_body | <p><a href="/broken-text-paragraph">Broken text link</a></p> |
     When I am logged in as a moderator
-    And I go to "admin/reports/linkchecker"
+    And I go to "admin/reports/linkchecker?code=All"
     Then I should see the link "Faulty text"
+    And I should see the link "Broken links group"
 
   @javascript
   Scenario: A broken link in a paragraph nested inside an accordion is attributed to the node it belongs to.
@@ -48,5 +50,6 @@ Feature: Broken links report
     And I enter "<p><a href='/broken-accordion-paragraph'>Broken accordion link</a></p>" in the 1st "Body" wysiwyg editor in the "Accordion item" field
     And I press "Save" in the "Modal buttons" region
     And I press "Publish"
-    When I go to "admin/reports/linkchecker"
+    When I go to "admin/reports/linkchecker?code=All"
     Then I should see the link "Broken accordion page"
+    And I should see the link "Broken links group"
