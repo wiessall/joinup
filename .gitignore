@@ -61,6 +61,3 @@
 
 # Automatically created by DDEV but not used.
 /recipes/
-
-# Ignore the pnpm store, which containers place inside the project.
-/.pnpm-store/
