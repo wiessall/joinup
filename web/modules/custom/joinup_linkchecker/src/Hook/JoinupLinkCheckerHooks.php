@@ -13,7 +13,6 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_linkchecker\JoinupLinkCheckerLinkStorageSchema;
 use Drupal\linkchecker\LinkCheckerLinkInterface;
-use Drupal\paragraphs\ParagraphInterface;
 
 /**
  * Hooks implementations for Joinup Link checker module.
@@ -62,18 +61,12 @@ final class JoinupLinkCheckerHooks {
    */
   #[Hook('linkcheckerlink_presave')]
   public function addGroup(LinkCheckerLinkInterface $link): void {
-    $entity = $link->getParentEntity();
+    $entity = $link->getTopMostParentEntity();
+
     if ($entity instanceof GroupInterface) {
       $link->set('group', $entity->id());
-      return;
     }
-
-    // Climb to the topmost entity containing the link.
-    while ($entity instanceof ParagraphInterface && $entity->getParentEntity() !== NULL) {
-      $entity = $entity->getParentEntity();
-    }
-
-    if ($entity instanceof GroupContentInterface) {
+    elseif ($entity instanceof GroupContentInterface) {
       try {
         $link->set('group', $entity->getGroup());
       }
