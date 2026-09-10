@@ -21,6 +21,7 @@ Feature: Input filter
       | Google docs                        | "<iframe frameborder=\"0\" height=\"800\" marginheight=\"0\" marginwidth=\"0\" src=\"https://docs.google.com/forms/d/1dBGzMp9whY2Ibxf4pUQNadpE2C3ywxdDefSSM3BdwJ4/viewform?embedded=true\" width=\"100%\">Loading...</iframe>"                                                                                       | Netflix group |
       | Interoperable Europe Portal iframe | "<iframe frameborder=\"0\" height=\"800\" marginheight=\"0\" marginwidth=\"0\" src=\"/homepage\" width=\"100%\"></iframe>"                                                                                                                                                                                          | Netflix group |
       | Quoted texts                       | <q>This is a famous quote.</q> ~ Interoperable Europe Portal developer.                                                                                                                                                                                                                                             | Netflix group |
+      # Kept as a fixture to prove the markup is filtered out, not rendered.
       # The area coordinates contain commas, so the cell would otherwise be split into multiple scalar items; wrap in "..." and escape inner quotes as \" so the value is parsed as a single scalar.
       | Image map                          | "<map name=\"imagemap\"><area shape=\"circle\" coords=\"50,50,25\" href=\"/\" alt=\"Homepage\"/></map><img usemap=\"imagemap\" src=\"/images/my-image.png\" alt=\"Imagemap example\" />"                                                                                                                            | Netflix group |
       | Accessibility planning             | "Accessibility planning is framed in the context of social exclusion within transport planning <img src=\"/web/sites/default/files/logo.png\" />"                                                                                                                                                                   | Netflix group |
@@ -41,12 +42,19 @@ Feature: Input filter
     When I go to the "Quoted texts" discussion
     Then the response should contain "<q>This is a famous quote.</q> ~ Interoperable Europe Portal developer."
     When I go to the "Image map" discussion
-    Then I should see the "map" element with the "name" attribute set to "imagemap" in the "Content" region
-    And I should see the "img" element with the "usemap" attribute set to "imagemap" in the "Content" region
-    And the response should contain "<area shape=\"circle\" coords=\"50,50,25\" href=\"/\" alt=\"Homepage\">"
+    # Image maps went with <img>: a <map> can no longer be attached to anything,
+    # so <img>, <map> and <area> are all filtered out of the content editor.
+    Then the response should not contain "<map name=\"imagemap\">"
+    And the response should not contain "<area shape=\"circle\""
+    And the response should not contain "usemap"
     When I go to the "Accessibility planning" discussion
-    Then I see the "img" element with empty "alt" attribute in the "Content" region
+    # Inline <img> is no longer allowed at all; only the surrounding text
+    # survives. Images are embedded as media, see the next step.
+    Then the response should contain "Accessibility planning is framed in the context of social exclusion within transport planning"
+    And the response should not contain "/web/sites/default/files/logo.png"
     When I go to the "Accessibility rating" discussion
+    # <drupal-media> is expanded by the media_embed filter, which runs after
+    # filter_html, so the <img> it generates is never filtered.
     Then I should see the "img" element with the "alt" attribute set to "Image media alt text" in the "Content" region
 
     Given I am logged in as an authenticated
