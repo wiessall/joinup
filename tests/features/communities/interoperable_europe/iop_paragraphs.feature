@@ -2,12 +2,6 @@
 Feature:
   Access and functionality checks for the IOP related paragraphs.
 
-  Background:
-    # Mimic the "Interoperable Europe" collection.
-    Given the following "collection" content:
-      | uri                                                            | title                | topic      |
-      | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c | Interoperable Europe | Demography |
-
   Scenario: Test that carousels content listing options are working correctly.
     Given the following "collection" content:
       | title       |
