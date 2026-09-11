@@ -178,6 +178,7 @@ default:
         'licence comparer': 'table[data-drupal-selector="licence-comparer"]'
         'subscribers report': 'table'
         'media admin': 'form[data-drupal-selector="views-form-media-media-page-list"] table'
+        'node revisions': 'table.diff-revisions'
         'Ventuno media library': '.view-id-media_library.view-display-id-widget form table'
         'OSS catalogue list': '.oss-catalogue-list table'
         'Owner IEF': '.field--name-owner .ief-entity-table'
