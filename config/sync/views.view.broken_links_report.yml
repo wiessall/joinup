@@ -939,7 +939,7 @@ display:
                   max: ''
                   value: '^(?:(?!200|206|301|302|304|401|403))'
               2:
-                title: OK
+                title: 'OK (200, 206, 301, 302, 304, 401, 403)'
                 operator: regular_expression
                 value:
                   min: ''
