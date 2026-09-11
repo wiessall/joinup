@@ -463,9 +463,10 @@
                 "Links never checked @see https://www.drupal.org/i/3469263": "resources/patch/php/drupal/linkchecker/3469263-mr133.diff",
                 "linkchecker_index table does not support entities with string IDs @see https://www.drupal.org/i/3567956": "resources/patch/php/drupal/linkchecker/3567956-mr134.diff",
                 "Provide option to only check links found in default translation @see https://drupal.org/i/3614972": "resources/patch/php/drupal/linkchecker/3614972.mr157-aa2ce3f8ae.diff",
-                "Page entity label does not resolve the topmost parent for nested paragraphs @see https://www.drupal.org/i/3135654": "resources/patch/php/drupal/linkchecker/3135654-mr154.diff",
+                "Page entity label does not resolve the topmost parent for nested paragraphs @see https://www.drupal.org/i/3135654": "resources/patch/php/drupal/linkchecker/3135654-mr154.commit-6b4fe8b4.diff",
                 "Add parent entity relationship @see https://www.drupal.org/project/linkchecker/issues/3539894": "resources/patch/php/drupal/linkchecker/3539894-mr130-474076fb.diff",
-                "Use \"view\" or \"edit\" for the field access @see https://www.drupal.org/i/3620347": "resources/patch/php/drupal/linkchecker/3620347-mr165-ddef5549.diff"
+                "Use \"view\" or \"edit\" for the field access @see https://www.drupal.org/i/3620347": "resources/patch/php/drupal/linkchecker/3620347-mr165-ddef5549.diff",
+                "Avoid expensive operations while client waits for response @see https://www.drupal.org/i/3622264": "resources/patch/php/drupal/linkchecker/3622264.mr168.commit-27f721f8.diff"
             },
             "drupal/linkit": {
                 "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "resources/patch/php/drupal/linkit/linkit-2877535-62-revised-7.0.15.patch",

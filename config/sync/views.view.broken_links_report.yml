@@ -3,10 +3,9 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.og_audience
     - system.menu.admin
   module:
-    - joinup_core
+    - joinup_linkchecker
     - linkchecker
     - node
     - user
@@ -28,6 +27,110 @@ display:
     display_options:
       title: 'Broken links report'
       fields:
+        linkcheckerlink_page_entity_label_1:
+          id: linkcheckerlink_page_entity_label_1
+          table: linkchecker_link
+          field: linkcheckerlink_page_entity_label
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: linkcheckerlink
+          plugin_id: linkcheckerlink_page_entity_label
+          label: 'Page entity label'
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 90
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: true
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          link_to_entity: false
+        linkcheckerlink_page_entity_link:
+          id: linkcheckerlink_page_entity_link
+          table: linkchecker_link
+          field: linkcheckerlink_page_entity_link
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: linkcheckerlink
+          plugin_id: linkcheckerlink_page_entity_link
+          label: 'Page entity link'
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          text: view
+          output_url_as_text: true
+          absolute: false
         entity_field:
           id: entity_field
           table: linkchecker_link
@@ -106,8 +209,8 @@ display:
           label: 'Entity language'
           exclude: true
           alter:
-            alter_text: false
-            text: ''
+            alter_text: true
+            text: '{{ entity_langcode__value }}'
             make_link: false
             path: ''
             absolute: false
@@ -147,8 +250,7 @@ display:
           click_sort_column: value
           type: language
           settings:
-            link_to_entity: false
-            native_language: true
+            native_language: false
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -159,57 +261,6 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        linkcheckerlink_page_entity_label:
-          id: linkcheckerlink_page_entity_label
-          table: linkchecker_link
-          field: linkcheckerlink_page_entity_label
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: linkcheckerlink
-          plugin_id: linkcheckerlink_page_entity_label
-          label: ''
-          exclude: true
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          link_to_entity: 1
         url_1:
           id: url_1
           table: linkchecker_link
@@ -610,19 +661,20 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        nothing:
-          id: nothing
-          table: views
-          field: nothing
+        linkcheckerlink_page_entity_label:
+          id: linkcheckerlink_page_entity_label
+          table: linkchecker_link
+          field: linkcheckerlink_page_entity_label
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: custom
+          entity_type: linkcheckerlink
+          plugin_id: linkcheckerlink_page_entity_label
           label: 'Found here'
           exclude: false
           alter:
             alter_text: true
-            text: "<b>Entity:</b> {{ linkcheckerlink_page_entity_label }}<br />\r\n<b>Language:</b> {{ entity_langcode }}"
+            text: '<a href="{{ linkcheckerlink_page_entity_link }}">{{ linkcheckerlink_page_entity_label_1 }}</a> ({{ entity_langcode }})'
             make_link: false
             path: ''
             absolute: false
@@ -637,7 +689,7 @@ display:
             suffix: ''
             target: ''
             nl2br: false
-            max_length: 0
+            max_length: 100
             word_boundary: true
             ellipsis: true
             more_link: false
@@ -651,23 +703,26 @@ display:
           element_class: ''
           element_label_type: ''
           element_label_class: ''
-          element_label_colon: true
+          element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
           empty: ''
           hide_empty: false
           empty_zero: false
-          hide_alter_empty: false
-        og_audience:
-          id: og_audience
-          table: node__og_audience
-          field: og_audience
-          relationship: node_relationship
+          hide_alter_empty: true
+          link_to_entity: false
+        group:
+          id: group
+          table: linkchecker_link
+          field: group
+          relationship: none
           group_type: group
           admin_label: ''
+          entity_type: linkcheckerlink
+          entity_field: group
           plugin_id: field
-          label: 'Groups audience'
+          label: Group
           exclude: false
           alter:
             alter_text: false
@@ -813,10 +868,83 @@ display:
       cache:
         type: tag
         options: {  }
-      empty: {  }
+      empty:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: true
+          content:
+            value: 'No links detected for the selected filters.'
+            format: content_editor
+          tokenize: false
       sorts: {  }
       arguments: {  }
       filters:
+        code:
+          id: code
+          table: linkchecker_link
+          field: code
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: linkcheckerlink
+          entity_field: code
+          plugin_id: numeric
+          operator: regular_expression
+          value:
+            min: ''
+            max: ''
+            value: ^(200|206|301|302|304|401|403)
+          group: 1
+          exposed: true
+          expose:
+            operator_id: code_op
+            label: 'Status code'
+            description: ''
+            use_operator: false
+            operator: code_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: code
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: true
+          group_info:
+            label: Status
+            description: ''
+            identifier: code
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: '1'
+            default_group_multiple: {  }
+            group_items:
+              1:
+                title: Broken
+                operator: regular_expression
+                value:
+                  min: ''
+                  max: ''
+                  value: '^(?:(?!200|206|301|302|304|401|403))'
+              2:
+                title: 'OK (200, 206, 301, 302, 304, 401, 403)'
+                operator: regular_expression
+                value:
+                  min: ''
+                  max: ''
+                  value: ^(200|206|301|302|304|401|403)
         url:
           id: url
           table: linkchecker_link
@@ -858,27 +986,28 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        og_audience_target_id_autocomplete:
-          id: og_audience_target_id_autocomplete
-          table: node__og_audience
-          field: og_audience_target_id_autocomplete
-          relationship: node_relationship
+        group:
+          id: group
+          table: linkchecker_link
+          field: group
+          relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: og_audience_autocomplete
+          entity_type: linkcheckerlink
+          plugin_id: joinup_linkchecker_group_autocomplete
           operator: '='
           value: null
           group: 1
           exposed: true
           expose:
             operator_id: ''
-            label: 'Groups audience (autocomplete)'
+            label: Group
             description: ''
             use_operator: false
-            operator: og_audience_target_id_autocomplete_op
+            operator: group_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: og_audience_target_id_autocomplete
+            identifier: group
             required: false
             remember: false
             multiple: false
@@ -907,20 +1036,35 @@ display:
           row_class: ''
           default_row_class: true
           columns:
+            linkcheckerlink_page_entity_label_1: linkcheckerlink_page_entity_label_1
+            linkcheckerlink_page_entity_link: linkcheckerlink_page_entity_link
             entity_field: entity_field
             entity_langcode: entity_langcode
-            linkcheckerlink_page_entity_label: linkcheckerlink_page_entity_label
             url_1: url_1
             url: url
+            group: group
             last_check: last_check
             code: code
             error: error
             fail_count: fail_count
-            nothing: nothing
-            og_audience: og_audience
+            linkcheckerlink_page_entity_label: linkcheckerlink_page_entity_label
             operations: operations
           default: '-1'
           info:
+            linkcheckerlink_page_entity_label_1:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            linkcheckerlink_page_entity_link:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
             entity_field:
               sortable: false
               default_sort_order: asc
@@ -935,13 +1079,6 @@ display:
               separator: ''
               empty_column: false
               responsive: ''
-            linkcheckerlink_page_entity_label:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
             url_1:
               sortable: false
               default_sort_order: asc
@@ -950,7 +1087,14 @@ display:
               empty_column: false
               responsive: ''
             url:
-              sortable: false
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            group:
+              sortable: true
               default_sort_order: asc
               align: ''
               separator: ''
@@ -978,18 +1122,13 @@ display:
               empty_column: false
               responsive: ''
             fail_count:
-              sortable: false
+              sortable: true
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
-            nothing:
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            og_audience:
+            linkcheckerlink_page_entity_label:
               sortable: false
               default_sort_order: asc
               align: ''
@@ -1032,7 +1171,10 @@ display:
       show_admin_links: true
       header: {  }
       footer: {  }
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: -1
       contexts:
@@ -1041,8 +1183,7 @@ display:
         - url
         - url.query_args
         - user.permissions
-      tags:
-        - 'config:field.storage.node.og_audience'
+      tags: {  }
   page_1:
     id: page_1
     display_title: Page
@@ -1076,5 +1217,4 @@ display:
         - url
         - url.query_args
         - user.permissions
-      tags:
-        - 'config:field.storage.node.og_audience'
+      tags: {  }
