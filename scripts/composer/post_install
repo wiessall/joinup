@@ -2,15 +2,14 @@
 
 set -e
 
-# Run NPM install only if it's not bypassed or when building the distribution.
+# Install node dependencies only if not bypassed or when building the distribution.
 if [ "$BUILD_DISTRO" = "1" ] || [ ! -f .env ] || [ "$(grep 'COMPOSER_DISABLE_NODE_DEPENDENCIES=1' .env)" = "" ]
 then
-  npm ci --no-progress
-  # Explicitly run what used to be the 'postinstall' script. The corporate
-  # pipelines set NPM_CONFIG_IGNORE_SCRIPTS=true, which silently skips npm
-  # lifecycle scripts, leaving the node patches unapplied and web/libraries/
-  # unpopulated. Calling it here keeps dev and CI on the same path.
-  npm run install:libraries
+  pnpm install --frozen-lockfile
+  # pnpm applies the node patches itself during install, so only the library
+  # copy is left to invoke. It is called explicitly because the corporate
+  # pipelines set NPM_CONFIG_IGNORE_SCRIPTS=true.
+  pnpm run build:third-party-libraries
 fi
 
 source scripts/composer/download_licences

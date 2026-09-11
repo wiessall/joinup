@@ -346,9 +346,9 @@ dev:
 
 * Run task:
   ```shell
-  ddev npm run watch
+  ddev exec pnpm run watch
   ```
-* PhpStorm and VS Code, see our [NPM watch developer documentation](docs/npm_watch.md).
+* PhpStorm and VS Code, see our [pnpm watch developer documentation](docs/pnpm_watch.md).
 
 ### Upgrade process
 
