@@ -1,0 +1,32 @@
+#!/bin/bash
+
+## Description: Updates node dependencies and both lock files
+## Usage: pnpm-update [package[@version] ...]
+## Example: ddev pnpm-update chart.js@4.5.1
+## Example: ddev pnpm-update
+## ExecRaw: true
+
+set -e
+
+#
+# The project ships two lock files. package-lock.json is mandatory on the
+# corporate pipelines, while pnpm-lock.yaml is the one every install actually
+# builds from. Nothing reads package-lock.json during a build, so when the two
+# stop describing the same dependency tree there is no error and no warning --
+# the versions CI resolves simply stop matching the versions recorded next to
+# them.
+#
+# They are kept in step by resolving with npm first and deriving pnpm-lock.yaml
+# from that result, so both files always name the same versions. Reaching for
+# `pnpm add` or `pnpm update` instead moves pnpm-lock.yaml on its own and
+# leaves package-lock.json describing the previous tree.
+#
+# Pass a package spec to bump one dependency, or none to re-resolve after
+# editing package.json by hand.
+#
+
+export COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+
+npm install --package-lock-only "$@"
+pnpm import
+pnpm install

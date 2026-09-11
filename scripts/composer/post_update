@@ -7,11 +7,11 @@ source scripts/composer/download_licences
 # Build the codebase.
 test ! -f vendor/bin/run || vendor/bin/run toolkit:build-dev
 
-# Run NPM install only if it's not bypassed.
+# Install node dependencies only if not bypassed.
 if [ ! -f .env ] || [ "$(grep 'COMPOSER_DISABLE_NODE_DEPENDENCIES=1' .env)" = "" ]
 then
-  npm ci --no-progress
-  # See scripts/composer/post_install: npm lifecycle scripts do not run on the
-  # corporate pipelines, so the former 'postinstall' is invoked explicitly.
-  npm run install:libraries
+  pnpm install --frozen-lockfile
+  # See scripts/composer/post_install: lifecycle scripts do not run on the
+  # corporate pipelines, so the library copy is invoked explicitly.
+  pnpm run build:third-party-libraries
 fi

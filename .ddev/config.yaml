@@ -34,6 +34,7 @@ web_environment:
     - DRUPAL_BASE_URL=https://${DDEV_SITENAME}.${DDEV_TLD}
 disable_settings_management: true
 nodejs_version: "24"
+corepack_enable: true
 # Affects only macOS developers.
 performance_mode: global
 
