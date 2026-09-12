@@ -85,6 +85,26 @@ final class DefaultContentHelper {
           'pathauto' => PathautoState::SKIP,
         ],
       ],
+      // The group that is themed with the Interoperable Europe theme. The
+      // theme rule refers to it by node id, so the id is pinned on install.
+      '8e30f798-ff2b-478b-9c09-5ed5a63b4c8c' => [
+        'nid' => 723208,
+        'title' => 'Interoperable Europe',
+        'uri' => 'http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c',
+        'field_state' => 'published',
+        'created' => strtotime('2015-01-01 08:03'),
+        'changed' => strtotime('2015-01-01 08:03'),
+        'published_at' => strtotime('2015-01-01 08:03'),
+        'abstract' => 'Interoperable Europe.',
+        'description' => [
+          'value' => 'Interoperable Europe.',
+          'format' => 'content_editor',
+        ],
+        'path' => [
+          'alias' => '/interoperable-europe',
+          'pathauto' => PathautoState::SKIP,
+        ],
+      ],
       // The legacy group that the webform assessments are linked to.
       AssessmentInterface::GROUP_UUID => [
         'title' => 'Interoperability assessments space',
