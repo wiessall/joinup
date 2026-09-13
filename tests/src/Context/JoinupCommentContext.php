@@ -129,14 +129,7 @@ class JoinupCommentContext extends RawDrupalContext {
       throw new \RuntimeException(sprintf("The content '%s' has no comments.", $content));
     }
 
-    $comment = $storage->load(reset($cids));
-    $comment->delete();
-
-    // Forget it, so the cleanup does not delete it twice.
-    $this->comments = array_filter(
-      $this->comments,
-      static fn(CommentInterface $tracked): bool => $tracked->id() !== $comment->id(),
-    );
+    $storage->load(reset($cids))->delete();
   }
 
   /**
