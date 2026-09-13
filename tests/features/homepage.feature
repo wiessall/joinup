@@ -282,6 +282,85 @@ Feature: Homepage
     # This tab continues into no listing, unlike the bundle specific ones.
     But I should not see the link "See more user comments" in the "Explore block"
 
+  # The block is render cached for 6 hours, so a new comment has to invalidate
+  # it whether or not the commented content is already listed.
+  Scenario: A comment on content already listed refreshes the explore block
+    Given the following "collection" content:
+      | title                | state     |
+      | Busy comment space   | published |
+    And the following "news" content:
+      | title            | body            | collection         | state     |
+      | Established news | Some news body. | Busy comment space | published |
+    And the following comments:
+      | content          | created             | body            |
+      | Established news | 2026-03-01T09:00:00 | An old remark.  |
+
+    # Primes the cache.
+    When I am on the homepage
+    Then the user comments section should contain the following content:
+      | title            | date       |
+      | Established news | 01/03/2026 |
+
+    When the following comments:
+      | content          | created             | body           |
+      | Established news | 2026-03-06T10:00:00 | A new remark.  |
+    And I am on the homepage
+    Then the user comments section should contain the following content:
+      | title            | date       |
+      | Established news | 06/03/2026 |
+
+  Scenario: A comment on content not yet listed refreshes the explore block
+    Given the following "collection" content:
+      | title               | state     |
+      | Fresh comment space | published |
+    And the following "news" content:
+      | title            | body             | collection          | state     |
+      | Established news | Some news body.  | Fresh comment space | published |
+      | Quiet news       | Another news body. | Fresh comment space | published |
+    And the following comments:
+      | content          | created             | body           |
+      | Established news | 2026-03-01T09:00:00 | An old remark. |
+
+    When I am on the homepage
+    Then the user comments section should contain the following content:
+      | title            | date       |
+      | Established news | 01/03/2026 |
+
+    # "Quiet news" is not in the block yet, so its node tag is not among the
+    # tags the cached block carries.
+    When the following comments:
+      | content    | created             | body          |
+      | Quiet news | 2026-03-05T10:00:00 | A new remark. |
+    And I am on the homepage
+    Then the user comments section should contain the following content:
+      | title            | date       |
+      | Quiet news       | 05/03/2026 |
+      | Established news | 01/03/2026 |
+
+  Scenario: Deleting the latest comment updates the explore block
+    Given the following "collection" content:
+      | title                  | state     |
+      | Deleted comment space  | published |
+    And the following "news" content:
+      | title            | body            | collection            | state     |
+      | Established news | Some news body. | Deleted comment space | published |
+    And the following comments:
+      | content          | created             | body             |
+      | Established news | 2026-03-01T09:00:00 | An older remark. |
+      | Established news | 2026-03-02T10:00:00 | A newer remark.  |
+
+    When I am on the homepage
+    Then the user comments section should contain the following content:
+      | title            | date       |
+      | Established news | 02/03/2026 |
+
+    # Comment::postDelete() does not invalidate the commented node.
+    When the comment "A newer remark." is deleted
+    And I am on the homepage
+    Then the user comments section should contain the following content:
+      | title            | date       |
+      | Established news | 01/03/2026 |
+
   @group-clone
   Scenario: The /events path redirects to upcoming events page.
     Given I am on the homepage

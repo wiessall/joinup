@@ -104,6 +104,26 @@ class JoinupCommentContext extends RawDrupalContext {
   }
 
   /**
+   * Deletes a comment created earlier in the scenario, identified by its body.
+   *
+   * @param string $body
+   *   The body of the comment to delete.
+   */
+  #[Given('the comment :body is deleted')]
+  public function deleteComment(string $body): void {
+    foreach ($this->comments as $key => $comment) {
+      if ($comment->get('field_body')->value === $body) {
+        $comment->delete();
+        // Forget it, so the cleanup does not delete it twice.
+        unset($this->comments[$key]);
+        return;
+      }
+    }
+
+    throw new \RuntimeException(sprintf("No comment with body '%s' was created in this scenario.", $body));
+  }
+
+  /**
    * Removes the comments created during the scenario.
    */
   #[AfterScenario]

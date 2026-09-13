@@ -7,6 +7,7 @@ namespace Drupal\joinup_front_page\Plugin\Block;
 use Drupal\comment\CommentInterface;
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryInterface;
@@ -145,7 +146,9 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
     // whenever any of the content types shown in it change. The front page is
     // heavily trafficked and too frequent cache invalidations might affect
     // performance.
-    return ['homepage_explore_block'];
+    // The bubbled node tags only cover content already listed, so the commented
+    // tab needs `comment_list` to catch comments on anything else.
+    return ['homepage_explore_block', 'comment_list'];
   }
 
   /**
@@ -272,10 +275,21 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
         continue;
       }
       $node = $this->entityRepository->getTranslationFromContext($nodes[$nid]);
+      $comment = $newest_comments[$nid];
       $build = $view_builder->view($node, $this->viewMode);
       // Consumed by joinup_front_page_preprocess_node(), which turns it into
       // the "See comment" link and the comment date in the tile footer.
-      $build['#joinup_latest_comment'] = $newest_comments[$nid];
+      $build['#joinup_latest_comment'] = $comment;
+
+      // The footer lands in the tile's render cache entry, which is keyed by
+      // node and view mode alone and which Comment::postDelete() leaves alone.
+      if (isset($build['#cache']['keys'])) {
+        $build['#cache']['keys'][] = 'latest-comment-' . $comment->id();
+      }
+      CacheableMetadata::createFromRenderArray($build)
+        ->addCacheableDependency($comment)
+        ->applyTo($build);
+
       $content[] = $build;
     }
 
