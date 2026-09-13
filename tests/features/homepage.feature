@@ -355,7 +355,7 @@ Feature: Homepage
       | Established news | 02/03/2026 |
 
     # Comment::postDelete() does not invalidate the commented node.
-    When the comment "A newer remark." is deleted
+    When the latest comment on "Established news" is deleted
     And I am on the homepage
     Then the user comments section should contain the following content:
       | title            | date       |
