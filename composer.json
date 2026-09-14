@@ -548,7 +548,9 @@
             },
             "drupal/tmgmt": {
                 "Hook to allow modules to alter translation @see https://www.drupal.org/i/3298245": "resources/patch/php/drupal/tmgmt/3298245.mr58.commit6976599d.diff",
-                "Data loss when the same source is accepted concurrently @see https://www.drupal.org/i/3618383": "resources/patch/php/drupal/tmgmt/3618383.mr180.commita40a65ff.diff"
+                "Data loss when the same source is accepted concurrently @see https://www.drupal.org/i/3618383": "resources/patch/php/drupal/tmgmt/3618383.mr180.commit655b7548.diff",
+                "Know the word count before writing the job item @see https://www.drupal.org/i/3238559": "resources/patch/php/drupal/tmgmt/3238559.mr13.commitdd71e389.diff",
+                "Read the translatable data of a source once per request @see https://www.drupal.org/i/3622064": "resources/patch/php/drupal/tmgmt/3622064.mr185.commitaf918b05.diff"
             },
             "drupal/tmgmt_ec_etranslation": {
                 "Reschedule timeouted items few times @see https://www.drupal.org/i/3609037": "resources/patch/php/drupal/tmgmt_ec_etranslation/3609037.mr3609037-commit55c6c018.diff"

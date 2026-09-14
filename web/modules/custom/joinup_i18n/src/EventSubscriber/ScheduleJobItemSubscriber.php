@@ -8,7 +8,6 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\RevisionableStorageInterface;
-use Drupal\joinup_i18n\TranslationHelper;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\tmgmt\Events\ContinuousEvents;
 use Drupal\tmgmt\Events\ShouldCreateJobEvent;
@@ -23,7 +22,6 @@ final readonly class ScheduleJobItemSubscriber implements EventSubscriberInterfa
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected TranslationHelper $translationHelper,
   ) {}
 
   /**
@@ -94,11 +92,6 @@ final readonly class ScheduleJobItemSubscriber implements EventSubscriberInterfa
     /* @see \Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource::saveTranslation */
     /* @see \Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource::getPendingRevisionWithCompositeReferenceField() */
     if ($storage instanceof RevisionableStorageInterface && (int) $storage->getLatestRevisionId($entity->id()) !== (int) $entity->getRevisionId()) {
-      return FALSE;
-    }
-
-    // The entity must expose translatable content.
-    if (!$this->translationHelper->hasTranslatableFields($entity)) {
       return FALSE;
     }
 
