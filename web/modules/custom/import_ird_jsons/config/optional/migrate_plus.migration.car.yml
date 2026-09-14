@@ -11,7 +11,7 @@
 # To import a different collection, change the URL in source.urls
 # or override at runtime:
 #   drush migrate:import ird_solution_import \
-#     --source-url=modules/custom/import_IRD_jsons/sources/dah.json
+#     --source-url=modules/custom/import_ird_jsons/sources/dah.json
 
 uuid: 1f7e0c34-bfe8-4e27-ad92-9da9fc404024
 langcode: en
@@ -38,7 +38,7 @@ source:
   data_parser_plugin: json
 
   urls:
-    - modules/custom/import_IRD_jsons/sources/car-sample.json
+    - modules/custom/import_ird_jsons/sources/car-sample.json
 
   # ----- Collection-level defaults (read from meta object) -----
   # These are injected as constants so process plugins can reference them.

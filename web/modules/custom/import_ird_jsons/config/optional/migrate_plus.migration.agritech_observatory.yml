@@ -23,7 +23,7 @@ source:
   data_parser_plugin: json
 
   urls:
-    - modules/custom/import_IRD_jsons/sources/agritech_observatory.json  #!
+    - modules/custom/import_ird_jsons/sources/agritech_observatory.json  #!
 
   constants:
     OG_AUDIENCE_NID: '2168'          #!
