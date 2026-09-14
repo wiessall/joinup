@@ -1,0 +1,14 @@
+uuid: 75cf98ce-7058-4dbb-ad06-3ad43101ca02
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_taxonomy
+third_party_settings:
+  joinup_taxonomy:
+    locked: false
+name: Topic
+vid: topic
+description: null
+weight: 0
+new_revision: false

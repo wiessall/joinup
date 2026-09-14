@@ -1,0 +1,13 @@
+uuid: f52ae79b-b427-43e3-bf5e-c2c9432f44da
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.oss_used_by
+id: taxonomy_term.oss_used_by
+targetEntityType: taxonomy_term
+bundle: oss_used_by
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

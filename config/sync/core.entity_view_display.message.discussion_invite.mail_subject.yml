@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.message.mail_subject
-    - field.field.message.discussion_invite.field_invitation
     - message.template.discussion_invite
 id: message.discussion_invite.mail_subject
 targetEntityType: message
@@ -17,7 +16,6 @@ content:
     weight: 0
     region: content
 hidden:
-  field_invitation: true
   partial_1: true
   search_api_excerpt: true
   uuid: true

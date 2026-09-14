@@ -1,0 +1,12 @@
+uuid: a49a897b-06fe-4385-b153-00b0bf646e00
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_solution
+id: unarchive_solution
+label: 'Unarchive (publish) solutions'
+type: node
+plugin: 'change_state:node:solution'
+configuration:
+  target_state: published

@@ -1,0 +1,18 @@
+uuid: 93cf321d-b57a-478d-83cb-6ccb54321268
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_group
+  theme:
+    - iop
+id: interoperable_europe
+label: 'Interoperable Europe'
+theme: iop
+weight: -10
+conditions:
+  group_context:
+    id: group_context
+    negate: false
+    limit_to_groups:
+      - '723208'

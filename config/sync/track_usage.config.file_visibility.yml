@@ -1,0 +1,41 @@
+uuid: 9d769f2f-6471-49b4-8b7c-61df293cfdbf
+langcode: en
+status: true
+dependencies: {  }
+id: file_visibility
+label: 'File visibility'
+trackPlugins: {  }
+activeRevision: true
+realTimeRecording: true
+source:
+  node:
+    - collection
+    - custom_page
+    - discussion
+    - distribution
+    - document
+    - event
+    - news
+    - release
+    - solution
+traversable:
+  comment: {  }
+  media:
+    - collection_logo
+    - discussion_logo
+    - event_logo
+    - file
+    - image
+    - news_logo
+    - solution_logo
+  paragraph:
+    - accordion_item
+    - entity_reference
+    - image
+    - image_gallery
+    - resource_file
+    - simple_paragraph
+    - testimony
+    - tile
+target:
+  file: {  }

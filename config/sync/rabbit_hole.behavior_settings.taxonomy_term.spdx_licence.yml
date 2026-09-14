@@ -1,0 +1,13 @@
+uuid: 3f45ad31-22c1-4d9d-844b-b656f20672ab
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.spdx_licence
+id: taxonomy_term.spdx_licence
+targetEntityType: taxonomy_term
+bundle: spdx_licence
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

@@ -1,0 +1,14 @@
+uuid: 3b9dda43-ee77-495e-84e7-e3c1acd3e223
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_taxonomy
+third_party_settings:
+  joinup_taxonomy:
+    locked: false
+name: 'OSS Category'
+vid: oss_category
+description: 'Open Source Software Solution Category'
+weight: 0
+new_revision: false

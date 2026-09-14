@@ -1,0 +1,339 @@
+uuid: b317bf83-b1c2-46de-99a7-8ba399abd453
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.index.published
+    - taxonomy.vocabulary.spdx_licence
+  module:
+    - search_api
+    - user
+id: licence_list
+label: 'Licence list'
+module: views
+description: ''
+tag: ''
+base_table: search_api_index_published
+base_field: search_api_id
+display:
+  default:
+    id: default
+    display_title: Master
+    display_plugin: default
+    position: 0
+    display_options:
+      title: 'Licence list'
+      fields:
+        body:
+          id: body
+          table: search_api_index_published
+          field: body
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: null
+          entity_field: null
+          plugin_id: search_api
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          link_to_item: false
+          use_highlighting: false
+          multi_type: separator
+          multi_separator: ', '
+      pager:
+        type: none
+        options:
+          offset: 0
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      access:
+        type: perm
+        options:
+          perm: 'access content'
+      cache:
+        type: search_api_tag
+        options: {  }
+      empty: {  }
+      sorts:
+        title:
+          id: title
+          table: search_api_index_published
+          field: title
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+      arguments: {  }
+      filters:
+        entity_bundle:
+          id: entity_bundle
+          table: search_api_index_published
+          field: entity_bundle
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_string
+          operator: '='
+          value:
+            min: ''
+            max: ''
+            value: licence
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        spdx_licence:
+          id: spdx_licence
+          table: search_api_index_published
+          field: spdx_licence
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_string
+          operator: 'not empty'
+          value:
+            min: ''
+            max: ''
+            value: ''
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      style:
+        type: default
+        options:
+          row_class: ''
+          default_row_class: false
+          uses_fields: false
+      row:
+        type: search_api
+        options:
+          view_modes:
+            'entity:node':
+              collection: default
+              custom_page: default
+              discussion: default
+              distribution: default
+              document: default
+              event: default
+              licence: view_mode_search_list_item
+              news: default
+              release: default
+              solution: default
+            'entity:taxonomy_term':
+              eif_conceptual_model: default
+              eif_interoperability_layer: default
+              eif_principle: default
+              eif_recommendation: default
+              topic: default
+            'entity:user':
+              user: default
+      query:
+        type: search_api_query
+        options:
+          bypass_access: false
+          skip_access: false
+      relationships: {  }
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: result
+          empty: false
+          content: "<div class=\"licence-counter\">\r\n  <span class=\"licence-counter__number\">\r\n    @total\r\n  </span>\r\n  <span class=\"licence-counter__text\">\r\n    licences found\r\n  </span>\r\n</div>"
+      footer: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:search_api.index.published'
+        - 'search_api_list:published'
+  licence_list_block:
+    id: licence_list_block
+    display_title: 'Block (JLA)'
+    display_plugin: block
+    position: 1
+    display_options:
+      display_description: ''
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:search_api.index.published'
+        - 'search_api_list:published'
+  licence_list_block_jlc:
+    id: licence_list_block_jlc
+    display_title: 'Block (JLC)'
+    display_plugin: block
+    position: 1
+    display_options:
+      style:
+        type: default
+        options:
+          row_class: ''
+          default_row_class: false
+          uses_fields: false
+      row:
+        type: search_api
+        options:
+          view_modes:
+            'entity:node':
+              collection: default
+              custom_page: default
+              discussion: default
+              distribution: default
+              document: default
+              event: default
+              licence: compatibility_check
+              news: default
+              release: default
+              solution: default
+            'entity:taxonomy_term':
+              eif_conceptual_model: default
+              eif_interoperability_layer: default
+              eif_principle: default
+              eif_recommendation: default
+              topic: default
+            'entity:user':
+              user: default
+      defaults:
+        style: false
+        row: false
+      display_description: ''
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:search_api.index.published'
+        - 'search_api_list:published'

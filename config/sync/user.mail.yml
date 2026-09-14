@@ -1,0 +1,130 @@
+langcode: en
+cancel_confirm:
+  subject: 'Account cancellation request for [user:account-name] at [site:name]'
+  body: |-
+    [user:display-name],
+
+    A request to cancel your account has been made at [site:name].
+
+    You may now cancel your account on [site:url-brief] by clicking this link or copying and pasting it into your browser:
+
+    <a href="[user:cancel-url]">[user:cancel-url]</a>
+
+    NOTE: The cancellation of your account is not reversible.
+
+    This link expires in one day and nothing will happen if it is not used.
+
+    Kind regards,
+
+    The Portal Support Team
+password_reset:
+  subject: 'Please confirm the request of a new password.'
+  body: |-
+    Dear [user:field_user_first_name],
+
+    A new password has been requested for the account [user:account-name].
+
+    To confirm the request, please click <a href="[user:one-time-login-url]">[user:one-time-login-url]</a>.
+
+    If you didn't ask for a new password, please disregard this message.
+
+    Kind regards,
+
+    The Portal Support Team
+register_admin_created:
+  subject: 'Your Interoperable Europe Portal account was created successfully.'
+  body: |-
+    Dear [user:field_user_first_name],
+
+    The Portal Support Team created your account on Interoperable Europe Portal.
+    Please log in through the following link in order to set your password.
+    <a href="[user:one-time-login-url]">[user:one-time-login-url]</a>
+
+    In case you think this action is not due, please contact the <a href="[site:contact-form]">Interoperable Europe Portal Support Team</a>.
+
+    Kind regards,
+
+    The Portal Support Team
+register_no_approval_required:
+  subject: "You're one step away to create your Interoperable Europe Portal account. Please confirm your email address before you can sign in to Interoperable Europe Portal."
+  body: |-
+    Dear [user:field_user_first_name],
+
+    You are one step away from creating your account in Interoperable Europe Portal, the European Commission collaborative platform for Interoperability solutions for public administrations, businesses and citizens.
+
+    Please confirm your email address by clicking <a href="[user:one-time-login-url]">[user:one-time-login-url]</a> to complete the creation of your new Interoperable Europe Portal account.
+
+    If you think that this email was erroneously sent to you, please disregard this message.
+
+    Kind regards,
+
+    The Portal Support Team
+register_pending_approval:
+  subject: 'Your [site:name] account is pending approval.'
+  body: |-
+    Dear [user:field_user_first_name],
+
+    Thank you for registering on the [site:name]. Your application for an account is currently pending approval. Once it has been approved, you will receive another email containing information about how to sign in and other details.
+
+    We would like to inform you that our system automatically places accounts registered with certain generic email domains under review. This measure helps us maintain the integrity of the platform by minimising the risk of spam or misuse. If your account has not been validated in the following 1 business day, please contact us through our <a href="[site:contact-form]">contact form</a>.
+
+    Kind regards,
+
+    The Portal Support Team.
+register_pending_approval_admin:
+  subject: 'Account details for [user:display-name] at [site:name] (pending admin approval)'
+  body: |-
+    [user:display-name] has applied for an account.
+
+    <a href="[user:edit-url]">[user:edit-url]</a>
+status_activated:
+  subject: 'Welcome to the Interoperable Europe Portal!'
+  body: |-
+    Dear [user:field_user_first_name],
+
+    Your account has been activated and we are excited to have you join our growing community of innovators, policy makers, and technology enthusiasts working together to enhance digital public services across Europe.
+
+    Here's how you can get started:
+
+    <strong>1. Login to the Interoperable Europe Portal</strong>
+    You may now log in with EU Login credentials by clicking this link or copying and pasting it into your browser: <a href="[site:url]">[site:url]</a>
+
+    <strong>2. Explore the Interoperable Europe Portal</strong>
+    Visit the <a href="[site:url]">Homepage</a> to discover the platform's content. You can browse through the main topics, view highlighted content and use the <a href="[site:url]search?keys=&sort_by=relevance">advanced search</a> to find specific information. The top menu also provides quick access to key areas.
+
+    <strong>3. Participate and contribute</strong>
+    Add content by becoming a member of a Collection. Click on the button “Join this collection” at the top right of any Collection that matches your interests and share with the community new content (events, news, documents, etc.) related to interoperability and digital government.
+
+    <strong>4. Stay informed</strong>
+    Subscribe to your favourite Collections or Solutions and receive email updates when new content or announcements are published. You can configure your subscription settings by visiting the <a href="[site:url]user/subscriptions">My subscriptions</a> page.
+
+    <strong>5. Connect with the community</strong>
+    Subscribe to the <a href="https://ec.europa.eu/newsroom/informatics/user-subscriptions/1115/create">Interoperable Europe Newsletter</a>, and receive updates on important news on interoperability and digital transformation, as well as upcoming events.
+    Follow us on social media, such as <a href="https://www.linkedin.com/groups/12907049/">LinkedIn</a> and <a href="https://x.com/Joinup_eu">X</a> to stay engaged with what is happening in the world of digital public services.
+
+    If you need any assistance, our support team is here to help through the <a href="[site:url]contact">support contact form</a>. Before contacting us, be sure to check our <a href="[site:url]collection/joinup/faq">FAQ</a> and <a href="[site:url]collection/joinup/how-video-tutorials">How-To sections</a>.
+
+    Best regards,
+
+    The Interoperable Europe Portal Team
+status_blocked:
+  subject: 'Your account was just blocked.'
+  body: |-
+    Dear [user:field_user_first_name],
+
+    Your Interoperable Europe Portal account was recently blocked by our moderators.
+    For more information about blocked accounts, please visit our FAQ section.
+
+    Kind regards,
+
+    The Portal Support Team.
+status_canceled:
+  subject: 'Your account has been deleted.'
+  body: |-
+    Dear Interoperable Europe Portal user,
+
+    Your account [user:account-name] has been deleted.@joinup_user:moderation_text If you believe that this action has been performed by mistake, please contact The Portal Support Team at <a href="[site:contact-form]">[site:contact-form]</a>.
+
+    Kind regards,
+
+    The Portal Support Team

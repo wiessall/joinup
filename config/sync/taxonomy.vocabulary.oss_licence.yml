@@ -1,0 +1,14 @@
+uuid: 9fcf8856-39bc-4dce-abe2-1d040b8457ea
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_taxonomy
+third_party_settings:
+  joinup_taxonomy:
+    locked: false
+name: 'OSS Licence'
+vid: oss_licence
+description: 'Open Source Software Solution Licence'
+weight: 0
+new_revision: false

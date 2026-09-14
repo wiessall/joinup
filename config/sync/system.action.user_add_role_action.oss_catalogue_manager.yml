@@ -1,0 +1,14 @@
+uuid: 1a7b66ac-5fe9-4ed2-a113-c4c742649b41
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.oss_catalogue_manager
+  module:
+    - user
+id: user_add_role_action.oss_catalogue_manager
+label: 'Add the OSS Catalogue Manager role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: oss_catalogue_manager

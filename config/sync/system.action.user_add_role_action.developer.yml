@@ -1,0 +1,14 @@
+uuid: 1c44ed2a-20b9-4b67-b902-97c3b182bb10
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.developer
+  module:
+    - user
+id: user_add_role_action.developer
+label: 'Add the Developer role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: developer

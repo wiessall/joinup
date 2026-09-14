@@ -1,0 +1,29 @@
+uuid: 498c6842-7a39-4604-b09d-03e582afc376
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.licence
+    - taxonomy.vocabulary.legal_type
+  module:
+    - dashboard
+    - joinup_licence
+    - node
+    - paragraphs_type_permissions
+    - taxonomy
+    - toolbar
+id: licence_manager
+label: 'Licence manager'
+weight: -10
+is_admin: false
+permissions:
+  - 'access compatibility document overview'
+  - 'access dashboard'
+  - 'access taxonomy overview'
+  - 'access toolbar'
+  - 'create licence content'
+  - 'delete any licence content'
+  - 'edit any licence content'
+  - 'edit terms in legal_type'
+  - 'view licence overview page'
+  - 'view paragraph content block'

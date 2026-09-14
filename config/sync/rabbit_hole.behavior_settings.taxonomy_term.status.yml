@@ -1,0 +1,13 @@
+uuid: 716c107a-aa7c-49e3-ba32-e58b74fc6503
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.status
+id: taxonomy_term.status
+targetEntityType: taxonomy_term
+bundle: status
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

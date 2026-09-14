@@ -1,0 +1,9 @@
+uuid: c4f0d0b5-4ca5-49a0-a553-bd7da69bd7de
+langcode: en
+status: true
+dependencies: {  }
+name: 'dv_solutions: Keywords'
+vid: dv_solutions_keywords
+description: null
+weight: 0
+new_revision: false

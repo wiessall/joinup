@@ -1,0 +1,17 @@
+uuid: 16253b69-574d-42b4-a1ee-9bbb949acbaf
+langcode: zxx
+status: true
+dependencies:
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    type: 'http://www.w3.org/2000/01/rdf-schema#Resource'
+    uri_field_name: claim_value_uri
+    uri_plugin: null
+    fields: {  }
+name: 'Claim values'
+vid: claim_values
+description: null
+weight: 0
+new_revision: false
