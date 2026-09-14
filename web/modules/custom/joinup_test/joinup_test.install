@@ -122,6 +122,11 @@ function joinup_test_install($is_syncing): void {
       $collection_values['owner'] = $owner;
       $collection_values['logo'] = $logo;
       $collection = $nodeStorage->create($collection_values);
+      // The Interoperable Europe theme rule refers to its group by node id.
+      if (isset($data['nid'])) {
+        $collection->nid = $data['nid'];
+        $collection->enforceIsNew();
+      }
       $collection->save();
       $collection->skip_notification = TRUE;
       $created[$uuid] = $uuid;

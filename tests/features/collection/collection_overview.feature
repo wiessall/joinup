@@ -31,6 +31,7 @@ Feature: Collections Overview
       | Connecting Europe                    |
       # Created in 8:31am.
       | E-health                             |
+      | Interoperable Europe                 |
       | Interoperability assessments space   |
       | Portal support                       |
 

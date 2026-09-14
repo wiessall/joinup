@@ -66,6 +66,8 @@ grumphp:
 
     # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/yamllint.md
     lint-yaml:
+      ignore_patterns:
+        - /^pnpm-lock\.yaml$/
       metadata:
         task: yamllint
 

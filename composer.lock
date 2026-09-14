@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "03a56b86836c0f96a8d32a72dbc1765f",
+    "content-hash": "86e7ec737739ab3600b90d7ed38e43d9",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -24099,16 +24099,16 @@
         },
         {
             "name": "ec-europa/toolkit",
-            "version": "10.29.3",
+            "version": "10.30.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/toolkit.git",
-                "reference": "94b74323b3b07ddbe1afc5bc109e03dfe4464bf3"
+                "reference": "741fd22bd36a5c0ba10bf463a426041094670f9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/94b74323b3b07ddbe1afc5bc109e03dfe4464bf3",
-                "reference": "94b74323b3b07ddbe1afc5bc109e03dfe4464bf3",
+                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/741fd22bd36a5c0ba10bf463a426041094670f9f",
+                "reference": "741fd22bd36a5c0ba10bf463a426041094670f9f",
                 "shasum": ""
             },
             "require": {
@@ -24168,7 +24168,7 @@
                 "issues": "https://github.com/ec-europa/toolkit/issues",
                 "source": "https://github.com/ec-europa/toolkit"
             },
-            "time": "2026-07-13T15:40:34+00:00"
+            "time": "2026-08-28T11:45:31+00:00"
         },
         {
             "name": "ec-europa/toolkit-composer-plugin",

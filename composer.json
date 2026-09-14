@@ -479,7 +479,8 @@
                 "Prevent moving components on Translate edit page @see https://drupal.org/i/3540040": "resources/patch/php/drupal/layout_paragraphs/3540040.mr242.diff",
                 "Provide more info to component add buttons to help customization @see https://drupal.org/i/3611607": "resources/patch/php/drupal/layout_paragraphs/3611607-mr248-1356ffbb58--on-top-of-3540040.mr242.diff",
                 "Cache loaded paragraphs in LayoutParagraphsLayout @see https://drupal.org/i/3611711": "resources/patch/php/drupal/layout_paragraphs/3611711-mr249-6d99e004.diff",
-                "Maximum call stack size reached in serialize() @see https://www.drupal.org/i/3599833": "resources/patch/php/drupal/layout_paragraphs/3599833.mr241.commitd4c9beff1108.diff"
+                "Maximum call stack size reached in serialize() @see https://www.drupal.org/i/3599833": "resources/patch/php/drupal/layout_paragraphs/3599833.mr241.commitd4c9beff1108.diff",
+                "Iframes inside a paragraph block clicks @see https://www.drupal.org/i/3620795": "resources/patch/php/drupal/layout_paragraphs/3620795-mr263-45be9280.diff"
             },
             "drupal/memcache": {
                 "Use Drupal core time service with fallback @see https://drupal.org/i/2999614": "resources/patch/php/drupal/memcache/2999614-mr41-20f8103bd2.diff",
