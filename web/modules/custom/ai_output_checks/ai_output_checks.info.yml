@@ -1,0 +1,10 @@
+name: 'AI Output Checks'
+type: module
+description: 'Provides fuzzy organization matching for ECA workflows.'
+core_version_requirement: ^10
+package: Custom
+dependencies:
+  - drupal:action
+  - drupal:node
+  - drupal:taxonomy
+  - drupal:paragraphs
