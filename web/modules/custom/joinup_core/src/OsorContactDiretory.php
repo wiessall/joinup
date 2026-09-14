@@ -278,9 +278,11 @@ EOS
     // Text, example: 9872.
     $contact = '';
     if ($email) {
-      $contact .= "Email: {$this->linkFromString($email)}</br>";
+      $contactLink = static::linkFromString($email);
+      $contact .= "Email: $contactLink</br>";
     }
-    $contact .= "Web: {$this->linkFromString($weburl)}";
+    $weburlLink = $this->linkFromString($weburl);
+    $contact .= "Web: $weburlLink";
     $textComponents = [
       "<strong>$title</strong>",
       $contact,
@@ -313,7 +315,7 @@ EOS
    * @return string
    *   The HTML link.
    */
-  private function linkFromString(string $url): string {
+  private static function linkFromString(string $url): string {
     $target = str_contains($url, '@') ? "mailto:$url" : $url;
     return "<a href=\"$target\">$url</a>";
   }
