@@ -109,10 +109,7 @@ Feature: Archived content on content listings - groups and paragraphs.
 
   @javascript
   Scenario: Carousel listings can also control archived items visibility.
-    Given the following "collection" content:
-      | uri                                                            | title                |
-      | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c | Interoperable Europe |
-    And the following "news" content:
+    Given the following "news" content:
       | title              | headline           | state     | collection           | body |
       | IOP archived news  | IOP archived news  | archived  | Interoperable Europe | Test |
       | IOP published news | IOP published news | published | Interoperable Europe | Test |
