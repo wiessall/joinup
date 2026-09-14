@@ -47,15 +47,8 @@ final readonly class OsorContactDiretory implements ContainerInjectionInterface 
     ],
 
     'France' => [
-      'lastItemId' => 118074, // 9870
+      'lastItemId' => 118074,
       'itemsToAdd' => [
-        // [
-        //   'title' => 'TOSIT (The Open Source I Trust)',
-        //   'description' => 'TOSIT was established in 2017 as non-profit organisation that aims to encourage the development of open source code and IT solutions in the cybersecurity domain. TOSIT serves as a forum for members to share experiences and best practices, identifies strategic needs, conducts research on open source solutions, and promotes effective open source tools across different sectors.',
-        //   'imagePath' => 'fr-tosit.png',
-        //   'weburl' => 'https://tosit.fr/',
-        //   'email' => 'contact@tosit.fr',
-        // ],
         [
           'title' => 'OW2',
           'description' => 'OW2 is a non-profit organisation that acts as both an independent open source software community and an ecosystem platform that facilitates interaction between open source code producers and consumers. Founded in 2007, its objective is to host and promote open source projects, and to manage a community of academics, companies, public bodies, NGOs and individuals involved in open source software development. OW2 regularly organises events to promote open source software and campaign for open models at political and social levels.',
