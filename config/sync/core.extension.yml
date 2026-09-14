@@ -52,7 +52,6 @@ module:
   editor: 0
   editor_file: 0
   eif: 0
-  eira: 0
   email_confirmer: 0
   email_contact: 0
   entity_form_field_label: 0
@@ -99,16 +98,13 @@ module:
   imagecache_external: 0
   inline_entity_form: 0
   inline_form_errors: 0
-  interoperable_europe: 0
   isa2_analytics: 0
   joinup_api: 0
   joinup_assessment: 0
   joinup_bookmark: 0
   joinup_bundle_class: 0
-  joinup_collection: 0
   joinup_community_content: 0
   joinup_core: 0
-  joinup_discussion: 0
   joinup_distribution: 0
   joinup_document: 0
   joinup_eulogin: 0
@@ -124,7 +120,6 @@ module:
   joinup_layout: 0
   joinup_legal: 0
   joinup_licence: 0
-  joinup_like: 0
   joinup_log: 0
   joinup_media: 0
   joinup_menu: 0
@@ -145,7 +140,6 @@ module:
   joinup_rss: 0
   joinup_search: 0
   joinup_security: 0
-  joinup_seo: 0
   joinup_sitewide_alert: 0
   joinup_slick: 0
   joinup_solution: 0
@@ -162,7 +156,6 @@ module:
   jquery_ui_accordion: 0
   js_cookie: 0
   json_field: 0
-  jsonapi: 0
   l10n_pconfig: 0
   language: 0
   layout_builder: 0
@@ -186,8 +179,6 @@ module:
   message_notify: 0
   meta_entity: 0
   metatag: 0
-  metatag_open_graph: 0
-  metatag_views: 0
   migrate: 0
   migrate_plus: 0
   migrate_source_csv: 0
@@ -243,11 +234,6 @@ module:
   responsive_image: 0
   rest: 0
   role_delegation: 0
-  schema_article: 0
-  schema_digital_document: 0
-  schema_event: 0
-  schema_metatag: 0
-  schema_social_media_posting: 0
   search_api: 0
   search_api_arbitrary_facet: 0
   search_api_autocomplete: 0
@@ -271,6 +257,7 @@ module:
   state_machine: 0
   state_machine_permissions: 0
   state_machine_revisions: 0
+  sti_portal_api: 0
   sti_rdf: 0
   subpathauto: 0
   svg_image: 0
@@ -289,7 +276,6 @@ module:
   toolbar: 0
   topic: 0
   tour: 0
-  tracer: 0
   track_usage: 0
   twig_field_value: 0
   ui_patterns: 0
@@ -315,7 +301,6 @@ module:
   views: 10
   paragraphs: 11
   publication_date: 99
-  import_ird_jsons: 100
   joinup: 1000
 theme:
   claro: 0

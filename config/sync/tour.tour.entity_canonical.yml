@@ -1,0 +1,52 @@
+uuid: 55a9df76-88fa-4777-932d-3d557295af89
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+id: entity_canonical
+label: 'Canonical entity page.'
+routes:
+  -
+    route_name: entity.node.canonical
+tips:
+  collection_content:
+    id: collection_content
+    plugin: text
+    label: 'Collection content'
+    weight: 1
+    position: left-start
+    selector: '.collection__collection-settings article.tile'
+    body: 'The content area displays items that have been created or shared within a collection. This is the default view when entering a collection.'
+  solution_content:
+    id: solution_content
+    plugin: text
+    label: 'Solution content'
+    weight: 2
+    position: left-start
+    selector: '.solution__solution-settings article.tile'
+    body: 'The content area displays items that have been created or shared within a solution. This is the default view when entering a solution.'
+  filters:
+    id: filters
+    plugin: text
+    label: Filter
+    weight: 5
+    position: bottom-start
+    selector: '.tabs--content-type .nav-tabs a'
+    body: 'By clicking on these icons, you can view specific content types in the content area.'
+  join:
+    id: join
+    plugin: text
+    label: Join
+    weight: 6
+    position: right-start
+    selector: '.join-group-form input.button'
+    body: 'By joining a collection you become a member, with the ability to create content for it.'
+  search:
+    id: search
+    plugin: text
+    label: Search
+    weight: 8
+    position: left-start
+    selector: .dropdown-search
+    body: 'Search through the entire Interoperable Europe Portal platform and its supported content items.'

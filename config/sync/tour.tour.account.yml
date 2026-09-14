@@ -1,0 +1,44 @@
+uuid: b513de13-cad4-4f76-b16a-f05a59403a2c
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+id: account
+label: 'User account tour.'
+routes:
+  -
+    route_name: entity.user.canonical
+tips:
+  content:
+    id: content
+    plugin: text
+    label: 'My account'
+    weight: 1
+    position: left-start
+    selector: '.user--full article.tile'
+    body: 'In the "My account" page, the content area displays items that have been created by you, as well as content that belongs to the collections and solutions you are a member of.'
+  filter_icons:
+    id: filter_icons
+    plugin: text
+    label: Categories
+    weight: 2
+    position: bottom-start
+    selector: '.tabs--content-type .nav-tabs a'
+    body: 'By clicking on these icons, you can view specific content types in the content area.'
+  search:
+    id: search
+    plugin: text
+    label: Search
+    weight: 3
+    position: left-start
+    selector: .dropdown-search
+    body: 'Search through the entire Interoperable Europe Portal platform and its supported content items.'
+  local_tasks:
+    id: local_tasks
+    plugin: text
+    label: 'Edit your account'
+    weight: 4
+    position: left-start
+    selector: '#local-tasks-primary'
+    body: 'The "three dots" menu allows you to edit your user account.'

@@ -1,0 +1,36 @@
+uuid: bce9a623-8167-41bc-bc3b-b4534966f038
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+id: content_overview
+label: 'Tour for the content overview.'
+routes:
+  -
+    route_name: view.content_overview.page_1
+tips:
+  content:
+    id: content
+    plugin: text
+    label: Content
+    weight: 1
+    position: left-start
+    selector: '.view-content-overview article.tile'
+    body: 'The content area displays Interoperable Europe Portal events, documents, news, and discussions that have been created or updated recently.'
+  filters:
+    id: filters
+    plugin: text
+    label: Categories
+    weight: 2
+    position: bottom-start
+    selector: '.nav-tabs a'
+    body: 'By clicking on these icons, you can view specific content types in the content area.'
+  search:
+    id: search
+    plugin: text
+    label: Search
+    weight: 3
+    position: left-start
+    selector: .dropdown-search
+    body: 'Search through the entire Interoperable Europe Portal platform and its supported content items.'

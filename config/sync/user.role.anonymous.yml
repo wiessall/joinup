@@ -1,0 +1,88 @@
+uuid: 37041c6b-b070-4e29-a41f-95d823a56913
+langcode: en
+status: true
+dependencies:
+  config:
+    - entity_legal.document.legal_notice
+    - filter.format.basic_html
+    - filter.format.simple_text
+    - rest.resource.assessment_report
+    - rest.resource.sti_collection_solutions
+    - search_api_autocomplete.search.search
+    - search_api_autocomplete.search.search_oss_catalogue
+  module:
+    - comment
+    - email_confirmer
+    - entity_legal
+    - filter
+    - flag
+    - joinup_licence
+    - media
+    - meta_entity
+    - paragraphs_type_permissions
+    - poll
+    - rest
+    - search_api_autocomplete
+    - sitewide_alert
+    - sparql_endpoint
+    - system
+    - tour
+id: anonymous
+label: 'Anonymous user'
+weight: -9
+is_admin: false
+permissions:
+  - 'access comments'
+  - 'access content'
+  - 'access email confirmation'
+  - 'access polls'
+  - 'access tour'
+  - 'access user profiles'
+  - 'legal view legal_notice'
+  - 'restful get assessment_report'
+  - 'restful get sti_collection_solutions'
+  - 'sparql endpoint query'
+  - 'use search_api_autocomplete for search'
+  - 'use search_api_autocomplete for search_oss_catalogue'
+  - 'use text format basic_html'
+  - 'use text format simple_text'
+  - 'view bookmark'
+  - 'view collection_settings meta-entity'
+  - 'view compatibility documents'
+  - 'view eif_perspective meta-entity'
+  - 'view interoperability'
+  - 'view like'
+  - 'view media'
+  - 'view paragraph content accordion'
+  - 'view paragraph content accordion_item'
+  - 'view paragraph content accordion_item'
+  - 'view paragraph content block'
+  - 'view paragraph content call_to_action'
+  - 'view paragraph content carousel'
+  - 'view paragraph content configurable_listing'
+  - 'view paragraph content content_listing'
+  - 'view paragraph content entity_reference'
+  - 'view paragraph content events_calendar'
+  - 'view paragraph content github_feed'
+  - 'view paragraph content heading'
+  - 'view paragraph content iframe'
+  - 'view paragraph content image'
+  - 'view paragraph content image_gallery'
+  - 'view paragraph content json_map'
+  - 'view paragraph content layout'
+  - 'view paragraph content poll'
+  - 'view paragraph content quote'
+  - 'view paragraph content resource_file'
+  - 'view paragraph content resource_link'
+  - 'view paragraph content simple_paragraph'
+  - 'view paragraph content social_media'
+  - 'view paragraph content table_of_contents'
+  - 'view paragraph content testimony'
+  - 'view paragraph content text'
+  - 'view paragraph content tile'
+  - 'view paragraph content tiles'
+  - 'view paragraph content video'
+  - 'view paragraph content webform'
+  - 'view published sitewide alert entities'
+  - 'view solution_settings meta-entity'
+  - 'view topic meta-entity'

@@ -1,0 +1,14 @@
+uuid: 66eeb92e-6a8a-4ba3-9052-10f8d32fdb60
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_taxonomy
+third_party_settings:
+  joinup_taxonomy:
+    locked: false
+name: 'OSS Software Type'
+vid: oss_software_type
+description: 'Open Source Software Solution Software Type'
+weight: 0
+new_revision: false

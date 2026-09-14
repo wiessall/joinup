@@ -1,0 +1,803 @@
+uuid: 9abde774-af5d-4f58-b0c2-93d2da225b4e
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.message.mail_body
+    - system.menu.admin
+  module:
+    - message
+    - user
+id: messages_overview
+label: 'Messages overview'
+module: views
+description: ''
+tag: ''
+base_table: message_field_data
+base_field: mid
+display:
+  default:
+    id: default
+    display_title: Master
+    display_plugin: default
+    position: 0
+    display_options:
+      title: 'Messages overview'
+      fields:
+        mid:
+          id: mid
+          table: message_field_data
+          field: mid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: message
+          entity_field: mid
+          plugin_id: field
+          label: 'Message ID'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: number_integer
+          settings:
+            thousand_separator: ''
+            prefix_suffix: true
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        created:
+          id: created
+          table: message_field_data
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: message
+          entity_field: created
+          plugin_id: field
+          label: 'Created on'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: timestamp
+          settings:
+            date_format: short
+            custom_date_format: ''
+            timezone: ''
+            tooltip:
+              date_format: ''
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        uid:
+          id: uid
+          table: message_field_data
+          field: uid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: message
+          entity_field: uid
+          plugin_id: field
+          label: Creator
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: entity_reference_label
+          settings:
+            link: true
+          group_column: target_id
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        rendered_entity_1:
+          id: rendered_entity_1
+          table: message
+          field: rendered_entity
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: message
+          plugin_id: rendered_entity
+          label: ''
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          view_mode: mail_body
+        get_text:
+          id: get_text
+          table: message
+          field: get_text
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: message
+          plugin_id: get_text
+          label: ''
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          delta: null
+        nothing:
+          id: nothing
+          table: views
+          field: nothing
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: custom
+          label: 'Custom text'
+          exclude: false
+          alter:
+            alter_text: true
+            text: '{{ rendered_entity_1 }}<br >{{get_text}}'
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: false
+      pager:
+        type: mini
+        options:
+          offset: 0
+          pagination_heading_level: h4
+          items_per_page: 10
+          total_pages: null
+          id: 0
+          tags:
+            next: ››
+            previous: ‹‹
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      access:
+        type: perm
+        options:
+          perm: 'access joinup reports'
+      cache:
+        type: tag
+        options: {  }
+      empty: {  }
+      sorts: {  }
+      arguments: {  }
+      filters:
+        template:
+          id: template
+          table: message_field_data
+          field: template
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: message
+          entity_field: template
+          plugin_id: bundle
+          operator: in
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: template_op
+            label: Template
+            description: ''
+            use_operator: false
+            operator: template_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: template
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        combine:
+          id: combine
+          table: views
+          field: combine
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: combine
+          operator: allwords
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: combine_op
+            label: 'Message contains'
+            description: ''
+            use_operator: false
+            operator: combine_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: combine
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          fields:
+            nothing: nothing
+      style:
+        type: table
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+          columns:
+            mid: mid
+            created: created
+            template: template
+            rendered_entity: rendered_entity
+            rendered_entity_1: rendered_entity_1
+            nothing: nothing
+          default: created
+          info:
+            mid:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            created:
+              sortable: true
+              default_sort_order: desc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            template:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            rendered_entity:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            rendered_entity_1:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            nothing:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+          override: true
+          sticky: false
+          summary: ''
+          empty_table: false
+          caption: ''
+          description: ''
+          class: ''
+      row:
+        type: fields
+      query:
+        type: views_query
+        options:
+          query_comment: ''
+          disable_sql_rewrite: true
+          distinct: false
+          replica: false
+          query_tags: {  }
+      relationships: {  }
+      header: {  }
+      footer: {  }
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - user.permissions
+      tags:
+        - 'config:core.entity_view_display.message.cc_delete.mail_body'
+        - 'config:core.entity_view_display.message.cc_delete.mail_subject'
+        - 'config:core.entity_view_display.message.cc_transition_approve_proposed.mail_body'
+        - 'config:core.entity_view_display.message.cc_transition_approve_proposed.mail_subject'
+        - 'config:core.entity_view_display.message.cc_transition_propose.mail_body'
+        - 'config:core.entity_view_display.message.cc_transition_propose.mail_subject'
+        - 'config:core.entity_view_display.message.cc_transition_propose_reported.mail_body'
+        - 'config:core.entity_view_display.message.cc_transition_propose_reported.mail_subject'
+        - 'config:core.entity_view_display.message.cc_transition_publish.mail_body'
+        - 'config:core.entity_view_display.message.cc_transition_publish.mail_subject'
+        - 'config:core.entity_view_display.message.cc_transition_reject_deletion.mail_body'
+        - 'config:core.entity_view_display.message.cc_transition_reject_deletion.mail_subject'
+        - 'config:core.entity_view_display.message.cc_transition_report.mail_body'
+        - 'config:core.entity_view_display.message.cc_transition_report.mail_subject'
+        - 'config:core.entity_view_display.message.cc_transition_request_changes.mail_body'
+        - 'config:core.entity_view_display.message.cc_transition_request_changes.mail_subject'
+        - 'config:core.entity_view_display.message.cc_transition_request_deletion.mail_body'
+        - 'config:core.entity_view_display.message.cc_transition_request_deletion.mail_subject'
+        - 'config:core.entity_view_display.message.col_approve_edit.mail_body'
+        - 'config:core.entity_view_display.message.col_approve_edit.mail_subject'
+        - 'config:core.entity_view_display.message.col_approve_new.mail_body'
+        - 'config:core.entity_view_display.message.col_approve_new.mail_subject'
+        - 'config:core.entity_view_display.message.col_arc_del_apr_own.mail_body'
+        - 'config:core.entity_view_display.message.col_arc_del_apr_own.mail_subject'
+        - 'config:core.entity_view_display.message.col_arc_del_members.mail_body'
+        - 'config:core.entity_view_display.message.col_arc_del_members.mail_subject'
+        - 'config:core.entity_view_display.message.col_arc_del_no_request.mail_body'
+        - 'config:core.entity_view_display.message.col_arc_del_no_request.mail_subject'
+        - 'config:core.entity_view_display.message.col_arc_del_rej.mail_body'
+        - 'config:core.entity_view_display.message.col_arc_del_rej.mail_subject'
+        - 'config:core.entity_view_display.message.col_arc_del_sol_no_affiliates.mail_body'
+        - 'config:core.entity_view_display.message.col_arc_del_sol_no_affiliates.mail_subject'
+        - 'config:core.entity_view_display.message.col_propose_edit_mod.mail_body'
+        - 'config:core.entity_view_display.message.col_propose_edit_mod.mail_subject'
+        - 'config:core.entity_view_display.message.col_propose_edit_own.mail_body'
+        - 'config:core.entity_view_display.message.col_propose_edit_own.mail_subject'
+        - 'config:core.entity_view_display.message.col_propose_new.mail_body'
+        - 'config:core.entity_view_display.message.col_propose_new.mail_subject'
+        - 'config:core.entity_view_display.message.col_req_arch_del.mail_body'
+        - 'config:core.entity_view_display.message.col_req_arch_del.mail_subject'
+        - 'config:core.entity_view_display.message.comment_create.mail_body'
+        - 'config:core.entity_view_display.message.comment_create.mail_subject'
+        - 'config:core.entity_view_display.message.comment_delete.mail_body'
+        - 'config:core.entity_view_display.message.comment_delete.mail_subject'
+        - 'config:core.entity_view_display.message.comment_update.mail_body'
+        - 'config:core.entity_view_display.message.comment_update.mail_subject'
+        - 'config:core.entity_view_display.message.contact_form_submission.default'
+        - 'config:core.entity_view_display.message.contact_form_submission.mail_body'
+        - 'config:core.entity_view_display.message.contact_form_submission.mail_subject'
+        - 'config:core.entity_view_display.message.discussion_comment_new.mail_body'
+        - 'config:core.entity_view_display.message.discussion_comment_new.mail_subject'
+        - 'config:core.entity_view_display.message.discussion_delete.mail_body'
+        - 'config:core.entity_view_display.message.discussion_delete.mail_subject'
+        - 'config:core.entity_view_display.message.discussion_invite.default'
+        - 'config:core.entity_view_display.message.discussion_invite.mail_body'
+        - 'config:core.entity_view_display.message.discussion_invite.mail_subject'
+        - 'config:core.entity_view_display.message.discussion_updated.mail_body'
+        - 'config:core.entity_view_display.message.discussion_updated.mail_subject'
+        - 'config:core.entity_view_display.message.distribution_delete.mail_body'
+        - 'config:core.entity_view_display.message.distribution_delete.mail_subject'
+        - 'config:core.entity_view_display.message.distribution_update.mail_body'
+        - 'config:core.entity_view_display.message.distribution_update.mail_subject'
+        - 'config:core.entity_view_display.message.og_membership_decision.mail_body'
+        - 'config:core.entity_view_display.message.og_membership_decision.mail_subject'
+        - 'config:core.entity_view_display.message.og_membership_request.mail_body'
+        - 'config:core.entity_view_display.message.og_membership_request.mail_subject'
+        - 'config:core.entity_view_display.message.release_approve_proposed.mail_body'
+        - 'config:core.entity_view_display.message.release_approve_proposed.mail_subject'
+        - 'config:core.entity_view_display.message.release_delete.mail_body'
+        - 'config:core.entity_view_display.message.release_delete.mail_subject'
+        - 'config:core.entity_view_display.message.release_request_changes.mail_body'
+        - 'config:core.entity_view_display.message.release_request_changes.mail_subject'
+        - 'config:core.entity_view_display.message.release_update.mail_body'
+        - 'config:core.entity_view_display.message.release_update.mail_subject'
+        - 'config:core.entity_view_display.message.report_contact_form.mail_body'
+        - 'config:core.entity_view_display.message.report_contact_form.mail_subject'
+        - 'config:core.entity_view_display.message.sol_approve_proposed.mail_body'
+        - 'config:core.entity_view_display.message.sol_approve_proposed.mail_subject'
+        - 'config:core.entity_view_display.message.sol_blacklist.mail_body'
+        - 'config:core.entity_view_display.message.sol_blacklist.mail_subject'
+        - 'config:core.entity_view_display.message.sol_deletion_by_moderator.mail_body'
+        - 'config:core.entity_view_display.message.sol_deletion_by_moderator.mail_subject'
+        - 'config:core.entity_view_display.message.sol_propose_changes.mail_body'
+        - 'config:core.entity_view_display.message.sol_propose_changes.mail_subject'
+        - 'config:core.entity_view_display.message.sol_propose_new.mail_body'
+        - 'config:core.entity_view_display.message.sol_propose_new.mail_subject'
+        - 'config:core.entity_view_display.message.sol_propose_requested_changes.mail_body'
+        - 'config:core.entity_view_display.message.sol_propose_requested_changes.mail_subject'
+        - 'config:core.entity_view_display.message.sol_publish_backlisted.mail_body'
+        - 'config:core.entity_view_display.message.sol_publish_backlisted.mail_subject'
+        - 'config:core.entity_view_display.message.sol_request_changes.mail_body'
+        - 'config:core.entity_view_display.message.sol_request_changes.mail_subject'
+  page_1:
+    id: page_1
+    display_title: Page
+    display_plugin: page
+    position: 1
+    display_options:
+      display_extenders: {  }
+      path: admin/reporting/messages-overview
+      menu:
+        type: normal
+        title: 'Messages overview'
+        description: ''
+        weight: 7
+        expanded: false
+        menu_name: admin
+        parent: joinup_reports.admin_reporting
+        context: '0'
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - user.permissions
+      tags:
+        - 'config:core.entity_view_display.message.cc_delete.mail_body'
+        - 'config:core.entity_view_display.message.cc_delete.mail_subject'
+        - 'config:core.entity_view_display.message.cc_transition_approve_proposed.mail_body'
+        - 'config:core.entity_view_display.message.cc_transition_approve_proposed.mail_subject'
+        - 'config:core.entity_view_display.message.cc_transition_propose.mail_body'
+        - 'config:core.entity_view_display.message.cc_transition_propose.mail_subject'
+        - 'config:core.entity_view_display.message.cc_transition_propose_reported.mail_body'
+        - 'config:core.entity_view_display.message.cc_transition_propose_reported.mail_subject'
+        - 'config:core.entity_view_display.message.cc_transition_publish.mail_body'
+        - 'config:core.entity_view_display.message.cc_transition_publish.mail_subject'
+        - 'config:core.entity_view_display.message.cc_transition_reject_deletion.mail_body'
+        - 'config:core.entity_view_display.message.cc_transition_reject_deletion.mail_subject'
+        - 'config:core.entity_view_display.message.cc_transition_report.mail_body'
+        - 'config:core.entity_view_display.message.cc_transition_report.mail_subject'
+        - 'config:core.entity_view_display.message.cc_transition_request_changes.mail_body'
+        - 'config:core.entity_view_display.message.cc_transition_request_changes.mail_subject'
+        - 'config:core.entity_view_display.message.cc_transition_request_deletion.mail_body'
+        - 'config:core.entity_view_display.message.cc_transition_request_deletion.mail_subject'
+        - 'config:core.entity_view_display.message.col_approve_edit.mail_body'
+        - 'config:core.entity_view_display.message.col_approve_edit.mail_subject'
+        - 'config:core.entity_view_display.message.col_approve_new.mail_body'
+        - 'config:core.entity_view_display.message.col_approve_new.mail_subject'
+        - 'config:core.entity_view_display.message.col_arc_del_apr_own.mail_body'
+        - 'config:core.entity_view_display.message.col_arc_del_apr_own.mail_subject'
+        - 'config:core.entity_view_display.message.col_arc_del_members.mail_body'
+        - 'config:core.entity_view_display.message.col_arc_del_members.mail_subject'
+        - 'config:core.entity_view_display.message.col_arc_del_no_request.mail_body'
+        - 'config:core.entity_view_display.message.col_arc_del_no_request.mail_subject'
+        - 'config:core.entity_view_display.message.col_arc_del_rej.mail_body'
+        - 'config:core.entity_view_display.message.col_arc_del_rej.mail_subject'
+        - 'config:core.entity_view_display.message.col_arc_del_sol_no_affiliates.mail_body'
+        - 'config:core.entity_view_display.message.col_arc_del_sol_no_affiliates.mail_subject'
+        - 'config:core.entity_view_display.message.col_propose_edit_mod.mail_body'
+        - 'config:core.entity_view_display.message.col_propose_edit_mod.mail_subject'
+        - 'config:core.entity_view_display.message.col_propose_edit_own.mail_body'
+        - 'config:core.entity_view_display.message.col_propose_edit_own.mail_subject'
+        - 'config:core.entity_view_display.message.col_propose_new.mail_body'
+        - 'config:core.entity_view_display.message.col_propose_new.mail_subject'
+        - 'config:core.entity_view_display.message.col_req_arch_del.mail_body'
+        - 'config:core.entity_view_display.message.col_req_arch_del.mail_subject'
+        - 'config:core.entity_view_display.message.comment_create.mail_body'
+        - 'config:core.entity_view_display.message.comment_create.mail_subject'
+        - 'config:core.entity_view_display.message.comment_delete.mail_body'
+        - 'config:core.entity_view_display.message.comment_delete.mail_subject'
+        - 'config:core.entity_view_display.message.comment_update.mail_body'
+        - 'config:core.entity_view_display.message.comment_update.mail_subject'
+        - 'config:core.entity_view_display.message.contact_form_submission.default'
+        - 'config:core.entity_view_display.message.contact_form_submission.mail_body'
+        - 'config:core.entity_view_display.message.contact_form_submission.mail_subject'
+        - 'config:core.entity_view_display.message.discussion_comment_new.mail_body'
+        - 'config:core.entity_view_display.message.discussion_comment_new.mail_subject'
+        - 'config:core.entity_view_display.message.discussion_delete.mail_body'
+        - 'config:core.entity_view_display.message.discussion_delete.mail_subject'
+        - 'config:core.entity_view_display.message.discussion_invite.default'
+        - 'config:core.entity_view_display.message.discussion_invite.mail_body'
+        - 'config:core.entity_view_display.message.discussion_invite.mail_subject'
+        - 'config:core.entity_view_display.message.discussion_updated.mail_body'
+        - 'config:core.entity_view_display.message.discussion_updated.mail_subject'
+        - 'config:core.entity_view_display.message.distribution_delete.mail_body'
+        - 'config:core.entity_view_display.message.distribution_delete.mail_subject'
+        - 'config:core.entity_view_display.message.distribution_update.mail_body'
+        - 'config:core.entity_view_display.message.distribution_update.mail_subject'
+        - 'config:core.entity_view_display.message.og_membership_decision.mail_body'
+        - 'config:core.entity_view_display.message.og_membership_decision.mail_subject'
+        - 'config:core.entity_view_display.message.og_membership_request.mail_body'
+        - 'config:core.entity_view_display.message.og_membership_request.mail_subject'
+        - 'config:core.entity_view_display.message.release_approve_proposed.mail_body'
+        - 'config:core.entity_view_display.message.release_approve_proposed.mail_subject'
+        - 'config:core.entity_view_display.message.release_delete.mail_body'
+        - 'config:core.entity_view_display.message.release_delete.mail_subject'
+        - 'config:core.entity_view_display.message.release_request_changes.mail_body'
+        - 'config:core.entity_view_display.message.release_request_changes.mail_subject'
+        - 'config:core.entity_view_display.message.release_update.mail_body'
+        - 'config:core.entity_view_display.message.release_update.mail_subject'
+        - 'config:core.entity_view_display.message.report_contact_form.mail_body'
+        - 'config:core.entity_view_display.message.report_contact_form.mail_subject'
+        - 'config:core.entity_view_display.message.sol_approve_proposed.mail_body'
+        - 'config:core.entity_view_display.message.sol_approve_proposed.mail_subject'
+        - 'config:core.entity_view_display.message.sol_blacklist.mail_body'
+        - 'config:core.entity_view_display.message.sol_blacklist.mail_subject'
+        - 'config:core.entity_view_display.message.sol_deletion_by_moderator.mail_body'
+        - 'config:core.entity_view_display.message.sol_deletion_by_moderator.mail_subject'
+        - 'config:core.entity_view_display.message.sol_propose_changes.mail_body'
+        - 'config:core.entity_view_display.message.sol_propose_changes.mail_subject'
+        - 'config:core.entity_view_display.message.sol_propose_new.mail_body'
+        - 'config:core.entity_view_display.message.sol_propose_new.mail_subject'
+        - 'config:core.entity_view_display.message.sol_propose_requested_changes.mail_body'
+        - 'config:core.entity_view_display.message.sol_propose_requested_changes.mail_subject'
+        - 'config:core.entity_view_display.message.sol_publish_backlisted.mail_body'
+        - 'config:core.entity_view_display.message.sol_publish_backlisted.mail_subject'
+        - 'config:core.entity_view_display.message.sol_request_changes.mail_body'
+        - 'config:core.entity_view_display.message.sol_request_changes.mail_subject'

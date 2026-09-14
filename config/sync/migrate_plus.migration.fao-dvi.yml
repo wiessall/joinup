@@ -1,4 +1,4 @@
-uuid: a8503f0f-db13-4f0e-8b77-a8ca2e458f8b
+uuid: a8745dbb-4bec-4965-886a-7c4ea321099a
 langcode: en
 status: true
 dependencies:
@@ -21,7 +21,7 @@ source:
   data_fetcher_plugin: file
   data_parser_plugin: json
   urls:
-    - modules/custom/import_IRD_jsons/sources/dv_solutions.json
+    - modules/custom/import_ird_jsons/sources/dv_solutions.json
   constants:
     OG_AUDIENCE_NID: '5538'
     OWNER_NID: 33

@@ -1,0 +1,11 @@
+uuid: 74e2ac15-06ca-47d1-841e-478961393fd2
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_solution
+id: change_collection
+label: 'Move to other collection'
+type: node
+plugin: change_collection
+configuration: {  }
