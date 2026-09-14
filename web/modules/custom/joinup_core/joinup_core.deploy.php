@@ -12,6 +12,7 @@ use Drupal\Core\Database\Database;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
 use Drupal\Core\Menu\MenuTreeStorageInterface;
 use Drupal\joinup_core\Archiver;
+use Drupal\joinup_core\OsorContactDiretory;
 use Drupal\joinup_core\Update\Base64ImageConverter;
 use Drupal\joinup_core\Update\InlineImageConverter;
 use Drupal\joinup_core\Update\NodeTranslationsRollback;
@@ -465,4 +466,12 @@ function joinup_core_deploy_201613(): string {
     'Queued %s collections without solutions',
     count($groupIds),
   );
+}
+
+/**
+ * Update OSOR contact directory page.
+ */
+function joinup_core_deploy_201614(): string {
+  \Drupal::classResolver(OsorContactDiretory::class)->performContentUpdate();
+  return "Updated OSOR contact directory page";
 }
