@@ -1,0 +1,10 @@
+{
+  "name": "drupal/ai_output_checks",
+  "type": "drupal-module",
+  "autoload": {
+    "psr-4": {
+      "Drupal\\ai_output_checks\\": "src/"
+    }
+  }
+}
+

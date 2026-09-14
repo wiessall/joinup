@@ -1,0 +1,8 @@
+name: 'STI Portal API'
+type: module
+description: 'Read-only endpoints for external consumers of collection content.'
+core_version_requirement: ^10 || ^11
+package: Custom
+dependencies:
+  - drupal:rest
+  - drupal:serialization

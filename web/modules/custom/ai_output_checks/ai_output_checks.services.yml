@@ -1,0 +1,40 @@
+services:
+  ai_output_checks.fuzz:
+    class: FuzzyWuzzy\Fuzz
+
+  logger.channel.ai_output_checks:
+    class: Drupal\Core\Logger\LoggerChannel
+    factory: ['@logger.factory', 'get']
+    arguments: ['ai_output_checks']
+
+  ai_output_checks.duplicate_detector:
+    class: Drupal\ai_output_checks\Service\DuplicateDetector
+    arguments: ['@ai_output_checks.fuzz']
+
+  ai_output_checks.regexp_checker:
+    class: Drupal\ai_output_checks\Service\RegexpChecker
+    arguments: ['@config.factory']
+
+  ai_output_checks.url_checker:
+    class: Drupal\ai_output_checks\Service\UrlChecker
+    arguments: ['@http_client', '@config.factory']
+  
+  ai_output_checks.qa_paragraph_manager:
+    class: Drupal\ai_output_checks\Infrastructure\Drupal\QaParagraphManager
+    arguments: ['@entity_type.manager', '@logger.channel.ai_output_checks']
+
+  ai_output_checks.check_runner:
+    class: Drupal\ai_output_checks\Application\Runner\CheckRunner
+    arguments: 
+      - !tagged_iterator ai_output_checks.check
+  
+  Drupal\ai_output_checks\Domain\Checker\RegexpGuardCheck:
+    arguments: ['@ai_output_checks.regexp_checker']
+    tags: [ { name: ai_output_checks.check } ]
+
+  Drupal\ai_output_checks\Domain\Checker\UrlGuardCheck:
+    arguments: ['@ai_output_checks.url_checker']
+    tags: [ { name: ai_output_checks.check } ]
+
+  ai_output_checks.node_audit:
+    class: Drupal\ai_output_checks\Infrastructure\Drupal\NodeAudit

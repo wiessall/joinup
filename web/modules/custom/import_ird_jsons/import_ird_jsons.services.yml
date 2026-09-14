@@ -1,5 +1,0 @@
-services:
-  import_ird_jsons.claim_facet_prune_subscriber:
-    class: Drupal\import_ird_jsons\EventSubscriber\ClaimFacetPruneSubscriber
-    tags:
-      - { name: event_subscriber }
