@@ -676,11 +676,29 @@ How would editing on open social happen? How much automisation is possible in cr
 On the question of how many items a taxonomy vocabulary can support; how many search-api facets a view can have and how quickly/slowly those can be hidden based on context I'm testing 200 Collections with ~1400 solutions each with 30 categorical and 1 non-categorical column
   - Migration of 1429 solutions: 18 minutes
     + [notice] Processed 1329 items (1277 created, 0 updated, 0 failed, 52 ignored) in 1046.6 seconds (76.2/min) - done with 'stf'
-    + annotate: ~1.5h
+    + annotate: ~1.5h; in fact it takes forever *needs to be optimized/refactored*
     + ~drush search-api:index published~: [incredible slow-down after 2500]
       - [notice] Message: Successfully indexed 3772 items.
       - ddev drush search-api:index published  0.14s user 0.06s system 0% cpu 10:54.42 total
-    +
+    #+begin_src
+      ❯ ddev drush search-api:index published
+ [success] Found 67468 items to index for Published entities index. Indexing all items.
+ [success] Indexing a maximum number of 67468 items (50 items per batch run) for the index 'Published entities index'.
+    #+end_src
+    + rendering the sites
+      - Collection-specific view/search facet block
+      - Edit view page
+      - Edit taxonomy vocabulary page
+    + sql copying
+      - facets
+        #+begin_src
+          +29 facets, +29 filters | totals: 1305/1305 | 1754.9s
+          Done. 1305 facets, 1305 filters added.
+          took 29m22s
+        #+end_src
+    + ~ddev drush cr~: 45s
+
+digit-joinup-reference on  sti-annotation-paragraphs [✘!?] via  via 🐘 via 🐍 v3.12.13 via ❄️  impure (nix-shell-env) on ☁️  tristan.wiessalla@fao.org took 29m22s
 *** Bugs
   - python script auto-assigns categorical = true, should default to false when pressing enter
   -

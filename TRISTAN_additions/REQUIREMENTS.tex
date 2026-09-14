@@ -1,0 +1,186 @@
+% Created 2026-07-30 Thu 15:35
+% Intended LaTeX compiler: xelatex
+\documentclass{scrartcl}
+\usepackage[top=2.5cm, bottom=2.5cm, left=3cm, right=3cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[EU1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage[margin=2cm]{geometry}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true, linkcolor=Blue, citecolor=BrickRed, urlcolor=PineGreen]{hyperref}
+\usepackage{indentfirst}
+\usepackage{minted}
+\author{Tristan}
+\date{2026-07-07}
+\title{STI Portal / ATIO KB — Requirements Register}
+\hypersetup{
+ pdfauthor={Tristan},
+ pdftitle={STI Portal / ATIO KB — Requirements Register},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 30.2 (Org mode 9.7.11)}, 
+ pdflang={English}}
+\usepackage{biblatex}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\section{Purpose \& scope}
+\label{sec:org108aeca}
+This register states \textbf{what} the redesigned STI Portal / ATIO KB must do and which qualities it
+must have. It deliberately excludes:
+\begin{itemize}
+\item business rationale and funding logic → CAPEX proposal,
+\item architecture and technology choices (joinup, CQRS dual-DB, triplestore, Solr, Milvus, the JSON import schema) → Design Doc v4.2 and Architecture Decision Records (ADRs).
+\end{itemize}
+Each requirement referencing a design choice points to the ADR that owns it, so requirements stay stable while the "how" evolves under agile.
+\section{Glossary}
+\label{sec:orgda777e7}
+\begin{description}
+\item[{AFSI}] Agrifood System Innovation — the \textbf{content} / knowledge unit. This encompasses both original records and ATIO innovation records or other representations in the platform.
+\item[{AFSA}] Agrifood System Actor — a \textbf{person or organisation} (policymaker, innovator, farmer rep, researcher, funder).
+\item[{Claim}] an AAA-style statement a collection makes about an AFSI; stored alongside slim core
+fields rather than forced into a fixed schema.
+\item[{Collection}] a data source's own body of records, retaining its own vocabulary/taxonomy.
+\item[{Connected}] a notebook-style entry of a AFSA in another AFSA's profile
+\item[{Relevant (to an actor)}] Topic or interest matches AFSA's interests
+\item[{AAA}] "Anyone can say Anything about Anything" — the semantic-web principle underlying the
+claims model.
+\item[{FAIR}] Findable, Accessible, Interoperable, Reusable.
+\item[{SKOS}] Simple Knowledge Organization System (vocabulary/taxonomy exchange).
+\item[{RAG}] Retrieval-Augmented Generation — an application pattern over a vector-search endpoint,
+not itself a query interface.
+\item[{ADR}] Architecture Decision Record.
+\end{description}
+\section{Constraints \& assumptions}
+\label{sec:orgb6a4412}
+These are \emph{givens}, not choices. They are not requirements and must not be confused with them.
+\subsection{{\bfseries\sffamily PROPOSED} Drupal engine is retained}
+\label{sec:org594bd7f}
+The Drupal engine remains the content-handling and orchestration layer (team skills, consultant pool, de-facto public-sector standard).
+\subsection{{\bfseries\sffamily PROPOSED} FAO GCP hosting}
+\label{sec:orgcbb76cf}
+The system is hosted on FAO Google Cloud Platform, with edge → review → production CD.
+\subsection{{\bfseries\sffamily PROPOSED} No regression of ATIO curation}
+\label{sec:org321b995}
+The redesign shall not remove any curation capability the ATIO team currently relies on, and existing ATIO curation workflows (analysis, synthesis, standardisation) shall remain operational. (This absorbs the old "existing workflows keep working" acceptance line, which was a non-regression check rather than a forward requirement.)
+\subsection{{\bfseries\sffamily PROPOSED} Interoperability with FAO infrastructure}
+\label{sec:orgcd15e6d}
+The system must interoperate with existing FAO infrastructure and vocabularies (AGROVOC, FAOSTAT, …).
+\subsection{{\bfseries\sffamily PROPOSED} Deliver the promised scope}
+\label{sec:orge7325b9}
+The redesign must deliver what the CAPEX proposal and ATIO Design Doc outline.
+\section{Functional requirements}
+\label{sec:org9bdc340}
+\subsection{Data agglomeration\hfill{}\textsc{AGG}}
+\label{sec:org69e6b04}
+\subsubsection{{\bfseries\sffamily PROTOTYPE} Import preserves original key–value pairs}
+\label{sec:orga782bd5}
+The system shall import a source record supplied in a supported format, preserving the source's original field names and values without mapping them onto a fixed schema.
+\begin{itemize}
+\item Acceptance: two structurally different sources load through the same path, and every original key–value pair is retrievable afterwards.
+\item Supported formats are structured data (JSON, XLSX, CSV, XML, SQL).
+\end{itemize}
+\subsection{Curation\hfill{}\textsc{CUR}}
+\label{sec:org2d69db7}
+\subsubsection{{\bfseries\sffamily PROPOSED} Non-developer curator can author records via GUI}
+\label{sec:org548d9ad}
+A content curator without software-development skills shall be able to create, edit, and submit an innovation record for review through a graphical interface, without writing code or running CLI commands.
+\begin{itemize}
+\item Acceptance: a non-developer completes record creation → submission in a usability test with no CLI use.
+\end{itemize}
+\subsubsection{{\bfseries\sffamily PROTOTYPE} Maintainer can curate SKOS relationships}
+\label{sec:org10ef29b}
+A data curator can match semantic dimensions across collections using SKOS (e.g. 'Technological Readiness' of collection A similar to 'Readiness' of collection B)
+\subsection{Access \& interoperability\hfill{}\textsc{API}}
+\label{sec:orgf8de93e}
+\subsubsection{{\bfseries\sffamily PROTOTYPE} SPARQL endpoint per collection}
+\label{sec:orgfb95533}
+Each data collection shall be queryable by external machine clients via a SPARQL endpoint, returning records annotated with that collection's own vocabulary.
+\subsubsection{{\bfseries\sffamily PROTOTYPE} REST API per collection}
+\label{sec:org9c0b5a3}
+Each data collection shall be queryable by external machine clients via a REST API, returning records annotated with that collection's own vocabulary.
+\subsubsection{{\bfseries\sffamily PROPOSED} Vector / semantic-search endpoint per collection}
+\label{sec:org40a2aa2}
+The platform shall expose a vector/semantic-search endpoint over each collection, suitable for consumption by RAG clients.
+\subsubsection{{\bfseries\sffamily PROTOTYPE} Collection-level landing page}
+\label{sec:orgd05d994}
+The platform shall present one landing page per collection listing this collections AFSIs and filtered search based on that collection's taxonomy.
+\subsubsection{{\bfseries\sffamily PROTOTYPE} RDF Data Model}
+\label{sec:orge4ae598}
+The platform shall employ a data model that matches both Unit 1 and Unit 5 requirements.
+\subsection{Networking\hfill{}\textsc{NET}}
+\label{sec:org4166fca}
+Networking depends on solid implementation of the core STI portal (AGG, CUR, API).
+\subsubsection{{\bfseries\sffamily PROPOSED} Actors linkable to innovations and to one another}
+\label{sec:org4dc11d7}
+Actors (AFSA) should be linkable to the innovations (AFSI) held in central storage, and to one another.
+\subsubsection{{\bfseries\sffamily PROPOSED} Actor-to-actor messaging}
+\label{sec:org842e6db}
+An actor shall be able to send a message to another actor through the platform.
+\subsubsection{{\bfseries\sffamily PROTOTYPE} Groups / communities of practice}
+\label{sec:orgd39dd87}
+Actors shall be able to form and join groups / communities of practice on the platform.
+\subsubsection{{\bfseries\sffamily PROPOSED} Surface relevant innovations to an actor}
+\label{sec:org257be6d}
+An actor should be surfaced innovations relevant to them.
+\subsubsection{{\bfseries\sffamily PROPOSED} Surface relevant actors to an actor}
+\label{sec:org05263b9}
+An actor should be surfaced other actors relevant to them.
+\subsubsection{{\bfseries\sffamily PROTOTYPE} Challenge organization}
+\label{sec:orgd903d72}
+An actor (AFSA) with an organiser role should be able to create an innovation challenge on the platform and collect idea submissions from other actors.
+\begin{itemize}
+\item Out of scope: assessment, scoring, or ranking of submissions (collection only, no adjudication).
+\item Acceptance: an organiser creates a challenge; a second actor submits an idea to it; the submission is stored and visible to the organiser; no scoring/ranking UI is present.
+\end{itemize}
+\subsection{Indicators\hfill{}\textsc{IND}}
+\label{sec:org03f81bd}
+\subsubsection{{\bfseries\sffamily PROPOSED} Display external indicators about an innovation}
+\label{sec:org1024cbc}
+The platform shall display ASTI indicators about a country drawn from external sources (e.g. FAOSTAT).
+\subsubsection{{\bfseries\sffamily PROPOSED} User-defined assessment criteria}
+\label{sec:org460bd6e}
+Data owners and platform users may define their own assessment criteria for innovations.
+\section{Non-functional / quality requirements}
+\label{sec:org711fe02}
+\subsection{{\bfseries\sffamily PROPOSED} Interoperability \& FAIR}
+\label{sec:orgb720353}
+{[}TBD: which standards, which vocabularies, which FAIR criteria are testable.]
+\subsection{{\bfseries\sffamily PROPOSED} Provenance \& AI-origin auditability}
+\label{sec:orgc9f91ec}
+{[}TBD: every field value traceable to its source/claim; AI-generated values flagged and attributable. Make the AAA + AI-origin principles testable here.]
+\subsection{{\bfseries\sffamily PROPOSED} High-scale ingestion performance}
+\label{sec:orgb2b9759}
+{[}TBD: throughput / volume target for bulk import.]
+\subsection{{\bfseries\sffamily PROPOSED} Collection-level access control}
+\label{sec:orge207899}
+{[}TBD: per-collection roles and transitions.]
+\subsection{{\bfseries\sffamily PROPOSED} Maintainability}
+\label{sec:orgcb0cdee}
+{[}TBD: configuration-as-code, environment parity.]
+\section{Traceability}
+\label{sec:org13bff81}
+\begin{center}
+\begin{tabular}{llll}
+Requirement & CAPEX / Design Doc & ADR & Test\\
+\hline
+FR-AGG-01 & AAA / claims model & ADR-TBD & \\
+FR-CUR-01 & problem statement & ADR-007 & \\
+FR-API-01 & Feature 8 & ADR-TBD & \\
+FR-API-02 & Feature 8 & ADR-TBD & \\
+FR-API-03 & Feature 8 / Milvus & ADR-TBD & \\
+\end{tabular}
+\end{center}
+\end{document}
