@@ -23,7 +23,7 @@ source:
   data_parser_plugin: json
 
   urls:
-    - modules/custom/import_IRD_jsons/sources/dv_solutions.json  #!
+    - modules/custom/import_ird_jsons/sources/dv_solutions.json  #!
 
   constants:
     OG_AUDIENCE_NID: '5538'          #! they could be obtained from the json as done currently

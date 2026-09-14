@@ -1,19 +1,4 @@
 services:
-  import_ird_jsons.ird_annotate_commands:
-    class: Drupal\import_ird_jsons\Commands\IrdAnnotateCommands
-    arguments:
-      - '@entity_type.manager'
-      - '@datetime.time'
-    tags:
-      - { name: drush.command }
-
-  import_ird_jsons.ird_collection_view_commands:
-    class: Drupal\import_ird_jsons\Commands\IrdCollectionViewCommands
-    arguments:
-      - '@entity_type.manager'
-      - '@config.factory'
-    tags:
-      - { name: drush.command }
   import_ird_jsons.claim_facet_prune_subscriber:
     class: Drupal\import_ird_jsons\EventSubscriber\ClaimFacetPruneSubscriber
     tags:

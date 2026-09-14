@@ -1,0 +1,5 @@
+claim_facet_dropdown:
+  js:
+    js/claim-facet-dropdown.js: {}
+  dependencies:
+    - core/drupal
