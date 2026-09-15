@@ -241,11 +241,13 @@
             -webkit-box-orient: vertical;
           }
           .date {
+            margin-top: auto;
             color: $gray-600;
             font-size: $font-size-xs;
             .field--name-created,
             .field--name-published-at,
-            .field--name-changed {
+            .field--name-changed,
+            .explore-item__comment-date {
               padding-top: $btn-padding-y;
             }
           }
@@ -255,6 +257,8 @@
           }
           .read-more {
             float: right;
+            padding-right: $spacer;
+            padding-left: $spacer;
             &:hover {
               text-decoration: none;
             }

@@ -1,0 +1,101 @@
+uuid: edd0eed1-f832-4053-8e78-1b1f49908749
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.explore_item
+    - field.field.node.discussion.body
+    - field.field.node.discussion.field_attachment
+    - field.field.node.discussion.field_discussion_logo
+    - field.field.node.discussion.field_replies
+    - field.field.node.discussion.field_site_featured
+    - field.field.node.discussion.field_state
+    - field.field.node.discussion.field_topic
+    - field.field.node.discussion.keywords
+    - field.field.node.discussion.og_audience
+    - node.type.discussion
+  module:
+    - layout_builder
+    - layout_discovery
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: false
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
+          a22f76f0-37db-4710-97fe-504df8d2a050:
+            uuid: a22f76f0-37db-4710-97fe-504df8d2a050
+            region: content
+            configuration:
+              id: 'field_block:node:discussion:body'
+              label: Description
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: joinup_html_stripper_stripped
+                label: hidden
+                settings:
+                  trim_length: 220
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: explore-item__description
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+        third_party_settings: {  }
+id: node.discussion.explore_item
+targetEntityType: node
+bundle: discussion
+mode: explore_item
+content: {  }
+hidden:
+  anonymous_comment_links: true
+  body: true
+  featured: true
+  field_attachment: true
+  field_discussion_logo: true
+  field_replies: true
+  field_shared_in: true
+  field_site_featured: true
+  field_state: true
+  field_topic: true
+  flag_like: true
+  flag_subscribe_discussions: true
+  invite_link: true
+  keywords: true
+  langcode: true
+  latest_update_time: true
+  links: true
+  og_audience: true
+  pinned_in: true
+  private_message_link: true
+  published_at: true
+  read_more: true
+  report: true
+  search_api_excerpt: true
+  share_link: true
+  shared_in: true
+  uuid: true
