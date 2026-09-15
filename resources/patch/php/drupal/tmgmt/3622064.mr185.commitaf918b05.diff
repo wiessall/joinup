@@ -1,0 +1,71 @@
+diff --git a/sources/content/tmgmt_content.module b/sources/content/tmgmt_content.module
+index a4c65282a094523f0c14b7dbe7499116b8331ad1..1bc0a9594f5b89ee8c56bda0874ad659138069e5 100644
+--- a/sources/content/tmgmt_content.module
++++ b/sources/content/tmgmt_content.module
+@@ -316,11 +316,15 @@ function tmgmt_content_entity_update(EntityInterface $entity) {
+     $source_langcode = $entity->language()->getId();
+     $current_job_items = tmgmt_job_item_load_latest('content', $entity->getEntityTypeId(), $entity->id(), $source_langcode);
+     if ($current_job_items) {
++      $source_data = NULL;
+       /** @var \Drupal\tmgmt\JobItemInterface $job_item */
+       foreach ($current_job_items as $job_item) {
+         // If the job item is not yet submitted update its data.
+         if ($job_item->getJob()->isSubmittable() || $job_item->isInactive()) {
+-          $job_item->resetData();
++          // The reading depends on the source and its language only, the same
++          // for every item here.
++          $source_data = $source_data ?? $job_item->getSourcePlugin()->getData($job_item);
++          $job_item->resetData($source_data);
+           $job_item->addMessage('Updated source data.');
+         }
+         elseif ($job_item->getJob()->isContinuous()) {
+diff --git a/src/Entity/JobItem.php b/src/Entity/JobItem.php
+index 9a5fc4bd74d7157e295bb0f642fe4481d7c163e2..a1d68d42dba50638acd104802d831c4c6f256fa5 100644
+--- a/src/Entity/JobItem.php
++++ b/src/Entity/JobItem.php
+@@ -861,10 +861,21 @@ class JobItem extends ContentEntityBase implements JobItemInterface {
+   /**
+    * {@inheritdoc}
+    */
+-  public function resetData() {
++  public function resetData(/* ?array $source_data = NULL */) {
++    $args = func_get_args();
++    $source_data = $args[0] ?? NULL;
++
+     $this->data->value = NULL;
+     $this->unserializedData = NULL;
+-    $this->getData();
++
++    if ($source_data === NULL || !$this->getJobId()) {
++      $this->getData();
++      return;
++    }
++
++    // A segmenter may key its segments to the item, so segmenting stays here.
++    $this->unserializedData = \Drupal::service('tmgmt.segmenter')->getSegmentedData($source_data);
++    $this->save();
+   }
+ 
+   /**
+diff --git a/src/JobItemInterface.php b/src/JobItemInterface.php
+index 24b9064355f7c028ae1cfbaa9e161e04c03605c3..5ce700d37001081ff4d681dec3915a9c3f745ff8 100644
+--- a/src/JobItemInterface.php
++++ b/src/JobItemInterface.php
+@@ -409,8 +409,16 @@ interface JobItemInterface extends ContentEntityInterface {
+ 
+   /**
+    * Resets job item data arrays.
++   *
++   * phpcs:disable Drupal.Commenting
++   * @todo Uncomment new method parameters before tmgmt:2.0.0.
++   * @see https://www.drupal.org/project/tmgmt/issues/3622064
++   * @param array|null $source_data
++   *   (optional) The reading of the source, before segmenting, shared between
++   *   the job items of one source. Defaults to reading the source.
++   * phpcs:enable
+    */
+-  public function resetData();
++  public function resetData(/* ?array $source_data = NULL */);
+ 
+   /**
+    * Adds translated data to a job item.

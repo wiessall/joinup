@@ -7,7 +7,6 @@ namespace Drupal\Tests\joinup_i18n\ExistingSite;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_i18n\Hook\JoinupI18nHooks;
-use Drupal\joinup_i18n\TranslationHelper;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\language\Entity\ContentLanguageSettings;
 use Drupal\meta_entity\Entity\MetaEntity;
@@ -418,7 +417,16 @@ final class JoinupI18nTest extends JoinupExistingSiteTestBase {
       $this->assertFalse($definitions[$fieldName]->isTranslatable());
     }
 
-    $this->assertFalse(\Drupal::service(TranslationHelper::class)->hasTranslatableFields($media));
+    $dataHelper = \Drupal::service('tmgmt.data');
+    $data = \Drupal::service('plugin.manager.tmgmt.source')
+      ->createInstance('content')
+      ->extractTranslatableData($media);
+
+    $wordCount = array_sum(array_map(
+      fn(array $item): int => $dataHelper->wordCount($item['#text']),
+      $dataHelper->filterTranslatable($data),
+    ));
+    $this->assertSame(0, $wordCount);
   }
 
   /**
