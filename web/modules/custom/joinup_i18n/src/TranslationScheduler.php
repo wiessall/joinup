@@ -100,7 +100,6 @@ class TranslationScheduler {
    */
   public static function processBatchChunk(array $ids, array &$context): void {
     $storage = \Drupal::entityTypeManager()->getStorage('node');
-    $translationHelper = \Drupal::service(TranslationHelper::class);
     foreach ($storage->loadMultiple($ids) as $entity) {
       assert($entity instanceof NodeInterface);
       if (!$entity->isPublished()) {
@@ -110,20 +109,18 @@ class TranslationScheduler {
         continue;
       }
 
-      if ($translationHelper->hasTranslatableFields($entity)) {
-        tmgmt_content_create_continuous_job_items($entity);
-      }
+      tmgmt_content_create_continuous_job_items($entity);
 
       if ($entity instanceof GroupInterface) {
         $settings = $entity->get("{$entity->bundle()}_settings")->entity;
-        if ($settings && $translationHelper->hasTranslatableFields($settings)) {
+        if ($settings) {
           // Add also the corresponding group settings.
           tmgmt_content_create_continuous_job_items($settings);
         }
 
         if ($entity instanceof SolutionInterface) {
           $eifPerspective = $entity->get('eif_perspective')->entity;
-          if ($eifPerspective && $translationHelper->hasTranslatableFields($eifPerspective)) {
+          if ($eifPerspective) {
             // Add also the corresponding EIF perspective.
             tmgmt_content_create_continuous_job_items($eifPerspective);
           }
