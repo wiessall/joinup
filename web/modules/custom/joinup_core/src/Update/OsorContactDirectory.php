@@ -33,7 +33,7 @@ final readonly class OsorContactDirectory implements ContainerInjectionInterface
   ) {}
 
   private const array CONTACT_ITEMS = [
-    'Bulgary' => [
+    'Bulgaria' => [
       'lastItemId' => 91594,
       'itemsToAdd' => [
         [
@@ -125,7 +125,7 @@ final readonly class OsorContactDirectory implements ContainerInjectionInterface
    *   The paragraph field of the OSOR contact page.
    */
   private function addNewItemsToPreexisingSections(EntityReferenceFieldItemListInterface $fieldItemList): void {
-    foreach (static::CONTACT_ITEMS as ['lastItemId' => $lastItemId, 'itemsToAdd' => $itemsToAddPerCountry]) {
+    foreach (OsorContactDirectory::CONTACT_ITEMS as ['lastItemId' => $lastItemId, 'itemsToAdd' => $itemsToAddPerCountry]) {
       foreach (array_reverse($itemsToAddPerCountry) as $itemData) {
         $itemsToAdd = $this->createItem(...$itemData);
         $this->insertItemsAfterParagraph($fieldItemList, $lastItemId, $itemsToAdd);
@@ -279,10 +279,10 @@ EOS
     // Text, example: 9872.
     $contact = '';
     if ($email) {
-      $contactLink = static::linkFromString($email);
+      $contactLink = OsorContactDirectory::linkFromString($email);
       $contact .= "Email: $contactLink</br>";
     }
-    $weburlLink = $this->linkFromString($weburl);
+    $weburlLink = OsorContactDirectory::linkFromString($weburl);
     $contact .= "Web: $weburlLink";
     $textComponents = [
       "<strong>$title</strong>",
