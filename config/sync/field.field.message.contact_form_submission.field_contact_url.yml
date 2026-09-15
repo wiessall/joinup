@@ -7,8 +7,12 @@ dependencies:
     - message.template.contact_form_submission
   module:
     - link
+    - linkchecker
     - tmgmt_content
 third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
   tmgmt_content:
     excluded: false
 _core:

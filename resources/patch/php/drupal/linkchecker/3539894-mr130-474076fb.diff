@@ -1,0 +1,56 @@
+diff --git a/linkchecker.views.inc b/linkchecker.views.inc
+index 0b6f09a6f7e80733ec72099e83bbfd94234c2b71..9675f95fd5daf82079415c764da5666f5a6b9d82 100644
+--- a/linkchecker.views.inc
++++ b/linkchecker.views.inc
+@@ -5,6 +5,8 @@
+  * Contains Views integration for the linkchecker module.
+  */
+
++use Drupal\Core\StringTranslation\TranslatableMarkup;
++
+ /**
+  * Implements hook_views_data().
+  */
+@@ -23,4 +25,42 @@ function linkchecker_views_data_alter(array &$data) {
+       'id' => 'linkcheckerlink_page_entity_link',
+     ],
+   ];
++
++  /** @var \Drupal\linkchecker\LinkExtractorBatch $extractor */
++  $extractor = \Drupal::service('linkchecker.extractor_batch');
++  $entityTypes = $extractor->getEntityTypesToProcess();
++  $entityTypeManager = \Drupal::entityTypeManager();
++  foreach ($entityTypes as $entityTypeData) {
++    /** @var \Drupal\Core\Entity\EntityTypeInterface $entityType */
++    $target_entity_type = $entityTypeData['entity_type'];
++    $target_entity_type_id = $target_entity_type->id();
++    $target_base_table = $target_entity_type->getDataTable() ?: $target_entity_type->getBaseTable();
++    $entity_type = $entityTypeManager->getDefinition('linkcheckerlink');
++
++    $t_args = [
++      '@origin_label' => $entity_type->getLabel(),
++      '@target_label' => $target_entity_type->getLabel(),
++      '@field_name' => 'parent_entity_id',
++      '@type' => 'base field',
++    ];
++
++    $data['linkchecker_link'][$target_entity_type_id . '_relationship']['relationship'] = [
++      'title' => new TranslatableMarkup('@field_name to @target_label entities', $t_args),
++      'label' => new TranslatableMarkup('@field_name: @target_label', $t_args),
++      'group' => $entity_type->getLabel(),
++      'help' => new TranslatableMarkup(
++        'References to @target_label entities referenced by @field_name @type on @origin_label entities.',
++        $t_args
++      ),
++      'id' => 'standard',
++      'base' => $target_base_table,
++      'entity type' => $target_entity_type_id,
++      'base field' => $target_entity_type->getKey('id'),
++      'relationship field' => 'parent_entity_id',
++      'extra' => [
++        ['left_field' => 'parent_entity_type_id', 'value' => $target_entity_type_id],
++        ['left_field' => 'entity_langcode', 'field' => 'langcode'],
++      ],
++    ];
++  }
+ }

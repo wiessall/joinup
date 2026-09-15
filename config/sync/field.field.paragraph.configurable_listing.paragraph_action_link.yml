@@ -7,6 +7,11 @@ dependencies:
     - paragraphs.paragraphs_type.configurable_listing
   module:
     - link
+    - linkchecker
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
 id: paragraph.configurable_listing.paragraph_action_link
 field_name: paragraph_action_link
 entity_type: paragraph

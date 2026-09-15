@@ -34,6 +34,7 @@ Feature: User authentication
       | admin/legal-notice                                  |
       | admin/legal-notice/add                              |
       | admin/people                                        |
+      | admin/reports/linkchecker                           |
       | admin/structure                                     |
       | admin/structure/compatibility-document              |
       | admin/structure/compatibility-document/display      |
@@ -91,6 +92,7 @@ Feature: User authentication
       | admin/legal-notice                                  |
       | admin/legal-notice/add                              |
       | admin/people                                        |
+      | admin/reports/linkchecker                           |
       | admin/structure                                     |
       | admin/structure/compatibility-document              |
       | admin/structure/compatibility-document/display      |
@@ -137,6 +139,7 @@ Feature: User authentication
       | admin/legal-notice                                            |
       | admin/legal-notice/add                                        |
       | admin/people                                                  |
+      | admin/reports/linkchecker                                     |
       | admin/structure/compatibility-document                        |
       | admin/structure/webform                                       |
       | admin/structure/webform/manage/assessment/results/submissions |

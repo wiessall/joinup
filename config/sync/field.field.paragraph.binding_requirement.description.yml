@@ -7,9 +7,13 @@ dependencies:
     - filter.format.plain_text
     - paragraphs.paragraphs_type.binding_requirement
   module:
+    - linkchecker
     - text
     - tmgmt_content
 third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: html_link_extractor
   rdf_sync:
     value:
       predicate: 'http://data.europa.eu/2sa/cav#valueDescription'

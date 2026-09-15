@@ -119,6 +119,7 @@ module:
   joinup_legal: 0
   joinup_licence: 0
   joinup_like: 0
+  joinup_linkchecker: 0
   joinup_log: 0
   joinup_media: 0
   joinup_menu: 0
@@ -164,6 +165,8 @@ module:
   layout_discovery: 0
   layout_paragraphs: 0
   link: 0
+  linkchecker: 0
+  linkchecker_summary_mail: 0
   linkit: 0
   locale: 0
   mailsystem: 0

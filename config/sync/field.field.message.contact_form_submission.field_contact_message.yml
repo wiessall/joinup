@@ -7,7 +7,12 @@ dependencies:
     - filter.format.basic_html
     - message.template.contact_form_submission
   module:
+    - linkchecker
     - text
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: html_link_extractor
 _core:
   default_config_hash: jZ3D6MOXKmMUj9hS0x2XDafaI1jOgo2b_FVndhlwl48
 id: message.contact_form_submission.field_contact_message

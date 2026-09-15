@@ -7,9 +7,13 @@ dependencies:
     - filter.format.basic_html
     - meta_entity.type.collection_settings
   module:
+    - linkchecker
     - text
     - tmgmt_content
 third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: html_link_extractor
   tmgmt_content:
     excluded: false
 id: meta_entity.collection_settings.approval_message

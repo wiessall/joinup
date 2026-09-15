@@ -8,7 +8,12 @@ dependencies:
     - filter.format.simple_html
     - filter.format.simple_text
   module:
+    - linkchecker
     - text
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: html_link_extractor
 _core:
   default_config_hash: XjinYVUnMIshdBycAetpscFS2ON6_ggwnH1m-FyU6oc
 id: comment.comment.field_body

@@ -7,10 +7,14 @@ dependencies:
     - field.storage.assessment.description
     - filter.format.plain_text
   module:
+    - linkchecker
     - rdf_sync
     - text
     - tmgmt_content
 third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: html_link_extractor
   rdf_sync:
     value:
       predicate: 'http://purl.org/dc/terms/description'

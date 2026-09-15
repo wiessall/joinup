@@ -7,9 +7,13 @@ dependencies:
     - field.storage.assessment.remaining_barriers
     - filter.format.plain_text
   module:
+    - linkchecker
     - text
     - tmgmt_content
 third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: html_link_extractor
   tmgmt_content:
     excluded: false
 id: assessment.report.remaining_barriers

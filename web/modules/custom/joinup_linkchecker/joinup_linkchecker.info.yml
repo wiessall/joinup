@@ -1,0 +1,9 @@
+name: Joinup Link checker
+description: 'Joinup Link checker module integration'
+type: module
+package: Joinup
+core_version_requirement: "*"
+
+dependencies:
+  - joinup:joinup_group
+  - linkchecker:linkchecker
