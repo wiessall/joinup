@@ -114,6 +114,7 @@ final readonly class OsorContactDiretory implements ContainerInjectionInterface 
     $this->addUkraine($fieldItemList);
 
     $node->setNewRevision();
+    $node->setRevisionLogMessage('Updated programmatically.');
     $node->save();
   }
 
