@@ -110,8 +110,8 @@ final readonly class OsorContactDirectory implements ContainerInjectionInterface
     assert($fieldItemList instanceof EntityReferenceFieldItemListInterface);
 
     $this->addNewItemsToPreexisingSections($fieldItemList);
-    $this->updateToc($fieldItemList);
     $this->addUkraine($fieldItemList);
+    $this->updateToc($fieldItemList);
 
     $node->setNewRevision();
     $node->setRevisionLogMessage('Updated programmatically.');
@@ -144,16 +144,27 @@ final readonly class OsorContactDirectory implements ContainerInjectionInterface
       $fieldItemList->getValue(),
       fn (array $val) => $val['target_id'] === '9781',
     ));
-    $tocParagraphText = $fieldItemList[$tocParagraphKey]->entity->field_body->get(0)->value;
+    if (!$tocParagraphKey) {
+      return;
+    }
+    $tocParagraph = $fieldItemList[$tocParagraphKey]->entity;
+    $tocParagraphText = $tocParagraph->field_body->get(0)->value;
     if (str_contains($tocParagraphText, '<a href="#Ukraine">')) {
       return;
     }
 
-    $fieldItemList[$tocParagraphKey]->entity->field_body->get(0)->value = preg_replace(
-      '/(<a href="#United Kingdom")/',
+    $newContent = preg_replace(
+      '/(<a href="#United)/',
       '<a href="#Ukraine">Ukraine</a></p><p>$1',
       $tocParagraphText,
     );
+    if (!str_contains($newContent, '<a href="#Ukraine">')) {
+      $newContent = $tocParagraphText . '<p><a href="#Ukraine">Ukraine</a></p>';
+    }
+    $tocParagraph->set('field_body', [
+      'value' => $newContent,
+      'format' => 'text_html',
+    ]);
   }
 
   /**
