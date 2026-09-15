@@ -1,7 +1,7 @@
 @api @group-clone
 Feature: Test ISAICP-11701
 
-  @update:joinup_core_deploy_201614
+  @update:joinup_core_deploy_201609
   Scenario Outline: Checks that new items are added
     Given <login step>
     When I go to "/collection/open-source-observatory-osor/open-source-contact-directory"
