@@ -7,6 +7,11 @@ dependencies:
     - node.type.event
   module:
     - link
+    - linkchecker
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
 _core:
   default_config_hash: p7r2kzNPUYgFky3eQPN9zPZ3VW32TmLJHpx5rRK2CSM
 id: node.event.field_event_web_url

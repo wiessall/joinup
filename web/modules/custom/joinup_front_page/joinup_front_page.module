@@ -1,0 +1,84 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for the Joinup front page module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\comment\CommentInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function joinup_front_page_theme(): array {
+  return [
+    'explore_block' => [
+      'variables' => [
+        'data' => [],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node.
+ *
+ * Completes the tiles of the explore block's "User Comments" tab with the date
+ * the latest comment was posted and a link to it.
+ *
+ * The other tabs get the equivalent footer — a date bottom left, a button
+ * bottom right — from the layout of their `explore_item` view display, using
+ * the node's own changed date and its "Read more" extra field. Neither applies
+ * here: the comment is context supplied by the block, not a property of the
+ * node, so the same two slots are filled in code instead. The markup and the
+ * classes are those of the display's blocks, so the tiles are styled by the
+ * existing rules and look identical.
+ *
+ * @see \Drupal\joinup_front_page\Plugin\Block\ExploreBlock::getRecentlyCommentedItems()
+ * @see block--extra-field-block--read-more.html.twig
+ */
+function joinup_front_page_preprocess_node(array &$variables): void {
+  $comment = $variables['elements']['#joinup_latest_comment'] ?? NULL;
+  if (!$comment instanceof CommentInterface) {
+    return;
+  }
+
+  // Weights put both below the layout, which grows to fill the tile.
+  $variables['content']['joinup_latest_comment_date'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#attributes' => ['class' => ['date']],
+    '#weight' => 100,
+    'date' => [
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#attributes' => ['class' => ['explore-item__comment-date']],
+      '#value' => \Drupal::service('date.formatter')
+        ->format($comment->getCreatedTime(), 'date_only'),
+    ],
+  ];
+
+  // permalink() resolves to the commented entity with a `#comment-<id>`
+  // fragment, so the visitor lands on the comment itself rather than at the top
+  // of a long page.
+  $variables['content']['joinup_latest_comment_link'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#attributes' => ['class' => ['read-more-wrapper']],
+    '#weight' => 101,
+    'link' => [
+      '#type' => 'link',
+      // The hidden half names the content, so the purpose of the link survives
+      // being read out of context by a screen reader.
+      '#title' => t('See comment<span class="visually-hidden"> on @title</span>', [
+        '@title' => $variables['node']->label(),
+      ]),
+      '#url' => $comment->permalink(),
+      '#attributes' => [
+        'class' => ['read-more', 'btn', 'btn-secondary'],
+      ],
+    ],
+  ];
+}

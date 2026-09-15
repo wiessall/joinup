@@ -249,6 +249,71 @@ class HomepageContext extends RawDrupalContext {
   }
 
   /**
+   * Checks the contents of the "User Comments" tab of the "Explore" block.
+   *
+   * Unlike the other tabs this one mixes bundles and is ordered by the date of
+   * the newest comment on each item, so it is asserted separately.
+   *
+   * @codingStandardsIgnoreStart
+   * Table format:
+   *  | title              | date       |
+   *  | Ongoing discussion | 04/03/2026 |
+   *  | Interesting news   | 02/03/2026 |
+   * @codingStandardsIgnoreEnd
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The expected content, in the expected order.
+   */
+  #[Then('the user comments section should contain the following content:')]
+  public function assertUserComments(TableNode $table): void {
+    $expected_rows = $table->getColumnsHash();
+    $tiles = $this->getSession()->getPage()->findAll('css', '#user_comments .glide__slides > *');
+    $this->assertSameValues(count($expected_rows), count($tiles), sprintf('Expected %d items in the "User Comments" tab but found %d.', count($expected_rows), count($tiles)));
+
+    foreach ($expected_rows as $expected) {
+      // Shifting keeps the assertion order-sensitive: the tab must list the
+      // most recently commented content first.
+      $tile = array_shift($tiles);
+      $title = $expected['title'];
+
+      $this->assertCondition(
+        str_contains($tile->getText(), $title),
+        sprintf('The "User Comments" tab does not show "%s" in the expected position.', $title),
+      );
+
+      // The tab mixes bundles but must not look like it: every tile is the
+      // same explore item as the ones the collections and solutions tabs show,
+      // abstract included.
+      $this->assertCondition(
+        str_contains((string) $tile->getAttribute('class'), '--explore-item'),
+        sprintf('The tile for "%s" is not rendered as an explore item.', $title),
+      );
+      $this->assertCondition(
+        !empty($tile->find('css', '.explore-item__description')),
+        sprintf('The tile for "%s" does not show an abstract.', $title),
+      );
+
+      // The date of the newest comment, in the tile footer.
+      $this->assertCondition(
+        !empty($tile->find('xpath', '//*[text() = "' . $expected['date'] . '"]')),
+        sprintf('The comment date "%s" was not found on the tile for "%s".', $expected['date'], $title),
+      );
+
+      // "See comment" must deep link to the comment rather than to the top of
+      // the page, otherwise the visitor has to hunt for it.
+      $link = $tile->find('xpath', '//a[contains(., "See comment")]');
+      $this->assertCondition(
+        $link instanceof NodeElement,
+        sprintf('No "See comment" link was found on the tile for "%s".', $title),
+      );
+      $this->assertCondition(
+        (bool) preg_match('/#comment-\d+$/', (string) $link->getAttribute('href')),
+        sprintf('The "See comment" link for "%s" does not point at a specific comment, but at "%s".', $title, $link->getAttribute('href')),
+      );
+    }
+  }
+
+  /**
    * Adds the given topic terms to the homepage topics queue.
    */
   #[Given('/^the following topics are enabled in the homepage:$/')]

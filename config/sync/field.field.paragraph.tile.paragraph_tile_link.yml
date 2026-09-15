@@ -7,6 +7,11 @@ dependencies:
     - paragraphs.paragraphs_type.tile
   module:
     - link
+    - linkchecker
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
 id: paragraph.tile.paragraph_tile_link
 field_name: paragraph_tile_link
 entity_type: paragraph

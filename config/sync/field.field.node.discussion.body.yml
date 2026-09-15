@@ -7,7 +7,12 @@ dependencies:
     - filter.format.content_editor
     - node.type.discussion
   module:
+    - linkchecker
     - text
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: html_link_extractor
 _core:
   default_config_hash: HKEbvPv_WwMJJucpr0BLkIKxJD4l7faYhAJNuwQOsUA
 id: node.discussion.body

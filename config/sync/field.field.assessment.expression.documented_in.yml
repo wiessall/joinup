@@ -7,9 +7,13 @@ dependencies:
     - field.storage.assessment.documented_in
   module:
     - link
+    - linkchecker
     - rdf_sync
     - tmgmt_content
 third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
   tmgmt_content:
     excluded: false
   rdf_sync:

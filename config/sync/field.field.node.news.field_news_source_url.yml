@@ -7,6 +7,11 @@ dependencies:
     - node.type.news
   module:
     - link
+    - linkchecker
+third_party_settings:
+  linkchecker:
+    scan: true
+    extractor: link_link_extractor
 _core:
   default_config_hash: baIK3sAlomflCmYVln2MmYpANIXQfyqH_Mpolft2xSE
 id: node.news.field_news_source_url

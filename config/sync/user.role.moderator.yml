@@ -84,6 +84,7 @@ label: Moderator
 weight: -6
 is_admin: false
 permissions:
+  - 'access broken links report'
   - 'access compatibility document overview'
   - 'access contact form messages'
   - 'access content moderation overview'

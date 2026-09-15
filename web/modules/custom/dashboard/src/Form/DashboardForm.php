@@ -141,6 +141,10 @@ class DashboardForm extends FormBase {
         '#url' => Url::fromRoute('entity.webform.collection'),
       ],
       [
+        '#title' => $this->t('Broken links report'),
+        '#url' => Url::fromRoute('view.broken_links_report.page_1'),
+      ],
+      [
         '#title' => $this->t('Private messages reports'),
         '#url' => Url::fromRoute('view.private_message_report.all'),
       ],
