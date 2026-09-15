@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_core;
+namespace Drupal\joinup_core\Update;
 
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
@@ -21,7 +21,7 @@ use Drupal\paragraphs\Entity\Paragraph;
 /**
  * Class to perform content updates to OSOR contact directory.
  */
-final readonly class OsorContactDiretory implements ContainerInjectionInterface {
+final readonly class OsorContactDirectory implements ContainerInjectionInterface {
 
   use AutowireTrait;
 
