@@ -2,8 +2,10 @@
 Feature: Solution revisions referred by releases are never purged.
 
   Scenario: The revision purge queue keeps solution revisions referred by releases.
+    When I am logged in as a moderator
+
     # Set the amount to 5 for the scope of the test.
-    Given I set the configuration item "node.type.solution" with key "third_party_settings.node_revision_delete.solution_revision_amount.settings.amount" to "5"
+    And I set the configuration item "node.type.solution" with key "third_party_settings.node_revision_delete.solution_revision_amount.settings.amount" to "5"
     And the following "collection" content:
       | title            |
       | Space technology |
@@ -11,6 +13,13 @@ Feature: Solution revisions referred by releases are never purged.
     And the following "solution" content:
       | title       | description       | revision_log  | revision_timestamp | resources | collection       |
       | Rocket fuel | The first formula | First formula | 2020-01-01 10:00   | text.pdf  | Space technology |
+
+    # Regression test for ISAICP-11817.
+    And I visit the revisions page for "Rocket fuel"
+    Then the "node revisions" table should contain the following columns:
+      | Revision information                                        |
+      | 01/01/2020 - 10:00 by Anonymous (not verified)First formula |
+
     And the following solution content revisions:
       | current title | description        | log message    | revision date    |
       | Rocket fuel   | The second formula | Second formula | 2020-01-02 10:00 |
@@ -47,7 +56,6 @@ Feature: Solution revisions referred by releases are never purged.
     # All the revisions are listed in the revision overview page. Mind that the
     # revision log message is glued to the author name as they are rendered in
     # adjacent HTML elements.
-    When I am logged in as a moderator
     And I visit the revisions page for "Rocket fuel"
     Then the "node revisions" table should contain the following columns:
       | Revision information                                                                                        |

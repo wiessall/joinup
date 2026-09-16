@@ -7,6 +7,7 @@ namespace Drupal\joinup_release\Hook;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
@@ -30,6 +31,7 @@ final class ReleaseSolutionDataHooks {
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
+    protected ConfigFactoryInterface $configFactory,
   ) {}
 
   /**
@@ -58,7 +60,7 @@ final class ReleaseSolutionDataHooks {
    * Implements hook_form_FORM_ID_alter().
    */
   #[Hook('form_revision_overview_form_alter')]
-  public function formAlter(array &$form, FormStateInterface &$formState): void {
+  public function formAlter(array &$form, FormStateInterface $formState): void {
     $entity = $formState->getBuildInfo()['args'][0];
     if (!$entity instanceof SolutionInterface) {
       return;
@@ -66,10 +68,24 @@ final class ReleaseSolutionDataHooks {
 
     $storage = $this->entityTypeManager->getStorage('node');
 
-    foreach (Element::children($form['node_revisions_table']) as $key) {
+    $pager = $this->configFactory->get('diff.settings')
+      ->get('general_settings.revision_pager_limit');
+
+    $vids = array_keys(
+      $storage->getQuery()->accessCheck()
+        ->allRevisions()
+        ->condition('langcode', $entity->language()->getId())
+        ->condition('revision_translation_affected', '1')
+        ->condition('nid', $entity->id())
+        ->sort('vid', 'DESC')
+        ->pager($pager)
+        ->execute()
+    );
+
+    foreach (Element::children($form['node_revisions_table']) as $delta => $key) {
       $row =& $form['node_revisions_table'][$key];
 
-      $vid = $row['select_column_one']['#return_value'];
+      $vid = $vids[$delta];
       $revision = $storage->loadRevision($vid);
 
       if ($releases = $this->getReferringReleases($revision)) {
