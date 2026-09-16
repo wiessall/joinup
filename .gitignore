@@ -16,6 +16,8 @@
 
 # Ignore user's local files
 /local/
+/web/modules/custom/import_ird_jsons/sources
+/scripts/
 
 # Ignore sensitive information
 /web/sites/sites.php
@@ -61,3 +63,4 @@
 
 # Automatically created by DDEV but not used.
 /recipes/
+.ddev/config.local.yaml

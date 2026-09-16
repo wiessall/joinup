@@ -1,0 +1,188 @@
+#ddev-generated
+# If you remove the ddev-generated line above you
+# are responsible for maintaining this file. DDEV will not then
+# update it, for example if you add `additional_hostnames`, etc.
+
+http:
+  routers:
+    joinup-selenium-chrome-7900-http:
+      entrypoints:
+        - http-7910
+      rule: HostRegexp(`^joinup\.ddev\.site$`)
+      
+      service: "joinup-selenium-chrome-7900"
+      tls: false
+      # middlewares:
+      #   - "joinup-redirectHttps"
+    joinup-xhgui-80-http:
+      entrypoints:
+        - http-8143
+      rule: HostRegexp(`^joinup\.ddev\.site$`)
+      
+      service: "joinup-xhgui-80"
+      tls: false
+      # middlewares:
+      #   - "joinup-redirectHttps"
+    joinup-solr-standalone-2-8983-http:
+      entrypoints:
+        - http-8983
+      rule: HostRegexp(`^joinup\.ddev\.site$`)
+      
+      service: "joinup-solr-standalone-2-8983"
+      tls: false
+      # middlewares:
+      #   - "joinup-redirectHttps"
+    joinup-virtuoso-8890-http:
+      entrypoints:
+        - http-8890
+      rule: HostRegexp(`^joinup\.ddev\.site$`)
+      
+      service: "joinup-virtuoso-8890"
+      tls: false
+      # middlewares:
+      #   - "joinup-redirectHttps"
+    joinup-web-80-http:
+      entrypoints:
+        - http-80
+      rule: HostRegexp(`^joinup\.ddev\.site$`)
+      
+      service: "joinup-web-80"
+      tls: false
+      # middlewares:
+      #   - "joinup-redirectHttps"
+    joinup-web-8025-http:
+      entrypoints:
+        - http-8025
+      rule: HostRegexp(`^joinup\.ddev\.site$`)
+      
+      service: "joinup-web-8025"
+      tls: false
+      # middlewares:
+      #   - "joinup-redirectHttps"
+    joinup-web-9323-http:
+      entrypoints:
+        - http-8323
+      rule: HostRegexp(`^joinup\.ddev\.site$`)
+      
+      service: "joinup-web-9323"
+      tls: false
+      # middlewares:
+      #   - "joinup-redirectHttps"
+    
+    
+    joinup-selenium-chrome-7900-https:
+      entrypoints:
+        - http-7900
+      rule: HostRegexp(`^joinup\.ddev\.site$`)
+      
+      service: "joinup-selenium-chrome-7900"
+      
+      tls: true
+      
+    
+    joinup-xhgui-80-https:
+      entrypoints:
+        - http-8142
+      rule: HostRegexp(`^joinup\.ddev\.site$`)
+      
+      service: "joinup-xhgui-80"
+      
+      tls: true
+      
+    
+    joinup-solr-standalone-2-8983-https:
+      entrypoints:
+        - http-8983
+      rule: HostRegexp(`^joinup\.ddev\.site$`)
+      
+      service: "joinup-solr-standalone-2-8983"
+      
+      tls: true
+      
+    
+    
+    
+    
+    joinup-web-80-https:
+      entrypoints:
+        - http-443
+      rule: HostRegexp(`^joinup\.ddev\.site$`)
+      
+      service: "joinup-web-80"
+      
+      tls: true
+      
+    joinup-web-8025-https:
+      entrypoints:
+        - http-8026
+      rule: HostRegexp(`^joinup\.ddev\.site$`)
+      
+      service: "joinup-web-8025"
+      
+      tls: true
+      
+    joinup-web-9323-https:
+      entrypoints:
+        - http-9324
+      rule: HostRegexp(`^joinup\.ddev\.site$`)
+      
+      service: "joinup-web-9323"
+      
+      tls: true
+      
+    
+
+  middlewares:
+    joinup-redirectHttps:
+      redirectScheme:
+        scheme: https
+        permanent: true
+
+  services:
+    joinup-selenium-chrome-7900:
+      loadbalancer:
+        servers:
+          - url: http://ddev-joinup-selenium-chrome:7900
+        
+    
+    joinup-xhgui-80:
+      loadbalancer:
+        servers:
+          - url: http://ddev-joinup-xhgui:80
+        
+    
+    joinup-solr-standalone-2-8983:
+      loadbalancer:
+        servers:
+          - url: http://ddev-joinup-solr-standalone-2:8983
+        
+    
+    joinup-virtuoso-8890:
+      loadbalancer:
+        servers:
+          - url: http://ddev-joinup-virtuoso:8890
+        
+    joinup-web-80:
+      loadbalancer:
+        servers:
+          - url: http://ddev-joinup-web:80
+        
+    joinup-web-8025:
+      loadbalancer:
+        servers:
+          - url: http://ddev-joinup-web:8025
+        
+    joinup-web-9323:
+      loadbalancer:
+        servers:
+          - url: http://ddev-joinup-web:9323
+        
+    
+    
+    
+    
+
+tls:
+  certificates:
+    - certFile: /mnt/ddev-global-cache/traefik/certs/joinup.crt
+      keyFile: /mnt/ddev-global-cache/traefik/certs/joinup.key

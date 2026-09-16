@@ -1,0 +1,9 @@
+services:
+  ollama:
+    image: ollama/ollama
+    volumes:
+      - /home/tristan/.ollama:/root/.ollama
+    networks:
+      ddev_default: null
+      default: null
+    restart: "no"
