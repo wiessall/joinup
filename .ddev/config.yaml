@@ -18,6 +18,9 @@ webimage_extra_packages:
 webserver_type: apache-fpm
 xdebug_enabled: false
 
+# Performace tracing
+xhprof_enabled: true
+
 # Tip: Run `ddev describe -j | jq -r .raw.dbinfo.published_port` to get the port
 # exposed on host. DDEV is assigning a random, unused port, for each instance.
 database:
@@ -32,6 +35,7 @@ use_dns_when_possible: false
 composer_version: "2"
 web_environment:
     - DRUPAL_BASE_URL=https://${DDEV_SITENAME}.${DDEV_TLD}
+    - SEARCH_API_SERVER_SS_SOLR_HOST=solr-standalone-2
 disable_settings_management: true
 nodejs_version: "20"
 # Affects only macOS developers.
