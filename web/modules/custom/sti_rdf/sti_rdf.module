@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * @file
+ * Module file for STI RDF.
+ *
+ * The only hooks here are the entity lifecycle hooks that keep the EAV
+ * annotation_value table in sync with annotation nodes. All real work lives
+ * in services.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_node_insert().
+ */
+function sti_rdf_node_insert(NodeInterface $node): void {
+  /** @var \Drupal\sti_rdf\Service\AnnotationIndexer $indexer */
+  $indexer = \Drupal::service('sti_rdf.annotation_indexer');
+  if ($indexer->isAnnotationBundle($node->bundle())) {
+    $indexer->index($node);
+    _sti_rdf_invalidate_collection_cache();
+  }
+}
+
+/**
+ * Implements hook_node_update().
+ */
+function sti_rdf_node_update(NodeInterface $node): void {
+  /** @var \Drupal\sti_rdf\Service\AnnotationIndexer $indexer */
+  $indexer = \Drupal::service('sti_rdf.annotation_indexer');
+  if ($indexer->isAnnotationBundle($node->bundle())) {
+    $indexer->index($node);
+    _sti_rdf_invalidate_collection_cache();
+  }
+}
+
+/**
+ * Implements hook_node_predelete().
+ */
+function sti_rdf_node_predelete(NodeInterface $node): void {
+  /** @var \Drupal\sti_rdf\Service\AnnotationIndexer $indexer */
+  $indexer = \Drupal::service('sti_rdf.annotation_indexer');
+  if ($indexer->isAnnotationBundle($node->bundle())) {
+    $indexer->clearForAnnotation((int) $node->id());
+    _sti_rdf_invalidate_collection_cache();
+  }
+}
+
+/**
+ * Invalidates the cache tag used by collection search pages.
+ */
+function _sti_rdf_invalidate_collection_cache(): void {
+  \Drupal::service('cache_tags.invalidator')
+    ->invalidateTags(['annotation_value_list']);
+}

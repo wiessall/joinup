@@ -1,0 +1,29 @@
+uuid: 68509bc9-e156-4b45-be25-29c4f8d691a6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.acronym
+    - node.type.owner
+  module:
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://www.w3.org/2004/02/skos/core#altLabel'
+      type: 'xsd:string'
+  tmgmt_content:
+    excluded: false
+id: node.owner.acronym
+field_name: acronym
+entity_type: node
+bundle: owner
+label: Acronym
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

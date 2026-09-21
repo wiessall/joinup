@@ -8,6 +8,9 @@ dependencies:
     - field.field.node.solution.contact
     - field.field.node.solution.description
     - field.field.node.solution.domain
+    - field.field.node.solution.field_claims
+    - field.field.node.solution.field_machine_record
+    - field.field.node.solution.field_original_internal_id
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
     - field.field.node.solution.keywords
@@ -1344,6 +1347,15 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
+  field_claims:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 101
+    region: main
   flag_interoperability:
     settings: {  }
     third_party_settings: {  }
@@ -1397,6 +1409,8 @@ hidden:
   eif_perspective: true
   featured: true
   field_is_description: true
+  field_machine_record: true
+  field_original_internal_id: true
   field_shared_in: true
   field_state: true
   field_topic: true

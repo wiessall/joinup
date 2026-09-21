@@ -1,20 +1,6 @@
 _core:
   default_config_hash: 7QwhifH5gAzkdFMMDFV6XQRrcx4PAvtROZO8rs19nTo
-form_ids:
-  - message_contact_form_submission_form
-  - comment_comment_form
-  - comment_reply_form
-  - node_custom_page_form
-  - node_discussion_form
-  - node_document_form
-  - node_event_form
-  - node_glossary_form
-  - node_news_form
-  - node_newsletter_form
-  - subscribe_to_collection_form
-  - share_content_form
-  - email_contact_mail_form
-  - subscribe_group_form
+form_ids: null
 excluded_form_ids:
   - ''
 show_form_ids: false

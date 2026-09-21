@@ -767,8 +767,17 @@ function joinup_solution_theme_suggestions_flag_interoperable_text(array $variab
  * @return int
  *   The ID of the taxonomy term serving as default value.
  */
+//! Needs to be replaced with proper rdf lookup
 function _joinup_solution_status_default_value(): int {
-  return (int) MappedTerm::loadByUri('http://purl.org/adms/status/Completed')->id();
+//  return (int) MappedTerm::loadByUri('http://purl.org/adms/status/Completed')->id();
+  $terms = \Drupal::entityTypeManager()
+    ->getStorage('taxonomy_term')
+    ->loadByProperties([
+      'vid' => 'solution_status',
+      'name' => 'NOT INDICATED',
+    ]);
+  $term = reset($terms);
+  return $term ? (int) $term->id() : 0;
 }
 
 /**

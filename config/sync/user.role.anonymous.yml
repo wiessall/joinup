@@ -5,9 +5,9 @@ dependencies:
   config:
     - entity_legal.document.legal_notice
     - filter.format.basic_html
-    - filter.format.plain_text_glossary
     - filter.format.simple_text
     - rest.resource.assessment_report
+    - rest.resource.sti_collection_solutions
     - search_api_autocomplete.search.search
     - search_api_autocomplete.search.search_oss_catalogue
   module:
@@ -40,11 +40,11 @@ permissions:
   - 'access user profiles'
   - 'legal view legal_notice'
   - 'restful get assessment_report'
+  - 'restful get sti_collection_solutions'
   - 'sparql endpoint query'
   - 'use search_api_autocomplete for search'
   - 'use search_api_autocomplete for search_oss_catalogue'
   - 'use text format basic_html'
-  - 'use text format plain_text_glossary'
   - 'use text format simple_text'
   - 'view bookmark'
   - 'view collection_settings meta-entity'

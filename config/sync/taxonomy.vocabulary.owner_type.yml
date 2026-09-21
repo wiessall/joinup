@@ -30,7 +30,7 @@ third_party_settings:
           type: resource
 _core:
   default_config_hash: U6oNQvUPHBpdDusMd-QjjNnPw-p3b7pbkyv_uu4c9B8
-name: 'Owner type'
+name: 'Organization type'
 vid: owner_type
 description: null
 weight: 0

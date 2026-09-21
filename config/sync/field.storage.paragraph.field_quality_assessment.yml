@@ -1,0 +1,20 @@
+uuid: fe112de8-1dbf-4ec6-8c36-6b7b9b7b5541
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+    - taxonomy
+id: paragraph.field_quality_assessment
+field_name: field_quality_assessment
+entity_type: paragraph
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

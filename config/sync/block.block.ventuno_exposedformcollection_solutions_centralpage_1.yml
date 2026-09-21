@@ -1,0 +1,23 @@
+uuid: f50dcd86-6001-4a88-a3be-aceb50f16ef2
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.collection_solutions_central
+  module:
+    - views
+  theme:
+    - ventuno
+id: ventuno_exposedformcollection_solutions_centralpage_1
+theme: ventuno
+region: content
+weight: 0
+provider: null
+plugin: 'views_exposed_filter_block:collection_solutions_central-page_1'
+settings:
+  id: 'views_exposed_filter_block:collection_solutions_central-page_1'
+  label: ''
+  label_display: visible
+  provider: views
+  views_label: ''
+visibility: {  }

@@ -1,0 +1,124 @@
+uuid: c38f9d21-1929-4f5a-8909-881cf9edb88d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.quality_assessment
+    - node.type.core_annotation
+    - paragraphs.paragraphs_type.quality_check
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: node.core_annotation.quality_assessment
+field_name: quality_assessment
+entity_type: node
+bundle: core_annotation
+label: 'Quality Assessment'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      quality_check: quality_check
+    negate: 0
+    target_bundles_drag_drop:
+      accordion:
+        weight: 32
+        enabled: false
+      accordion_item:
+        weight: 33
+        enabled: false
+      binding_requirement:
+        weight: 34
+        enabled: false
+      block:
+        weight: 35
+        enabled: false
+      call_to_action:
+        weight: 36
+        enabled: false
+      carousel:
+        weight: 37
+        enabled: false
+      configurable_listing:
+        weight: 38
+        enabled: false
+      content_listing:
+        weight: 39
+        enabled: false
+      entity_reference:
+        weight: 40
+        enabled: false
+      events_calendar:
+        weight: 41
+        enabled: false
+      github_feed:
+        weight: 42
+        enabled: false
+      heading:
+        weight: 43
+        enabled: false
+      iframe:
+        weight: 44
+        enabled: false
+      image:
+        weight: 45
+        enabled: false
+      image_gallery:
+        weight: 46
+        enabled: false
+      json_map:
+        weight: 47
+        enabled: false
+      layout:
+        weight: 48
+        enabled: false
+      poll:
+        weight: 49
+        enabled: false
+      quality_check:
+        weight: 50
+        enabled: true
+      quote:
+        weight: 51
+        enabled: false
+      resource_file:
+        weight: 52
+        enabled: false
+      resource_link:
+        weight: 53
+        enabled: false
+      simple_paragraph:
+        weight: 54
+        enabled: false
+      social_media:
+        weight: 55
+        enabled: false
+      table_of_contents:
+        weight: 56
+        enabled: false
+      testimony:
+        weight: 57
+        enabled: false
+      text:
+        weight: 58
+        enabled: false
+      tile:
+        weight: 59
+        enabled: false
+      tiles:
+        weight: 60
+        enabled: false
+      video:
+        weight: 61
+        enabled: false
+      webform:
+        weight: 62
+        enabled: false
+field_type: entity_reference

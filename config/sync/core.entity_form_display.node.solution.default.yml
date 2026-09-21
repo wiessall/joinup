@@ -9,6 +9,9 @@ dependencies:
     - field.field.node.solution.contact
     - field.field.node.solution.description
     - field.field.node.solution.domain
+    - field.field.node.solution.field_claims
+    - field.field.node.solution.field_machine_record
+    - field.field.node.solution.field_original_internal_id
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
     - field.field.node.solution.keywords
@@ -65,7 +68,6 @@ third_party_settings:
         - title
         - abstract
         - description
-        - classification
         - domain
         - field_topic
         - language
@@ -190,20 +192,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  classification:
-    type: tagify_entity_reference_autocomplete_widget
-    weight: 4
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      placeholder: 'Select or start typing...'
-      suggestions_dropdown: 0
-      show_entity_id: 0
-      show_info_label: 0
-      info_label: ''
-      parent_selection: 1
-    third_party_settings: {  }
   contact:
     type: inline_entity_form_complex
     weight: 13
@@ -252,6 +240,24 @@ content:
       show_info_label: 0
       info_label: ''
       parent_selection: 1
+    third_party_settings: {  }
+  field_claims:
+    type: paragraphs
+    weight: 43
+    region: content
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      closed_mode: summary
+      autocollapse: none
+      closed_mode_threshold: 0
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+      features:
+        collapse_edit_all: collapse_edit_all
+        duplicate: duplicate
     third_party_settings: {  }
   field_is_description:
     type: text_textarea
@@ -439,7 +445,10 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  classification: true
   created: true
+  field_machine_record: true
+  field_original_internal_id: true
   field_shared_in: true
   metrics_page: true
   og_audience: true

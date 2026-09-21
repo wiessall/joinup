@@ -10,7 +10,7 @@ dependencies:
 id: ventuno_privatemessage_inbox
 theme: ventuno
 region: sidebar
-weight: -25
+weight: -38
 provider: null
 plugin: private_message_inbox_block
 settings:

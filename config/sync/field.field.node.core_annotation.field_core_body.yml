@@ -1,0 +1,19 @@
+uuid: 98b826d7-5f77-4247-b696-05911c644753
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_core_body
+    - node.type.core_annotation
+id: node.core_annotation.field_core_body
+field_name: field_core_body
+entity_type: node
+bundle: core_annotation
+label: body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

@@ -4,9 +4,12 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.node.inline
+    - field.field.node.owner.acronym
     - field.field.node.owner.country
     - field.field.node.owner.field_state
+    - field.field.node.owner.link
     - field.field.node.owner.owner_type
+    - field.field.node.owner.related_content
     - node.type.owner
   module:
     - tagify
@@ -57,13 +60,16 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  acronym: true
   created: true
   current_workflow_state: true
   field_state: true
   langcode: true
+  link: true
   path: true
   promote: true
   published_at: true
+  related_content: true
   simple_sitemap: true
   status: true
   sticky: true

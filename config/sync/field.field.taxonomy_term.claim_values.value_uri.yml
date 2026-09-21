@@ -1,0 +1,24 @@
+uuid: 0314157e-ed01-4c5a-91ea-3b20bff2a239
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.value_uri
+    - taxonomy.vocabulary.claim_values
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: taxonomy_term.claim_values.value_uri
+field_name: value_uri
+entity_type: taxonomy_term
+bundle: claim_values
+label: 'Value uri'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

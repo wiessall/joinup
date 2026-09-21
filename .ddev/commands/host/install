@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ## Description: Installs an empty Interoperable Europe Portal site
 ## Usage: install

@@ -9,6 +9,9 @@ dependencies:
     - field.field.node.solution.contact
     - field.field.node.solution.description
     - field.field.node.solution.domain
+    - field.field.node.solution.field_claims
+    - field.field.node.solution.field_machine_record
+    - field.field.node.solution.field_original_internal_id
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
     - field.field.node.solution.keywords
@@ -100,6 +103,9 @@ hidden:
   domain: true
   eif_perspective: true
   featured: true
+  field_claims: true
+  field_machine_record: true
+  field_original_internal_id: true
   field_shared_in: true
   field_state: true
   flag_like: true

@@ -1,0 +1,33 @@
+uuid: 291b9796-ffc3-4d8c-a83e-9e38c5f71097
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - taxonomy
+id: taxonomy_term.field_qa_value
+field_name: field_qa_value
+entity_type: taxonomy_term
+type: list_integer
+settings:
+  allowed_values:
+    -
+      value: 10
+      label: Good
+    -
+      value: 7
+      label: Acceptable
+    -
+      value: 5
+      label: Borderline
+    -
+      value: 2
+      label: 'Not acceptable'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

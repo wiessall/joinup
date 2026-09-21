@@ -1,0 +1,109 @@
+# ---------------------------------------------------------------------------
+#  L1.4  sti_atio:DataSource   (extends dcat:Dataset)
+# ---------------------------------------------------------------------------
+
+sti_atio:DataSource #! Why? Why not call it a collection? Why scope it externally?
+    a owl:Class ;
+    rdfs:label "ATIO Data Source"@en ;
+    rdfs:comment """An external database, platform, API, or information service
+    from which the ATIO KB harvests or receives innovation data.
+    Models the data source as an information resource (cf. dcat:Dataset),
+    distinct from the organisation that manages it (org:Organization)."""@en ;
+    rdfs:subClassOf dcat:Dataset ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:trustLevel
+    a owl:ObjectProperty ;
+    rdfs:label "trust level"@en ;
+    rdfs:comment "Trust classification determining the QA approach applied to ingested content."@en ;
+    rdfs:domain sti_atio:DataSource ;
+    rdfs:range sti_atio:TrustLevel ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:harvestingMethod
+    a owl:ObjectProperty ;
+    rdfs:label "harvesting method"@en ;
+    rdfs:comment "Technical method used to harvest data from this source."@en ;
+    rdfs:domain sti_atio:DataSource ;
+    rdfs:range sti_atio:HarvestingMethod ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:harvestingStatus
+    a owl:ObjectProperty ;
+    rdfs:label "harvesting status"@en ;
+    rdfs:comment "Current operational status of the harvesting pipeline for this source."@en ;
+    rdfs:domain sti_atio:DataSource ;
+    rdfs:range sti_atio:HarvestingStatus ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:sharingAgreement
+    a owl:DatatypeProperty ;
+    rdfs:label "data sharing agreement"@en ;
+    rdfs:comment "Reference to or description of the data sharing agreement with this source."@en ;
+    rdfs:domain sti_atio:DataSource ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:allowsAIEnrichment
+    a owl:DatatypeProperty ;
+    rdfs:label "allows AI enrichment"@en ;
+    rdfs:comment "Whether the data sharing agreement permits AI enrichment of harvested records."@en ;
+    rdfs:domain sti_atio:DataSource ;
+    rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:allowsPublicDisplay
+    a owl:DatatypeProperty ;
+    rdfs:label "allows public display"@en ;
+    rdfs:comment "Whether records from this source may be displayed in the public KB."@en ;
+    rdfs:domain sti_atio:DataSource ;
+    rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:fieldSharingScope
+    a owl:ObjectProperty ;
+    rdfs:label "field sharing scope"@en ;
+    rdfs:comment "Policy defining which fields from this source may be published publicly."@en ;
+    rdfs:domain sti_atio:DataSource ;
+    rdfs:range sti_atio:FieldSharingScope ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:sourceManagedBy
+    a owl:ObjectProperty ;
+    rdfs:label "managed by"@en ;
+    rdfs:comment "Organisation(s) responsible for managing this data source. Many-to-many."@en ;
+    rdfs:domain sti_atio:DataSource ;
+    rdfs:range org:Organization ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:lastHarvestedAt
+    a owl:DatatypeProperty ;
+    rdfs:label "last harvested at"@en ;
+    rdfs:domain sti_atio:DataSource ;
+    rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:updateFrequency
+    a owl:ObjectProperty ;
+    rdfs:label "update frequency"@en ;
+    rdfs:domain sti_atio:DataSource ;
+    rdfs:subPropertyOf dcterms:accrualPeriodicity ;
+    rdfs:range dcterms:Frequency ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:sourceAPIEndpoint
+    a owl:DatatypeProperty ;
+    rdfs:label "API endpoint"@en ;
+    rdfs:domain sti_atio:DataSource ;
+    rdfs:range xsd:anyURI ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:sourceSchemaFormat
+    a owl:DatatypeProperty ;
+    rdfs:label "source schema / format"@en ;
+    rdfs:comment "Schema or format of the data as delivered by this source (e.g. JSON, XML, CSV, RDF)."@en ;
+    rdfs:domain sti_atio:DataSource ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+

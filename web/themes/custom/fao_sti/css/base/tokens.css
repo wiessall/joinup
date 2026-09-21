@@ -1,0 +1,31 @@
+/**
+ * FAO design tokens, mapped onto the Bootstrap/BCL custom properties that
+ * ventuno's compiled CSS reads. Change a colour here and every Bootstrap
+ * component (buttons, links, badges, focus rings) follows.
+ *
+ * Values taken from the :root block of FAO Design System 3.6.5.
+ */
+:root {
+  /* FAO names (used by FAO component CSS). */
+  --fao-primary: #116bac;
+  --fao-primary-hover: #1688da;
+  --fao-primary-light: #e5ecf4;
+  --fao-text: #545454;
+  --fao-text-muted: #999;
+  --fao-line: #f2f2f2;
+  --fao-border: #dee2e6;
+  --fao-surface: #fff;
+  --fao-radius: 5px;
+  --fao-font: "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Bootstrap 5.3 variables, so BCL-rendered markup picks up FAO colours. */
+  --bs-primary: var(--fao-primary);
+  --bs-primary-rgb: 17, 107, 172;
+  --bs-link-color: var(--fao-primary);
+  --bs-link-color-rgb: 17, 107, 172;
+  --bs-link-hover-color: var(--fao-primary-hover);
+  --bs-body-color: var(--fao-text);
+  --bs-body-font-family: var(--fao-font);
+  --bs-border-color: var(--fao-border);
+  --bs-border-radius: var(--fao-radius);
+}

@@ -1,0 +1,199 @@
+uuid: 254693f3-8de7-4edd-ad36-2a0353a0bbcb
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - sti_rdf
+      - joinup_rdf
+      - migrate_plus
+id: bp5
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - IRD
+  - solution
+migration_group: ird_import_group
+label: 'IRD universal solution importer'
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+    - modules/custom/import_ird_jsons/sources/bp5.json
+  constants:
+    OG_AUDIENCE_NID: '64'
+    OWNER_NID: 33
+    CONTACT_NID: 34
+    DEFAULT_CLASSIFICATION_TID: 5
+    DEFAULT_DOMAIN_TID: 8
+    DEFAULT_LANGUAGE_TID: 31
+    DEFAULT_STATE: draft
+    BUNDLE: solution
+  item_selector: records
+  fields:
+    -
+      name: id
+      label: 'Record ID'
+      selector: id
+    -
+      name: title
+      label: Title
+      selector: title
+    -
+      name: abstract
+      label: Abstract
+      selector: abstract
+    -
+      name: description
+      label: Description
+      selector: description
+    -
+      name: date
+      label: Date
+      selector: date
+    -
+      name: url
+      label: 'Landing page URL'
+      selector: url
+    -
+      name: classification_name
+      label: Classification
+      selector: classification_name
+    -
+      name: domain_names
+      label: Domains
+      selector: domain_names
+    -
+      name: topic_names
+      label: Topics
+      selector: topic_names
+    -
+      name: language_names
+      label: Languages
+      selector: language_names
+    -
+      name: owner_name
+      label: 'Owner org name'
+      selector: owner_name
+    -
+      name: raw_record
+      label: 'Original record'
+      selector: _raw
+  ids:
+    id:
+      type: string
+process:
+  title:
+    plugin: skip_on_empty
+    method: row
+    message: 'Skipped: no title'
+    source: title
+  type:
+    plugin: default_value
+    default_value: solution
+  field_state:
+    plugin: default_value
+    default_value: published
+  description/value:
+    plugin: skip_on_empty
+    method: process
+    source: description
+  description/format:
+    plugin: default_value
+    default_value: full_html
+  topic:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: topic_names
+    -
+      plugin: entity_generate
+      entity_type: taxonomy_term
+      bundle_key: vid
+      bundle: topic
+      value_key: name
+      ignore_case: true
+  _language_lookup:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: language_names
+    -
+      plugin: entity_generate
+      entity_type: taxonomy_term
+      bundle_key: vid
+      bundle: language
+      value_key: name
+      ignore_case: true
+  language:
+    -
+      plugin: null_coalesce
+      source:
+        - '@_language_lookup'
+        - constants/DEFAULT_LANGUAGE_TID
+  og_audience:
+    plugin: get
+    source: constants/OG_AUDIENCE_NID
+  _owner_lookup:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: owner_name
+    -
+      plugin: entity_lookup
+      entity_type: node
+      bundle_key: type
+      bundle: owner
+      value_key: title
+      ignore_case: true
+  owner:
+    -
+      plugin: null_coalesce
+      source:
+        - '@_owner_lookup'
+        - constants/OWNER_NID
+  contact:
+    plugin: get
+    source: constants/CONTACT_NID
+  landing_page/uri:
+    plugin: skip_on_empty
+    method: process
+    source: url
+  field_information_resource_date:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: date
+    -
+      plugin: format_date
+      from_format: Y-m-d
+      to_format: Y-m-d
+  field_original_internal_id: id
+  field_machine_record:
+    plugin: callback
+    callable: json_encode
+    source: raw_record
+  _time:
+    plugin: callback
+    callable: time
+    unpack_source: true
+    source: {  }
+  field_last_ingestion_datetime:
+    plugin: format_date
+    source: '@_time'
+    from_format: U
+    to_format: U
+destination:
+  plugin: 'entity:node'
+  default_bundle: solution
+  overwrite_properties:
+    - field_machine_record
+    - field_last_ingestion_datetime
+    - field_original_internal_id
+idMap: {  }
+migration_dependencies:
+  required: {  }
+  optional:
+    - ird_annotation_import

@@ -1,0 +1,20 @@
+uuid: 32e9c835-413c-4268-bd84-809e17edb2f2
+langcode: en
+status: true
+dependencies:
+  module:
+    - serialization
+    - sti_portal_api
+    - user
+_core:
+  default_config_hash: p3V9hW2HyuFXhVqV3CNqCpo0ZPQ8_IxknCHcFU7bUiM
+id: sti_collection_solutions
+plugin_id: sti_collection_solutions
+granularity: resource
+configuration:
+  methods:
+    - GET
+  formats:
+    - json
+  authentication:
+    - cookie

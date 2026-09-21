@@ -10,7 +10,7 @@ dependencies:
 id: ventuno_ossfacetsblock
 theme: ventuno
 region: sidebar
-weight: -27
+weight: -40
 provider: null
 plugin: facets_block
 settings:

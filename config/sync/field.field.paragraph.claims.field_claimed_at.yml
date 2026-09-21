@@ -1,0 +1,31 @@
+uuid: ccd458c4-0df7-4fe1-9828-2787520cd700
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_claimed_at
+    - paragraphs.paragraphs_type.claims
+  module:
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    value:
+      predicate: 'https://sti-portal.fao.org/ontology#claimedAt'
+      type: 'xsd:dateTime'
+id: paragraph.claims.field_claimed_at
+field_name: field_claimed_at
+entity_type: paragraph
+bundle: claims
+label: field_claimed_at
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: 1780581446
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

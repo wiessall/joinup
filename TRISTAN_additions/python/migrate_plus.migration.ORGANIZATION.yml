@@ -1,0 +1,107 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - sti_rdf
+      - migrate_plus
+
+id: ird_owner_import                #!
+migration_tags:
+  - IRD
+  - owner
+migration_group: ird_import_group
+label: 'IRD owner (organisation) importer'
+
+# =============================================================================
+# SOURCE
+# =============================================================================
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+
+  urls:
+    - modules/custom/import_IRD_jsons/sources/organizations_digital_green.json  #!
+
+  constants:
+    DEFAULT_STATE: published
+
+  item_selector: records
+
+  fields:
+    - { name: id,          label: 'Org source ID',  selector: id }
+    - { name: title,       label: 'Title',           selector: title }
+    - { name: description, label: 'Description',     selector: description }
+    - { name: acronym,     label: 'Acronym',         selector: acronym }
+    - { name: country,     label: 'Country',         selector: country }
+    - { name: link,        label: 'Website',         selector: link }
+    - { name: owner_type,  label: 'Org type',        selector: owner_type }
+
+  ids:
+    id:
+      type: string
+
+# =============================================================================
+# PROCESS
+# =============================================================================
+process:
+
+  title:
+    plugin: skip_on_empty
+    method: row
+    message: 'Skipped: no title'
+    source: title
+
+  type:
+    plugin: default_value
+    default_value: owner
+
+  field_state:
+    plugin: default_value
+    default_value: published
+
+  acronym: acronym
+
+  country:
+    - plugin: skip_on_empty
+      method: process
+      source: country
+    - plugin: entity_generate
+      entity_type: taxonomy_term
+      bundle_key: vid
+      bundle: country              #! verify vocab machine name
+      value_key: name
+      ignore_case: true
+
+  link/uri:
+    plugin: skip_on_empty
+    method: process
+    source: link
+
+  owner_type:
+    - plugin: skip_on_empty
+      method: process
+      source: owner_type
+    - plugin: sub_process
+      process:
+        target_id:
+          plugin: entity_generate
+          source: value
+          entity_type: taxonomy_term
+          bundle_key: vid
+          bundle: owner_type       #! verify vocab machine name
+          value_key: name
+          ignore_case: true
+
+# =============================================================================
+# DESTINATION
+# =============================================================================
+destination:
+  plugin: 'entity:node'
+  default_bundle: owner
+  # Overwrite everything on re-import — owners are source data, not curated.
+
+migration_dependencies:
+  required: []
+  optional: []

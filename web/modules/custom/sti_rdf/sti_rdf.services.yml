@@ -1,0 +1,21 @@
+services:
+  sti_rdf.dah_annotation_normalize_subscriber:
+    class: Drupal\sti_rdf\EventSubscriber\DahAnnotationNormalizeSubscriber
+    tags:
+      - { name: event_subscriber }
+
+  sti_rdf.logger:
+    parent: logger.channel_base
+    arguments: ['sti_rdf']
+
+  sti_rdf.annotation_indexer:
+    class: Drupal\sti_rdf\Service\AnnotationIndexer
+    arguments:
+      - '@entity_type.manager'
+      - '@config.factory'
+      - '@sti_rdf.logger'
+
+  sti_rdf.annotation_library:
+    class: Drupal\sti_rdf\Service\AnnotationLibrary
+    arguments:
+      - '@database'

@@ -1,0 +1,5 @@
+services:
+  sti_rdf.dah_annotation_normalize_subscriber:
+    class: Drupal\sti_rdf\EventSubscriber\DahAnnotationNormalizeSubscriber
+    tags:
+      - { name: event_subscriber }

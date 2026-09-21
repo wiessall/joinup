@@ -1,0 +1,139 @@
+collection_id: stf
+collection_label: stf
+owner_id_prefix: stf
+required:
+- title
+core:
+  id:
+    column: ID
+  title:
+    column: Project Title
+  description:
+    column: Executive Summary
+  abstract:
+    column: Innovation Description
+  date:
+    column: Created date
+  url:
+    column: Website
+    type: url
+  owner_name:
+    column: Submitting Organization
+  contact_name:
+    column: Network Contact Names
+claims:
+  Source of Entry:
+    column: Source of Entry
+    categorical: false
+  Organization Type:
+    column: Organization Type
+    categorical: true
+  Organization Size:
+    column: Organization Size
+    categorical: true
+  Benefitting Country:
+    column: Benefitting Country
+    categorical: true
+    separator: '|'
+  Country:
+    column: Country
+    categorical: true
+  State:
+    column: State
+    categorical: true
+  City:
+    column: City
+    categorical: true
+  Innovation Domains Addressed:
+    column: Innovation Domains Addressed
+    categorical: true
+    separator: '|'
+  SDGs Addressed:
+    column: SDGs Addressed
+    categorical: true
+    separator: '|'
+  Domain:
+    column: Domain
+    categorical: true
+    separator: '|'
+  Areas_of_Focus:
+    column: Areas_of_Focus
+    categorical: true
+    separator: '|'
+  Areas_of_Need:
+    column: Areas_of_Need
+    categorical: true
+    separator: '|'
+  Areas_of_Expertise:
+    column: Areas_of_Expertise
+    categorical: true
+    separator: '|'
+  human_impact_in_1-5_years:
+    column: human_impact_in_1-5_years
+    categorical: true
+    separator: '|'
+  human_impact_in_6-10_years:
+    column: human_impact_in_6-10_years
+    categorical: true
+    separator: '|'
+  human_impact_in_11-15_years:
+    column: human_impact_in_11-15_years
+    categorical: true
+    separator: '|'
+  Greenhouse Gasses_impact:
+    column: Greenhouse Gasses_impact
+    categorical: true
+    separator: '|'
+  Water Use_impact:
+    column: Water Use_impact
+    categorical: true
+    separator: '|'
+  Land Use_impact:
+    column: Land Use_impact
+    categorical: true
+    separator: '|'
+  Biodiversity_impact:
+    column: Biodiversity_impact
+    categorical: true
+    separator: '|'
+  Phosphorus Use_impact:
+    column: Phosphorus Use_impact
+    categorical: true
+    separator: '|'
+  Nitrogen Use_impact:
+    column: Nitrogen Use_impact
+    categorical: true
+    separator: '|'
+  Award Applied For:
+    column: Award Applied For
+    categorical: true
+  Development Status:
+    column: Development Status
+    categorical: true
+  Level Recognized:
+    column: Level Recognized
+    categorical: true
+  Award Year:
+    column: Award Year
+    categorical: true
+  Latitude:
+    column: Latitude
+  Longitude:
+    column: Longitude
+  Inclusion and Representation:
+    column: Inclusion and Representation
+    categorical: true
+    separator: '|'
+  Prior Awards or Recognitions:
+    column: Prior Awards or Recognitions
+    categorical: true
+    separator: '|'
+  Received Prior Awards or Recognitions (non-STF):
+    column: Received Prior Awards or Recognitions (non-STF)
+    categorical: true
+  Network Contact Emails or LinkedIN Profiles:
+    column: Network Contact Emails or LinkedIN Profiles
+    separator: '|'
+  Attestation:
+    column: Attestation
+    categorical: true

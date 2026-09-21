@@ -1,0 +1,21 @@
+uuid: f6e7478c-c8cc-4db1-9b39-d2ff9ad4d3b0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_ai_generated
+    - paragraphs.paragraphs_type.quality_check
+id: paragraph.quality_check.field_ai_generated
+field_name: field_ai_generated
+entity_type: paragraph
+bundle: quality_check
+label: 'AI generated'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

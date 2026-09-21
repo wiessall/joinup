@@ -5,14 +5,11 @@ dependencies:
   config:
     - entityqueue.entity_queue.homepage_topics
     - entityqueue.entity_queue.spotlight
-    - filter.format.plain_text_glossary
-    - filter.format.webform_default
     - media.type.collection_logo
     - media.type.discussion_logo
     - media.type.event_logo
     - media.type.news_logo
     - media.type.solution_logo
-    - node.type.certificate
     - node.type.collection
     - node.type.contact_information
     - node.type.custom_page
@@ -31,14 +28,12 @@ dependencies:
     - collection
     - comment
     - contact_form
-    - content_translation
     - custom_page
     - dashboard
     - entity_legal
     - entityqueue
     - field_permissions
     - file
-    - filter
     - flag
     - joinup_community_content
     - joinup_core
@@ -46,7 +41,6 @@ dependencies:
     - joinup_featured
     - joinup_group
     - joinup_group_content_management
-    - joinup_i18n
     - joinup_legal
     - joinup_licence
     - joinup_log
@@ -56,12 +50,9 @@ dependencies:
     - joinup_search
     - joinup_security
     - joinup_solution
-    - joinup_subscription
     - joinup_webform
-    - locale
     - media
     - menu_admin_per_menu
-    - menu_link_content
     - meta_entity
     - moderation
     - node
@@ -76,7 +67,6 @@ dependencies:
     - system
     - taxonomy
     - toolbar
-    - topic
     - view_unpublished
     - webform
 id: moderator
@@ -84,7 +74,6 @@ label: Moderator
 weight: -6
 is_admin: false
 permissions:
-  - 'access broken links report'
   - 'access compatibility document overview'
   - 'access contact form messages'
   - 'access content moderation overview'
@@ -125,10 +114,10 @@ permissions:
   - 'assign assessment_reporter role'
   - 'assign licence_manager role'
   - 'assign oss_catalogue_manager role'
+  - 'assign translator role'
   - 'bypass code of conduct'
   - 'bypass entity legal acceptance'
   - 'bypass node creation limit'
-  - 'create approval_message'
   - 'create blocked_reason'
   - 'create collection content'
   - 'create collection_logo media'
@@ -136,7 +125,6 @@ permissions:
   - 'create content for any_user option'
   - 'create content for facilitators_and_authors option'
   - 'create content for only_members option'
-  - 'create content translations'
   - 'create custom_page content'
   - 'create discussion content'
   - 'create discussion_logo media'
@@ -145,7 +133,6 @@ permissions:
   - 'create event_logo media'
   - 'create licence content'
   - 'create news_logo media'
-  - 'create newsletter'
   - 'create paragraph content block'
   - 'create paragraph content call_to_action'
   - 'create paragraph content carousel'
@@ -169,7 +156,6 @@ permissions:
   - 'create solution_logo media'
   - 'create webform'
   - 'delete all sitewide alert revisions'
-  - 'delete any certificate content'
   - 'delete any collection_logo media'
   - 'delete any contact_information content'
   - 'delete any custom_page content'
@@ -184,7 +170,6 @@ permissions:
   - 'delete any release content'
   - 'delete any solution_logo media'
   - 'delete assessment report'
-  - 'delete content translations'
   - 'delete paragraph content block'
   - 'delete paragraph content call_to_action'
   - 'delete paragraph content carousel'
@@ -205,9 +190,6 @@ permissions:
   - 'delete private message thread for all'
   - 'delete sitewide alert entities'
   - 'delete terms in tags'
-  - 'download assessment PDFs'
-  - 'download subscribers report'
-  - 'edit any certificate content'
   - 'edit any collection content'
   - 'edit any collection_logo media'
   - 'edit any contact_information content'
@@ -222,19 +204,14 @@ permissions:
   - 'edit any owner content'
   - 'edit any solution content'
   - 'edit any solution_logo media'
-  - 'edit approval_message'
   - 'edit blocked_reason'
-  - 'edit newsletter'
-  - 'edit own approval_message'
   - 'edit own blocked_reason'
   - 'edit own document content'
-  - 'edit own newsletter'
   - 'edit require_update_reason'
   - 'edit short id after publication'
   - 'edit sitewide alert entities'
   - 'edit terms in legal_type'
   - 'edit terms in tags'
-  - 'edit topic term description'
   - 'feature entity'
   - 'flag interoperability'
   - 'manage custom landing pages'
@@ -243,6 +220,7 @@ permissions:
   - 'manage group content'
   - 'manage newsroom newsletter subscriptions'
   - 'manage oauth clients'
+  - 'manage solutions'
   - 'perform announcement workflow approve transition on any entity'
   - 'perform announcement workflow reject transition on any entity'
   - 'perform announcement workflow send transition on any entity'
@@ -252,7 +230,6 @@ permissions:
   - 'perform collection_workflow workflow archive transition on any entity'
   - 'perform collection_workflow workflow draft transition on any entity'
   - 'perform collection_workflow workflow propose transition on any entity'
-  - 'perform collection_workflow workflow unarchive transition on any entity'
   - 'perform collection_workflow workflow update_published transition on any entity'
   - 'perform collection_workflow workflow validate transition on any entity'
   - 'perform contact_information_workflow workflow approve_changes transition on any entity'
@@ -278,7 +255,6 @@ permissions:
   - 'perform node:post_moderated workflow save_as_draft transition on any entity'
   - 'perform node:post_moderated workflow save_new_draft transition on any entity'
   - 'perform node:post_moderated workflow unarchive transition on any entity'
-  - 'perform node:post_moderated workflow update transition on any entity'
   - 'perform node:pre_moderated workflow approve_proposed transition on any entity'
   - 'perform node:pre_moderated workflow archive transition on any entity'
   - 'perform node:pre_moderated workflow propose transition on any entity'
@@ -290,7 +266,6 @@ permissions:
   - 'perform node:pre_moderated workflow save_as_draft transition on any entity'
   - 'perform node:pre_moderated workflow save_new_draft transition on any entity'
   - 'perform node:pre_moderated workflow unarchive transition on any entity'
-  - 'perform node:pre_moderated workflow update transition on any entity'
   - 'perform owner_workflow workflow approve_changes transition on any entity'
   - 'perform owner_workflow workflow request_changes transition on any entity'
   - 'perform owner_workflow workflow request_deletion transition on any entity'
@@ -318,15 +293,10 @@ permissions:
   - 'rebuild node access permissions'
   - 'replicate entities'
   - 'revert all sitewide alert revisions'
-  - 'schedule translation'
-  - 'translate any entity'
-  - 'translate interface'
-  - 'translate menu_link_content'
   - 'unarchived community content'
   - 'unfeature entity'
   - 'unflag interoperability'
   - 'update collection_settings meta-entity'
-  - 'update content translations'
   - 'update eif_perspective meta-entity'
   - 'update homepage_topics entityqueue'
   - 'update paragraph content block'
@@ -348,25 +318,18 @@ permissions:
   - 'update paragraph content webform'
   - 'update solution_settings meta-entity'
   - 'update spotlight entityqueue'
-  - 'use text format plain_text_glossary'
-  - 'use text format webform_default'
+  - 'update topic meta-entity'
   - 'vbo joinup archive action'
   - 'vbo joinup change group action'
   - 'vbo joinup unarchive action'
-  - 'view admin pages in preferred language'
   - 'view all sitewide alert revisions'
   - 'view any unpublished assessment report'
   - 'view any unpublished content'
   - 'view any webform submission'
-  - 'view approval_message'
   - 'view assessment listing'
   - 'view blocked_reason'
-  - 'view content translations'
   - 'view licence overview page'
-  - 'view newsletter'
-  - 'view own approval_message'
   - 'view own blocked_reason'
-  - 'view own newsletter'
   - 'view require_update_reason'
   - 'view the administration theme'
   - 'view unpublished sitewide alert entities'

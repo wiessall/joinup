@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.storage.node.language
     - node.type.solution
+    - taxonomy.vocabulary.language
   module:
     - rdf_sync
     - tmgmt_content
@@ -26,10 +27,13 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: views
+  handler: 'default:taxonomy_term'
   handler_settings:
-    view:
-      view_name: languages_eu
-      display_name: entity_reference_languages_eu
-      arguments: {  }
+    target_bundles:
+      language: language
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
 field_type: entity_reference

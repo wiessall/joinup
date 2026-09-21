@@ -4,9 +4,12 @@ status: false
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.owner.acronym
     - field.field.node.owner.country
     - field.field.node.owner.field_state
+    - field.field.node.owner.link
     - field.field.node.owner.owner_type
+    - field.field.node.owner.related_content
     - node.type.owner
   module:
     - link
@@ -34,12 +37,15 @@ content:
     weight: 50
     region: content
 hidden:
+  acronym: true
   country: true
   field_state: true
   langcode: true
+  link: true
   owner_type: true
   private_message_link: true
   published_at: true
+  related_content: true
   search_api_excerpt: true
   uri: true
   uuid: true

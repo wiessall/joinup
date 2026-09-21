@@ -1,0 +1,140 @@
+# ---------------------------------------------------------------------------
+#  L1.2  sti_atio:InnovationFamily
+# ---------------------------------------------------------------------------
+
+sti_atio:InnovationFamily
+    a owl:Class ;
+    rdfs:label "Innovation Family"@en ;
+    rdfs:comment """A named analytical abstraction grouping multiple specific innovation
+    implementations by shared mechanism, feature dimensions, or functional domain.
+    NOT a taxonomy class or SKOS concept: families are dynamic named entities with
+    temporal identity, split/merge history, and family-level analytics.
+    They are the unit of analysis; innovations are the unit of information."""@en ;
+    rdfs:subClassOf schema:Thing ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:familyName
+    a owl:DatatypeProperty ;
+    rdfs:label "family name"@en ;
+    rdfs:domain sti_atio:InnovationFamily ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:familyDescription
+    a owl:DatatypeProperty ;
+    rdfs:label "family description"@en ;
+    rdfs:domain sti_atio:InnovationFamily ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# Feature dimensions A–E (Ranganathan facets)
+sti_atio:featureDimensionA
+    a owl:ObjectProperty ;
+    rdfs:label "feature dimension A (mechanism)"@en ;
+    rdfs:comment "Defining facet A: the core mechanism or mode of action."@en ;
+    rdfs:domain sti_atio:InnovationFamily ;
+    rdfs:range skos:Concept ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:featureDimensionB
+    a owl:ObjectProperty ;
+    rdfs:label "feature dimension B (domain)"@en ;
+    rdfs:comment "Defining facet B: the functional or thematic domain."@en ;
+    rdfs:domain sti_atio:InnovationFamily ;
+    rdfs:range skos:Concept ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:featureDimensionC
+    a owl:ObjectProperty ;
+    rdfs:label "feature dimension C (target)"@en ;
+    rdfs:comment "Defining facet C: target beneficiary or system component."@en ;
+    rdfs:domain sti_atio:InnovationFamily ;
+    rdfs:range skos:Concept ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:featureDimensionD
+    a owl:ObjectProperty ;
+    rdfs:label "feature dimension D (context)"@en ;
+    rdfs:comment "Defining facet D: agroclimatic, geographic, or institutional context."@en ;
+    rdfs:domain sti_atio:InnovationFamily ;
+    rdfs:range skos:Concept ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:featureDimensionE
+    a owl:ObjectProperty ;
+    rdfs:label "feature dimension E (innovation form)"@en ;
+    rdfs:comment "Defining facet E: form or modality of the innovation."@en ;
+    rdfs:domain sti_atio:InnovationFamily ;
+    rdfs:range skos:Concept ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# Temporal identity
+sti_atio:familyBirthDate
+    a owl:DatatypeProperty ;
+    rdfs:label "family birth date"@en ;
+    rdfs:comment "Date on which this family was first identified and registered."@en ;
+    rdfs:domain sti_atio:InnovationFamily ;
+    rdfs:range xsd:date ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:familyRegistryVersion
+    a owl:DatatypeProperty ;
+    rdfs:label "family registry version"@en ;
+    rdfs:comment "Version of the Family Registry methodology used when this family was defined."@en ;
+    rdfs:domain sti_atio:InnovationFamily ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:splitFromFamily
+    a owl:ObjectProperty ;
+    rdfs:label "split from family"@en ;
+    rdfs:comment "The parent family from which this family was split."@en ;
+    rdfs:domain sti_atio:InnovationFamily ;
+    rdfs:range sti_atio:InnovationFamily ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:mergedIntoFamily
+    a owl:ObjectProperty ;
+    rdfs:label "merged into family"@en ;
+    rdfs:comment "The successor family into which this family was merged (when deprecated)."@en ;
+    rdfs:domain sti_atio:InnovationFamily ;
+    rdfs:range sti_atio:InnovationFamily ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:mergedFromFamily
+    a owl:ObjectProperty ;
+    rdfs:label "merged from family"@en ;
+    rdfs:comment "A predecessor family that was merged to create this family."@en ;
+    rdfs:domain sti_atio:InnovationFamily ;
+    rdfs:range sti_atio:InnovationFamily ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:familyStatus
+    a owl:ObjectProperty ;
+    rdfs:label "family status"@en ;
+    rdfs:comment "Current status of this family entity: active | deprecated | proposed."@en ;
+    rdfs:domain sti_atio:InnovationFamily ;
+    rdfs:range sti_atio:FamilyStatus ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# Optional alignment to SKOS/OWL representation (see ADR-011)
+sti_atio:correspondingConcept
+    a owl:ObjectProperty ;
+    rdfs:label "corresponding KOS concept"@en ;
+    rdfs:comment """Optional: the SKOS concept in VocBench that corresponds to this
+    family entity. Used when the family is also managed as a SKOS concept in the
+    VocBench vocabulary management environment."""@en ;
+    rdfs:domain sti_atio:InnovationFamily ;
+    rdfs:range skos:Concept ;
+    owl:equivalentProperty skos:exactMatch ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- InnovationFamily alignment note ---
+# schema:ProductGroup NOT used. See design rationale above.
+# InnovationFamily retains only schema:Thing as external parent.
+sti_atio:InnovationFamily rdfs:comment """No close equivalent in standard
+    ontologies. Conceptually analogous to a product family in manufacturing
+    ontologies but InnovationFamily groups genuinely distinct implementations,
+    not variants of one product. schema:ProductGroup is NOT used (see v0.6
+    alignment rationale). Custom class in the sti_atio: namespace."""@en .
+

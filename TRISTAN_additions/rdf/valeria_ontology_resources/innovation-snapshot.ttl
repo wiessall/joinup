@@ -1,0 +1,111 @@
+# InnovationRecord data-management properties
+# (moved from sti_atio:Innovation in v0.7)
+# ---------------------------------------------------------------------------
+#  L1.0.E  InnovationSnapshot — real-world state over time  (v0.8)
+#
+#  DESIGN NOTE: DISTINCT from sti_atio:InnovationVersion:
+#
+#    InnovationVersion  (data layer, on InnovationRecord)
+#      Tracks changes to the DATA RECORD: curation edits, re-ingestion,
+#      AI enrichment updates. Subject is InnovationRecord.
+#      Drupal equivalent: node revision (sparql_entity_storage stores
+#      each Drupal revision as a separate named graph version).
+#
+#    InnovationSnapshot  (real-world layer, on Innovation)
+#      Tracks changes to the REAL-WORLD STATE: readiness level improves,
+#      adoption spreads to new countries, user base grows, new impact
+#      evidence emerges. Subject is Innovation.
+#      Drupal equivalent: paragraph type 'innovation_snapshot' on the
+#      node--innovation content type, or a dedicated content type
+#      node--innovation_snapshot with entity reference back to
+#      node--innovation.
+# ---------------------------------------------------------------------------
+
+sti_atio:InnovationSnapshot
+    a owl:Class ;
+    rdfs:label "Innovation Snapshot"@en ;
+    rdfs:comment """A time-stamped representation of the known real-world
+    state of a sti_atio:Innovation at a specific point in time.
+    Captures values of key real-world properties as they were known or
+    assessed at a specific date: readiness level, adoption level,
+    adoption countries, estimated user base.
+
+    DISTINCT from InnovationVersion (record versioning).
+    InnovationSnapshot tracks real-world evolution;
+    InnovationVersion tracks data record changes.
+
+    Example: Innovation X was TRL-5 in 2022, TRL-7 in 2024, TRL-9 in 2026.
+    Each assessment is an InnovationSnapshot.
+    The corresponding InnovationVersions record who edited the database
+    record when and which data fields were changed."""@en ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:hasSnapshot
+    a owl:ObjectProperty ;
+    rdfs:label "has snapshot"@en ;
+    rdfs:comment "Links an Innovation to a time-stamped InnovationSnapshot of its real-world state."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range  sti_atio:InnovationSnapshot ;
+    owl:inverseOf sti_atio:isSnapshotOf ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:isSnapshotOf
+    a owl:ObjectProperty ;
+    rdfs:label "is snapshot of"@en ;
+    rdfs:domain sti_atio:InnovationSnapshot ;
+    rdfs:range  sti_atio:Innovation ;
+    owl:inverseOf sti_atio:hasSnapshot ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:snapshotValidAt
+    a owl:DatatypeProperty ;
+    rdfs:label "snapshot valid at"@en ;
+    rdfs:comment "Date at which this snapshot was assessed or recorded."@en ;
+    rdfs:domain sti_atio:InnovationSnapshot ;
+    rdfs:range  xsd:date ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:snapshotSource
+    a owl:ObjectProperty ;
+    rdfs:label "snapshot source"@en ;
+    rdfs:comment "The DataSource or curator Agent that produced this snapshot."@en ;
+    rdfs:domain sti_atio:InnovationSnapshot ;
+    rdfs:range  prov:Agent ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:snapshotReason
+    a owl:DatatypeProperty ;
+    rdfs:label "snapshot reason"@en ;
+    rdfs:comment "Why this snapshot was created (e.g. new readiness evidence, new country adoption, periodic review)."@en ;
+    rdfs:domain sti_atio:InnovationSnapshot ;
+    rdfs:range  rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:snapshotReadinessLevel
+    a owl:ObjectProperty ;
+    rdfs:label "readiness level at snapshot"@en ;
+    rdfs:domain sti_atio:InnovationSnapshot ;
+    rdfs:range  skos:Concept ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:snapshotAdoptionLevel
+    a owl:ObjectProperty ;
+    rdfs:label "adoption level at snapshot"@en ;
+    rdfs:domain sti_atio:InnovationSnapshot ;
+    rdfs:range  skos:Concept ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:snapshotAdoptionCountry
+    a owl:ObjectProperty ;
+    rdfs:label "adoption countries at snapshot"@en ;
+    rdfs:domain sti_atio:InnovationSnapshot ;
+    rdfs:range  skos:Concept ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:snapshotEstimatedUsers
+    a owl:DatatypeProperty ;
+    rdfs:label "estimated users at snapshot"@en ;
+    rdfs:domain sti_atio:InnovationSnapshot ;
+    rdfs:range  xsd:integer ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .

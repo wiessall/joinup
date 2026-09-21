@@ -1,4 +1,4 @@
 langcode: en
-banner_popup: true
-video_popup: true
+banner_popup: false
+video_popup: false
 cookie_notice_url: 'https://ec.europa.eu/info/cookies_{lang}'

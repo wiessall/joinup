@@ -9,6 +9,8 @@ services:
     expose:
       - 1111
       - 8890
+    # ports:
+      # - "8890:8890"
     environment:
       VIRTUAL_HOST: ${DDEV_HOSTNAME}
       HTTP_EXPOSE: '8890:8890'
@@ -28,11 +30,11 @@ services:
       VIRT_SPARQL_MaxQueryExecutionTime: 120
       VIRT_SPARQL_ResultSetMaxRows: 1000000
     volumes:
-      - virtuoso:/opt/virtuoso-opensource/database
+      - virtuoso-2:/opt/virtuoso-opensource/database
       - ./virtuoso/entrypoint.sh:/opt/virtuoso-opensource/bin/virtuoso-entrypoint.sh
       - ./virtuoso/snapshot:/opt/virtuoso-opensource/tmp
       - ./virtuoso/initdb.d:/opt/virtuoso-opensource/initdb.d
       # Needed to recognize .ddev/commands/virtuoso container commands.
       - .:/mnt/ddev_config
 volumes:
-  virtuoso:
+  virtuoso-2:

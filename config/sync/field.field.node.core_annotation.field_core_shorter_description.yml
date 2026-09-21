@@ -1,0 +1,19 @@
+uuid: 815351e0-0eea-4d0a-b4ed-739d31167183
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_core_shorter_description
+    - node.type.core_annotation
+id: node.core_annotation.field_core_shorter_description
+field_name: field_core_shorter_description
+entity_type: node
+bundle: core_annotation
+label: field_shorter_description
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

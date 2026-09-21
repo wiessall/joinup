@@ -11,6 +11,6 @@ features:
   favicon: true
   node_user_picture: false
 logo:
-  path: ''
+  path: 'https://www.fao.org/images/corporatelibraries/logos/fao-logo-archive/fao-logo-blue-2lines-en.svg?sfvrsn=90d67aef_14'
   url: null
   use_default: true

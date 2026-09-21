@@ -16,7 +16,7 @@ entity_type: node
 bundle: solution
 label: Abstract
 description: 'Short description text to be shown in search result tiles.'
-required: true
+required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''

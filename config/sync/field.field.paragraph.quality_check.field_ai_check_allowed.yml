@@ -1,0 +1,23 @@
+uuid: 08d8e6cc-10b8-4725-8e0b-630da1077bf9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_ai_check_allowed
+    - paragraphs.paragraphs_type.quality_check
+id: paragraph.quality_check.field_ai_check_allowed
+field_name: field_ai_check_allowed
+entity_type: paragraph
+bundle: quality_check
+label: 'AI check allowed'
+description: 'whether the field can be AI-assessed'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

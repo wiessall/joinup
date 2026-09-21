@@ -17,7 +17,7 @@ entity_type: node
 bundle: solution
 label: Domain
 description: 'Available info for <a href="https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Glossary:Classification_of_the_functions_of_government_(COFOG)" target="_blank">Government functions</a>'
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''

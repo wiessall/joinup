@@ -4,9 +4,12 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.confirmation
+    - field.field.node.owner.acronym
     - field.field.node.owner.country
     - field.field.node.owner.field_state
+    - field.field.node.owner.link
     - field.field.node.owner.owner_type
+    - field.field.node.owner.related_content
     - node.type.owner
   module:
     - field_delimiter
@@ -54,11 +57,14 @@ content:
     weight: 1
     region: content
 hidden:
+  acronym: true
   field_state: true
   langcode: true
+  link: true
   links: true
   private_message_link: true
   published_at: true
+  related_content: true
   report: true
   search_api_excerpt: true
   uri: true

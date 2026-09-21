@@ -1,0 +1,53 @@
+{#
+/**
+ * @file
+ * FAO corporate footer (SDC: fao_sti:fao-footer).
+ */
+#}
+<footer class="fao-footer" role="contentinfo">
+  <div class="container">
+    {% if site_links %}
+      <div class="fao-footer__site">{{ site_links }}</div>
+    {% endif %}
+
+    <div class="fao-footer__top">
+      {% if logo.image %}
+        <a class="fao-footer__logo" href="{{ logo.url }}">
+          <img src="{{ logo.image }}" alt="{{ logo.alt }}" height="60" loading="lazy" decoding="async">
+        </a>
+      {% endif %}
+
+      {% if social_icons.items %}
+        <div class="fao-footer__social">
+          <p class="fao-footer__label">{{ 'Follow us on'|t }}</p>
+          <ul>
+            {% for item in social_icons.items %}
+              <li>
+                <a href="{{ item.url }}" rel="noopener" target="_blank">
+                  <img src="{{ item.image }}" alt="{{ item.title }}" width="24" height="24" loading="lazy">
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+
+    <nav class="fao-footer__links" aria-label="{{ 'FAO corporate links'|t }}">
+      <ul>
+        {% if top_menu_left.url %}
+          <li><a href="{{ top_menu_left.url }}">{{ top_menu_left.label }}</a></li>
+        {% endif %}
+        {% for item in top_menu_right.items|default([]) %}
+          <li><a href="{{ item.url }}">{{ item.label }}</a></li>
+        {% endfor %}
+      </ul>
+      <ul class="fao-footer__small">
+        {% for item in bottom_menu.items|default([]) %}
+          <li><a href="{{ item.url }}">{{ item.label }}</a></li>
+        {% endfor %}
+        <li>© FAO {{ 'now'|date('Y') }}</li>
+      </ul>
+    </nav>
+  </div>
+</footer>
