@@ -1,0 +1,25 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: FAO corporate header
+status: stable
+description: 'Thin FAO corporate strip above the site header: FAO logo and the "Discover" menu. Site navigation stays in the Joinup navbar below it.'
+props:
+  type: object
+  properties:
+    logo:
+      type: object
+      properties:
+        url: { type: string }
+        image: { type: string }
+        alt: { type: string }
+        title: { type: string }
+    menu:
+      type: object
+      properties:
+        button: { type: string }
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              label: { type: string }
+              url: { type: string }

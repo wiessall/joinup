@@ -1,0 +1,41 @@
+name: FAO STI
+type: theme
+description: 'FAO Design System look for the Joinup-based STI Portal. Sub-theme of Ventuno, same pattern as the Interoperable Europe (iop) theme.'
+package: Custom
+core_version_requirement: ^10.4 || ^11
+
+# Inherit everything Joinup's PHP expects from the theme layer: tile
+# preprocessing, UI patterns, local-task blocks, search/facet templates.
+base theme: ventuno
+
+# Libraries loaded on every page. Keep this list short: anything that is only
+# needed by one component belongs in that component's SDC folder (auto-attached)
+# or in a library attached from a template with attach_library().
+libraries:
+  - ventuno/base      # Bootstrap reboot + BCL reset (compiled from SCSS)
+  - ventuno/layout    # Bootstrap containers + grid
+  - ventuno/components
+  - fao_sti/global
+
+libraries-override:
+  # Ventuno's brand layer (EU blue, typography). FAO tokens replace it.
+  ventuno/theme: false
+
+# Same region machine names as ventuno, so block placements copy across when
+# this theme is installed and Joinup's block config keeps working.
+regions:
+  top_bar: 'Top bar'
+  search_bar: 'Search bar'
+  header: 'Header'
+  featured: 'Featured'
+  messages: 'Messages'
+  sidebar: 'Sidebar'
+  content_top: 'Content top'
+  content: 'Content'
+  footer: 'Footer'
+
+# Read by joinup_core's LocalTaskLinksHelper. Info-file keys are NOT inherited
+# from the base theme, so this must be repeated in every sub-theme.
+joinup:
+  menu_local_tasks:
+    horizontal_tabs_block: ventuno_horizontal_tabs

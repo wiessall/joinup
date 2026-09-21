@@ -1,0 +1,22 @@
+global:
+  css:
+    base:
+      css/base/fonts.css: {}
+      css/base/tokens.css: {}
+    layout:
+      css/layout/layout-builder.css: {}
+    theme:
+      # Transitional: the compiled FAO Design System (3.6.5) minus its
+      # render-blocking @import of the Bootstrap Icons font from jsDelivr.
+      # Step by step, move the rules you actually use into component CSS and
+      # then delete this line. Target: no global stylesheet but tokens + fonts.
+      css/vendor/fao-ds.min.css: { minified: true }
+
+# Note what is deliberately NOT here, compared to the standalone fao theme:
+# - bootstrap 5.0.2 css/js: ventuno already ships Bootstrap 5.3 via BCL.
+#   Loading both means two Bootstraps with different CSS variables.
+# - swiper (160 KB): only attach it from the one template that needs it,
+#   or replace with a CSS scroll-snap carousel.
+# - fao.js, expandable.js, throbber.js, faceted-search-dropdown.js: see README.
+# - { preprocess: false } everywhere: it switched off CSS aggregation, i.e.
+#   one HTTP request per file on every page.

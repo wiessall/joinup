@@ -1,0 +1,29 @@
+{#
+/**
+ * @file
+ * FAO corporate header (SDC: fao_sti:fao-header).
+ *
+ * The "Discover" dropdown is a native <details> element: opens/closes and is
+ * keyboard-accessible without Bootstrap's dropdown JS.
+ */
+#}
+<div class="fao-header">
+  <div class="container fao-header__inner">
+    {% if logo.image %}
+      <a class="fao-header__logo" href="{{ logo.url }}">
+        <img src="{{ logo.image }}" alt="{{ logo.alt }}" width="170" height="40" decoding="async">
+      </a>
+    {% endif %}
+
+    {% if menu.items %}
+      <details class="fao-header__discover">
+        <summary>{{ menu.button }}</summary>
+        <ul class="fao-header__menu">
+          {% for item in menu.items %}
+            <li><a href="{{ item.url }}">{{ item.label }}</a></li>
+          {% endfor %}
+        </ul>
+      </details>
+    {% endif %}
+  </div>
+</div>
