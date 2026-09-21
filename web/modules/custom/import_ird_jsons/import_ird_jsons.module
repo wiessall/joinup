@@ -137,3 +137,30 @@ function import_ird_jsons_entity_presave(\Drupal\Core\Entity\EntityInterface $en
   }
 }
 
+
+/**
+ * Implements hook_theme().
+ */
+function import_ird_jsons_theme(): array {
+  return [
+    'hero_banner_block' => [
+      'variables' => [
+        'video_url' => NULL,
+        'category' => NULL,
+        'title' => NULL,
+        'link_url' => NULL,
+        'body' => NULL,
+        'autoplay' => TRUE,
+        'loop' => TRUE,
+        'muted' => TRUE,
+      ],
+    ],
+    'claim_facets_grouped' => [
+      'variables' => [
+        'sections' => [],
+        'facet_id' => NULL,
+        'active_count' => 0,
+      ],
+    ],
+  ];
+}

@@ -1,0 +1,52 @@
+{#
+/**
+ * @file
+ * FAO card (SDC: fao_sti:card).
+ *
+ * card.css next to this file is attached automatically whenever the
+ * component renders: no attach_library() needed, and pages without cards
+ * don't download it.
+ */
+#}
+{% set heading = 'h' ~ (heading_level|default(3)) %}
+{% set classes = [
+  'fao-card',
+  variant and variant != 'default' ? 'fao-card--' ~ variant,
+] %}
+
+<article{{ attributes.addClass(classes) }}>
+  {{ contextual }}
+  {% if media %}
+    <div class="fao-card__media">{{ media }}</div>
+  {% endif %}
+
+  <div class="fao-card__body">
+    {% if category %}
+      <p class="fao-card__category">{{ category }}</p>
+    {% endif %}
+
+    <{{ heading }} class="fao-card__title">
+      {% if url %}
+        <a href="{{ url }}" class="fao-card__link">{{ title }}</a>
+      {% else %}
+        {{ title }}
+      {% endif %}
+    </{{ heading }}>
+
+    {% if meta %}
+      <p class="fao-card__meta">{{ meta }}</p>
+    {% endif %}
+
+    {% if text %}
+      <div class="fao-card__text">{{ text }}</div>
+    {% endif %}
+
+    {% if badges %}
+      <div class="fao-card__badges">{{ badges }}</div>
+    {% endif %}
+  </div>
+
+  {% if footer %}
+    <div class="fao-card__footer">{{ footer }}</div>
+  {% endif %}
+</article>

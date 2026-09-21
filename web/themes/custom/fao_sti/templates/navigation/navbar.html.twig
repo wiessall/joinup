@@ -1,0 +1,328 @@
+{#
+  Copied from ventuno. Required: ventuno's parts/header.html.twig includes
+  directory ~ '/templates/navigation/navbar.html.twig', and `directory` is the
+  ACTIVE theme's path, not ventuno's. A normal template override would be
+  found by name; this include is by path, so the file must exist here.
+#}
+
+{# Parameters:
+  - brand (object) (default: {})
+    format: {
+      src: '',
+      alt: '',
+      motto: '', (optional)
+      link: ''
+    }
+  - collapse_id (string) (default: '')
+  - list_id (string) (default: '')
+  - items (array of objects) (default: [{}])
+    format: [{
+      id: '',
+      label: '',
+      icon: '',
+      links: (array of objects)
+      format: [{
+        link: '',
+        label: '',
+        extra_attributes: [] (example: ['class' => ['btn', 'btn-primary]])
+        popover (object) (default: {})
+        format: {
+          title: '',
+          description: '',
+          cta (object) (default: {})
+          format: {
+            link: '',
+            text: '',
+            attributes: '', (optional)
+          }
+        }
+      }]
+    }]
+#}
+
+{{ attach_library('ventuno/navbar') }}
+{{ attach_library('ventuno/mmenu') }}
+
+{% if search %}
+  {{ attach_library('ventuno/navbar-search') }}
+{% endif %}
+
+{% set _brand = brand|default({}) %}
+{% set _collapse_id = collapse_id|default('') %}
+{% set _list_id = list_id|default('') %}
+{% set _items = items|default([{}]) %}
+
+{% set _nav_classes = [
+  'joinup-navbar',
+  'navbar',
+  'navbar-expand',
+  'navbar--sticky',
+] %}
+{% set _navbar_toggler_classes = ['navbar-toggler'] %}
+{% set _list_id = list_id|default('list-1') %}
+{% set _list_classes = ['navbar-nav'] %}
+
+{% if nav_attributes is empty %}
+  {% set nav_attributes = create_attribute() %}
+{% endif %}
+
+{% if navbar_toggler_attributes is empty %}
+  {% set navbar_toggler_attributes = create_attribute() %}
+{% endif %}
+
+{% if list_attributes is empty %}
+  {% set list_attributes = create_attribute() %}
+{% endif %}
+
+{% if list_item_attributes is empty %}
+  {% set list_item_attributes = create_attribute() %}
+{% endif %}
+
+{% set nav_attributes = nav_attributes.addClass(_nav_classes).setAttribute('aria-label', 'Main header'|t) %}
+{% set navbar_toggler_attributes = navbar_toggler_attributes.addClass(_navbar_toggler_classes) %}
+{% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('type', 'button') %}
+{% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('data-bs-toggle', 'collapse') %}
+{% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('data-bs-target', '#' ~ _list_id) %}
+{% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('aria-controls', _list_id) %}
+{% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('aria-expanded', 'false') %}
+{% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('aria-label', 'Toggle navigation') %}
+{% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('role', 'banner') %}
+{% set list_attributes = list_attributes.addClass(_list_classes) %}
+{% set list_attributes = list_attributes.setAttribute('id', _list_id) %}
+
+<header
+  {{ nav_attributes }}
+>
+  <div class="container">
+    <div class="d-flex">
+      {% if is_front %}<h1 class="mb-0">{% endif %}
+      <a class="navbar-brand" href="{{ _brand.link }}" title="{{ _brand.title }}">
+        <img class="navbar-brand-image" src="{{ _brand.src }}" alt="{{ _brand.alt }}" />
+      </a>
+      {% if is_front %}</h1>{% endif %}
+    </div>
+    <nav id="{{ _collapse_id }}" aria-label="{{ 'Main navigation'|t }}">
+      <ul
+        {{ list_attributes }}
+      >
+        {% for item in _items %}
+          {% if item.breakpoint %}
+            {% for link_key, link in item.links %}
+              {% if not link.hide_on_desktop %}
+                {% set desktop_li_attributes = create_attribute() %}
+                {% set desktop_li_classes = [
+                  'nav-item',
+                  item.breakpoint != 'all' ? 'd-none',
+                  item.breakpoint != 'all' ? 'd-' ~ item.breakpoint ~ '-inline-block' : 'd-inline-block',
+                  link.order ? 'order-' ~ link.order,
+                  link.children ? 'dropdown',
+                  link.in_active_trail ? 'is-active',
+                ] %}
+
+                <li{{ desktop_li_attributes.addClass(desktop_li_classes) }}>
+                  {% if link.link %}
+                    {% set attributes = create_attribute(link.attributes|default([])) %}
+                    {% set desktop_a_classes = [
+                      'nav-link',
+                      'nav-link--underline',
+                      link.children ? 'dropdown-toggle',
+                      link.in_active_trail ? 'is-active',
+                    ] %}
+
+                    {% if link.children %}
+                      {% set attributes = attributes.setAttribute('aria-expanded', 'false') %}
+                      {% set attributes = attributes.setAttribute('id', link_key) %}
+                      {% set attributes = attributes.setAttribute('role', 'button') %}
+                    {% endif %}
+
+                    {{ link(link.label, link.link, attributes.addClass(desktop_a_classes)) }}
+                    {% if link.children %}
+                      <ul class="dropdown-menu dropdown-menu--sub" aria-labelledby="{{ link_key }}">
+                        {% for child in link.children %}
+                          {% set attributes = create_attribute(link.attributes|default([])) %}
+                          {% set classes = [
+                            'dropdown-item',
+                            child.in_active_trail ? 'is-active',
+                          ] %}
+                          <li>
+                            {{ link(child.label, child.link, attributes.addClass(classes)) }}
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+
+                  {% elseif link.popover %}
+                    <button
+                      id="{{ link.id }}"
+                      class="btn btn-light get-started__trigger"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      type="button"
+                      data-bs-auto-close="outside"
+                    >
+                      {{ link.label }}
+                    </button>
+                    <div
+                      class="dropdown-menu get-started__menu pt-2 pb-3 px-3"
+                      aria-labelledby="{{ link.id }}"
+                      data-popper-placement="right"
+                    >
+                      <p class="mb-1"><a class="get-started__cta fw-bold" href="{{ link.popover.cta.link }}" {{ link.popover.cta.attributes }}>
+                        {{ link.popover.cta.text }}
+                        <svg class="bi icon--s ms-2">
+                          <use xlink:href="{{ bcl_icon_path }}#arrow-right"></use>
+                        </svg>
+                      </a></p>
+                      <p class="get-started__description mb-0 fs-sm">{{ link.popover.description }}</p>
+                    </div>
+                  {% endif %}
+                </li>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+          {% set list_item_attributes = create_attribute() %}
+          {% set _list_item_classes = item.classes|default([])|merge(['nav-item', 'dropdown']) %}
+          {% if item.breakpoint %}
+            {% set _list_item_classes = _list_item_classes|merge(['d-' ~ item.breakpoint ~ '-none']) %}
+          {% endif %}
+          {% set list_item_attributes = list_item_attributes.addClass(_list_item_classes) %}
+          {% if item.type == 'mmenu' %}
+            <li {{ list_item_attributes.addClass('mmenu-nav') }}>
+              <button
+                id="{{ item.id }}"
+                class="nav-link mmenu-nav__toggle"
+                type="button"
+                aria-label="{{ item.label }}"
+              >
+                <span class="visually-hidden">{{ item.label }}</span>
+                {% if item.icon is not empty %}
+                  <svg class="bi icon--s">
+                    <use xlink:href="{{ bcl_icon_path }}#{{ item.icon.name }}"></use>
+                  </svg>
+                {% endif %}
+              </button>
+              <div class="mmenu-nav__menu p-0 d-none" aria-labelledby="{{ item.id }}">
+                <ul>
+                  {% for link_key, link in item.links %}
+                    {% if link.link %}
+                      <li {{ create_attribute({class: link.in_active_trail ? 'Selected'}) }}>
+                        {% set attributes = create_attribute(link.attributes|default([])) %}
+                        <a href="{{ link.link }}" {{ attributes.addClass(link.in_active_trail ? 'is-active') }}>
+                          {{ link.label }}
+                        </a>
+                        {% if link.children %}
+                          <ul>
+                            {% for child in link.children %}
+                              <li {{ create_attribute({class: child.in_active_trail ? 'Selected'}) }}>
+                                {% set attributes = create_attribute(child.attributes|default([])) %}
+                                <a href="{{ child.link }}" {{ attributes.addClass(child.in_active_trail ? 'is-active') }}>
+                                  {{ child.label }}
+                                </a>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        {% endif %}
+                      </li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+            </li>
+          {% elseif (item.type == 'search') %}
+            <li {{ list_item_attributes }}>
+              <button
+                id="{{ item.id }}"
+                class="dropdown-toggle nav-link"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                type="button"
+                data-bs-auto-close="outside"
+                aria-label="{{ item.label }}"
+              >
+                <span class="visually-hidden">{{ item.label }}</span>
+                {% if item.icon is not empty %}
+                  <svg class="bi icon--s">
+                    <use xlink:href="{{ bcl_icon_path }}#{{ item.icon.name }}"></use>
+                  </svg>
+                {% endif %}
+              </button>
+              <div id="dropdown-menu--search"
+                class="dropdown-menu p-0"
+                aria-labelledby="{{ item.id }}"
+                data-popper-placement="right"
+              >
+                <div class="navbar-search p-2">
+                  {{ search }}
+                </div>
+              </div>
+            </li>
+          {% elseif item.type == 'dropdown' and not hide_toggle and not item.hide_toggle %}
+            <li {{ list_item_attributes }}>
+              <button
+                id="{{ item.id }}"
+                class="dropdown-toggle nav-link"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                type="button"
+                data-bs-auto-close="outside"
+                aria-label="{{ item.label }}"
+              >
+                <span class="visually-hidden">{{ item.label }}</span>
+                {% if item.icon is not empty %}
+                  <svg class="bi icon--s">
+                    <use xlink:href="{{ bcl_icon_path }}#{{ item.icon.name }}"></use>
+                  </svg>
+                {% endif %}
+              </button>
+              <div class="dropdown-menu p-0"
+                aria-labelledby="{{ item.id }}"
+                data-popper-placement="right"
+              >
+                <ul class="dropdown-list">
+                  {% for link_key, link in item.links %}
+                    {% if link.link %}
+                      {% set dropdown_id = link_key ~ '-dropdown'|clean_id %}
+                      <li class="dropdown-list-item">
+                        {% set attributes = create_attribute(link.attributes|default([])) %}
+                        {% if link.children %}
+                          {% set attributes = attributes.setAttribute('aria-expanded', 'false') %}
+                          {% set attributes = attributes.setAttribute('id', dropdown_id) %}
+                          {% set attributes = attributes.setAttribute('role', 'button') %}
+                          {% set attributes = attributes.setAttribute('data-bs-toggle', 'dropdown') %}
+                        {% endif %}
+
+                        <a href="{{ link.link }}" {{ attributes.addClass(['dropdown-list-link']) }}>
+                          {{ link.label }}
+                          {% if link.children %}
+                            {{ pattern('icon', {
+                              name: 'chevron-down',
+                              size: 'xs',
+                            }) }}
+                          {% endif %}
+                        </a>
+                        {% if link.children %}
+                          <ul class="dropdown-menu dropdown-menu--sub" aria-labelledby="{{ dropdown_id }}">
+                            {% for child in link.children %}
+                              <li class="dropdown-list-item">
+                                <a href="{{ child.link }}" class="dropdown-list-link {{ child.in_active_trail ? 'is-active' }}">
+                                  {{ child.label }}
+                                </a>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        {% endif %}
+                      </li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+            </li>
+          {% endif %}
+        {% endfor %}
+        {% if private_message %}
+          {{ private_message }}
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+</header>

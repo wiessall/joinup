@@ -1,0 +1,107 @@
+<?php
+
+/**
+ * @file
+ * FAO STI theme: preprocess functions.
+ *
+ * Order of execution for a node in view_mode_tile, all on the same $variables:
+ *   1. template_preprocess_node()        core: content, label, url, node ...
+ *   2. module preprocesses                joinup_group, etc.
+ *   3. ventuno_preprocess_node()         base theme: image, text, badges ...
+ *   4. fao_sti_preprocess_node()         THIS theme: adjust what ventuno built
+ *   5. ..._preprocess_node__BUNDLE__VIEW_MODE() suggestions, most specific last
+ *
+ * Rule of thumb: decide WHAT to show here, in PHP. Decide HOW it looks in
+ * Twig/CSS. Templates should not dig into node.field_x.0.entity....
+ */
+
+declare(strict_types=1);
+
+use Drupal\joinup_bundle_class\AbstractInterface;
+use Drupal\joinup_bundle_class\DescriptionInterface;
+
+/**
+ * Implements hook_preprocess_HOOK() for node templates.
+ */
+function fao_sti_preprocess_node(array &$variables): void {
+  if ($variables['view_mode'] !== 'view_mode_tile') {
+    return;
+  }
+
+  // Ventuno only sets 'text' on the homepage and meta-entity routes, because
+  // the EU tile design has no summary. The FAO card always shows one.
+  // Take the first text field that the tile display actually renders, so
+  // "Manage display" of view_mode_tile stays the place where you choose it:
+  // enable Description there (trimmed formatter) and it shows up here.
+  if (empty($variables['text'])) {
+    $entity = $variables['node'];
+    $candidates = array_filter([
+      $entity instanceof AbstractInterface ? $entity->getAbstractField() : NULL,
+      $entity instanceof DescriptionInterface ? $entity->getDescriptionField() : NULL,
+      'field_description',
+      'body',
+    ]);
+    foreach ($candidates as $field) {
+      if (!empty($variables['content'][$field][0])) {
+        $variables['text'] = $variables['content'][$field];
+        break;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page.html.twig.
+ *
+ * Loads the FAO corporate header/footer data (links, logos) for the current
+ * interface language. The data is FAO-wide and not edited per site, so a
+ * versioned file is fine; site navigation lives in Drupal menus instead.
+ */
+function fao_sti_preprocess_page(array &$variables): void {
+  static $chrome;
+  if ($chrome === NULL) {
+    $file = \Drupal::service('extension.list.theme')->getPath('fao_sti') . '/data/fao-chrome.json';
+    $chrome = json_decode((string) file_get_contents($file), TRUE) ?: [];
+  }
+
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  // Pick the current language from every {en, fr, ...} map, falling back to en.
+  $pick = static function (array $section) use ($langcode): array {
+    $out = [];
+    foreach ($section as $key => $value) {
+      $out[$key] = is_array($value) && isset($value['en'])
+        ? ($value[$langcode] ?? $value['en'])
+        : $value;
+    }
+    return $out;
+  };
+
+  $variables['fao_chrome'] = [
+    'header' => $pick($chrome['header'] ?? []),
+    'footer' => $pick($chrome['footer'] ?? []),
+  ];
+  // The output differs per language: tell the render cache.
+  $variables['#cache']['contexts'][] = 'languages:language_interface';
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for html.html.twig.
+ */
+function fao_sti_preprocess_html(array &$variables): void {
+  // Preload the body font so text doesn't flash in a fallback face.
+  // Only preload what almost every page uses (regular); let the rest load lazily.
+  $theme_path = \Drupal::service('extension.list.theme')->getPath('fao_sti');
+  $variables['#attached']['html_head'][] = [
+    [
+      '#tag' => 'link',
+      '#attributes' => [
+        'rel' => 'preload',
+        'href' => base_path() . $theme_path . '/fonts/open-sans-v44-cyrillic_cyrillic-ext_latin_latin-ext_math_symbols-regular.woff2',
+        'as' => 'font',
+        'type' => 'font/woff2',
+        'crossorigin' => 'anonymous',
+      ],
+    ],
+    'fao_sti_font_preload',
+  ];
+}

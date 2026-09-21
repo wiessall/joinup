@@ -1,0 +1,182 @@
+/**
+ * Card grid. Joinup hard-codes Bootstrap row-cols-* in ~15 listing templates,
+ * keyed to the VIEWPORT width (row-cols-xl-4 = 4 columns on a wide screen, even
+ * when the listing only gets 2/3 of it next to the filters). Instead of
+ * overriding those templates, any row whose items are FAO cards becomes a CSS
+ * grid keyed to the space it actually has: as many columns of at least
+ * --fao-card-min as fit. In the 67% results column that gives 2; on a
+ * full-width page 3 or 4. Raise --fao-card-min for fewer, wider cards.
+ */
+.row:has(> .col > .fao-card) {
+  --fao-card-min: 17rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--fao-card-min)), 1fr));
+  gap: 1.5rem;
+  margin: 0 0 1.5rem;
+}
+
+.row:has(> .col > .fao-card) > .col {
+  width: auto;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+/**
+ * FAO card. Self-contained: needs only the tokens in css/base/tokens.css,
+ * not Bootstrap's .card / .ratio or the global FAO stylesheet.
+ *
+ * Everything interactive here is CSS: whole-card link, hover, focus,
+ * image crop, text clamping. No JS.
+ */
+.fao-card {
+  position: relative;            /* anchor for the stretched link */
+  display: flex;
+  flex-direction: column;
+  height: 100%;                  /* equal heights inside a grid row */
+  background: var(--fao-surface, #fff);
+  border: 1px solid var(--fao-border, #dee2e6);
+  border-radius: var(--fao-radius, 5px);
+  overflow: hidden;
+  transition: box-shadow 0.15s ease;
+}
+
+.fao-card:hover,
+.fao-card:focus-within {
+  box-shadow: 0 3px 12px rgb(0 0 0 / 0.12);
+}
+
+.fao-card--no-border {
+  border: 0;
+  background: transparent;
+}
+
+.fao-card--background {
+  border: 0;
+  background: var(--fao-line, #f2f2f2);
+}
+
+/* Media: aspect-ratio replaces Bootstrap's .ratio padding hack. */
+.fao-card__media {
+  aspect-ratio: 3 / 2;
+  background: var(--fao-line, #f2f2f2);
+}
+
+.fao-card__media :is(img, video, picture) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fao-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 1.25rem;
+}
+
+.fao-card__category {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--fao-text-muted, #999);
+}
+
+.fao-card__title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.fao-card__link {
+  color: var(--fao-primary, #116bac);
+  text-decoration: none;
+}
+
+/* Stretched link: the title's ::after covers the whole card, so the full
+   card is clickable while there is still only ONE link for screen readers. */
+.fao-card__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.fao-card:hover .fao-card__link {
+  text-decoration: underline;
+}
+
+.fao-card__link:focus-visible {
+  outline: none;
+}
+
+.fao-card:has(.fao-card__link:focus-visible) {
+  outline: 3px solid var(--fao-primary, #116bac);
+  outline-offset: 2px;
+}
+
+.fao-card__meta {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--fao-text-muted, #999);
+}
+
+/* Clamp long abstracts to 4 lines instead of trimming in PHP. */
+.fao-card__text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow: hidden;
+  font-size: 0.875rem;
+  color: var(--fao-text, #545454);
+}
+
+.fao-card__text > :last-child {
+  margin-bottom: 0;
+}
+
+.fao-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: auto;              /* push badges to the bottom of the body */
+  padding-top: 0.5rem;
+}
+
+.fao-card__badge {
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  background: var(--fao-primary-light, #e5ecf4);
+  font-size: 0.75rem;
+  color: var(--fao-text, #545454);
+}
+
+/* Footer and badges sit above the stretched link so their own links and
+   flag buttons (like, interoperability) remain clickable. */
+.fao-card__badges,
+.fao-card__footer {
+  position: relative;
+  z-index: 2;
+}
+
+.fao-card__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.5rem 1.25rem;
+  border-top: 1px solid var(--fao-line, #f2f2f2);
+  font-size: 0.75rem;
+  color: var(--fao-text-muted, #999);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fao-card {
+    transition: none;
+  }
+}

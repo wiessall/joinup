@@ -1,0 +1,52 @@
+{#
+/**
+ * @file
+ * Override of ventuno's UI Pattern "tile" (theme hook: pattern_tile).
+ *
+ * Every Joinup tile, for every bundle and every listing (collection pages,
+ * search, related solutions, content-listing paragraphs), ends up here:
+ *
+ *   node--view-mode-tile.html.twig   (ventuno: {{ pattern('tile', {...}) }})
+ *     -> pattern-tile.html.twig      (THIS FILE, found by name in the sub-theme)
+ *       -> fao_sti:card              (SDC in components/card/)
+ *
+ * The variables were prepared in PHP by _ventuno_preprocess_tile() and
+ * fao_sti_preprocess_node(). This file only maps them onto the card's
+ * props and slots; it does not reach into node fields.
+ */
+#}
+{% set _attributes = attributes|default(create_attribute()) %}
+
+{% set _badges %}
+  {% for badge in badges|default([]) %}
+    <span class="fao-card__badge">{{ badge.label }}</span>
+  {% endfor %}
+{% endset %}
+
+{% set _footer %}
+  {% for key, data in extra_data|default({}) %}
+    {% if data.label is defined and data.label is not empty %}
+      <span>{{ data.label }}</span>
+    {% endif %}
+  {% endfor %}
+  {% for indicator in indicators|default([]) %}
+    {{ indicator }}
+  {% endfor %}
+  {{ action }}
+{% endset %}
+
+{# The .col wrapper is what Joinup's listing grid (row-cols-*) expects. #}
+<div class="col">
+  {{ include('fao_sti:card', {
+    attributes: _attributes,
+    title: label,
+    url: url|default(''),
+    category: bundle.label|default('') ~ '',
+    meta: (highlighted.text|default(info.label|default(''))) ~ '',
+    contextual: [title_prefix, title_suffix],
+    media: image,
+    text: text,
+    badges: _badges|trim ? _badges,
+    footer: _footer|trim ? _footer,
+  }, with_context = false) }}
+</div>
