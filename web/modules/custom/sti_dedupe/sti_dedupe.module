@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Post-import duplicate review for solutions.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_delete() for node entities.
+ *
+ * Clears candidate rows pointing at a node that no longer exists, including
+ * nodes deleted outside a merge.
+ *
+ * Decisions are deliberately NOT cleared here. A merge records its decision
+ * and then deletes the losing node, so clearing on delete would erase the
+ * record of the merge that had just been made. A decision naming a deleted
+ * node is harmless — it only ever excludes ids from future candidate sets —
+ * and it is the audit trail for what a reviewer chose.
+ */
+function sti_dedupe_node_delete(EntityInterface $entity): void {
+  if ($entity->bundle() !== 'solution') {
+    return;
+  }
+
+  \Drupal::service('sti_dedupe.candidates')->deleteForNode((int) $entity->id());
+}

@@ -1,0 +1,47 @@
+sti_dedupe.collections:
+  path: '/admin/content/dedupe'
+  defaults:
+    _controller: '\Drupal\sti_dedupe\Controller\DedupeController::collections'
+    _title: 'Import review'
+  requirements:
+    _permission: 'review sti duplicates'
+
+sti_dedupe.review:
+  path: '/admin/content/dedupe/{collection}'
+  defaults:
+    _controller: '\Drupal\sti_dedupe\Controller\DedupeController::review'
+    _title_callback: '\Drupal\sti_dedupe\Controller\DedupeController::reviewTitle'
+  options:
+    parameters:
+      collection:
+        type: 'entity:node'
+  requirements:
+    _permission: 'review sti duplicates'
+    collection: \d+
+
+sti_dedupe.resolve:
+  path: '/admin/content/dedupe/{collection}/resolve/{solution}/{candidate}'
+  defaults:
+    _form: '\Drupal\sti_dedupe\Form\ResolveForm'
+    _title: 'Possible duplicate'
+  options:
+    parameters:
+      collection:
+        type: 'entity:node'
+      solution:
+        type: 'entity:node'
+      candidate:
+        type: 'entity:node'
+  requirements:
+    _permission: 'review sti duplicates'
+    collection: \d+
+    solution: \d+
+    candidate: \d+
+
+sti_dedupe.settings:
+  path: '/admin/config/sti/dedupe'
+  defaults:
+    _form: '\Drupal\sti_dedupe\Form\SettingsForm'
+    _title: 'Duplicate resolution settings'
+  requirements:
+    _permission: 'administer site configuration'

@@ -1,0 +1,6 @@
+sti_dedupe.collections:
+  title: 'Import review'
+  description: 'Resolve possible duplicates created by the most recent imports.'
+  route_name: sti_dedupe.collections
+  parent: system.admin_content
+  weight: 20

@@ -1,0 +1,4 @@
+review sti duplicates:
+  title: 'Review and resolve possible duplicate solutions'
+  description: 'Resolving a duplicate can delete a solution and move its claims, so grant this only to curators.'
+  restrict access: true

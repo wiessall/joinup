@@ -1,0 +1,13 @@
+name: 'STI Duplicate Resolution'
+type: module
+description: 'Post-import review of possible duplicate solutions, with non-destructive, reviewer-driven resolution. See ADR #12.'
+package: 'ATIO KB'
+core_version_requirement: ^10.2 || ^11
+dependencies:
+  - drupal:node
+  - drupal:paragraphs
+  - drupal:search_api
+  - drupal:taxonomy
+  - joinup:joinup_group
+  - import_ird_jsons:import_ird_jsons
+configure: sti_dedupe.settings
