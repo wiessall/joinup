@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * Status messages as Bootstrap alerts.
+ *
+ * Keeps core's data-drupal-messages wrapper: Drupal's JS messages API
+ * (e.g. after AJAX) inserts into it.
+ */
+#}
+{% set alert_type = {status: 'success', warning: 'warning', error: 'danger'} %}
+<div data-drupal-messages>
+  {% for type, messages in message_list %}
+    <div class="alert alert-{{ alert_type[type]|default('info') }}" role="{{ type == 'error' ? 'alert' : 'status' }}" aria-label="{{ status_headings[type] }}">
+      {% if messages|length > 1 %}
+        <ul class="mb-0">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        {{ messages|first }}
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>

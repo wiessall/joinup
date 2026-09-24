@@ -1,0 +1,52 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Card
+status: stable
+description: 'FAO Design System card markup (.card, .title-category, .card-title). Whole card clickable via Bootstrap .stretched-link.'
+
+# Props = plain data (strings, booleans, enums). Validated against this schema
+# when PHP assertions are on (ddev: they are), so wrong types fail loudly in dev.
+props:
+  type: object
+  properties:
+    url:
+      type: string
+      title: URL
+      description: 'Link target. When set, the whole card is clickable.'
+    category:
+      type: string
+      title: Category
+      description: 'Small uppercase line above the title (e.g. content type).'
+    meta:
+      type: string
+      title: Meta line
+      description: 'Date, location or owner, shown under the title.'
+    heading_level:
+      type: integer
+      title: Heading level
+      enum: [2, 3, 4, 5, 6]
+      default: 5
+    variant:
+      type: string
+      title: Variant
+      enum: [default, no-border, background]
+      default: default
+
+# Slots = anything already rendered by Drupal (images, formatted fields,
+# badge lists, flags). Never pass markup through a string prop with |raw.
+slots:
+  contextual:
+    title: Contextual links
+    description: 'Drupal title_prefix/title_suffix (contextual links, admin UI). Must sit inside the article.'
+  title:
+    title: Title
+    description: 'Required. A slot, not a string prop, so a rendered title field (already escaped by Drupal) can be passed as-is.'
+  media:
+    title: Media
+    description: 'Image or video. Cropped to 3:2.'
+  text:
+    title: Text
+  badges:
+    title: Badges
+  footer:
+    title: Footer
+    description: 'Stats, flags, actions. Rendered above the stretched link so its own links stay clickable.'

@@ -1,0 +1,22 @@
+# One global library. Everything else is attached by a component (SDC) when
+# it renders, so pages only download what they show.
+#
+# Load order = group order: base -> layout -> component -> state -> theme.
+# Component CSS (card.css etc.) lands in "component", before the FAO DS in
+# "theme"; components use their own fao-* class names so nothing collides.
+global:
+  version: 3.6.5
+  css:
+    base:
+      vendor/bootstrap/bootstrap.min.css: { minified: true }   # Bootstrap 5.3.8
+      css/base/fonts.css: {}
+      css/base/icons.css: {}
+      css/base/tokens.css: {}
+    layout:
+      css/layout/layout.css: {}
+    theme:
+      vendor/fao-ds/fao-theme.min.css: { minified: true }      # FAO Design System 3.6.5, remote @imports removed
+  js:
+    # Needed for Bootstrap dropdowns/collapse in the main menu and FAO DS
+    # components. No jQuery.
+    vendor/bootstrap/bootstrap.bundle.min.js: { minified: true, attributes: { defer: true } }

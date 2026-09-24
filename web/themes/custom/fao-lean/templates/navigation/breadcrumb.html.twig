@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Breadcrumb in FAO Design System / Bootstrap markup.
+ */
+#}
+{% if breadcrumb %}
+  <nav aria-label="{{ 'Breadcrumb'|t }}">
+    <ol class="breadcrumb mb-2">
+      {% for item in breadcrumb %}
+        <li class="breadcrumb-item"{{ loop.last ? ' aria-current="page"' }}>
+          {% if item.url and not loop.last %}
+            <a href="{{ item.url }}">{{ item.text }}</a>
+          {% else %}
+            {{ item.text }}
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ol>
+  </nav>
+{% endif %}

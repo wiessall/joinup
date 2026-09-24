@@ -1,0 +1,59 @@
+/**
+ * Layout Builder regions and the form controls inside them.
+ *
+ * Why the filters overlapped the cards: Layout Builder regions are flex
+ * items, and a flex item's default `min-width: auto` means "never narrower
+ * than my content". A <select> sizes itself to its longest option, so the
+ * 33% filter column was pushed wider than 33% and painted under the results.
+ * `min-width: 0` lets the region keep its share; the controls then have to fit.
+ */
+.layout__region {
+  min-width: 0;
+}
+
+.layout__region :is(select, input, textarea, .form-select, .form-control) {
+  max-width: 100%;
+}
+
+.layout__region select,
+.layout__region .form-select {
+  width: 100%;
+  text-overflow: ellipsis;
+}
+
+/* Keep a long filter column usable without the page growing: it scrolls on
+   its own while the results scroll with the page (same as STI). */
+@media (min-width: 992px) {
+  .layout--twocol-section--33-67 > .layout__region--first {
+    position: sticky;
+    top: 1rem;
+    align-self: flex-start;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+    padding-right: 1rem;
+  }
+}
+
+/**
+ * Card grid: as many columns of at least --fao-card-min as the container
+ * has room for. Keyed to the container, not the viewport, so the same
+ * listing gives 2 columns next to filters and 3-4 at full width.
+ * Used by templates/search_api_field/search-api-field.html.twig; add the
+ * class to any other listing (Views: Format > Settings > Row class wrapper).
+ */
+.fao-card-grid {
+  --fao-card-min: 17rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--fao-card-min)), 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Sidebar layout used by page.html.twig when the Sidebar region has blocks. */
+@media (min-width: 992px) {
+  .fao-page--with-sidebar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 18rem;
+    gap: 2rem;
+  }
+}
