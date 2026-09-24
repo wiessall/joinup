@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * Joinup search_api_field listing (collection and solution pages).
+ *
+ * Same as the module's template, plus the fao-card-grid wrapper around the
+ * results so tiles lay out in as many columns as the space allows.
+ */
+#}
+{% if search_title %}
+  <h2>{{ search_title }}</h2>
+{% endif %}
+
+{% if no_of_results %}
+  <p class="text-muted">{{ no_of_results }}</p>
+{% endif %}
+
+{{ no_results_found }}
+{{ search_help }}
+
+{% if results %}
+  <div class="fao-card-grid">{{ results }}</div>
+{% endif %}
+
+{{ pager }}

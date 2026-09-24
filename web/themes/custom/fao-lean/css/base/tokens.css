@@ -1,0 +1,19 @@
+/**
+ * Component tokens.
+ *
+ * Components (components/*.css) only read --fao-* variables. Here those are
+ * pointed at the FAO Design System's own custom properties (defined in
+ * vendor/fao-ds/fao-theme.min.css :root), so a Design System upgrade that
+ * changes a colour flows through to every component automatically.
+ */
+:root {
+  --fao-primary: var(--primary, #116bac);
+  --fao-primary-hover: var(--btn-primary-hover, #1688da);
+  --fao-primary-light: var(--primary-light, #e5ecf4);
+  --fao-text: var(--on-background, #545454);
+  --fao-text-muted: var(--on-background-secondary, #999);
+  --fao-line: var(--line, #f2f2f2);
+  --fao-border: var(--border, #dee2e6);
+  --fao-surface: var(--surface, #fff);
+  --fao-radius: 5px;
+}

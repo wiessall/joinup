@@ -1,0 +1,1139 @@
+{
+  "header": {
+    "logo": {
+      "en": {
+        "url": "https://www.fao.org/home/en/",
+        "image": "https://www.fao.org/images/corporatelibraries/logos/fao-logo-en.svg?sfvrsn=f64522b4_36",
+        "alt": "Food and Agriculture Organization of the United Nations",
+        "title": "Food and Agriculture Organization of the United Nations"
+      },
+      "fr": {
+        "url": "https://www.fao.org/home/fr",
+        "image": "https://www.fao.org/images/corporatelibraries/fao-logo/fao-logo-archive/fao-logo-blue-2lines-fr.svg",
+        "alt": "Organisation des Nations Unies pour l'alimentation et l'agriculture",
+        "title": "Organisation des Nations Unies pour l'alimentation et l'agriculture"
+      },
+      "es": {
+        "url": "https://www.fao.org/home/es",
+        "image": "https://www.fao.org/images/corporatelibraries/fao-logo/fao-logo-archive/fao-logo-blue-2lines-es.svg",
+        "alt": "Organización de las Naciones Unidas para la Alimentación y la Agricultura",
+        "title": "Organización de las Naciones Unidas para la Alimentación y la Agricultura"
+      },
+      "ru": {
+        "url": "https://www.fao.org/home/ru",
+        "image": "https://www.fao.org/images/corporatelibraries/fao-logo/fao-logo-archive/fao-logo-blue-2lines-ru.svg",
+        "alt": "Продовольственная и сельскохозяйственная организация Объединенных Наций",
+        "title": "Продовольственная и сельскохозяйственная организация Объединенных Наций"
+      },
+      "zh-hans": {
+        "url": "https://www.fao.org/home/zh",
+        "image": "https://www.fao.org/images/corporatelibraries/fao-logo/fao-logo-archive/fao-logo-blue-2lines-zh.svg",
+        "alt": "联合国粮食及 农业组织",
+        "title": "联合国粮食及 农业组织"
+      },
+      "ar": {
+        "url": "https://www.fao.org/home/ar",
+        "image": "https://www.fao.org/images/corporatelibraries/fao-logo/fao-logo-archive/fao-logo-blue-2lines-ar.svg",
+        "alt": "منظمة الأغذية والزراعة للأمم الم",
+        "title": "منظمة الأغذية والزراعة للأمم الم"
+      }
+    },
+    "menu": {
+      "en": {
+        "button": "Discover",
+        "items": [
+          {
+            "label": "About FAO",
+            "url": "https://www.fao.org/about/en/"
+          },
+          {
+            "label": "News",
+            "url": "https://www.fao.org/news/en/"
+          },
+          {
+            "label": "Multimedia",
+            "url": "https://www.fao.org/news/video-at-fao/en/"
+          },
+          {
+            "label": "Main topics",
+            "url": "https://www.fao.org/themes/en/"
+          },
+          {
+            "label": "Statistics",
+            "url": "https://www.fao.org/statistics/en/"
+          },
+          {
+            "label": "Members",
+            "url": "https://www.fao.org/countryprofiles/en/"
+          },
+          {
+            "label": "Publications",
+            "url": "https://www.fao.org/publications/en/"
+          }
+        ]
+      },
+      "fr": {
+        "button": "Découvrir",
+        "items": [
+          {
+            "label": "À propos de la FAO",
+            "url": "https://www.fao.org/about/fr/"
+          },
+          {
+            "label": "Actualités",
+            "url": "https://www.fao.org/news/fr/"
+          },
+          {
+            "label": "Multimédia",
+            "url": "https://www.fao.org/news/video-at-fao/fr/"
+          },
+          {
+            "label": "Principaux sujets",
+            "url": "https://www.fao.org/themes/fr/"
+          },
+          {
+            "label": "Statistiques",
+            "url": "https://www.fao.org/statistics/fr/"
+          },
+          {
+            "label": "Membres",
+            "url": "https://www.fao.org/countryprofiles/fr/"
+          },
+          {
+            "label": "Publications",
+            "url": "https://www.fao.org/publications/fr/"
+          }
+        ]
+      },
+      "es": {
+        "button": "Descubrir",
+        "items": [
+          {
+            "label": "Acerca de la FAO",
+            "url": "https://www.fao.org/about/es/"
+          },
+          {
+            "label": "Noticias",
+            "url": "https://www.fao.org/news/es/"
+          },
+          {
+            "label": "Multimedia",
+            "url": "https://www.fao.org/news/video-at-fao/es/"
+          },
+          {
+            "label": "Temas principales",
+            "url": "https://www.fao.org/themes/es/"
+          },
+          {
+            "label": "Estadísticas",
+            "url": "https://www.fao.org/statistics/es/"
+          },
+          {
+            "label": "Miembros",
+            "url": "https://www.fao.org/countryprofiles/es/"
+          },
+          {
+            "label": "Publicaciones",
+            "url": "https://www.fao.org/publications/es/"
+          }
+        ]
+      },
+      "ru": {
+        "button": "Главное меню",
+        "items": [
+          {
+            "label": "О ФАО",
+            "url": "https://www.fao.org/about/ru/"
+          },
+          {
+            "label": "Новости",
+            "url": "https://www.fao.org/news/ru/"
+          },
+          {
+            "label": "Мультимедиа",
+            "url": "https://www.fao.org/news/video-at-fao/ru/"
+          },
+          {
+            "label": "Основные темы",
+            "url": "https://www.fao.org/themes/ru/"
+          },
+          {
+            "label": "Статистика",
+            "url": "https://www.fao.org/statistics/ru/"
+          },
+          {
+            "label": "Члены",
+            "url": "https://www.fao.org/countryprofiles/ru/"
+          },
+          {
+            "label": "Публикации",
+            "url": "https://www.fao.org/publications/ru/"
+          }
+        ]
+      },
+      "zh-hans": {
+        "button": "发现",
+        "items": [
+          {
+            "label": "关于粮农组织",
+            "url": "https://www.fao.org/about/zh/"
+          },
+          {
+            "label": "新闻",
+            "url": "https://www.fao.org/news/zh/"
+          },
+          {
+            "label": "媒体",
+            "url": "https://www.fao.org/news/video-at-fao/zh/"
+          },
+          {
+            "label": "主要议题",
+            "url": "https://www.fao.org/themes/zh/"
+          },
+          {
+            "label": "统计资料",
+            "url": "https://www.fao.org/statistics/zh/"
+          },
+          {
+            "label": "成员",
+            "url": "https://www.fao.org/countryprofiles/zh/"
+          },
+          {
+            "label": "出版物",
+            "url": "https://www.fao.org/publications/zh/"
+          }
+        ]
+      },
+      "ar": {
+        "button": "يكتشف",
+        "items": [
+          {
+            "label": "عن المنظمة",
+            "url": "https://www.fao.org/about/ar/"
+          },
+          {
+            "label": "الأخبار",
+            "url": "https://www.fao.org/news/ar/"
+          },
+          {
+            "label": "الوسائط الإعلامية المتعددة",
+            "url": "https://www.fao.org/news/video-at-fao/ar/"
+          },
+          {
+            "label": "الموضوعات الرئيسية",
+            "url": "https://www.fao.org/themes/ar/"
+          },
+          {
+            "label": "الإحصائيات",
+            "url": "https://www.fao.org/statistics/ar/"
+          },
+          {
+            "label": "الأعضاء",
+            "url": "https://www.fao.org/countryprofiles/ar/"
+          },
+          {
+            "label": "المطبوعات",
+            "url": "https://www.fao.org/publications/ar/"
+          }
+        ]
+      }
+    }
+  },
+  "footer": {
+    "logo": {
+      "en": {
+        "url": "https://www.fao.org/home/en/",
+        "image": "https://www.fao.org/media/images/corporatenavigationlibraries/default-album/uf21gr5-fao80-1_blue.svg?sfvrsn=c6153fd4_3",
+        "alt": "Food and Agriculture Organization of the United Nations",
+        "title": "Food and Agriculture Organization of the United Nations"
+      },
+      "fr": {
+        "url": "https://www.fao.org/home/fr",
+        "image": "https://www.fao.org/media/images/corporatenavigationlibraries/default-album/uf21gr5-fao80-1_blue.svg?sfvrsn=c6153fd4_3",
+        "alt": "Organisation des Nations Unies pour l'alimentation et l'agriculture",
+        "title": "Organisation des Nations Unies pour l'alimentation et l'agriculture"
+      },
+      "es": {
+        "url": "https://www.fao.org/home/es",
+        "image": "https://www.fao.org/media/images/corporatenavigationlibraries/default-album/uf21gr5-fao80-1_blue.svg?sfvrsn=c6153fd4_3",
+        "alt": "Organización de las Naciones Unidas para la Alimentación y la Agricultura",
+        "title": "Organización de las Naciones Unidas para la Alimentación y la Agricultura"
+      },
+      "ru": {
+        "url": "https://www.fao.org/home/ru",
+        "image": "https://www.fao.org/media/images/corporatenavigationlibraries/default-album/uf21gr5-fao80-1_blue.svg?sfvrsn=c6153fd4_3",
+        "alt": "Продовольственная и сельскохозяйственная организация Объединенных Наций",
+        "title": "Продовольственная и сельскохозяйственная организация Объединенных Наций"
+      },
+      "zh-hans": {
+        "url": "https://www.fao.org/home/zh",
+        "image": "https://www.fao.org/media/images/corporatenavigationlibraries/default-album/uf21gr5-fao80-1_blue.svg?sfvrsn=c6153fd4_3",
+        "alt": "联合国粮食及 农业组织",
+        "title": "联合国粮食及 农业组织"
+      },
+      "ar": {
+        "url": "https://www.fao.org/home/ar",
+        "image": "https://www.fao.org/media/images/corporatenavigationlibraries/default-album/uf21gr5-fao80-1_blue.svg?sfvrsn=c6153fd4_3",
+        "alt": "منظمة الأغذية والزراعة للأمم الم",
+        "title": "منظمة الأغذية والزراعة للأمم الم"
+      }
+    },
+    "top_menu_left": {
+      "en": {
+        "label": "FAO Organizational Chart",
+        "url": "https://www.fao.org/about/org-chart/en/"
+      },
+      "fr": {
+        "label": "Organigramme de la FAO",
+        "url": "https://www.fao.org/about/org-chart/fr/"
+      },
+      "es": {
+        "label": "Organigrama de la FAO",
+        "url": "https://www.fao.org/about/org-chart/es/"
+      },
+      "ru": {
+        "label": "Организационная структура ФАО",
+        "url": "https://www.fao.org/about/org-chart/ru/"
+      },
+      "zh-hans": {
+        "label": "粮农组织机构图",
+        "url": "https://www.fao.org/about/org-chart/zh/"
+      },
+      "ar": {
+        "label": "خريطة الهيكل التنظيمي",
+        "url": "https://www.fao.org/about/org-chart/ar/"
+      }
+    },
+    "top_menu_right": {
+      "en": {
+        "button": "Worldwide offices",
+        "items": [
+          {
+            "label": "Regional Office for Africa",
+            "url": "https://www.fao.org/africa/en/"
+          },
+          {
+            "label": "Regional Office for Asia and the Pacific",
+            "url": "https://www.fao.org/asiapacific/en/"
+          },
+          {
+            "label": "Regional Office for Europe and Central Asia",
+            "url": "https://www.fao.org/europe/en/"
+          },
+          {
+            "label": "Regional Office for Latin America and the Caribbean",
+            "url": "https://www.fao.org/americas/en/"
+          },
+          {
+            "label": "Regional Office for the Near East and North Africa",
+            "url": "https://www.fao.org/neareast/en/"
+          },
+          {
+            "label": "Country Offices",
+            "url": "https://www.fao.org/about/who-we-are/worldwide-offices/en/#c207632"
+          }
+        ]
+      },
+      "fr": {
+        "button": "Bureaux dans le monde",
+        "items": [
+          {
+            "label": "Bureau régional pour l'Afrique",
+            "url": "https://www.fao.org/africa/fr/"
+          },
+          {
+            "label": "Bureau régional pour l'Asie et le Pacifique",
+            "url": "https://www.fao.org/asiapacific/fr/"
+          },
+          {
+            "label": "Bureau régional pour l'Europe et l'Asie centrale",
+            "url": "https://www.fao.org/europe/fr/"
+          },
+          {
+            "label": "Bureau régional pour l'Amérique latine et les Caraïbes",
+            "url": "https://www.fao.org/americas/fr/"
+          },
+          {
+            "label": "Bureau régional pour le Proche-Orient et l'Afrique du Nord",
+            "url": "https://www.fao.org/neareast/fr/"
+          },
+          {
+            "label": "Bureaux sous-régionaux",
+            "url": "https://www.fao.org/about/who-we-are/worldwide-offices/fr/#c207632"
+          }
+        ]
+      },
+      "es": {
+        "button": "Oficinas en el mundo",
+        "items": [
+          {
+            "label": "Oficina Regional para África",
+            "url": "https://www.fao.org/africa/es/"
+          },
+          {
+            "label": "Oficina Regional para Asia y el Pacífico",
+            "url": "https://www.fao.org/asiapacific/es/"
+          },
+          {
+            "label": "Oficina Regional para Europa y Asia Central",
+            "url": "https://www.fao.org/europe/es/"
+          },
+          {
+            "label": "Oficina Regional para América Latina y el Caribe",
+            "url": "https://www.fao.org/americas/es/"
+          },
+          {
+            "label": "Oficina Regional para el Cercano Oriente y África del Norte",
+            "url": "https://www.fao.org/neareast/es/"
+          },
+          {
+            "label": "Oficinas subregionales",
+            "url": "https://www.fao.org/about/who-we-are/worldwide-offices/es/#c207632"
+          }
+        ]
+      },
+      "ru": {
+        "button": "Офисы по всему миру",
+        "items": [
+          {
+            "label": "Региональное представительство в Африке",
+            "url": "https://www.fao.org/africa/ru/"
+          },
+          {
+            "label": "Региональное представительство в Азии и Тихом океане",
+            "url": "https://www.fao.org/asiapacific/ru/"
+          },
+          {
+            "label": "Региональное представительство в Европе и Центральной Азии",
+            "url": "https://www.fao.org/europe/ru/"
+          },
+          {
+            "label": "Региональное представительство в Латинской Америке и Карибском бассейне",
+            "url": "https://www.fao.org/americas/ru/"
+          },
+          {
+            "label": "Региональное представительство на Ближнем Востоке и в Северной Африке",
+            "url": "https://www.fao.org/neareast/ru/"
+          },
+          {
+            "label": "Страновые отделения",
+            "url": "https://www.fao.org/about/who-we-are/worldwide-offices/ru/#c207632"
+          }
+        ]
+      },
+      "zh-hans": {
+        "button": "全球办事处",
+        "items": [
+          {
+            "label": "非洲区域办事处",
+            "url": "https://www.fao.org/africa/zh/"
+          },
+          {
+            "label": "分区域办事处",
+            "url": "https://www.fao.org/about/who-we-are/worldwide-offices/zh/#c207632"
+          },
+          {
+            "label": "亚洲及太平洋区域办事处",
+            "url": "https://www.fao.org/asiapacific/zh/"
+          },
+          {
+            "label": "欧洲及中亚区域办事处",
+            "url": "https://www.fao.org/europe/zh/"
+          },
+          {
+            "label": "拉丁美洲及加勒比区域办事处",
+            "url": "https://www.fao.org/americas/zh/"
+          },
+          {
+            "label": "近东及北非区域办事处",
+            "url": "https://www.fao.org/neareast/zh/"
+          }
+        ]
+      },
+      "ar": {
+        "button": "مكاتب حول العالم",
+        "items": [
+          {
+            "label": "المكتب الاقليمى لأفريقيا",
+            "url": "https://www.fao.org/africa/ar/"
+          },
+          {
+            "label": "المكتب الإقليمي لآسيا والمحيط الهادي",
+            "url": "https://www.fao.org/asiapacific/ar/"
+          },
+          {
+            "label": "المكتب الإقليمي لأوروبا وآسيا الوسطى",
+            "url": "https://www.fao.org/europe/ar/"
+          },
+          {
+            "label": "المكتب الإقليمي لأمريكا اللاتينية والبحر الكاريبي",
+            "url": "https://www.fao.org/americas/ar/"
+          },
+          {
+            "label": "المكتب الإقليمي للشرق الأدنى وشمال أفريقيا",
+            "url": "https://www.fao.org/neareast/ar/"
+          },
+          {
+            "label": "المكاتب الإقليمية الفرعية",
+            "url": "https://www.fao.org/about/who-we-are/worldwide-offices/ar/#c207632"
+          }
+        ]
+      }
+    },
+    "bottom_menu": {
+      "en": {
+        "items": [
+          {
+            "label": "Jobs",
+            "url": "https://fao.org/employment/home/en/"
+          },
+          {
+            "label": "Contact us",
+            "url": "https://fao.org/contact-us/en/"
+          },
+          {
+            "label": "Terms and Conditions",
+            "url": "https://fao.org/contact-us/terms/en/"
+          },
+          {
+            "label": "Data protection and privacy",
+            "url": "https://fao.org/contact-us/data-protection-and-privacy/en/"
+          },
+          {
+            "label": "Scam Alert",
+            "url": "https://fao.org/contact-us/scam-alert/en/"
+          },
+          {
+            "label": "Report Misconduct",
+            "url": "https://www.fao.org/audit-and-investigations/about/en"
+          },
+          {
+            "label": "Transparency and accountability",
+            "url": "https://www.fao.org/transparency/en"
+          }
+        ]
+      },
+      "fr": {
+        "items": [
+          {
+            "label": "Emplois",
+            "url": "http://fao.org/employment/home/fr/"
+          },
+          {
+            "label": "Contactez-nous",
+            "url": "http://fao.org/contact-us/fr/"
+          },
+          {
+            "label": "Termes et conditions",
+            "url": "http://fao.org/contact-us/terms/fr/"
+          },
+          {
+            "label": "Protection et confidentialité des données",
+            "url": "http://fao.org/contact-us/data-protection-and-privacy/fr/"
+          },
+          {
+            "label": "Transparence et redevabilité",
+            "url": "https://www.fao.org/transparency/en"
+          },
+          {
+            "label": "Alerte aux messages frauduleux",
+            "url": "http://fao.org/contact-us/scam-alert/fr/"
+          },
+          {
+            "label": "Signaler un cas de mauvaise conduite",
+            "url": "https://www.fao.org/audit-and-investigations/about/fr"
+          }
+        ]
+      },
+      "es": {
+        "items": [
+          {
+            "label": "Empleo",
+            "url": "http://fao.org/employment/home/es/"
+          },
+          {
+            "label": "Contacto",
+            "url": "http://fao.org/contact-us/es/"
+          },
+          {
+            "label": "Términos y condiciones",
+            "url": "http://fao.org/contact-us/terms/es/"
+          },
+          {
+            "label": "Transparencia y rendición de cuentas",
+            "url": "https://www.fao.org/transparency/en"
+          },
+          {
+            "label": "Protección de datos y privacidad",
+            "url": "http://fao.org/contact-us/data-protection-and-privacy/es/"
+          },
+          {
+            "label": "Alerta de estafa",
+            "url": "http://fao.org/contact-us/scam-alert/es/"
+          },
+          {
+            "label": "Reportar mala conducta",
+            "url": "https://www.fao.org/audit-and-investigations/about/es"
+          }
+        ]
+      },
+      "ru": {
+        "items": [
+          {
+            "label": "Трудоустройство",
+            "url": "http://fao.org/employment/home/ru/"
+          },
+          {
+            "label": "Связь с нами",
+            "url": "http://fao.org/contact-us/ru/"
+          },
+          {
+            "label": "Положения и условия",
+            "url": "http://fao.org/contact-us/terms/ru/"
+          },
+          {
+            "label": "Прозрачность и подотчетность",
+            "url": "https://www.fao.org/transparency/en"
+          },
+          {
+            "label": "Конфиденциальность и защита персональных данных",
+            "url": "http://fao.org/contact-us/data-protection-and-privacy/ru/"
+          },
+          {
+            "label": "Опасайтесь мошенников",
+            "url": "http://fao.org/contact-us/scam-alert/ru/"
+          },
+          {
+            "label": "Сообщить о нарушении",
+            "url": "https://www.fao.org/audit-and-investigations/about/ru"
+          }
+        ]
+      },
+      "zh-hans": {
+        "items": [
+          {
+            "label": "工作",
+            "url": "http://fao.org/employment/home/zh/"
+          },
+          {
+            "label": "联系我们",
+            "url": "http://fao.org/contact-us/zh/"
+          },
+          {
+            "label": "条款和条件",
+            "url": "http://fao.org/contact-us/terms/zh/"
+          },
+          {
+            "label": "透明与问责",
+            "url": "https://www.fao.org/transparency/en"
+          },
+          {
+            "label": "数据保护与隐私声明",
+            "url": "http://fao.org/contact-us/data-protection-and-privacy/zh/"
+          },
+          {
+            "label": "欺诈邮件",
+            "url": "http://fao.org/contact-us/scam-alert/zh/"
+          },
+          {
+            "label": "报告不当行为",
+            "url": "https://www.fao.org/audit-and-investigations/about/zh"
+          }
+        ]
+      },
+      "ar": {
+        "items": [
+          {
+            "label": "الوظائف",
+            "url": "http://fao.org/employment/home/ar/"
+          },
+          {
+            "label": "للإتصال بنا",
+            "url": "http://fao.org/contact-us/ar/"
+          },
+          {
+            "label": "القواعد والشروط",
+            "url": "http://fao.org/contact-us/terms/ar/"
+          },
+          {
+            "label": "الشفافية والمساءلة",
+            "url": "https://www.fao.org/transparency/en"
+          },
+          {
+            "label": "إشعار بشأن حماية البيانات والخصوصية",
+            "url": "http://fao.org/contact-us/data-protection-and-privacy/ar/"
+          },
+          {
+            "label": "التحذير من رسائل تحايلية",
+            "url": "http://fao.org/contact-us/scam-alert/ar/"
+          },
+          {
+            "label": "الإبلاغ عن سوء السلوك",
+            "url": "https://www.fao.org/audit-and-investigations/about/ar"
+          }
+        ]
+      }
+    },
+    "social_icons": {
+      "en": {
+        "items": [
+          {
+            "url": "https://bsky.app/profile/fao.org",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/bluesky.svg?sfvrsn=91618a92_1",
+            "alt": "Bluesky",
+            "title": "Bluesky"
+          },
+          {
+            "url": "https://www.facebook.com/pages/Food-and-Agriculture-Organization-of-the-United-Nations-FAO/46370758585?ref=mf",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-facebook.svg",
+            "alt": "facebook",
+            "title": "facebook"
+          },
+          {
+            "url": "https://instagram.com/fao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-instagram.svg",
+            "alt": "instagram",
+            "title": "instagram"
+          },
+          {
+            "url": "http://www.linkedin.com/company/fao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-linkedin.svg",
+            "alt": "linkedin",
+            "title": "linkedin"
+          },
+          {
+            "url": "https://soundcloud.com/unfao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-soundcloud.svg",
+            "alt": "soundcloud",
+            "title": "soundcloud"
+          },
+          {
+            "url": "https://www.tiktok.com/@fao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-tiktok.svg",
+            "alt": "tiktok",
+            "title": "tiktok"
+          },
+          {
+            "url": "https://www.toutiao.com/c/user/token/MS4wLjABAAAAddfBLLYL2GZzXAetR_paFVV1-M4fdAWpUxiROxuOpl7pDGuXLCGfYg_VOogU135J/",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-tuotiao.svg",
+            "alt": "tuotiao",
+            "title": "tuotiao"
+          },
+          {
+            "url": "#",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-wechat.svg",
+            "alt": "wechat",
+            "title": "wechat"
+          },
+          {
+            "url": "http://www.weibo.com/unfao?from=myfollow_all",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-weibo.svg",
+            "alt": "weibo",
+            "title": "weibo"
+          },
+          {
+            "url": "https://bit.ly/3BBpfEq",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/whatsapp-icon.svg",
+            "alt": "whatsapp",
+            "title": "whatsapp"
+          },
+          {
+            "url": "https://twitter.com/FAO",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-twitter.svg",
+            "alt": "twitter",
+            "title": "twitter"
+          },
+          {
+            "url": "http://www.youtube.com/user/FAOoftheUN",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-youtube.svg",
+            "alt": "youtube",
+            "title": "youtube"
+          }
+        ]
+      },
+      "fr": {
+        "items": [
+          {
+            "url": "https://bsky.app/profile/did:plc:bbsvns4672gtz2tc3zo43csd",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/bluesky.svg?sfvrsn=91618a92_1",
+            "alt": "Bluesky",
+            "title": "Bluesky"
+          },
+          {
+            "url": "https://www.facebook.com/pages/Food-and-Agriculture-Organization-of-the-United-Nations-FAO/46370758585?ref=mf",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-facebook.svg",
+            "alt": "facebook",
+            "title": "facebook"
+          },
+          {
+            "url": "https://instagram.com/fao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-instagram.svg",
+            "alt": "instagram",
+            "title": "instagram"
+          },
+          {
+            "url": "http://www.linkedin.com/company/fao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-linkedin.svg",
+            "alt": "linkedin",
+            "title": "linkedin"
+          },
+          {
+            "url": "https://soundcloud.com/unfao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-soundcloud.svg",
+            "alt": "soundcloud",
+            "title": "soundcloud"
+          },
+          {
+            "url": "https://www.tiktok.com/@fao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-tiktok.svg",
+            "alt": "tiktok",
+            "title": "tiktok"
+          },
+          {
+            "url": "https://www.toutiao.com/c/user/token/MS4wLjABAAAAddfBLLYL2GZzXAetR_paFVV1-M4fdAWpUxiROxuOpl7pDGuXLCGfYg_VOogU135J/",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-tuotiao.svg",
+            "alt": "tuotiao",
+            "title": "tuotiao"
+          },
+          {
+            "url": "#",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-wechat.svg",
+            "alt": "wechat",
+            "title": "wechat"
+          },
+          {
+            "url": "http://www.weibo.com/unfao?from=myfollow_all",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-weibo.svg",
+            "alt": "weibo",
+            "title": "weibo"
+          },
+          {
+            "url": "https://bit.ly/3YbiMc1",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/whatsapp-icon.svg",
+            "alt": "whatsapp",
+            "title": "whatsapp"
+          },
+          {
+            "url": "https://twitter.com/FAO",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-twitter.svg",
+            "alt": "twitter",
+            "title": "twitter"
+          },
+          {
+            "url": "http://www.youtube.com/user/FAOoftheUN",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-youtube.svg",
+            "alt": "youtube",
+            "title": "youtube"
+          }
+        ]
+      },
+      "es": {
+        "items": [
+          {
+            "url": "https://bsky.app/profile/did:plc:gp55i3b6a3b6tpk32x6gcfle",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/bluesky.svg?sfvrsn=91618a92_1",
+            "alt": "Bluesky",
+            "title": "Bluesky"
+          },
+          {
+            "url": "https://www.facebook.com/pages/Food-and-Agriculture-Organization-of-the-United-Nations-FAO/46370758585?ref=mf",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-facebook.svg",
+            "alt": "facebook",
+            "title": "facebook"
+          },
+          {
+            "url": "https://instagram.com/fao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-instagram.svg",
+            "alt": "instagram",
+            "title": "instagram"
+          },
+          {
+            "url": "http://www.linkedin.com/company/fao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-linkedin.svg",
+            "alt": "linkedin",
+            "title": "linkedin"
+          },
+          {
+            "url": "https://soundcloud.com/unfao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-soundcloud.svg",
+            "alt": "soundcloud",
+            "title": "soundcloud"
+          },
+          {
+            "url": "https://www.tiktok.com/@fao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-tiktok.svg",
+            "alt": "tiktok",
+            "title": "tiktok"
+          },
+          {
+            "url": "https://www.toutiao.com/c/user/token/MS4wLjABAAAAddfBLLYL2GZzXAetR_paFVV1-M4fdAWpUxiROxuOpl7pDGuXLCGfYg_VOogU135J/",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-tuotiao.svg",
+            "alt": "tuotiao",
+            "title": "tuotiao"
+          },
+          {
+            "url": "#",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-wechat.svg",
+            "alt": "wechat",
+            "title": "wechat"
+          },
+          {
+            "url": "http://www.weibo.com/unfao?from=myfollow_all",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-weibo.svg",
+            "alt": "weibo",
+            "title": "weibo"
+          },
+          {
+            "url": "https://bit.ly/3NdxmJU",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/whatsapp-icon.svg",
+            "alt": "whatsapp",
+            "title": "whatsapp"
+          },
+          {
+            "url": "https://twitter.com/FAO",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-twitter.svg",
+            "alt": "twitter",
+            "title": "twitter"
+          },
+          {
+            "url": "http://www.youtube.com/user/FAOoftheUN",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-youtube.svg",
+            "alt": "youtube",
+            "title": "youtube"
+          }
+        ]
+      },
+      "ru": {
+        "items": [
+          {
+            "url": "https://bsky.app/profile/fao.org",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/bluesky.svg?sfvrsn=91618a92_1",
+            "alt": "Bluesky",
+            "title": "Bluesky"
+          },
+          {
+            "url": "https://www.facebook.com/pages/Food-and-Agriculture-Organization-of-the-United-Nations-FAO/46370758585?ref=mf",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-facebook.svg",
+            "alt": "facebook",
+            "title": "facebook"
+          },
+          {
+            "url": "https://instagram.com/fao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-instagram.svg",
+            "alt": "instagram",
+            "title": "instagram"
+          },
+          {
+            "url": "http://www.linkedin.com/company/fao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-linkedin.svg",
+            "alt": "linkedin",
+            "title": "linkedin"
+          },
+          {
+            "url": "https://soundcloud.com/unfao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-soundcloud.svg",
+            "alt": "soundcloud",
+            "title": "soundcloud"
+          },
+          {
+            "url": "https://www.tiktok.com/@fao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-tiktok.svg",
+            "alt": "tiktok",
+            "title": "tiktok"
+          },
+          {
+            "url": "https://www.toutiao.com/c/user/token/MS4wLjABAAAAddfBLLYL2GZzXAetR_paFVV1-M4fdAWpUxiROxuOpl7pDGuXLCGfYg_VOogU135J/",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-tuotiao.svg",
+            "alt": "tuotiao",
+            "title": "tuotiao"
+          },
+          {
+            "url": "#",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-wechat.svg",
+            "alt": "wechat",
+            "title": "wechat"
+          },
+          {
+            "url": "http://www.weibo.com/unfao?from=myfollow_all",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-weibo.svg",
+            "alt": "weibo",
+            "title": "weibo"
+          },
+          {
+            "url": "https://bit.ly/4haKRIb",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/whatsapp-icon.svg",
+            "alt": "whatsapp",
+            "title": "whatsapp"
+          },
+          {
+            "url": "https://twitter.com/FAO",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-twitter.svg",
+            "alt": "twitter",
+            "title": "twitter"
+          },
+          {
+            "url": "http://www.youtube.com/user/FAOoftheUN",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-youtube.svg",
+            "alt": "youtube",
+            "title": "youtube"
+          }
+        ]
+      },
+      "ar": {
+        "items": [
+          {
+            "url": "https://bsky.app/profile/fao.org",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/bluesky.svg?sfvrsn=91618a92_1",
+            "alt": "Bluesky",
+            "title": "Bluesky"
+          },
+          {
+            "url": "https://www.facebook.com/pages/Food-and-Agriculture-Organization-of-the-United-Nations-FAO/46370758585?ref=mf",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-facebook.svg",
+            "alt": "facebook",
+            "title": "facebook"
+          },
+          {
+            "url": "https://instagram.com/fao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-instagram.svg",
+            "alt": "instagram",
+            "title": "instagram"
+          },
+          {
+            "url": "http://www.linkedin.com/company/fao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-linkedin.svg",
+            "alt": "linkedin",
+            "title": "linkedin"
+          },
+          {
+            "url": "https://soundcloud.com/unfao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-soundcloud.svg",
+            "alt": "soundcloud",
+            "title": "soundcloud"
+          },
+          {
+            "url": "https://www.tiktok.com/@fao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-tiktok.svg",
+            "alt": "tiktok",
+            "title": "tiktok"
+          },
+          {
+            "url": "https://www.toutiao.com/c/user/token/MS4wLjABAAAAddfBLLYL2GZzXAetR_paFVV1-M4fdAWpUxiROxuOpl7pDGuXLCGfYg_VOogU135J/",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-tuotiao.svg",
+            "alt": "tuotiao",
+            "title": "tuotiao"
+          },
+          {
+            "url": "#",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-wechat.svg",
+            "alt": "wechat",
+            "title": "wechat"
+          },
+          {
+            "url": "http://www.weibo.com/unfao?from=myfollow_all",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-weibo.svg",
+            "alt": "weibo",
+            "title": "weibo"
+          },
+          {
+            "url": "https://bit.ly/3NjAfbW",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/whatsapp-icon.svg",
+            "alt": "whatsapp",
+            "title": "whatsapp"
+          },
+          {
+            "url": "https://twitter.com/FAO",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-twitter.svg",
+            "alt": "twitter",
+            "title": "twitter"
+          },
+          {
+            "url": "http://www.youtube.com/user/FAOoftheUN",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-youtube.svg",
+            "alt": "youtube",
+            "title": "youtube"
+          }
+        ]
+      },
+      "zh-hans": {
+        "items": [
+          {
+            "url": "https://bsky.app/profile/fao.org",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/bluesky.svg?sfvrsn=91618a92_1",
+            "alt": "Bluesky",
+            "title": "Bluesky"
+          },
+          {
+            "url": "https://www.facebook.com/pages/Food-and-Agriculture-Organization-of-the-United-Nations-FAO/46370758585?ref=mf",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-facebook.svg",
+            "alt": "facebook",
+            "title": "facebook"
+          },
+          {
+            "url": "https://instagram.com/fao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-instagram.svg",
+            "alt": "instagram",
+            "title": "instagram"
+          },
+          {
+            "url": "http://www.linkedin.com/company/fao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-linkedin.svg",
+            "alt": "linkedin",
+            "title": "linkedin"
+          },
+          {
+            "url": "https://soundcloud.com/unfao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-soundcloud.svg",
+            "alt": "soundcloud",
+            "title": "soundcloud"
+          },
+          {
+            "url": "https://www.tiktok.com/@fao",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-tiktok.svg",
+            "alt": "tiktok",
+            "title": "tiktok"
+          },
+          {
+            "url": "https://www.toutiao.com/c/user/token/MS4wLjABAAAAddfBLLYL2GZzXAetR_paFVV1-M4fdAWpUxiROxuOpl7pDGuXLCGfYg_VOogU135J/",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-tuotiao.svg",
+            "alt": "tuotiao",
+            "title": "tuotiao"
+          },
+          {
+            "url": "#",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-wechat.svg",
+            "alt": "wechat",
+            "title": "wechat"
+          },
+          {
+            "url": "http://www.weibo.com/unfao?from=myfollow_all",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-weibo.svg",
+            "alt": "weibo",
+            "title": "weibo"
+          },
+          {
+            "url": "https://bit.ly/3BBpfEq",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/whatsapp-icon.svg",
+            "alt": "whatsapp",
+            "title": "whatsapp"
+          },
+          {
+            "url": "https://twitter.com/FAO",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-twitter.svg",
+            "alt": "twitter",
+            "title": "twitter"
+          },
+          {
+            "url": "http://www.youtube.com/user/FAOoftheUN",
+            "image": "https://www.fao.org/images/corporatelibraries/social-icons/social-icon-youtube.svg",
+            "alt": "youtube",
+            "title": "youtube"
+          }
+        ]
+      }
+    },
+    "app": {
+      "items": []
+    }
+  }
+}

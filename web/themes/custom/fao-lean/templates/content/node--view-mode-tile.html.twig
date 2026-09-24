@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Node in a listing (Joinup's "Tile" view mode) -> FAO card component.
+ *
+ * Only maps variables. The data comes from fao_preprocess_node(), which reads
+ * what Manage display > Tile renders. Copy this file as node--card.html.twig
+ * (or node--BUNDLE--view-mode-tile.html.twig) when another view mode or one
+ * bundle needs the same card.
+ */
+#}
+{{ include('fao:card', {
+  attributes: attributes,
+  title: label,
+  url: url,
+  category: card.category,
+  meta: card.meta,
+  contextual: [title_prefix, title_suffix],
+  media: card.media,
+  text: card.text,
+}, false) }}
