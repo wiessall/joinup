@@ -1,0 +1,44 @@
+sti_dedupe.settings:
+  type: config_object
+  label: 'Duplicate resolution settings'
+  mapping:
+    threshold:
+      type: float
+      label: 'Minimum score to offer a pair for review'
+    max_candidates:
+      type: integer
+      label: 'Maximum candidates stored per solution'
+    indexes:
+      type: sequence
+      label: 'Search API indexes to search'
+      sequence:
+        type: string
+        label: 'Index id'
+    migration_tags:
+      type: sequence
+      label: 'Migration tags whose id maps are repointed on merge'
+      sequence:
+        type: string
+        label: 'Tag'
+    compare_fields:
+      type: sequence
+      label: 'Core fields shown in the side-by-side comparison'
+      sequence:
+        type: string
+        label: 'Field name'
+    weights:
+      type: mapping
+      label: 'Scoring weights'
+      mapping:
+        title:
+          type: float
+          label: 'Title similarity'
+        owner:
+          type: float
+          label: 'Owner match'
+        country:
+          type: float
+          label: 'Country match'
+        year:
+          type: float
+          label: 'Year proximity'

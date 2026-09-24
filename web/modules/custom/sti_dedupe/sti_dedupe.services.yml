@@ -1,0 +1,34 @@
+services:
+  sti_dedupe.decisions:
+    class: Drupal\sti_dedupe\DecisionStore
+    arguments:
+      - '@database'
+      - '@current_user'
+      - '@datetime.time'
+
+  sti_dedupe.candidates:
+    class: Drupal\sti_dedupe\CandidateStore
+    arguments:
+      - '@database'
+      - '@datetime.time'
+
+  sti_dedupe.finder:
+    class: Drupal\sti_dedupe\DuplicateFinder
+    arguments:
+      - '@entity_type.manager'
+      - '@config.factory'
+      - '@sti_dedupe.decisions'
+      - '@logger.factory'
+
+  sti_dedupe.merger:
+    class: Drupal\sti_dedupe\Merger
+    arguments:
+      - '@entity_type.manager'
+      - '@database'
+      - '@plugin.manager.migration'
+      - '@sti_dedupe.decisions'
+      - '@sti_dedupe.candidates'
+      - '@config.factory'
+      - '@module_handler'
+      - '@logger.factory'
+      - '@datetime.time'

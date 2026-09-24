@@ -1,0 +1,112 @@
+<?php
+
+/**
+ * @file
+ * Install, update and schema hooks for sti_dedupe.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Implements hook_schema().
+ */
+function sti_dedupe_schema(): array {
+  $schema['sti_dedupe_candidate'] = [
+    'description' => 'Precomputed duplicate candidates, one row per ordered pair.',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'source_nid' => [
+        'description' => 'The newly imported solution.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'candidate_nid' => [
+        'description' => 'An existing solution that may describe the same AFSI.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'collection_nid' => [
+        'description' => 'Collection of the source solution, for cheap listing.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'score' => [
+        'description' => 'Match score, 0..1, stored x1000 as an integer.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'reasons' => [
+        'description' => 'Human-readable scoring breakdown.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'computed' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'pair' => ['source_nid', 'candidate_nid'],
+    ],
+    'indexes' => [
+      'collection_score' => ['collection_nid', 'score'],
+      'source' => ['source_nid'],
+    ],
+  ];
+
+  $schema['sti_dedupe_decision'] = [
+    'description' => 'Reviewer decisions about candidate pairs. Pairs are stored low-nid first so direction does not matter.',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'nid_low' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'nid_high' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'decision' => [
+        'description' => 'One of: merged, same_separate, different.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+      ],
+      'uid' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'pair' => ['nid_low', 'nid_high'],
+    ],
+  ];
+
+  return $schema;
+}
