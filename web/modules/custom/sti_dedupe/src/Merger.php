@@ -42,6 +42,22 @@ final class Merger {
 
   private const SAME_AS_LABEL = 'sameInnovationAs';
 
+  /**
+   * The field holding a claim_properties term's URI.
+   *
+   * This is the field that actually exists on the vocabulary
+   * (field.field.taxonomy_term.claim_properties.property_uri). Note that the
+   * vocabulary's own rdf_sync config names "field_claim_property_uri" and
+   * IrdClaims names "field_property_uri"; neither exists, which is why terms
+   * end up with no URI. See the README.
+   */
+  private const URI_FIELD = 'claim_property_uri';
+
+  /**
+   * Namespace under which a collection's own property terms are minted.
+   */
+  private const COLLECTION_NS = 'https://sti-portal.fao.org/collection/';
+
   public function __construct(
     private readonly EntityTypeManagerInterface $entityTypeManager,
     private readonly Connection $database,
@@ -226,7 +242,7 @@ final class Merger {
         if (!$idMap instanceof Sql) {
           continue;
         }
-        $table = $idMap->getQualifiedMapTableName();
+        $table = $idMap->mapTableName();
         if (!$this->database->schema()->tableExists($table)) {
           continue;
         }
@@ -279,7 +295,7 @@ final class Merger {
       return;
     }
 
-    $property = $this->sameAsPropertyTerm($collection);
+    $property = $this->sameAsPropertyTerm();
     if (!$property) {
       return;
     }
@@ -344,30 +360,60 @@ final class Merger {
     $subject->set('related_solutions', $items);
   }
 
-  /**
-   * Gets or creates the sameInnovationAs term inside a collection's namespace.
+   /**
+   * Gets or creates the single sameInnovationAs property term.
    *
-   * claim_properties is hierarchical with the collection as the parent term,
-   * mirroring how ird_claims builds it.
+   * claim_properties is otherwise hierarchical with the collection as parent,
+   * mirroring how ird_claims builds it. This term is the exception: it is a
+   * system predicate with one fixed URI, so there is exactly one term for it,
+   * shared by every collection. Minting it per collection fails — rdf_sync
+   * registers a term's URI in rdf_sync_uri, which is unique on uri, so the
+   * second collection's save raises an integrity violation. Attribution is
+   * carried by the claim's field_claimed_by, not by which branch the term
+   * sits in.
+   *
+   * The primary lookup goes through rdf_sync_uri rather than an entity query,
+   * because the vocabulary's rdf_sync uri_field_name ('claim_property_uri')
+   * is a computed BundleFieldDefinition with custom storage: it has no
+   * column, and an entity query condition on it throws "not found".
    */
-  private function sameAsPropertyTerm(NodeInterface $collection): ?TermInterface {
-    $slug = (string) ($collection->get('short_id')->value ?? '');
-    if ($slug === '') {
-      return NULL;
+  private function sameAsPropertyTerm(): ?TermInterface {
+    $storage = $this->entityTypeManager->getStorage('taxonomy_term');
+
+    $tid = $this->database->select('rdf_sync_uri', 'u')
+      ->fields('u', ['entity_id'])
+      ->condition('u.entity_type', 'taxonomy_term')
+      ->condition('u.uri', self::SAME_AS_URI)
+      ->range(0, 1)
+      ->execute()
+      ->fetchField();
+
+    if ($tid) {
+      $term = $storage->load((int) $tid);
+      if ($term instanceof TermInterface) {
+        return $term;
+      }
     }
 
-    $parent = $this->termByName('claim_properties', $slug, 0);
-    if (!$parent) {
-      $parent = $this->createTerm('claim_properties', $slug, 0);
+    // No URI registered yet: fall back to a name lookup anywhere in the
+    // vocabulary, which also picks up a term created before this module.
+    $ids = $storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('vid', 'claim_properties')
+      ->condition('name', self::SAME_AS_LABEL)
+      ->sort('tid')
+      ->range(0, 1)
+      ->execute();
+
+    $term = $ids ? $storage->load((int) reset($ids)) : NULL;
+
+    if (!$term instanceof TermInterface) {
+      // Root level: a system predicate belongs to no collection.
+      return $this->createTerm('claim_properties', self::SAME_AS_LABEL, 0, self::SAME_AS_URI);
     }
 
-    $term = $this->termByName('claim_properties', self::SAME_AS_LABEL, (int) $parent->id());
-    if (!$term) {
-      $term = $this->createTerm('claim_properties', self::SAME_AS_LABEL, (int) $parent->id());
-    }
-
-    if ($term->hasField('field_property_uri') && $term->get('field_property_uri')->isEmpty()) {
-      $term->set('field_property_uri', self::SAME_AS_URI);
+    if ($term->hasField(self::URI_FIELD) && $term->get(self::URI_FIELD)->isEmpty()) {
+      $term->set(self::URI_FIELD, self::SAME_AS_URI);
       $term->save();
     }
 
@@ -395,7 +441,41 @@ final class Merger {
   }
 
   /**
+   * Finds a term by name anywhere in a vocabulary, ignoring the hierarchy.
+   *
+   * For system predicates only. sti:sameInnovationAs is one term shared by
+   * every collection: rdf_sync_uri.uri is unique, so minting it per
+   * collection fails on the second save. Attribution is carried by the
+   * claim's field_claimed_by, not by which branch the term sits in.
+   *
+   * Cannot be done by URI: the vocabulary's rdf_sync uri_field_name
+   * ('claim_property_uri') is a computed BundleFieldDefinition with custom
+   * storage, so it has no column and an entity query on it throws.
+   */
+  private function systemPropertyTerm(string $vocabulary, string $name): ?TermInterface {
+    $storage = $this->entityTypeManager->getStorage('taxonomy_term');
+    $ids = $storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('vid', $vocabulary)
+      ->condition('name', $name)
+      ->sort('tid')
+      ->range(0, 1)
+      ->execute();
+
+    if (!$ids) {
+      return NULL;
+    }
+    $term = $storage->load((int) reset($ids));
+    return $term instanceof TermInterface ? $term : NULL;
+  }
+
+  /**
    * Creates a term in a vocabulary under a parent.
+   *
+   * The URI is set BEFORE the first save. rdf_sync syncs a term on save, and
+   * a term whose URI field is empty produces a SPARQL statement with an empty
+   * subject — "FILTER (?subject = )" — which the triplestore rejects. Saving
+   * once without a URI and again with it is enough to trigger that.
    */
   private function createTerm(string $vocabulary, string $name, int $parent): TermInterface {
     $term = $this->entityTypeManager->getStorage('taxonomy_term')->create([
@@ -403,8 +483,9 @@ final class Merger {
       'name' => $name,
       'parent' => $parent,
     ]);
-    $term->save();
     assert($term instanceof TermInterface);
+
+    $term->save();
     return $term;
   }
 
