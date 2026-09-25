@@ -1,0 +1,31 @@
+uuid: 0044e00b-7af1-4b60-b933-16d5d8370cca
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_core
+    - joinup_group
+  theme:
+    - fao_lean
+id: fao_lean_unpublished_proposed
+theme: fao_lean
+region: content
+weight: 1
+provider: null
+plugin: entity_unpublished
+settings:
+  id: entity_unpublished
+  label: 'Proposed content'
+  label_display: visible
+  provider: joinup_group
+  context_mapping:
+    og: '@node.node_route_context:node'
+  states_filter:
+    - proposed
+  negate_states_filter: false
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - entity.node.unpublished_content

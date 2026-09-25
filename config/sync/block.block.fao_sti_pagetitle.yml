@@ -1,0 +1,36 @@
+uuid: 9129e318-1996-47a9-ae90-02cdc77bb51e
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+    - system
+  theme:
+    - fao_sti
+id: fao_sti_pagetitle
+theme: fao_sti
+region: content
+weight: -26
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  label_display: '0'
+  provider: core
+visibility:
+  request_route:
+    id: request_route
+    negate: true
+    context_mapping: {  }
+    routes:
+      - entity.user.canonical
+      - entity.user.edit_form
+      - entity.meta_entity.canonical
+      - view.content_overview.page_1
+      - view.discussions.overview
+  request_path:
+    id: request_path
+    negate: true
+    context_mapping: {  }
+    pages: "<front>\r\n/eu-oss-catalogue/solutions/*\r\n/api/assessments/v1"

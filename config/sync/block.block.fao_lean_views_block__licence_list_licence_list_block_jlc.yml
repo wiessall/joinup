@@ -1,0 +1,30 @@
+uuid: 532943c8-1058-4b33-955c-6c750063cfeb
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.licence_list
+  module:
+    - system
+    - views
+  theme:
+    - fao_lean
+id: fao_lean_views_block__licence_list_licence_list_block_jlc
+theme: fao_lean
+region: content
+weight: -8
+provider: null
+plugin: 'views_block:licence_list-licence_list_block_jlc'
+settings:
+  id: 'views_block:licence_list-licence_list_block_jlc'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: null
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /node/703242

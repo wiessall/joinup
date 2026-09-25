@@ -1,0 +1,22 @@
+uuid: e635f0a0-e599-4649-8b97-08f96546b3f6
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_group
+  theme:
+    - fao
+id: fao_three_dots_menu
+theme: fao
+region: breadcrumb
+weight: -26
+provider: null
+plugin: joinup_local_tasks_block
+settings:
+  id: joinup_local_tasks_block
+  label: Tabs
+  label_display: '0'
+  provider: joinup_group
+  primary: true
+  secondary: false
+visibility: {  }

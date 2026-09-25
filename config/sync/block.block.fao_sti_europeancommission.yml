@@ -1,0 +1,25 @@
+uuid: 4e9329cf-4c19-45d3-ae12-f51fefd7af1d
+langcode: en
+status: false
+dependencies:
+  config:
+    - system.menu.footer-european-commission
+  module:
+    - system
+  theme:
+    - fao_sti
+id: fao_sti_europeancommission
+theme: fao_sti
+region: footer
+weight: -25
+provider: null
+plugin: 'system_menu_block:footer-european-commission'
+settings:
+  id: 'system_menu_block:footer-european-commission'
+  label: 'European Commission'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: null
+  expand_all_items: false
+visibility: {  }

@@ -1,0 +1,36 @@
+uuid: d2bb26be-4675-4a30-8343-10a50085e83c
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_core
+    - oe_webtools_etrans
+  theme:
+    - fao_lean
+id: fao_lean_webtools_etrans
+theme: fao_lean
+region: header
+weight: -26
+provider: null
+plugin: oe_webtools_etrans
+settings:
+  id: oe_webtools_etrans
+  label: 'OpenEuropa Webtools ETrans'
+  label_display: '0'
+  provider: oe_webtools_etrans
+  delay: 0
+  domain: gen
+  exclude: ''
+  include: ''
+  render_as: button
+  render_to: ''
+visibility:
+  request_route:
+    id: request_route
+    negate: true
+    context_mapping: {  }
+    routes:
+      - entity.node.delete_form
+      - entity.node.edit_form
+      - entity.taxonomy_term.edit_form
+      - entity.taxonomy_term.delete_form

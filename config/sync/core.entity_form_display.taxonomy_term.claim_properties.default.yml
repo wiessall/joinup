@@ -3,7 +3,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.taxonomy_term.claim_properties.property_uri
     - taxonomy.vocabulary.claim_properties
   module:
     - path
@@ -42,14 +41,6 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  property_uri:
-    type: string_textarea
-    weight: 101
-    region: content
-    settings:
-      rows: 5
-      placeholder: ''
-    third_party_settings: {  }
   status:
     type: boolean_checkbox
     weight: 100
@@ -58,4 +49,5 @@ content:
       display_label: true
     third_party_settings: {  }
 hidden:
+  claim_property_uri: true
   uuid: true

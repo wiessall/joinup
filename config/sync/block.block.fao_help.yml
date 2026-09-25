@@ -1,0 +1,20 @@
+uuid: c98f358b-d51d-4919-8cc0-fe29f0f1474c
+langcode: en
+status: false
+dependencies:
+  module:
+    - help
+  theme:
+    - fao
+id: fao_help
+theme: fao
+region: content
+weight: -17
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Help
+  label_display: '0'
+  provider: help
+visibility: {  }

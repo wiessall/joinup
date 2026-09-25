@@ -1,0 +1,29 @@
+uuid: f4ef16ce-5137-434d-bbdf-58949ce62bc4
+langcode: en
+status: false
+dependencies:
+  config:
+    - facets.facet.collection_my_content
+  module:
+    - facets
+    - system
+  theme:
+    - fao_sti
+id: fao_sti_mycontentcollection
+theme: fao_sti
+region: content
+weight: -20
+provider: null
+plugin: 'facet_block:collection_my_content'
+settings:
+  id: 'facet_block:collection_my_content'
+  label: 'Collections - My content'
+  label_display: '0'
+  provider: facets
+  context_mapping: {  }
+  block_id: ventuno_mycontentcollection
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /collections

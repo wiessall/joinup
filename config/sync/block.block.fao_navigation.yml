@@ -1,0 +1,41 @@
+uuid: 505cdee3-e65f-498f-b5ef-be59b4fde2de
+langcode: en
+status: false
+dependencies:
+  config:
+    - og_menu.ogmenu.navigation
+  module:
+    - joinup_core
+    - joinup_group
+    - og
+  theme:
+    - fao
+id: fao_navigation
+theme: fao
+region: header
+weight: -25
+provider: null
+plugin: 'group_menu_block:navigation'
+settings:
+  id: 'group_menu_block:navigation'
+  label: 'Collection | Solution menu'
+  label_display: '0'
+  provider: joinup_group
+  context_mapping:
+    og: '@og.context:og'
+  level: 1
+  depth: 1
+visibility:
+  og_group_type:
+    id: og_group_type
+    negate: false
+    context_mapping:
+      og: '@og.context:og'
+    group_types:
+      node-collection: node-collection
+      node-solution: node-solution
+  request_route:
+    id: request_route
+    negate: true
+    routes:
+      - entity.node.edit_form

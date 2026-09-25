@@ -1,0 +1,35 @@
+uuid: eed35c7f-8191-4cbb-84d6-39a6a0ba1930
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_core
+    - joinup_flag
+  theme:
+    - fao
+id: fao_like
+theme: fao
+region: breadcrumb
+weight: -27
+provider: null
+plugin: joinup_flag_block
+settings:
+  id: joinup_flag_block
+  label: Like
+  label_display: '0'
+  provider: joinup_flag
+  flag_type: like
+visibility:
+  joinup_content:
+    id: joinup_content
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    content:
+      node-assessment_report: node-assessment_report
+      node-custom_page: node-custom_page
+      node-discussion: node-discussion
+      node-document: node-document
+      node-event: node-event
+      node-news: node-news
+      node-solution: node-solution

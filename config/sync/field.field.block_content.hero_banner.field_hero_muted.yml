@@ -1,0 +1,26 @@
+uuid: 0418cc41-4e94-443b-af81-8ec5cfad04c5
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.hero_banner
+    - field.storage.block_content.field_hero_muted
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: block_content.hero_banner.field_hero_muted
+field_name: field_hero_muted
+entity_type: block_content
+bundle: hero_banner
+label: field_hero_muted
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

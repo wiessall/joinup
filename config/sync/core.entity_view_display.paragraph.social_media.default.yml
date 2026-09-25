@@ -3,31 +3,17 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.paragraph.social_media.field_paragraphs_social_media
     - paragraphs.paragraphs_type.social_media
-  module:
-    - social_media_links_field
-    - template_suggestion
 id: paragraph.social_media.default
 targetEntityType: paragraph
 bundle: social_media
 mode: default
 content:
   field_paragraphs_social_media:
-    type: social_media_links_field_default
-    label: hidden
     settings:
-      appearance:
-        orientation: h
-        show_name: true
-      link_attributes:
-        target: _blank
-        rel: nofollow
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 0
-    region: content
+      appearance: {  }
+      link_attributes: {  }
+    third_party_settings: {  }
 hidden:
   search_api_excerpt: true
   uuid: true

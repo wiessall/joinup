@@ -1,0 +1,29 @@
+uuid: 0ba1dd33-602d-461a-b413-41dcb5585468
+langcode: en
+status: false
+dependencies:
+  config:
+    - facets.facet.sbt_solution_type
+  module:
+    - facets
+    - system
+  theme:
+    - fao_lean
+id: fao_lean_sbt_solutiontype_page
+theme: fao_lean
+region: content
+weight: -28
+provider: null
+plugin: 'facet_block:sbt_solution_type'
+settings:
+  id: 'facet_block:sbt_solution_type'
+  label: 'Solution type'
+  label_display: visible
+  provider: facets
+  context_mapping: {  }
+  block_id: ventuno_sbt_solutiontype_page
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /admin/reporting/solutions-by-type

@@ -1,0 +1,27 @@
+uuid: e4be7bed-8992-41b7-9457-5e590ae1f7e3
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_core
+    - joinup_private_message
+  theme:
+    - fao
+id: fao_createprivatemessage
+theme: fao
+region: sidebar
+weight: -39
+provider: null
+plugin: joinup_private_message_block
+settings:
+  id: joinup_private_message_block
+  label: 'Create Private Message'
+  label_display: '0'
+  provider: joinup_private_message
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - private_message.private_message_page
+      - entity.private_message_thread.canonical

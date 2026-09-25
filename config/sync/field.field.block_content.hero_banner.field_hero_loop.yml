@@ -1,0 +1,26 @@
+uuid: 7861a2d4-2838-4bba-9ab2-a9d74b1a5eb6
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.hero_banner
+    - field.storage.block_content.field_hero_loop
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: block_content.hero_banner.field_hero_loop
+field_name: field_hero_loop
+entity_type: block_content
+bundle: hero_banner
+label: field_hero_loop
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

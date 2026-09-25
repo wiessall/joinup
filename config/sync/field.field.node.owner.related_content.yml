@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.storage.node.related_content
-    - node.type.distribution
     - node.type.owner
     - node.type.solution
   module:
@@ -31,7 +30,6 @@ settings:
   handler: 'default:node'
   handler_settings:
     target_bundles:
-      distribution: distribution
       solution: solution
     sort:
       field: _none

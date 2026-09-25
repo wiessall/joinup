@@ -1,0 +1,29 @@
+uuid: 5183c585-048c-495a-bb65-aefa9b1abf99
+langcode: en
+status: false
+dependencies:
+  config:
+    - facets.facet.aggregated_changed
+  module:
+    - facets
+    - system
+  theme:
+    - fao_sti
+id: fao_sti_changed
+theme: fao_sti
+region: content
+weight: -30
+provider: null
+plugin: 'facet_block:aggregated_changed'
+settings:
+  id: 'facet_block:aggregated_changed'
+  label: Changed
+  label_display: visible
+  provider: facets
+  context_mapping: {  }
+  block_id: ventuno_changed
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /admin/reporting/solutions-by-type

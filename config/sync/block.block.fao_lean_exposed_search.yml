@@ -1,0 +1,29 @@
+uuid: f1262a04-4693-499c-83db-3430fd444b52
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.search
+  module:
+    - system
+    - views
+  theme:
+    - fao_lean
+id: fao_lean_exposed_search
+theme: fao_lean
+region: header
+weight: -27
+provider: null
+plugin: 'views_exposed_filter_block:search-page_1'
+settings:
+  id: 'views_exposed_filter_block:search-page_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    context_mapping: {  }
+    pages: '/solution/*'

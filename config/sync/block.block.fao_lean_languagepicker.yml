@@ -1,0 +1,28 @@
+uuid: 089b4dea-c97b-4412-92e7-1c4cf280a81e
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_i18n
+    - user
+  theme:
+    - fao_lean
+id: fao_lean_languagepicker
+theme: fao_lean
+region: header
+weight: 0
+provider: null
+plugin: language_picker
+settings:
+  id: language_picker
+  label: 'Language Picker'
+  label_display: '0'
+  provider: joinup_i18n
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      translator: translator

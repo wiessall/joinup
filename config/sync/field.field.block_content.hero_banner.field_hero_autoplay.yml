@@ -1,0 +1,26 @@
+uuid: 2c01a640-dd3a-4cd9-a109-411a04a278e5
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.hero_banner
+    - field.storage.block_content.field_hero_autoplay
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: block_content.hero_banner.field_hero_autoplay
+field_name: field_hero_autoplay
+entity_type: block_content
+bundle: hero_banner
+label: field_hero_autoplay
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

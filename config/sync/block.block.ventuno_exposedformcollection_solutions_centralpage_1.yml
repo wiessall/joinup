@@ -1,6 +1,6 @@
 uuid: f50dcd86-6001-4a88-a3be-aceb50f16ef2
 langcode: en
-status: false
+status: true
 dependencies:
   config:
     - views.view.collection_solutions_central

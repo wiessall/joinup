@@ -1,0 +1,31 @@
+uuid: e090bccb-2b80-43a9-9e07-a991d42a0901
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.private_message_ban_settings
+  module:
+    - joinup_core
+    - views
+  theme:
+    - fao_sti
+id: fao_sti_views_block__private_message_ban_settings_block_blocked_users
+theme: fao_sti
+region: content
+weight: -4
+provider: null
+plugin: 'views_block:private_message_ban_settings-block_blocked_users'
+settings:
+  id: 'views_block:private_message_ban_settings-block_blocked_users'
+  label: ''
+  label_display: visible
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: null
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - joinup_private_message.private_message_settings_page

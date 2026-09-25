@@ -20,30 +20,97 @@ dependencies:
     - search_api_field
 third_party_settings:
   layout_builder:
-    enabled: false
+    enabled: true
     allow_custom: false
+    sections:
+      -
+        layout_id: layout_twocol_section
+        layout_settings:
+          label: 'Filters and results'
+          column_widths: 33-67
+        components:
+          9f1c4a30-6b52-4a7e-9d21-1c7a5e8b3d40:
+            uuid: 9f1c4a30-6b52-4a7e-9d21-1c7a5e8b3d40
+            region: first
+            configuration:
+              id: 'extra_field_block:meta_entity:collection_settings:meta_entity_collection_settings_listing_content_top'
+              label: 'Facet region: Collection content top'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 0
+            additional: {  }
+          2d8e7b14-c035-4f69-8a52-6e90d4a17c83:
+            uuid: 2d8e7b14-c035-4f69-8a52-6e90d4a17c83
+            region: first
+            configuration:
+              id: 'extra_field_block:meta_entity:collection_settings:meta_entity_collection_settings_listing_content_inline_facets'
+              label: 'Facet region: Inline facets'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 1
+            additional: {  }
+          7a3f9c56-8e14-4b02-a7d8-53b1e6f0a29c:
+            uuid: 7a3f9c56-8e14-4b02-a7d8-53b1e6f0a29c
+            region: second
+            configuration:
+              id: 'field_block:meta_entity:collection_settings:listing_content'
+              label: 'Listing content'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: search_api_field
+                label: hidden
+                settings: {  }
+                third_party_settings: {  }
+            weight: 0
+            additional: {  }
+          88ee9ac6-33e9-41dd-928b-6fe7f924188a:
+            uuid: 88ee9ac6-33e9-41dd-928b-6fe7f924188a
+            region: content
+            configuration:
+              id: 'extra_field_block:meta_entity:collection_settings:meta_entity_collection_settings_listing_content_top'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 0
+            additional: {  }
+          b4178997-6920-4200-afcd-b7b9e7644e81:
+            uuid: b4178997-6920-4200-afcd-b7b9e7644e81
+            region: content
+            configuration:
+              id: 'extra_field_block:meta_entity:collection_settings:meta_entity_collection_settings_listing_content_inline_facets'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 1
+            additional: {  }
+          a35e37a8-61bf-40d4-86d1-364be902aebb:
+            uuid: a35e37a8-61bf-40d4-86d1-364be902aebb
+            region: content
+            configuration:
+              id: 'field_block:meta_entity:collection_settings:listing_content'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: search_api_field
+                label: hidden
+                settings: {  }
+                third_party_settings: {  }
+            weight: 2
+            additional: {  }
+        third_party_settings: {  }
 id: meta_entity.collection_settings.listing_content
 targetEntityType: meta_entity
 bundle: collection_settings
 mode: listing_content
-content:
-  listing_content:
-    type: search_api_field
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 2
-    region: content
-  meta_entity_collection_settings_listing_content_inline_facets:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 1
-    region: content
-  meta_entity_collection_settings_listing_content_top:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 0
-    region: content
+content: {  }
 hidden:
   announcements_enabled: true
   changed: true
@@ -60,3 +127,6 @@ hidden:
   search_api_excerpt: true
   target: true
   uuid: true
+  meta_entity_collection_settings_listing_content_top: true
+  meta_entity_collection_settings_listing_content_inline_facets: true
+  listing_content: true

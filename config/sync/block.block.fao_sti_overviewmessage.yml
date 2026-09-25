@@ -1,0 +1,26 @@
+uuid: 3ef87204-7089-4e4e-b0c9-bfec27985dff
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_group
+    - system
+  theme:
+    - fao_sti
+id: fao_sti_overviewmessage
+theme: fao_sti
+region: content
+weight: -19
+provider: null
+plugin: overview_message_block
+settings:
+  id: overview_message_block
+  label: 'Overview message'
+  label_display: '0'
+  provider: joinup_group
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: "/collections\r\n/solutions"

@@ -1,0 +1,14 @@
+uuid: cb565d1f-727d-4194-812a-4e90cce6dcd0
+langcode: en
+status: true
+dependencies: {  }
+id: local_video
+label: 'Local video'
+description: 'Pre-uploaded videos used to decorate content.'
+source: video_file
+queue_thumbnail_downloads: false
+new_revision: false
+source_configuration:
+  source_field: file
+field_map:
+  mimetype: name

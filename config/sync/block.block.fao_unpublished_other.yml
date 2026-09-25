@@ -1,0 +1,32 @@
+uuid: 3b828552-81af-4ae7-84f7-8b49ee3d5d5d
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_core
+    - joinup_group
+  theme:
+    - fao
+id: fao_unpublished_other
+theme: fao
+region: content
+weight: 2
+provider: null
+plugin: entity_unpublished
+settings:
+  id: entity_unpublished
+  label: 'Other unpublished content'
+  label_display: visible
+  provider: joinup_group
+  context_mapping:
+    og: '@node.node_route_context:node'
+  states_filter:
+    - draft
+    - proposed
+  negate_states_filter: true
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - entity.node.unpublished_content

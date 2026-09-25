@@ -7,7 +7,7 @@ dependencies:
     - field.field.paragraph.resource_file.resource_file
     - paragraphs.paragraphs_type.resource_file
   module:
-    - joinup_distribution
+    - file
     - layout_builder
 third_party_settings:
   layout_builder:
@@ -19,14 +19,12 @@ bundle: resource_file
 mode: tracker
 content:
   resource_file:
-    type: tracked_hosted_file_download
+    type: file_default
     label: above
     settings:
-      hosted_files_title: Download
-      remote_files_title: External
-      show_remote_files: false
+      use_description_as_link_text: true
     third_party_settings: {  }
-    weight: 0
+    weight: 1
     region: content
 hidden:
   search_api_excerpt: true

@@ -1,0 +1,20 @@
+uuid: f543119e-035a-462d-a037-4d92590e6837
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - fao_sti
+id: fao_sti_content
+theme: fao_sti
+region: content
+weight: -12
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }

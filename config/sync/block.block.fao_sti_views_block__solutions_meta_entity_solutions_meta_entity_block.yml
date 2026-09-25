@@ -1,0 +1,29 @@
+uuid: d34b2c2b-c393-40d6-975d-eb6b47881b74
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.solutions_meta_entity
+  module:
+    - system
+    - views
+  theme:
+    - fao_sti
+id: fao_sti_views_block__solutions_meta_entity_solutions_meta_entity_block
+theme: fao_sti
+region: content
+weight: -6
+provider: null
+plugin: 'views_block:solutions_meta_entity-solutions_meta_entity_block'
+settings:
+  id: 'views_block:solutions_meta_entity-solutions_meta_entity_block'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: null
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /node/705372

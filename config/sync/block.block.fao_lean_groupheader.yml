@@ -1,0 +1,24 @@
+uuid: 016ea6eb-0ec6-4cb2-a13b-41bf66b65947
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_group
+  theme:
+    - fao_lean
+_core:
+  default_config_hash: h5CYj7Tnz0AfDbd7lm81Q1EBn7jA6-IcEpCbJt4ddsk
+id: fao_lean_groupheader
+theme: fao_lean
+region: header
+weight: -27
+provider: null
+plugin: group_header_block
+settings:
+  id: group_header_block
+  label: 'Group header'
+  label_display: '0'
+  provider: joinup_group
+  context_mapping:
+    og: '@og.context:og'
+visibility: {  }

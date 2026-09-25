@@ -1,0 +1,27 @@
+uuid: 12aded11-bc15-4212-b405-4c73e98a8340
+langcode: en
+status: false
+dependencies:
+  module:
+    - collection
+    - joinup_core
+  theme:
+    - fao_sti
+id: fao_sti_collectionsettingslink
+theme: fao_sti
+region: content
+weight: -23
+provider: null
+plugin: collection_settings_link
+settings:
+  id: collection_settings_link
+  label: 'Collection settings link'
+  label_display: '0'
+  provider: joinup_collection
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    context_mapping: {  }
+    routes:
+      - entity.node.glossary

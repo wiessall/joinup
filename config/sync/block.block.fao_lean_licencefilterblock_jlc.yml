@@ -1,0 +1,27 @@
+uuid: 07c32213-bd0e-403b-a34e-c83ab6378867
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_licence
+    - system
+  theme:
+    - fao_lean
+id: fao_lean_licencefilterblock_jlc
+theme: fao_lean
+region: content
+weight: -10
+provider: null
+plugin: licence_filter_block
+settings:
+  id: licence_filter_block
+  label: 'Licence filter block (JLC)'
+  label_display: '0'
+  provider: joinup_licence
+  show_terms: false
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /node/703242

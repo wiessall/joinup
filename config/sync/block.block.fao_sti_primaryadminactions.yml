@@ -1,0 +1,18 @@
+uuid: f63374dc-e9cc-430f-813a-4bd0ba5b6eee
+langcode: en
+status: false
+dependencies:
+  theme:
+    - fao_sti
+id: fao_sti_primaryadminactions
+theme: fao_sti
+region: content
+weight: -24
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  label_display: '0'
+  provider: core
+visibility: {  }

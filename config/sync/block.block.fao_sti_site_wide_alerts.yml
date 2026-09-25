@@ -1,0 +1,20 @@
+uuid: 8d13e6f7-78d4-445d-bb20-be17955b8b1d
+langcode: en
+status: false
+dependencies:
+  module:
+    - sitewide_alert_block
+  theme:
+    - fao_sti
+id: fao_sti_site_wide_alerts
+theme: fao_sti
+region: messages
+weight: -26
+provider: null
+plugin: sitewide_alert_block
+settings:
+  id: sitewide_alert_block
+  label: 'Site wide alerts'
+  label_display: '0'
+  provider: sitewide_alert_block
+visibility: {  }

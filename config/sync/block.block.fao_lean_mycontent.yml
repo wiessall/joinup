@@ -1,0 +1,33 @@
+uuid: 4e758de5-39eb-47b6-988e-e4aaf680fcef
+langcode: en
+status: false
+dependencies:
+  config:
+    - facets.facet.content_my_content
+  module:
+    - facets
+    - joinup_core
+  theme:
+    - fao_lean
+_core:
+  default_config_hash: '-AQZlw29gV0x0t8_q98V7WbwZXUJn_cCHp3lQCLtRQQ'
+id: fao_lean_mycontent
+theme: fao_lean
+region: content
+weight: -18
+provider: null
+plugin: 'facet_block:content_my_content'
+settings:
+  id: 'facet_block:content_my_content'
+  label: 'Content overview - My content'
+  label_display: '0'
+  provider: facets
+  context_mapping: {  }
+  block_id: ventuno_mycontent
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    context_mapping: {  }
+    routes:
+      - view.content_overview.page_1

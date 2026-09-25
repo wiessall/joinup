@@ -1,0 +1,27 @@
+uuid: 25db2d1a-3b15-4700-8b42-17a855156beb
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_licence
+    - system
+  theme:
+    - fao
+id: fao_licencefilterblock
+theme: fao
+region: content
+weight: -11
+provider: null
+plugin: licence_filter_block
+settings:
+  id: licence_filter_block
+  label: 'Licence filter block (JLA)'
+  label_display: '0'
+  provider: joinup_licence
+  show_terms: true
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /node/701805

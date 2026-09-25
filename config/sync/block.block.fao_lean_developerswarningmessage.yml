@@ -1,0 +1,28 @@
+uuid: c9ce2ab2-3316-4509-8398-d5ca710066b1
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_user
+    - user
+  theme:
+    - fao_lean
+id: fao_lean_developerswarningmessage
+theme: fao_lean
+region: messages
+weight: -27
+provider: null
+plugin: developer_warning_message
+settings:
+  id: developer_warning_message
+  label: 'Developers warning message'
+  label_display: '0'
+  provider: joinup_user
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      developer: developer
