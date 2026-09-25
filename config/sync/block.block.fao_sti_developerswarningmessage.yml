@@ -1,0 +1,28 @@
+uuid: e0e06915-c5c0-4de2-bb8a-a0ab1f7d003b
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_user
+    - user
+  theme:
+    - fao_sti
+id: fao_sti_developerswarningmessage
+theme: fao_sti
+region: messages
+weight: -27
+provider: null
+plugin: developer_warning_message
+settings:
+  id: developer_warning_message
+  label: 'Developers warning message'
+  label_display: '0'
+  provider: joinup_user
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      developer: developer

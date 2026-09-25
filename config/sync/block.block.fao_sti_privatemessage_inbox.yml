@@ -1,0 +1,30 @@
+uuid: da462934-a775-4ebc-9d3e-eec32df2de94
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_core
+    - private_message
+  theme:
+    - fao_sti
+id: fao_sti_privatemessage_inbox
+theme: fao_sti
+region: sidebar
+weight: -38
+provider: null
+plugin: private_message_inbox_block
+settings:
+  id: private_message_inbox_block
+  label: 'Private Message Inbox'
+  label_display: '0'
+  provider: private_message
+  thread_count: 5
+  ajax_load_count: 5
+  ajax_refresh_rate: 15
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - private_message.private_message_page
+      - entity.private_message_thread.canonical

@@ -1,0 +1,23 @@
+uuid: d37b555e-3fc0-48cc-a012-187fd5952e61
+langcode: en
+status: false
+dependencies:
+  module:
+    - collection
+  theme:
+    - fao
+id: fao_collection_coc_message
+theme: fao
+region: messages
+weight: -22
+provider: null
+plugin: collection_coc_message
+settings:
+  id: collection_coc_message
+  label: 'Collection CoC message'
+  label_display: '0'
+  provider: collection
+  context_mapping:
+    og: '@og.context:og'
+    user: '@user.current_user_context:current_user'
+visibility: {  }

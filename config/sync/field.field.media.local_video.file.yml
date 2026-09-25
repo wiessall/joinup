@@ -1,0 +1,28 @@
+uuid: eb0a6b13-5b8c-4a67-894d-d15fbbdcd82c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.file
+    - media.type.local_video
+  module:
+    - file
+id: media.local_video.file
+field_name: file
+entity_type: media
+bundle: local_video
+label: 'Video file'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_extensions: mp4
+  max_filesize: ''
+  description_field: false
+  description_field_required: false
+field_type: file

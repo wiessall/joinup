@@ -14,7 +14,6 @@ dependencies:
     - node.type.contact_information
     - node.type.custom_page
     - node.type.discussion
-    - node.type.distribution
     - node.type.document
     - node.type.glossary
     - node.type.licence
@@ -35,13 +34,12 @@ dependencies:
     - field_permissions
     - file
     - flag
+    - joinup_acceptance
     - joinup_community_content
     - joinup_core
-    - joinup_distribution
     - joinup_featured
     - joinup_group
     - joinup_group_content_management
-    - joinup_legal
     - joinup_licence
     - joinup_log
     - joinup_newsletter
@@ -78,7 +76,6 @@ permissions:
   - 'access contact form messages'
   - 'access content moderation overview'
   - 'access dashboard'
-  - 'access distribution reports'
   - 'access files overview'
   - 'access glossary data export'
   - 'access group reports'
@@ -93,7 +90,6 @@ permissions:
   - 'add sitewide alert entities'
   - 'administer collection ownership'
   - 'administer comments'
-  - 'administer entity legal document versions'
   - 'administer footer-about-us menu items'
   - 'administer footer-european-commission menu items'
   - 'administer footer-follow-us menu items'
@@ -128,7 +124,6 @@ permissions:
   - 'create custom_page content'
   - 'create discussion content'
   - 'create discussion_logo media'
-  - 'create distribution content'
   - 'create eif_perspective meta-entity'
   - 'create event_logo media'
   - 'create licence content'
@@ -196,7 +191,6 @@ permissions:
   - 'edit any custom_page content'
   - 'edit any discussion content'
   - 'edit any discussion_logo media'
-  - 'edit any distribution content'
   - 'edit any event_logo media'
   - 'edit any glossary content'
   - 'edit any licence content'
@@ -221,6 +215,7 @@ permissions:
   - 'manage newsroom newsletter subscriptions'
   - 'manage oauth clients'
   - 'manage solutions'
+  - 'perform acceptance tasks'
   - 'perform announcement workflow approve transition on any entity'
   - 'perform announcement workflow reject transition on any entity'
   - 'perform announcement workflow send transition on any entity'

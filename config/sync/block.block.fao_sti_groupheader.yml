@@ -1,0 +1,24 @@
+uuid: 8549b84f-62db-4dc6-9477-6c4e9ce18187
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_group
+  theme:
+    - fao_sti
+_core:
+  default_config_hash: h5CYj7Tnz0AfDbd7lm81Q1EBn7jA6-IcEpCbJt4ddsk
+id: fao_sti_groupheader
+theme: fao_sti
+region: header
+weight: -27
+provider: null
+plugin: group_header_block
+settings:
+  id: group_header_block
+  label: 'Group header'
+  label_display: '0'
+  provider: joinup_group
+  context_mapping:
+    og: '@og.context:og'
+visibility: {  }

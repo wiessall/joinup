@@ -1,0 +1,22 @@
+uuid: d59c7c1a-c340-48f7-b336-c9704f3be0dc
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - fao
+_core:
+  default_config_hash: U8VHHZGmwUulZiUO6NVs1BXf9rRtY6zwNoAc6c-3rP8
+id: fao_messages
+theme: fao
+region: messages
+weight: -25
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: 'Status messages'
+  label_display: '0'
+  provider: system
+visibility: {  }

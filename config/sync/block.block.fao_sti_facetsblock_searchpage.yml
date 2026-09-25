@@ -1,0 +1,42 @@
+uuid: 8de9ba52-a954-4efc-bfab-79fe7006bad0
+langcode: en
+status: false
+dependencies:
+  module:
+    - facets_block
+    - joinup_core
+  theme:
+    - fao_sti
+id: fao_sti_facetsblock_searchpage
+theme: fao_sti
+region: sidebar
+weight: -41
+provider: null
+plugin: facets_block
+settings:
+  id: facets_block
+  label: 'Facets block: View Search, display Page'
+  label_display: '0'
+  provider: facets_block
+  show_title: false
+  exclude_empty_facets: true
+  hide_empty_block: false
+  facets_to_include:
+    - 'facet_block:topic'
+    - 'facet_block:type'
+    - 'facet_block:organisation_country'
+    - 'facet_block:solution_classification'
+    - 'facet_block:domain'
+    - 'facet_block:type_of_document'
+    - 'facet_block:spatial_coverage'
+    - 'facet_block:interoperable_flag'
+    - 'facet_block:status'
+    - 'facet_block:date'
+  add_js_classes: true
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    context_mapping: {  }
+    routes:
+      - view.search.page_1

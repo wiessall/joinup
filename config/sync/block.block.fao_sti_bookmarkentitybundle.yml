@@ -1,0 +1,29 @@
+uuid: ea924853-be46-4a0c-b93d-07deeb32c38a
+langcode: en
+status: false
+dependencies:
+  config:
+    - facets.facet.bookmark_entity_bundle
+  module:
+    - facets
+    - system
+  theme:
+    - fao_sti
+id: fao_sti_bookmarkentitybundle
+theme: fao_sti
+region: content
+weight: -14
+provider: null
+plugin: 'facet_block:bookmark_entity_bundle'
+settings:
+  id: 'facet_block:bookmark_entity_bundle'
+  label: 'Bookmark Entity bundle'
+  label_display: '0'
+  provider: facets
+  context_mapping: {  }
+  block_id: ventuno_bookmarkentitybundle
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /user/bookmarks

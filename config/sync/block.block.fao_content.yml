@@ -1,0 +1,20 @@
+uuid: f7fb7766-72f9-4a8c-990f-1aae260aff1f
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - fao
+id: fao_content
+theme: fao
+region: content
+weight: -12
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }

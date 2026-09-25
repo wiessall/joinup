@@ -1,0 +1,20 @@
+uuid: e4e40b73-cc6b-4648-be1d-5e5a25f539bb
+langcode: en
+status: false
+dependencies:
+  module:
+    - sitewide_alert_block
+  theme:
+    - fao_lean
+id: fao_lean_site_wide_alerts
+theme: fao_lean
+region: messages
+weight: -26
+provider: null
+plugin: sitewide_alert_block
+settings:
+  id: sitewide_alert_block
+  label: 'Site wide alerts'
+  label_display: '0'
+  provider: sitewide_alert_block
+visibility: {  }

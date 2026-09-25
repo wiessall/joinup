@@ -1,0 +1,29 @@
+uuid: 023d4baf-a1ea-40de-b12b-3fbb4fc673f0
+langcode: en
+status: false
+dependencies:
+  config:
+    - facets.facet.collection_my_content
+  module:
+    - facets
+    - system
+  theme:
+    - fao_lean
+id: fao_lean_mycontentcollection
+theme: fao_lean
+region: content
+weight: -20
+provider: null
+plugin: 'facet_block:collection_my_content'
+settings:
+  id: 'facet_block:collection_my_content'
+  label: 'Collections - My content'
+  label_display: '0'
+  provider: facets
+  context_mapping: {  }
+  block_id: ventuno_mycontentcollection
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /collections

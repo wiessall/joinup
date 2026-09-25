@@ -1,0 +1,28 @@
+uuid: 25daf384-7953-4902-8b4d-91dc5a555f23
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_licence
+    - node
+  theme:
+    - fao
+id: fao_licencedeprecatedmessage
+theme: fao
+region: messages
+weight: -24
+provider: null
+plugin: licence_deprecated_message_block
+settings:
+  id: licence_deprecated_message_block
+  label: 'Licence overview deprecated message'
+  label_display: '0'
+  provider: joinup_licence
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      licence: licence

@@ -6,7 +6,7 @@ connector:
   config:
     endpoint: basic
     scheme: http
-    host: localhost
+    host: digit-joinup-reference-2.ddev.site
     port: 8890
     paths:
       query: sparql

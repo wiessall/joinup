@@ -1,0 +1,39 @@
+uuid: 25704f90-d4b5-4657-a395-ad059ac27b7f
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_core
+    - joinup_group
+    - og
+  theme:
+    - fao
+_core:
+  default_config_hash: lNcx1eTcO-2duy3JjKHExr2AxeKuGkf60Vc6V35A_dI
+id: fao_joinup_add_content
+theme: fao
+region: breadcrumb
+weight: -25
+provider: null
+plugin: add_content_block
+settings:
+  id: add_content_block
+  label: 'Add content'
+  label_display: '0'
+  provider: joinup_group
+  context_mapping:
+    og: '@og.context:og'
+visibility:
+  og_group_type:
+    id: og_group_type
+    negate: false
+    context_mapping:
+      og: '@og.context:og'
+    group_types:
+      node-collection: node-collection
+      node-solution: node-solution
+  request_route:
+    id: request_route
+    negate: true
+    routes:
+      - entity.node.edit_form

@@ -36,6 +36,7 @@ dependencies:
     - joinup_html_stripper
     - svg_image_responsive
     - template_suggestion
+    - text
     - user
 id: node.solution.view_mode_tile
 targetEntityType: node
@@ -53,23 +54,32 @@ content:
       fallback_field_formatter_id: joinup_html_stripper_stripped
       fallback_field_formatter_settings:
         trim_length: 600
+      reset_theme: true
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
     weight: 1
     region: content
-  download_total:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 3
-    region: content
-  flag_interoperability:
+  description:
+    type: text_default
+    label: above
     settings: {  }
     third_party_settings: {  }
     weight: 2
     region: content
-  flag_like:
-    settings: {  }
+  domain:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_topic:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
     third_party_settings: {  }
     weight: 4
     region: content
@@ -81,6 +91,10 @@ content:
       image_link: ''
       image_loading:
         attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
@@ -90,9 +104,8 @@ hidden:
   classification: true
   collections: true
   contact: true
-  description: true
   distributions: true
-  domain: true
+  download_total: true
   eif_perspective: true
   featured: true
   field_claims: true
@@ -100,7 +113,8 @@ hidden:
   field_original_internal_id: true
   field_shared_in: true
   field_state: true
-  field_topic: true
+  flag_interoperability: true
+  flag_like: true
   keywords: true
   landing_page: true
   langcode: true

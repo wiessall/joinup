@@ -1,11 +1,6 @@
 _core:
   default_config_hash: 4GIX5Esnc_umpXUBj4IIocRX7Mt5fPhm4AgXfE3E56E
 module:
-  action: 0
-  addtocal: 0
-  adms_validator: 0
-  ai_enhancement: 0
-  ai_output_checks: 0
   allowed_formats: 0
   antibot: 0
   assessments: 0
@@ -16,13 +11,15 @@ module:
   better_exposed_filters: 0
   blazy: 0
   block: 0
+  block_content: 0
   block_field: 0
   breakpoint: 0
   cached_computed_field: 0
-  calendar_view: 0
   cas: 0
   cas_attributes: 0
   changed_fields: 0
+  chosen: 0
+  chosen_lib: 0
   ckeditor5: 0
   code_of_conduct: 0
   collection: 0
@@ -30,6 +27,7 @@ module:
   comment: 0
   config: 0
   config_ignore: 0
+  config_split: 0
   config_translation: 0
   consumers: 0
   contact_form: 0
@@ -52,7 +50,6 @@ module:
   dynamic_page_cache: 0
   editor: 0
   editor_file: 0
-  eif: 0
   email_confirmer: 0
   email_contact: 0
   entity_form_field_label: 0
@@ -62,9 +59,6 @@ module:
   entityqueue: 0
   entityqueue_block: 0
   error_page: 0
-  eu_oss_catalogue: 0
-  eu_oss_translation: 0
-  eu_oss_vitality_index: 0
   eupl: 0
   facets: 0
   facets_block: 0
@@ -97,15 +91,19 @@ module:
   image: 0
   image_library_widget: 0
   imagecache_external: 0
+  import_ird_jsons: 0
   inline_entity_form: 0
   inline_form_errors: 0
   isa2_analytics: 0
+  joinup_acceptance: 0
   joinup_api: 0
   joinup_assessment: 0
   joinup_bookmark: 0
   joinup_bundle_class: 0
+  joinup_collection: 0
   joinup_community_content: 0
   joinup_core: 0
+  joinup_discussion: 0
   joinup_distribution: 0
   joinup_document: 0
   joinup_eulogin: 0
@@ -119,8 +117,8 @@ module:
   joinup_i18n: 0
   joinup_invite: 0
   joinup_layout: 0
-  joinup_legal: 0
   joinup_licence: 0
+  joinup_like: 0
   joinup_log: 0
   joinup_media: 0
   joinup_menu: 0
@@ -141,12 +139,15 @@ module:
   joinup_rss: 0
   joinup_search: 0
   joinup_security: 0
+  joinup_seo: 0
   joinup_sitewide_alert: 0
   joinup_slick: 0
   joinup_solution: 0
   joinup_stats: 0
   joinup_subscription: 0
   joinup_taxonomy: 0
+  joinup_test_content: 0
+  joinup_test_time: 0
   joinup_tiles: 0
   joinup_tour: 0
   joinup_user: 0
@@ -199,7 +200,6 @@ module:
   oe_webtools_analytics: 0
   oe_webtools_cookie_consent: 0
   oe_webtools_etrans: 0
-  oe_webtools_globan: 0
   oe_webtools_maps: 0
   og: 0
   og_menu: 0
@@ -210,6 +210,7 @@ module:
   owner: 0
   page_cache: 0
   page_manager: 0
+  page_manager_ui: 0
   paragraphs_type_permissions: 0
   path: 0
   path_alias: 0
@@ -251,13 +252,12 @@ module:
   sitewide_alert_block: 0
   slick: 0
   smart_trim: 0
-  social_media_links: 0
-  social_media_links_field: 0
   sparql_endpoint: 0
   sparql_endpoint_piwik: 0
   state_machine: 0
   state_machine_permissions: 0
   state_machine_revisions: 0
+  sti_dedupe: 0
   sti_portal_api: 0
   sti_rdf: 0
   subpathauto: 0
@@ -279,6 +279,7 @@ module:
   tour: 0
   track_usage: 0
   twig_field_value: 0
+  twig_tweak: 0
   ui_patterns: 0
   ui_patterns_library: 0
   ui_patterns_settings: 0
@@ -308,4 +309,7 @@ theme:
   oe_bootstrap_theme: 0
   ventuno: 0
   iop: 0
+  fao: 0
+  fao_sti: 0
+  fao_lean: 0
 profile: joinup

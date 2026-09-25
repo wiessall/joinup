@@ -1,0 +1,24 @@
+uuid: 8304248e-28bc-4603-9681-58542e36454c
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_user
+  theme:
+    - fao_sti
+_core:
+  default_config_hash: cUHOddgt8ZfDNPWn5Oz4x-XWRYRKnfmp23iF-wfobwg
+id: fao_sti_userheader
+theme: fao_sti
+region: header
+weight: -26
+provider: null
+plugin: user_header_block
+settings:
+  id: user_header_block
+  label: 'User header'
+  label_display: '0'
+  provider: joinup_user
+  context_mapping:
+    user_route: '@joinup_user.user_route_context:user_route'
+visibility: {  }

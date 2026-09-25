@@ -3,7 +3,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.taxonomy_term.claim_properties.property_uri
     - taxonomy.vocabulary.claim_properties
   module:
     - text
@@ -19,14 +18,8 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
-  property_uri:
-    type: basic_string
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 1
-    region: content
 hidden:
+  claim_property_uri: true
   langcode: true
   search_api_excerpt: true
   uuid: true

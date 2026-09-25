@@ -1,0 +1,29 @@
+uuid: b448d134-39cf-4553-83b4-87c377029c49
+langcode: en
+status: false
+dependencies:
+  config:
+    - facets.facet.sbt_csv_solution_type
+  module:
+    - facets
+    - system
+  theme:
+    - fao_sti
+id: fao_sti_sbt_solutiontype
+theme: fao_sti
+region: content
+weight: -29
+provider: null
+plugin: 'facet_block:sbt_csv_solution_type'
+settings:
+  id: 'facet_block:sbt_csv_solution_type'
+  label: 'Solution type'
+  label_display: visible
+  provider: facets
+  context_mapping: {  }
+  block_id: ventuno_sbt_solutiontype
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /admin/reporting/solutions-by-type/csv

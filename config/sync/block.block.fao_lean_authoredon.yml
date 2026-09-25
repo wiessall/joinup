@@ -1,0 +1,29 @@
+uuid: 47d0d12c-64fc-4f63-9a66-211145c7d580
+langcode: en
+status: false
+dependencies:
+  config:
+    - facets.facet.authoredon
+  module:
+    - facets
+    - system
+  theme:
+    - fao_lean
+id: fao_lean_authoredon
+theme: fao_lean
+region: content
+weight: -31
+provider: null
+plugin: 'facet_block:authoredon'
+settings:
+  id: 'facet_block:authoredon'
+  label: 'Authored on'
+  label_display: visible
+  provider: facets
+  context_mapping: {  }
+  block_id: ventuno_authoredon
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /admin/reporting/solutions-by-type

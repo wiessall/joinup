@@ -1,0 +1,25 @@
+uuid: ee0c8d72-7dbd-4651-ac67-d7e2537f2479
+langcode: en
+status: false
+dependencies:
+  config:
+    - system.menu.footer-about-us
+  module:
+    - system
+  theme:
+    - fao_lean
+id: fao_lean_aboutus
+theme: fao_lean
+region: footer
+weight: -27
+provider: null
+plugin: 'system_menu_block:footer-about-us'
+settings:
+  id: 'system_menu_block:footer-about-us'
+  label: 'About us'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: null
+  expand_all_items: false
+visibility: {  }

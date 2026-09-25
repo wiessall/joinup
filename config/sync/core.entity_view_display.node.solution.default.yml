@@ -33,6 +33,7 @@ dependencies:
   module:
     - custom_markup_block
     - entity_reference_revisions
+    - import_ird_jsons
     - joinup_group
     - joinup_layout
     - layout_builder
@@ -810,28 +811,7 @@ third_party_settings:
               region_classes: ''
               region_styles: null
               region_data: null
-        components:
-          16740c7b-5aa2-4776-a101-f7f7853eda27:
-            uuid: 16740c7b-5aa2-4776-a101-f7f7853eda27
-            region: content
-            configuration:
-              id: 'field_block:node:solution:solution_settings'
-              label: 'Solution settings reference'
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: entity_reference_entity_view
-                label: hidden
-                settings:
-                  view_mode: listing_content
-                third_party_settings:
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 0
-            additional: {  }
+        components: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
@@ -1063,43 +1043,6 @@ third_party_settings:
                   class: ''
                   style: ''
                   data: ''
-          62807d5d-f198-4b51-9b19-926f89c108d5:
-            uuid: 62807d5d-f198-4b51-9b19-926f89c108d5
-            region: content
-            configuration:
-              id: 'field_block:node:solution:latest_release'
-              label: 'Latest release'
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: entity_reference_entity_view
-                label: hidden
-                settings:
-                  view_mode: about
-                third_party_settings:
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 10
-            additional:
-              component_attributes:
-                block_attributes:
-                  id: ''
-                  class: 'pe-5 pb-4'
-                  style: ''
-                  data: ''
-                block_title_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
-                block_content_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
           11816b4b-fea8-433f-99b5-bd0a68a5990c:
             uuid: 11816b4b-fea8-433f-99b5-bd0a68a5990c
             region: content
@@ -1146,6 +1089,20 @@ third_party_settings:
                   class: ''
                   style: ''
                   data: ''
+          564968b5-69a6-4fc4-af9d-6a2e2eceee95:
+            uuid: 564968b5-69a6-4fc4-af9d-6a2e2eceee95
+            region: content
+            configuration:
+              id: ird_annotation_table
+              label: 'IRD Annotation Table'
+              label_display: '0'
+              provider: import_ird_jsons
+              context_mapping: {  }
+              show_claimed_at: false
+              link_claimer: true
+              heading_level: h3
+            weight: 11
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol

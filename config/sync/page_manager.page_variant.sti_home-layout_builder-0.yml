@@ -1,0 +1,141 @@
+uuid: f2737cb0-d74f-4217-be70-b85a7f396538
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.hero_banner
+    - page_manager.page.sti_home
+  module:
+    - joinup_layout
+    - layout_builder
+    - layout_discovery
+id: sti_home-layout_builder-0
+label: 'Layout Builder'
+weight: 0
+variant: layout_builder
+variant_settings:
+  id: layout_builder
+  label: null
+  weight: 0
+  uuid: ff8bcaf5-ab45-44cc-a61e-343ea585f5d9
+  sections:
+    -
+      layout_id: layout_onecol
+      layout_settings:
+        label: sections
+        context_mapping: {  }
+        custom_id: null
+        custom_classes: ''
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+      components:
+        9dbe3abc-088d-4e46-bc63-4388275f84a2:
+          uuid: 9dbe3abc-088d-4e46-bc63-4388275f84a2
+          region: content
+          configuration:
+            id: 'inline_block:hero_banner'
+            label: 'Welcome hero'
+            label_display: '0'
+            provider: layout_builder
+            context_mapping: {  }
+            view_mode: full
+            block_id: 1
+            block_revision_id: 1
+            block_serialized: null
+          weight: 0
+          additional: {  }
+      third_party_settings: {  }
+    -
+      layout_id: joinup_layout_twocol_60_40
+      layout_settings:
+        label: search
+        context_mapping: {  }
+        custom_id: null
+        custom_classes: ''
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          top:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+          first:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+          second:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+          bottom:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+      components: {  }
+      third_party_settings: {  }
+    -
+      layout_id: layout_onecol
+      layout_settings:
+        label: space
+        context_mapping: {  }
+        custom_id: null
+        custom_classes: ''
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+      components: {  }
+      third_party_settings: {  }
+    -
+      layout_id: layout_twocol_section
+      layout_settings:
+        label: charts
+        context_mapping: {  }
+        column_widths: 50-50
+        custom_id: null
+        custom_classes: ''
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          first:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+          second:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+      components: {  }
+      third_party_settings: {  }
+page: sti_home
+selection_criteria: {  }
+selection_logic: and
+static_context: {  }

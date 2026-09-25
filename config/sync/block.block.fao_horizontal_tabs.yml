@@ -1,0 +1,29 @@
+uuid: 1bf7d655-f955-4b52-85d7-acfd947c81bb
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_core
+  theme:
+    - fao
+id: fao_horizontal_tabs
+theme: fao
+region: content
+weight: -25
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: 'Horizontal tabs'
+  label_display: '0'
+  provider: core
+  primary: true
+  secondary: true
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    context_mapping: {  }
+    routes:
+      - user.login
+      - user.pass

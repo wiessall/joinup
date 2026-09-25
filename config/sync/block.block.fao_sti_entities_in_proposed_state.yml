@@ -1,0 +1,34 @@
+uuid: 15e43b91-6385-4f60-94db-617fb2a001c5
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_core
+    - joinup_group
+    - user
+  theme:
+    - fao_sti
+id: fao_sti_entities_in_proposed_state
+theme: fao_sti
+region: content
+weight: 4
+provider: null
+plugin: proposed_entities
+settings:
+  id: proposed_entities
+  label: 'Entities in proposed state'
+  label_display: visible
+  provider: joinup_group
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - dashboard.page
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      moderator: moderator

@@ -283,6 +283,43 @@ third_party_settings:
             additional: {  }
         third_party_settings: {  }
       -
+        layout_id: joinup_layout_twocolfooter_onecol_67_33
+        layout_settings:
+          label: 'facet results'
+          context_mapping: {  }
+          custom_id: null
+          custom_classes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+          regions:
+            first:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+            second:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+            third:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+            two_col_footer:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+        components: {  }
+        third_party_settings: {  }
+      -
         layout_id: layout_onecol
         layout_settings:
           label: 'Detailed header'

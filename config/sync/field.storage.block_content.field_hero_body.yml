@@ -1,0 +1,19 @@
+uuid: 4f71f590-9b4c-4c9a-91f5-b33b864f987f
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_content
+id: block_content.field_hero_body
+field_name: field_hero_body
+entity_type: block_content
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,25 @@
+uuid: 037d6de8-db12-440f-a277-7b6655abd72e
+langcode: en
+status: false
+dependencies:
+  config:
+    - system.menu.footer-help-and-support
+  module:
+    - system
+  theme:
+    - fao_lean
+id: fao_lean_helpandsupport
+theme: fao_lean
+region: footer
+weight: -26
+provider: null
+plugin: 'system_menu_block:footer-help-and-support'
+settings:
+  id: 'system_menu_block:footer-help-and-support'
+  label: 'Help and support'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: null
+  expand_all_items: false
+visibility: {  }

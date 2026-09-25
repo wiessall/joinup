@@ -5,7 +5,6 @@ dependencies:
   config:
     - core.entity_view_mode.user.group_header
     - field.field.user.user.blocked_reason
-    - field.field.user.user.field_social_media
     - field.field.user.user.field_user_business_title
     - field.field.user.user.field_user_content
     - field.field.user.user.field_user_family_name
@@ -18,7 +17,6 @@ dependencies:
     - image.style.profile_icon_big
   module:
     - options
-    - social_media_links_field
     - svg_image
     - template_suggestion
     - user
@@ -35,20 +33,10 @@ content:
     weight: 2
     region: content
   field_social_media:
-    type: social_media_links_field_default
-    label: hidden
     settings:
-      appearance:
-        orientation: h
-        show_name: true
-      link_attributes:
-        target: _blank
-        rel: '<none>'
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 9
-    region: content
+      appearance: {  }
+      link_attributes: {  }
+    third_party_settings: {  }
   field_user_business_title:
     type: string
     label: hidden

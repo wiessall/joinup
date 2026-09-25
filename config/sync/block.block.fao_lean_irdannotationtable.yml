@@ -1,0 +1,31 @@
+uuid: e336623c-e4b8-4e6b-a93b-da01165b2269
+langcode: en
+status: false
+dependencies:
+  module:
+    - import_ird_jsons
+    - system
+  theme:
+    - fao_lean
+id: fao_lean_irdannotationtable
+theme: fao_lean
+region: content
+weight: 0
+provider: null
+plugin: ird_annotation_table
+settings:
+  id: ird_annotation_table
+  label: 'IRD Annotation Table'
+  label_display: visible
+  provider: import_ird_jsons
+  layout: grouped
+  show_claimed_by: false
+  show_claimed_at: false
+  link_claimer: true
+  heading_level: h3
+  collapse_values: true
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/solution/*'

@@ -1,0 +1,47 @@
+uuid: 1a035b49-1a98-45f3-96f0-fc77ac38c2c9
+langcode: en
+status: false
+dependencies:
+  module:
+    - custom_page
+    - joinup_core
+    - node
+    - og
+  theme:
+    - fao
+id: fao_toc_outline
+theme: fao
+region: content
+weight: -3
+provider: null
+plugin: toc_outline
+settings:
+  id: toc_outline
+  label: 'Table of contents outline'
+  label_display: '0'
+  provider: custom_page
+  context_mapping:
+    og: '@og.context:og'
+    node: '@node.node_route_context:node'
+visibility:
+  og_group_type:
+    id: og_group_type
+    negate: false
+    context_mapping:
+      og: '@og.context:og'
+    group_types:
+      node-collection: node-collection
+      node-solution: node-solution
+  request_route:
+    id: request_route
+    negate: false
+    context_mapping: {  }
+    routes:
+      - entity.node.canonical
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      custom_page: custom_page

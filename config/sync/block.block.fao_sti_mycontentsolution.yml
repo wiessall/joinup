@@ -1,0 +1,31 @@
+uuid: 100732c8-f35a-41bf-a64e-6e8b32caff98
+langcode: en
+status: false
+dependencies:
+  config:
+    - facets.facet.solution_my_content
+  module:
+    - facets
+    - system
+  theme:
+    - fao_sti
+_core:
+  default_config_hash: 4kmIiw6gImpiApek0WfYh1_nUGT94-3fbLPXvH_ClaM
+id: fao_sti_mycontentsolution
+theme: fao_sti
+region: content
+weight: -15
+provider: null
+plugin: 'facet_block:solution_my_content'
+settings:
+  id: 'facet_block:solution_my_content'
+  label: 'Solutions - My content'
+  label_display: '0'
+  provider: facets
+  context_mapping: {  }
+  block_id: ventuno_mycontentsolution
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /solutions

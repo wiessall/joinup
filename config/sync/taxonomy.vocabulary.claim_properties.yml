@@ -7,7 +7,7 @@ dependencies:
 third_party_settings:
   rdf_sync:
     type: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#Property'
-    uri_field_name: field_claim_property_uri
+    uri_field_name: claim_property_uri
     uri_plugin: null
     fields: {  }
 name: 'Claim properties'

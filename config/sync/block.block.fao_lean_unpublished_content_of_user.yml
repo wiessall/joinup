@@ -1,0 +1,31 @@
+uuid: 824be365-3f01-4161-a5e1-3759ca02abaf
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_core
+    - joinup_user
+  theme:
+    - fao_lean
+_core:
+  default_config_hash: K15zkMgDnwRG7Pa_FNbxbX6j3w5gp2vEDtuQ0hwiRYs
+id: fao_lean_unpublished_content_of_user
+theme: fao_lean
+region: content
+weight: -2
+provider: null
+plugin: user_unpublished
+settings:
+  id: user_unpublished
+  label: 'My unpublished content'
+  label_display: visible
+  provider: joinup_core
+  context_mapping:
+    user_route: '@joinup_user.user_route_context:user_route'
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    context_mapping: {  }
+    routes:
+      - entity.user.canonical

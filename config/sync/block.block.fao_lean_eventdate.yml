@@ -1,0 +1,30 @@
+uuid: fcae896e-12f5-4fc8-a7ae-1f1bd32e2dbb
+langcode: en
+status: false
+dependencies:
+  config:
+    - facets.facet.event_date
+  module:
+    - facets
+    - joinup_core
+  theme:
+    - fao_lean
+id: fao_lean_eventdate
+theme: fao_lean
+region: content
+weight: -16
+provider: null
+plugin: 'facet_block:event_date'
+settings:
+  id: 'facet_block:event_date'
+  label: 'Event date'
+  label_display: '0'
+  provider: facets
+  block_id: eventdate
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    context_mapping: {  }
+    routes:
+      - view.content_overview.page_1

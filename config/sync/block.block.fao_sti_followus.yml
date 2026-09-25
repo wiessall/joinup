@@ -1,0 +1,25 @@
+uuid: a7f5a6d9-54c0-47de-9b7f-5412450567cf
+langcode: en
+status: false
+dependencies:
+  config:
+    - system.menu.footer-follow-us
+  module:
+    - system
+  theme:
+    - fao_sti
+id: fao_sti_followus
+theme: fao_sti
+region: footer
+weight: -24
+provider: null
+plugin: 'system_menu_block:footer-follow-us'
+settings:
+  id: 'system_menu_block:footer-follow-us'
+  label: 'Follow us'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: null
+  expand_all_items: false
+visibility: {  }

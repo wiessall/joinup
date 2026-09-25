@@ -1,0 +1,36 @@
+uuid: 391edcba-c6fc-4c19-980d-1b9be4f07632
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.search
+  module:
+    - joinup_core
+    - system
+    - views
+  theme:
+    - fao_lean
+id: fao_lean_exposed_form_search_page
+theme: fao_lean
+region: content
+weight: -27
+provider: null
+plugin: 'views_exposed_filter_block:search-page_1'
+settings:
+  id: 'views_exposed_filter_block:search-page_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    context_mapping: {  }
+    routes:
+      - view.search.page_1
+  request_path:
+    id: request_path
+    negate: true
+    context_mapping: {  }
+    pages: "/search\r\n/search/*"

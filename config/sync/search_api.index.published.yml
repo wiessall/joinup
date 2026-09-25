@@ -40,7 +40,7 @@ dependencies:
   module:
     - assessments
     - custom_page
-    - joinup_distribution
+    - import_ird_jsons
     - joinup_flag
     - joinup_release
     - joinup_search
@@ -168,6 +168,18 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
+  claim_collection:
+    label: 'Claim collection'
+    property_path: claim_collection
+    type: string
+  claim_facet:
+    label: 'Claim facet'
+    property_path: claim_facet
+    type: string
+  claim_key:
+    label: 'Claim key'
+    property_path: claim_key
+    type: string
   classification:
     label: 'Solution classification'
     datasource_id: 'entity:node'
@@ -900,6 +912,7 @@ processor_settings:
     weights:
       preprocess_index: 0
   auto_aggregated_fulltext_field: {  }
+  claim_fields: {  }
   custom_value: {  }
   entity_type: {  }
   exclude_assessment_solutions: {  }
@@ -932,9 +945,6 @@ processor_settings:
   include_custom_page_content:
     weights:
       preprocess_index: -49
-  index_distribution_data:
-    weights:
-      preprocess_index: -50
   interoperable_flag: {  }
   joinup_entity_bundle: {  }
   joinup_entity_published_revision: {  }

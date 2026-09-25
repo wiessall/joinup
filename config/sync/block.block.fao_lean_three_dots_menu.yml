@@ -1,0 +1,22 @@
+uuid: 25934b6f-ca07-487a-acf3-9ee4ff82d3ac
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_group
+  theme:
+    - fao_lean
+id: fao_lean_three_dots_menu
+theme: fao_lean
+region: header
+weight: -26
+provider: null
+plugin: joinup_local_tasks_block
+settings:
+  id: joinup_local_tasks_block
+  label: Tabs
+  label_display: '0'
+  provider: joinup_group
+  primary: true
+  secondary: false
+visibility: {  }

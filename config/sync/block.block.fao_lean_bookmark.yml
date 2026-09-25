@@ -1,0 +1,36 @@
+uuid: 4b592661-b8ae-487b-a91c-ac1a4eba03aa
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_core
+    - joinup_flag
+  theme:
+    - fao_lean
+id: fao_lean_bookmark
+theme: fao_lean
+region: header
+weight: -28
+provider: null
+plugin: joinup_flag_block
+settings:
+  id: joinup_flag_block
+  label: 'My bookmarks'
+  label_display: '0'
+  provider: joinup_flag
+  flag_type: bookmark
+visibility:
+  joinup_content:
+    id: joinup_content
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    content:
+      node-assessment_report: node-assessment_report
+      node-collection: node-collection
+      node-custom_page: node-custom_page
+      node-discussion: node-discussion
+      node-document: node-document
+      node-event: node-event
+      node-news: node-news
+      node-solution: node-solution

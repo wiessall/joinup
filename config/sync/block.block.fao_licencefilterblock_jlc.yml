@@ -1,0 +1,27 @@
+uuid: ed1edcaf-b1f5-4263-acd6-9de0f894a745
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_licence
+    - system
+  theme:
+    - fao
+id: fao_licencefilterblock_jlc
+theme: fao
+region: content
+weight: -10
+provider: null
+plugin: licence_filter_block
+settings:
+  id: licence_filter_block
+  label: 'Licence filter block (JLC)'
+  label_display: '0'
+  provider: joinup_licence
+  show_terms: false
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /node/703242

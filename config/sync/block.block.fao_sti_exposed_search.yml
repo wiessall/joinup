@@ -1,0 +1,29 @@
+uuid: 78973b7e-c9b8-4cb7-9819-b9acad3284bb
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.search
+  module:
+    - system
+    - views
+  theme:
+    - fao_sti
+id: fao_sti_exposed_search
+theme: fao_sti
+region: top_bar
+weight: -27
+provider: null
+plugin: 'views_exposed_filter_block:search-page_1'
+settings:
+  id: 'views_exposed_filter_block:search-page_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    context_mapping: {  }
+    pages: '/solution/*'

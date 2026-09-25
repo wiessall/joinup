@@ -1,0 +1,18 @@
+uuid: f02ee590-4495-4322-94e5-34245613e999
+langcode: en
+status: false
+dependencies:
+  theme:
+    - fao_lean
+id: fao_lean_primaryadminactions
+theme: fao_lean
+region: content
+weight: -24
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  label_display: '0'
+  provider: core
+visibility: {  }

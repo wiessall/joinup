@@ -1,0 +1,126 @@
+uuid: 23ba0db9-214b-44ee-871e-b74081267e10
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.card
+    - field.field.node.solution.abstract
+    - field.field.node.solution.classification
+    - field.field.node.solution.contact
+    - field.field.node.solution.description
+    - field.field.node.solution.domain
+    - field.field.node.solution.field_claims
+    - field.field.node.solution.field_machine_record
+    - field.field.node.solution.field_original_internal_id
+    - field.field.node.solution.field_state
+    - field.field.node.solution.field_topic
+    - field.field.node.solution.keywords
+    - field.field.node.solution.landing_page
+    - field.field.node.solution.language
+    - field.field.node.solution.logo
+    - field.field.node.solution.metrics_page
+    - field.field.node.solution.og_audience
+    - field.field.node.solution.owner
+    - field.field.node.solution.process_status
+    - field.field.node.solution.related_solutions
+    - field.field.node.solution.release_number
+    - field.field.node.solution.resources
+    - field.field.node.solution.short_id
+    - field.field.node.solution.site_featured
+    - field.field.node.solution.solution_type
+    - field.field.node.solution.translation
+    - node.type.solution
+  module:
+    - layout_builder
+    - svg_image
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.solution.card
+targetEntityType: node
+bundle: solution
+mode: card
+content:
+  abstract:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  logo:
+    type: image
+    label: above
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  classification: true
+  collections: true
+  contact: true
+  description: true
+  distributions: true
+  domain: true
+  download_total: true
+  eif_perspective: true
+  featured: true
+  field_claims: true
+  field_is_description: true
+  field_machine_record: true
+  field_original_internal_id: true
+  field_shared_in: true
+  field_state: true
+  field_topic: true
+  flag_interoperability: true
+  flag_like: true
+  group_moderation: true
+  keywords: true
+  landing_page: true
+  langcode: true
+  language: true
+  members: true
+  metrics_page: true
+  node_solution_listing_content_inline_facets: true
+  node_solution_listing_content_top: true
+  og_audience: true
+  og_group: true
+  owner: true
+  pinned_in: true
+  private_message_link: true
+  process_status: true
+  published_at: true
+  read_more: true
+  related_solution: true
+  related_solutions: true
+  release_number: true
+  releases_overview: true
+  report: true
+  resources: true
+  search_api_excerpt: true
+  share_link: true
+  shared_in: true
+  short_id: true
+  site_featured: true
+  solution_settings: true
+  solution_subscribe: true
+  solution_type: true
+  translation: true
+  uri: true
+  uuid: true

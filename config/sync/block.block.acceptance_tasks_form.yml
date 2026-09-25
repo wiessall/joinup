@@ -1,0 +1,29 @@
+uuid: ee909561-ade9-4a56-8137-f47a4b2d419a
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_acceptance
+    - joinup_core
+  theme:
+    - ventuno
+_core:
+  default_config_hash: qXoHZde3aykR9r7aPehwKT51p14lAd88IQmWUvbzZ9k
+id: acceptance_tasks_form
+theme: ventuno
+region: content
+weight: 0
+provider: null
+plugin: acceptance_tasks
+settings:
+  id: acceptance_tasks
+  label: 'Acceptance tasks'
+  label_display: '0'
+  provider: joinup_acceptance
+visibility:
+  request_route:
+    id: request_route
+    routes:
+      - dashboard.page
+    negate: false
+    context_mapping: {  }

@@ -1,0 +1,25 @@
+uuid: e49b247d-52c2-44a7-ae33-cdb8087b0567
+langcode: en
+status: false
+dependencies:
+  config:
+    - system.menu.footer-help-and-support
+  module:
+    - system
+  theme:
+    - fao
+id: fao_helpandsupport
+theme: fao
+region: footer
+weight: -26
+provider: null
+plugin: 'system_menu_block:footer-help-and-support'
+settings:
+  id: 'system_menu_block:footer-help-and-support'
+  label: 'Help and support'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: null
+  expand_all_items: false
+visibility: {  }

@@ -1,0 +1,31 @@
+uuid: d2b9c39e-d9b5-446f-a390-6f256c16d1e3
+langcode: en
+status: false
+dependencies:
+  module:
+    - joinup_core
+    - joinup_group
+  theme:
+    - fao
+id: fao_unpublished_draft
+theme: fao
+region: content
+weight: -1
+provider: null
+plugin: entity_unpublished
+settings:
+  id: entity_unpublished
+  label: 'Draft content'
+  label_display: visible
+  provider: joinup_group
+  context_mapping:
+    og: '@node.node_route_context:node'
+  states_filter:
+    - draft
+  negate_states_filter: false
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - entity.node.unpublished_content
