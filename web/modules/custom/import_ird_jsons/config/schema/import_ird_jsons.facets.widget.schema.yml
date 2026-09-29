@@ -1,0 +1,33 @@
+# Settings of the grouped_claim_dropdown facet widget.
+# @see \Drupal\import_ird_jsons\Plugin\facets\widget\GroupedClaimDropdownWidget
+facet.widget.config.grouped_claim_dropdown:
+  type: facet.widget.default_config
+  label: 'Grouped claim dropdown widget'
+  mapping:
+    multiple:
+      type: boolean
+      label: 'Allow several values per property'
+    use_chosen:
+      type: boolean
+      label: 'Enhance with Chosen'
+    placeholder:
+      type: label
+      label: 'Placeholder text'
+    sections:
+      type: text
+      label: 'Sections and order, one Label|slug,slug per line'
+    ungrouped_label:
+      type: label
+      label: 'Label for unlisted properties'
+    hide_ungrouped:
+      type: boolean
+      label: 'Hide properties not named in a section'
+    open_sections:
+      type: string
+      label: 'Sections expanded by default'
+    exclude:
+      type: text
+      label: 'Properties to exclude'
+    heading:
+      type: label
+      label: 'Heading above the dropdowns'
