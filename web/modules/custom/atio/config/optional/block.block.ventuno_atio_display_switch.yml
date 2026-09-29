@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  module:
+  - atio
+  - node
+  theme:
+  - ventuno
+  enforced:
+    module:
+    - atio
+id: ventuno_atio_display_switch
+theme: ventuno
+region: content
+weight: -13
+provider: null
+plugin: atio_display_switch
+settings:
+  id: atio_display_switch
+  label: 'ATIO display switch'
+  label_display: '0'
+  provider: atio
+  context_mapping:
+    node: '@node.node_route_context:node'
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      atio_innovation: atio_innovation

@@ -1,0 +1,62 @@
+uuid: 5d280330-2a5d-42bd-a411-f4d89bb7453f
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: q7pQvm_8LFdOHlSob716DAYwGXlYMQ0BZ28w-QTeD3U
+id: atio_actor_types_terms
+class: null
+idMap: {  }
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - vocabulary
+  - atio
+migration_group: sti_vocabularies
+label: 'Actor types terms'
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+    - modules/custom/atio/data/atio_actor_types.json
+  item_selector: ''
+  ids:
+    tid:
+      type: integer
+  fields:
+    -
+      name: tid
+      label: tid
+      selector: tid
+    -
+      name: name
+      label: name
+      selector: name
+    -
+      name: parent
+      label: parent
+      selector: parent
+process:
+  name: name
+  vid:
+    plugin: default_value
+    default_value: atio_actor_types
+  parent:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: parent
+    -
+      plugin: migration_lookup
+      migration: atio_actor_types_terms
+      no_stub: true
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: atio_actor_types
+migration_dependencies:
+  required: {  }
+  optional: {  }

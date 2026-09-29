@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  module:
+  - paragraphs
+  enforced:
+    module:
+    - atio
+id: paragraph.claim_row
+label: Claim row
+description: 'One claim as a property / value row, as on the solution page.'
+targetEntityType: paragraph
+cache: true

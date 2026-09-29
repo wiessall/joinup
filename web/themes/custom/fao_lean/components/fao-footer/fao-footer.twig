@@ -1,0 +1,69 @@
+{#
+/**
+ * @file
+ * FAO corporate footer (SDC: fao_lean:fao-footer), FAO Design System markup
+ * (footer.footer), styled by vendor/fao-ds. Blocks placed in the Footer
+ * region arrive in the site_links slot, above the corporate part.
+ */
+#}
+<footer class="footer">
+  <div class="container">
+    {% if site_links %}
+      <div class="row mb-4">
+        <div class="col-12">{{ site_links }}</div>
+      </div>
+    {% endif %}
+    <div class="row">
+      <div class="footer-logo col-md-7">
+        {% if logo.image %}
+          <a href="{{ logo.url }}">
+            <img src="{{ logo.image }}" alt="{{ logo.alt }}" loading="lazy" decoding="async">
+          </a>
+        {% endif %}
+      </div>
+      <div class="footer-social col-md-5">
+        {% if social_icons.items %}
+          <h6 class="title-category">{{ 'Follow us on'|t }}</h6>
+          <ul class="list-inline social-icons">
+            {% for item in social_icons.items %}
+              <li class="list-inline-item">
+                <a href="{{ item.url }}" rel="noopener" target="_blank">
+                  <img src="{{ item.image }}" alt="{{ item.title }}" loading="lazy" width="24" height="24">
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="footer-links col-md-7">
+        <div class="footer-links-top">
+          {% if top_menu_left.url %}
+            <div><a href="{{ top_menu_left.url }}">{{ top_menu_left.label }}</a></div>
+          {% endif %}
+          {% if top_menu_right.items %}
+            <div class="btn-group dropup">
+              <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ top_menu_right.button }}</button>
+              <ul class="dropdown-menu">
+                {% for item in top_menu_right.items %}
+                  <li><a class="dropdown-item" href="{{ item.url }}">{{ item.label }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+        </div>
+        <div class="footer-links-bottom">
+          <ul class="list-inline">
+            {% for item in bottom_menu.items|default([]) %}
+              <li class="list-inline-item"><a href="{{ item.url }}">{{ item.label }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      <div class="footer-download col-md-5">
+        <a class="copyright" href="https://www.fao.org/contact-us/terms/en/">© FAO {{ 'now'|date('Y') }}</a>
+      </div>
+    </div>
+  </div>
+</footer>

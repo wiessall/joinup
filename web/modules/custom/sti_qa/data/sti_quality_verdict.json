@@ -1,0 +1,72 @@
+[
+ {
+  "tid": "3258",
+  "name": "Bad",
+  "parent": 0
+ },
+ {
+  "tid": "3368",
+  "name": "AI meta-response",
+  "parent": 0
+ },
+ {
+  "tid": "3364",
+  "name": "Definite hallucination",
+  "parent": 0
+ },
+ {
+  "tid": "3365",
+  "name": "Duplicate",
+  "parent": 0
+ },
+ {
+  "tid": "3366",
+  "name": "Multiple names",
+  "parent": 0
+ },
+ {
+  "tid": "3367",
+  "name": "Possible hallucination",
+  "parent": 0
+ },
+ {
+  "tid": "3358",
+  "name": "Possible duplicate",
+  "parent": 0
+ },
+ {
+  "tid": "3359",
+  "name": "Possible multiple names",
+  "parent": 0
+ },
+ {
+  "tid": "3360",
+  "name": "Acceptable",
+  "parent": 0
+ },
+ {
+  "tid": "3375",
+  "name": "Failed AI enrichment - reverted",
+  "parent": 0
+ },
+ {
+  "tid": "3361",
+  "name": "Originally bad > fixed",
+  "parent": 0
+ },
+ {
+  "tid": "3362",
+  "name": "Originally good > validated",
+  "parent": 0
+ },
+ {
+  "tid": "3363",
+  "name": "Pre-vetted",
+  "parent": 0
+ },
+ {
+  "tid": "3256",
+  "name": "Good",
+  "parent": 0
+ }
+]

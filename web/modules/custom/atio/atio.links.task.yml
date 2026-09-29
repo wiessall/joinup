@@ -1,0 +1,17 @@
+atio.node_both:
+  route_name: entity.node.canonical
+  base_route: entity.node.canonical
+  title: 'Both'
+  weight: -10
+
+atio.node_atio_fields:
+  route_name: entity.node.atio_fields
+  base_route: entity.node.canonical
+  title: 'ATIO fields'
+  weight: -9
+
+atio.node_claims:
+  route_name: entity.node.claims
+  base_route: entity.node.canonical
+  title: 'Claims'
+  weight: -8

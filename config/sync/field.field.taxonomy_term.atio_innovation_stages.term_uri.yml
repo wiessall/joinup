@@ -1,0 +1,24 @@
+uuid: ac23bfc4-1b9e-412e-a4ca-acd4a302ecf8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.term_uri
+    - taxonomy.vocabulary.atio_innovation_stages
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: HSu2PAy2Z-Y1YJtdH4l53wqM8Ld5PY04CvLtRqYoLRE
+id: taxonomy_term.atio_innovation_stages.term_uri
+field_name: term_uri
+entity_type: taxonomy_term
+bundle: atio_innovation_stages
+label: 'Term URI'
+description: 'Authoritative URI for this concept. Leave empty to mint one under the STI namespace.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

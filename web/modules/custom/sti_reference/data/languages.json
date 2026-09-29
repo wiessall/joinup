@@ -1,0 +1,922 @@
+[
+ {
+  "tid": "602",
+  "name": "Abkhaz",
+  "parent": 0
+ },
+ {
+  "tid": "603",
+  "name": "Afar",
+  "parent": 0
+ },
+ {
+  "tid": "604",
+  "name": "Afrikaans",
+  "parent": 0
+ },
+ {
+  "tid": "605",
+  "name": "Akan",
+  "parent": 0
+ },
+ {
+  "tid": "606",
+  "name": "Albanian",
+  "parent": 0
+ },
+ {
+  "tid": "607",
+  "name": "Amharic",
+  "parent": 0
+ },
+ {
+  "tid": "608",
+  "name": "Arabic",
+  "parent": 0
+ },
+ {
+  "tid": "609",
+  "name": "Aragonese",
+  "parent": 0
+ },
+ {
+  "tid": "610",
+  "name": "Armenian",
+  "parent": 0
+ },
+ {
+  "tid": "611",
+  "name": "Assamese",
+  "parent": 0
+ },
+ {
+  "tid": "612",
+  "name": "Avaric",
+  "parent": 0
+ },
+ {
+  "tid": "613",
+  "name": "Avestan",
+  "parent": 0
+ },
+ {
+  "tid": "614",
+  "name": "Aymara",
+  "parent": 0
+ },
+ {
+  "tid": "615",
+  "name": "Azerbaijani",
+  "parent": 0
+ },
+ {
+  "tid": "616",
+  "name": "Bambara",
+  "parent": 0
+ },
+ {
+  "tid": "617",
+  "name": "Bashkir",
+  "parent": 0
+ },
+ {
+  "tid": "618",
+  "name": "Basque",
+  "parent": 0
+ },
+ {
+  "tid": "619",
+  "name": "Belarusian",
+  "parent": 0
+ },
+ {
+  "tid": "620",
+  "name": "Bengali, Bangla",
+  "parent": 0
+ },
+ {
+  "tid": "621",
+  "name": "Bihari",
+  "parent": 0
+ },
+ {
+  "tid": "622",
+  "name": "Bislama",
+  "parent": 0
+ },
+ {
+  "tid": "623",
+  "name": "Bosnian",
+  "parent": 0
+ },
+ {
+  "tid": "624",
+  "name": "Breton",
+  "parent": 0
+ },
+ {
+  "tid": "625",
+  "name": "Bulgarian",
+  "parent": 0
+ },
+ {
+  "tid": "626",
+  "name": "Burmese",
+  "parent": 0
+ },
+ {
+  "tid": "627",
+  "name": "Catalan",
+  "parent": 0
+ },
+ {
+  "tid": "628",
+  "name": "Chamorro",
+  "parent": 0
+ },
+ {
+  "tid": "629",
+  "name": "Chechen",
+  "parent": 0
+ },
+ {
+  "tid": "630",
+  "name": "Chichewa, Chewa, Nyanja",
+  "parent": 0
+ },
+ {
+  "tid": "631",
+  "name": "Chinese",
+  "parent": 0
+ },
+ {
+  "tid": "632",
+  "name": "Chuvash",
+  "parent": 0
+ },
+ {
+  "tid": "633",
+  "name": "Cornish",
+  "parent": 0
+ },
+ {
+  "tid": "634",
+  "name": "Corsican",
+  "parent": 0
+ },
+ {
+  "tid": "635",
+  "name": "Cree",
+  "parent": 0
+ },
+ {
+  "tid": "636",
+  "name": "Croatian",
+  "parent": 0
+ },
+ {
+  "tid": "637",
+  "name": "Czech",
+  "parent": 0
+ },
+ {
+  "tid": "638",
+  "name": "Danish",
+  "parent": 0
+ },
+ {
+  "tid": "639",
+  "name": "Divehi, Dhivehi, Maldivian",
+  "parent": 0
+ },
+ {
+  "tid": "640",
+  "name": "Dutch",
+  "parent": 0
+ },
+ {
+  "tid": "641",
+  "name": "Dzongkha",
+  "parent": 0
+ },
+ {
+  "tid": "642",
+  "name": "English",
+  "parent": 0
+ },
+ {
+  "tid": "643",
+  "name": "Esperanto",
+  "parent": 0
+ },
+ {
+  "tid": "644",
+  "name": "Estonian",
+  "parent": 0
+ },
+ {
+  "tid": "645",
+  "name": "Ewe",
+  "parent": 0
+ },
+ {
+  "tid": "646",
+  "name": "Faroese",
+  "parent": 0
+ },
+ {
+  "tid": "647",
+  "name": "Fijian",
+  "parent": 0
+ },
+ {
+  "tid": "648",
+  "name": "Finnish",
+  "parent": 0
+ },
+ {
+  "tid": "649",
+  "name": "French",
+  "parent": 0
+ },
+ {
+  "tid": "650",
+  "name": "Fula, Fulah, Pulaar, Pular",
+  "parent": 0
+ },
+ {
+  "tid": "651",
+  "name": "Galician",
+  "parent": 0
+ },
+ {
+  "tid": "692",
+  "name": "Ganda",
+  "parent": 0
+ },
+ {
+  "tid": "652",
+  "name": "Georgian",
+  "parent": 0
+ },
+ {
+  "tid": "653",
+  "name": "German",
+  "parent": 0
+ },
+ {
+  "tid": "654",
+  "name": "Greek (modern)",
+  "parent": 0
+ },
+ {
+  "tid": "655",
+  "name": "Guaraní",
+  "parent": 0
+ },
+ {
+  "tid": "656",
+  "name": "Gujarati",
+  "parent": 0
+ },
+ {
+  "tid": "657",
+  "name": "Haitian, Haitian Creole",
+  "parent": 0
+ },
+ {
+  "tid": "658",
+  "name": "Hausa",
+  "parent": 0
+ },
+ {
+  "tid": "659",
+  "name": "Hebrew (modern)",
+  "parent": 0
+ },
+ {
+  "tid": "660",
+  "name": "Herero",
+  "parent": 0
+ },
+ {
+  "tid": "661",
+  "name": "Hindi",
+  "parent": 0
+ },
+ {
+  "tid": "662",
+  "name": "Hiri Motu",
+  "parent": 0
+ },
+ {
+  "tid": "663",
+  "name": "Hungarian",
+  "parent": 0
+ },
+ {
+  "tid": "671",
+  "name": "Icelandic",
+  "parent": 0
+ },
+ {
+  "tid": "670",
+  "name": "Ido",
+  "parent": 0
+ },
+ {
+  "tid": "668",
+  "name": "Igbo",
+  "parent": 0
+ },
+ {
+  "tid": "665",
+  "name": "Indonesian",
+  "parent": 0
+ },
+ {
+  "tid": "664",
+  "name": "Interlingua",
+  "parent": 0
+ },
+ {
+  "tid": "666",
+  "name": "Interlingue",
+  "parent": 0
+ },
+ {
+  "tid": "673",
+  "name": "Inuktitut",
+  "parent": 0
+ },
+ {
+  "tid": "669",
+  "name": "Inupiaq",
+  "parent": 0
+ },
+ {
+  "tid": "667",
+  "name": "Irish",
+  "parent": 0
+ },
+ {
+  "tid": "672",
+  "name": "Italian",
+  "parent": 0
+ },
+ {
+  "tid": "674",
+  "name": "Japanese",
+  "parent": 0
+ },
+ {
+  "tid": "675",
+  "name": "Javanese",
+  "parent": 0
+ },
+ {
+  "tid": "676",
+  "name": "Kalaallisut, Greenlandic",
+  "parent": 0
+ },
+ {
+  "tid": "677",
+  "name": "Kannada",
+  "parent": 0
+ },
+ {
+  "tid": "678",
+  "name": "Kanuri",
+  "parent": 0
+ },
+ {
+  "tid": "679",
+  "name": "Kashmiri",
+  "parent": 0
+ },
+ {
+  "tid": "680",
+  "name": "Kazakh",
+  "parent": 0
+ },
+ {
+  "tid": "681",
+  "name": "Khmer",
+  "parent": 0
+ },
+ {
+  "tid": "682",
+  "name": "Kikuyu, Gikuyu",
+  "parent": 0
+ },
+ {
+  "tid": "683",
+  "name": "Kinyarwanda",
+  "parent": 0
+ },
+ {
+  "tid": "733",
+  "name": "Kirundi",
+  "parent": 0
+ },
+ {
+  "tid": "685",
+  "name": "Komi",
+  "parent": 0
+ },
+ {
+  "tid": "686",
+  "name": "Kongo",
+  "parent": 0
+ },
+ {
+  "tid": "687",
+  "name": "Korean",
+  "parent": 0
+ },
+ {
+  "tid": "688",
+  "name": "Kurdish",
+  "parent": 0
+ },
+ {
+  "tid": "689",
+  "name": "Kwanyama, Kuanyama",
+  "parent": 0
+ },
+ {
+  "tid": "684",
+  "name": "Kyrgyz",
+  "parent": 0
+ },
+ {
+  "tid": "695",
+  "name": "Lao",
+  "parent": 0
+ },
+ {
+  "tid": "690",
+  "name": "Latin",
+  "parent": 0
+ },
+ {
+  "tid": "698",
+  "name": "Latvian",
+  "parent": 0
+ },
+ {
+  "tid": "693",
+  "name": "Limburgish, Limburgan, Limburger",
+  "parent": 0
+ },
+ {
+  "tid": "694",
+  "name": "Lingala",
+  "parent": 0
+ },
+ {
+  "tid": "696",
+  "name": "Lithuanian",
+  "parent": 0
+ },
+ {
+  "tid": "697",
+  "name": "Luba-Katanga",
+  "parent": 0
+ },
+ {
+  "tid": "691",
+  "name": "Luxembourgish, Letzeburgesch",
+  "parent": 0
+ },
+ {
+  "tid": "700",
+  "name": "Macedonian",
+  "parent": 0
+ },
+ {
+  "tid": "701",
+  "name": "Malagasy",
+  "parent": 0
+ },
+ {
+  "tid": "702",
+  "name": "Malay",
+  "parent": 0
+ },
+ {
+  "tid": "703",
+  "name": "Malayalam",
+  "parent": 0
+ },
+ {
+  "tid": "704",
+  "name": "Maltese",
+  "parent": 0
+ },
+ {
+  "tid": "699",
+  "name": "Manx",
+  "parent": 0
+ },
+ {
+  "tid": "705",
+  "name": "Māori",
+  "parent": 0
+ },
+ {
+  "tid": "706",
+  "name": "Marathi (Marāṭhī)",
+  "parent": 0
+ },
+ {
+  "tid": "707",
+  "name": "Marshallese",
+  "parent": 0
+ },
+ {
+  "tid": "708",
+  "name": "Mongolian",
+  "parent": 0
+ },
+ {
+  "tid": "709",
+  "name": "Nauruan",
+  "parent": 0
+ },
+ {
+  "tid": "710",
+  "name": "Navajo, Navaho",
+  "parent": 0
+ },
+ {
+  "tid": "713",
+  "name": "Ndonga",
+  "parent": 0
+ },
+ {
+  "tid": "712",
+  "name": "Nepali",
+  "parent": 0
+ },
+ {
+  "tid": "711",
+  "name": "Northern Ndebele",
+  "parent": 0
+ },
+ {
+  "tid": "739",
+  "name": "Northern Sami",
+  "parent": 0
+ },
+ {
+  "tid": "716",
+  "name": "Norwegian",
+  "parent": 0
+ },
+ {
+  "tid": "714",
+  "name": "Norwegian Bokmål",
+  "parent": 0
+ },
+ {
+  "tid": "715",
+  "name": "Norwegian Nynorsk",
+  "parent": 0
+ },
+ {
+  "tid": "717",
+  "name": "Nuosu",
+  "parent": 0
+ },
+ {
+  "tid": "719",
+  "name": "Occitan",
+  "parent": 0
+ },
+ {
+  "tid": "720",
+  "name": "Ojibwe, Ojibwa",
+  "parent": 0
+ },
+ {
+  "tid": "721",
+  "name": "Old Church Slavonic, Church Slavonic, Old Bulgarian",
+  "parent": 0
+ },
+ {
+  "tid": "723",
+  "name": "Oriya",
+  "parent": 0
+ },
+ {
+  "tid": "722",
+  "name": "Oromo",
+  "parent": 0
+ },
+ {
+  "tid": "724",
+  "name": "Ossetian, Ossetic",
+  "parent": 0
+ },
+ {
+  "tid": "2172",
+  "name": "Other",
+  "parent": 0
+ },
+ {
+  "tid": "726",
+  "name": "Pāli",
+  "parent": 0
+ },
+ {
+  "tid": "729",
+  "name": "Pashto, Pushto",
+  "parent": 0
+ },
+ {
+  "tid": "727",
+  "name": "Persian (Farsi)",
+  "parent": 0
+ },
+ {
+  "tid": "728",
+  "name": "Polish",
+  "parent": 0
+ },
+ {
+  "tid": "730",
+  "name": "Portuguese",
+  "parent": 0
+ },
+ {
+  "tid": "731",
+  "name": "Quechua",
+  "parent": 0
+ },
+ {
+  "tid": "734",
+  "name": "Romanian",
+  "parent": 0
+ },
+ {
+  "tid": "732",
+  "name": "Romansh",
+  "parent": 0
+ },
+ {
+  "tid": "735",
+  "name": "Russian",
+  "parent": 0
+ },
+ {
+  "tid": "740",
+  "name": "Samoan",
+  "parent": 0
+ },
+ {
+  "tid": "741",
+  "name": "Sango",
+  "parent": 0
+ },
+ {
+  "tid": "736",
+  "name": "Sanskrit (Saṁskṛta)",
+  "parent": 0
+ },
+ {
+  "tid": "737",
+  "name": "Sardinian",
+  "parent": 0
+ },
+ {
+  "tid": "743",
+  "name": "Scottish Gaelic, Gaelic",
+  "parent": 0
+ },
+ {
+  "tid": "742",
+  "name": "Serbian",
+  "parent": 0
+ },
+ {
+  "tid": "744",
+  "name": "Shona",
+  "parent": 0
+ },
+ {
+  "tid": "738",
+  "name": "Sindhi",
+  "parent": 0
+ },
+ {
+  "tid": "745",
+  "name": "Sinhalese, Sinhala",
+  "parent": 0
+ },
+ {
+  "tid": "746",
+  "name": "Slovak",
+  "parent": 0
+ },
+ {
+  "tid": "747",
+  "name": "Slovene",
+  "parent": 0
+ },
+ {
+  "tid": "748",
+  "name": "Somali",
+  "parent": 0
+ },
+ {
+  "tid": "718",
+  "name": "Southern Ndebele",
+  "parent": 0
+ },
+ {
+  "tid": "749",
+  "name": "Southern Sotho",
+  "parent": 0
+ },
+ {
+  "tid": "750",
+  "name": "Spanish",
+  "parent": 0
+ },
+ {
+  "tid": "751",
+  "name": "Sundanese",
+  "parent": 0
+ },
+ {
+  "tid": "752",
+  "name": "Swahili",
+  "parent": 0
+ },
+ {
+  "tid": "753",
+  "name": "Swati",
+  "parent": 0
+ },
+ {
+  "tid": "754",
+  "name": "Swedish",
+  "parent": 0
+ },
+ {
+  "tid": "762",
+  "name": "Tagalog",
+  "parent": 0
+ },
+ {
+  "tid": "769",
+  "name": "Tahitian",
+  "parent": 0
+ },
+ {
+  "tid": "757",
+  "name": "Tajik",
+  "parent": 0
+ },
+ {
+  "tid": "755",
+  "name": "Tamil",
+  "parent": 0
+ },
+ {
+  "tid": "767",
+  "name": "Tatar",
+  "parent": 0
+ },
+ {
+  "tid": "756",
+  "name": "Telugu",
+  "parent": 0
+ },
+ {
+  "tid": "758",
+  "name": "Thai",
+  "parent": 0
+ },
+ {
+  "tid": "760",
+  "name": "Tibetan Standard, Tibetan, Central",
+  "parent": 0
+ },
+ {
+  "tid": "759",
+  "name": "Tigrinya",
+  "parent": 0
+ },
+ {
+  "tid": "764",
+  "name": "Tonga (Tonga Islands)",
+  "parent": 0
+ },
+ {
+  "tid": "766",
+  "name": "Tsonga",
+  "parent": 0
+ },
+ {
+  "tid": "763",
+  "name": "Tswana",
+  "parent": 0
+ },
+ {
+  "tid": "765",
+  "name": "Turkish",
+  "parent": 0
+ },
+ {
+  "tid": "761",
+  "name": "Turkmen",
+  "parent": 0
+ },
+ {
+  "tid": "768",
+  "name": "Twi",
+  "parent": 0
+ },
+ {
+  "tid": "771",
+  "name": "Ukrainian",
+  "parent": 0
+ },
+ {
+  "tid": "772",
+  "name": "Urdu",
+  "parent": 0
+ },
+ {
+  "tid": "770",
+  "name": "Uyghur",
+  "parent": 0
+ },
+ {
+  "tid": "773",
+  "name": "Uzbek",
+  "parent": 0
+ },
+ {
+  "tid": "774",
+  "name": "Venda",
+  "parent": 0
+ },
+ {
+  "tid": "775",
+  "name": "Vietnamese",
+  "parent": 0
+ },
+ {
+  "tid": "776",
+  "name": "Volapük",
+  "parent": 0
+ },
+ {
+  "tid": "777",
+  "name": "Walloon",
+  "parent": 0
+ },
+ {
+  "tid": "778",
+  "name": "Welsh",
+  "parent": 0
+ },
+ {
+  "tid": "780",
+  "name": "Western Frisian",
+  "parent": 0
+ },
+ {
+  "tid": "779",
+  "name": "Wolof",
+  "parent": 0
+ },
+ {
+  "tid": "781",
+  "name": "Xhosa",
+  "parent": 0
+ },
+ {
+  "tid": "782",
+  "name": "Yiddish",
+  "parent": 0
+ },
+ {
+  "tid": "783",
+  "name": "Yoruba",
+  "parent": 0
+ },
+ {
+  "tid": "784",
+  "name": "Zhuang, Chuang",
+  "parent": 0
+ },
+ {
+  "tid": "785",
+  "name": "Zulu",
+  "parent": 0
+ }
+]

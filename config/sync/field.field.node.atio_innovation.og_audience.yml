@@ -1,0 +1,36 @@
+uuid: faa47551-8707-4190-8916-3ac769f8c151
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.og_audience
+    - node.type.atio_innovation
+    - node.type.collection
+  module:
+    - og
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: R21s04wK_6n4mN7GPGKRk7xezZyzFZ0A0krL_-UNdYY
+id: node.atio_innovation.og_audience
+field_name: og_audience
+entity_type: node
+bundle: atio_innovation
+label: 'Parent Entity'
+description: 'OG group audience reference field.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      collection: collection
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: collection
+field_type: og_standard_reference

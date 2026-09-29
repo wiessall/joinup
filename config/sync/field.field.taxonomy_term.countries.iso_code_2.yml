@@ -1,0 +1,24 @@
+uuid: 216dbb90-b11a-4bdc-9aaa-d2a1a7c76931
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.iso_code_2
+    - taxonomy.vocabulary.countries
+  enforced:
+    module:
+      - sti_reference
+_core:
+  default_config_hash: qljiIjcKtEFbDhdO93JL3zO0pCpPnFlY1g7s31czC8k
+id: taxonomy_term.countries.iso_code_2
+field_name: iso_code_2
+entity_type: taxonomy_term
+bundle: countries
+label: 'Iso code 2'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

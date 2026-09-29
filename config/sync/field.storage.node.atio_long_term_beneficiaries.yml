@@ -1,0 +1,25 @@
+uuid: a755e4b2-ad3b-4407-b4a7-f6f4581bb52f
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: uMrcdCOLY6oqtuHcRn5Ct44yR-aJSCBMwv8OSfnqIj8
+id: node.atio_long_term_beneficiaries
+field_name: atio_long_term_beneficiaries
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

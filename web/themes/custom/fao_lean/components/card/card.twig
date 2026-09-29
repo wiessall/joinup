@@ -1,0 +1,50 @@
+{#
+/**
+ * @file
+ * FAO Design System card (SDC: fao_lean:card).
+ *
+ * Markup follows the FAO DS card (.card, .card-image, .title-category,
+ * .card-title, .card-text), so vendor/fao-ds styles it; card.css only adds
+ * what the DS lacks. The whole card is clickable through Bootstrap's
+ * .stretched-link on the title link (CSS only, still one link for screen readers).
+ */
+#}
+{% set heading = 'h' ~ (heading_level|default(5)) %}
+{% set classes = [
+  'card',
+  'h-100',
+  'fao-card',
+  variant == 'no-border' ? 'border-0',
+  variant == 'background' ? 'bg-gray-light',
+] %}
+
+<article{{ attributes.addClass(classes) }}>
+  {{ contextual }}
+  {% if media %}
+    <div class="card-image ratio ratio-3x2">{{ media }}</div>
+  {% endif %}
+  <div class="card-body">
+    {% if category %}
+      <h6 class="title-category">{{ category }}</h6>
+    {% endif %}
+    <{{ heading }} class="card-title">
+      {% if url %}
+        <a href="{{ url }}" class="stretched-link">{{ title }}</a>
+      {% else %}
+        {{ title }}
+      {% endif %}
+    </{{ heading }}>
+    {% if meta %}
+      <p class="date-location card-date-location mb-2">{{ meta }}</p>
+    {% endif %}
+    {% if text %}
+      <div class="card-text fao-card__text">{{ text }}</div>
+    {% endif %}
+    {% if badges %}
+      <div class="fao-card__above-link mt-2">{{ badges }}</div>
+    {% endif %}
+  </div>
+  {% if footer %}
+    <div class="card-footer fao-card__above-link">{{ footer }}</div>
+  {% endif %}
+</article>

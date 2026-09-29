@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.node.atio_readiness_description
+  - node.type.atio_innovation
+  enforced:
+    module:
+    - atio
+id: node.atio_innovation.atio_readiness_description
+field_name: atio_readiness_description
+entity_type: node
+bundle: atio_innovation
+label: 'Readiness: narrative'
+description: ''
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings: {}
+field_type: string_long

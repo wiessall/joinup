@@ -1,0 +1,24 @@
+uuid: bfc5c210-46a1-4636-be02-3427584f6acd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.term_uri
+    - taxonomy.vocabulary.geographic_regions
+  enforced:
+    module:
+      - sti_reference
+_core:
+  default_config_hash: 8uNqcEW0Wr6SlsMmFNYqXFlhWQIMuEhEek6uWdaCOA4
+id: taxonomy_term.geographic_regions.term_uri
+field_name: term_uri
+entity_type: taxonomy_term
+bundle: geographic_regions
+label: 'Term URI'
+description: 'Authoritative URI for this concept. Leave empty to mint one under the STI namespace.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

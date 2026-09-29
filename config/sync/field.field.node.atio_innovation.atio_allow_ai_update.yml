@@ -1,0 +1,26 @@
+uuid: 1dc6df7d-3fcd-4a51-bcb8-c04bebe8489e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_allow_ai_update
+    - node.type.atio_innovation
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: z1gdMTiEmz3A6Ozqwe3GGOj6geLIsnV6ksp9iZPE2-Q
+id: node.atio_innovation.atio_allow_ai_update
+field_name: atio_allow_ai_update
+entity_type: node
+bundle: atio_innovation
+label: 'Allow AI update'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

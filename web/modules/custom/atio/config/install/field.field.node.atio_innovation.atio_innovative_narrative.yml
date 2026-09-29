@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.node.atio_innovative_narrative
+  - node.type.atio_innovation
+  enforced:
+    module:
+    - atio
+id: node.atio_innovation.atio_innovative_narrative
+field_name: atio_innovative_narrative
+entity_type: node
+bundle: atio_innovation
+label: 'Innovative dimensions: narrative'
+description: Elaborate on what the innovative elements are (see categories above).
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings: {}
+field_type: string_long

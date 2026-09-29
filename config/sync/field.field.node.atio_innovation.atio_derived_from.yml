@@ -1,0 +1,36 @@
+uuid: 1c9ca507-9a24-4492-a9da-2bf03183ff38
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_derived_from
+    - node.type.atio_innovation
+    - node.type.solution
+  module:
+    - entity_reference_revisions
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: RQrnbDywBeAVqeQeIV4rIIj8RWBf-pcSNci6O23Xw1Y
+id: node.atio_innovation.atio_derived_from
+field_name: atio_derived_from
+entity_type: node
+bundle: atio_innovation
+label: 'Derived from'
+description: 'The solution revision(s) whose claims this synthesis was formed from.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      solution: solution
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference_revisions

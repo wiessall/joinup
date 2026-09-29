@@ -1,0 +1,538 @@
+[
+ {
+  "tid": "897",
+  "name": "Production",
+  "parent": 0
+ },
+ {
+  "tid": "898",
+  "name": "crop production",
+  "parent": 897
+ },
+ {
+  "tid": "899",
+  "name": "animal production",
+  "parent": 897
+ },
+ {
+  "tid": "900",
+  "name": "fisheries products management",
+  "parent": 897
+ },
+ {
+  "tid": "901",
+  "name": "forest products and logging management",
+  "parent": 897
+ },
+ {
+  "tid": "902",
+  "name": "improved plant varieties",
+  "parent": 897
+ },
+ {
+  "tid": "903",
+  "name": "improved animal breeds",
+  "parent": 897
+ },
+ {
+  "tid": "904",
+  "name": "crop monitoring",
+  "parent": 897
+ },
+ {
+  "tid": "905",
+  "name": "livestock monitoring",
+  "parent": 897
+ },
+ {
+  "tid": "906",
+  "name": "plant health",
+  "parent": 897
+ },
+ {
+  "tid": "907",
+  "name": "animal health",
+  "parent": 897
+ },
+ {
+  "tid": "908",
+  "name": "precision seeding and fertilization for better production",
+  "parent": 897
+ },
+ {
+  "tid": "909",
+  "name": "optimization of resource use for better production",
+  "parent": 897
+ },
+ {
+  "tid": "1186",
+  "name": "pastoralists' animal production",
+  "parent": 897,
+  "variant": "pastoralism"
+ },
+ {
+  "tid": "910",
+  "name": "Farm management",
+  "parent": 0
+ },
+ {
+  "tid": "1154",
+  "name": "disaster management",
+  "parent": 910
+ },
+ {
+  "tid": "1180",
+  "name": "income increase",
+  "parent": 910
+ },
+ {
+  "tid": "1155",
+  "name": "taxation management",
+  "parent": 910
+ },
+ {
+  "tid": "911",
+  "name": "record-keeping and accounting",
+  "parent": 910
+ },
+ {
+  "tid": "912",
+  "name": "forecasting, planning of planting and harvesting",
+  "parent": 910
+ },
+ {
+  "tid": "913",
+  "name": "equipment management",
+  "parent": 910
+ },
+ {
+  "tid": "914",
+  "name": "field management",
+  "parent": 910
+ },
+ {
+  "tid": "915",
+  "name": "optimization of resource use for economic benefit",
+  "parent": 910
+ },
+ {
+  "tid": "916",
+  "name": "Natural resources management & sustainable practices",
+  "parent": 0
+ },
+ {
+  "tid": "917",
+  "name": "biodiversity preservation, agroecology, conservation agriculture",
+  "parent": 916
+ },
+ {
+  "tid": "1189",
+  "name": "precision seeding and fertilization for better NR management",
+  "parent": 916
+ },
+ {
+  "tid": "918",
+  "name": "climate change adaptation",
+  "parent": 916
+ },
+ {
+  "tid": "919",
+  "name": "climate change mitigation",
+  "parent": 916
+ },
+ {
+  "tid": "920",
+  "name": "water use optimization for sustainability",
+  "parent": 916
+ },
+ {
+  "tid": "921",
+  "name": "improving soil management practices",
+  "parent": 916
+ },
+ {
+  "tid": "922",
+  "name": "soil carbon sequestration monitoring",
+  "parent": 916
+ },
+ {
+  "tid": "923",
+  "name": "carbon credit management to monetize sustainable practices",
+  "parent": 916
+ },
+ {
+  "tid": "924",
+  "name": "biodiversity mapping to inform land use planning",
+  "parent": 916
+ },
+ {
+  "tid": "925",
+  "name": "reduction of energy consumption and environmental impact",
+  "parent": 916
+ },
+ {
+  "tid": "926",
+  "name": "minimize pesticide use",
+  "parent": 916
+ },
+ {
+  "tid": "927",
+  "name": "forestry management",
+  "parent": 916
+ },
+ {
+  "tid": "956",
+  "name": "Access to finance",
+  "parent": 0
+ },
+ {
+  "tid": "1156",
+  "name": "support for Anticipatory Cash Transfers",
+  "parent": 956
+ },
+ {
+  "tid": "957",
+  "name": "easier access to loans for inputs or equipment",
+  "parent": 956
+ },
+ {
+  "tid": "958",
+  "name": "evidence-based credit",
+  "parent": 956
+ },
+ {
+  "tid": "959",
+  "name": "raising capital",
+  "parent": 956
+ },
+ {
+  "tid": "960",
+  "name": "protection against risks",
+  "parent": 956
+ },
+ {
+  "tid": "961",
+  "name": "index-based insurance and climate risk insurance",
+  "parent": 956
+ },
+ {
+  "tid": "962",
+  "name": "support to subsidies' compliance and management",
+  "parent": 956
+ },
+ {
+  "tid": "963",
+  "name": "farmers' economic identity",
+  "parent": 956
+ },
+ {
+  "tid": "964",
+  "name": "remote financial transactions and savings",
+  "parent": 956
+ },
+ {
+  "tid": "928",
+  "name": "Access to markets",
+  "parent": 0
+ },
+ {
+  "tid": "929",
+  "name": "direct sale to consumers or businesses",
+  "parent": 928
+ },
+ {
+  "tid": "930",
+  "name": "access to price information (output)",
+  "parent": 928
+ },
+ {
+  "tid": "931",
+  "name": "access to physical marketplaces",
+  "parent": 928
+ },
+ {
+  "tid": "932",
+  "name": "access to virtual marketplaces",
+  "parent": 928
+ },
+ {
+  "tid": "933",
+  "name": "market forecasting for production and inventory planning",
+  "parent": 928
+ },
+ {
+  "tid": "934",
+  "name": "Alternative food production",
+  "parent": 0
+ },
+ {
+  "tid": "935",
+  "name": "production of food in limited spaces (e.g. vertical farming)",
+  "parent": 934
+ },
+ {
+  "tid": "936",
+  "name": "aquaponics management",
+  "parent": 934
+ },
+ {
+  "tid": "937",
+  "name": "production of alternative protein sources (e.g. insect farming, meat substitutes)",
+  "parent": 934
+ },
+ {
+  "tid": "938",
+  "name": "cellular agriculture to develop lab-grown meat",
+  "parent": 934
+ },
+ {
+  "tid": "939",
+  "name": "Supply chain management",
+  "parent": 0
+ },
+ {
+  "tid": "940",
+  "name": "trading between input suppliers and farmers",
+  "parent": 939
+ },
+ {
+  "tid": "941",
+  "name": "access to price information (input)",
+  "parent": 939
+ },
+ {
+  "tid": "942",
+  "name": "support to post-harvest handling and aggregation",
+  "parent": 939
+ },
+ {
+  "tid": "943",
+  "name": "support to food processing",
+  "parent": 939
+ },
+ {
+  "tid": "944",
+  "name": "support to consumption and nutrition",
+  "parent": 939
+ },
+ {
+  "tid": "945",
+  "name": "support to distribution",
+  "parent": 939
+ },
+ {
+  "tid": "946",
+  "name": "traceability to ensure food safety and supply chain transparency",
+  "parent": 939
+ },
+ {
+  "tid": "947",
+  "name": "logistics optimization to reduce costs and food waste",
+  "parent": 939
+ },
+ {
+  "tid": "948",
+  "name": "cold chain monitoring to maintain product quality during transport",
+  "parent": 939
+ },
+ {
+  "tid": "949",
+  "name": "inventory management to optimize stock levels",
+  "parent": 939
+ },
+ {
+  "tid": "950",
+  "name": "disintermediation (farm-to-fork)",
+  "parent": 939
+ },
+ {
+  "tid": "951",
+  "name": "Food quality and safety",
+  "parent": 0
+ },
+ {
+  "tid": "2083",
+  "name": "food fortification",
+  "parent": 951
+ },
+ {
+  "tid": "952",
+  "name": "rapid testing to ensure product safety",
+  "parent": 951
+ },
+ {
+  "tid": "2084",
+  "name": "school feeding programs",
+  "parent": 951
+ },
+ {
+  "tid": "953",
+  "name": "smart packaging to extend shelf life and reduce waste",
+  "parent": 951
+ },
+ {
+  "tid": "954",
+  "name": "verification of product authenticity",
+  "parent": 951
+ },
+ {
+  "tid": "955",
+  "name": "food safety compliance support to meet regulatory requirements",
+  "parent": 951
+ },
+ {
+  "tid": "965",
+  "name": "Access to knowledge and advisory",
+  "parent": 0
+ },
+ {
+  "tid": "966",
+  "name": "access to connectivity",
+  "parent": 965
+ },
+ {
+  "tid": "967",
+  "name": "access to agricultural advice",
+  "parent": 965
+ },
+ {
+  "tid": "968",
+  "name": "agricultural skills development",
+  "parent": 965
+ },
+ {
+  "tid": "969",
+  "name": "Business models support",
+  "parent": 0
+ },
+ {
+  "tid": "970",
+  "name": "supporting / implementing innovative business models",
+  "parent": 969
+ },
+ {
+  "tid": "971",
+  "name": "negotiation of business models",
+  "parent": 969
+ },
+ {
+  "tid": "972",
+  "name": "supporting data value chain business models",
+  "parent": 969
+ },
+ {
+  "tid": "973",
+  "name": "Collective action and aggregation",
+  "parent": 0
+ },
+ {
+  "tid": "1187",
+  "name": "indigenous peoples' rights",
+  "parent": 973
+ },
+ {
+  "tid": "974",
+  "name": "cooperative management to improve efficiency and governance",
+  "parent": 973
+ },
+ {
+  "tid": "975",
+  "name": "farmer profiling",
+  "parent": 973
+ },
+ {
+  "tid": "976",
+  "name": "support to collective selling to access larger markets",
+  "parent": 973
+ },
+ {
+  "tid": "977",
+  "name": "shared economy support to share equipment and reduce individual costs",
+  "parent": 973
+ },
+ {
+  "tid": "978",
+  "name": "support to group purchasing to negotiate better prices on inputs",
+  "parent": 973
+ },
+ {
+  "tid": "979",
+  "name": "data cooperatives management",
+  "parent": 973
+ },
+ {
+  "tid": "980",
+  "name": "Governance, policy support and intelligence",
+  "parent": 0
+ },
+ {
+  "tid": "2090",
+  "name": "Addressing market concentration and power imbalances",
+  "parent": 980
+ },
+ {
+  "tid": "981",
+  "name": "SDG monitoring to track progress",
+  "parent": 980
+ },
+ {
+  "tid": "982",
+  "name": "policy simulation to assess potential impacts of agricultural policies",
+  "parent": 980
+ },
+ {
+  "tid": "983",
+  "name": "impact assessment to evaluate project outcomes",
+  "parent": 980
+ },
+ {
+  "tid": "984",
+  "name": "open data support for evidence-based decision making",
+  "parent": 980
+ },
+ {
+  "tid": "985",
+  "name": "provision of insights for policy making",
+  "parent": 980
+ },
+ {
+  "tid": "986",
+  "name": "support to incentives schemes",
+  "parent": 980
+ },
+ {
+  "tid": "987",
+  "name": "support to certification schemes",
+  "parent": 980
+ },
+ {
+  "tid": "988",
+  "name": "support to social responsibility schemes, including codes of conduct",
+  "parent": 980
+ },
+ {
+  "tid": "989",
+  "name": "support to traceability",
+  "parent": 980
+ },
+ {
+  "tid": "990",
+  "name": "compliance tracking",
+  "parent": 980
+ },
+ {
+  "tid": "991",
+  "name": "promoting ethical practices and community wellbeing",
+  "parent": 980
+ },
+ {
+  "tid": "992",
+  "name": "addressing ethical / legal issues around data sharing",
+  "parent": 980
+ },
+ {
+  "tid": "1190",
+  "name": "NO USE CASE IDENTIFIED",
+  "parent": 0
+ }
+]

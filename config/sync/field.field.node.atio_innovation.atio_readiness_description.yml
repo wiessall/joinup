@@ -1,0 +1,24 @@
+uuid: 55b71651-0e67-4bb3-8ca1-1b6e1ae8ea8d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_readiness_description
+    - node.type.atio_innovation
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: pzjlJObhtlBLvX0peWWAQur63vDZUhJpn8hnDLwPz-c
+id: node.atio_innovation.atio_readiness_description
+field_name: atio_readiness_description
+entity_type: node
+bundle: atio_innovation
+label: 'Readiness: narrative'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

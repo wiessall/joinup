@@ -1,0 +1,34 @@
+uuid: f58c02f9-68c9-485a-8d50-358337bf92c7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_owner
+    - node.type.atio_innovation
+    - node.type.owner
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: 6pmoafQDQiXm8cX8Nb7MMp80uyGAfLJjfQxVp-QTpNw
+id: node.atio_innovation.atio_owner
+field_name: atio_owner
+entity_type: node
+bundle: atio_innovation
+label: 'Link(s) to owner organization(s)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      owner: owner
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.taxonomy_term.level_no
+  - taxonomy.vocabulary.atio_readiness_levels
+  enforced:
+    module:
+    - atio
+id: taxonomy_term.atio_readiness_levels.level_no
+field_name: level_no
+entity_type: taxonomy_term
+bundle: atio_readiness_levels
+label: Level no
+description: ''
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings: {}
+field_type: integer

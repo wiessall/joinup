@@ -1,0 +1,27 @@
+uuid: 91f33773-7a3c-4316-8add-ae00bc45645a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_shorter_description
+    - node.type.atio_innovation
+  module:
+    - text
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: 6LGxySYLqUNRH7nGTZhPZ5HSlChnDODc95EVvEy0_D8
+id: node.atio_innovation.atio_shorter_description
+field_name: atio_shorter_description
+entity_type: node
+bundle: atio_innovation
+label: 'Short description'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

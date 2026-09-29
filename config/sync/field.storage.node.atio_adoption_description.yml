@@ -1,0 +1,24 @@
+uuid: cc019f1f-a3ce-41c2-9df2-4a78b43344ea
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: 4HbigGn8g_gtngBXxjTQRKFC5DYkpjW2YLhDRlLZ3Ww
+id: node.atio_adoption_description
+field_name: atio_adoption_description
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

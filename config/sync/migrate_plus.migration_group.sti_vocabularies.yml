@@ -1,0 +1,15 @@
+uuid: 5b05ae9f-86fd-45a7-b87e-f2be0e5b67bf
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - sti_reference
+_core:
+  default_config_hash: NC4Djp-TJzwBGL4RknV1A13F4kNFBYadxqj7N3AobBE
+id: sti_vocabularies
+label: 'STI vocabularies'
+description: 'Taxonomy ported from the production STI Portal.'
+source_type: JSON
+module: null
+shared_configuration: {  }

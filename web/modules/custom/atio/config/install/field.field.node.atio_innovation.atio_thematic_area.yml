@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.node.atio_thematic_area
+  - node.type.atio_innovation
+  - taxonomy.vocabulary.atio_themes
+  enforced:
+    module:
+    - atio
+id: node.atio_innovation.atio_thematic_area
+field_name: atio_thematic_area
+entity_type: node
+bundle: atio_innovation
+label: Thematic area
+description: ''
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings:
+  handler: default:taxonomy_term
+  handler_settings:
+    target_bundles:
+      atio_themes: atio_themes
+    sort:
+      field: name
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

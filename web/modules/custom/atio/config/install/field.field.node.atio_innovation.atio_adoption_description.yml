@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.node.atio_adoption_description
+  - node.type.atio_innovation
+  enforced:
+    module:
+    - atio
+id: node.atio_innovation.atio_adoption_description
+field_name: atio_adoption_description
+entity_type: node
+bundle: atio_innovation
+label: 'Adoption: narrative'
+description: Narrative description / justification or the selection of the level of
+  adoption of the innovation, possibly including some evidence and the categories
+  / groups of users who adopted it.
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings: {}
+field_type: string_long

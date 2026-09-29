@@ -1,0 +1,68 @@
+uuid: 2bbce5f9-d429-42e0-be36-cb1876e53e82
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - sti_reference
+_core:
+  default_config_hash: nY7YXXZ4Rm9N3Ec9ty299FyH72JWgJt4-tmZiboR-gU
+id: geographic_regions_terms
+class: null
+idMap: {  }
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - vocabulary
+  - sti_reference
+  - hierarchical
+migration_group: sti_vocabularies
+label: 'Geographic regions terms'
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+    - modules/custom/sti_reference/data/geographic_regions.json
+  item_selector: ''
+  ids:
+    tid:
+      type: integer
+  fields:
+    -
+      name: tid
+      label: tid
+      selector: tid
+    -
+      name: name
+      label: name
+      selector: name
+    -
+      name: parent
+      label: parent
+      selector: parent
+    -
+      name: variant
+      label: variant
+      selector: variant
+process:
+  name: name
+  vid:
+    plugin: default_value
+    default_value: geographic_regions
+  parent:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: parent
+    -
+      plugin: migration_lookup
+      migration: geographic_regions_terms
+      no_stub: true
+  variant: variant
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: geographic_regions
+migration_dependencies:
+  required: {  }
+  optional: {  }

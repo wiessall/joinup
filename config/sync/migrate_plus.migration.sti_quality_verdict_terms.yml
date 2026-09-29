@@ -1,0 +1,62 @@
+uuid: 61b41160-8cdd-4d31-a7d3-1d79f2277619
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - sti_qa
+_core:
+  default_config_hash: 6CO1zN7Yl2QyB4nkV5BLLTb2E5MrPLeI_L1rH30KeDM
+id: sti_quality_verdict_terms
+class: null
+idMap: {  }
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - vocabulary
+  - sti_qa
+migration_group: sti_vocabularies
+label: 'Quality verdict terms'
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+    - modules/custom/sti_qa/data/sti_quality_verdict.json
+  item_selector: ''
+  ids:
+    tid:
+      type: integer
+  fields:
+    -
+      name: tid
+      label: tid
+      selector: tid
+    -
+      name: name
+      label: name
+      selector: name
+    -
+      name: parent
+      label: parent
+      selector: parent
+process:
+  name: name
+  vid:
+    plugin: default_value
+    default_value: sti_quality_verdict
+  parent:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: parent
+    -
+      plugin: migration_lookup
+      migration: sti_quality_verdict_terms
+      no_stub: true
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: sti_quality_verdict
+migration_dependencies:
+  required: {  }
+  optional: {  }

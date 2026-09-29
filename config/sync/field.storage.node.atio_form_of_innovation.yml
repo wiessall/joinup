@@ -1,0 +1,25 @@
+uuid: 89349c84-040b-47a2-918d-6be382f26676
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: v8svQyDv5SUmxhVJoH4urUDNye95fwp9WYYNfSG_0Ds
+id: node.atio_form_of_innovation
+field_name: atio_form_of_innovation
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

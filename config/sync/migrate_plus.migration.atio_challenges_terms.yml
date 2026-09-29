@@ -1,0 +1,62 @@
+uuid: 31f06098-1648-4dde-8db4-66f7fdeec4ef
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: 7tJPqy8fTU7McFrzI8YiU1hFvWTnJO381KxB58L-byM
+id: atio_challenges_terms
+class: null
+idMap: {  }
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - vocabulary
+  - atio
+migration_group: sti_vocabularies
+label: 'AFS challenges terms'
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+    - modules/custom/atio/data/atio_challenges.json
+  item_selector: ''
+  ids:
+    tid:
+      type: integer
+  fields:
+    -
+      name: tid
+      label: tid
+      selector: tid
+    -
+      name: name
+      label: name
+      selector: name
+    -
+      name: parent
+      label: parent
+      selector: parent
+process:
+  name: name
+  vid:
+    plugin: default_value
+    default_value: atio_challenges
+  parent:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: parent
+    -
+      plugin: migration_lookup
+      migration: atio_challenges_terms
+      no_stub: true
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: atio_challenges
+migration_dependencies:
+  required: {  }
+  optional: {  }

@@ -1,0 +1,24 @@
+uuid: d3d912f2-8cac-4efb-b3a0-50db7af15518
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_innovative_narrative
+    - node.type.atio_innovation
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: d-r31jpFhxWAbpET4lm_wi0Q-M1g-4EhTY-PcNyGFFo
+id: node.atio_innovation.atio_innovative_narrative
+field_name: atio_innovative_narrative
+entity_type: node
+bundle: atio_innovation
+label: 'Innovative dimensions: narrative'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

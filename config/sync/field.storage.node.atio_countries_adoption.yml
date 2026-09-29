@@ -1,0 +1,25 @@
+uuid: e1315f2b-5023-411c-a38e-d34d6b450d33
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: RCIsAXuNZhkzw_XK3A7fgTO3hL-nqym-HsvPe5p-8T0
+id: node.atio_countries_adoption
+field_name: atio_countries_adoption
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

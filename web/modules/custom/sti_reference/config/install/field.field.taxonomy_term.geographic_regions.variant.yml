@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.taxonomy_term.variant
+  - taxonomy.vocabulary.geographic_regions
+  enforced:
+    module:
+    - sti_reference
+id: taxonomy_term.geographic_regions.variant
+field_name: variant
+entity_type: taxonomy_term
+bundle: geographic_regions
+label: Variant
+description: ''
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings: {}
+field_type: string

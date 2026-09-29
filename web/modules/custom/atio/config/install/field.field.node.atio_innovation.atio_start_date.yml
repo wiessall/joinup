@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.node.atio_start_date
+  - node.type.atio_innovation
+  enforced:
+    module:
+    - atio
+id: node.atio_innovation.atio_start_date
+field_name: atio_start_date
+entity_type: node
+bundle: atio_innovation
+label: Start date
+description: ''
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings: {}
+field_type: datetime

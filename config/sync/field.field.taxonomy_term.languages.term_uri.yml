@@ -1,0 +1,24 @@
+uuid: 63853be4-326b-4fdf-8bd4-247228f016ca
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.term_uri
+    - taxonomy.vocabulary.languages
+  enforced:
+    module:
+      - sti_reference
+_core:
+  default_config_hash: hOKDdANAxO-JyyyfQ2nov0ygOXQms15QlqjZtDq9hzA
+id: taxonomy_term.languages.term_uri
+field_name: term_uri
+entity_type: taxonomy_term
+bundle: languages
+label: 'Term URI'
+description: 'Authoritative URI for this concept. Leave empty to mint one under the STI namespace.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

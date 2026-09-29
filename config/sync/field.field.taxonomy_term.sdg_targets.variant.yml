@@ -1,0 +1,24 @@
+uuid: 34f91a38-02dd-4734-be05-c89c8ece4587
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.variant
+    - taxonomy.vocabulary.sdg_targets
+  enforced:
+    module:
+      - sti_reference
+_core:
+  default_config_hash: rSLCf755_3qsFTcUcnxW25S6McjvR05fd0hvKQFsAgQ
+id: taxonomy_term.sdg_targets.variant
+field_name: variant
+entity_type: taxonomy_term
+bundle: sdg_targets
+label: Variant
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,24 @@
+uuid: 9c607eae-b0a8-4a7f-ba5d-f440985cf22c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.term_uri
+    - taxonomy.vocabulary.sti_record_status
+  enforced:
+    module:
+      - sti_qa
+_core:
+  default_config_hash: 7O8VU067IoriQgQL2-f667IEsf7UEovoMikwcPqqd2c
+id: taxonomy_term.sti_record_status.term_uri
+field_name: term_uri
+entity_type: taxonomy_term
+bundle: sti_record_status
+label: 'Term URI'
+description: 'Authoritative URI for this concept. Leave empty to mint one under the STI namespace.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

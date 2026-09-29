@@ -1,0 +1,33 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.node.atio_derived_from
+  - node.type.atio_innovation
+  - node.type.solution
+  module:
+  - entity_reference_revisions
+  enforced:
+    module:
+    - atio
+id: node.atio_innovation.atio_derived_from
+field_name: atio_derived_from
+entity_type: node
+bundle: atio_innovation
+label: Derived from
+required: false
+translatable: false
+description: The solution revision(s) whose claims this synthesis was formed from.
+default_value: []
+default_value_callback: ''
+settings:
+  handler: default:node
+  handler_settings:
+    target_bundles:
+      solution: solution
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference_revisions

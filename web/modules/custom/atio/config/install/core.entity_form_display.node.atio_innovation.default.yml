@@ -1,0 +1,711 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.field.node.atio_innovation.atio_actual_users
+  - field.field.node.atio_innovation.atio_adoptability_dimensions
+  - field.field.node.atio_innovation.atio_adoption_description
+  - field.field.node.atio_innovation.atio_adoption_level
+  - field.field.node.atio_innovation.atio_ai_enriched_description
+  - field.field.node.atio_innovation.atio_ai_quality
+  - field.field.node.atio_innovation.atio_allow_ai_if_empty
+  - field.field.node.atio_innovation.atio_allow_ai_update
+  - field.field.node.atio_innovation.atio_allow_overwrite_by_origin
+  - field.field.node.atio_innovation.atio_allow_overwrite_if_empty
+  - field.field.node.atio_innovation.atio_bib_citation
+  - field.field.node.atio_innovation.atio_challenges_addressed
+  - field.field.node.atio_innovation.atio_city
+  - field.field.node.atio_innovation.atio_countries_adoption
+  - field.field.node.atio_innovation.atio_country_origin
+  - field.field.node.atio_innovation.atio_curation_notes
+  - field.field.node.atio_innovation.atio_derived_from
+  - field.field.node.atio_innovation.atio_form_of_innovation
+  - field.field.node.atio_innovation.atio_geo_scale
+  - field.field.node.atio_innovation.atio_grassroot_partner
+  - field.field.node.atio_innovation.atio_grassroots_narrative
+  - field.field.node.atio_innovation.atio_identifying_feature
+  - field.field.node.atio_innovation.atio_innovation_stage
+  - field.field.node.atio_innovation.atio_innovation_type
+  - field.field.node.atio_innovation.atio_innovative_features
+  - field.field.node.atio_innovation.atio_innovative_narrative
+  - field.field.node.atio_innovation.atio_investment_type
+  - field.field.node.atio_innovation.atio_is_grassroots
+  - field.field.node.atio_innovation.atio_languages
+  - field.field.node.atio_innovation.atio_long_term_beneficiaries
+  - field.field.node.atio_innovation.atio_owner
+  - field.field.node.atio_innovation.atio_partners
+  - field.field.node.atio_innovation.atio_prospective_users
+  - field.field.node.atio_innovation.atio_quality
+  - field.field.node.atio_innovation.atio_quality_notes
+  - field.field.node.atio_innovation.atio_readiness_description
+  - field.field.node.atio_innovation.atio_readiness_level
+  - field.field.node.atio_innovation.atio_record_status
+  - field.field.node.atio_innovation.atio_region
+  - field.field.node.atio_innovation.atio_sdg_targets
+  - field.field.node.atio_innovation.atio_shorter_description
+  - field.field.node.atio_innovation.atio_sponsors
+  - field.field.node.atio_innovation.atio_start_date
+  - field.field.node.atio_innovation.atio_start_year
+  - field.field.node.atio_innovation.atio_thematic_area
+  - field.field.node.atio_innovation.atio_use_case_image
+  - field.field.node.atio_innovation.atio_use_cases
+  - field.field.node.atio_innovation.atio_use_cases_description
+  - field.field.node.atio_innovation.body
+  - field.field.node.atio_innovation.og_audience
+  - node.type.atio_innovation
+  module:
+  - datetime
+  - field_group
+  - inline_entity_form
+  - og
+  - path
+  - text
+  enforced:
+    module:
+    - atio
+third_party_settings:
+  field_group:
+    group_overview:
+      children:
+      - atio_owner
+      - atio_country_origin
+      - atio_region
+      - atio_city
+      - atio_start_year
+      - atio_shorter_description
+      - body
+      - atio_identifying_feature
+      - atio_ai_enriched_description
+      label: Core information
+      region: content
+      parent_name: ''
+      weight: 3
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: true
+        description: ''
+        required_fields: true
+    group_type_and_use_cases:
+      children:
+      - atio_form_of_innovation
+      - atio_innovation_type
+      - atio_innovative_features
+      - atio_innovative_narrative
+      - atio_use_case_image
+      - atio_use_cases
+      - atio_use_cases_description
+      - atio_thematic_area
+      label: Innovation areas and types
+      region: content
+      parent_name: ''
+      weight: 4
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: true
+        id: ''
+        open: false
+        description: ''
+        required_fields: true
+    group_readiness_and_adoption:
+      children:
+      - atio_innovation_stage
+      - atio_readiness_level
+      - atio_readiness_description
+      - atio_adoption_level
+      - atio_adoption_description
+      - atio_languages
+      - atio_prospective_users
+      - atio_actual_users
+      - atio_countries_adoption
+      - atio_adoptability_dimensions
+      - atio_geo_scale
+      label: Readiness and adoption
+      region: content
+      parent_name: ''
+      weight: 5
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: false
+        description: 'In this section please provide information on the innovation
+          stage, readiness and adoption of the innovation. Besides selecting the level,
+          please provide a narrative description / justification of the selection
+          of the levels in the "Adoption: narrative" and "Readiness: narrative" fields.'
+        required_fields: true
+    group_impact:
+      children:
+      - atio_sdg_targets
+      - atio_challenges_addressed
+      - atio_long_term_beneficiaries
+      label: Impact
+      region: content
+      parent_name: ''
+      weight: 6
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: false
+        description: ''
+        required_fields: true
+    group_investment_and_partners:
+      children:
+      - atio_investment_type
+      - atio_sponsors
+      - atio_partners
+      label: Investment and partners
+      region: content
+      parent_name: ''
+      weight: 7
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: false
+        description: ''
+        required_fields: true
+    group_grassroots_innovation:
+      children:
+      - atio_is_grassroots
+      - atio_grassroot_partner
+      - atio_grassroots_narrative
+      label: Grassroots innovation
+      region: content
+      parent_name: ''
+      weight: 8
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: false
+        description: ''
+        required_fields: true
+    group_provenance:
+      children:
+      - atio_derived_from
+      - atio_bib_citation
+      label: Provenance
+      region: content
+      parent_name: ''
+      weight: 12
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: true
+        id: ''
+        open: false
+        description: The solution revision(s) this synthesis was formed from. Loading
+          a pinned revision returns exactly the claim set the curator read.
+        required_fields: true
+    group_internal:
+      children:
+      - atio_record_status
+      - atio_quality
+      - atio_ai_quality
+      - atio_curation_notes
+      - atio_quality_notes
+      - atio_allow_ai_update
+      - atio_allow_ai_if_empty
+      - atio_allow_overwrite_by_origin
+      - atio_allow_overwrite_if_empty
+      label: Internal
+      region: content
+      parent_name: ''
+      weight: 13
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: true
+        id: ''
+        open: false
+        description: ''
+        required_fields: true
+id: node.atio_innovation.default
+targetEntityType: node
+bundle: atio_innovation
+mode: default
+content:
+  body:
+    type: text_textarea_with_summary
+    weight: 6
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {}
+  atio_owner:
+    type: inline_entity_form_complex
+    weight: 0
+    region: content
+    settings:
+      form_mode: embedded_editable
+      override_labels: true
+      label_singular: organization
+      label_plural: organizations
+      allow_new: true
+      allow_existing: true
+      match_operator: CONTAINS
+      allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: optional
+    third_party_settings: {}
+  atio_country_origin:
+    type: entity_reference_autocomplete_tags
+    weight: 1
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: start typing and select
+    third_party_settings: {}
+  atio_region:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {}
+    third_party_settings: {}
+  atio_city:
+    type: string_textfield
+    weight: 3
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {}
+  atio_start_year:
+    type: number
+    weight: 4
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {}
+  atio_shorter_description:
+    type: text_textarea
+    weight: 5
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {}
+  atio_identifying_feature:
+    type: string_textarea
+    weight: 7
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {}
+  atio_ai_enriched_description:
+    type: text_textarea
+    weight: 8
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {}
+  atio_form_of_innovation:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {}
+    third_party_settings: {}
+  atio_innovation_type:
+    type: options_select
+    weight: 1
+    region: content
+    settings: {}
+    third_party_settings: {}
+  atio_innovative_features:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {}
+    third_party_settings: {}
+  atio_innovative_narrative:
+    type: string_textarea
+    weight: 3
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {}
+  atio_use_case_image:
+    type: options_select
+    weight: 4
+    region: content
+    settings: {}
+    third_party_settings: {}
+  atio_use_cases:
+    type: options_select
+    weight: 5
+    region: content
+    settings: {}
+    third_party_settings: {}
+  atio_use_cases_description:
+    type: string_textarea
+    weight: 6
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {}
+  atio_thematic_area:
+    type: options_select
+    weight: 7
+    region: content
+    settings: {}
+    third_party_settings: {}
+  atio_innovation_stage:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {}
+    third_party_settings: {}
+  atio_readiness_level:
+    type: options_select
+    weight: 1
+    region: content
+    settings: {}
+    third_party_settings: {}
+  atio_readiness_description:
+    type: string_textarea
+    weight: 2
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {}
+  atio_adoption_level:
+    type: options_select
+    weight: 3
+    region: content
+    settings: {}
+    third_party_settings: {}
+  atio_adoption_description:
+    type: string_textarea
+    weight: 4
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {}
+  atio_languages:
+    type: entity_reference_autocomplete
+    weight: 5
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {}
+  atio_prospective_users:
+    type: options_select
+    weight: 6
+    region: content
+    settings: {}
+    third_party_settings: {}
+  atio_actual_users:
+    type: options_select
+    weight: 7
+    region: content
+    settings: {}
+    third_party_settings: {}
+  atio_countries_adoption:
+    type: entity_reference_autocomplete_tags
+    weight: 8
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: start typing and select, use comma to type another one
+    third_party_settings: {}
+  atio_adoptability_dimensions:
+    type: string_textarea
+    weight: 9
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {}
+  atio_sdg_targets:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {}
+    third_party_settings: {}
+  atio_challenges_addressed:
+    type: options_select
+    weight: 1
+    region: content
+    settings: {}
+    third_party_settings: {}
+  atio_long_term_beneficiaries:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {}
+    third_party_settings: {}
+  atio_investment_type:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {}
+    third_party_settings: {}
+  atio_sponsors:
+    type: inline_entity_form_complex
+    weight: 1
+    region: content
+    settings:
+      form_mode: default
+      override_labels: true
+      label_singular: organization
+      label_plural: organizations
+      allow_new: true
+      allow_existing: true
+      match_operator: CONTAINS
+      allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: optional
+    third_party_settings: {}
+  atio_partners:
+    type: inline_entity_form_complex
+    weight: 2
+    region: content
+    settings:
+      form_mode: default
+      override_labels: true
+      label_singular: organization
+      label_plural: organizations
+      allow_new: true
+      allow_existing: true
+      match_operator: CONTAINS
+      allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: optional
+    third_party_settings: {}
+  atio_is_grassroots:
+    type: boolean_checkbox
+    weight: 0
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {}
+  atio_grassroot_partner:
+    type: inline_entity_form_complex
+    weight: 1
+    region: content
+    settings:
+      form_mode: default
+      override_labels: true
+      label_singular: organization
+      label_plural: organizations
+      allow_new: true
+      allow_existing: true
+      match_operator: CONTAINS
+      allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: optional
+    third_party_settings: {}
+  atio_grassroots_narrative:
+    type: string_textarea
+    weight: 2
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {}
+  atio_bib_citation:
+    type: string_textarea
+    weight: 1
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {}
+  atio_record_status:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {}
+    third_party_settings: {}
+  atio_quality:
+    type: entity_reference_autocomplete
+    weight: 1
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {}
+  atio_ai_quality:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {}
+    third_party_settings: {}
+  atio_curation_notes:
+    type: text_textarea
+    weight: 3
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {}
+  atio_quality_notes:
+    type: text_textarea
+    weight: 4
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {}
+  atio_allow_ai_update:
+    type: boolean_checkbox
+    weight: 5
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {}
+  atio_allow_ai_if_empty:
+    type: boolean_checkbox
+    weight: 6
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {}
+  atio_allow_overwrite_by_origin:
+    type: boolean_checkbox
+    weight: 7
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {}
+  atio_allow_overwrite_if_empty:
+    type: boolean_checkbox
+    weight: 8
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {}
+  atio_derived_from:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {}
+  og_audience:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {}
+    third_party_settings: {}
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {}
+  created:
+    type: datetime_timestamp
+    weight: 60
+    region: content
+    settings: {}
+    third_party_settings: {}
+  uid:
+    type: entity_reference_autocomplete
+    weight: 61
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {}
+  path:
+    type: path
+    weight: 62
+    region: content
+    settings: {}
+    third_party_settings: {}
+  group_overview:
+    weight: 3
+    region: content
+    settings: {}
+    third_party_settings: {}
+  group_type_and_use_cases:
+    weight: 4
+    region: content
+    settings: {}
+    third_party_settings: {}
+  group_readiness_and_adoption:
+    weight: 5
+    region: content
+    settings: {}
+    third_party_settings: {}
+  group_impact:
+    weight: 6
+    region: content
+    settings: {}
+    third_party_settings: {}
+  group_investment_and_partners:
+    weight: 7
+    region: content
+    settings: {}
+    third_party_settings: {}
+  group_grassroots_innovation:
+    weight: 8
+    region: content
+    settings: {}
+    third_party_settings: {}
+  group_provenance:
+    weight: 12
+    region: content
+    settings: {}
+    third_party_settings: {}
+  group_internal:
+    weight: 13
+    region: content
+    settings: {}
+    third_party_settings: {}
+  atio_geo_scale:
+    type: options_select
+    weight: 10
+    region: content
+    settings: {}
+    third_party_settings: {}
+hidden:
+  atio_start_date: true
+  promote: true
+  sticky: true
+  status: true
+  langcode: true
+  url_redirects: true

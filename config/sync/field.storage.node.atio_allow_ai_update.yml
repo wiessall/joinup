@@ -1,0 +1,23 @@
+uuid: d26f53a8-3b63-4e4d-84a6-0e7507dfc21a
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: 6du7ltPLGD2iiM-QY-lBKYnwUwVBreqspF3qysewXsk
+id: node.atio_allow_ai_update
+field_name: atio_allow_ai_update
+entity_type: node
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

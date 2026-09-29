@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.node.atio_ai_enriched_description
+  - node.type.atio_innovation
+  enforced:
+    module:
+    - atio
+id: node.atio_innovation.atio_ai_enriched_description
+field_name: atio_ai_enriched_description
+entity_type: node
+bundle: atio_innovation
+label: Hidden AI-enriched description
+description: ''
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings: {}
+field_type: text_long

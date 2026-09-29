@@ -1,0 +1,25 @@
+uuid: a564eff4-185e-446d-b048-db02929a0982
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: QEeq6EC7dphtvbIINWA351cOma-3Rxi7OLevOjJ_VDo
+id: node.atio_innovation_type
+field_name: atio_innovation_type
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

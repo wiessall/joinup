@@ -1,0 +1,11 @@
+name: 'STI quality assurance vocabularies'
+type: module
+description: 'Pipeline-level quality verdict and record status vocabularies, shared across all collections.'
+package: 'STI'
+core_version_requirement: ^11
+version: 1.8.0
+dependencies:
+  - sti_reference:sti_reference
+  - drupal:taxonomy
+  - migrate_plus:migrate_plus
+  - rdf_sync:rdf_sync

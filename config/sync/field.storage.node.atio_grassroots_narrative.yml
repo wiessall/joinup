@@ -1,0 +1,24 @@
+uuid: 4cb28a6a-eef1-4073-a330-bb9532d37a79
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: 58pH3i1AsQLy1oxCFq0tQIJlIrCVM9DF7SPZ0loyUl4
+id: node.atio_grassroots_narrative
+field_name: atio_grassroots_narrative
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

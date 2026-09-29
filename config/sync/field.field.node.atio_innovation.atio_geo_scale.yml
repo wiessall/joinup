@@ -1,0 +1,34 @@
+uuid: 899baf8f-40f2-4be5-82ff-0ad355af9cae
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_geo_scale
+    - node.type.atio_innovation
+    - taxonomy.vocabulary.geographic_scope
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: DoiuWC6CsUTEzMHq5QY_DFRyd3hpHxTWJ5GD2TlZv94
+id: node.atio_innovation.atio_geo_scale
+field_name: atio_geo_scale
+entity_type: node
+bundle: atio_innovation
+label: 'Geographic scale'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      geographic_scope: geographic_scope
+    sort:
+      field: name
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

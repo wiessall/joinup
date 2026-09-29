@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.node.atio_prospective_users
+  - node.type.atio_innovation
+  - taxonomy.vocabulary.atio_actor_types
+  enforced:
+    module:
+    - atio
+id: node.atio_innovation.atio_prospective_users
+field_name: atio_prospective_users
+entity_type: node
+bundle: atio_innovation
+label: Prospective users
+description: ''
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings:
+  handler: default:taxonomy_term
+  handler_settings:
+    target_bundles:
+      atio_actor_types: atio_actor_types
+    sort:
+      field: name
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

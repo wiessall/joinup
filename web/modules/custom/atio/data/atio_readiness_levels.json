@@ -1,0 +1,61 @@
+[
+ {
+  "tid": "96",
+  "name": "1. Idea/Hypothesis",
+  "parent": 0,
+  "level_no": "1"
+ },
+ {
+  "tid": "95",
+  "name": "2. Basic research",
+  "parent": 0,
+  "level_no": "2"
+ },
+ {
+  "tid": "94",
+  "name": "3. Basic model",
+  "parent": 0,
+  "level_no": "3"
+ },
+ {
+  "tid": "93",
+  "name": "4. Formulating Working Model",
+  "parent": 0,
+  "level_no": "4"
+ },
+ {
+  "tid": "92",
+  "name": "5. Working Model",
+  "parent": 0,
+  "level_no": "5"
+ },
+ {
+  "tid": "91",
+  "name": "6. Working Application",
+  "parent": 0,
+  "level_no": "6"
+ },
+ {
+  "tid": "90",
+  "name": "7. Proof of Application",
+  "parent": 0,
+  "level_no": "7"
+ },
+ {
+  "tid": "89",
+  "name": "8. Incubation",
+  "parent": 0,
+  "level_no": "8"
+ },
+ {
+  "tid": "88",
+  "name": "9. Ready",
+  "parent": 0,
+  "level_no": "9"
+ },
+ {
+  "tid": "2618",
+  "name": "NOT INDICATED",
+  "parent": 0
+ }
+]

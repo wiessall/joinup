@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.taxonomy_term.term_uri
+  - taxonomy.vocabulary.atio_use_cases
+  enforced:
+    module:
+    - atio
+id: taxonomy_term.atio_use_cases.term_uri
+field_name: term_uri
+entity_type: taxonomy_term
+bundle: atio_use_cases
+label: Term URI
+description: Authoritative URI for this concept. Leave empty to mint one under the
+  STI namespace.
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings: {}
+field_type: string

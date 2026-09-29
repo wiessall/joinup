@@ -1,0 +1,31 @@
+# Alternative renderings of an innovation. The canonical page shows both; these
+# show one half each. Linked from the page itself by the atio_view_switch
+# pseudo-field, because fao_lean places no local-tasks block.
+entity.node.atio_fields:
+  path: '/node/{node}/atio-fields'
+  defaults:
+    _entity_view: 'node.atio_fields'
+    _title_callback: '\Drupal\node\Controller\NodeViewController::title'
+  requirements:
+    _entity_access: 'node.view'
+  options:
+    parameters:
+      node:
+        type: 'entity:node'
+        bundle:
+          - atio_innovation
+
+entity.node.claims:
+  path: '/node/{node}/claims'
+  defaults:
+    _entity_view: 'node.claims'
+    _title_callback: '\Drupal\node\Controller\NodeViewController::title'
+  requirements:
+    _entity_access: 'node.view'
+  options:
+    parameters:
+      node:
+        type: 'entity:node'
+        bundle:
+          - atio_innovation
+          - solution

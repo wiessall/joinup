@@ -1,0 +1,39 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.node.atio_form_of_innovation
+  - node.type.atio_innovation
+  - taxonomy.vocabulary.atio_innovation_forms
+  enforced:
+    module:
+    - atio
+id: node.atio_innovation.atio_form_of_innovation
+field_name: atio_form_of_innovation
+entity_type: node
+bundle: atio_innovation
+label: Form of innovation
+description: 'This taxonomy classifies innovations by their nature and mode of manifestation
+  — i.e., the tangible or conceptual form in which they are delivered, applied, or
+  made accessible to users:  whether they are tangible products, traditional or modern
+  techniques, outputs of research processes, packages or bundles of multiple solutions,
+  or structured processes that can be adopted.. It represents how the innovation is
+  packaged, experienced, or deployed in practice. (Different from he innovation ''type"
+  which classifies  according to the innovation''s functional domain and mechanism
+  of change in agrifood systems, reflecting how it functions / operates to drive transformation.
+  )'
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings:
+  handler: default:taxonomy_term
+  handler_settings:
+    target_bundles:
+      atio_innovation_forms: atio_innovation_forms
+    sort:
+      field: name
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

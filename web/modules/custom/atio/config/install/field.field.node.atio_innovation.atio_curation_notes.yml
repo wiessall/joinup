@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.node.atio_curation_notes
+  - node.type.atio_innovation
+  enforced:
+    module:
+    - atio
+id: node.atio_innovation.atio_curation_notes
+field_name: atio_curation_notes
+entity_type: node
+bundle: atio_innovation
+label: Record quality - Human curation notes
+description: ''
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings: {}
+field_type: text_long

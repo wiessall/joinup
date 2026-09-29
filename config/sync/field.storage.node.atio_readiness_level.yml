@@ -1,0 +1,25 @@
+uuid: e2ac2647-4dc0-4d59-b3e9-43e9266d8c7c
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: z4DrW8jd-tAXPaRzMKi06QU5zhEeuG2TKAGKLKfNDR4
+id: node.atio_readiness_level
+field_name: atio_readiness_level
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

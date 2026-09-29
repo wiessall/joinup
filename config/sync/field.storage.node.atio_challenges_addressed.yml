@@ -1,0 +1,25 @@
+uuid: 6d052e73-1224-465a-9f2d-e53a5a0ec1a5
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: lzsaLFCMgvjg2_IFKZXaYqi3SGhLu-82txEoN39e-uc
+id: node.atio_challenges_addressed
+field_name: atio_challenges_addressed
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.node.atio_allow_ai_if_empty
+  - node.type.atio_innovation
+  enforced:
+    module:
+    - atio
+id: node.atio_innovation.atio_allow_ai_if_empty
+field_name: atio_allow_ai_if_empty
+entity_type: node
+bundle: atio_innovation
+label: Allow AI update if empty
+description: If yes, empty fields in the innovation record can be enriched by AI.
+  If no, even if the enrichment action is run, nothing will be overwritten (unless
+  Allow AI update is ticked).
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings: {}
+field_type: boolean

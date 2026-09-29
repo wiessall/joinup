@@ -1,0 +1,104 @@
+[
+ {
+  "tid": "1158",
+  "name": "Goal 1: No poverty",
+  "parent": 0,
+  "variant": "1. No Poverty, No Poverty, 1"
+ },
+ {
+  "tid": "1159",
+  "name": "Goal 2: Zero hunger",
+  "parent": 0,
+  "variant": "2. Zero hunger, Zero hunger, 2"
+ },
+ {
+  "tid": "1160",
+  "name": "Goal 3: Good health and well-being",
+  "parent": 0,
+  "variant": "3. Good health and well-being, Good health and well-being, 3"
+ },
+ {
+  "tid": "1161",
+  "name": "Goal 4: Quality education",
+  "parent": 0,
+  "variant": "4. Quality education, Quality education, 4"
+ },
+ {
+  "tid": "1162",
+  "name": "Goal 5: Gender equality",
+  "parent": 0,
+  "variant": "5. Gender equality, Gender equality, 5"
+ },
+ {
+  "tid": "1163",
+  "name": "Goal 6: Clean water and sanitation",
+  "parent": 0,
+  "variant": "6. Clean water and sanitation, Clean water and sanitation, 6"
+ },
+ {
+  "tid": "1164",
+  "name": "Goal 7: Affordable and clean energy",
+  "parent": 0,
+  "variant": "7. Affordable and clean energy, Affordable and clean energy, 7"
+ },
+ {
+  "tid": "1165",
+  "name": "Goal 8: Decent work and economic growth",
+  "parent": 0,
+  "variant": "8. Decent work and economic growth, Decent work and economic growth, 8"
+ },
+ {
+  "tid": "1166",
+  "name": "Goal 9: Industry, innovation and infrastructure",
+  "parent": 0,
+  "variant": "9. Industry, innovation and infrastructure, Industry, innovation and infrastructure, 9"
+ },
+ {
+  "tid": "1167",
+  "name": "Goal 10: Reduced inequalities",
+  "parent": 0,
+  "variant": "10. Reduced inequalities, Reduced inequalities, 10"
+ },
+ {
+  "tid": "1168",
+  "name": "Goal 11: Sustainable cities and communities",
+  "parent": 0,
+  "variant": "11. Sustainable cities and communities, Sustainable cities and communities, 11"
+ },
+ {
+  "tid": "1169",
+  "name": "Goal 12: Responsible consumption and production",
+  "parent": 0,
+  "variant": "12. Responsible consumption and production, Responsible consumption and production, 12"
+ },
+ {
+  "tid": "1170",
+  "name": "Goal 13: Climate action",
+  "parent": 0,
+  "variant": "13. Climate action, Climate action, 13"
+ },
+ {
+  "tid": "1171",
+  "name": "Goal 14: Life below water",
+  "parent": 0,
+  "variant": "14. Life below water, Life below water, 14"
+ },
+ {
+  "tid": "1172",
+  "name": "Goal 15: Life on Land",
+  "parent": 0,
+  "variant": "15. Life on Land, Life on Land, 15"
+ },
+ {
+  "tid": "1173",
+  "name": "Goal 16: Peace, justice and strong institutions",
+  "parent": 0,
+  "variant": "16. Peace, justice and strong institutions, Peace, justice and strong institutions, 16"
+ },
+ {
+  "tid": "1174",
+  "name": "Goal 17: Partnerships for the goals",
+  "parent": 0,
+  "variant": "17. Partnerships for the goals, Partnerships for the goals, 17"
+ }
+]

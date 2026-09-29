@@ -1,0 +1,34 @@
+uuid: e25cf043-68ce-45eb-b935-8456e4a2ff9d
+langcode: en
+status: true
+dependencies:
+  module:
+    - rdf_sync
+  enforced:
+    module:
+      - sti_reference
+third_party_settings:
+  rdf_sync:
+    type: 'http://www.w3.org/2004/02/skos/core#Concept'
+    uri_plugin: sti_namespace
+    uri_field_name: term_uri
+    fields:
+      vid:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#inScheme'
+          type: resource
+      name:
+        value:
+          predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
+          type: null
+      parent:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#broaderTransitive'
+          type: resource
+_core:
+  default_config_hash: tqI4_voxSB_Gf7Os07Jx6wJ39FQh8MJBeG1JTfF0vlU
+name: 'Geographic scope'
+vid: geographic_scope
+description: 'Ported from the production STI Portal vocabulary "geographic_scope".'
+weight: 0
+new_revision: false

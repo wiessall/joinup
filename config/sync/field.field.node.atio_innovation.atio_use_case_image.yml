@@ -1,0 +1,34 @@
+uuid: d0ded432-e5a7-49c3-ade3-d0192b062dc5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_use_case_image
+    - node.type.atio_innovation
+    - taxonomy.vocabulary.atio_use_cases
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: p93QwFI_6W-HZeEK9g90k1WlMAunUOdR0ykjg87IKJM
+id: node.atio_innovation.atio_use_case_image
+field_name: atio_use_case_image
+entity_type: node
+bundle: atio_innovation
+label: 'Main use case (for image)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      atio_use_cases: atio_use_cases
+    sort:
+      field: name
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

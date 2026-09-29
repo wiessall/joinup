@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.node.atio_use_cases_description
+  - node.type.atio_innovation
+  enforced:
+    module:
+    - atio
+id: node.atio_innovation.atio_use_cases_description
+field_name: atio_use_cases_description
+entity_type: node
+bundle: atio_innovation
+label: 'Use cases: narrative'
+description: Narrative description / justification of the selection of the use cases
+  of the innovation, and elaboration on additional use cases if not present in the
+  list.
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings: {}
+field_type: string_long

@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+    - sti_reference
+id: sti_vocabularies
+label: STI vocabularies
+description: Taxonomy ported from the production STI Portal.
+source_type: JSON
+shared_configuration: {}

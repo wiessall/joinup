@@ -1,0 +1,24 @@
+uuid: cc16dc8d-6657-45d5-859e-bace6bea179a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_adoption_description
+    - node.type.atio_innovation
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: nfyMju0YFqu68TBPlnBAq1AAILM8Iwmm9YAwvqQ1XKs
+id: node.atio_innovation.atio_adoption_description
+field_name: atio_adoption_description
+entity_type: node
+bundle: atio_innovation
+label: 'Adoption: narrative'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

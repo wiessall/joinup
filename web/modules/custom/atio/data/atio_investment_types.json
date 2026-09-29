@@ -1,0 +1,37 @@
+[
+ {
+  "tid": "526",
+  "name": "Bonds",
+  "parent": 0
+ },
+ {
+  "tid": "532",
+  "name": "Collective",
+  "parent": 0
+ },
+ {
+  "tid": "529",
+  "name": "Equity",
+  "parent": 0
+ },
+ {
+  "tid": "527",
+  "name": "Grant",
+  "parent": 0
+ },
+ {
+  "tid": "528",
+  "name": "Guarantee",
+  "parent": 0
+ },
+ {
+  "tid": "531",
+  "name": "Self-funded",
+  "parent": 0
+ },
+ {
+  "tid": "530",
+  "name": "Venture capital",
+  "parent": 0
+ }
+]
