@@ -1,0 +1,23 @@
+uuid: 8ca90fdd-88d2-4d0c-8976-6efdb4f117b9
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: _hmlBLRYWgDAXp6gRRiFAbJfMLT_RKMYP6HUEjQYIcc
+id: node.atio_allow_ai_if_empty
+field_name: atio_allow_ai_if_empty
+entity_type: node
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

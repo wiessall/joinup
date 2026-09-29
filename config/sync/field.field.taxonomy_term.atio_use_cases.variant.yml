@@ -1,0 +1,24 @@
+uuid: ba6f981b-9326-4859-9279-64ec522c6b2e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.variant
+    - taxonomy.vocabulary.atio_use_cases
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: ATD0Vwgm9bWwX701eU57ulXpjK3_gzhROEdnY_5unVk
+id: taxonomy_term.atio_use_cases.variant
+field_name: variant
+entity_type: taxonomy_term
+bundle: atio_use_cases
+label: Variant
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,24 @@
+uuid: 99e6385b-8b75-4761-953e-72c4d063cf55
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.term_uri
+    - taxonomy.vocabulary.atio_innovation_forms
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: bw4JJ5p4wPmXT-72pQHlIky-fLP22IBXuRkPYqZKNZ4
+id: taxonomy_term.atio_innovation_forms.term_uri
+field_name: term_uri
+entity_type: taxonomy_term
+bundle: atio_innovation_forms
+label: 'Term URI'
+description: 'Authoritative URI for this concept. Leave empty to mint one under the STI namespace.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

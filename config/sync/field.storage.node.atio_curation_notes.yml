@@ -1,0 +1,24 @@
+uuid: 9f8f9e56-28a0-4606-811b-f626661aa1de
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - text
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: LGlKfxbM5h8473awe5vscG3rm__oICiIxZ6NnfZ-zMM
+id: node.atio_curation_notes
+field_name: atio_curation_notes
+entity_type: node
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

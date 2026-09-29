@@ -1,0 +1,47 @@
+[
+ {
+  "tid": "2076",
+  "name": "Product/Tool",
+  "parent": 0
+ },
+ {
+  "tid": "2077",
+  "name": "Practice/Technique",
+  "parent": 0
+ },
+ {
+  "tid": "2081",
+  "name": "Service",
+  "parent": 0
+ },
+ {
+  "tid": "2080",
+  "name": "Framework/Approach/Methodology",
+  "parent": 0
+ },
+ {
+  "tid": "2078",
+  "name": "Research result",
+  "parent": 0
+ },
+ {
+  "tid": "3607",
+  "name": "Knowledge product",
+  "parent": 0
+ },
+ {
+  "tid": "2082",
+  "name": "Platform",
+  "parent": 0
+ },
+ {
+  "tid": "2089",
+  "name": "Policy",
+  "parent": 0
+ },
+ {
+  "tid": "2079",
+  "name": "Integrated solution",
+  "parent": 0
+ }
+]

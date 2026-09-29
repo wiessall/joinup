@@ -1,0 +1,26 @@
+uuid: 9cbcfa51-b49a-4742-b371-1689910e57a3
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+  enforced:
+    module:
+      - sti_reference
+_core:
+  default_config_hash: 9Wnqw4BcmJ4Ft6wG6lhceKLr1_hXJ_ad2mgvZR-ZRyI
+id: taxonomy_term.variant
+field_name: variant
+entity_type: taxonomy_term
+type: string
+settings:
+  max_length: 255
+  is_ascii: false
+  case_sensitive: false
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

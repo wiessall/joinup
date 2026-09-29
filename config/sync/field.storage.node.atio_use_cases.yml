@@ -1,0 +1,25 @@
+uuid: d9781779-1646-4a48-a82f-dfb8b090b676
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: 2YEywgUnme5GIF4Gsz1DdGks7ChgOEuxZOgu6nFySKM
+id: node.atio_use_cases
+field_name: atio_use_cases
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

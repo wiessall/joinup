@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.node.atio_bib_citation
+  - node.type.atio_innovation
+  enforced:
+    module:
+    - atio
+id: node.atio_innovation.atio_bib_citation
+field_name: atio_bib_citation
+entity_type: node
+bundle: atio_innovation
+label: Bibliographic citation of publication
+description: If the source of the description of the innovation was a publication,
+  provide the bibliographic citation.
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings: {}
+field_type: string_long

@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  module:
+  - node
+  enforced:
+    module:
+    - atio
+id: node.claims
+label: Claims
+description: ''
+targetEntityType: node
+cache: true

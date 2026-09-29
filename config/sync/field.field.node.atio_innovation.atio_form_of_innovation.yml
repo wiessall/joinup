@@ -1,0 +1,34 @@
+uuid: 5e5b0884-981d-42b8-8903-1b848c24f7fc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_form_of_innovation
+    - node.type.atio_innovation
+    - taxonomy.vocabulary.atio_innovation_forms
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: ohTjjZ-3bg4Fhi3pY_O54G3-dGum-hioKvLQ5lDvv6s
+id: node.atio_innovation.atio_form_of_innovation
+field_name: atio_form_of_innovation
+entity_type: node
+bundle: atio_innovation
+label: 'Form of innovation'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      atio_innovation_forms: atio_innovation_forms
+    sort:
+      field: name
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

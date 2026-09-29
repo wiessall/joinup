@@ -1,0 +1,5 @@
+services:
+  atio.display_switch:
+    class: Drupal\atio\AtioDisplaySwitch
+    autowire: true
+  Drupal\atio\AtioDisplaySwitch: '@atio.display_switch'

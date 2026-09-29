@@ -1,0 +1,172 @@
+<?php
+
+/**
+ * @file
+ * FAO Design System theme.
+ *
+ * Rule of thumb for this file: PHP decides WHAT to show and adds the
+ * Bootstrap/FAO classes that Drupal's default markup lacks. Twig decides
+ * HOW it looks. Prefer adding a class here over copying a core template:
+ * one preprocess function covers every instance of an element, a copied
+ * template has to be kept in sync with core forever.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Render\Element;
+use Drupal\Core\Template\Attribute;
+
+/**
+ * Implements hook_preprocess_HOOK() for html.html.twig.
+ */
+function fao_lean_preprocess_html(array &$variables): void {
+  // Preload the body font (regular weight only) to avoid a flash of fallback text.
+  $path = \Drupal::service('extension.list.theme')->getPath('fao_lean');
+  $variables['#attached']['html_head'][] = [
+    [
+      '#tag' => 'link',
+      '#attributes' => [
+        'rel' => 'preload',
+        'as' => 'font',
+        'type' => 'font/woff2',
+        'crossorigin' => 'anonymous',
+        'href' => base_path() . $path . '/fonts/open-sans-v44-cyrillic_cyrillic-ext_latin_latin-ext_math_symbols-regular.woff2',
+      ],
+    ],
+    'fao_lean_font_preload',
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page.html.twig.
+ *
+ * Provides the FAO corporate header/footer data for the current language.
+ * FAO-wide links and logos live in data/fao-chrome.json (not edited per
+ * site); site navigation lives in Drupal menus, placed as blocks.
+ */
+function fao_lean_preprocess_page(array &$variables): void {
+  static $chrome;
+  if ($chrome === NULL) {
+    $file = \Drupal::service('extension.list.theme')->getPath('fao_lean') . '/data/fao-chrome.json';
+    $chrome = json_decode((string) file_get_contents($file), TRUE) ?: [];
+  }
+
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  // Every {en, fr, es, ...} map -> the current language, falling back to en.
+  $pick = static function (array $section) use ($langcode): array {
+    $out = [];
+    foreach ($section as $key => $value) {
+      $out[$key] = is_array($value) && isset($value['en']) ? ($value[$langcode] ?? $value['en']) : $value;
+    }
+    return $out;
+  };
+
+  $variables['fao_chrome'] = [
+    'header' => $pick($chrome['header'] ?? []),
+    'footer' => $pick($chrome['footer'] ?? []),
+  ];
+  $variables['site_name'] = \Drupal::config('system.site')->get('name');
+
+  // Tell the render cache what this output depends on.
+  $variables['#cache']['contexts'][] = 'languages:language_interface';
+  $variables['#cache']['tags'][] = 'config:system.site';
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node templates.
+ *
+ * Prepares the data the card component needs for listing view modes.
+ * It only reads what the view display renders, so "Manage display" of the
+ * view mode stays the single place where you choose image and text.
+ */
+function fao_lean_preprocess_node(array &$variables): void {
+  if (!in_array($variables['view_mode'], ['view_mode_tile', 'card'], TRUE)) {
+    return;
+  }
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $variables['node'];
+  $content = $variables['content'];
+
+  $variables['card'] = [
+    'category' => (string) ($node->type->entity?->label() ?? ''),
+    'meta' => (string) \Drupal::service('date.formatter')->format($node->getChangedTime(), 'custom', 'j M Y'),
+    'media' => _fao_lean_first_rendered($content, ['logo', 'field_image', 'field_logo', 'field_media']),
+    'text' => _fao_lean_first_rendered($content, ['abstract', 'description', 'field_description', 'body']),
+  ];
+}
+
+/**
+ * Returns the first field of $names that the display actually rendered.
+ */
+function _fao_lean_first_rendered(array $content, array $names): array {
+  foreach ($names as $name) {
+    if (!empty($content[$name]) && Element::children($content[$name])) {
+      return $content[$name];
+    }
+  }
+  return [];
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for input elements.
+ *
+ * Bootstrap classes for every <input>, instead of one template per element.
+ */
+function fao_lean_preprocess_input(array &$variables): void {
+  $type = $variables['element']['#type'] ?? '';
+  $classes = match ($type) {
+    'checkbox', 'radio' => ['form-check-input'],
+    'submit', 'button' => ['btn', ($variables['element']['#button_type'] ?? '') === 'primary' ? 'btn-primary' : 'btn-outline-primary'],
+    'range' => ['form-range'],
+    'hidden', 'token', 'image_button' => [],
+    default => ['form-control'],
+  };
+  foreach ($classes as $class) {
+    $variables['attributes']['class'][] = $class;
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for select elements.
+ */
+function fao_lean_preprocess_select(array &$variables): void {
+  $variables['attributes']['class'][] = 'form-select';
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for textarea elements.
+ */
+function fao_lean_preprocess_textarea(array &$variables): void {
+  $variables['attributes']['class'][] = 'form-control';
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for form element wrappers.
+ */
+function fao_lean_preprocess_form_element(array &$variables): void {
+  $type = $variables['element']['#type'] ?? '';
+  $variables['attributes']['class'][] = in_array($type, ['checkbox', 'radio'], TRUE) ? 'form-check' : 'mb-3';
+  if (($variables['description']['attributes'] ?? NULL) instanceof Attribute) {
+    $variables['description']['attributes']->addClass('form-text');
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for form element labels.
+ */
+function fao_lean_preprocess_form_element_label(array &$variables): void {
+  // Checkbox and radio labels come after the input ('after' display).
+  $after = ($variables['element']['#title_display'] ?? '') === 'after';
+  $variables['attributes']['class'][] = $after ? 'form-check-label' : 'form-label';
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for a single local task (tab).
+ */
+function fao_lean_preprocess_menu_local_task(array &$variables): void {
+  $variables['link']['#options']['attributes']['class'][] = 'nav-link';
+  if (!empty($variables['is_active'])) {
+    $variables['link']['#options']['attributes']['class'][] = 'active';
+    $variables['link']['#options']['attributes']['aria-current'] = 'page';
+  }
+}

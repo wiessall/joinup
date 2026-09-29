@@ -1,0 +1,32 @@
+name: 'ATIO community'
+type: module
+description: "ATIO's curated innovation bundle, its vocabularies and its curation fields."
+package: 'STI communities'
+core_version_requirement: ^11
+version: 1.8.0
+dependencies:
+  - sti_reference:sti_reference
+  - sti_qa:sti_qa
+  - drupal:taxonomy
+  - drupal:layout_builder
+  - drupal:layout_discovery
+  - joinup_layout:joinup_layout
+  - custom_markup_block:custom_markup_block
+  - layout_builder_component_attributes:layout_builder_component_attributes
+  - layout_custom_section_classes:layout_custom_section_classes
+  - field_delimiter:field_delimiter
+  - paragraphs:paragraphs
+  - drupal:path
+  - field_fallback_formatter:field_fallback_formatter
+  - joinup_html_stripper:joinup_html_stripper
+  - template_suggestion:template_suggestion
+  - facets:facets
+  - field_group:field_group
+  - inline_entity_form:inline_entity_form
+  - drupal:options
+  - drupal:datetime
+  - drupal:link
+  - migrate_plus:migrate_plus
+  - entity_reference_revisions:entity_reference_revisions
+  - og:og
+  - rdf_sync:rdf_sync

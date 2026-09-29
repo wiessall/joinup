@@ -1,0 +1,1966 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - core.entity_view_mode.node.atio_fields
+  - field.field.node.atio_innovation.atio_actual_users
+  - field.field.node.atio_innovation.atio_adoptability_dimensions
+  - field.field.node.atio_innovation.atio_adoption_description
+  - field.field.node.atio_innovation.atio_adoption_level
+  - field.field.node.atio_innovation.atio_ai_enriched_description
+  - field.field.node.atio_innovation.atio_bib_citation
+  - field.field.node.atio_innovation.atio_challenges_addressed
+  - field.field.node.atio_innovation.atio_city
+  - field.field.node.atio_innovation.atio_countries_adoption
+  - field.field.node.atio_innovation.atio_country_origin
+  - field.field.node.atio_innovation.atio_form_of_innovation
+  - field.field.node.atio_innovation.atio_geo_scale
+  - field.field.node.atio_innovation.atio_grassroot_partner
+  - field.field.node.atio_innovation.atio_grassroots_narrative
+  - field.field.node.atio_innovation.atio_identifying_feature
+  - field.field.node.atio_innovation.atio_innovation_stage
+  - field.field.node.atio_innovation.atio_innovation_type
+  - field.field.node.atio_innovation.atio_innovative_features
+  - field.field.node.atio_innovation.atio_innovative_narrative
+  - field.field.node.atio_innovation.atio_investment_type
+  - field.field.node.atio_innovation.atio_is_grassroots
+  - field.field.node.atio_innovation.atio_languages
+  - field.field.node.atio_innovation.atio_long_term_beneficiaries
+  - field.field.node.atio_innovation.atio_owner
+  - field.field.node.atio_innovation.atio_partners
+  - field.field.node.atio_innovation.atio_prospective_users
+  - field.field.node.atio_innovation.atio_readiness_description
+  - field.field.node.atio_innovation.atio_readiness_level
+  - field.field.node.atio_innovation.atio_region
+  - field.field.node.atio_innovation.atio_sdg_targets
+  - field.field.node.atio_innovation.atio_shorter_description
+  - field.field.node.atio_innovation.atio_sponsors
+  - field.field.node.atio_innovation.atio_start_date
+  - field.field.node.atio_innovation.atio_start_year
+  - field.field.node.atio_innovation.atio_thematic_area
+  - field.field.node.atio_innovation.atio_use_cases
+  - field.field.node.atio_innovation.atio_use_cases_description
+  - field.field.node.atio_innovation.body
+  - node.type.atio_innovation
+  module:
+  - custom_markup_block
+  - datetime
+  - field_delimiter
+  - joinup_layout
+  - layout_builder
+  - layout_builder_component_attributes
+  - layout_custom_section_classes
+  - layout_discovery
+  - text
+  enforced:
+    module:
+    - atio
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: false
+    sections:
+    - layout_id: joinup_layout_group_heading
+      layout_settings:
+        label: Heading section
+        context_mapping: {}
+      components:
+        5428540e-a720-5b14-8f08-faeeda1b00f5:
+          uuid: 5428540e-a720-5b14-8f08-faeeda1b00f5
+          region: main
+          configuration:
+            id: field_block:node:atio_innovation:atio_shorter_description
+            label: atio_shorter_description
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: text_default
+              label: hidden
+              settings: {}
+              third_party_settings: {}
+          weight: 0
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: fs-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        867f05fe-6a77-5b18-830b-42b19da94e47:
+          uuid: 867f05fe-6a77-5b18-830b-42b19da94e47
+          region: main
+          configuration:
+            id: extra_field_block:node:atio_innovation:atio_view_switch
+            label_display: '0'
+            context_mapping:
+              entity: layout_builder.entity
+          weight: 5
+          additional: {}
+        6b68d091-f626-5149-98a9-f72dda6eca91:
+          uuid: 6b68d091-f626-5149-98a9-f72dda6eca91
+          region: left
+          configuration:
+            id: field_block:node:atio_innovation:atio_owner
+            label: atio_owner
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings:
+                field_delimiter:
+                  delimiter: ', '
+          weight: 0
+          additional: {}
+        a33d7624-83dd-54ce-bf67-f7c06f9190ec:
+          uuid: a33d7624-83dd-54ce-bf67-f7c06f9190ec
+          region: right
+          configuration:
+            id: field_block:node:atio_innovation:atio_partners
+            label: atio_partners
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings:
+                field_delimiter:
+                  delimiter: ', '
+          weight: 0
+          additional: {}
+        327fee78-daef-5a6f-a82d-3349bb84df2e:
+          uuid: 327fee78-daef-5a6f-a82d-3349bb84df2e
+          region: aside
+          configuration:
+            id: custom_markup
+            label: Custom Markup
+            label_display: '0'
+            provider: custom_markup_block
+            context_mapping: {}
+            markup:
+              value: <h2>Key facts</h2>
+              format: content_editor
+          weight: 0
+          additional: {}
+        5a02c27f-37a8-59d8-817c-ab0a47c32c31:
+          uuid: 5a02c27f-37a8-59d8-817c-ab0a47c32c31
+          region: aside
+          configuration:
+            id: field_block:node:atio_innovation:atio_innovation_stage
+            label: atio_innovation_stage
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings: {}
+          weight: 1
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: mb-3
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        41b6fe7b-f05d-5669-af6f-a2b949da4bf2:
+          uuid: 41b6fe7b-f05d-5669-af6f-a2b949da4bf2
+          region: aside
+          configuration:
+            id: field_block:node:atio_innovation:atio_readiness_level
+            label: atio_readiness_level
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings: {}
+          weight: 2
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: mb-3
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        6d559b46-d671-5483-932a-f838ba090bf8:
+          uuid: 6d559b46-d671-5483-932a-f838ba090bf8
+          region: aside
+          configuration:
+            id: field_block:node:atio_innovation:atio_adoption_level
+            label: atio_adoption_level
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings: {}
+          weight: 3
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: mb-3
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        fc8e8ab4-d8bd-5f58-8394-c88e11898d9f:
+          uuid: fc8e8ab4-d8bd-5f58-8394-c88e11898d9f
+          region: aside
+          configuration:
+            id: field_block:node:atio_innovation:atio_country_origin
+            label: atio_country_origin
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings: {}
+          weight: 4
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: mb-3
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        8e555341-d0d6-564b-8103-267fd8a0b0f6:
+          uuid: 8e555341-d0d6-564b-8103-267fd8a0b0f6
+          region: aside
+          configuration:
+            id: field_block:node:atio_innovation:atio_start_year
+            label: atio_start_year
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: number_integer
+              label: above
+              settings:
+                thousand_separator: ''
+                prefix_suffix: true
+              third_party_settings: {}
+          weight: 5
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: mb-3
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+      third_party_settings: {}
+    - layout_id: layout_onecol
+      layout_settings:
+        label: Description section
+        context_mapping: {}
+        custom_id: null
+        custom_classes: ''
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: joinup-group--description
+            region_styles: null
+            region_data: null
+      components:
+        6408bce5-b9cc-51ee-85a4-483a7d0cf4cb:
+          uuid: 6408bce5-b9cc-51ee-85a4-483a7d0cf4cb
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:body
+            label: body
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: text_default
+              label: hidden
+              settings: {}
+              third_party_settings: {}
+          weight: 0
+          additional: {}
+        860501c2-e1f7-5675-bf87-a616cfddbfe5:
+          uuid: 860501c2-e1f7-5675-bf87-a616cfddbfe5
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_identifying_feature
+            label: atio_identifying_feature
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: basic_string
+              label: above
+              settings: {}
+              third_party_settings: {}
+          weight: 1
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: mt-3
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+      third_party_settings: {}
+    - layout_id: layout_onecol
+      layout_settings:
+        label: Detailed header
+        context_mapping: {}
+        custom_id: null
+        custom_classes: ''
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+      components:
+        95b531e1-31df-57e3-8e81-336641126586:
+          uuid: 95b531e1-31df-57e3-8e81-336641126586
+          region: content
+          configuration:
+            id: custom_markup
+            label: Custom Markup
+            label_display: '0'
+            provider: custom_markup_block
+            context_mapping: {}
+            markup:
+              value: <h2>Detailed information</h2>
+              format: content_editor
+          weight: 0
+          additional: {}
+      third_party_settings: {}
+    - layout_id: layout_onecol
+      layout_settings:
+        label: Detailed items
+        context_mapping: {}
+        custom_id: null
+        custom_classes: ''
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: d-flex flex-wrap rounded-3 bg-light mt-4 mb-5 px-4 pt-4
+            region_styles: null
+            region_data: null
+      components:
+        55559f7b-d048-5741-a593-0fe6ce10c4db:
+          uuid: 55559f7b-d048-5741-a593-0fe6ce10c4db
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:published_at
+            label: Published on
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: timestamp
+              settings:
+                date_format: date_only
+                custom_date_format: ''
+                timezone: ''
+                tooltip:
+                  date_format: long
+                  custom_date_format: ''
+                time_diff:
+                  enabled: false
+                  future_format: '@interval hence'
+                  past_format: '@interval ago'
+                  granularity: 2
+                  refresh: 60
+              third_party_settings: {}
+              label: above
+          weight: 0
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        d3966aff-d6ea-5803-a3cd-07af9907e137:
+          uuid: d3966aff-d6ea-5803-a3cd-07af9907e137
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:changed
+            label: Changed
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: timestamp
+              settings:
+                date_format: date_only
+                custom_date_format: ''
+                timezone: ''
+                tooltip:
+                  date_format: long
+                  custom_date_format: ''
+                time_diff:
+                  enabled: false
+                  future_format: '@interval hence'
+                  past_format: '@interval ago'
+                  granularity: 2
+                  refresh: 60
+              third_party_settings: {}
+              label: above
+          weight: 1
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        0195a9e6-3e11-588e-a06c-731112b50966:
+          uuid: 0195a9e6-3e11-588e-a06c-731112b50966
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_region
+            label: atio_region
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings:
+                field_delimiter:
+                  delimiter: ', '
+          weight: 2
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        78cc675d-2a19-58b3-931f-d9c297870adc:
+          uuid: 78cc675d-2a19-58b3-931f-d9c297870adc
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_city
+            label: atio_city
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: string
+              label: above
+              settings:
+                link_to_entity: false
+              third_party_settings: {}
+          weight: 3
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        1069db16-17ac-5430-a198-163492ae3c0e:
+          uuid: 1069db16-17ac-5430-a198-163492ae3c0e
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_start_date
+            label: atio_start_date
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: datetime_default
+              settings:
+                timezone_override: ''
+                format_type: html_date
+              third_party_settings: {}
+              label: above
+          weight: 4
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+      third_party_settings: {}
+    - layout_id: layout_onecol
+      layout_settings:
+        label: Innovation areas and types header
+        context_mapping: {}
+        custom_id: null
+        custom_classes: ''
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+      components:
+        b0819d48-7adf-561c-a0e9-cd73c2851737:
+          uuid: b0819d48-7adf-561c-a0e9-cd73c2851737
+          region: content
+          configuration:
+            id: custom_markup
+            label: Custom Markup
+            label_display: '0'
+            provider: custom_markup_block
+            context_mapping: {}
+            markup:
+              value: <h3>Innovation areas and types</h3>
+              format: content_editor
+          weight: 0
+          additional: {}
+      third_party_settings: {}
+    - layout_id: layout_onecol
+      layout_settings:
+        label: Innovation areas and types items
+        context_mapping: {}
+        custom_id: null
+        custom_classes: ''
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: d-flex flex-wrap rounded-3 bg-light mt-2 mb-5 px-4 pt-4
+            region_styles: null
+            region_data: null
+      components:
+        659a378a-fe64-5d6b-b53d-c0fbb217832e:
+          uuid: 659a378a-fe64-5d6b-b53d-c0fbb217832e
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_form_of_innovation
+            label: atio_form_of_innovation
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings: {}
+          weight: 0
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        d6898696-da65-52d5-a084-a88fd0bfc920:
+          uuid: d6898696-da65-52d5-a084-a88fd0bfc920
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_innovation_type
+            label: atio_innovation_type
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings:
+                field_delimiter:
+                  delimiter: ', '
+          weight: 1
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        c745c9ce-203f-530f-904d-855254ea7f1e:
+          uuid: c745c9ce-203f-530f-904d-855254ea7f1e
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_innovative_features
+            label: atio_innovative_features
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings:
+                field_delimiter:
+                  delimiter: ', '
+          weight: 2
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        73ae69b9-bd22-549f-9f3d-0ab3d3db294b:
+          uuid: 73ae69b9-bd22-549f-9f3d-0ab3d3db294b
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_use_cases
+            label: atio_use_cases
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings:
+                field_delimiter:
+                  delimiter: ', '
+          weight: 3
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        f4650ba0-3ab0-573d-8f98-d06cb99c522c:
+          uuid: f4650ba0-3ab0-573d-8f98-d06cb99c522c
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_thematic_area
+            label: atio_thematic_area
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings:
+                field_delimiter:
+                  delimiter: ', '
+          weight: 4
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+      third_party_settings: {}
+    - layout_id: layout_onecol
+      layout_settings:
+        label: Innovation areas and types text
+        context_mapping: {}
+        custom_id: null
+        custom_classes: mb-5
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+      components:
+        0b324ef7-7870-5780-b65c-3422ce775992:
+          uuid: 0b324ef7-7870-5780-b65c-3422ce775992
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_innovative_narrative
+            label: atio_innovative_narrative
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: basic_string
+              label: above
+              settings: {}
+              third_party_settings: {}
+          weight: 0
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: mb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        47d98c9c-fe2f-5d0d-85e0-73d9bf75a201:
+          uuid: 47d98c9c-fe2f-5d0d-85e0-73d9bf75a201
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_use_cases_description
+            label: atio_use_cases_description
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: basic_string
+              label: above
+              settings: {}
+              third_party_settings: {}
+          weight: 1
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: mb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+      third_party_settings: {}
+    - layout_id: layout_onecol
+      layout_settings:
+        label: Readiness and adoption header
+        context_mapping: {}
+        custom_id: null
+        custom_classes: ''
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+      components:
+        2d6ecebc-06d6-5722-bf2f-c7702ee2f389:
+          uuid: 2d6ecebc-06d6-5722-bf2f-c7702ee2f389
+          region: content
+          configuration:
+            id: custom_markup
+            label: Custom Markup
+            label_display: '0'
+            provider: custom_markup_block
+            context_mapping: {}
+            markup:
+              value: <h3>Readiness and adoption</h3>
+              format: content_editor
+          weight: 0
+          additional: {}
+      third_party_settings: {}
+    - layout_id: layout_onecol
+      layout_settings:
+        label: Readiness and adoption items
+        context_mapping: {}
+        custom_id: null
+        custom_classes: ''
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: d-flex flex-wrap rounded-3 bg-light mt-2 mb-5 px-4 pt-4
+            region_styles: null
+            region_data: null
+      components:
+        e757042b-398a-52a9-8b3e-a8d9e46304a1:
+          uuid: e757042b-398a-52a9-8b3e-a8d9e46304a1
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_geo_scale
+            label: atio_geo_scale
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              settings:
+                link: true
+              third_party_settings:
+                field_delimiter:
+                  delimiter: ', '
+              label: above
+          weight: 0
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        6bfc4079-8a03-57a6-90c2-2465edd269bc:
+          uuid: 6bfc4079-8a03-57a6-90c2-2465edd269bc
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_languages
+            label: atio_languages
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings:
+                field_delimiter:
+                  delimiter: ', '
+          weight: 1
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        3067e028-d338-5a58-9ef3-17ed0ee1c72c:
+          uuid: 3067e028-d338-5a58-9ef3-17ed0ee1c72c
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_prospective_users
+            label: atio_prospective_users
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings:
+                field_delimiter:
+                  delimiter: ', '
+          weight: 2
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        f1983965-9bc6-5d50-a0ce-599b84fd9168:
+          uuid: f1983965-9bc6-5d50-a0ce-599b84fd9168
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_actual_users
+            label: atio_actual_users
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings:
+                field_delimiter:
+                  delimiter: ', '
+          weight: 3
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        0f840844-2221-59fc-9ebf-3a0ee9108b14:
+          uuid: 0f840844-2221-59fc-9ebf-3a0ee9108b14
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_countries_adoption
+            label: atio_countries_adoption
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings:
+                field_delimiter:
+                  delimiter: ', '
+          weight: 4
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+      third_party_settings: {}
+    - layout_id: layout_onecol
+      layout_settings:
+        label: Readiness and adoption text
+        context_mapping: {}
+        custom_id: null
+        custom_classes: mb-5
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+      components:
+        bc03862f-ff04-5f75-a2ae-167741e48c9b:
+          uuid: bc03862f-ff04-5f75-a2ae-167741e48c9b
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_readiness_description
+            label: atio_readiness_description
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: basic_string
+              label: above
+              settings: {}
+              third_party_settings: {}
+          weight: 0
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: mb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        10ba6182-17ce-5029-a919-a0b316b0325f:
+          uuid: 10ba6182-17ce-5029-a919-a0b316b0325f
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_adoption_description
+            label: atio_adoption_description
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: basic_string
+              label: above
+              settings: {}
+              third_party_settings: {}
+          weight: 1
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: mb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        39cff594-592c-5bc3-8b1c-ae33aa971bdd:
+          uuid: 39cff594-592c-5bc3-8b1c-ae33aa971bdd
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_adoptability_dimensions
+            label: atio_adoptability_dimensions
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: basic_string
+              label: above
+              settings: {}
+              third_party_settings: {}
+          weight: 2
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: mb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+      third_party_settings: {}
+    - layout_id: layout_onecol
+      layout_settings:
+        label: Impact header
+        context_mapping: {}
+        custom_id: null
+        custom_classes: ''
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+      components:
+        e6f6e2c9-1cf2-592e-abed-11f6b468eb88:
+          uuid: e6f6e2c9-1cf2-592e-abed-11f6b468eb88
+          region: content
+          configuration:
+            id: custom_markup
+            label: Custom Markup
+            label_display: '0'
+            provider: custom_markup_block
+            context_mapping: {}
+            markup:
+              value: <h3>Impact</h3>
+              format: content_editor
+          weight: 0
+          additional: {}
+      third_party_settings: {}
+    - layout_id: layout_onecol
+      layout_settings:
+        label: Impact items
+        context_mapping: {}
+        custom_id: null
+        custom_classes: ''
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: d-flex flex-wrap rounded-3 bg-light mt-2 mb-5 px-4 pt-4
+            region_styles: null
+            region_data: null
+      components:
+        908bd0e7-7fb5-5227-9de6-12ec601d26d2:
+          uuid: 908bd0e7-7fb5-5227-9de6-12ec601d26d2
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_sdg_targets
+            label: atio_sdg_targets
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings:
+                field_delimiter:
+                  delimiter: ', '
+          weight: 0
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        8e0c5425-1112-5590-bcaf-c8099bb707f6:
+          uuid: 8e0c5425-1112-5590-bcaf-c8099bb707f6
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_challenges_addressed
+            label: atio_challenges_addressed
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings:
+                field_delimiter:
+                  delimiter: ', '
+          weight: 1
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        4b24aca4-1eda-5edb-8264-f77f665cc6a0:
+          uuid: 4b24aca4-1eda-5edb-8264-f77f665cc6a0
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_long_term_beneficiaries
+            label: atio_long_term_beneficiaries
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings:
+                field_delimiter:
+                  delimiter: ', '
+          weight: 2
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+      third_party_settings: {}
+    - layout_id: layout_onecol
+      layout_settings:
+        label: Investment and partners header
+        context_mapping: {}
+        custom_id: null
+        custom_classes: ''
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+      components:
+        2dbbe439-92b8-547d-8d7d-8072308f02fa:
+          uuid: 2dbbe439-92b8-547d-8d7d-8072308f02fa
+          region: content
+          configuration:
+            id: custom_markup
+            label: Custom Markup
+            label_display: '0'
+            provider: custom_markup_block
+            context_mapping: {}
+            markup:
+              value: <h3>Investment and partners</h3>
+              format: content_editor
+          weight: 0
+          additional: {}
+      third_party_settings: {}
+    - layout_id: layout_onecol
+      layout_settings:
+        label: Investment and partners items
+        context_mapping: {}
+        custom_id: null
+        custom_classes: ''
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: d-flex flex-wrap rounded-3 bg-light mt-2 mb-5 px-4 pt-4
+            region_styles: null
+            region_data: null
+      components:
+        799974f0-7e10-57bf-930f-430f8217c0ce:
+          uuid: 799974f0-7e10-57bf-930f-430f8217c0ce
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_investment_type
+            label: atio_investment_type
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings:
+                field_delimiter:
+                  delimiter: ', '
+          weight: 0
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        263ba8c0-6e3e-54f2-92d8-c0dd400dad64:
+          uuid: 263ba8c0-6e3e-54f2-92d8-c0dd400dad64
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_sponsors
+            label: atio_sponsors
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings:
+                field_delimiter:
+                  delimiter: ', '
+          weight: 1
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+      third_party_settings: {}
+    - layout_id: layout_onecol
+      layout_settings:
+        label: Grassroots innovation header
+        context_mapping: {}
+        custom_id: null
+        custom_classes: ''
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+      components:
+        82a96255-f765-5f36-813b-b0d1c9ea8104:
+          uuid: 82a96255-f765-5f36-813b-b0d1c9ea8104
+          region: content
+          configuration:
+            id: custom_markup
+            label: Custom Markup
+            label_display: '0'
+            provider: custom_markup_block
+            context_mapping: {}
+            markup:
+              value: <h3>Grassroots innovation</h3>
+              format: content_editor
+          weight: 0
+          additional: {}
+      third_party_settings: {}
+    - layout_id: layout_onecol
+      layout_settings:
+        label: Grassroots innovation items
+        context_mapping: {}
+        custom_id: null
+        custom_classes: ''
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: d-flex flex-wrap rounded-3 bg-light mt-2 mb-5 px-4 pt-4
+            region_styles: null
+            region_data: null
+      components:
+        6d6842f2-26fc-57f8-9bb0-e3c5b75010e7:
+          uuid: 6d6842f2-26fc-57f8-9bb0-e3c5b75010e7
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_is_grassroots
+            label: atio_is_grassroots
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: boolean
+              label: above
+              settings:
+                format: default
+                format_custom_false: ''
+                format_custom_true: ''
+              third_party_settings: {}
+          weight: 0
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        7ebedb37-b3f4-53e2-ad45-6263a74c8109:
+          uuid: 7ebedb37-b3f4-53e2-ad45-6263a74c8109
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_grassroot_partner
+            label: atio_grassroot_partner
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: entity_reference_label
+              label: above
+              settings:
+                link: true
+              third_party_settings:
+                field_delimiter:
+                  delimiter: ', '
+          weight: 1
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: pe-5 pb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+      third_party_settings: {}
+    - layout_id: layout_onecol
+      layout_settings:
+        label: Grassroots innovation text
+        context_mapping: {}
+        custom_id: null
+        custom_classes: mb-5
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+      components:
+        c402a64c-6f1c-5a4c-84a3-f612473aadf4:
+          uuid: c402a64c-6f1c-5a4c-84a3-f612473aadf4
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_grassroots_narrative
+            label: atio_grassroots_narrative
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: basic_string
+              label: above
+              settings: {}
+              third_party_settings: {}
+          weight: 0
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: mb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+      third_party_settings: {}
+    - layout_id: layout_onecol
+      layout_settings:
+        label: AI-enriched description
+        context_mapping: {}
+        custom_id: null
+        custom_classes: mb-5
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+      components:
+        2c68abd4-147b-5d6e-88e7-8259b8f67e89:
+          uuid: 2c68abd4-147b-5d6e-88e7-8259b8f67e89
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_ai_enriched_description
+            label: atio_ai_enriched_description
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: text_default
+              label: above
+              settings: {}
+              third_party_settings: {}
+          weight: 0
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: mb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+      third_party_settings: {}
+    - layout_id: layout_onecol
+      layout_settings:
+        label: Provenance
+        context_mapping: {}
+        custom_id: null
+        custom_classes: mb-5
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+      components:
+        889de6a0-0c43-5aa5-b66c-1138bec1fda4:
+          uuid: 889de6a0-0c43-5aa5-b66c-1138bec1fda4
+          region: content
+          configuration:
+            id: field_block:node:atio_innovation:atio_bib_citation
+            label: atio_bib_citation
+            label_display: '0'
+            provider: layout_builder
+            context_mapping:
+              entity: layout_builder.entity
+              view_mode: view_mode
+            formatter:
+              type: basic_string
+              label: above
+              settings: {}
+              third_party_settings: {}
+          weight: 0
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: mb-4
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+      third_party_settings: {}
+id: node.atio_innovation.atio_fields
+targetEntityType: node
+bundle: atio_innovation
+mode: atio_fields
+content: {}
+hidden:
+  atio_actual_users: true
+  atio_adoptability_dimensions: true
+  atio_adoption_description: true
+  atio_adoption_level: true
+  atio_ai_enriched_description: true
+  atio_ai_quality: true
+  atio_allow_ai_if_empty: true
+  atio_allow_ai_update: true
+  atio_allow_overwrite_by_origin: true
+  atio_allow_overwrite_if_empty: true
+  atio_bib_citation: true
+  atio_challenges_addressed: true
+  atio_city: true
+  atio_countries_adoption: true
+  atio_country_origin: true
+  atio_curation_notes: true
+  atio_derived_from: true
+  atio_form_of_innovation: true
+  atio_geo_scale: true
+  atio_grassroot_partner: true
+  atio_grassroots_narrative: true
+  atio_identifying_feature: true
+  atio_innovation_stage: true
+  atio_innovation_type: true
+  atio_innovative_features: true
+  atio_innovative_narrative: true
+  atio_investment_type: true
+  atio_is_grassroots: true
+  atio_languages: true
+  atio_long_term_beneficiaries: true
+  atio_owner: true
+  atio_partners: true
+  atio_prospective_users: true
+  atio_quality: true
+  atio_quality_notes: true
+  atio_readiness_description: true
+  atio_readiness_level: true
+  atio_record_status: true
+  atio_region: true
+  atio_sdg_targets: true
+  atio_shorter_description: true
+  atio_sponsors: true
+  atio_start_date: true
+  atio_start_year: true
+  atio_thematic_area: true
+  atio_use_case_image: true
+  atio_use_cases: true
+  atio_use_cases_description: true
+  atio_view_switch: true
+  body: true
+  langcode: true
+  links: true
+  og_audience: true
+  published_at: true
+  search_api_excerpt: true
+  uri: true
+  uuid: true

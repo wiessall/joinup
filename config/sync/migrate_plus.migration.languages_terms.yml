@@ -1,0 +1,62 @@
+uuid: e657c59c-9dee-46c2-8810-169960436a31
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - sti_reference
+_core:
+  default_config_hash: mJBh-YpqO93-7jRd51nFfeynIzpi-dPoAUHYq-FpvC0
+id: languages_terms
+class: null
+idMap: {  }
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - vocabulary
+  - sti_reference
+migration_group: sti_vocabularies
+label: 'Languages terms'
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+    - modules/custom/sti_reference/data/languages.json
+  item_selector: ''
+  ids:
+    tid:
+      type: integer
+  fields:
+    -
+      name: tid
+      label: tid
+      selector: tid
+    -
+      name: name
+      label: name
+      selector: name
+    -
+      name: parent
+      label: parent
+      selector: parent
+process:
+  name: name
+  vid:
+    plugin: default_value
+    default_value: languages
+  parent:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: parent
+    -
+      plugin: migration_lookup
+      migration: languages_terms
+      no_stub: true
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: languages
+migration_dependencies:
+  required: {  }
+  optional: {  }

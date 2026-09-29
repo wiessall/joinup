@@ -1,0 +1,25 @@
+uuid: c0ceb0ca-87e1-4cf9-9f3f-bd1c4e5b66ce
+langcode: en
+status: true
+dependencies:
+  module:
+    - datetime
+    - node
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: Nj8HkTPJsmMoyaJscAENTh4l8ymS4hSzXV04UqTPAIo
+id: node.atio_start_date
+field_name: atio_start_date
+entity_type: node
+type: datetime
+settings:
+  datetime_type: datetime
+module: datetime
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

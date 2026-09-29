@@ -1,0 +1,26 @@
+uuid: 7f4f59ad-3940-4e60-8d1c-e0dc533f1bf2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_allow_overwrite_if_empty
+    - node.type.atio_innovation
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: IVYZ5G4VvxOxOkbjwaAAMimdWLLsMHTxwQZeXIVOeNM
+id: node.atio_innovation.atio_allow_overwrite_if_empty
+field_name: atio_allow_overwrite_if_empty
+entity_type: node
+bundle: atio_innovation
+label: 'Allow overwriting by extracted innovation record if field empty'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

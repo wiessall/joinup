@@ -1,0 +1,25 @@
+uuid: fda3c965-c131-4965-b18a-7074eef00cf8
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: Zvad75oUkjtlHRqWj70X52TVuWMnMYlI97b4dYmvEBM
+id: node.atio_prospective_users
+field_name: atio_prospective_users
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

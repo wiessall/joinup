@@ -1,0 +1,25 @@
+uuid: b8e2f80c-64c3-4fc6-86a0-1e1b7541a607
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: VxFspyJ80QtvDVht7WtxXrCSm1yzLD0POM4yvOJMbLA
+id: taxonomy_term.level_no
+field_name: level_no
+entity_type: taxonomy_term
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

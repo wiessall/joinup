@@ -1,0 +1,189 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+    - atio
+third_party_settings:
+  rdf_sync:
+    type: https://sti-portal.fao.org/ontology#Innovation
+    uri_plugin: sti_namespace
+    fields:
+      body:
+        value:
+          predicate: http://purl.org/dc/terms/description
+          type: null
+      atio_actual_users:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#actual_users
+          type: resource
+      atio_adoptability_dimensions:
+        value:
+          predicate: https://sti-portal.fao.org/ontology#adoptability_dimensions
+          type: null
+      atio_adoption_description:
+        value:
+          predicate: https://sti-portal.fao.org/ontology#adoption_description
+          type: null
+      atio_adoption_level:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#adoption_level
+          type: resource
+      atio_ai_enriched_description:
+        value:
+          predicate: https://sti-portal.fao.org/ontology#ai_enriched_description
+          type: null
+      atio_bib_citation:
+        value:
+          predicate: https://sti-portal.fao.org/ontology#bib_citation
+          type: null
+      atio_challenges_addressed:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#challenges_addressed
+          type: resource
+      atio_city:
+        value:
+          predicate: https://sti-portal.fao.org/ontology#city
+          type: null
+      atio_countries_adoption:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#countries_adoption
+          type: resource
+      atio_country_origin:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#country_origin
+          type: resource
+      atio_form_of_innovation:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#form_of_innovation
+          type: resource
+      atio_geo_scale:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#geo_scale
+          type: resource
+      atio_grassroot_partner:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#grassroot_partner
+          type: resource
+      atio_grassroots_narrative:
+        value:
+          predicate: https://sti-portal.fao.org/ontology#grassroots_narrative
+          type: null
+      atio_identifying_feature:
+        value:
+          predicate: https://sti-portal.fao.org/ontology#identifying_feature
+          type: null
+      atio_is_grassroots:
+        value:
+          predicate: https://sti-portal.fao.org/ontology#is_grassroots
+          type: null
+      atio_sdg_targets:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#sdg_targets
+          type: resource
+      atio_innovation_stage:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#innovation_stage
+          type: resource
+      atio_innovation_type:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#innovation_type
+          type: resource
+      atio_innovative_narrative:
+        value:
+          predicate: https://sti-portal.fao.org/ontology#innovative_narrative
+          type: null
+      atio_innovative_features:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#innovative_features
+          type: resource
+      atio_investment_type:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#investment_type
+          type: resource
+      atio_languages:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#languages
+          type: resource
+      atio_long_term_beneficiaries:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#long_term_beneficiaries
+          type: resource
+      atio_owner:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#owner
+          type: resource
+      atio_partners:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#partners
+          type: resource
+      atio_prospective_users:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#prospective_users
+          type: resource
+      atio_readiness_description:
+        value:
+          predicate: https://sti-portal.fao.org/ontology#readiness_description
+          type: null
+      atio_readiness_level:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#readiness_level
+          type: resource
+      atio_region:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#region
+          type: resource
+      atio_shorter_description:
+        value:
+          predicate: https://sti-portal.fao.org/ontology#shorter_description
+          type: null
+      atio_sponsors:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#sponsors
+          type: resource
+      atio_start_date:
+        value:
+          predicate: https://sti-portal.fao.org/ontology#start_date
+          type: null
+      atio_start_year:
+        value:
+          predicate: https://sti-portal.fao.org/ontology#start_year
+          type: null
+      atio_thematic_area:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#thematic_area
+          type: resource
+      atio_use_case_image:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#use_case_image
+          type: resource
+      atio_use_cases:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#use_cases
+          type: resource
+      atio_use_cases_description:
+        value:
+          predicate: https://sti-portal.fao.org/ontology#use_cases_description
+          type: null
+      atio_derived_from:
+        target_id:
+          predicate: http://www.w3.org/ns/prov#wasDerivedFrom
+          type: resource
+      og_audience:
+        target_id:
+          predicate: https://sti-portal.fao.org/ontology#statedBy
+          type: resource
+      title:
+        value:
+          predicate: http://purl.org/dc/terms/title
+          type: null
+name: ATIO Innovation
+type: atio_innovation
+description: ATIO's curated synthesis over one or more solution records.
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: false
+label_singular: innovation
+label_plural: innovations
+label_count: null

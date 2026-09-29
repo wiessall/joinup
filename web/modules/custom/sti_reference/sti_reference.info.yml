@@ -1,0 +1,10 @@
+name: 'STI reference vocabularies'
+type: module
+description: 'Portal-wide reference vocabularies: countries, languages, regions, SDG targets. Not owned by any one collection.'
+package: 'STI'
+core_version_requirement: ^11
+version: 1.8.0
+dependencies:
+  - drupal:taxonomy
+  - migrate_plus:migrate_plus
+  - rdf_sync:rdf_sync

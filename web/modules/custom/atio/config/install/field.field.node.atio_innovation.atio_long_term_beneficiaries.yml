@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.node.atio_long_term_beneficiaries
+  - node.type.atio_innovation
+  - taxonomy.vocabulary.atio_actor_types
+  enforced:
+    module:
+    - atio
+id: node.atio_innovation.atio_long_term_beneficiaries
+field_name: atio_long_term_beneficiaries
+entity_type: node
+bundle: atio_innovation
+label: Long-term beneficiaries
+description: ''
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings:
+  handler: default:taxonomy_term
+  handler_settings:
+    target_bundles:
+      atio_actor_types: atio_actor_types
+    sort:
+      field: name
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

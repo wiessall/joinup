@@ -1,0 +1,26 @@
+uuid: cd0623c9-861f-4033-9164-1f539265071a
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+  enforced:
+    module:
+      - sti_reference
+_core:
+  default_config_hash: cBpzGMFI4XsC9aAaUPyeDXCrBniBgXMi86rPI3tu7KA
+id: taxonomy_term.iso_code
+field_name: iso_code
+entity_type: taxonomy_term
+type: string
+settings:
+  max_length: 255
+  is_ascii: false
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

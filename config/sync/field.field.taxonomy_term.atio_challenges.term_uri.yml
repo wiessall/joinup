@@ -1,0 +1,24 @@
+uuid: 0c134926-84f1-40ae-b19b-02ab347dd62d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.term_uri
+    - taxonomy.vocabulary.atio_challenges
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: rlrZdDBrvHqwzkGlN_llN9H4oe_EJIPQeccDq9ni8lg
+id: taxonomy_term.atio_challenges.term_uri
+field_name: term_uri
+entity_type: taxonomy_term
+bundle: atio_challenges
+label: 'Term URI'
+description: 'Authoritative URI for this concept. Leave empty to mint one under the STI namespace.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

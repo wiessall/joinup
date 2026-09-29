@@ -1,0 +1,28 @@
+uuid: 6c2468ae-87d6-4404-8444-840b488f8407
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_start_year
+    - node.type.atio_innovation
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: eTf0A70dX18kqVo6UL3nzUUf9jf5W0wm_-CuKAr6eUE
+id: node.atio_innovation.atio_start_year
+field_name: atio_start_year
+entity_type: node
+bundle: atio_innovation
+label: 'Start year'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: ''
+  max: ''
+  prefix: ''
+  suffix: ''
+field_type: integer

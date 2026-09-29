@@ -1,0 +1,77 @@
+uuid: 0bb9edff-9d9e-418b-a344-fdc5e550988f
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - sti_reference
+_core:
+  default_config_hash: BGGkv70YEuAVudUllw6NcMCg8PBTilkyy7E0HHRtepc
+id: countries_terms
+class: null
+idMap: {  }
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - vocabulary
+  - sti_reference
+migration_group: sti_vocabularies
+label: 'Countries terms'
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+    - modules/custom/sti_reference/data/countries.json
+  item_selector: ''
+  ids:
+    tid:
+      type: integer
+  fields:
+    -
+      name: tid
+      label: tid
+      selector: tid
+    -
+      name: name
+      label: name
+      selector: name
+    -
+      name: parent
+      label: parent
+      selector: parent
+    -
+      name: iso_code
+      label: iso_code
+      selector: iso_code
+    -
+      name: iso_code_2
+      label: iso_code_2
+      selector: iso_code_2
+    -
+      name: m49_code
+      label: m49_code
+      selector: m49_code
+process:
+  name: name
+  vid:
+    plugin: default_value
+    default_value: countries
+  parent:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: parent
+    -
+      plugin: migration_lookup
+      migration: countries_terms
+      no_stub: true
+  iso_code: iso_code
+  iso_code_2: iso_code_2
+  m49_code: m49_code
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: countries
+migration_dependencies:
+  required: {  }
+  optional: {  }

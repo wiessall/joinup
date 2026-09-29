@@ -1,0 +1,24 @@
+uuid: 944c4716-2d35-443a-b4e3-c9abeebbc339
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: corXKaeRHqItybvJcU5dJryVaCssY83sxMpQpugm-ic
+id: node.atio_sponsors
+field_name: atio_sponsors
+entity_type: node
+type: entity_reference
+settings:
+  target_type: node
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

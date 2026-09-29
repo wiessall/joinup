@@ -1,0 +1,25 @@
+uuid: acd145fa-11ac-40aa-bd95-c282ebb1baf7
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: Dmm1_nndkee9K3Qocr9LR3368BsODKbG-nel1SHnbeg
+id: node.atio_investment_type
+field_name: atio_investment_type
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

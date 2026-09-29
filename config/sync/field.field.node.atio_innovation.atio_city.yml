@@ -1,0 +1,24 @@
+uuid: 698c8390-71b0-48af-a4de-717ed191f391
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_city
+    - node.type.atio_innovation
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: zuQEmPKccTq3wHjdRvae5_Kk6VYnN5eG2FH4lYhkSx8
+id: node.atio_innovation.atio_city
+field_name: atio_city
+entity_type: node
+bundle: atio_innovation
+label: City
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

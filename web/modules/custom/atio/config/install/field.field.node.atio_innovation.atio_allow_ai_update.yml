@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.node.atio_allow_ai_update
+  - node.type.atio_innovation
+  enforced:
+    module:
+    - atio
+id: node.atio_innovation.atio_allow_ai_update
+field_name: atio_allow_ai_update
+entity_type: node
+bundle: atio_innovation
+label: Allow AI update
+description: "If yes, the innovation record can be AI-enriched. If no, even if the\
+  \ AI enrichment action is run, nothing will be overwritten (unless Allow AI update\
+  \ if empty is ticked).\r\nThis should be un-checked if a record is supposed to be\
+  \ under manual curation."
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings: {}
+field_type: boolean

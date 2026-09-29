@@ -1,0 +1,37 @@
+[
+ {
+  "tid": "564",
+  "name": "Climate change",
+  "parent": 0
+ },
+ {
+  "tid": "567",
+  "name": "Drought / water scarcity",
+  "parent": 0
+ },
+ {
+  "tid": "571",
+  "name": "Equitable access to data",
+  "parent": 0
+ },
+ {
+  "tid": "565",
+  "name": "Hunger",
+  "parent": 0
+ },
+ {
+  "tid": "566",
+  "name": "Poverty",
+  "parent": 0
+ },
+ {
+  "tid": "570",
+  "name": "Power imbalances",
+  "parent": 0
+ },
+ {
+  "tid": "569",
+  "name": "Soil degradation",
+  "parent": 0
+ }
+]

@@ -1,0 +1,62 @@
+uuid: 5c436d48-157b-4cc7-bc86-5924691401a6
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: SZZ-dOWgK3SI3Cxq-D3uLdyEPcsl_vaDDMYXmS-0XSE
+id: atio_innovation_stages_terms
+class: null
+idMap: {  }
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - vocabulary
+  - atio
+migration_group: sti_vocabularies
+label: 'Innovation stages terms'
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+    - modules/custom/atio/data/atio_innovation_stages.json
+  item_selector: ''
+  ids:
+    tid:
+      type: integer
+  fields:
+    -
+      name: tid
+      label: tid
+      selector: tid
+    -
+      name: name
+      label: name
+      selector: name
+    -
+      name: parent
+      label: parent
+      selector: parent
+process:
+  name: name
+  vid:
+    plugin: default_value
+    default_value: atio_innovation_stages
+  parent:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: parent
+    -
+      plugin: migration_lookup
+      migration: atio_innovation_stages_terms
+      no_stub: true
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: atio_innovation_stages
+migration_dependencies:
+  required: {  }
+  optional: {  }

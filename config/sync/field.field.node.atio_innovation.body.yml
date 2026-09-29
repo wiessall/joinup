@@ -1,0 +1,29 @@
+uuid: 79c6942a-54ed-4a73-8e67-99b5e60bfc4b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.atio_innovation
+  module:
+    - text
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: _OsF0v5UKo3DbSuVvHXE9Mw4K2DJfMVRMW97j5EmbTw
+id: node.atio_innovation.body
+field_name: body
+entity_type: node
+bundle: atio_innovation
+label: 'Long description'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: 0
+  required_summary: false
+  allowed_formats: {  }
+field_type: text_with_summary

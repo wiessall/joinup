@@ -1,0 +1,47 @@
+[
+ {
+  "tid": "598",
+  "name": "Newly extracted from original record - Not checked, not enriched",
+  "parent": 0
+ },
+ {
+  "tid": "3767",
+  "name": "Generated / updated from extracted record",
+  "parent": 0
+ },
+ {
+  "tid": "3768",
+  "name": "AI-enriched (only empty)",
+  "parent": 0
+ },
+ {
+  "tid": "3769",
+  "name": "AI-enriched",
+  "parent": 0
+ },
+ {
+  "tid": "3770",
+  "name": "Rejected - Bad AI-generated content",
+  "parent": 0
+ },
+ {
+  "tid": "3771",
+  "name": "To be reviewed after new / modified original record imported",
+  "parent": 0
+ },
+ {
+  "tid": "3772",
+  "name": "Manually curated",
+  "parent": 0
+ },
+ {
+  "tid": "3773",
+  "name": "Approved",
+  "parent": 0
+ },
+ {
+  "tid": "3774",
+  "name": "Used in document - edit with caution",
+  "parent": 0
+ }
+]

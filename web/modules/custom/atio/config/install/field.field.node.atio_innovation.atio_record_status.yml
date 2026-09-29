@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.node.atio_record_status
+  - node.type.atio_innovation
+  - taxonomy.vocabulary.sti_record_status
+  enforced:
+    module:
+    - atio
+id: node.atio_innovation.atio_record_status
+field_name: atio_record_status
+entity_type: node
+bundle: atio_innovation
+label: Record status
+description: ''
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings:
+  handler: default:taxonomy_term
+  handler_settings:
+    target_bundles:
+      sti_record_status: sti_record_status
+    sort:
+      field: name
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

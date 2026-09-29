@@ -1,0 +1,34 @@
+uuid: eff3f0fe-a61f-470e-b1f7-847319706be0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_use_cases
+    - node.type.atio_innovation
+    - taxonomy.vocabulary.atio_use_cases
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: r0OoHH3E3CTzDqHMzwrI17oD3Wl28LjugMxEYBPB_PM
+id: node.atio_innovation.atio_use_cases
+field_name: atio_use_cases
+entity_type: node
+bundle: atio_innovation
+label: 'Use cases'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      atio_use_cases: atio_use_cases
+    sort:
+      field: name
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,22 @@
+[
+ {
+  "tid": "533",
+  "name": "Pre-emergent",
+  "parent": 0
+ },
+ {
+  "tid": "534",
+  "name": "Emergent",
+  "parent": 0
+ },
+ {
+  "tid": "535",
+  "name": "Mature",
+  "parent": 0
+ },
+ {
+  "tid": "536",
+  "name": "Obsolete",
+  "parent": 0
+ }
+]

@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.node.atio_adoptability_dimensions
+  - node.type.atio_innovation
+  enforced:
+    module:
+    - atio
+id: node.atio_innovation.atio_adoptability_dimensions
+field_name: atio_adoptability_dimensions
+entity_type: node
+bundle: atio_innovation
+label: Adoptability dimensions
+description: 'Elaborate on what features the innovation has that makes it adoptable.
+  Address: Profitability, Accessibility, Acceptability, Sustainability, Co-development.'
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings: {}
+field_type: string_long

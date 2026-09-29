@@ -1,0 +1,24 @@
+uuid: ef7ab2ab-bd0d-4610-948f-5c141cd2c064
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.m49_code
+    - taxonomy.vocabulary.countries
+  enforced:
+    module:
+      - sti_reference
+_core:
+  default_config_hash: NHP-lD4A-8x323Z4yrVKJIVpAdADiEWCOr4SpM6E-9I
+id: taxonomy_term.countries.m49_code
+field_name: m49_code
+entity_type: taxonomy_term
+bundle: countries
+label: 'M49 code'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

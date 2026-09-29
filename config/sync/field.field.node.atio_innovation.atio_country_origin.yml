@@ -1,0 +1,34 @@
+uuid: 22d1482a-c507-4cf2-9888-5ce164968146
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_country_origin
+    - node.type.atio_innovation
+    - taxonomy.vocabulary.countries
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: 63GMvGjSQ2uIYmk3dRJ4BxvS3EoqQb9PWU_rZAE1Vbc
+id: node.atio_innovation.atio_country_origin
+field_name: atio_country_origin
+entity_type: node
+bundle: atio_innovation
+label: 'Country (origin)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      countries: countries
+    sort:
+      field: name
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

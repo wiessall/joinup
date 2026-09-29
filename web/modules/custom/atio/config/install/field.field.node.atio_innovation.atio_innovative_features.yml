@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.node.atio_innovative_features
+  - node.type.atio_innovation
+  - taxonomy.vocabulary.atio_innovative_features
+  enforced:
+    module:
+    - atio
+id: node.atio_innovation.atio_innovative_features
+field_name: atio_innovative_features
+entity_type: node
+bundle: atio_innovation
+label: Innovative dimensions
+description: ''
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings:
+  handler: default:taxonomy_term
+  handler_settings:
+    target_bundles:
+      atio_innovative_features: atio_innovative_features
+    sort:
+      field: name
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

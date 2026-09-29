@@ -1,0 +1,24 @@
+uuid: 270cf5e4-a27b-44f3-bf7c-ff2bec1413a3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_grassroots_narrative
+    - node.type.atio_innovation
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: LImgw9_0xj_dYIic_FTpIRKE3gH7uEhe-_VFCJHpEIg
+id: node.atio_innovation.atio_grassroots_narrative
+field_name: atio_grassroots_narrative
+entity_type: node
+bundle: atio_innovation
+label: 'Grassroots innovation: narrative'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

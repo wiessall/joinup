@@ -1,0 +1,25 @@
+uuid: 7a722e52-0090-4737-8c4f-3097444c4732
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: WttxjZsz9B_8dJQszaoijayDhWJOEVoekitSzjvNUH0
+id: node.atio_thematic_area
+field_name: atio_thematic_area
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,97 @@
+[
+ {
+  "tid": "1",
+  "name": "Academia and researchers",
+  "parent": 0
+ },
+ {
+  "tid": "2",
+  "name": "Farmers' associations",
+  "parent": 0
+ },
+ {
+  "tid": "3",
+  "name": "Agriculture cooperatives",
+  "parent": 0
+ },
+ {
+  "tid": "4",
+  "name": "Rural communities",
+  "parent": 0
+ },
+ {
+  "tid": "2074",
+  "name": "Indigenous communities",
+  "parent": 0
+ },
+ {
+  "tid": "5",
+  "name": "Large size farms / farmers",
+  "parent": 0
+ },
+ {
+  "tid": "6",
+  "name": "Medium size farms / farmers",
+  "parent": 0
+ },
+ {
+  "tid": "7",
+  "name": "Smallholder farms / farmers",
+  "parent": 0
+ },
+ {
+  "tid": "8",
+  "name": "Farm advisors",
+  "parent": 0
+ },
+ {
+  "tid": "9",
+  "name": "Large enterprises",
+  "parent": 0
+ },
+ {
+  "tid": "10",
+  "name": "Small-medium enterprises",
+  "parent": 0
+ },
+ {
+  "tid": "11",
+  "name": "Small-micro entrepreneurs",
+  "parent": 0
+ },
+ {
+  "tid": "12",
+  "name": "Civil society organizations",
+  "parent": 0
+ },
+ {
+  "tid": "13",
+  "name": "Food consumers",
+  "parent": 0
+ },
+ {
+  "tid": "14",
+  "name": "Central government entities",
+  "parent": 0
+ },
+ {
+  "tid": "15",
+  "name": "Local government entities",
+  "parent": 0
+ },
+ {
+  "tid": "16",
+  "name": "International organizations",
+  "parent": 0
+ },
+ {
+  "tid": "2075",
+  "name": "Funders and investors",
+  "parent": 0
+ },
+ {
+  "tid": "17",
+  "name": "Consortium of partners",
+  "parent": 0
+ }
+]

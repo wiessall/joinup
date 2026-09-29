@@ -1,0 +1,24 @@
+uuid: 466cdd58-fd0b-41d8-8b1e-5f5063ed7bfb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_bib_citation
+    - node.type.atio_innovation
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: ARyRjbtjirtZEIOdfdytMo3mei33fFLkb6k6k9sA4eo
+id: node.atio_innovation.atio_bib_citation
+field_name: atio_bib_citation
+entity_type: node
+bundle: atio_innovation
+label: 'Bibliographic citation of publication'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

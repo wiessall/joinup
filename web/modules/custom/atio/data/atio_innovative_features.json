@@ -1,0 +1,82 @@
+[
+ {
+  "tid": "557",
+  "name": "is a new or modified process that helps solve a problem or improves something",
+  "parent": 0
+ },
+ {
+  "tid": "556",
+  "name": "is a new or modified solution to a problem",
+  "parent": 0
+ },
+ {
+  "tid": "558",
+  "name": "is an existing solution used to solve a new / different problem",
+  "parent": 0
+ },
+ {
+  "tid": "559",
+  "name": "is an existing solution used in a different context",
+  "parent": 0
+ },
+ {
+  "tid": "789",
+  "name": "creates or supports new or improved / more equitable business models",
+  "parent": 0
+ },
+ {
+  "tid": "792",
+  "name": "accelerates / advances co-design and participatory approaches",
+  "parent": 0
+ },
+ {
+  "tid": "794",
+  "name": "facilitates transformative partnerships",
+  "parent": 0
+ },
+ {
+  "tid": "795",
+  "name": "supports incubation and novel / improved investment models",
+  "parent": 0
+ },
+ {
+  "tid": "561",
+  "name": "is a change to a solution/process that enhances inclusion and equity",
+  "parent": 0
+ },
+ {
+  "tid": "560",
+  "name": "is a change to a solution/process that focuses on socio-cultural aspects",
+  "parent": 0
+ },
+ {
+  "tid": "793",
+  "name": "is a new or modified solution/process developed with strong grassroots participation",
+  "parent": 0
+ },
+ {
+  "tid": "788",
+  "name": "supports behavioral change",
+  "parent": 0
+ },
+ {
+  "tid": "787",
+  "name": "supports foresight",
+  "parent": 0
+ },
+ {
+  "tid": "791",
+  "name": "uses / advances frontier technologies",
+  "parent": 0
+ },
+ {
+  "tid": "790",
+  "name": "facilitates / accelerates innovation",
+  "parent": 0
+ },
+ {
+  "tid": "562",
+  "name": "is a game changer",
+  "parent": 0
+ }
+]

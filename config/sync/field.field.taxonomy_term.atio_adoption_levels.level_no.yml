@@ -1,0 +1,28 @@
+uuid: c6d15d0a-a434-4117-a3ec-376f735d058a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.level_no
+    - taxonomy.vocabulary.atio_adoption_levels
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: AAPEpAKEyhoNWYHd8MVjMBh-9Xe-K3yAtdbumUK6_bk
+id: taxonomy_term.atio_adoption_levels.level_no
+field_name: level_no
+entity_type: taxonomy_term
+bundle: atio_adoption_levels
+label: 'Level no'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: ''
+  max: ''
+  prefix: ''
+  suffix: ''
+field_type: integer

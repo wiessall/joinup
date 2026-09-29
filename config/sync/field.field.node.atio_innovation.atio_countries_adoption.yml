@@ -1,0 +1,34 @@
+uuid: c0b74f6d-d56d-47f2-8edf-9b2f03786e62
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_countries_adoption
+    - node.type.atio_innovation
+    - taxonomy.vocabulary.countries
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: Tqs-xnAiZ0w3dX-DWew_bWvJSq1lDFvZnkTleqC6kxY
+id: node.atio_innovation.atio_countries_adoption
+field_name: atio_countries_adoption
+entity_type: node
+bundle: atio_innovation
+label: 'Countries (adoption)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      countries: countries
+    sort:
+      field: name
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,24 @@
+uuid: 573faa79-c942-4935-a9fe-218d95a81106
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_adoptability_dimensions
+    - node.type.atio_innovation
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: HlIbGjWBjM2f5yT3mA-5sMFomk69HQA_3lZ6qtCPUqU
+id: node.atio_innovation.atio_adoptability_dimensions
+field_name: atio_adoptability_dimensions
+entity_type: node
+bundle: atio_innovation
+label: 'Adoptability dimensions'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

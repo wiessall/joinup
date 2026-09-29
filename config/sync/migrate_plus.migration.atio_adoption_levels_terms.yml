@@ -1,0 +1,67 @@
+uuid: c21dab06-7a75-4501-89b0-93ff679cb7a9
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: bxci2semeAzUqR5oMBGJz4PjWMciQbFLCWKbOaLPzxU
+id: atio_adoption_levels_terms
+class: null
+idMap: {  }
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - vocabulary
+  - atio
+migration_group: sti_vocabularies
+label: 'Adoption levels terms'
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+    - modules/custom/atio/data/atio_adoption_levels.json
+  item_selector: ''
+  ids:
+    tid:
+      type: integer
+  fields:
+    -
+      name: tid
+      label: tid
+      selector: tid
+    -
+      name: name
+      label: name
+      selector: name
+    -
+      name: parent
+      label: parent
+      selector: parent
+    -
+      name: level_no
+      label: level_no
+      selector: level_no
+process:
+  name: name
+  vid:
+    plugin: default_value
+    default_value: atio_adoption_levels
+  parent:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: parent
+    -
+      plugin: migration_lookup
+      migration: atio_adoption_levels_terms
+      no_stub: true
+  level_no: level_no
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: atio_adoption_levels
+migration_dependencies:
+  required: {  }
+  optional: {  }

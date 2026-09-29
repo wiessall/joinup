@@ -4,6 +4,7 @@ module:
   allowed_formats: 0
   antibot: 0
   assessments: 0
+  atio: 0
   babel: 0
   babel_content_entity: 0
   babel_menu_link_content: 0
@@ -259,7 +260,9 @@ module:
   state_machine_revisions: 0
   sti_dedupe: 0
   sti_portal_api: 0
+  sti_qa: 0
   sti_rdf: 0
+  sti_reference: 0
   subpathauto: 0
   svg_image: 0
   svg_image_responsive: 0

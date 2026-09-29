@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  module:
+  - rdf_sync
+  enforced:
+    module:
+    - atio
+third_party_settings:
+  rdf_sync:
+    type: http://www.w3.org/2004/02/skos/core#Concept
+    uri_plugin: sti_namespace
+    uri_field_name: term_uri
+    fields:
+      vid:
+        target_id:
+          predicate: http://www.w3.org/2004/02/skos/core#inScheme
+          type: resource
+      name:
+        value:
+          predicate: http://www.w3.org/2004/02/skos/core#prefLabel
+          type: null
+      parent:
+        target_id:
+          predicate: http://www.w3.org/2004/02/skos/core#broaderTransitive
+          type: resource
+name: AFS challenges
+vid: atio_challenges
+description: Ported from the production STI Portal vocabulary "afs_challenges".
+weight: 0
+new_revision: false

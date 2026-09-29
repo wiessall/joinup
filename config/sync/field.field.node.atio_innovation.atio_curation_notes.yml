@@ -1,0 +1,27 @@
+uuid: 84005d36-84c7-42de-94d0-90f9d1b304f1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_curation_notes
+    - node.type.atio_innovation
+  module:
+    - text
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: eF_7saqrrOrti0hv0LtrBulvBReFcJE7PZf5DyAI1Ow
+id: node.atio_innovation.atio_curation_notes
+field_name: atio_curation_notes
+entity_type: node
+bundle: atio_innovation
+label: 'Record quality - Human curation notes'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

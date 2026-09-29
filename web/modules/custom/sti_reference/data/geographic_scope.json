@@ -1,0 +1,22 @@
+[
+ {
+  "tid": "3763",
+  "name": "Global",
+  "parent": 0
+ },
+ {
+  "tid": "3764",
+  "name": "Local",
+  "parent": 0
+ },
+ {
+  "tid": "3765",
+  "name": "National",
+  "parent": 0
+ },
+ {
+  "tid": "3766",
+  "name": "Regional",
+  "parent": 0
+ }
+]

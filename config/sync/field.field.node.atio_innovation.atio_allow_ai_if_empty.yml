@@ -1,0 +1,26 @@
+uuid: ab033a6b-e3b7-49cb-b498-4ce0324146b6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_allow_ai_if_empty
+    - node.type.atio_innovation
+  enforced:
+    module:
+      - atio
+_core:
+  default_config_hash: 8AkiaBdQaw5TLxLCmplmPo97qcns8MP_lLiYh1PQcvU
+id: node.atio_innovation.atio_allow_ai_if_empty
+field_name: atio_allow_ai_if_empty
+entity_type: node
+bundle: atio_innovation
+label: 'Allow AI update if empty'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

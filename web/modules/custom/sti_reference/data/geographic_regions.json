@@ -1,0 +1,106 @@
+[
+ {
+  "tid": "102",
+  "name": "Africa",
+  "parent": 0,
+  "variant": "Sub-Saharan Africa, SSA"
+ },
+ {
+  "tid": "2587",
+  "name": "Northern Africa",
+  "parent": 102
+ },
+ {
+  "tid": "2586",
+  "name": "Sub-Saharan Africa",
+  "parent": 102
+ },
+ {
+  "tid": "1463",
+  "name": "Americas",
+  "parent": 0
+ },
+ {
+  "tid": "105",
+  "name": "Latin America and the Caribbean",
+  "parent": 1463,
+  "variant": "Latin America, Caribbean"
+ },
+ {
+  "tid": "107",
+  "name": "Northern America",
+  "parent": 1463
+ },
+ {
+  "tid": "103",
+  "name": "Asia",
+  "parent": 0,
+  "variant": "Asia, Asia Pacific"
+ },
+ {
+  "tid": "2580",
+  "name": "Eastern Asia",
+  "parent": 103
+ },
+ {
+  "tid": "2579",
+  "name": "Southern Asia",
+  "parent": 103
+ },
+ {
+  "tid": "2578",
+  "name": "South-eastern Asia",
+  "parent": 103
+ },
+ {
+  "tid": "2581",
+  "name": "Central Asia",
+  "parent": 103
+ },
+ {
+  "tid": "1469",
+  "name": "Western Asia",
+  "parent": 103
+ },
+ {
+  "tid": "104",
+  "name": "Europe",
+  "parent": 0,
+  "variant": "Europe, Central Asia, Caucasus"
+ },
+ {
+  "tid": "2582",
+  "name": "Eastern Europe",
+  "parent": 104
+ },
+ {
+  "tid": "2585",
+  "name": "Northern Europe",
+  "parent": 104
+ },
+ {
+  "tid": "2584",
+  "name": "Southern Europe",
+  "parent": 104
+ },
+ {
+  "tid": "2583",
+  "name": "Western Europe",
+  "parent": 104
+ },
+ {
+  "tid": "1465",
+  "name": "Europe",
+  "parent": 104
+ },
+ {
+  "tid": "1505",
+  "name": "Oceania",
+  "parent": 0
+ },
+ {
+  "tid": "108",
+  "name": "Location-independent",
+  "parent": 0
+ }
+]
