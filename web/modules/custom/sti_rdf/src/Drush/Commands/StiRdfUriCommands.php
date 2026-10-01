@@ -1,0 +1,102 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\sti_rdf\Drush\Commands;
+
+use Drupal\sti_rdf\Service\UriReminter;
+use Drush\Attributes as CLI;
+use Drush\Commands\AutowireTrait;
+use Drush\Commands\DrushCommands;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+
+/**
+ * Inspects and repairs STI instance URIs.
+ *
+ * The same work runs automatically in sti_rdf_update_11001(). These
+ * commands exist to look before deploying (uri-report) and to re-run the
+ * rewrite after restoring an older database dump (uri-remint).
+ */
+final class StiRdfUriCommands extends DrushCommands {
+
+  use AutowireTrait;
+
+  public function __construct(
+    #[Autowire(service: 'sti_rdf.uri_reminter')]
+    private readonly UriReminter $reminter,
+  ) {
+    parent::__construct();
+  }
+
+  /**
+   * Shows pending URI plugin changes and legacy URIs still stored.
+   */
+  #[CLI\Command(name: 'sti-rdf:uri-report')]
+  #[CLI\Usage(name: 'drush sti-rdf:uri-report', description: 'Lists bundles still on a legacy URI plugin and counts legacy URIs per bundle.')]
+  public function report(): int {
+    $plan = $this->reminter->planConfigChanges();
+    if ($plan) {
+      $this->io()->section('Bundles still on a legacy URI plugin');
+      $rows = [];
+      foreach ($plan as $change) {
+        $rows[] = [$change['entity_type'], $change['bundle'], $change['from'] ?? '(none)', $change['to']];
+      }
+      $this->io()->table(['Entity type', 'Bundle', 'From', 'To'], $rows);
+    }
+    else {
+      $this->io()->success('Every mapped STI bundle uses an sti_namespace derivative.');
+    }
+
+    $left = $this->reminter->verify();
+    if ($left) {
+      $this->io()->section('Legacy URIs still stored');
+      $rows = [];
+      foreach ($left as $scope => $count) {
+        $rows[] = [$scope, $count];
+      }
+      $this->io()->table(['Scope', 'Count'], $rows);
+      return self::EXIT_FAILURE;
+    }
+    $this->io()->success('No legacy URIs are stored for typed bundles.');
+    return $plan ? self::EXIT_FAILURE : self::EXIT_SUCCESS;
+  }
+
+  /**
+   * Switches bundles to typed URI plugins and rewrites legacy URIs.
+   *
+   * Afterwards, drop the graph and run rdf_sync:synchronize for node,
+   * paragraph and taxonomy_term: rdf_sync deletes triples by the URI it
+   * currently knows, so it cannot clean up triples written under old URIs.
+   */
+  #[CLI\Command(name: 'sti-rdf:uri-remint')]
+  #[CLI\Option(name: 'batch-size', description: 'Entities examined per database round.')]
+  #[CLI\Usage(name: 'drush sti-rdf:uri-remint', description: 'Rewrites every legacy URI to https://sti-portal.fao.org/id/{type}/{uuid}.')]
+  public function remint(array $options = ['batch-size' => 500]): int {
+    $changed = $this->reminter->applyConfigChanges();
+    $this->logger()->notice(dt('Switched @count bundle(s) to typed URI plugins.', ['@count' => $changed]));
+
+    $batchSize = max(1, (int) $options['batch-size']);
+    foreach ($this->reminter->scopes() as $scope) {
+      $label = $scope['entity_type'] . ':' . $scope['bundle'] . ($scope['field'] ? ':' . $scope['field'] : '');
+      $cursor = 0;
+      $rewritten = 0;
+      do {
+        $result = $this->reminter->remintBatch($scope, $cursor, $batchSize);
+        $cursor = $result['last_id'];
+        $rewritten += $result['rewritten'];
+      } while ($result['examined'] > 0);
+      if ($rewritten > 0) {
+        $this->logger()->notice(dt('@scope: rewrote @count URI(s).', ['@scope' => $label, '@count' => $rewritten]));
+      }
+    }
+
+    $left = $this->reminter->verify();
+    if ($left) {
+      $this->logger()->error(dt('Legacy URIs remain after the rewrite: @left', ['@left' => json_encode($left)]));
+      return self::EXIT_FAILURE;
+    }
+    $this->logger()->success(dt('All typed bundles now use https://sti-portal.fao.org/id/ URIs. Drop the graph and re-run rdf_sync:synchronize.'));
+    return self::EXIT_SUCCESS;
+  }
+
+}

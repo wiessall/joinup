@@ -29,8 +29,8 @@ third_party_settings:
       settings:
         age: 0
   rdf_sync:
-    type: 'https://sti-portal.fao.org/ontology#Innovation'
-    uri_plugin: sti_namespace
+    type: 'https://sti-portal.fao.org/ontology#SourceRecord'
+    uri_plugin: 'sti_namespace:source-record'
     fields:
       title:
         value:

@@ -1,0 +1,34 @@
+# Curated axioms for the sti: namespace (platform, tier 1).
+# Merged into the generated namespace document by OntologyDocumentBuilder.
+# Declare here only what rdf_sync config cannot express.
+
+@prefix sti:     <https://sti-portal.fao.org/ontology#> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix dcat:    <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix schema:  <https://schema.org/> .
+
+<https://sti-portal.fao.org/ontology>
+    rdfs:label "STI Portal platform vocabulary"@en .
+
+sti:SourceRecord
+    a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:comment """One collection's record of an innovation, as harvested and
+    normalised. Never merged with another collection's record: sameness is
+    expressed on the ATIO innovation that derives from both."""@en .
+
+sti:FieldClaim
+    a owl:Class ;
+    rdfs:comment """A reified statement by one collection about one property
+    of a source record: claimedBy, claimProperty, claimRefValue or
+    claimLiteralValue, claimedAt."""@en .
+
+sti:claimedBy
+    schema:rangeIncludes dcat:Catalog .
+
+sti:inCollection
+    rdfs:subPropertyOf dcterms:isPartOf ;
+    schema:rangeIncludes dcat:Catalog .

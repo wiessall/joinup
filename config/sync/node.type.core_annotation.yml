@@ -5,7 +5,7 @@ dependencies: {  }
 third_party_settings:
   rdf_sync:
     type: 'https://sti-portal.fao.org/ontology#Annotation'
-    uri_plugin: sti_namespace
+    uri_plugin: 'sti_namespace:annotation'
     fields:
       title:
         value:

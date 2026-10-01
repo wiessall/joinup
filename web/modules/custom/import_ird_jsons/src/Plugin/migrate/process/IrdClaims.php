@@ -36,7 +36,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * (parent term = collection id):
  *   claim_properties:  {collection} → {key}
  *   claim_values:      {collection} → {key} → {value}
- * Term URIs are written to field_property_uri so rdf_sync emits RDF resources.
+ * Term URIs are minted by rdf_sync itself: claim_properties uses the
+ * 'sti_namespace:property' URI plugin and claim_values 'sti_namespace:concept'
+ * (https://sti-portal.fao.org/id/{type}/{uuid}). This plugin used to write
+ * http://data.fao.org/ird/… URIs into field_property_uri, a field that never
+ * existed, so the terms ended up with no URI at all.
  *
  * Idempotency: because this runs during import (and the destination lists
  * `field_claims` in overwrite_properties), on re-import we look up the already
@@ -65,8 +69,6 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
   private const PARAGRAPH_BUNDLE  = 'claims';
   private const SOLUTION_BUNDLE   = 'solution';
   private const COLLECTION_BUNDLE = 'collection';
-  private const FIELD_TERM_URI    = 'field_property_uri';
-  private const URI_BASE          = 'http://data.fao.org/ird/';
   private const MAX_TERM_NAME     = 255;
 
   /** Per-process static caches (one migrate run reuses them). */
@@ -180,7 +182,7 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
         $meta           = $field_config[$key] ?? [];
         $is_categorical = (bool) ($meta['categorical'] ?? FALSE);
         $separator      = $meta['separator'] ?? NULL;
-        $property_term  = $this->ensureKeyTerm(self::VOCAB_PROPERTIES, $collection_id, $key, $properties_parent);
+        $property_term  = $this->ensureKeyTerm(self::VOCAB_PROPERTIES, $key, $properties_parent);
 
         foreach ($this->normalizeValues($raw_value, $separator) as $single) {
           try {
@@ -195,7 +197,7 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
             }
 
             $paragraph = $is_categorical
-              ? $this->buildRefClaim($collection_id, $key, $single, $property_term, $values_parent, $collection_nid)
+              ? $this->buildRefClaim($key, $single, $property_term, $values_parent, $collection_nid)
               : $this->buildLiteralClaim($single, $property_term, $collection_nid);
 
             $new_refs[] = [
@@ -260,17 +262,14 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
   }
 
   private function buildRefClaim(
-    string $collection_id,
     string $key,
     string $value,
     TermInterface $property,
     TermInterface $values_parent,
     int $collection_nid,
   ): ParagraphInterface {
-    $key_term   = $this->ensureKeyTerm(self::VOCAB_VALUES, $collection_id, $key, $values_parent);
-    $value_term = $this->ensureTerm(
-      self::VOCAB_VALUES, $value, (int) $key_term->id(), $this->valueUri($collection_id, $key, $value),
-    );
+    $key_term   = $this->ensureKeyTerm(self::VOCAB_VALUES, $key, $values_parent);
+    $value_term = $this->ensureTerm(self::VOCAB_VALUES, $value, (int) $key_term->id());
     return $this->createClaim([
       'field_claim_property'  => ['target_id' => $property->id()],
       'field_claim_ref_value' => ['target_id' => $value_term->id()],
@@ -292,12 +291,11 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
   // Taxonomy helpers (idempotent, cached)
   // ---------------------------------------------------------------------------
 
-  private function ensureKeyTerm(string $vid, string $collection_id, string|int $key, TermInterface $parent): TermInterface {
-    $uri = $vid === self::VOCAB_PROPERTIES ? $this->propertyUri($collection_id, $key) : NULL;
-    return $this->ensureTerm($vid, (string) $key, (int) $parent->id(), $uri);
+  private function ensureKeyTerm(string $vid, string|int $key, TermInterface $parent): TermInterface {
+    return $this->ensureTerm($vid, (string) $key, (int) $parent->id());
   }
 
-  private function ensureTerm(string $vid, string $name, ?int $parent_tid = NULL, ?string $uri = NULL): TermInterface {
+  private function ensureTerm(string $vid, string $name, ?int $parent_tid = NULL): TermInterface {
     if ($existing = $this->findTerm($vid, $name, $parent_tid)) {
       return $existing;
     }
@@ -306,9 +304,6 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
       'name'   => $name,
       'parent' => $parent_tid !== NULL ? [$parent_tid] : [],
     ]);
-    if ($uri !== NULL && $term->hasField(self::FIELD_TERM_URI)) {
-      $term->set(self::FIELD_TERM_URI, $uri);
-    }
     $term->save();
     // Refresh cache so subsequent lookups in the same run hit.
     $this->termCache["$vid|$name|" . ($parent_tid ?? 'root')] = $term;
@@ -366,22 +361,6 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
       throw new \InvalidArgumentException("No collection found with short_id={$collection_id}.");
     }
     return self::$collectionNidCache[$collection_id] = (int) reset($matches)->id();
-  }
-
-  // ---------------------------------------------------------------------------
-  // URI minting
-  // ---------------------------------------------------------------------------
-
-  private function propertyUri(string $collection_id, string|int $key): string {
-    return self::URI_BASE . $this->slug($collection_id) . '#' . $this->slug((string) $key);
-  }
-
-  private function valueUri(string $collection_id, string $key, string $value): string {
-    return self::URI_BASE . $this->slug($collection_id) . '/' . $this->slug($key) . '#' . $this->slug($value);
-  }
-
-  private function slug(string $value): string {
-    return trim(preg_replace('/[^a-z0-9_]+/', '_', mb_strtolower($value)), '_');
   }
 
   // ---------------------------------------------------------------------------
