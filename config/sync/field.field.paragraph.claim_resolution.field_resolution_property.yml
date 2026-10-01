@@ -10,7 +10,7 @@ dependencies:
 third_party_settings:
   rdf_sync:
     value:
-      predicate: https://sti-portal.fao.org/ontology/atio#resolvesProperty
+      predicate: https://sti-portal.fao.org/atio#resolvesProperty
       type: resource
 id: paragraph.claim_resolution.field_resolution_property
 field_name: field_resolution_property

@@ -13,9 +13,11 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 /**
  * Inspects and repairs STI instance URIs.
  *
- * The same work runs automatically in sti_rdf_update_11001(). These
- * commands exist to look before deploying (uri-report) and to re-run the
- * rewrite after restoring an older database dump (uri-remint).
+ * The update hook sti_rdf_update_11001() only switches bundle config.
+ * Rewriting the URIs already stored is uri-remint's job, run in a
+ * maintenance window together with a graph rebuild, because rdf_sync
+ * replaces triples by the URI it has stored and cannot find triples written
+ * under an old one.
  */
 final class StiRdfUriCommands extends DrushCommands {
 
@@ -64,6 +66,7 @@ final class StiRdfUriCommands extends DrushCommands {
   /**
    * Switches bundles to typed URI plugins and rewrites legacy URIs.
    *
+   * Irreversible once the new URIs are published.
    * Afterwards, drop the graph and run rdf_sync:synchronize for node,
    * paragraph and taxonomy_term: rdf_sync deletes triples by the URI it
    * currently knows, so it cannot clean up triples written under old URIs.

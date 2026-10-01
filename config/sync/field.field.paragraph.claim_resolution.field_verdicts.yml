@@ -12,7 +12,7 @@ dependencies:
 third_party_settings:
   rdf_sync:
     target_id:
-      predicate: https://sti-portal.fao.org/ontology/atio#hasVerdict
+      predicate: https://sti-portal.fao.org/atio#hasVerdict
       type: resource
 id: paragraph.claim_resolution.field_verdicts
 field_name: field_verdicts

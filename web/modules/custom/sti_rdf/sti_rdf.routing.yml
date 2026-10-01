@@ -49,7 +49,7 @@ sti_rdf.id:
 
 # P0: the namespace IRIs dereference to their namespace documents.
 sti_rdf.ontology.sti:
-  path: '/ontology'
+  path: '/sti'
   defaults:
     _controller: '\Drupal\sti_rdf\Controller\OntologyController::document'
     prefix: sti
@@ -58,7 +58,7 @@ sti_rdf.ontology.sti:
     _access: 'TRUE'
 
 sti_rdf.ontology.atio:
-  path: '/ontology/atio'
+  path: '/atio'
   defaults:
     _controller: '\Drupal\sti_rdf\Controller\OntologyController::document'
     prefix: atio

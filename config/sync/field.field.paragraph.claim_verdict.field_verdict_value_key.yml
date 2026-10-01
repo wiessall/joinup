@@ -10,7 +10,7 @@ dependencies:
 third_party_settings:
   rdf_sync:
     value:
-      predicate: https://sti-portal.fao.org/ontology/atio#valueKey
+      predicate: https://sti-portal.fao.org/atio#valueKey
       type: null
 id: paragraph.claim_verdict.field_verdict_value_key
 field_name: field_verdict_value_key

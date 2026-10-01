@@ -14,7 +14,7 @@ third_party_settings:
     excluded: false
   rdf_sync:
     target_id:
-      predicate: 'https://sti-portal.fao.org/ontology#claimedBy'
+      predicate: 'https://sti-portal.fao.org/sti#claimedBy'
       type: resource
 id: paragraph.claims.field_claimed_by
 field_name: field_claimed_by

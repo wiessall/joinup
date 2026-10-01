@@ -2,15 +2,15 @@
 # Merged into the generated namespace document by OntologyDocumentBuilder.
 # Declare here only what rdf_sync config cannot express.
 
-@prefix atio:    <https://sti-portal.fao.org/ontology/atio#> .
-@prefix sti:     <https://sti-portal.fao.org/ontology#> .
+@prefix atio:    <https://sti-portal.fao.org/atio#> .
+@prefix sti:     <https://sti-portal.fao.org/sti#> .
 @prefix prov:    <http://www.w3.org/ns/prov#> .
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl:     <http://www.w3.org/2002/07/owl#> .
 @prefix schema:  <https://schema.org/> .
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
 
-<https://sti-portal.fao.org/ontology/atio>
+<https://sti-portal.fao.org/atio>
     rdfs:label "ATIO Knowledge Base vocabulary"@en .
 
 atio:Innovation

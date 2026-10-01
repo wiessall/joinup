@@ -11,7 +11,7 @@ dependencies:
 third_party_settings:
   rdf_sync:
     target_id:
-      predicate: https://sti-portal.fao.org/ontology#claimProperty
+      predicate: https://sti-portal.fao.org/sti#claimProperty
       type: resource
 id: paragraph.claim_verdict.field_verdict_property
 field_name: field_verdict_property

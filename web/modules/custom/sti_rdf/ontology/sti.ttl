@@ -2,7 +2,7 @@
 # Merged into the generated namespace document by OntologyDocumentBuilder.
 # Declare here only what rdf_sync config cannot express.
 
-@prefix sti:     <https://sti-portal.fao.org/ontology#> .
+@prefix sti:     <https://sti-portal.fao.org/sti#> .
 @prefix prov:    <http://www.w3.org/ns/prov#> .
 @prefix dcat:    <http://www.w3.org/ns/dcat#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
@@ -10,7 +10,7 @@
 @prefix owl:     <http://www.w3.org/2002/07/owl#> .
 @prefix schema:  <https://schema.org/> .
 
-<https://sti-portal.fao.org/ontology>
+<https://sti-portal.fao.org/sti>
     rdfs:label "STI Portal platform vocabulary"@en .
 
 sti:SourceRecord
