@@ -22,11 +22,13 @@ use Drupal\sti_rdf\StiUri;
  *
  * Two steps, always in this order:
  *
- * 1. Bundle config: every bundle on the bare 'sti_namespace' plugin, or on
- *    Joinup's 'joinup_po_namespace:w21', is switched to an
- *    'sti_namespace:{type}' derivative. Bare 'sti_namespace' stops being a
- *    valid plugin id when the deriver is introduced, so this must run before
- *    any mapped entity is saved again.
+ * 1. Bundle config: every bundle on the bare 'sti_namespace' plugin, and
+ *    every bundle in MIGRATION_MAP that is on Joinup's
+ *    'joinup_po_namespace:w21', is switched to an 'sti_namespace:{type}'
+ *    derivative. Bare 'sti_namespace' stops being a valid plugin id when the
+ *    deriver is introduced, so this must run before any mapped entity is
+ *    saved again. Other w21 bundles (Joinup's own, such as release) are not
+ *    ours and are left alone: w21 is still a valid plugin for them.
  * 2. Stored URIs: rows in rdf_sync_uri, and values of stored URI fields
  *    (uri_field_name), that still carry a legacy prefix are rewritten to the
  *    new pattern. Externally assigned URIs (an AGROVOC or UN URI in term_uri)
@@ -73,9 +75,17 @@ final class UriReminter {
   ];
 
   /**
-   * Plugin ids that are replaced by an sti_namespace derivative.
+   * The underived plugin id, invalid once the deriver exists.
+   *
+   * Every bundle on it must move, so an unmapped node or paragraph bundle
+   * here is an error.
    */
-  private const LEGACY_PLUGINS = ['sti_namespace', 'joinup_po_namespace:w21'];
+  private const BARE_PLUGIN = 'sti_namespace';
+
+  /**
+   * Joinup's plugin, still valid; only bundles in MIGRATION_MAP leave it.
+   */
+  private const JOINUP_PLUGIN = 'joinup_po_namespace:w21';
 
   public function __construct(
     private readonly EntityTypeManagerInterface $entityTypeManager,
@@ -92,9 +102,9 @@ final class UriReminter {
    *   One entry per bundle whose uri_plugin changes.
    *
    * @throws \UnexpectedValueException
-   *   When a node or paragraph bundle is on a legacy plugin but has no entry
-   *   in MIGRATION_MAP. Guessing a type would freeze a wrong URI, so this is
-   *   loud on purpose: add the bundle to the map.
+   *   When a node or paragraph bundle is on the bare 'sti_namespace' plugin
+   *   but has no entry in MIGRATION_MAP. Guessing a type would freeze a
+   *   wrong URI, so this is loud on purpose: add the bundle to the map.
    */
   public function planConfigChanges(): array {
     $plan = [];
@@ -103,10 +113,15 @@ final class UriReminter {
       $current = $bundleEntity->getThirdPartySetting('rdf_sync', 'uri_plugin');
       $mapped = self::MIGRATION_MAP[$entityTypeId][$bundle] ?? NULL;
 
-      $isLegacy = in_array($current, self::LEGACY_PLUGINS, TRUE);
-      // The claim vocabularies have no plugin at all yet.
-      $needsPlugin = $current === NULL && $mapped !== NULL;
-      if (!$isLegacy && !$needsPlugin) {
+      $moves = match (TRUE) {
+        $current === self::BARE_PLUGIN => TRUE,
+        // Joinup's bundles (release, …) stay on w21; only ours leave it.
+        $current === self::JOINUP_PLUGIN => $mapped !== NULL,
+        // The claim vocabularies have no plugin at all yet.
+        $current === NULL => $mapped !== NULL,
+        default => FALSE,
+      };
+      if (!$moves) {
         continue;
       }
 

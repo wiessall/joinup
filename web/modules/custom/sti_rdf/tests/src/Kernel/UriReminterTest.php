@@ -25,8 +25,9 @@ use PHPUnit\Framework\Attributes\Group;
  * Every failure here is silent: a row that is skipped keeps its old URI and
  * the site carries on. The invariants asserted are the ones a deploy relies
  * on: legacy URIs are gone, external URIs are untouched, unmapped bundles are
- * untouched, a second run changes nothing, and an unknown bundle on a legacy
- * plugin stops the run instead of being guessed.
+ * untouched (including Joinup's own bundles on w21), a second run changes
+ * nothing, and an unknown bundle on the bare sti_namespace plugin stops the
+ * run instead of being guessed.
  *
  * Entities are created before their bundles are mapped, and the mapping is
  * written to raw config, so that rdf_sync never attempts a triplestore write.
@@ -178,7 +179,7 @@ final class UriReminterTest extends KernelTestBase {
   }
 
   /**
-   * A node bundle on a legacy plugin with no type in the map stops the run.
+   * A node bundle on bare sti_namespace with no type in the map stops the run.
    */
   public function testUnknownBundleIsRefusedNotGuessed(): void {
     NodeType::create(['type' => 'mystery', 'name' => 'Mystery'])->save();
@@ -187,6 +188,31 @@ final class UriReminterTest extends KernelTestBase {
     $this->expectException(\UnexpectedValueException::class);
     $this->expectExceptionMessage('node:mystery');
     $this->reminter()->planConfigChanges();
+  }
+
+  /**
+   * A Joinup bundle on w21 that is not in the map stays on w21.
+   *
+   * Joinup's release bundle is mapped to w21 on the real site. Treating it as
+   * ours either aborted the update (the first version of this code) or would
+   * have moved Joinup content into the STI namespace.
+   */
+  public function testJoinupBundleOnW21IsLeftAlone(): void {
+    NodeType::create(['type' => 'release', 'name' => 'Release'])->save();
+    $release = Node::create(['type' => 'release', 'title' => 'R']);
+    $release->save();
+    $this->map('node_type', 'release', 'http://www.w3.org/ns/dcat#Dataset', 'joinup_po_namespace:w21');
+    $uri = 'http://data.europa.eu/w21/' . $release->uuid();
+    $this->row('node', $release, $uri);
+
+    $reminter = $this->reminter();
+    $this->assertNotContains('release', array_column($reminter->planConfigChanges(), 'bundle'));
+    $reminter->applyConfigChanges();
+    $this->assertSame('joinup_po_namespace:w21', $this->plugin('node.type.release'));
+
+    $this->runRemint($reminter, 100);
+    $this->assertSame($uri, $this->storedUri('node', $release));
+    $this->assertArrayNotHasKey('node:release', $reminter->verify());
   }
 
   /**
