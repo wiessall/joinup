@@ -1,124 +1,124 @@
 # STI Duplicate Resolution (`sti_dedupe`)
 
-Post-import review of possible duplicate solutions. Implements ADR #12: the
-migration never merges, a reviewer decides afterwards, and every outcome is
-additive or reversible.
+Post-import review of possible duplicate solutions, and curator rulings on
+claims that cannot all be true.
 
-## Why it works this way
+## Model
 
-Loading a second collection covering the same innovations raises two questions
-— what to do when core fields disagree, and whether to merge records.
-Answering them automatically needs a resolution policy, per-property
-tie-breaks and trust weights, all of which mutate data at import time and are
-hard to undo. A human answers them instead, so none of that machinery exists.
+- A **solution** is a source record: one collection's account of an
+  innovation. It is never merged, edited or deleted by this module.
+- An **ATIO innovation** (`atio_innovation`) is the curated thing. It lists
+  every solution it was derived from in `atio_derived_from`
+  (`atio:derivedFromSource`), each pinned at a revision.
+- "These two solutions are the same innovation" is therefore a link on the
+  innovation, not an operation on the solutions.
+- **Claims** stay on the solutions, attributed to their collections. Where
+  the sources of one innovation disagree on a *single-valued* ATIO property,
+  a curator rules which value is authoritative.
 
-Two constraints shaped the code:
-
-- **Core fields only.** Scoring and the comparison table use title, owner,
-  country and year. They must never consume mapped claim values, because that
-  would make review depend on vocabulary-mapping coverage, and ADR #14
-  requires that nothing waits on a mapping.
-- **Claims are additive.** Two collections claiming different things about one
-  AFSI is the normal case, not a conflict, so claims are summarised rather
-  than diffed.
-
-## Flow
+## Duplicate review
 
 ```
-drush sti-dedupe:scan <collection>     → precomputes candidates into a table
-/admin/content/dedupe                  → collections with pending reviews
-/admin/content/dedupe/{collection}     → queue, best score first
-  → resolve/{solution}/{candidate}     → side-by-side, three outcomes
+drush sti-dedupe:scan <collection>    → candidates, precomputed into a table
+/admin/content/dedupe                 → collections with pending reviews
+/admin/content/dedupe/{collection}    → queue, best score first
+  → resolve/{solution}/{candidate}    → side by side, two outcomes
 ```
-
-Scanning is a batch step, not per-request work: at 200 collections of ~1400
-solutions, a search per row per page load would not be acceptable.
-
-## The three outcomes
 
 | Button | What happens |
 |---|---|
-| Same — keep existing | claims and `field_source_records` re-parented onto the survivor; survivor shared into the loser's collection; migrate map repointed; redirect created; decision recorded; loser deleted |
-| Same — keep both | a `sti:sameInnovationAs` claim written on each side, attributed to that side's collection |
-| Not the same | decision recorded so the pair is never offered again |
+| Same innovation | The decision is recorded. The pair, plus everything already decided "same" with either (the *cluster*), goes onto the innovation(s) derived from any of them. No innovation yet → decision only. One → every cluster member is added. Several → the reviewer picks a survivor; it gains every source, the others are unpublished, recorded as replaced, and their URIs redirect to the survivor. |
+| Not the same | The decision is recorded and the pair is never offered again. Refused if the pair was already decided "same": undoing a link is a curator's job. |
 
-### Four things that fail silently if you change them
+Scoring uses core fields only (title, owner, country, year), never mapped
+claim values: duplicate review must not wait on vocabulary mappings.
 
-1. **The migrate map must be repointed.** After the loser is deleted,
-   `migrate_map_<id>` still maps its source row to a dead nid, so the next
-   import recreates the duplicate and undoes the decision. `Merger` rewrites
-   `destid1` through the id map's own table — there is no entity-level API for
-   this. With it done, `ird_claims`'s per-collection delete-and-recreate
-   correctly refreshes the merged record instead of forking it again.
-2. **Paragraphs are re-parented before the delete.**
-   `entity_reference_revisions` is a composite relationship, so deleting the
-   loser would take its claims with it. They are re-parented and attached to
-   the survivor, then removed from the loser, then the loser is deleted.
-   Re-parenting rather than cloning keeps paragraph ids, and therefore the
-   FieldClaim URIs minted from them, stable across a merge.
-3. **"Not the same" is recorded.** Without it reviewers redo the same pair on
-   every re-import.
-4. **Sharing, not `og_audience`.** `og_audience` has cardinality 1, so the
-   survivor keeps its own collection and gains a Joinup `Sharing` for the
-   other — visibility without edit rights.
+## Claim conflicts
 
-### Decisions survive node deletion on purpose
+```
+/admin/content/dedupe/conflicts             → pending and stale resolutions
+/admin/content/dedupe/conflicts/{paragraph} → rule: one value authoritative
+drush sti-dedupe:conflicts [--innovation=N] → compute now instead of on cron
+```
 
-`hook_node_delete()` clears candidate rows but **not** decisions. A merge
-records its decision and then deletes the losing node; clearing decisions on
-delete would erase the record of the merge that had just been made. A decision
-naming a deleted node is harmless and is the audit trail.
+A claim is compared only when its collection's property term is mapped to an
+ATIO property (`field_atio_property` on `claim_properties`). Unmapped
+properties are never compared. Nothing waits on a mapping, and nothing is
+guessed from property names.
 
-## Predicate choice
+A property is **single-valued** when the `atio_innovation` field that emits
+it (via its rdf_sync mapping) is a configurable, non-narrative field with
+cardinality 1: readiness level, origin country, start year, the grassroots
+flag. Titles and descriptions are never compared. The settings form shows the
+computed list and takes additions and removals.
 
-`sti:sameInnovationAs`, declared non-transitive — deliberately not
-`owl:sameAs`, which asserts identity of individuals (so a reasoner merges the
-two titles the reviewer explicitly refused to merge) and is transitive (so one
-bad link contaminates a chain). `prov:alternateOf` is the closest standard
-alternative if you would rather not mint a term.
+Values compare by `field_skos_exact_match` on the `claim_values` term when it
+has one, otherwise by normalised label.
 
-### Why not `related_solutions`?
+Each conflict is a `claim_resolution` paragraph on the innovation
+(`atio_claim_resolutions`), with one `claim_verdict` per claimed value:
 
-Joinup's solution bundle already has `related_solutions` — an unlimited
-node→node reference described as "Related solutions (similar, same context,
-same application, etc.)", rendered by the stock tile, teaser, carousel and
-group-header displays.
+- New conflict → *pending*, every value *unreviewed*.
+- Untouched pending → follows the claims; removed when the sources agree.
+- Ruled → *resolved*. When the claims change later the ruling is **kept**:
+  verdicts on values no longer claimed are flagged not current, new values
+  are added unreviewed, and the resolution becomes *stale*.
 
-It is not a substitute for the claim, because it carries no attribution (who
-said so, when), no relation type, and has no `rdf_sync` mapping, so nothing
-reaches the graph. But it is the right place to *show* the link. So "Same —
-keep both" writes both: the claim is the record, `related_solutions` is a
-projection of it — the same write-model/read-model split the core fields use.
+Verdicts identify a claim by collection + property + value, never by claim
+paragraph id, because `ird_claims` deletes and recreates a collection's
+claim paragraphs on every re-import. An identical re-import changes nothing.
 
-Joinup does use `owl:sameAs` once, on `field.field.node.licence.spdx_licence`,
-where a licence node really is the identical thing as its SPDX entry. That is
-the correct use of it, and it is why it is the wrong predicate for two
-distinct curated records that a reviewer has just chosen to keep apart.
+A ruling is recorded only. Copying the authoritative value into the
+innovation's own field is left to the curator or the enrichment pipeline.
 
-## Config it installs
+Refreshes run on cron (queue `sti_dedupe_conflict_refresh`), triggered by a
+solution save, a change to an innovation's sources, or a mapping edit (one
+full pass, however many terms are edited).
 
-`field_claim_ref_node` on the `claims` paragraph — an entity reference to
-`node.solution`. The existing `field_claim_ref_value` only targets taxonomy
-terms, so a claim whose object is another solution had nowhere to point. If
-the field is missing, the code falls back to writing the node's absolute URI
-into `field_claim_literal_value`.
+## Things that fail silently, and what guards them
 
-## Settings
+| Failure | Guard |
+|---|---|
+| A link half-written (some sources added, loser still published, replacement not recorded) | One transaction; `Linker::verify()` reads storage back and rolls back with an error log. |
+| A refresh leaves resolutions out of step with claims | `ResolutionReconciler::verify()`, same pattern. |
+| A ruling saved against values the curator never saw | `StaleResolutionException` when the claimed values changed since the form loaded. |
+| A re-import silently discards a ruling | Tuple identity, `ClaimResolutionTest::testRulingSurvivesIdenticalReimport()`. |
+| Hooks stop queueing refreshes | `ConflictQueueTest`. |
+| A replaced innovation's URI starts to 404 | `ReplacedInnovationSubscriber` on `sti_rdf`'s `UriResolveEvent`; `LinkerTest`. |
 
-`/admin/config/sti/dedupe` — threshold (default 0.8), max candidates per
-solution, which Search API indexes to search (newly imported solutions are
-usually unpublished, so `unpublished` is included by default), which migration
-tags own the id maps to repoint, and which core fields the comparison shows.
+Rollback covers SQL only. rdf_sync writes to the triplestore as entities are
+saved, so after a failed link, re-sync the innovations involved.
 
-## Not done yet
+## Upgrading from the merge version
 
-- No test coverage. `Merger::keepExisting()` is the part that most wants a
-  kernel test: paragraph re-parenting, map repointing and delete ordering are
-  exactly the things that break quietly.
-- `field_source_records` (ADR #11) does not exist yet. The merger already
-  moves it when present, so nothing changes here when it lands.
-- Scoring is deterministic string similarity. `ai_output_checks` already
-  solves fuzzy organisation matching; reusing its scorer would likely beat
-  `similar_text()` on titles.
-- The queue lists one row per solution with its best candidate. Walking the
-  other candidates happens on the resolution screen.
+`ddev drush deploy` (updb, then cim) does everything, in this order:
+
+1. `sti_rdf_update_11001()`: P0 URI re-minting (see sti_rdf).
+2. `sti_dedupe_update_11001()`: replacement table, decision indexes, and
+   "same, keep both" → "same". It stops and names any newly required module
+   that is not enabled.
+3. `sti_dedupe_update_11002()`: every `sameInnovationAs` claim (written by
+   the old version and misattributed to a collection) becomes a "same"
+   decision; the claims, their `related_solutions` mirrors, the property term
+   and `field_claim_ref_node` are removed.
+4. `cim` creates the new fields, paragraph types and settings from
+   `config/sync`. They are deliberately not created by an update hook: cim
+   would then delete or replace them, because config/sync is the truth.
+
+Until step 4 has run, conflict refreshes fail loudly (no resolutions field)
+and are retried from the queue.
+
+"Merged" decisions from the old version name deleted nodes. They are kept as
+history and still count towards clusters.
+
+## Tests
+
+```
+ddev exec 'vendor/bin/phpunit -c phpunit.xml web/modules/custom/sti_dedupe'
+```
+
+Kernel tests boot core and contrib only (node, taxonomy, paragraphs,
+entity_reference_revisions, rdf_sync, sti_rdf), never the Joinup
+distribution. Fields owned by other modules are created with their site
+names. sti_dedupe's own fields are installed from its config/install, minus
+rdf_sync mappings, so the shipped config is what gets tested.

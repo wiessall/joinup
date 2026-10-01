@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.field.paragraph.claims.field_claim_literal_value
     - field.field.paragraph.claims.field_claim_property
-    - field.field.paragraph.claims.field_claim_ref_node
     - field.field.paragraph.claims.field_claim_ref_value
     - field.field.paragraph.claims.field_claimed_at
     - field.field.paragraph.claims.field_claimed_by
@@ -66,7 +65,6 @@ content:
     weight: 0
     region: content
 hidden:
-  field_claim_ref_node: true
   search_api_excerpt: true
   uri: true
   uuid: true

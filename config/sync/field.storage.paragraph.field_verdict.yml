@@ -1,0 +1,29 @@
+uuid: 06ad1719-5120-46eb-9227-cfbf5dbc1f35
+langcode: en
+status: true
+dependencies:
+  module:
+  - options
+  - paragraphs
+id: paragraph.field_verdict
+field_name: field_verdict
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+  - value: unreviewed
+    label: Unreviewed
+  - value: authoritative
+    label: Authoritative
+  - value: supplementary
+    label: Supplementary
+  - value: rejected
+    label: Rejected
+  allowed_values_function: ''
+module: options
+locked: true
+cardinality: 1
+translatable: false
+indexes: {}
+persist_with_no_fields: false
+custom_storage: false

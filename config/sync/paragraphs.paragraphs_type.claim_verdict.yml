@@ -1,0 +1,16 @@
+uuid: 7f75d607-b116-433d-8da6-2c34f737dd37
+langcode: en
+status: true
+dependencies:
+  module:
+  - rdf_sync
+third_party_settings:
+  rdf_sync:
+    type: https://sti-portal.fao.org/ontology/atio#ClaimVerdict
+    uri_plugin: sti_namespace:claim-verdict
+id: claim_verdict
+label: Claim verdict
+icon_uuid: null
+icon_default: null
+description: One claimed value (collection, property, value) and the verdict on it. Managed by sti_dedupe.
+behavior_plugins: {}

@@ -1,0 +1,28 @@
+uuid: bb8f487a-9b6f-476e-ac2f-719271011e0b
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.paragraph.field_verdict_current
+  - paragraphs.paragraphs_type.claim_verdict
+  module:
+  - rdf_sync
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: https://sti-portal.fao.org/ontology/atio#currentlyClaimed
+      type: xsd:boolean
+id: paragraph.claim_verdict.field_verdict_current
+field_name: field_verdict_current
+entity_type: paragraph
+bundle: claim_verdict
+label: Still claimed
+description: ''
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

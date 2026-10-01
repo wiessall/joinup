@@ -59,7 +59,11 @@ final class DuplicateFinder {
       return [];
     }
 
-    $excluded = array_flip($this->decisions->decidedAgainst((int) $solution->id()));
+    // Skip every pair already decided either way, and every solution already
+    // linked to this one through other "same" decisions: within a cluster
+    // the answer follows by transitivity.
+    $self = (int) $solution->id();
+    $excluded = array_flip(array_merge($this->decisions->decidedWith($self), $this->decisions->cluster($self)));
     $seen = [];
     $matches = [];
 

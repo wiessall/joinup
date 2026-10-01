@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.taxonomy_term.field_skos_exact_match
+  - taxonomy.vocabulary.claim_values
+  module:
+  - rdf_sync
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: http://www.w3.org/2004/02/skos/core#exactMatch
+      type: resource
+id: taxonomy_term.claim_values.field_skos_exact_match
+field_name: field_skos_exact_match
+entity_type: taxonomy_term
+bundle: claim_values
+label: Exact match
+description: The concept (for example an ATIO or AGROVOC term URI) this value means exactly. Values with the same exact match count as the same value.
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings: {}
+field_type: uri

@@ -9,19 +9,27 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Session\AccountProxyInterface;
 
 /**
- * Records and reads reviewer decisions about candidate pairs.
+ * Records reviewer decisions about pairs of solutions.
  *
- * A decision is symmetric: deciding that A and B are different must also
- * suppress the pair (B, A). Pairs are therefore stored low-nid first.
+ * A decision is symmetric, so pairs are stored low nid first. Two outcomes:
  *
- * Recording "different" is not cosmetic — without it the same pair is offered
- * again on every re-import and reviewers redo the work. See ADR #12.
+ * - same: both solutions describe one real-world innovation. Solutions are
+ *   source records and are never merged or deleted; "same" is a link, and
+ *   links are transitive in effect: if A~B and B~C were decided, A, B and C
+ *   form one cluster and end up on one ATIO innovation.
+ * - different: the pair is never offered again.
+ *
+ * 'merged' and 'same_separate' are values written by the first version of
+ * this module. sti_dedupe_update_11001() turns 'same_separate' into 'same';
+ * 'merged' rows name a deleted node and are kept as the audit trail.
  */
 final class DecisionStore {
 
-  public const MERGED = 'merged';
-  public const SAME_SEPARATE = 'same_separate';
+  public const SAME = 'same';
   public const DIFFERENT = 'different';
+  public const LEGACY_MERGED = 'merged';
+
+  private const TABLE = 'sti_dedupe_decision';
 
   public function __construct(
     private readonly Connection $database,
@@ -31,14 +39,20 @@ final class DecisionStore {
 
   /**
    * Records a decision about a pair, replacing any earlier one.
+   *
+   * @throws \InvalidArgumentException
+   *   For a pair of one node, or a decision other than SAME or DIFFERENT.
    */
   public function record(int $a, int $b, string $decision): void {
+    if (!in_array($decision, [self::SAME, self::DIFFERENT], TRUE)) {
+      throw new \InvalidArgumentException(sprintf('Unknown decision "%s".', $decision));
+    }
+    if ($a === $b) {
+      throw new \InvalidArgumentException('A solution cannot be paired with itself.');
+    }
     [$low, $high] = $this->order($a, $b);
-    $this->database->merge('sti_dedupe_decision')
-      ->keys([
-        'nid_low' => $low,
-        'nid_high' => $high,
-      ])
+    $this->database->merge(self::TABLE)
+      ->keys(['nid_low' => $low, 'nid_high' => $high])
       ->fields([
         'decision' => $decision,
         'uid' => (int) $this->currentUser->id(),
@@ -48,32 +62,31 @@ final class DecisionStore {
   }
 
   /**
-   * Whether this pair has already been decided.
+   * Returns the decision recorded for a pair, if any.
    */
-  public function isDecided(int $a, int $b): bool {
+  public function get(int $a, int $b): ?string {
     [$low, $high] = $this->order($a, $b);
-    return (bool) $this->database->select('sti_dedupe_decision', 'd')
-      ->fields('d', ['id'])
+    $decision = $this->database->select(self::TABLE, 'd')
+      ->fields('d', ['decision'])
       ->condition('nid_low', $low)
       ->condition('nid_high', $high)
-      ->range(0, 1)
       ->execute()
       ->fetchField();
+    return $decision === FALSE ? NULL : (string) $decision;
   }
 
   /**
-   * Returns the node ids already decided against for one node.
+   * Returns every node a decision pairs with the given one, any outcome.
    *
    * @return int[]
    *   Node ids, in no particular order.
    */
-  public function decidedAgainst(int $nid): array {
-    $query = $this->database->select('sti_dedupe_decision', 'd');
+  public function decidedWith(int $nid): array {
+    $query = $this->database->select(self::TABLE, 'd');
     $query->fields('d', ['nid_low', 'nid_high']);
-    $group = $query->orConditionGroup()
+    $query->condition($query->orConditionGroup()
       ->condition('nid_low', $nid)
-      ->condition('nid_high', $nid);
-    $query->condition($group);
+      ->condition('nid_high', $nid));
 
     $others = [];
     foreach ($query->execute() as $row) {
@@ -83,14 +96,44 @@ final class DecisionStore {
   }
 
   /**
-   * Removes every decision that mentions a node, after it is deleted.
+   * Returns the transitive closure of "same" around the given nodes.
+   *
+   * Legacy 'merged' rows are followed as well: they record that two records
+   * were judged the same, even though one of them no longer exists. Callers
+   * filter out ids that do not load.
+   *
+   * @param int ...$nids
+   *   One or more seed node ids.
+   *
+   * @return int[]
+   *   The seeds and everything linked to them, sorted ascending.
    */
-  public function deleteForNode(int $nid): void {
-    $query = $this->database->delete('sti_dedupe_decision');
-    $group = $query->orConditionGroup()
-      ->condition('nid_low', $nid)
-      ->condition('nid_high', $nid);
-    $query->condition($group)->execute();
+  public function cluster(int ...$nids): array {
+    $members = array_fill_keys($nids, TRUE);
+    $frontier = $nids;
+    while ($frontier) {
+      $query = $this->database->select(self::TABLE, 'd');
+      $query->fields('d', ['nid_low', 'nid_high']);
+      $query->condition('decision', [self::SAME, self::LEGACY_MERGED], 'IN');
+      $query->condition($query->orConditionGroup()
+        ->condition('nid_low', $frontier, 'IN')
+        ->condition('nid_high', $frontier, 'IN'));
+
+      $next = [];
+      foreach ($query->execute() as $row) {
+        foreach ([(int) $row->nid_low, (int) $row->nid_high] as $nid) {
+          if (!isset($members[$nid])) {
+            $members[$nid] = TRUE;
+            $next[] = $nid;
+          }
+        }
+      }
+      $frontier = $next;
+    }
+
+    $out = array_keys($members);
+    sort($out);
+    return $out;
   }
 
   /**

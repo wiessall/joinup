@@ -3,8 +3,6 @@ max_candidates: 5
 indexes:
   - published
   - unpublished
-migration_tags:
-  - IRD
 compare_fields:
   - title
   - body
@@ -17,3 +15,6 @@ weights:
   owner: 0.2
   country: 0.15
   year: 0.05
+exclusive_properties:
+  add: []
+  remove: []

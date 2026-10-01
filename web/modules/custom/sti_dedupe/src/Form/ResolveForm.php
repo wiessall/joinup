@@ -10,45 +10,53 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\sti_dedupe\CandidateStore;
-use Drupal\sti_dedupe\Merger;
+use Drupal\sti_dedupe\ContentModel;
+use Drupal\sti_dedupe\Exception\SurvivorRequiredException;
+use Drupal\sti_dedupe\Linker;
+use Drupal\sti_dedupe\Prefixes;
+use Drupal\sti_rdf\Service\MappingReaderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Side-by-side resolution of one candidate pair.
+ * Side-by-side review of one candidate pair of solutions.
  *
- * The comparison shows CORE fields only. Claims are summarised rather than
- * diffed, because they are additive by definition and because diffing them
- * would need vocabulary mappings, which nothing is allowed to wait on
- * (ADR #14).
+ * Two outcomes, neither of which edits or deletes a solution: "same
+ * innovation" links both (and anything already linked to either) to one
+ * ATIO innovation; "not the same" stops the pair being offered again.
+ *
+ * The comparison shows core fields only. Claims are summarised, not diffed:
+ * collections disagreeing is normal, and the disagreements that matter
+ * (single-valued properties) are surfaced as claim conflicts on the
+ * innovation once the pair is linked.
  */
 final class ResolveForm extends FormBase {
 
   /**
-   * Prefixes used to compact predicate URIs for display.
+   * The collection whose queue the reviewer came from.
    */
-  private const PREFIXES = [
-    'http://purl.org/dc/terms/' => 'dct:',
-    'http://www.w3.org/ns/dcat#' => 'dcat:',
-    'http://xmlns.com/foaf/0.1/' => 'foaf:',
-    'https://sti-portal.fao.org/ontology#' => 'sti:',
-  ];
-
   private ?NodeInterface $collection = NULL;
+
+  /**
+   * The newly imported solution.
+   */
   private ?NodeInterface $solution = NULL;
+
+  /**
+   * The existing solution it may duplicate.
+   */
   private ?NodeInterface $candidate = NULL;
 
   /**
    * Constructs the form.
    *
-   * Note: FormBase already declares $configFactory through
-   * ConfigFormBaseTrait, so it must not be promoted here — a readonly
-   * promoted property of the same name is a fatal error. Settings are read
-   * through FormBase::config() instead.
+   * FormBase already declares $configFactory, so it is not promoted here;
+   * settings are read through FormBase::config().
    */
   public function __construct(
     private readonly EntityTypeManagerInterface $entityTypeManager,
-    private readonly Merger $merger,
+    private readonly Linker $linker,
     private readonly CandidateStore $candidates,
+    private readonly MappingReaderInterface $mappingReader,
   ) {}
 
   /**
@@ -57,8 +65,9 @@ final class ResolveForm extends FormBase {
   public static function create(ContainerInterface $container): static {
     return new static(
       $container->get('entity_type.manager'),
-      $container->get('sti_dedupe.merger'),
+      $container->get('sti_dedupe.linker'),
       $container->get('sti_dedupe.candidates'),
+      $container->get('sti_rdf.mapping_reader'),
     );
   }
 
@@ -83,7 +92,7 @@ final class ResolveForm extends FormBase {
     $this->solution = $solution;
     $this->candidate = $candidate;
 
-    if (!$solution || !$candidate) {
+    if (!$solution || !$candidate || $solution->bundle() !== ContentModel::SOLUTION || $candidate->bundle() !== ContentModel::SOLUTION) {
       $form['error'] = ['#markup' => $this->t('This pair could not be loaded.')];
       return $form;
     }
@@ -105,40 +114,29 @@ final class ResolveForm extends FormBase {
 
     $form['diff'] = $this->buildDiff($solution, $candidate);
     $form['claims'] = $this->buildClaimSummary($solution, $candidate);
+    $form['innovation'] = $this->buildInnovationSection($solution, $candidate);
 
     $form['actions'] = ['#type' => 'actions'];
-
-    $form['actions']['keep_existing'] = [
+    $form['actions']['same'] = [
       '#type' => 'submit',
-      '#name' => 'keep_existing',
-      '#value' => $this->t('Same — keep existing'),
+      '#name' => 'same',
+      '#value' => $this->t('Same innovation'),
       '#attributes' => ['class' => ['btn', 'btn-primary']],
-      '#description' => $this->t('Moves the claims and raw record onto the existing node, shares it into this collection, repoints the migrate map, deletes this node and leaves a redirect.'),
     ];
-
-    $form['actions']['keep_both'] = [
-      '#type' => 'submit',
-      '#name' => 'keep_both',
-      '#value' => $this->t('Same — keep both'),
-      '#attributes' => ['class' => ['btn', 'btn-secondary']],
-    ];
-
     $form['actions']['different'] = [
       '#type' => 'submit',
       '#name' => 'different',
       '#value' => $this->t('Not the same'),
       '#attributes' => ['class' => ['btn', 'btn-secondary']],
+      '#limit_validation_errors' => [],
+      '#submit' => ['::submitForm'],
     ];
 
     $form['legend'] = [
       '#theme' => 'item_list',
       '#items' => [
-        $this->t('<strong>Same — keep existing</strong>: @loser is deleted; its claims and raw payload move to @winner.', [
-          '@loser' => $solution->label(),
-          '@winner' => $candidate->label(),
-        ]),
-        $this->t('<strong>Same — keep both</strong>: both records stay, linked by a sti:sameInnovationAs claim attributed to you.'),
-        $this->t('<strong>Not the same</strong>: both records stay and the decision is recorded, so this pair is not offered again.'),
+        $this->t('<strong>Same innovation</strong>: both records stay as they are. They, and every record already linked to either, are listed as sources of one ATIO innovation. If none exists yet, only the decision is recorded.'),
+        $this->t('<strong>Not the same</strong>: the decision is recorded so this pair is not offered again.'),
       ],
     ];
 
@@ -146,20 +144,72 @@ final class ResolveForm extends FormBase {
   }
 
   /**
+   * Describes what "same" would do, and asks for a survivor if needed.
+   */
+  private function buildInnovationSection(NodeInterface $solution, NodeInterface $candidate): array {
+    $plan = $this->linker->plan($solution, $candidate);
+    $section = [
+      '#type' => 'details',
+      '#title' => $this->t('ATIO innovation'),
+      '#open' => TRUE,
+    ];
+
+    $section['cluster'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'p',
+      '#value' => $this->t('"Same" would link @count source records.', ['@count' => count($plan->cluster)]),
+    ];
+
+    $innovations = $this->entityTypeManager->getStorage('node')->loadMultiple($plan->innovations);
+    if (!$innovations) {
+      $section['none'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => $this->t('None of them is on an ATIO innovation yet; only the decision will be recorded.'),
+      ];
+      return $section;
+    }
+
+    $options = [];
+    foreach ($innovations as $nid => $innovation) {
+      $options[$nid] = $this->t('@title (@status)', [
+        '@title' => $innovation->label(),
+        '@status' => $innovation instanceof NodeInterface && $innovation->isPublished() ? $this->t('published') : $this->t('unpublished'),
+      ]);
+    }
+
+    if (!$plan->needsSurvivor()) {
+      $section['target'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => $this->t('They will be listed as sources of %title.', ['%title' => reset($options)]),
+      ];
+      return $section;
+    }
+
+    $section['survivor'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('These records are on @count innovations. Which one survives?', ['@count' => count($options)]),
+      '#description' => $this->t('The survivor gains every source. The others are unpublished, not deleted, and their URIs redirect to the survivor.'),
+      '#options' => $options,
+    ];
+    return $section;
+  }
+
+  /**
    * Builds the core-field comparison table.
    */
   private function buildDiff(NodeInterface $new, NodeInterface $existing): array {
     $fields = (array) ($this->config('sti_dedupe.settings')->get('compare_fields') ?? []);
-    $predicates = $this->predicateMap();
+    $predicates = [];
+    foreach ($this->mappingReader->fieldMappings('node', ContentModel::SOLUTION) as $mapping) {
+      $predicates[$mapping['field']] ??= Prefixes::compact($mapping['predicate']);
+    }
 
     $rows = [];
     foreach ($fields as $fieldName) {
-      if (!$new->hasField($fieldName) && !$existing->hasField($fieldName)) {
-        continue;
-      }
       $left = $this->fieldToString($new, $fieldName);
       $right = $this->fieldToString($existing, $fieldName);
-
       if ($left === NULL && $right === NULL) {
         continue;
       }
@@ -169,7 +219,6 @@ final class ResolveForm extends FormBase {
       else {
         $status = $left !== NULL ? $this->t('new only') : $this->t('existing only');
       }
-
       $rows[] = [
         'property' => $predicates[$fieldName] ?? $fieldName,
         'new' => $left ?? '—',
@@ -184,7 +233,7 @@ final class ResolveForm extends FormBase {
       '#header' => [
         $this->t('Property'),
         $this->t('New — @collection', ['@collection' => $this->collectionLabel($new)]),
-        $this->t('Existing — @collection (survives)', ['@collection' => $this->collectionLabel($existing)]),
+        $this->t('Existing — @collection', ['@collection' => $this->collectionLabel($existing)]),
         $this->t('Diff'),
       ],
       '#rows' => $rows,
@@ -193,57 +242,19 @@ final class ResolveForm extends FormBase {
   }
 
   /**
-   * Summarises the claims on each side. Claims are additive, so not diffed.
+   * Summarises the claims on each side.
    */
   private function buildClaimSummary(NodeInterface $new, NodeInterface $existing): array {
+    $count = static fn(NodeInterface $node): int => $node->hasField(ContentModel::CLAIMS) ? $node->get(ContentModel::CLAIMS)->count() : 0;
     return [
       '#theme' => 'item_list',
       '#title' => $this->t('Claims'),
       '#items' => [
-        $this->t('New: @count claims, which would move to the existing record.', [
-          '@count' => $new->hasField('field_claims') ? $new->get('field_claims')->count() : 0,
-        ]),
-        $this->t('Existing: @count claims already attached.', [
-          '@count' => $existing->hasField('field_claims') ? $existing->get('field_claims')->count() : 0,
-        ]),
+        $this->t('New: @count claims.', ['@count' => $count($new)]),
+        $this->t('Existing: @count claims.', ['@count' => $count($existing)]),
+        $this->t('Claims are never moved or merged. Disagreements on single-valued ATIO properties appear under "Claim conflicts" once the records share an innovation.'),
       ],
     ];
-  }
-
-  /**
-   * Maps field names to compacted RDF predicates from the bundle's config.
-   *
-   * @return array<string, string>
-   *   Field name to compacted predicate, e.g. "title" => "dct:title".
-   */
-  private function predicateMap(): array {
-    $type = $this->entityTypeManager->getStorage('node_type')->load('solution');
-    if (!$type) {
-      return [];
-    }
-    $fields = (array) ($type->getThirdPartySetting('rdf_sync', 'fields') ?? []);
-
-    $map = [];
-    foreach ($fields as $fieldName => $properties) {
-      $predicate = NULL;
-      foreach ((array) $properties as $property) {
-        if (isset($property['predicate'])) {
-          $predicate = (string) $property['predicate'];
-          break;
-        }
-      }
-      if ($predicate === NULL) {
-        continue;
-      }
-      foreach (self::PREFIXES as $namespace => $prefix) {
-        if (str_starts_with($predicate, $namespace)) {
-          $predicate = $prefix . substr($predicate, strlen($namespace));
-          break;
-        }
-      }
-      $map[$fieldName] = $predicate;
-    }
-    return $map;
   }
 
   /**
@@ -253,7 +264,6 @@ final class ResolveForm extends FormBase {
     if (!$node->hasField($fieldName) || $node->get($fieldName)->isEmpty()) {
       return NULL;
     }
-
     $parts = [];
     foreach ($node->get($fieldName) as $item) {
       $value = $item->getValue();
@@ -268,7 +278,6 @@ final class ResolveForm extends FormBase {
         $parts[] = trim(strip_tags((string) $value['value']));
       }
     }
-
     $string = trim(implode(', ', array_filter($parts)));
     return $string === '' ? NULL : mb_substr($string, 0, 400);
   }
@@ -287,34 +296,56 @@ final class ResolveForm extends FormBase {
   /**
    * {@inheritdoc}
    */
+  public function validateForm(array &$form, FormStateInterface $form_state): void {
+    $trigger = (string) ($form_state->getTriggeringElement()['#name'] ?? '');
+    if ($trigger === 'same' && isset($form['innovation']['survivor']) && !$form_state->getValue('survivor')) {
+      $form_state->setErrorByName('survivor', $this->t('Choose the innovation that survives.'));
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $trigger = (string) ($form_state->getTriggeringElement()['#name'] ?? '');
-    $solution = $this->solution;
-    $candidate = $this->candidate;
-
-    if (!$solution || !$candidate) {
+    if (!$this->solution || !$this->candidate) {
       return;
     }
 
-    switch ($trigger) {
-      case 'keep_existing':
-        $loserLabel = $solution->label();
-        $this->merger->keepExisting($solution, $candidate);
-        $this->messenger()->addStatus($this->t('Merged “@loser” into “@winner”. Its claims and raw record moved, and the migrate map now points at the surviving node.', [
-          '@loser' => $loserLabel,
-          '@winner' => $candidate->label(),
+    if ($trigger === 'same') {
+      $survivor = $form_state->getValue('survivor');
+      try {
+        $result = $this->linker->linkSame($this->solution, $this->candidate, $survivor ? (int) $survivor : NULL);
+      }
+      catch (SurvivorRequiredException) {
+        // The records joined another innovation since the form was built.
+        $this->messenger()->addError($this->t('These records are now on several innovations. Choose the one that survives.'));
+        $form_state->setRebuild();
+        return;
+      }
+
+      if ($result->innovation === NULL) {
+        $this->messenger()->addStatus($this->t('Recorded as the same innovation. No ATIO innovation exists for these records yet.'));
+      }
+      else {
+        $this->messenger()->addStatus($this->t('Recorded as the same innovation: @added source record(s) added, @replaced innovation(s) replaced.', [
+          '@added' => count($result->added),
+          '@replaced' => count($result->replaced),
         ]));
-        break;
-
-      case 'keep_both':
-        $this->merger->keepBoth($solution, $candidate);
-        $this->messenger()->addStatus($this->t('Recorded as the same innovation, kept separate and linked with sti:sameInnovationAs.'));
-        break;
-
-      case 'different':
-        $this->merger->markDifferent($solution, $candidate);
+        if (!$result->conflictsRefreshed) {
+          $this->messenger()->addWarning($this->t('Claim conflicts could not be refreshed right away and were queued for the next cron run.'));
+        }
+      }
+    }
+    elseif ($trigger === 'different') {
+      try {
+        $this->linker->markDifferent($this->solution, $this->candidate);
         $this->messenger()->addStatus($this->t('Recorded as different. This pair will not be offered again.'));
-        break;
+      }
+      catch (\LogicException $e) {
+        $this->messenger()->addError($e->getMessage());
+        return;
+      }
     }
 
     if ($this->collection) {

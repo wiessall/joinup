@@ -7,11 +7,15 @@ namespace Drupal\sti_dedupe\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\paragraphs\ParagraphInterface;
 use Drupal\sti_dedupe\CandidateStore;
+use Drupal\sti_dedupe\ContentModel;
+use Drupal\sti_dedupe\Prefixes;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Lists collections with pending reviews, and the queue for one collection.
+ * Lists pending duplicate reviews and pending claim conflicts.
  */
 final class DedupeController extends ControllerBase {
 
@@ -19,13 +23,17 @@ final class DedupeController extends ControllerBase {
 
   public function __construct(
     private readonly CandidateStore $candidates,
+    private readonly RequestStack $requestStack,
   ) {}
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): static {
-    return new static($container->get('sti_dedupe.candidates'));
+    return new static(
+      $container->get('sti_dedupe.candidates'),
+      $container->get('request_stack'),
+    );
   }
 
   /**
@@ -86,7 +94,7 @@ final class DedupeController extends ControllerBase {
     $collectionId = (int) $collection->id();
     $total = $this->candidates->countSourcesForCollection($collectionId);
 
-    $page = (int) (\Drupal::request()->query->get('page') ?? 0);
+    $page = (int) ($this->requestStack->getCurrentRequest()?->query->get('page') ?? 0);
     $offset = $page * self::PAGE_SIZE;
     $entries = $this->candidates->pageForCollection($collectionId, self::PAGE_SIZE, $offset);
 
@@ -153,6 +161,86 @@ final class DedupeController extends ControllerBase {
     $build['#cache']['max-age'] = 0;
 
     return $build;
+  }
+
+  /**
+   * Lists claim resolutions waiting for a curator, stale ones first.
+   */
+  public function conflicts(): array {
+    $storage = $this->entityTypeManager()->getStorage('paragraph');
+    $ids = $storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', ContentModel::RESOLUTION)
+      ->condition(ContentModel::RESOLUTION_STATUS, [ContentModel::STATUS_STALE, ContentModel::STATUS_PENDING], 'IN')
+      ->condition('parent_type', 'node')
+      ->sort(ContentModel::RESOLUTION_STATUS, 'DESC')
+      ->sort('id')
+      ->pager(self::PAGE_SIZE)
+      ->execute();
+
+    $rows = [];
+    foreach ($storage->loadMultiple($ids) as $resolution) {
+      if (!$resolution instanceof ParagraphInterface) {
+        continue;
+      }
+      $innovation = $resolution->getParentEntity();
+      // Only resolutions still attached to an innovation are actionable;
+      // detached ones await the paragraphs orphan purger.
+      if (!$innovation instanceof NodeInterface || !$this->isAttached($innovation, $resolution)) {
+        continue;
+      }
+      $current = 0;
+      foreach ($resolution->get(ContentModel::VERDICTS)->referencedEntities() as $verdict) {
+        $current += (int) (bool) $verdict->get(ContentModel::VERDICT_CURRENT)->value;
+      }
+      $rows[] = [
+        'innovation' => ['data' => $innovation->toLink()->toRenderable()],
+        'property' => Prefixes::compact((string) $resolution->get(ContentModel::RESOLUTION_PROPERTY)->value),
+        'status' => $resolution->get(ContentModel::RESOLUTION_STATUS)->value,
+        'values' => $current,
+        'operations' => [
+          'data' => [
+            '#type' => 'link',
+            '#title' => $this->t('Resolve'),
+            '#url' => Url::fromRoute('sti_dedupe.conflict', ['paragraph' => $resolution->id()]),
+            '#attributes' => ['class' => ['btn', 'btn-outline-primary', 'btn-sm']],
+          ],
+        ],
+      ];
+    }
+
+    return [
+      'table' => [
+        '#type' => 'table',
+        '#header' => [
+          $this->t('Innovation'),
+          $this->t('Property'),
+          $this->t('Status'),
+          $this->t('Claimed values'),
+          $this->t('Operations'),
+        ],
+        '#rows' => $rows,
+        '#attributes' => ['class' => ['table', 'table-striped']],
+        '#empty' => $this->t('No claim conflicts are waiting. Conflicts are computed on cron after imports; run <code>drush sti-dedupe:conflicts</code> to compute them now.'),
+      ],
+      'pager' => ['#type' => 'pager'],
+      '#cache' => ['max-age' => 0],
+    ];
+  }
+
+  /**
+   * Whether a resolution is in the innovation's current revision.
+   */
+  private function isAttached(NodeInterface $innovation, ParagraphInterface $resolution): bool {
+    if (!$innovation->hasField(ContentModel::RESOLUTIONS)) {
+      return FALSE;
+    }
+    foreach ($innovation->get(ContentModel::RESOLUTIONS)->getValue() as $item) {
+      if ((int) $item['target_id'] === (int) $resolution->id()) {
+        return TRUE;
+      }
+    }
+    return FALSE;
   }
 
   /**

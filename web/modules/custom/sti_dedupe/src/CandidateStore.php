@@ -153,6 +153,25 @@ final class CandidateStore {
   }
 
   /**
+   * Removes every candidate pair whose two ends are both in a set.
+   *
+   * Used after a "same" decision: within a cluster, every pair is decided by
+   * transitivity, so none of them should be offered again.
+   *
+   * @param int[] $nids
+   *   The cluster.
+   */
+  public function deletePairsWithin(array $nids): void {
+    if (count($nids) < 2) {
+      return;
+    }
+    $this->database->delete('sti_dedupe_candidate')
+      ->condition('source_nid', $nids, 'IN')
+      ->condition('candidate_nid', $nids, 'IN')
+      ->execute();
+  }
+
+  /**
    * Removes every candidate row mentioning a node, after it is deleted.
    */
   public function deleteForNode(int $nid): void {

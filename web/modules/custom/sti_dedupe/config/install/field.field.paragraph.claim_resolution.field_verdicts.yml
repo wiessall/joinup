@@ -1,0 +1,36 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.paragraph.field_verdicts
+  - paragraphs.paragraphs_type.claim_resolution
+  - paragraphs.paragraphs_type.claim_verdict
+  module:
+  - entity_reference_revisions
+  - rdf_sync
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: https://sti-portal.fao.org/ontology/atio#hasVerdict
+      type: resource
+id: paragraph.claim_resolution.field_verdicts
+field_name: field_verdicts
+entity_type: paragraph
+bundle: claim_resolution
+label: Verdicts
+description: ''
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings:
+  handler: default:paragraph
+  handler_settings:
+    target_bundles:
+      claim_verdict: claim_verdict
+    negate: 0
+    target_bundles_drag_drop:
+      claim_verdict:
+        weight: 0
+        enabled: true
+field_type: entity_reference_revisions

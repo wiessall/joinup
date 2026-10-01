@@ -2,18 +2,18 @@ langcode: en
 status: true
 dependencies:
   module:
-    - node
-    - paragraphs
-id: paragraph.field_claim_ref_node
-field_name: field_claim_ref_node
+  - node
+  - paragraphs
+id: paragraph.field_verdict_collection
+field_name: field_verdict_collection
 entity_type: paragraph
 type: entity_reference
 settings:
   target_type: node
 module: core
-locked: false
+locked: true
 cardinality: 1
-translatable: true
-indexes: {  }
+translatable: false
+indexes: {}
 persist_with_no_fields: false
 custom_storage: false

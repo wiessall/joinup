@@ -1,0 +1,19 @@
+uuid: 0c6b8ac5-8b54-436e-9db6-d9a1e5fa577d
+langcode: en
+status: true
+dependencies:
+  module:
+  - paragraphs
+id: paragraph.field_resolution_note
+field_name: field_resolution_note
+entity_type: paragraph
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: true
+cardinality: 1
+translatable: false
+indexes: {}
+persist_with_no_fields: false
+custom_storage: false

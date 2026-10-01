@@ -1,0 +1,36 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.node.atio_claim_resolutions
+  - node.type.atio_innovation
+  - paragraphs.paragraphs_type.claim_resolution
+  module:
+  - entity_reference_revisions
+  - rdf_sync
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: https://sti-portal.fao.org/ontology/atio#hasClaimResolution
+      type: resource
+id: node.atio_innovation.atio_claim_resolutions
+field_name: atio_claim_resolutions
+entity_type: node
+bundle: atio_innovation
+label: Claim resolutions
+description: Rulings on conflicting claims from the sources. Managed from Content › Import review › Claim conflicts.
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings:
+  handler: default:paragraph
+  handler_settings:
+    target_bundles:
+      claim_resolution: claim_resolution
+    negate: 0
+    target_bundles_drag_drop:
+      claim_resolution:
+        weight: 0
+        enabled: true
+field_type: entity_reference_revisions
