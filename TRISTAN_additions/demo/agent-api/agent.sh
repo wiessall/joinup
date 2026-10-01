@@ -14,6 +14,9 @@ SITE="${SITE:-https://digit-joinup-reference-2.ddev.site}"
 SPARQL="${SPARQL:-http://digit-joinup-reference-2.ddev.site:8890/sparql}"
 COLLECTION="${COLLECTION:?set COLLECTION to a collection nid, uuid or alias}"
 SOLUTION_NID="${SOLUTION_NID:-}"
+# Namespace of the sti: predicates in the graph. Entities not re-synced since
+# P0 still carry the old one: STI_NS=https://sti-portal.fao.org/ontology#
+STI_NS="${STI_NS:-https://sti-portal.fao.org/sti#}"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 OUT="${OUT:-$HERE/out}"
 mkdir -p "$OUT"
@@ -25,6 +28,7 @@ sparql() {
   local file="$1"; shift
   local query
   query="$(cat "$HERE/queries/$file")"
+  query="${query//<https:\/\/sti-portal.fao.org\/sti#>/<$STI_NS>}"
   while [ $# -gt 0 ]; do
     query="${query//__$1__/$2}"
     shift 2
@@ -45,13 +49,16 @@ uris="$(jq -r '[.[] | select(.uri != null) | "<\(.uri)>"] | join(" ")' "$OUT/01-
 sparql 00-without-innovation.rq SOLUTIONS "$uris" > "$OUT/02-without-innovation.json"
 jq -r '.results.bindings | length | "\(.) without an innovation"' "$OUT/02-without-innovation.json" >&2
 
-if [ -n "$SOLUTION_NID" ]; then
+if [ -n "${SOLUTION_URI:-}" ]; then
+  # Direct override: the REST list stops at 200 solutions.
+  solution_uri="$SOLUTION_URI"
+elif [ -n "$SOLUTION_NID" ]; then
   solution_uri="$(jq -r --argjson nid "$SOLUTION_NID" '.[] | select(.nid == $nid) | .uri' "$OUT/01-solutions.json")"
 else
   solution_uri="$(jq -r '.results.bindings[0].solution.value // empty' "$OUT/02-without-innovation.json")"
 fi
 [ -n "$solution_uri" ] && [ "$solution_uri" != null ] || { echo "No solution to work on." >&2; exit 1; }
-nid="$(jq -r --arg uri "$solution_uri" '.[] | select(.uri == $uri) | .nid' "$OUT/01-solutions.json")"
+nid="${SOLUTION_NID:-$(jq -r --arg uri "$solution_uri" '.[] | select(.uri == $uri) | .nid' "$OUT/01-solutions.json")}"
 
 say "2. REST: full content of solution $nid ($solution_uri)"
 curl -sS --fail-with-body "$SITE/node/$nid?_format=json" > "$OUT/03-solution.json"
