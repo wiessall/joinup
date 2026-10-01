@@ -161,98 +161,74 @@ function sti_dedupe_update_11001(): string {
 }
 
 /**
- * Turn the first version's sameInnovationAs claims into decisions.
+ * Record the first version's sameInnovationAs claims as decisions.
  *
- * That version wrote "same" as a claim on each solution, attributed to the
- * solution's collection, although the reviewer, not the collection, made the
- * statement. Each such claim becomes a "same" decision; the claim paragraph,
- * the matching related_solutions entry, the sameInnovationAs property term
- * and the field_claim_ref_node field are then removed. Fails, without
- * removing the field, if any such claim is left.
+ * Non-destructive. The claims stay on the solutions: "same" lives there.
+ * Each claim also becomes a "same" decision, so that clusters and the
+ * duplicate queue know about it. Claims written by the URL-literal fallback
+ * (used when field_claim_ref_node was missing) are the one exception: they
+ * are removed, and the deploy hook restore_same_as_claims writes proper ones
+ * in their place.
+ *
+ * An earlier revision of this update deleted every such claim, its
+ * related_solutions mirror, the property term and field_claim_ref_node.
+ * The pairs survived as decisions; the deploy hook writes the claims back.
  */
 function sti_dedupe_update_11002(array &$sandbox): string {
-  $entityTypeManager = \Drupal::entityTypeManager();
-  $paragraphs = $entityTypeManager->getStorage('paragraph');
+  $paragraphs = \Drupal::entityTypeManager()->getStorage('paragraph');
 
   if (!isset($sandbox['tid'])) {
     $sandbox['tid'] = _sti_dedupe_same_as_term_id();
-    $sandbox['converted'] = 0;
-    $sandbox['skipped'] = 0;
-    $sandbox['total'] = $sandbox['tid'] === NULL ? 0 : (int) $paragraphs->getQuery()
-      ->accessCheck(FALSE)
-      ->condition('type', ContentModel::CLAIM)
-      ->condition(ContentModel::CLAIM_PROPERTY, $sandbox['tid'])
-      ->count()
-      ->execute();
+    $sandbox['last'] = 0;
+    $sandbox['recorded'] = 0;
+    $sandbox['replaced'] = 0;
+  }
+  if ($sandbox['tid'] === NULL) {
+    $sandbox['#finished'] = 1;
+    return (string) t('No legacy sameInnovationAs claims.');
   }
 
-  if ($sandbox['tid'] !== NULL) {
-    $ids = $paragraphs->getQuery()
-      ->accessCheck(FALSE)
-      ->condition('type', ContentModel::CLAIM)
-      ->condition(ContentModel::CLAIM_PROPERTY, $sandbox['tid'])
-      ->sort('id')
-      ->range(0, 50)
-      ->execute();
+  $ids = $paragraphs->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('type', ContentModel::CLAIM)
+    ->condition(ContentModel::CLAIM_PROPERTY, $sandbox['tid'])
+    ->condition('id', $sandbox['last'], '>')
+    ->sort('id')
+    ->range(0, 50)
+    ->execute();
 
-    foreach ($paragraphs->loadMultiple($ids) as $claim) {
-      assert($claim instanceof ParagraphInterface);
-      if (_sti_dedupe_convert_same_as_claim($claim)) {
-        $sandbox['converted']++;
-      }
-      else {
-        $sandbox['skipped']++;
-      }
-    }
-
-    if ($ids) {
-      $done = $sandbox['converted'] + $sandbox['skipped'];
-      $sandbox['#finished'] = $sandbox['total'] > 0 ? min(0.99, $done / $sandbox['total']) : 0.99;
-      return (string) t('Converted @done of @total sameInnovationAs claims.', [
-        '@done' => $done,
-        '@total' => $sandbox['total'],
-      ]);
-    }
+  foreach ($paragraphs->loadMultiple($ids) as $claim) {
+    assert($claim instanceof ParagraphInterface);
+    $sandbox['last'] = (int) $claim->id();
+    [$recorded, $replaced] = _sti_dedupe_record_same_as_claim($claim);
+    $sandbox['recorded'] += (int) $recorded;
+    $sandbox['replaced'] += (int) $replaced;
   }
 
-  // Every claim is gone; remove the term and the legacy field.
-  if ($sandbox['tid'] !== NULL) {
-    $left = (int) $paragraphs->getQuery()
-      ->accessCheck(FALSE)
-      ->condition(ContentModel::CLAIM_PROPERTY, $sandbox['tid'])
-      ->count()
-      ->execute();
-    if ($left > 0) {
-      throw new \RuntimeException(sprintf('%d sameInnovationAs claims remain after conversion; the legacy field was not removed.', $left));
-    }
-    $entityTypeManager->getStorage('taxonomy_term')->load($sandbox['tid'])?->delete();
-  }
-  $field = $entityTypeManager->getStorage('field_config')->load('paragraph.' . ContentModel::CLAIM . '.' . ContentModel::CLAIM_REF_NODE_LEGACY);
-  $field?->delete();
-
-  $sandbox['#finished'] = 1;
-  return (string) t('Turned @converted sameInnovationAs claim(s) into decisions (@skipped skipped: one side no longer exists) and removed the legacy field.', [
-    '@converted' => $sandbox['converted'],
-    '@skipped' => $sandbox['skipped'],
+  $sandbox['#finished'] = $ids ? 0.5 : 1;
+  return (string) t('Recorded @recorded legacy sameInnovationAs claim(s) as decisions; @replaced URL-literal claim(s) left for the deploy hook to rewrite.', [
+    '@recorded' => $sandbox['recorded'],
+    '@replaced' => $sandbox['replaced'],
   ]);
 }
 
 /**
- * Converts one legacy sameInnovationAs claim and removes it.
+ * Records one legacy sameInnovationAs claim as a decision.
  *
- * @return bool
- *   TRUE when a decision was recorded; FALSE when one side no longer exists
- *   (the claim is removed either way).
+ * @return array{0: bool, 1: bool}
+ *   Whether a decision was recorded, and whether the claim was a URL-literal
+ *   fallback that was removed.
  */
-function _sti_dedupe_convert_same_as_claim(ParagraphInterface $claim): bool {
+function _sti_dedupe_record_same_as_claim(ParagraphInterface $claim): array {
   $subject = $claim->getParentEntity();
   $object = NULL;
-  if ($claim->hasField(ContentModel::CLAIM_REF_NODE_LEGACY) && !$claim->get(ContentModel::CLAIM_REF_NODE_LEGACY)->isEmpty()) {
-    $object = $claim->get(ContentModel::CLAIM_REF_NODE_LEGACY)->entity;
+  $literal = FALSE;
+  if ($claim->hasField(ContentModel::CLAIM_REF_NODE) && !$claim->get(ContentModel::CLAIM_REF_NODE)->isEmpty()) {
+    $object = $claim->get(ContentModel::CLAIM_REF_NODE)->entity;
   }
   elseif ($claim->hasField(ContentModel::CLAIM_LITERAL) && preg_match('#/node/(\d+)$#', (string) $claim->get(ContentModel::CLAIM_LITERAL)->value, $matches)) {
-    // The fallback stored the object's absolute URL as a literal.
     $object = \Drupal::entityTypeManager()->getStorage('node')->load((int) $matches[1]);
+    $literal = TRUE;
   }
 
   $recorded = FALSE;
@@ -263,40 +239,25 @@ function _sti_dedupe_convert_same_as_claim(ParagraphInterface $claim): bool {
     $recorded = TRUE;
   }
 
-  if ($subject instanceof NodeInterface && $subject->hasField(ContentModel::CLAIMS)) {
-    $items = array_values(array_filter(
-      $subject->get(ContentModel::CLAIMS)->getValue(),
-      static fn(array $item): bool => (int) $item['target_id'] !== (int) $claim->id(),
-    ));
-    $subject->set(ContentModel::CLAIMS, $items);
-    if ($object instanceof NodeInterface && $subject->hasField(ContentModel::RELATED_SOLUTIONS)) {
-      $related = array_values(array_filter(
-        $subject->get(ContentModel::RELATED_SOLUTIONS)->getValue(),
-        static fn(array $item): bool => (int) $item['target_id'] !== (int) $object->id(),
-      ));
-      $subject->set(ContentModel::RELATED_SOLUTIONS, $related);
-    }
-    $subject->setNewRevision(TRUE);
-    $subject->setRevisionLogMessage('sti_dedupe: legacy sameInnovationAs claim replaced by a duplicate decision.');
-    $subject->save();
+  if (!$literal || !$subject instanceof NodeInterface || !$subject->hasField(ContentModel::CLAIMS)) {
+    return [$recorded, FALSE];
   }
-
-  // Deleted rather than left to the orphan purger: an orphaned claim would
-  // still be synced to the graph as a FieldClaim nobody points to.
+  $items = array_values(array_filter(
+    $subject->get(ContentModel::CLAIMS)->getValue(),
+    static fn(array $item): bool => (int) $item['target_id'] !== (int) $claim->id(),
+  ));
+  $subject->set(ContentModel::CLAIMS, $items);
+  $subject->setNewRevision(TRUE);
+  $subject->setRevisionLogMessage('sti_dedupe: URL-literal sameInnovationAs claim removed; rewritten with a solution reference by the deploy hook.');
+  $subject->save();
   $claim->delete();
-  return $recorded;
+  return [$recorded, TRUE];
 }
 
 /**
- * Finds the legacy sameInnovationAs claim property term.
+ * Finds the root-level sameInnovationAs claim property term.
  */
 function _sti_dedupe_same_as_term_id(): ?int {
-  $ids = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->getQuery()
-    ->accessCheck(FALSE)
-    ->condition('vid', ContentModel::CLAIM_PROPERTIES)
-    ->condition('name', 'sameInnovationAs')
-    ->sort('tid')
-    ->range(0, 1)
-    ->execute();
-  return $ids ? (int) reset($ids) : NULL;
+  $term = \Drupal::service('sti_dedupe.same_as_claims')->findProperty();
+  return $term === NULL ? NULL : (int) $term->id();
 }

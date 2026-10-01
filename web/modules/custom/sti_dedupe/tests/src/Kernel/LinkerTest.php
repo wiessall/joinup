@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\Tests\sti_dedupe\Kernel;
 
 use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 use Drupal\sti_dedupe\DecisionStore;
 use Drupal\sti_dedupe\Exception\SurvivorRequiredException;
 use Drupal\sti_dedupe\Linker;
@@ -17,11 +18,13 @@ use PHPUnit\Framework\Attributes\Group;
  * Tests "same" and "different" decisions on pairs of solutions.
  *
  * The invariants are the ones whose failure is silent:
- * - a solution (a source record) is never edited, merged or deleted;
+ * - a solution (a source record) is never merged or deleted; "same" is a
+ *   sameInnovationAs claim on each solution of the cluster, naming every
+ *   other one and attributed to that solution's own collection;
  * - a cluster decided "same", directly or transitively, ends up on one
- *   innovation, each new source pinned at its current revision;
+ *   innovation, each source pinned at the revision carrying its claims;
  * - joining two innovations needs a survivor, and without one nothing at
- *   all is written, the decision included;
+ *   all is written, the decision and the claims included;
  * - the loser is unpublished, not deleted, recorded as replaced, excluded
  *   from lookups, and its URI resolves to the survivor.
  */
@@ -30,19 +33,22 @@ use PHPUnit\Framework\Attributes\Group;
 final class LinkerTest extends StiDedupeKernelTestBase {
 
   /**
-   * With no innovation anywhere, only the decision is recorded.
+   * With no innovation anywhere, the decision and the claims are written.
    */
-  public function testNoInnovationRecordsTheDecisionOnly(): void {
-    $a = $this->solution('Solar pump A');
-    $b = $this->solution('Solar pump B');
-    $revisions = [$a->getRevisionId(), $b->getRevisionId()];
+  public function testNoInnovationWritesDecisionAndClaims(): void {
+    $one = $this->collection('One');
+    $two = $this->collection('Two');
+    $a = $this->solution('Solar pump A', [], $one);
+    $b = $this->solution('Solar pump B', [], $two);
 
     $result = $this->linker()->linkSame($a, $b);
 
     $this->assertNull($result->innovation);
     $this->assertSame(DecisionStore::SAME, $this->decisions()->get((int) $a->id(), (int) $b->id()));
     $this->assertSame([], $this->innovationIds());
-    $this->assertSame($revisions, [$this->reload($a)->getRevisionId(), $this->reload($b)->getRevisionId()]);
+    $this->assertSame([(int) $b->id() => (int) $one->id()], $this->sameAsClaims($a), 'A names B, claimed by its own collection.');
+    $this->assertSame([(int) $a->id() => (int) $two->id()], $this->sameAsClaims($b), 'B names A, claimed by its own collection.');
+    $this->assertSame([(int) $b->id()], array_map('intval', array_column($this->reload($a)->get('related_solutions')->getValue(), 'target_id')));
   }
 
   /**
@@ -63,10 +69,8 @@ final class LinkerTest extends StiDedupeKernelTestBase {
     $reloaded = $this->reload($innovation);
     $this->assertGreaterThan($before, (int) $reloaded->getRevisionId(), 'Linking is an editorial change and gets a revision.');
     $pinned = array_column($reloaded->get('atio_derived_from')->getValue(), 'target_revision_id', 'target_id');
-    $this->assertSame((int) $b->getRevisionId(), (int) $pinned[$b->id()]);
-
-    // The source record itself is untouched.
-    $this->assertSame((int) $b->getRevisionId(), (int) $this->reload($b)->getRevisionId());
+    $this->assertSame((int) $this->reload($b)->getRevisionId(), (int) $pinned[$b->id()], 'Pinned at the revision that carries the sameInnovationAs claim.');
+    $this->assertArrayHasKey((int) $a->id(), $this->sameAsClaims($b));
   }
 
   /**
@@ -83,6 +87,9 @@ final class LinkerTest extends StiDedupeKernelTestBase {
 
     $this->assertSame([(int) $a->id(), (int) $b->id(), (int) $c->id()], $result->cluster);
     $this->assertSame([(int) $a->id(), (int) $b->id(), (int) $c->id()], $this->sources($innovation));
+    // A was never paired with C directly, but the cluster is complete.
+    $this->assertSame([(int) $b->id(), (int) $c->id()], array_keys($this->sameAsClaims($a)));
+    $this->assertSame([(int) $a->id(), (int) $b->id()], array_keys($this->sameAsClaims($c)));
   }
 
   /**
@@ -103,7 +110,9 @@ final class LinkerTest extends StiDedupeKernelTestBase {
       $this->assertEqualsCanonicalizing([(int) $x->id(), (int) $y->id()], $e->candidates);
     }
 
-    $this->assertNull($this->decisions()->get((int) $a->id(), (int) $b->id()), 'The decision is rolled back with the link.');
+    $this->assertNull($this->decisions()->get((int) $a->id(), (int) $b->id()), 'Nothing is written: no decision.');
+    $this->assertSame([], $this->sameAsClaims($a), 'Nothing is written: no claim.');
+    $this->assertSame([], $this->sameAsClaims($b));
     $this->assertSame($revisions, [$this->reload($x)->getRevisionId(), $this->reload($y)->getRevisionId()]);
     $this->assertTrue($this->reload($y)->isPublished());
   }
@@ -172,6 +181,44 @@ final class LinkerTest extends StiDedupeKernelTestBase {
 
     $this->assertTrue($result->conflictsRefreshed);
     $this->assertArrayHasKey(self::READINESS, $this->resolutions($innovation));
+  }
+
+  /**
+   * A failed check rolls back the decision and the claims alike.
+   */
+  public function testFailedCheckRollsBackClaims(): void {
+    $a = $this->solution('A');
+    $b = $this->solution('B');
+    // No collection to attribute B's claim to: refused before any write.
+    $b->set('og_audience', NULL)->save();
+
+    try {
+      $this->linker()->linkSame($a, $b);
+      $this->fail('A solution without a collection cannot carry a claim.');
+    }
+    catch (\LogicException) {
+    }
+
+    $this->assertNull($this->decisions()->get((int) $a->id(), (int) $b->id()));
+    $this->assertSame([], $this->sameAsClaims($a), 'A is not left half-linked.');
+  }
+
+  /**
+   * Returns a solution's sameInnovationAs claims as [object => claimed by].
+   *
+   * @return array<int, int>
+   *   Claimed-by collection id, keyed by the solution named, ascending.
+   */
+  private function sameAsClaims(NodeInterface $solution): array {
+    $property = $this->container->get('sti_dedupe.same_as_claims')->findProperty();
+    $out = [];
+    foreach ($this->reload($solution)->get('field_claims')->referencedEntities() as $claim) {
+      if ($property !== NULL && (int) $claim->get('field_claim_property')->target_id === (int) $property->id()) {
+        $out[(int) $claim->get('field_claim_ref_node')->target_id] = (int) $claim->get('field_claimed_by')->target_id;
+      }
+    }
+    ksort($out);
+    return $out;
   }
 
   /**

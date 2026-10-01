@@ -22,14 +22,18 @@ final class ContentModel {
   public const CLAIM_PROPERTIES = 'claim_properties';
   public const CLAIM_VALUES = 'claim_values';
 
-  // Solution and claim fields (import_ird_jsons, site config).
+  // Solution and claim fields (import_ird_jsons, OG, site config).
+  public const AUDIENCE = 'og_audience';
   public const CLAIMS = 'field_claims';
   public const CLAIMED_BY = 'field_claimed_by';
   public const CLAIM_PROPERTY = 'field_claim_property';
   public const CLAIM_REF_VALUE = 'field_claim_ref_value';
   public const CLAIM_LITERAL = 'field_claim_literal_value';
-  public const CLAIM_REF_NODE_LEGACY = 'field_claim_ref_node';
+  public const CLAIMED_AT = 'field_claimed_at';
   public const RELATED_SOLUTIONS = 'related_solutions';
+
+  // Ours: object of a sameInnovationAs claim, another solution.
+  public const CLAIM_REF_NODE = 'field_claim_ref_node';
 
   // ATIO innovation fields (atio module).
   public const DERIVED_FROM = 'atio_derived_from';

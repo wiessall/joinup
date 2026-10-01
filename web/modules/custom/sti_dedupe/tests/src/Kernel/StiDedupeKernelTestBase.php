@@ -9,6 +9,7 @@ use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\import_ird_jsons\Plugin\migrate\process\IrdClaims;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
@@ -39,6 +40,16 @@ use Drupal\Tests\user\Traits\UserCreationTrait;
 abstract class StiDedupeKernelTestBase extends KernelTestBase {
 
   use UserCreationTrait;
+
+  /**
+   * The collection solutions belong to unless a test names one.
+   */
+  private ?NodeInterface $defaultCollection = NULL;
+
+  /**
+   * The collection-level term imported claim properties sit under.
+   */
+  private ?TermInterface $propertyParent = NULL;
 
   protected const READINESS = StiUri::ATIO . 'readinessLevel';
   protected const START_YEAR = StiUri::ATIO . 'startYear';
@@ -108,6 +119,8 @@ abstract class StiDedupeKernelTestBase extends KernelTestBase {
     $this->field('paragraph', ContentModel::CLAIM, 'field_claimed_at', 'timestamp');
     $this->field('node', ContentModel::SOLUTION, ContentModel::CLAIMS, 'entity_reference_revisions', ['target_type' => 'paragraph'], -1);
     $this->field('node', ContentModel::SOLUTION, ContentModel::RELATED_SOLUTIONS, 'entity_reference', ['target_type' => 'node'], -1);
+    // OG's group audience, as a plain reference: OG itself is not needed.
+    $this->field('node', ContentModel::SOLUTION, ContentModel::AUDIENCE, 'entity_reference', ['target_type' => 'node']);
 
     // As configured by the atio module.
     $this->field('node', ContentModel::INNOVATION, ContentModel::DERIVED_FROM, 'entity_reference_revisions', ['target_type' => 'node'], -1);
@@ -202,7 +215,17 @@ abstract class StiDedupeKernelTestBase extends KernelTestBase {
    * Creates a collection-scoped claim property, optionally mapped.
    */
   protected function property(string $name, ?string $atioProperty): TermInterface {
-    $term = Term::create(['vid' => ContentModel::CLAIM_PROPERTIES, 'name' => $name]);
+    // Under a collection term, as ird_claims builds them: root-level property
+    // terms are system predicates.
+    if ($this->propertyParent === NULL) {
+      $this->propertyParent = Term::create(['vid' => ContentModel::CLAIM_PROPERTIES, 'name' => 'test-collection']);
+      $this->propertyParent->save();
+    }
+    $term = Term::create([
+      'vid' => ContentModel::CLAIM_PROPERTIES,
+      'name' => $name,
+      'parent' => [$this->propertyParent->id()],
+    ]);
     if ($atioProperty !== NULL) {
       $term->set(ContentModel::ATIO_PROPERTY, $atioProperty);
     }
@@ -254,12 +277,16 @@ abstract class StiDedupeKernelTestBase extends KernelTestBase {
    *   The title.
    * @param \Drupal\paragraphs\ParagraphInterface[] $claims
    *   Unsaved claim paragraphs.
+   * @param \Drupal\node\NodeInterface|null $collection
+   *   The collection holding it; a shared default collection when NULL.
    */
-  protected function solution(string $title, array $claims = []): NodeInterface {
+  protected function solution(string $title, array $claims = [], ?NodeInterface $collection = NULL): NodeInterface {
+    $this->defaultCollection ??= $this->collection('Default collection');
     $node = Node::create([
       'type' => ContentModel::SOLUTION,
       'title' => $title,
       ContentModel::CLAIMS => $claims,
+      ContentModel::AUDIENCE => ($collection ?? $this->defaultCollection)->id(),
     ]);
     $node->save();
     return $node;
@@ -269,7 +296,9 @@ abstract class StiDedupeKernelTestBase extends KernelTestBase {
    * Replaces one collection's claims on a solution, the way ird_claims does.
    *
    * Old paragraphs of that collection are deleted and new ones created, so
-   * claim paragraph ids change even when the values do not.
+   * claim paragraph ids change even when the values do not. Claims on a
+   * system property are kept, using ird_claims' own rule for telling them
+   * apart.
    *
    * @param \Drupal\node\NodeInterface $solution
    *   The solution being re-imported.
@@ -282,7 +311,7 @@ abstract class StiDedupeKernelTestBase extends KernelTestBase {
     $solution = $this->reload($solution);
     $kept = [];
     foreach ($solution->get(ContentModel::CLAIMS)->referencedEntities() as $claim) {
-      if ((int) $claim->get(ContentModel::CLAIMED_BY)->target_id === (int) $collection->id()) {
+      if ((int) $claim->get(ContentModel::CLAIMED_BY)->target_id === (int) $collection->id() && !IrdClaims::isSystemClaim($claim)) {
         $claim->delete();
       }
       else {

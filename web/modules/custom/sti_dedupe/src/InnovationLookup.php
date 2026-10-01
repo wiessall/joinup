@@ -49,7 +49,7 @@ final class InnovationLookup {
    * Whether the atio_innovation bundle and its derived-from field exist.
    *
    * The field belongs to the atio module; without it there is nothing to
-   * link to, and callers fall back to recording the decision only.
+   * link to, and callers record the decision and the solution claims only.
    */
   public function isAvailable(): bool {
     $definitions = $this->entityFieldManager->getFieldDefinitions('node', ContentModel::INNOVATION);

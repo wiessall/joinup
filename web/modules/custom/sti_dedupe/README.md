@@ -6,12 +6,17 @@ claims that cannot all be true.
 ## Model
 
 - A **solution** is a source record: one collection's account of an
-  innovation. It is never merged, edited or deleted by this module.
+  innovation. It is never merged or deleted by this module.
+- "These two solutions are the same innovation" **lives on the solutions**:
+  each one gets a `sameInnovationAs` claim naming the other, attributed to
+  its own collection like every other claim on it, and mirrored into
+  `related_solutions`. In the graph:
+  `?s sti:hasFieldClaim ?c . ?c sti:claimProperty <sameInnovationAs term> ; sti:claimRefValue ?other`.
 - An **ATIO innovation** (`atio_innovation`) is the curated thing. It lists
   every solution it was derived from in `atio_derived_from`
   (`atio:derivedFromSource`), each pinned at a revision.
-- "These two solutions are the same innovation" is therefore a link on the
-  innovation, not an operation on the solutions.
+- When an ATIO innovation exists, the link is also reflected there: the
+  innovation lists every solution of the cluster in `atio_derived_from`.
 - **Claims** stay on the solutions, attributed to their collections. Where
   the sources of one innovation disagree on a *single-valued* ATIO property,
   a curator rules which value is authoritative.
@@ -27,7 +32,7 @@ drush sti-dedupe:scan <collection>    → candidates, precomputed into a table
 
 | Button | What happens |
 |---|---|
-| Same innovation | The decision is recorded. The pair, plus everything already decided "same" with either (the *cluster*), goes onto the innovation(s) derived from any of them. No innovation yet → decision only. One → every cluster member is added. Several → the reviewer picks a survivor; it gains every source, the others are unpublished, recorded as replaced, and their URIs redirect to the survivor. |
+| Same innovation | The decision is recorded, and every solution in the *cluster* (the pair plus everything already decided "same" with either) gets a `sameInnovationAs` claim naming every other member. The cluster also goes onto the innovation(s) derived from any of them. No innovation yet → decision and claims only. One → every cluster member is added. Several → the reviewer picks a survivor; it gains every source, the others are unpublished, recorded as replaced, and their URIs redirect to the survivor. |
 | Not the same | The decision is recorded and the pair is never offered again. Refused if the pair was already decided "same": undoing a link is a curator's job. |
 
 Scoring uses core fields only (title, owner, country, year), never mapped
@@ -80,6 +85,9 @@ full pass, however many terms are edited).
 | Failure | Guard |
 |---|---|
 | A link half-written (some sources added, loser still published, replacement not recorded) | One transaction; `Linker::verify()` reads storage back and rolls back with an error log. |
+| A solution left without its sameInnovationAs claim | Every subject is checked before any is written; `SameAsClaims::verify()` reads storage back inside the link transaction; `LinkerTest`. |
+| A re-import deletes the sameInnovationAs claims (they are attributed to the importing collection) | `ird_claims` keeps claims whose property term sits at the root of `claim_properties` (`IrdClaims::isSystemClaim()`); `SameAsClaimsTest::testReimportKeepsSameAsClaims()`. |
+| A refused link leaves claims in a memcache entity cache after the SQL rollback | The survivor check runs before any write; entity caches of the cluster are reset on rollback. |
 | A refresh leaves resolutions out of step with claims | `ResolutionReconciler::verify()`, same pattern. |
 | A ruling saved against values the curator never saw | `StaleResolutionException` when the claimed values changed since the form loaded. |
 | A re-import silently discards a ruling | Tuple identity, `ClaimResolutionTest::testRulingSurvivesIdenticalReimport()`. |
@@ -91,23 +99,25 @@ saved, so after a failed link, re-sync the innovations involved.
 
 ## Upgrading from the merge version
 
-`ddev drush deploy` (updb, then cim) does everything, in this order:
+`ddev drush deploy` (updb, cim, then deploy hooks) does everything, in this
+order:
 
-1. `sti_rdf_update_11001()`: typed URI plugins (config only; stored URIs are
-   re-minted later with `drush sti-rdf:uri-remint` plus a graph rebuild).
+1. `sti_rdf_update_11001()`: typed URI plugins (config only).
 2. `sti_dedupe_update_11001()`: replacement table, decision indexes, and
-   "same, keep both" → "same". It stops and names any newly required module
-   that is not enabled.
-3. `sti_dedupe_update_11002()`: every `sameInnovationAs` claim (written by
-   the old version and misattributed to a collection) becomes a "same"
-   decision; the claims, their `related_solutions` mirrors, the property term
-   and `field_claim_ref_node` are removed.
-4. `cim` creates the new fields, paragraph types and settings from
-   `config/sync`. They are deliberately not created by an update hook: cim
-   would then delete or replace them, because config/sync is the truth.
+   "same, keep both" → "same".
+3. `sti_dedupe_update_11002()`: every legacy `sameInnovationAs` claim is
+   also recorded as a "same" decision. The claims stay. URL-literal fallback
+   claims are removed and rewritten in step 5.
+4. `cim` creates the new fields, paragraph types and settings, and
+   `field_claim_ref_node`, from `config/sync`.
+5. Deploy hook `restore_same_as_claims`: writes the missing
+   `sameInnovationAs` claims for every "same" cluster. Idempotent; fails
+   loudly, after finishing the other clusters, if one cannot be written
+   (usually a solution without a collection).
 
-Until step 4 has run, conflict refreshes fail loudly (no resolutions field)
-and are retried from the queue.
+An earlier revision of step 3 deleted the claims, their `related_solutions`
+mirrors, the property term and `field_claim_ref_node`. The pairs survived as
+decisions, and step 5 writes the claims back from them.
 
 "Merged" decisions from the old version name deleted nodes. They are kept as
 history and still count towards clusters.

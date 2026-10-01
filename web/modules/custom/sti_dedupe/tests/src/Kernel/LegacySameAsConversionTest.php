@@ -14,39 +14,40 @@ use PHPUnit\Framework\Attributes\Group;
 /**
  * Tests sti_dedupe_update_11002(): legacy sameInnovationAs claims.
  *
- * A one-off data migration is exactly the kind of code that fails quietly:
- * a claim left behind keeps projecting a statement nobody made, and a field
- * removed too early loses the only record of a reviewer's decision.
+ * The update records each legacy claim as a "same" decision and keeps the
+ * claim: "same" lives on the solutions. Only URL-literal fallback claims are
+ * removed, and the deploy hook writes proper ones in their place. The silent
+ * failure guarded here is the one an earlier revision of this update had:
+ * deleting the reviewer's links from the solutions.
  */
 #[Group('sti_dedupe')]
 final class LegacySameAsConversionTest extends StiDedupeKernelTestBase {
 
   /**
-   * Each legacy claim becomes a decision, and only those claims go.
+   * Reference claims stay; literal ones are recorded, removed and rewritten.
    */
-  public function testClaimsBecomeDecisions(): void {
-    $this->field('paragraph', ContentModel::CLAIM, ContentModel::CLAIM_REF_NODE_LEGACY, 'entity_reference', ['target_type' => 'node']);
+  public function testClaimsAreRecordedAndKept(): void {
+    // The first version created the term at the root of claim_properties.
     $sameAs = Term::create(['vid' => ContentModel::CLAIM_PROPERTIES, 'name' => 'sameInnovationAs']);
     $sameAs->save();
 
     $one = $this->collection('One');
     $two = $this->collection('Two');
     $readiness = $this->property('readiness', self::READINESS);
-    $a = $this->solution('A', [$this->claim($one, $readiness, 'TRL 5')]);
-    $b = $this->solution('B');
-    $c = $this->solution('C');
+    $a = $this->solution('A', [$this->claim($one, $readiness, 'TRL 5')], $one);
+    $b = $this->solution('B', [], $two);
+    $c = $this->solution('C', [], $two);
 
-    // What the first version wrote for "same, keep both" on A and B: a claim
-    // on each side plus a related_solutions mirror.
+    // What the first version wrote for "same, keep both" on A and B.
     $a->get(ContentModel::CLAIMS)->appendItem(Paragraph::create([
       'type' => ContentModel::CLAIM,
       ContentModel::CLAIMED_BY => $one->id(),
       ContentModel::CLAIM_PROPERTY => $sameAs->id(),
-      ContentModel::CLAIM_REF_NODE_LEGACY => $b->id(),
+      ContentModel::CLAIM_REF_NODE => $b->id(),
     ]));
-    $a->set(ContentModel::RELATED_SOLUTIONS, [$b->id(), $c->id()]);
+    $a->set(ContentModel::RELATED_SOLUTIONS, [$b->id()]);
     $a->save();
-    // Its fallback, when field_claim_ref_node was missing: a URL literal.
+    // Its fallback when field_claim_ref_node was missing: a URL literal.
     $b->get(ContentModel::CLAIMS)->appendItem(Paragraph::create([
       'type' => ContentModel::CLAIM,
       ContentModel::CLAIMED_BY => $two->id(),
@@ -61,19 +62,13 @@ final class LegacySameAsConversionTest extends StiDedupeKernelTestBase {
     $this->assertSame(DecisionStore::SAME, $decisions->get((int) $a->id(), (int) $b->id()));
     $this->assertSame(DecisionStore::SAME, $decisions->get((int) $b->id(), (int) $c->id()));
 
-    $a = $this->reload($a);
-    $this->assertCount(1, $a->get(ContentModel::CLAIMS), 'The ordinary claim stays.');
-    $this->assertSame((int) $readiness->id(), (int) $a->get(ContentModel::CLAIMS)->entity->get(ContentModel::CLAIM_PROPERTY)->target_id);
-    $this->assertSame([(int) $c->id()], array_map('intval', array_column($a->get(ContentModel::RELATED_SOLUTIONS)->getValue(), 'target_id')), 'Only the mirrored link is removed.');
-    $this->assertCount(0, $this->reload($b)->get(ContentModel::CLAIMS));
-
-    $this->assertNull(Term::load($sameAs->id()));
-    $this->assertNull(FieldConfig::loadByName('paragraph', ContentModel::CLAIM, ContentModel::CLAIM_REF_NODE_LEGACY));
-    $this->assertSame(0, (int) $this->container->get('entity_type.manager')->getStorage('paragraph')->getQuery()
-      ->accessCheck(FALSE)
-      ->condition(ContentModel::CLAIM_PROPERTY, $sameAs->id())
-      ->count()
-      ->execute());
+    $sameAsClaims = $this->container->get('sti_dedupe.same_as_claims');
+    $this->assertSame((int) $sameAs->id(), (int) $sameAsClaims->findProperty()?->id(), 'The legacy root term is reused.');
+    $this->assertSame([(int) $b->id()], $sameAsClaims->objectsOf($this->reload($a)), 'The reference claim stays.');
+    $this->assertCount(2, $this->reload($a)->get(ContentModel::CLAIMS), 'Nothing else on A is touched.');
+    $this->assertSame([(int) $b->id()], array_map('intval', array_column($this->reload($a)->get(ContentModel::RELATED_SOLUTIONS)->getValue(), 'target_id')));
+    $this->assertCount(0, $this->reload($b)->get(ContentModel::CLAIMS), 'The literal fallback is removed.');
+    $this->assertNotNull(FieldConfig::loadByName('paragraph', ContentModel::CLAIM, ContentModel::CLAIM_REF_NODE));
   }
 
   /**
@@ -81,7 +76,7 @@ final class LegacySameAsConversionTest extends StiDedupeKernelTestBase {
    */
   public function testNothingToConvert(): void {
     $this->runUpdate();
-    $this->assertNull(FieldConfig::loadByName('paragraph', ContentModel::CLAIM, ContentModel::CLAIM_REF_NODE_LEGACY));
+    $this->assertNull($this->container->get('sti_dedupe.same_as_claims')->findProperty());
   }
 
   /**
