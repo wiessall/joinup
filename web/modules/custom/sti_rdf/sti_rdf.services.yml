@@ -29,9 +29,15 @@ services:
       - '@config.factory'
       - '@sti_rdf.logger'
 
-  sti_rdf.ontology_document_builder:
-    class: Drupal\sti_rdf\Service\OntologyDocumentBuilder
+  sti_rdf.mapping_reader:
+    class: Drupal\sti_rdf\Service\MappingReader
     arguments:
       - '@entity_type.manager'
       - '@entity_field.manager'
+  Drupal\sti_rdf\Service\MappingReaderInterface: '@sti_rdf.mapping_reader'
+
+  sti_rdf.ontology_document_builder:
+    class: Drupal\sti_rdf\Service\OntologyDocumentBuilder
+    arguments:
+      - '@sti_rdf.mapping_reader'
       - '@extension.list.module'
