@@ -1,0 +1,75 @@
+<?php
+
+/**
+ * @file
+ * Install and update hooks for STI RDF.
+ */
+
+declare(strict_types=1);
+
+/**
+ * P0: move STI entities to https://sti-portal.fao.org/id/{type}/{uuid}.
+ *
+ * Switches every mapped STI bundle to an 'sti_namespace:{type}' URI plugin
+ * (collections and owners leave Joinup's data.europa.eu/w21 namespace), then
+ * rewrites every stored legacy URI. Fails if any legacy URI is left.
+ *
+ * After this update: drop the triplestore graph and run
+ *   ddev drush rdf_sync:synchronize node
+ *   ddev drush rdf_sync:synchronize paragraph
+ *   ddev drush rdf_sync:synchronize taxonomy_term
+ * because rdf_sync cannot delete triples written under URIs it no longer
+ * knows.
+ */
+function sti_rdf_update_11001(array &$sandbox): string {
+  // \Drupal::service() is the only way in: update hooks are procedural and
+  // offer no injection point.
+  /** @var \Drupal\sti_rdf\Service\UriReminter $reminter */
+  $reminter = \Drupal::service('sti_rdf.uri_reminter');
+
+  if (!isset($sandbox['scopes'])) {
+    // The URI generator just gained a deriver; make sure plugin discovery
+    // does not serve the old, underived definition from cache.
+    \Drupal::service('plugin.cache_clearer')->clearCachedDefinitions();
+    $sandbox['bundles'] = $reminter->applyConfigChanges();
+    $sandbox['scopes'] = $reminter->scopes();
+    $sandbox['current'] = 0;
+    $sandbox['cursor'] = 0;
+    $sandbox['rewritten'] = 0;
+  }
+
+  $total = count($sandbox['scopes']);
+  if ($sandbox['current'] < $total) {
+    $scope = $sandbox['scopes'][$sandbox['current']];
+    $result = $reminter->remintBatch($scope, (int) $sandbox['cursor'], 1000);
+    $sandbox['rewritten'] += $result['rewritten'];
+    if ($result['examined'] === 0) {
+      $sandbox['current']++;
+      $sandbox['cursor'] = 0;
+    }
+    else {
+      $sandbox['cursor'] = $result['last_id'];
+    }
+  }
+
+  if ($sandbox['current'] < $total) {
+    $sandbox['#finished'] = $sandbox['current'] / $total;
+    return (string) t('Re-minting STI URIs: scope @n of @total.', [
+      '@n' => $sandbox['current'] + 1,
+      '@total' => $total,
+    ]);
+  }
+
+  $left = $reminter->verify();
+  if ($left) {
+    // Data would now be inconsistent: some entities on the new pattern, some
+    // on the old one. Fail the update so that it is re-run, not forgotten.
+    throw new \RuntimeException(sprintf('Legacy URIs remain after re-minting: %s. Run drush sti-rdf:uri-report.', json_encode($left)));
+  }
+
+  $sandbox['#finished'] = 1;
+  return (string) t('Switched @bundles bundle(s) to typed URI plugins and rewrote @count URI(s). Now drop the graph and run rdf_sync:synchronize for node, paragraph and taxonomy_term.', [
+    '@bundles' => $sandbox['bundles'],
+    '@count' => $sandbox['rewritten'],
+  ]);
+}

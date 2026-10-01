@@ -19,3 +19,19 @@ services:
     class: Drupal\sti_rdf\Service\AnnotationLibrary
     arguments:
       - '@database'
+
+  sti_rdf.uri_reminter:
+    class: Drupal\sti_rdf\Service\UriReminter
+    arguments:
+      - '@entity_type.manager'
+      - '@entity_field.manager'
+      - '@database'
+      - '@config.factory'
+      - '@sti_rdf.logger'
+
+  sti_rdf.ontology_document_builder:
+    class: Drupal\sti_rdf\Service\OntologyDocumentBuilder
+    arguments:
+      - '@entity_type.manager'
+      - '@entity_field.manager'
+      - '@extension.list.module'

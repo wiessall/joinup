@@ -32,3 +32,36 @@ sti_rdf.reindex:
     _controller: '\Drupal\sti_rdf\Controller\CollectionSearchController::reindex'
   requirements:
     _permission: 'administer site configuration'
+
+# P0: instance URIs https://sti-portal.fao.org/id/{type}/{uuid} dereference
+# here. The type requirement mirrors \Drupal\sti_rdf\StiUri::TYPES; keep the
+# two in step (StiUriTest asserts it).
+sti_rdf.id:
+  path: '/id/{type}/{uuid}'
+  defaults:
+    _controller: '\Drupal\sti_rdf\Controller\IdResolverController::resolve'
+  requirements:
+    # Open on purpose: instance URIs must dereference for anyone. The
+    # controller checks view access on the resolved entity and answers 404.
+    _access: 'TRUE'
+    type: 'source-record|innovation|annotation|collection|agent|claim|claim-resolution|claim-verdict|property|concept'
+    uuid: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+
+# P0: the namespace IRIs dereference to their namespace documents.
+sti_rdf.ontology.sti:
+  path: '/ontology'
+  defaults:
+    _controller: '\Drupal\sti_rdf\Controller\OntologyController::document'
+    prefix: sti
+  requirements:
+    # Open on purpose: a namespace document is public by definition.
+    _access: 'TRUE'
+
+sti_rdf.ontology.atio:
+  path: '/ontology/atio'
+  defaults:
+    _controller: '\Drupal\sti_rdf\Controller\OntologyController::document'
+    prefix: atio
+  requirements:
+    # Open on purpose: a namespace document is public by definition.
+    _access: 'TRUE'
