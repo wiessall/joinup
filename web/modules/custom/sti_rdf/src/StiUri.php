@@ -90,10 +90,13 @@ final class StiUri {
     if (!isset(self::TYPES[$type])) {
       throw new \InvalidArgumentException(sprintf('Unknown STI URI type "%s". Known types: %s.', $type, implode(', ', array_keys(self::TYPES))));
     }
+    // Normalise first: Uuid::isValid() accepts lower case only, and one
+    // entity must have exactly one URI.
+    $uuid = strtolower($uuid);
     if (!Uuid::isValid($uuid)) {
       throw new \InvalidArgumentException(sprintf('"%s" is not a valid UUID.', $uuid));
     }
-    return self::ID_BASE . $type . '/' . strtolower($uuid);
+    return self::ID_BASE . $type . '/' . $uuid;
   }
 
   /**
@@ -129,7 +132,9 @@ final class StiUri {
    * Returns the regular expression matching every type slug, for routing.
    */
   public static function typeRequirement(): string {
-    return implode('|', array_map(static fn(string $type): string => preg_quote($type, '/'), array_keys(self::TYPES)));
+    // Type slugs are lower-case letters and hyphens only (asserted in
+    // StiUriTest), so they are used in the pattern as they are.
+    return implode('|', array_keys(self::TYPES));
   }
 
 }
