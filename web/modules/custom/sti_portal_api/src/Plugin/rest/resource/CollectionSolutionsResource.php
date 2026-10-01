@@ -3,6 +3,7 @@
 namespace Drupal\sti_portal_api\Plugin\rest\resource;
 
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\rest\Plugin\ResourceBase;
@@ -56,6 +57,7 @@ class CollectionSolutionsResource extends ResourceBase {
     LoggerInterface $logger,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected FileUrlGeneratorInterface $fileUrlGenerator,
+    protected Connection $database,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
   }
@@ -69,6 +71,7 @@ class CollectionSolutionsResource extends ResourceBase {
       $container->get('logger.factory')->get('sti_portal_api'),
       $container->get('entity_type.manager'),
       $container->get('file_url_generator'),
+      $container->get('database'),
     );
   }
 
@@ -93,11 +96,15 @@ class CollectionSolutionsResource extends ResourceBase {
       ->range(0, 200)
       ->execute();
 
+    $uris = $this->graphUris($ids);
     $rows = [];
     foreach ($storage->loadMultiple($ids) as $node) {
       $rows[] = [
         'nid'      => (int) $node->id(),
         'uuid'     => $node->uuid(),
+        // The subject of this solution's triples in the graph, so a client
+        // can go from this list straight to SPARQL. NULL until first synced.
+        'uri'      => $uris[(int) $node->id()] ?? NULL,
         'title'    => $node->label(),
         'abstract' => $this->abstractOf($node),
         'logo'     => $this->logoOf($node),
@@ -116,6 +123,30 @@ class CollectionSolutionsResource extends ResourceBase {
     $response->addCacheableDependency($cache);
 
     return $response;
+  }
+
+  /**
+   * Reads the URIs rdf_sync stored for the given nodes.
+   *
+   * Read from rdf_sync_uri rather than computed from the UUID: solutions
+   * synced before the P0 URI pattern keep their earlier URI until re-minted.
+   *
+   * @param array $nids
+   *   Node ids.
+   *
+   * @return array<int, string>
+   *   URI keyed by node id.
+   */
+  private function graphUris(array $nids): array {
+    if (!$nids || !$this->database->schema()->tableExists('rdf_sync_uri')) {
+      return [];
+    }
+    return array_map('strval', $this->database->select('rdf_sync_uri', 'u')
+      ->fields('u', ['entity_id', 'uri'])
+      ->condition('u.entity_type', 'node')
+      ->condition('u.entity_id', array_values($nids), 'IN')
+      ->execute()
+      ->fetchAllKeyed());
   }
 
   /**

@@ -36,6 +36,13 @@ services:
       - '@entity_field.manager'
   Drupal\sti_rdf\Service\MappingReaderInterface: '@sti_rdf.mapping_reader'
 
+  sti_rdf.mapping_term_source:
+    class: Drupal\sti_rdf\Service\MappingTermSource
+    arguments:
+      - '@entity_type.manager'
+      - '@sti_rdf.mapping_reader'
+      - '@database'
+
   sti_rdf.ontology_document_builder:
     class: Drupal\sti_rdf\Service\OntologyDocumentBuilder
     arguments:

@@ -144,7 +144,16 @@ pre.ttl{font-family:var(--mono);font-size:11px;line-height:1.8;
 </header>
 
 <div class="load-bar">
-  <label>Load annotations from JSON:</label>
+  <label>Load from site:</label>
+  <div class="coll-load">
+    <select class="fsel" id="src-stf"></select>
+    <button class="fbtn" onclick="loadSource('stf')">Load left</button>
+  </div>
+  <div class="coll-load">
+    <select class="fsel" id="src-eca"></select>
+    <button class="fbtn" onclick="loadSource('eca')">Load right</button>
+  </div>
+  <label>or JSON:</label>
   <div class="coll-load">
     <span class="coll-tag tag-stf" id="stfLabel">STF</span>
     <button class="fbtn" onclick="document.getElementById('fi-stf').click()">Choose file</button>
@@ -426,25 +435,57 @@ async function fetchUrl(side) {
     ingest(await r.json(), side, url);
   } catch(err) { alert('Fetch failed: '+err.message); }
 }
+// ── Site sources (graph URIs) ─────────────────────────────────────────────────
+// Term lists come from /admin/curate/skos/terms/{source}: ATIO predicates, or
+// one collection's claim properties with the URI rdf_sync stored for each.
+// Mappings exported from these join the claims in the graph; mappings from
+// annotation JSON files use made-up slug URIs and do not.
+async function initSources() {
+  try {
+    const r = await fetch('/admin/curate/skos/sources', {credentials:'same-origin'});
+    if (!r.ok) throw new Error('HTTP '+r.status);
+    const sources = await r.json();
+    for (const side of ['stf','eca']) {
+      document.getElementById('src-'+side).innerHTML = sources
+        .map(x => `<option value="${x.id}">${x.label}</option>`).join('');
+    }
+    // Default: a collection on the left, ATIO on the right.
+    if (sources.length > 1) document.getElementById('src-stf').value = sources[1].id;
+    document.getElementById('src-eca').value = 'atio';
+  } catch (err) {
+    console.warn('Site sources unavailable (page opened outside Drupal?)', err);
+  }
+}
+async function loadSource(side) {
+  const id = document.getElementById('src-'+side).value;
+  if (!id) return;
+  try {
+    const r = await fetch('/admin/curate/skos/terms/'+encodeURIComponent(id), {credentials:'same-origin'});
+    if (!r.ok) throw new Error('HTTP '+r.status);
+    const data = await r.json();
+    if (data.unsynced && data.unsynced.length) {
+      alert(data.unsynced.length+' term(s) of '+data.meta.label+' have no URI yet (never synced) and are left out:\n'+data.unsynced.join(', '));
+    }
+    setSide(side, data.meta.label, data.terms.map(t => ({id:mkId(), label:t.label, uri:t.uri})));
+  } catch (err) { alert('Loading '+id+' failed: '+err.message); }
+}
+function setSide(side, label, items) {
+  if (side==='stf') stfItems = items; else ecaItems = items;
+  sideLabel[side] = label;
+  document.getElementById(side+'Label').textContent = label;
+  document.getElementById(side+'ColHead').textContent = '● ' + label;
+  document.getElementById(side+'GapBtn').textContent = '+ gap ' + label;
+  padToSameLength();
+  renderAll();
+}
+const sideLabel = {stf:'STF', eca:'ECA'};
+
 function ingest(data, side, src) {
   const keys = new Set();
   (data.records||[]).forEach(rec => Object.keys(rec._annotations||{}).forEach(k=>keys.add(k)));
   if (!keys.size) { alert('No _annotations keys found.'); return; }
   const label = data.meta?.collection_label || data.meta?.collection_id || src;
-  const items = [...keys].sort().map(k => ({id:mkId(), label:k}));
-  if (side==='stf') {
-    stfItems=items;
-    document.getElementById('stfLabel').textContent = label;
-    document.getElementById('stfColHead').textContent = '● ' + label;
-    document.getElementById('stfGapBtn').textContent = '+ gap' + label;
-  } else {
-    ecaItems=items;
-    document.getElementById('ecaLabel').textContent = label;
-    document.getElementById('ecaColHead').textContent = '● ' + label;
-    document.getElementById('ecaGapBtn').textContent = '+ gap' + label;
-  }
-  padToSameLength();
-  renderAll();
+  setSide(side, label, [...keys].sort().map(k => ({id:mkId(), label:k})));
 }
 
 // ── Turtle ────────────────────────────────────────────────────────────────────
@@ -452,36 +493,41 @@ const BASE = 'https://data.joinup.fao.org/annotation/';
 const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 
 function buildTtl() {
-  const n=rowCount(), triples=[], sSet=new Set(), eSet=new Set();
+  const n=rowCount(), triples=[], labels=new Map();
+  let slugs = false;
+  const ref = (item, side) => {
+    if (item.uri) return '&lt;'+item.uri+'&gt;';
+    slugs = true;
+    return side+':'+slug(item.label);
+  };
   for (let i=0; i<n; i++) {
-    const s=stfItems[i]?.label, e=ecaItems[i]?.label, r=getRelAt(i);
-    if (s&&e&&r) { triples.push({s,e,r}); sSet.add(s); eSet.add(e); }
+    const s=stfItems[i], e=ecaItems[i], r=getRelAt(i);
+    if (s?.label && e?.label && r) {
+      const sr=ref(s,'stf'), er=ref(e,'eca');
+      triples.push({sr,er,r}); labels.set(sr,s.label); labels.set(er,e.label);
+    }
   }
   const h=s=>`<span class="tc">${s}</span>`;
   const p=s=>`<span class="tp">${s}</span>`;
   const u=s=>`<span class="tu">${s}</span>`;
   const k=s=>`<span class="tk">${s}</span>`;
-  const sl = document.getElementById('stfLabel').textContent;
-  const el = document.getElementById('ecaLabel').textContent;
+  const q=s=>'"'+String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"')+'"';
   const lines = [
+    h('# SKOS mappings: '+sideLabel.stf+' → '+sideLabel.eca+', '+new Date().toISOString()),
+    h('# Load into the named graph https://sti-portal.fao.org/graph/mappings,'),
+    h('# not into rdf_sync\'s graph: rdf_sync rewrites a term\'s triples on save.'),
     p('@prefix skos: &lt;http://www.w3.org/2004/02/skos/core#&gt; .'),
     p('@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .'),
-    p('@prefix stf:  &lt;'+BASE+'stf/&gt; .'),
-    p('@prefix eca:  &lt;'+BASE+'eca/&gt; .'),
-    '',
-    h('# ── Schemes ──────────────────────────────────────────────────────────────────'),
-    `${u('&lt;'+BASE+'scheme/stf&gt;')} a ${k('skos:ConceptScheme')} ; rdfs:label "${sl}" .`,
-    `${u('&lt;'+BASE+'scheme/eca&gt;')} a ${k('skos:ConceptScheme')} ; rdfs:label "${el}" .`,
-    '',
-    h('# ── STF concepts ─────────────────────────────────────────────────────────────'),
-    ...[...sSet].map(f=>`${u('stf:'+slug(f))} a ${k('skos:Concept')} ; ${k('skos:inScheme')} ${u('&lt;'+BASE+'scheme/stf&gt;')} ; rdfs:label "${f}" .`),
-    '',
-    h('# ── ECA concepts ─────────────────────────────────────────────────────────────'),
-    ...[...eSet].map(f=>`${u('eca:'+slug(f))} a ${k('skos:Concept')} ; ${k('skos:inScheme')} ${u('&lt;'+BASE+'scheme/eca&gt;')} ; rdfs:label "${f}" .`),
-    '',
-    h('# ── Mappings ─────────────────────────────────────────────────────────────────'),
-    ...triples.map(t=>`${u('stf:'+slug(t.s))} ${k('skos:'+t.r)} ${u('eca:'+slug(t.e))} .`),
   ];
+  if (slugs) {
+    lines.push(p('@prefix stf:  &lt;'+BASE+'stf/&gt; .'), p('@prefix eca:  &lt;'+BASE+'eca/&gt; .'),
+      h('# WARNING: some terms came from annotation JSON and have made-up URIs;'),
+      h('# their mappings will not join the claims in the graph.'));
+  }
+  lines.push('', h('# ── Labels ───────────────────────────────────────────────────────────────────'));
+  for (const [r,l] of labels) lines.push(`${u(r)} ${k('rdfs:label')} ${q(l)} .`);
+  lines.push('', h('# ── Mappings ─────────────────────────────────────────────────────────────────'));
+  for (const t of triples) lines.push(`${u(t.sr)} ${k('skos:'+t.r)} ${u(t.er)} .`);
   document.getElementById('ttlN').textContent = triples.length+' mapping triples';
   return lines.join('\n');
 }
@@ -492,12 +538,13 @@ function copyTtl()    { navigator.clipboard.writeText(document.getElementById('t
 function dlTtl() {
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([document.getElementById('ttlOut').innerText],{type:'text/turtle'}));
-  a.download='skos_mappings.ttl'; a.click();
+  a.download='skos_'+slug(sideLabel.stf)+'__'+slug(sideLabel.eca)+'.ttl'; a.click();
 }
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
 initDefault();
 renderAll();
+initSources();
 </script>
 </body>
 </html>
