@@ -6,6 +6,22 @@ sti_rdf.curate.skos:
   requirements:
     _permission: 'access content'
 
+# Term lists for the SKOS mapper above, with the URIs the graph uses.
+sti_rdf.curate.skos.sources:
+  path: '/admin/curate/skos/sources'
+  defaults:
+    _controller: '\Drupal\sti_rdf\Controller\MappingTermsController::sources'
+  requirements:
+    _permission: 'access content'
+
+sti_rdf.curate.skos.terms:
+  path: '/admin/curate/skos/terms/{source}'
+  defaults:
+    _controller: '\Drupal\sti_rdf\Controller\MappingTermsController::terms'
+  requirements:
+    _permission: 'access content'
+    source: 'atio|\d+'
+
 # Dynamic per-collection faceted search.
 #
 # IMPORTANT: if your site already has nodes/aliases at /collection/{slug},
