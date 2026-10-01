@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.paragraph.field_resolved_at
+  - paragraphs.paragraphs_type.claim_resolution
+  module:
+  - rdf_sync
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: http://www.w3.org/ns/prov#generatedAtTime
+      type: xsd:dateTime
+id: paragraph.claim_resolution.field_resolved_at
+field_name: field_resolved_at
+entity_type: paragraph
+bundle: claim_resolution
+label: Resolved at
+description: ''
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings: {}
+field_type: timestamp

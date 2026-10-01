@@ -1,0 +1,19 @@
+uuid: 87c854b5-0610-4781-a346-742c7b23d202
+langcode: en
+status: true
+dependencies:
+  module:
+  - paragraphs
+id: paragraph.field_verdict_value_key
+field_name: field_verdict_value_key
+entity_type: paragraph
+type: string_long
+settings:
+  case_sensitive: true
+module: core
+locked: true
+cardinality: 1
+translatable: false
+indexes: {}
+persist_with_no_fields: false
+custom_storage: false

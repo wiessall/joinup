@@ -6,6 +6,27 @@ sti_dedupe.collections:
   requirements:
     _permission: 'review sti duplicates'
 
+sti_dedupe.conflicts:
+  path: '/admin/content/dedupe/conflicts'
+  defaults:
+    _controller: '\Drupal\sti_dedupe\Controller\DedupeController::conflicts'
+    _title: 'Claim conflicts'
+  requirements:
+    _permission: 'resolve sti claim conflicts'
+
+sti_dedupe.conflict:
+  path: '/admin/content/dedupe/conflicts/{paragraph}'
+  defaults:
+    _form: '\Drupal\sti_dedupe\Form\ConflictResolveForm'
+    _title: 'Rule on conflicting claims'
+  options:
+    parameters:
+      paragraph:
+        type: 'entity:paragraph'
+  requirements:
+    _permission: 'resolve sti claim conflicts'
+    paragraph: \d+
+
 sti_dedupe.review:
   path: '/admin/content/dedupe/{collection}'
   defaults:

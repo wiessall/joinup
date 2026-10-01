@@ -14,12 +14,6 @@ sti_dedupe.settings:
       sequence:
         type: string
         label: 'Index id'
-    migration_tags:
-      type: sequence
-      label: 'Migration tags whose id maps are repointed on merge'
-      sequence:
-        type: string
-        label: 'Tag'
     compare_fields:
       type: sequence
       label: 'Core fields shown in the side-by-side comparison'
@@ -42,3 +36,19 @@ sti_dedupe.settings:
         year:
           type: float
           label: 'Year proximity'
+    exclusive_properties:
+      type: mapping
+      label: 'Adjustments to which ATIO properties count as single-valued'
+      mapping:
+        add:
+          type: sequence
+          label: 'Also single-valued'
+          sequence:
+            type: uri
+            label: 'Property URI'
+        remove:
+          type: sequence
+          label: 'Never compared'
+          sequence:
+            type: uri
+            label: 'Property URI'

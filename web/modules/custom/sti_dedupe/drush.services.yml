@@ -1,9 +1,0 @@
-services:
-  sti_dedupe.commands:
-    class: \Drupal\sti_dedupe\Commands\DedupeCommands
-    arguments:
-      - '@entity_type.manager'
-      - '@sti_dedupe.finder'
-      - '@sti_dedupe.candidates'
-    tags:
-      - { name: drush.command }

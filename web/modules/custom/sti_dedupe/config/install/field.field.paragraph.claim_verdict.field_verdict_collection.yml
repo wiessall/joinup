@@ -1,0 +1,35 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.paragraph.field_verdict_collection
+  - node.type.collection
+  - paragraphs.paragraphs_type.claim_verdict
+  module:
+  - rdf_sync
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: https://sti-portal.fao.org/ontology#claimedBy
+      type: resource
+id: paragraph.claim_verdict.field_verdict_collection
+field_name: field_verdict_collection
+entity_type: paragraph
+bundle: claim_verdict
+label: Claimed by
+description: ''
+required: true
+translatable: false
+default_value: []
+default_value_callback: ''
+settings:
+  handler: default:node
+  handler_settings:
+    target_bundles:
+      collection: collection
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,34 +1,76 @@
 services:
+  _defaults:
+    autowire: false
+
+  logger.channel.sti_dedupe:
+    parent: logger.channel_base
+    arguments: ['sti_dedupe']
+
   sti_dedupe.decisions:
     class: Drupal\sti_dedupe\DecisionStore
-    arguments:
-      - '@database'
-      - '@current_user'
-      - '@datetime.time'
+    arguments: ['@database', '@current_user', '@datetime.time']
+  Drupal\sti_dedupe\DecisionStore: '@sti_dedupe.decisions'
 
   sti_dedupe.candidates:
     class: Drupal\sti_dedupe\CandidateStore
-    arguments:
-      - '@database'
-      - '@datetime.time'
+    arguments: ['@database', '@datetime.time']
+  Drupal\sti_dedupe\CandidateStore: '@sti_dedupe.candidates'
+
+  sti_dedupe.replacements:
+    class: Drupal\sti_dedupe\ReplacementStore
+    arguments: ['@database', '@current_user', '@datetime.time']
+  Drupal\sti_dedupe\ReplacementStore: '@sti_dedupe.replacements'
+
+  sti_dedupe.innovation_lookup:
+    class: Drupal\sti_dedupe\InnovationLookup
+    arguments: ['@entity_type.manager', '@entity_field.manager', '@sti_dedupe.replacements']
+  Drupal\sti_dedupe\InnovationLookup: '@sti_dedupe.innovation_lookup'
+
+  sti_dedupe.conflict_queue:
+    class: Drupal\sti_dedupe\ConflictQueue
+    arguments: ['@queue', '@state']
+  Drupal\sti_dedupe\ConflictQueue: '@sti_dedupe.conflict_queue'
 
   sti_dedupe.finder:
     class: Drupal\sti_dedupe\DuplicateFinder
-    arguments:
-      - '@entity_type.manager'
-      - '@config.factory'
-      - '@sti_dedupe.decisions'
-      - '@logger.factory'
+    arguments: ['@entity_type.manager', '@config.factory', '@sti_dedupe.decisions', '@logger.factory']
 
-  sti_dedupe.merger:
-    class: Drupal\sti_dedupe\Merger
+  sti_dedupe.claim_reader:
+    class: Drupal\sti_dedupe\Claims\ClaimReader
+    arguments: ['@entity_type.manager']
+
+  sti_dedupe.exclusive_properties:
+    class: Drupal\sti_dedupe\Claims\ExclusiveProperties
+    arguments: ['@sti_rdf.mapping_reader', '@entity_field.manager', '@config.factory']
+
+  sti_dedupe.conflict_detector:
+    class: Drupal\sti_dedupe\Claims\ConflictDetector
+    arguments: ['@sti_dedupe.claim_reader', '@sti_dedupe.exclusive_properties']
+
+  sti_dedupe.resolution_reconciler:
+    class: Drupal\sti_dedupe\Claims\ResolutionReconciler
+    arguments: ['@entity_type.manager', '@database', '@sti_dedupe.conflict_detector', '@logger.channel.sti_dedupe']
+
+  sti_dedupe.resolution_writer:
+    class: Drupal\sti_dedupe\Claims\ResolutionWriter
+    arguments: ['@entity_type.manager', '@database', '@sti_dedupe.resolution_reconciler', '@datetime.time', '@logger.channel.sti_dedupe']
+
+  sti_dedupe.linker:
+    class: Drupal\sti_dedupe\Linker
     arguments:
       - '@entity_type.manager'
       - '@database'
-      - '@plugin.manager.migration'
       - '@sti_dedupe.decisions'
       - '@sti_dedupe.candidates'
-      - '@config.factory'
-      - '@module_handler'
-      - '@logger.factory'
-      - '@datetime.time'
+      - '@sti_dedupe.replacements'
+      - '@sti_dedupe.innovation_lookup'
+      - '@sti_dedupe.resolution_reconciler'
+      - '@sti_dedupe.conflict_queue'
+      - '@current_user'
+      - '@logger.channel.sti_dedupe'
+
+  sti_dedupe.replaced_innovation_subscriber:
+    class: Drupal\sti_dedupe\EventSubscriber\ReplacedInnovationSubscriber
+    arguments: ['@entity.repository', '@sti_dedupe.replacements']
+    tags:
+      - { name: event_subscriber }

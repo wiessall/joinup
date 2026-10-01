@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+  - field.storage.taxonomy_term.field_atio_property
+  - taxonomy.vocabulary.claim_properties
+  module:
+  - rdf_sync
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: http://www.w3.org/2000/01/rdf-schema#subPropertyOf
+      type: resource
+id: taxonomy_term.claim_properties.field_atio_property
+field_name: field_atio_property
+entity_type: taxonomy_term
+bundle: claim_properties
+label: ATIO property
+description: The ATIO property this collection's property maps to, as a full URI. Unmapped properties are never compared across collections.
+required: false
+translatable: false
+default_value: []
+default_value_callback: ''
+settings: {}
+field_type: uri

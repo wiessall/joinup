@@ -1,0 +1,9 @@
+sti_dedupe.collections:
+  title: 'Duplicates'
+  route_name: sti_dedupe.collections
+  base_route: sti_dedupe.collections
+sti_dedupe.conflicts:
+  title: 'Claim conflicts'
+  route_name: sti_dedupe.conflicts
+  base_route: sti_dedupe.collections
+  weight: 10
