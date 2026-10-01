@@ -11,6 +11,7 @@ use Drupal\Core\Database\Query\ConditionInterface;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\Sql\DefaultTableMapping;
 use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -369,6 +370,11 @@ final class UriReminter {
     $storage = $this->entityTypeManager->getStorage($entityTypeId);
     assert($storage instanceof SqlEntityStorageInterface);
     $mapping = $storage->getTableMapping();
+    // Dedicated field tables are a DefaultTableMapping concept; the
+    // interface does not expose them.
+    if (!$mapping instanceof DefaultTableMapping) {
+      throw new \LogicException(sprintf('Entity type %s does not use the default SQL table mapping.', $entityTypeId));
+    }
     $dataTable = $mapping->getDedicatedDataTableName($fieldStorage);
     $revisionTable = $this->entityTypeManager->getDefinition($entityTypeId)->isRevisionable()
       ? $mapping->getDedicatedRevisionTableName($fieldStorage)
