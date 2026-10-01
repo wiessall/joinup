@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claim to ATIO map</title>
+<style>
+  :root {
+    --bg: #f7f7f5; --panel: #ffffff; --ink: #1d232a; --muted: #69727d; --line: #d9dcdf;
+    --self: #2f6fb3; --dup: #b35c2f; --atio: #2d7d5a; --via: #7a6aa8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15181c; --panel: #1d2127; --ink: #e6e8ea; --muted: #98a1ab; --line: #343a42;
+      --self: #6ea8e6; --dup: #e69a6e; --atio: #6ccf9f; --via: #b3a6e0;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { padding: 16px 20px 8px; display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: baseline; }
+  h1 { font-size: 18px; margin: 0; }
+  .hint { color: var(--muted); font-size: 13px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--muted); padding: 0 20px 8px; }
+  .legend span::before { content: ""; display: inline-block; width: 18px; height: 0; vertical-align: middle;
+    margin-right: 6px; border-top: 2px solid var(--muted); }
+  .legend .ind::before { border-top-style: dashed; }
+  .legend .note::before { display: none; }
+  .legend .self::before { border-color: var(--self); } .legend .dup::before { border-color: var(--dup); }
+  main { padding: 8px 20px 24px; overflow-x: auto; }
+  svg { display: block; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; }
+  .node rect { stroke-width: 1.5; }
+  .node text { fill: var(--ink); font-size: 12px; }
+  .node .sub { fill: var(--muted); font-size: 11px; }
+  .col { fill: var(--muted); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+  .edge { fill: none; }
+  .elabel { font-size: 10.5px; fill: var(--muted); paint-order: stroke; stroke: var(--panel); stroke-width: 3px; }
+  #drop { margin: 40px 20px; padding: 40px; border: 2px dashed var(--line); border-radius: 8px;
+    text-align: center; color: var(--muted); }
+  label.btn { display: inline-block; margin-top: 10px; padding: 6px 12px; border: 1px solid var(--line);
+    border-radius: 6px; cursor: pointer; color: var(--ink); background: var(--panel); }
+  input[type=file] { display: none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Claim → ATIO field map</h1>
+  <span class="hint" id="meta">Load <code>out/07-field-candidates.json</code> from agent.sh.</span>
+</header>
+<div class="legend">
+  <span class="self">claim of the solution</span>
+  <span class="dup">claim of a duplicate</span>
+  <span>direct mapping</span>
+  <span class="ind">indirect (via another collection's property)</span>
+  <span class="note">weights: exact 1.0 · close 0.8 · broad/narrow 0.6 · related 0.4; indirect = product</span>
+</div>
+<div id="drop">
+  Drop <code>07-field-candidates.json</code> here
+  <br><label class="btn">Choose file<input type="file" id="file" accept=".json"></label>
+</div>
+<main id="main" hidden></main>
+
+<script>
+const ATIO = 'https://sti-portal.fao.org/atio#';
+const short = r => r ? r.replace(/.*#/, '') : '';
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function load(json) {
+  const rows = (json.results?.bindings || []).map(b => Object.fromEntries(Object.entries(b).map(([k, v]) => [k, v.value])));
+  if (!rows.length) { alert('No candidate rows in this file.'); return; }
+
+  // One lane per ATIO field; inside it, one row per candidate route, by weight.
+  const lanes = new Map();
+  for (const r of rows) {
+    if (!lanes.has(r.atioField)) lanes.set(r.atioField, {title: r.atioLabel || short(r.atioField), uri: r.atioField, rows: []});
+    lanes.get(r.atioField).rows.push(r);
+  }
+  for (const lane of lanes.values()) lane.rows.sort((a, b) => b.weight - a.weight || a.role.localeCompare(b.role));
+
+  const W = 230, H = 44, ROW = 56, LANE_GAP = 26, X = [20, 400, 780], TOP = 40;
+  let y = TOP, body = '';
+  const box = (x, y, title, sub, stroke) => `<g class="node"><rect x="${x}" y="${y}" width="${W}" height="${H}" rx="6"
+    fill="var(--panel)" stroke="${stroke}"/><text x="${x + 10}" y="${y + 18}">${esc(title)}</text>
+    <text class="sub" x="${x + 10}" y="${y + 35}">${esc(sub)}</text></g>`;
+  const curve = (x1, y1, x2, y2) => { const m = (x1 + x2) / 2; return `M${x1},${y1} C${m},${y1} ${m},${y2} ${x2},${y2}`; };
+  const edge = (d, color, w, dashed) => `<path class="edge" d="${d}" stroke="${color}" stroke-width="${(1 + 3 * w).toFixed(1)}"
+    ${dashed ? 'stroke-dasharray="6 4"' : ''} opacity=".85"/>`;
+  const label = (x, y, text) => `<text class="elabel" x="${x}" y="${y}" text-anchor="middle">${esc(text)}</text>`;
+
+  for (const lane of lanes.values()) {
+    const laneTop = y, laneH = lane.rows.length * ROW - (ROW - H);
+    const fy = laneTop + laneH / 2 - H / 2;
+    body += `<rect x="10" y="${laneTop - 8}" width="${X[2] + W}" height="${laneH + 16}" rx="8" fill="none" stroke="var(--line)"/>`;
+    lane.rows.forEach((r, i) => {
+      const ry = laneTop + i * ROW, color = r.role === 'self' ? 'var(--self)' : 'var(--dup)';
+      const w = +r.weight, cy = ry + H / 2, fcy = fy + H / 2;
+      if (r.route === 'direct') {
+        body += edge(curve(X[0] + W, cy, X[2], fcy), color, w, false);
+        body += label((X[0] + W + X[2]) / 2, cy + (fcy - cy) / 2 - 5, `${short(r.relation)} · ${w.toFixed(2)}`);
+      } else {
+        body += edge(curve(X[0] + W, cy, X[1], cy), color, w, true);
+        body += edge(curve(X[1] + W, cy, X[2], fcy), color, w, true);
+        body += label((X[0] + W + X[1]) / 2, cy - 6, short(r.relation));
+        body += label(X[1] + W + 70, cy - 6, `${short(r.relation2)} · ${w.toFixed(2)}`);
+        body += box(X[1], ry, r.viaLabel || short(r.via), 'property of another collection', 'var(--via)');
+      }
+      body += box(X[0], ry, r.propertyLabel || short(r.property), (r.role === 'self' ? '' : 'duplicate · ') + '= ' + (r.value ?? ''), color);
+    });
+    body += box(X[2], fy, lane.title, 'atio:' + short(lane.uri), 'var(--atio)');
+    y += laneH + LANE_GAP;
+  }
+
+  const head = `<text class="col" x="${X[0]}" y="22">Claims</text><text class="col" x="${X[1]}" y="22">Via (indirect)</text>`
+    + `<text class="col" x="${X[2]}" y="22">ATIO field</text>`;
+  document.getElementById('main').innerHTML =
+    `<svg width="${X[2] + W + 20}" height="${y}" role="img" aria-label="Claim to ATIO field map">${head}${body}</svg>`;
+  document.getElementById('main').hidden = false;
+  document.getElementById('drop').hidden = true;
+  document.getElementById('meta').textContent = `${lanes.size} ATIO field(s), ${rows.length} candidate route(s), ranked by weight`;
+}
+
+const read = f => f && f.text().then(t => load(JSON.parse(t))).catch(e => alert('Could not read: ' + e.message));
+document.getElementById('file').addEventListener('change', e => read(e.target.files[0]));
+const drop = document.getElementById('drop');
+drop.addEventListener('dragover', e => e.preventDefault());
+drop.addEventListener('drop', e => { e.preventDefault(); read(e.dataTransfer.files[0]); });
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+# Step 2. Which claims does the solution's collection make about it, and how
+# does each relate to the ATIO innovation fields?
+#
+#   direct:   claim property --skos--> atio field
+#   indirect: claim property <--skos--> other collection's property --skos--> atio field
+#
+# Weights are a convention, kept as data in the VALUES tables:
+#   exactMatch 1.0, closeMatch 0.8, broadMatch/narrowMatch 0.6, relatedMatch 0.4.
+# An indirect route weighs the product of its two steps.
+PREFIX sti:  <https://sti-portal.fao.org/sti#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?claim ?property ?propertyLabel ?value
+       ?route ?weight ?relation ?via ?viaLabel ?relation2 ?atioField ?atioLabel
+WHERE {
+  VALUES ?solution { <__SOLUTION__> }
+  ?solution sti:hasFieldClaim ?claim .
+  ?claim sti:claimProperty ?property .
+  # Not the sameInnovationAs claims: their object is another solution.
+  FILTER NOT EXISTS { ?claim sti:claimRefValue ?other . ?other sti:inCollection ?anyCollection }
+  OPTIONAL { ?property skos:prefLabel|rdfs:label ?propertyLabel }
+  OPTIONAL { ?claim sti:claimLiteralValue ?literal }
+  OPTIONAL { ?claim sti:claimRefValue ?ref . OPTIONAL { ?ref skos:prefLabel ?refLabel } }
+  BIND(COALESCE(?literal, ?refLabel, STR(?ref)) AS ?value)
+
+  OPTIONAL {
+    {
+      VALUES (?relation ?weight) {
+        (skos:exactMatch 1.0) (skos:closeMatch 0.8) (skos:broadMatch 0.6)
+        (skos:narrowMatch 0.6) (skos:relatedMatch 0.4)
+      }
+      ?property ?relation ?atioField .
+      BIND("direct" AS ?route)
+    }
+    UNION
+    {
+      VALUES (?relation ?w1) {
+        (skos:exactMatch 1.0) (skos:closeMatch 0.8) (skos:broadMatch 0.6)
+        (skos:narrowMatch 0.6) (skos:relatedMatch 0.4)
+      }
+      VALUES (?relation2 ?w2) {
+        (skos:exactMatch 1.0) (skos:closeMatch 0.8) (skos:broadMatch 0.6)
+        (skos:narrowMatch 0.6) (skos:relatedMatch 0.4)
+      }
+      { ?property ?relation ?via } UNION { ?via ?relation ?property }
+      FILTER(!STRSTARTS(STR(?via), "https://sti-portal.fao.org/atio#"))
+      ?via ?relation2 ?atioField .
+      OPTIONAL { ?via skos:prefLabel|rdfs:label ?viaLabel }
+      BIND(?w1 * ?w2 AS ?weight)
+      BIND("indirect" AS ?route)
+    }
+    FILTER(STRSTARTS(STR(?atioField), "https://sti-portal.fao.org/atio#"))
+    OPTIONAL { ?atioField rdfs:label ?atioLabel }
+  }
+}
+ORDER BY ?propertyLabel DESC(?weight)

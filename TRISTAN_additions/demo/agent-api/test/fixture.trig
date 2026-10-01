@@ -1,0 +1,64 @@
+# Minimal stand-in for the two graphs the demo queries, shaped like what
+# rdf_sync writes (http://data) and the SKOS mapper exports (mappings).
+@prefix sti:     <https://sti-portal.fao.org/sti#> .
+@prefix atio:    <https://sti-portal.fao.org/atio#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix id:      <https://sti-portal.fao.org/id/> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+<http://data> {
+  id:collection\/stf a <http://www.w3.org/ns/dcat#Catalog> .
+  id:collection\/eca a <http://www.w3.org/ns/dcat#Catalog> .
+
+  # Solution S1 in collection stf, a duplicate S2 in eca; S3 is unrelated.
+  id:source-record\/s1 a sti:SourceRecord ; dcterms:title "Solar pump (STF)" ;
+    sti:inCollection id:collection\/stf ;
+    sti:hasFieldClaim id:claim\/c1, id:claim\/c2, id:claim\/c3 .
+  id:source-record\/s2 a sti:SourceRecord ; dcterms:title "Solar water pump (ECA)" ;
+    sti:inCollection id:collection\/eca ;
+    sti:hasFieldClaim id:claim\/c4, id:claim\/c5, id:claim\/c6 .
+  id:source-record\/s3 a sti:SourceRecord ; sti:inCollection id:collection\/stf .
+
+  # S1: technical_readiness "TRL 6" (literal), country -> Kenya (term).
+  id:claim\/c1 a sti:FieldClaim ; sti:claimedBy id:collection\/stf ;
+    sti:claimProperty id:property\/stf-readiness ; sti:claimLiteralValue "TRL 6" ;
+    sti:claimedAt "2026-09-01T10:00:00"^^xsd:dateTime .
+  id:claim\/c2 a sti:FieldClaim ; sti:claimedBy id:collection\/stf ;
+    sti:claimProperty id:property\/stf-country ; sti:claimRefValue id:concept\/kenya .
+  # S1 sameInnovationAs S2.
+  id:claim\/c3 a sti:FieldClaim ; sti:claimedBy id:collection\/stf ;
+    sti:claimProperty sti:sameInnovationAs ; sti:claimRefValue id:source-record\/s2 .
+
+  # S2: maturity -> Pilot (term), origin "Kenya" (literal), and back to S1.
+  id:claim\/c4 a sti:FieldClaim ; sti:claimedBy id:collection\/eca ;
+    sti:claimProperty id:property\/eca-maturity ; sti:claimRefValue id:concept\/pilot .
+  id:claim\/c5 a sti:FieldClaim ; sti:claimedBy id:collection\/eca ;
+    sti:claimProperty id:property\/eca-origin ; sti:claimLiteralValue "Kenya" .
+  id:claim\/c6 a sti:FieldClaim ; sti:claimedBy id:collection\/eca ;
+    sti:claimProperty sti:sameInnovationAs ; sti:claimRefValue id:source-record\/s1 .
+
+  id:property\/stf-readiness skos:prefLabel "technical_readiness" .
+  id:property\/stf-country skos:prefLabel "country" .
+  id:property\/eca-maturity skos:prefLabel "Development stage" .
+  id:property\/eca-origin skos:prefLabel "Country of origin" .
+  id:concept\/kenya skos:prefLabel "Kenya" .
+  id:concept\/pilot skos:prefLabel "Pilot" .
+
+  # S3 already has an innovation.
+  id:innovation\/i1 a atio:Innovation ; atio:derivedFromSource id:source-record\/s3 .
+}
+
+<https://sti-portal.fao.org/graph/mappings> {
+  atio:readinessLevel rdfs:label "Readiness level" .
+  atio:originCountry rdfs:label "Country of origin" .
+
+  # stf -> ATIO
+  id:property\/stf-readiness skos:exactMatch atio:readinessLevel .
+  # eca -> ATIO
+  id:property\/eca-origin skos:exactMatch atio:originCountry .
+  # stf <-> eca (authored eca -> stf on purpose: queries must read both ways)
+  id:property\/eca-maturity skos:closeMatch id:property\/stf-readiness .
+  id:property\/stf-country skos:relatedMatch id:property\/eca-origin .
+}

@@ -1,0 +1,53 @@
+# Step 4. Which claims do the duplicates' collections make, how does each
+# relate to the main solution's claims, and how to the ATIO fields?
+#
+#   claim <--skos--> other_claim      (?ccRelation, ?ccWeight)
+#   other_claim --skos--> atio field   (?atioRelation, ?atioWeight)
+PREFIX sti:  <https://sti-portal.fao.org/sti#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?duplicate ?duplicateCollection
+       ?dupProperty ?dupPropertyLabel ?dupValue
+       ?ccRelation ?ccWeight ?mainProperty ?mainPropertyLabel ?mainValue
+       ?atioRelation ?atioWeight ?atioField ?atioLabel
+WHERE {
+  VALUES ?solution { <__SOLUTION__> }
+  ?solution sti:hasFieldClaim ?sameAs .
+  ?sameAs sti:claimRefValue ?duplicate .
+  ?duplicate sti:inCollection ?duplicateCollection ;
+             sti:hasFieldClaim ?dupClaim .
+  ?dupClaim sti:claimProperty ?dupProperty .
+  FILTER NOT EXISTS { ?dupClaim sti:claimRefValue ?o . ?o sti:inCollection ?c }
+  OPTIONAL { ?dupProperty skos:prefLabel|rdfs:label ?dupPropertyLabel }
+  OPTIONAL { ?dupClaim sti:claimLiteralValue ?dupLiteral }
+  OPTIONAL { ?dupClaim sti:claimRefValue ?dupRef . OPTIONAL { ?dupRef skos:prefLabel ?dupRefLabel } }
+  BIND(COALESCE(?dupLiteral, ?dupRefLabel, STR(?dupRef)) AS ?dupValue)
+
+  # How it relates to the main solution's claims.
+  OPTIONAL {
+    VALUES (?ccRelation ?ccWeight) {
+      (skos:exactMatch 1.0) (skos:closeMatch 0.8) (skos:broadMatch 0.6)
+      (skos:narrowMatch 0.6) (skos:relatedMatch 0.4)
+    }
+    { ?dupProperty ?ccRelation ?mainProperty } UNION { ?mainProperty ?ccRelation ?dupProperty }
+    ?solution sti:hasFieldClaim ?mainClaim .
+    ?mainClaim sti:claimProperty ?mainProperty .
+    OPTIONAL { ?mainProperty skos:prefLabel|rdfs:label ?mainPropertyLabel }
+    OPTIONAL { ?mainClaim sti:claimLiteralValue ?mainLiteral }
+    OPTIONAL { ?mainClaim sti:claimRefValue ?mainRef . OPTIONAL { ?mainRef skos:prefLabel ?mainRefLabel } }
+    BIND(COALESCE(?mainLiteral, ?mainRefLabel, STR(?mainRef)) AS ?mainValue)
+  }
+
+  # How it relates to the ATIO fields directly.
+  OPTIONAL {
+    VALUES (?atioRelation ?atioWeight) {
+      (skos:exactMatch 1.0) (skos:closeMatch 0.8) (skos:broadMatch 0.6)
+      (skos:narrowMatch 0.6) (skos:relatedMatch 0.4)
+    }
+    ?dupProperty ?atioRelation ?atioField .
+    FILTER(STRSTARTS(STR(?atioField), "https://sti-portal.fao.org/atio#"))
+    OPTIONAL { ?atioField rdfs:label ?atioLabel }
+  }
+}
+ORDER BY ?duplicate ?dupPropertyLabel
