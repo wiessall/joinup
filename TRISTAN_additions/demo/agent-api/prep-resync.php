@@ -11,7 +11,7 @@
  * with the current (P0) predicates and classes, for the given solutions plus
  * every solution they are sameInnovationAs. In this order: the claim
  * property and value terms their claims use, the claim paragraphs, then the
- * solutions and their collections.
+ * solutions (and, with --with-collections, their collections).
  *
  * Local demo tooling, not a data repair: it changes nothing in SQL, it only
  * re-sends what SQL already holds. No new revisions are created.
@@ -24,6 +24,7 @@
  * script stops and lists the gaps instead of half-syncing.
  *
  *   ... prep-resync.php -- --check 123 456   preflight only, saves nothing
+ *   ... prep-resync.php -- --with-collections 123   also re-save collections
  */
 
 declare(strict_types=1);
@@ -33,7 +34,12 @@ use Drupal\paragraphs\ParagraphInterface;
 
 $args = $extra ?? [];
 $checkOnly = in_array('--check', $args, TRUE);
-$seeds = array_values(array_filter(array_map('intval', array_diff($args, ['--check']))));
+// Collections are skipped by default: a collection's triples include one
+// dcat:dataset per solution, thousands of them, and Virtuoso can refuse that
+// single write. The demo queries read sti:inCollection on the solutions,
+// never the collection node.
+$withCollections = in_array('--with-collections', $args, TRUE);
+$seeds = array_values(array_filter(array_map('intval', array_diff($args, ['--check', '--with-collections']))));
 if (!$seeds) {
   throw new \InvalidArgumentException('Pass one or more solution node ids after --.');
 }
@@ -79,8 +85,10 @@ foreach ($nodes->loadMultiple($solutionIds) as $solution) {
     $collectionIds[] = (int) $solution->get('og_audience')->target_id;
   }
 }
-foreach ($nodes->loadMultiple(array_unique($collectionIds)) as $collection) {
-  $toSave['node:' . $collection->id()] = $collection;
+if ($withCollections) {
+  foreach ($nodes->loadMultiple(array_unique($collectionIds)) as $collection) {
+    $toSave['node:' . $collection->id()] = $collection;
+  }
 }
 
 // Referenced before referencing: terms, then claims, then nodes.
