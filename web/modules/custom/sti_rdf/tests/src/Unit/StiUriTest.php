@@ -89,6 +89,9 @@ final class StiUriTest extends UnitTestCase {
     $requirement = $routes['sti_rdf.id']['requirements']['type'];
     $this->assertEqualsCanonicalizing(array_keys(StiUri::TYPES), explode('|', $requirement));
     $this->assertSame(StiUri::typeRequirement(), $requirement);
+    foreach (array_keys(StiUri::TYPES) as $type) {
+      $this->assertMatchesRegularExpression('/^[a-z][a-z-]*$/', $type, 'Type slugs must be safe in a URI path and a route pattern without escaping.');
+    }
   }
 
 }
