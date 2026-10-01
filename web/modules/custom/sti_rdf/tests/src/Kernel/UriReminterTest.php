@@ -211,12 +211,11 @@ final class UriReminterTest extends KernelTestBase {
   private function map(string $bundleEntityType, string $bundle, string $type, ?string $plugin, ?string $uriField = NULL): void {
     $prefix = $bundleEntityType === 'node_type' ? 'node.type.' : 'taxonomy.vocabulary.';
     $config = $this->config($prefix . $bundle);
-    $config->set('third_party_settings.rdf_sync', [
-      'type' => $type,
-      'uri_plugin' => $plugin,
-      'uri_field_name' => $uriField,
-      'fields' => [],
-    ]);
+    $settings = ['type' => $type, 'uri_plugin' => $plugin, 'fields' => []];
+    if ($uriField !== NULL) {
+      $settings['uri_field_name'] = $uriField;
+    }
+    $config->set('third_party_settings.rdf_sync', $settings);
     $dependencies = (array) $config->get('dependencies.module');
     $config->set('dependencies.module', array_values(array_unique([...$dependencies, 'rdf_sync'])));
     $config->save();

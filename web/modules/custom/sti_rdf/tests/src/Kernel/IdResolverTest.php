@@ -87,7 +87,6 @@ final class IdResolverTest extends KernelTestBase {
     $config->set('third_party_settings.rdf_sync', [
       'type' => 'https://sti-portal.fao.org/ontology#SourceRecord',
       'uri_plugin' => 'sti_namespace:source-record',
-      'uri_field_name' => NULL,
       'fields' => [],
     ]);
     $config->set('dependencies.module', ['rdf_sync']);
