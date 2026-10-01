@@ -149,20 +149,36 @@ if ($checkOnly) {
   return;
 }
 
+// Save and write to the graph one entity at a time, so that one entity
+// rdf_sync cannot normalize costs only itself, not the whole batch.
+// rdf_sync.synchronizer->destruct() is what kernel terminate calls; Joinup's
+// own tests call it the same way. After a failure its pending list is
+// cleared by reflection (demo tooling: rdf_sync has no API for this), or
+// every later flush would retry the broken entity.
+$synchronizer = \Drupal::service('rdf_sync.synchronizer');
+$clearPending = static function () use ($synchronizer): void {
+  foreach ((new \ReflectionObject($synchronizer))->getProperties() as $property) {
+    if (!$property->isStatic() && is_array($property->getValue($synchronizer))) {
+      $property->setValue($synchronizer, []);
+    }
+  }
+};
+
 $saved = ['paragraph' => 0, 'taxonomy_term' => 0, 'node' => 0];
 $failed = [];
 foreach ($toSave as $key => $entity) {
   try {
     $entity->save();
+    $synchronizer->destruct();
     $saved[$entity->getEntityTypeId()]++;
   }
   catch (\Throwable $e) {
-    $failed[] = "$key: " . $e->getMessage();
+    $clearPending();
+    $failed[] = sprintf('%s (%s, "%s"): %s', $key, $entity->bundle(), mb_substr((string) $entity->label(), 0, 40), mb_substr($e->getMessage(), 0, 200));
   }
 }
-printf("Saved: %d claim(s), %d term(s), %d node(s). The graph is written when this script ends.\n",
-  $saved['paragraph'], $saved['taxonomy_term'], $saved['node']);
+printf("Synced: %d claim(s), %d term(s), %d node(s).\n", $saved['paragraph'], $saved['taxonomy_term'], $saved['node']);
 if ($failed) {
-  fwrite(STDERR, "Failed:\n  " . implode("\n  ", $failed) . "\n");
+  fwrite(STDERR, count($failed) . " entit(ies) could not be written to the graph (saved in SQL, graph unchanged):\n  " . implode("\n  ", $failed) . "\n");
   exit(1);
 }
