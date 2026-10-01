@@ -135,7 +135,7 @@ final class ResolveForm extends FormBase {
     $form['legend'] = [
       '#theme' => 'item_list',
       '#items' => [
-        $this->t('<strong>Same innovation</strong>: both records stay as they are. They, and every record already linked to either, are listed as sources of one ATIO innovation. If none exists yet, only the decision is recorded.'),
+        $this->t('<strong>Same innovation</strong>: no record is merged or deleted. Each record, and every record already linked to either, gets a sameInnovationAs claim naming the others; they are also listed as sources of one ATIO innovation when one exists.'),
         $this->t('<strong>Not the same</strong>: the decision is recorded so this pair is not offered again.'),
       ],
     ];
@@ -165,7 +165,7 @@ final class ResolveForm extends FormBase {
       $section['none'] = [
         '#type' => 'html_tag',
         '#tag' => 'p',
-        '#value' => $this->t('None of them is on an ATIO innovation yet; only the decision will be recorded.'),
+        '#value' => $this->t('None of them is on an ATIO innovation yet; the decision and the sameInnovationAs claims will be recorded.'),
       ];
       return $section;
     }

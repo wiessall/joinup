@@ -137,6 +137,52 @@ final class DecisionStore {
   }
 
   /**
+   * Returns every "same" cluster with at least two members.
+   *
+   * Follows legacy 'merged' rows like cluster() does; callers filter out ids
+   * that no longer load.
+   *
+   * @return list<int[]>
+   *   Clusters, each sorted ascending, ordered by their lowest id.
+   */
+  public function sameClusters(): array {
+    $parent = [];
+    $find = static function (int $nid) use (&$parent): int {
+      while ($parent[$nid] !== $nid) {
+        $parent[$nid] = $parent[$parent[$nid]];
+        $nid = $parent[$nid];
+      }
+      return $nid;
+    };
+
+    $rows = $this->database->select(self::TABLE, 'd')
+      ->fields('d', ['nid_low', 'nid_high'])
+      ->condition('decision', [self::SAME, self::LEGACY_MERGED], 'IN')
+      ->execute();
+    foreach ($rows as $row) {
+      $low = (int) $row->nid_low;
+      $high = (int) $row->nid_high;
+      $parent[$low] ??= $low;
+      $parent[$high] ??= $high;
+      $rootLow = $find($low);
+      $rootHigh = $find($high);
+      if ($rootLow !== $rootHigh) {
+        $parent[max($rootLow, $rootHigh)] = min($rootLow, $rootHigh);
+      }
+    }
+
+    $clusters = [];
+    foreach (array_keys($parent) as $nid) {
+      $clusters[$find($nid)][] = $nid;
+    }
+    ksort($clusters);
+    return array_values(array_map(static function (array $members): array {
+      sort($members);
+      return $members;
+    }, $clusters));
+  }
+
+  /**
    * Normalises a pair to (low, high).
    *
    * @return int[]

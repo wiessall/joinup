@@ -55,6 +55,11 @@ services:
     class: Drupal\sti_dedupe\Claims\ResolutionWriter
     arguments: ['@entity_type.manager', '@database', '@sti_dedupe.resolution_reconciler', '@datetime.time', '@logger.channel.sti_dedupe']
 
+  sti_dedupe.same_as_claims:
+    class: Drupal\sti_dedupe\SameAsClaims
+    arguments: ['@entity_type.manager', '@entity_field.manager', '@database', '@datetime.time', '@current_user', '@logger.channel.sti_dedupe']
+  Drupal\sti_dedupe\SameAsClaims: '@sti_dedupe.same_as_claims'
+
   sti_dedupe.linker:
     class: Drupal\sti_dedupe\Linker
     arguments:
@@ -64,6 +69,7 @@ services:
       - '@sti_dedupe.candidates'
       - '@sti_dedupe.replacements'
       - '@sti_dedupe.innovation_lookup'
+      - '@sti_dedupe.same_as_claims'
       - '@sti_dedupe.resolution_reconciler'
       - '@sti_dedupe.conflict_queue'
       - '@current_user'

@@ -1,0 +1,36 @@
+uuid: 3569fe36-add0-4345-bd2a-abd7982723e7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_claim_ref_node
+    - node.type.solution
+    - paragraphs.paragraphs_type.claims
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'https://sti-portal.fao.org/sti#claimRefValue'
+      type: resource
+id: paragraph.claims.field_claim_ref_node
+field_name: field_claim_ref_node
+entity_type: paragraph
+bundle: claims
+label: 'Claim value (solution)'
+description: 'Object of a claim that names another solution: the other side of a sameInnovationAs claim, written by duplicate review.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      solution: solution
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

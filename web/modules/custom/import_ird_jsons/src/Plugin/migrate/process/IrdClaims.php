@@ -48,6 +48,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * every OTHER collection's claim references, and return kept-refs + freshly
  * built refs. First import: no node yet → nothing to clear, returns new refs.
  *
+ * Claims whose property is a root-level claim_properties term are kept even
+ * when attributed to this collection. This plugin only ever creates property
+ * terms under the collection's own term; root-level ones are system
+ * predicates written by other modules (sti_dedupe's sameInnovationAs), and
+ * deleting them here would silently undo a reviewer's decision.
+ *
  * All work is wrapped so a single bad claim/value is logged and skipped rather
  * than failing the whole row — safe for unattended overnight runs.
  *
@@ -145,7 +151,7 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
           continue;
         }
         $claimed_by = (int) $paragraph->get('field_claimed_by')->target_id;
-        if ($claimed_by === $collection_nid) {
+        if ($claimed_by === $collection_nid && !self::isSystemClaim($paragraph)) {
           try {
             $paragraph->delete();
           }
@@ -218,6 +224,30 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
     }
 
     return array_merge($kept_refs, $new_refs);
+  }
+
+  /**
+   * Whether a claim uses a system property rather than an imported one.
+   *
+   * Imported property terms always sit under their collection's term
+   * (claim_properties: {collection} → {key}); system properties sit at the
+   * root. A claim whose property term cannot be loaded is not a system claim:
+   * it is this collection's to replace.
+   */
+  public static function isSystemClaim(ParagraphInterface $claim): bool {
+    if (!$claim->hasField('field_claim_property')) {
+      return FALSE;
+    }
+    $property = $claim->get('field_claim_property')->entity;
+    if (!$property instanceof TermInterface) {
+      return FALSE;
+    }
+    foreach ($property->get('parent') as $item) {
+      if ((int) $item->target_id !== 0) {
+        return FALSE;
+      }
+    }
+    return TRUE;
   }
 
   // ---------------------------------------------------------------------------

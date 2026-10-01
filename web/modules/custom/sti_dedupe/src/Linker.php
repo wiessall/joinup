@@ -17,11 +17,14 @@ use Drupal\sti_dedupe\Exception\SurvivorRequiredException;
  * Applies reviewer decisions about pairs of solutions.
  *
  * Solutions are source records: one collection's account of an innovation.
- * They are never merged, edited or deleted here. "Same" is expressed on the
- * ATIO innovation, which lists every solution it derives from:
+ * They are never merged or deleted here. "Same" is written in two places:
+ *
+ * - on the solutions: every member of the cluster gets a sameInnovationAs
+ *   claim naming every other member (SameAsClaims), always;
+ * - on the ATIO innovation, which lists every solution it derives from:
  *
  * - neither side (nor anything already linked to either) is on an
- *   innovation yet: the decision is recorded and nothing else changes. When
+ *   innovation yet: only the decision and the claims are written. When
  *   an innovation later picks up any member of the cluster, the next "same"
  *   decision touching it brings the whole cluster along.
  * - one innovation: every solution in the cluster is added to it.
@@ -44,6 +47,7 @@ final class Linker {
     private readonly CandidateStore $candidates,
     private readonly ReplacementStore $replacements,
     private readonly InnovationLookup $innovations,
+    private readonly SameAsClaims $sameAs,
     private readonly ResolutionReconciler $reconciler,
     private readonly ConflictQueue $conflictQueue,
     private readonly AccountProxyInterface $currentUser,
@@ -82,19 +86,24 @@ final class Linker {
   public function linkSame(NodeInterface $a, NodeInterface $b, ?int $survivorNid = NULL): LinkResult {
     $this->assertPair($a, $b);
 
+    // Refused before anything is written, the claims on the solutions
+    // included: a rollback covers SQL but not a non-SQL entity cache.
+    $plan = $this->plan($a, $b);
+    if ($plan->needsSurvivor() && !in_array($survivorNid, $plan->innovations, TRUE)) {
+      throw new SurvivorRequiredException($plan->innovations);
+    }
+
     $transaction = $this->database->startTransaction();
     try {
       $this->decisions->record((int) $a->id(), (int) $b->id(), DecisionStore::SAME);
-      $plan = $this->plan($a, $b);
       $this->candidates->deletePairsWithin($plan->cluster);
+      $this->sameAs->linkCluster($plan->cluster);
+      $this->sameAs->verify($plan->cluster);
 
       if (!$plan->innovations) {
         return new LinkResult($plan->cluster, NULL);
       }
 
-      if ($plan->needsSurvivor() && !in_array($survivorNid, $plan->innovations, TRUE)) {
-        throw new SurvivorRequiredException($plan->innovations);
-      }
       $survivorId = $plan->needsSurvivor() ? (int) $survivorNid : $plan->innovations[0];
       $losers = array_values(array_diff($plan->innovations, [$survivorId]));
 
@@ -107,6 +116,9 @@ final class Linker {
     }
     catch (\Throwable $e) {
       $transaction->rollBack();
+      // Saved entities may have reached a persistent cache (memcache) that
+      // the rollback does not touch.
+      $this->entityTypeManager->getStorage('node')->resetCache(array_merge($plan->cluster, $plan->innovations));
       throw $e;
     }
     // Commit before refreshing conflicts: the link must not depend on it.

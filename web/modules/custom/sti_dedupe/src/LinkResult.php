@@ -16,7 +16,7 @@ final class LinkResult {
    *   The solutions now known to be the same innovation.
    * @param int|null $innovation
    *   The innovation they are all derived from, or NULL when none exists yet
-   *   and only the decision was recorded.
+   *   and only the decision and the claims were recorded.
    * @param int[] $added
    *   Solutions newly added to that innovation's derived-from list.
    * @param int[] $replaced

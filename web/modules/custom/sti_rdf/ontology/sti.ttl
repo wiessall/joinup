@@ -6,6 +6,7 @@
 @prefix prov:    <http://www.w3.org/ns/prov#> .
 @prefix dcat:    <http://www.w3.org/ns/dcat#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl:     <http://www.w3.org/2002/07/owl#> .
 @prefix schema:  <https://schema.org/> .
@@ -17,8 +18,19 @@ sti:SourceRecord
     a owl:Class ;
     rdfs:subClassOf prov:Entity ;
     rdfs:comment """One collection's record of an innovation, as harvested and
-    normalised. Never merged with another collection's record: sameness is
-    expressed on the ATIO innovation that derives from both."""@en .
+    normalised. Never merged with another collection's record: sameness is a
+    sti:sameInnovationAs claim on each record, naming the other."""@en .
+
+sti:sameInnovationAs
+    a rdf:Property ;
+    rdfs:label "same innovation as"@en ;
+    schema:domainIncludes sti:SourceRecord ;
+    schema:rangeIncludes sti:SourceRecord ;
+    rdfs:comment """Used as the claimProperty of a FieldClaim whose
+    claimRefValue is another source record: both describe the same
+    innovation. Written on both records by duplicate review, each claim
+    attributed to the collection holding that record, and kept across
+    re-imports."""@en .
 
 sti:FieldClaim
     a owl:Class ;
