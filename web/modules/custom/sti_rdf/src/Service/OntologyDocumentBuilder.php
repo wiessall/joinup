@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\sti_rdf\Service;
 
-use Drupal\Core\Config\Entity\ConfigEntityInterface;
-use Drupal\Core\Entity\EntityFieldManagerInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
-use Drupal\Core\Field\FieldConfigInterface;
 use Drupal\sti_rdf\StiUri;
 use EasyRdf\Graph;
 use EasyRdf\Literal;
@@ -47,8 +43,7 @@ final class OntologyDocumentBuilder {
   private const XSD = 'http://www.w3.org/2001/XMLSchema#';
 
   public function __construct(
-    private readonly EntityTypeManagerInterface $entityTypeManager,
-    private readonly EntityFieldManagerInterface $entityFieldManager,
+    private readonly MappingReaderInterface $mappingReader,
     private readonly ModuleExtensionList $moduleList,
   ) {}
 
@@ -127,77 +122,19 @@ final class OntologyDocumentBuilder {
   /**
    * Collects every rdf_sync bundle mapping on the site.
    *
-   * @return list<array{type: string, label: string, fields: list<array{predicate: string, type: string|null, label: string, description: string}>}>
+   * @return list<array{type: string, label: string, fields: list<array>}>
    *   One entry per mapped bundle.
    */
   private function mappings(): array {
     $mappings = [];
-    foreach (self::ENTITY_TYPES as $entityTypeId) {
-      if (!$this->entityTypeManager->hasDefinition($entityTypeId)) {
-        continue;
-      }
-      $bundleEntityType = $this->entityTypeManager->getDefinition($entityTypeId)->getBundleEntityType();
-      if ($bundleEntityType === NULL) {
-        continue;
-      }
-      foreach ($this->entityTypeManager->getStorage($bundleEntityType)->loadMultiple() as $bundleEntity) {
-        if (!$bundleEntity instanceof ConfigEntityInterface) {
-          continue;
-        }
-        $settings = $bundleEntity->getThirdPartySettings('rdf_sync');
-        if (empty($settings['type'])) {
-          continue;
-        }
-        $mappings[] = [
-          'type' => (string) $settings['type'],
-          'label' => (string) $bundleEntity->label(),
-          'fields' => $this->fieldMappings($entityTypeId, (string) $bundleEntity->id(), (array) ($settings['fields'] ?? [])),
-        ];
-      }
+    foreach ($this->mappingReader->mappedBundles(self::ENTITY_TYPES) as $bundle) {
+      $mappings[] = [
+        'type' => $bundle['type'],
+        'label' => $bundle['label'],
+        'fields' => $this->mappingReader->fieldMappings($bundle['entity_type'], $bundle['bundle']),
+      ];
     }
     return $mappings;
-  }
-
-  /**
-   * Flattens a bundle's field mappings, bundle-level and field-level.
-   *
-   * The rdf_sync module keeps base-field mappings on the bundle and may keep
-   * configurable-field mappings on the field config; both are read.
-   */
-  private function fieldMappings(string $entityTypeId, string $bundle, array $bundleLevel): array {
-    $definitions = $this->entityFieldManager->getFieldDefinitions($entityTypeId, $bundle);
-
-    $sources = [];
-    foreach ($bundleLevel as $fieldName => $properties) {
-      $sources[$fieldName][] = (array) $properties;
-    }
-    foreach ($definitions as $fieldName => $definition) {
-      if ($definition instanceof FieldConfigInterface) {
-        $fieldLevel = $definition->getThirdPartySettings('rdf_sync');
-        if ($fieldLevel) {
-          $sources[$fieldName][] = $fieldLevel;
-        }
-      }
-    }
-
-    $out = [];
-    foreach ($sources as $fieldName => $sets) {
-      $definition = $definitions[$fieldName] ?? NULL;
-      foreach ($sets as $properties) {
-        foreach ($properties as $property) {
-          if (!is_array($property) || empty($property['predicate'])) {
-            continue;
-          }
-          $out[] = [
-            'predicate' => (string) $property['predicate'],
-            'type' => isset($property['type']) ? (string) $property['type'] : NULL,
-            'label' => $definition ? (string) $definition->getLabel() : $fieldName,
-            'description' => $definition ? trim(strip_tags((string) $definition->getDescription())) : '',
-          ];
-        }
-      }
-    }
-    return $out;
   }
 
 }
