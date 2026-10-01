@@ -29,7 +29,7 @@ third_party_settings:
       settings:
         age: 0
   rdf_sync:
-    type: 'https://sti-portal.fao.org/ontology#SourceRecord'
+    type: 'https://sti-portal.fao.org/sti#SourceRecord'
     uri_plugin: 'sti_namespace:source-record'
     fields:
       title:
@@ -46,7 +46,7 @@ third_party_settings:
           type: 'xsd:dateTime'
       og_audience:
         target_id:
-          predicate: 'https://sti-portal.fao.org/ontology#inCollection'
+          predicate: 'https://sti-portal.fao.org/sti#inCollection'
           type: resource
       body:
         value:

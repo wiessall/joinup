@@ -85,7 +85,7 @@ final class IdResolverTest extends KernelTestBase {
     // never reached for a triplestore.
     $config = $this->config('node.type.solution');
     $config->set('third_party_settings.rdf_sync', [
-      'type' => 'https://sti-portal.fao.org/ontology#SourceRecord',
+      'type' => 'https://sti-portal.fao.org/sti#SourceRecord',
       'uri_plugin' => 'sti_namespace:source-record',
       'fields' => [],
     ]);

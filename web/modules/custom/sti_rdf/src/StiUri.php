@@ -25,12 +25,12 @@ final class StiUri {
   /**
    * Platform vocabulary (tier 1, Unit 5): source records, claims, collections.
    */
-  public const STI = 'https://sti-portal.fao.org/ontology#';
+  public const STI = 'https://sti-portal.fao.org/sti#';
 
   /**
    * ATIO vocabulary (tier 2): the curated innovation and its properties.
    */
-  public const ATIO = 'https://sti-portal.fao.org/ontology/atio#';
+  public const ATIO = 'https://sti-portal.fao.org/atio#';
 
   /**
    * Base of every instance URI.

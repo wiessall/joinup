@@ -11,7 +11,7 @@ dependencies:
 third_party_settings:
   rdf_sync:
     value:
-      predicate: https://sti-portal.fao.org/ontology/atio#resolutionStatus
+      predicate: https://sti-portal.fao.org/atio#resolutionStatus
       type: null
 id: paragraph.claim_resolution.field_resolution_status
 field_name: field_resolution_status

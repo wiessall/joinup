@@ -93,7 +93,8 @@ saved, so after a failed link, re-sync the innovations involved.
 
 `ddev drush deploy` (updb, then cim) does everything, in this order:
 
-1. `sti_rdf_update_11001()`: P0 URI re-minting (see sti_rdf).
+1. `sti_rdf_update_11001()`: typed URI plugins (config only; stored URIs are
+   re-minted later with `drush sti-rdf:uri-remint` plus a graph rebuild).
 2. `sti_dedupe_update_11001()`: replacement table, decision indexes, and
    "same, keep both" → "same". It stops and names any newly required module
    that is not enabled.

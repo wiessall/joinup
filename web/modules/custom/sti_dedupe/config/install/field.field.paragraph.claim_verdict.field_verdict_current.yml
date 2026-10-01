@@ -9,7 +9,7 @@ dependencies:
 third_party_settings:
   rdf_sync:
     value:
-      predicate: https://sti-portal.fao.org/ontology/atio#currentlyClaimed
+      predicate: https://sti-portal.fao.org/atio#currentlyClaimed
       type: xsd:boolean
 id: paragraph.claim_verdict.field_verdict_current
 field_name: field_verdict_current

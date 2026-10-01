@@ -124,7 +124,7 @@ final class UriReminterTest extends KernelTestBase {
     $this->claimProperty = Term::create(['vid' => 'claim_properties', 'name' => 'readiness']);
     $this->claimProperty->save();
 
-    $this->map('node_type', 'solution', 'https://sti-portal.fao.org/ontology#SourceRecord', 'sti_namespace');
+    $this->map('node_type', 'solution', 'https://sti-portal.fao.org/sti#SourceRecord', 'sti_namespace');
     $this->map('node_type', 'collection', 'http://www.w3.org/ns/dcat#Catalog', 'joinup_po_namespace:w21');
     $this->map('taxonomy_vocabulary', 'topics', 'http://www.w3.org/2004/02/skos/core#Concept', 'sti_namespace', 'term_uri');
     $this->map('taxonomy_vocabulary', 'claim_properties', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#Property', NULL);

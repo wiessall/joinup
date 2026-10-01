@@ -12,7 +12,7 @@ dependencies:
 third_party_settings:
   rdf_sync:
     target_id:
-      predicate: https://sti-portal.fao.org/ontology/atio#hasClaimResolution
+      predicate: https://sti-portal.fao.org/atio#hasClaimResolution
       type: resource
 id: node.atio_innovation.atio_claim_resolutions
 field_name: atio_claim_resolutions

@@ -5,7 +5,7 @@ dependencies:
   - rdf_sync
 third_party_settings:
   rdf_sync:
-    type: https://sti-portal.fao.org/ontology/atio#ClaimResolution
+    type: https://sti-portal.fao.org/atio#ClaimResolution
     uri_plugin: sti_namespace:claim-resolution
 id: claim_resolution
 label: Claim resolution
