@@ -1,0 +1,17 @@
+diff --git a/src/Normalizer/RdfSyncNormalizer.php b/src/Normalizer/RdfSyncNormalizer.php
+--- a/src/Normalizer/RdfSyncNormalizer.php
++++ b/src/Normalizer/RdfSyncNormalizer.php
+@@ -97,8 +97,11 @@ class RdfSyncNormalizer extends EntityNormalizer {
+             }
+           }
+ 
+-          if ($value === NULL) {
+-            // Don't store NULLs.
++          if ($value === NULL || $value === '') {
++            // Don't store NULLs. Empty strings are skipped as well: a
++            // referenced entity whose URI field is empty would otherwise
++            // reach EasyRdf\Resource, which throws and aborts the whole
++            // synchronization batch, not just this triple.
+             continue;
+           }
+ 
