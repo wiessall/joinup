@@ -118,9 +118,14 @@ final class StiUri {
 
   /**
    * Whether a URI was minted under one of the pre-P0 prefixes.
+   *
+   * @param string $uri
+   *   The URI.
+   * @param string[] $extraPrefixes
+   *   Site-specific prefixes to count as pre-P0 as well.
    */
-  public static function isLegacy(string $uri): bool {
-    foreach (self::LEGACY_PREFIXES as $prefix) {
+  public static function isLegacy(string $uri, array $extraPrefixes = []): bool {
+    foreach ([...self::LEGACY_PREFIXES, ...$extraPrefixes] as $prefix) {
       if (str_starts_with($uri, $prefix)) {
         return TRUE;
       }

@@ -87,6 +87,17 @@ final class UriReminter {
    */
   private const JOINUP_PLUGIN = 'joinup_po_namespace:w21';
 
+  /**
+   * Further URI prefixes to treat as pre-P0, beyond StiUri::LEGACY_PREFIXES.
+   *
+   * Site-specific: rdf_sync's default generator used the site's base URL, so
+   * a database built on a developer machine carries that machine's host
+   * name. Those are not known to the code and are passed in at run time.
+   *
+   * @var string[]
+   */
+  private array $extraLegacyPrefixes = [];
+
   public function __construct(
     private readonly EntityTypeManagerInterface $entityTypeManager,
     private readonly EntityFieldManagerInterface $entityFieldManager,
@@ -94,6 +105,49 @@ final class UriReminter {
     private readonly ConfigFactoryInterface $configFactory,
     private readonly LoggerChannelInterface $logger,
   ) {}
+
+  /**
+   * Sets further URI prefixes to re-mint.
+   *
+   * @param string[] $prefixes
+   *   Prefixes including scheme and host, e.g. 'http://example.ddev.local/'.
+   */
+  public function setExtraLegacyPrefixes(array $prefixes): void {
+    $this->extraLegacyPrefixes = array_values(array_filter(array_map('trim', $prefixes)));
+  }
+
+  /**
+   * Counts stored URIs of typed bundles by scheme and host.
+   *
+   * The check that nothing hides: every host other than the P0 one is either
+   * an external authority (AGROVOC, the Publications Office) or a prefix
+   * that still has to be re-minted.
+   *
+   * @return array<string, int>
+   *   Count keyed by "entity_type scheme://host", largest first.
+   */
+  public function storedHosts(): array {
+    $bundles = [];
+    foreach ($this->scopes() as $scope) {
+      $bundles[$scope['entity_type']][$scope['bundle']] = TRUE;
+    }
+    $out = [];
+    foreach ($bundles as $entityTypeId => $names) {
+      $query = $this->database->select('rdf_sync_uri', 'r')
+        ->condition('r.entity_type', $entityTypeId)
+        ->condition('r.bundle', array_keys($names), 'IN');
+      // SUBSTRING_INDEX is MySQL/MariaDB, which is what the site runs on;
+      // the entity API offers nothing for grouping by part of a value.
+      $query->addExpression("SUBSTRING_INDEX(r.uri, '/', 3)", 'host');
+      $query->addExpression('COUNT(*)', 'n');
+      $query->groupBy('host');
+      foreach ($query->execute() as $row) {
+        $out[$entityTypeId . ' ' . $row->host] = (int) $row->n;
+      }
+    }
+    arsort($out);
+    return $out;
+  }
 
   /**
    * Lists the bundle config changes step 1 would make.
@@ -272,7 +326,7 @@ final class UriReminter {
     foreach ($query->execute() as $row) {
       $examined++;
       $lastId = (int) $row->entity_id;
-      if (!StiUri::isLegacy((string) $row->uri)) {
+      if (!StiUri::isLegacy((string) $row->uri, $this->extraLegacyPrefixes)) {
         continue;
       }
       $this->database->update('rdf_sync_uri')
@@ -321,7 +375,7 @@ final class UriReminter {
       $examined++;
       $lastId = (int) $row->entity_id;
       $old = (string) $row->{$column};
-      if (!StiUri::isLegacy($old)) {
+      if (!StiUri::isLegacy($old, $this->extraLegacyPrefixes)) {
         continue;
       }
       $new = StiUri::forEntity($scope['type'], (string) $row->uuid);
@@ -369,7 +423,7 @@ final class UriReminter {
    */
   private function legacyCondition(SelectInterface $query, string $column): ConditionInterface {
     $group = $query->orConditionGroup();
-    foreach (StiUri::LEGACY_PREFIXES as $prefix) {
+    foreach ([...StiUri::LEGACY_PREFIXES, ...$this->extraLegacyPrefixes] as $prefix) {
       $group->condition($column, $this->database->escapeLike($prefix) . '%', 'LIKE');
     }
     return $group;
