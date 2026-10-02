@@ -34,8 +34,10 @@ final class StiRdfUriCommands extends DrushCommands {
    * Shows pending URI plugin changes and legacy URIs still stored.
    */
   #[CLI\Command(name: 'sti-rdf:uri-report')]
-  #[CLI\Usage(name: 'drush sti-rdf:uri-report', description: 'Lists bundles still on a legacy URI plugin and counts legacy URIs per bundle.')]
-  public function report(): int {
+  #[CLI\Option(name: 'legacy-prefix', description: 'Comma-separated further URI prefixes to count as pre-P0, e.g. http://example.ddev.local/')]
+  #[CLI\Usage(name: 'drush sti-rdf:uri-report', description: 'Lists bundles still on a legacy URI plugin, stored URI hosts, and legacy URIs per bundle.')]
+  public function report(array $options = ['legacy-prefix' => '']): int {
+    $this->reminter->setExtraLegacyPrefixes(explode(',', (string) $options['legacy-prefix']));
     $plan = $this->reminter->planConfigChanges();
     if ($plan) {
       $this->io()->section('Bundles still on a legacy URI plugin');
@@ -48,6 +50,15 @@ final class StiRdfUriCommands extends DrushCommands {
     else {
       $this->io()->success('Every mapped STI bundle uses an sti_namespace derivative.');
     }
+
+    // Every host that is neither sti-portal.fao.org over https nor an
+    // external authority is a prefix uri-remint has to be told about.
+    $this->io()->section('Stored URIs of typed bundles, by host');
+    $rows = [];
+    foreach ($this->reminter->storedHosts() as $host => $count) {
+      $rows[] = [$host, $count];
+    }
+    $this->io()->table(['Entity type and host', 'Count'], $rows);
 
     $left = $this->reminter->verify();
     if ($left) {
@@ -73,8 +84,10 @@ final class StiRdfUriCommands extends DrushCommands {
    */
   #[CLI\Command(name: 'sti-rdf:uri-remint')]
   #[CLI\Option(name: 'batch-size', description: 'Entities examined per database round.')]
+  #[CLI\Option(name: 'legacy-prefix', description: 'Comma-separated further URI prefixes to re-mint, e.g. http://example.ddev.local/')]
   #[CLI\Usage(name: 'drush sti-rdf:uri-remint', description: 'Rewrites every legacy URI to https://sti-portal.fao.org/id/{type}/{uuid}.')]
-  public function remint(array $options = ['batch-size' => 500]): int {
+  public function remint(array $options = ['batch-size' => 500, 'legacy-prefix' => '']): int {
+    $this->reminter->setExtraLegacyPrefixes(explode(',', (string) $options['legacy-prefix']));
     $changed = $this->reminter->applyConfigChanges();
     $this->logger()->notice(dt('Switched @count bundle(s) to typed URI plugins.', ['@count' => $changed]));
 

@@ -216,6 +216,34 @@ final class UriReminterTest extends KernelTestBase {
   }
 
   /**
+   * A dev-machine host is re-minted only when named, and reported either way.
+   *
+   * The default rdf_sync generator used the site's base URL. Such URIs match
+   * no known legacy prefix, so without this they were silently kept while
+   * verify() reported a clean result.
+   */
+  public function testExtraLegacyPrefixIsRemintedOnlyWhenNamed(): void {
+    $local = 'http://example.ddev.local/taxonomy-term/claim-properties/' . $this->claimProperty->uuid();
+    $this->database()->update('rdf_sync_uri')
+      ->fields(['uri' => $local])
+      ->condition('entity_type', 'taxonomy_term')
+      ->condition('entity_id', $this->claimProperty->id())
+      ->execute();
+
+    $reminter = $this->reminter();
+    $reminter->applyConfigChanges();
+    $this->runRemint($reminter, 100);
+    $this->assertSame($local, $this->storedUri('taxonomy_term', $this->claimProperty), 'Unknown prefixes are left alone.');
+    $this->assertArrayHasKey('taxonomy_term http://example.ddev.local', $reminter->storedHosts(), 'But the report shows the host.');
+
+    $reminter->setExtraLegacyPrefixes(['http://example.ddev.local/']);
+    $this->assertArrayHasKey('taxonomy_term:claim_properties', $reminter->verify());
+    $this->runRemint($reminter, 100);
+    $this->assertSame(StiUri::forEntity('property', $this->claimProperty->uuid()), $this->storedUri('taxonomy_term', $this->claimProperty));
+    $this->assertSame([], $reminter->verify());
+  }
+
+  /**
    * Runs every scope to exhaustion and returns the number rewritten.
    */
   private function runRemint(UriReminter $reminter, int $batchSize): int {
