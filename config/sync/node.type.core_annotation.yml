@@ -4,7 +4,7 @@ status: true
 dependencies: {  }
 third_party_settings:
   rdf_sync:
-    type: 'https://sti-portal.fao.org/sti#Annotation'
+    type: 'https://sti-portal.fao.org/ontology#Annotation'
     uri_plugin: 'sti_namespace:annotation'
     fields:
       title:
@@ -13,11 +13,11 @@ third_party_settings:
           type: null
       field_innovation:
         target_id:
-          predicate: 'https://sti-portal.fao.org/sti#annotates'
+          predicate: 'https://sti-portal.fao.org/ontology#annotates'
           type: resource
       og_audience:
         target_id:
-          predicate: 'https://sti-portal.fao.org/sti#statedBy'
+          predicate: 'https://sti-portal.fao.org/ontology#statedBy'
           type: resource
       field_core_ai_automator_status:
         value:

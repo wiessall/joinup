@@ -8,8 +8,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: GCANVaHrNC3b1-V9lJPzx_hvDCMVJ0XILZ5Zw2uTWJw
 id: node.atio_innovation_stage
 field_name: atio_innovation_stage
 entity_type: node

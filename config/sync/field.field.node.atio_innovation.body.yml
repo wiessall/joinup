@@ -5,25 +5,21 @@ dependencies:
   config:
     - field.storage.node.body
     - node.type.atio_innovation
-  module:
-    - text
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: _OsF0v5UKo3DbSuVvHXE9Mw4K2DJfMVRMW97j5EmbTw
 id: node.atio_innovation.body
 field_name: body
 entity_type: node
 bundle: atio_innovation
 label: 'Long description'
-description: ''
+description: "The curated description. This field is not updated during subsequent data harvesting rounds: it is updated either by manual curators, or in special rounds of AI enhancements accompanied by manual validation. It doesn't have advanced versioning either, only basic chronological versioning for changes made by curators."
 required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  display_summary: 0
+  display_summary: false
   required_summary: false
   allowed_formats: {  }
 field_type: text_with_summary

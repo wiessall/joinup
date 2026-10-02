@@ -7,8 +7,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: 5fzjyhZpf1wUPqGamA9kzWn5zaKgxeXKCZJ6djsvmVU
 id: node.atio_start_year
 field_name: atio_start_year
 entity_type: node

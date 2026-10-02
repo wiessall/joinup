@@ -1,0 +1,24 @@
+services:
+  _defaults:
+    autowire: true
+
+  logger.channel.sti_graph_explorer:
+    parent: logger.channel_base
+    arguments: ['sti_graph_explorer']
+
+  Drupal\sti_graph_explorer\Sparql\ResultParser: ~
+
+  Drupal\sti_graph_explorer\Sparql\QueryFactory: ~
+
+  # Reads through Virtuoso's read-only SPARQL_RO user, never through the
+  # read-write rdf_sync.connection that the synchroniser uses.
+  Drupal\sti_graph_explorer\Sparql\SparqlClientInterface:
+    class: Drupal\sti_graph_explorer\Sparql\SparqlClient
+    arguments:
+      $endpoint: '@sparql_endpoint.readonly_endpoint'
+      $parser: '@Drupal\sti_graph_explorer\Sparql\ResultParser'
+
+  Drupal\sti_graph_explorer\GraphExplorer:
+    arguments:
+      $cache: '@cache.default'
+      $logger: '@logger.channel.sti_graph_explorer'

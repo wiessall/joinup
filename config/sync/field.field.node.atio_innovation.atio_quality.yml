@@ -9,8 +9,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: PCV2gHunp7hjx_onNgBY3-sc8ihjBCGSnVKroBeJqMU
 id: node.atio_innovation.atio_quality
 field_name: atio_quality
 entity_type: node

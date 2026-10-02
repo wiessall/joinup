@@ -1,0 +1,47 @@
+{#
+/**
+ * @file
+ * Shell for the knowledge graph explorer. js/graph-explorer.js fills it.
+ *
+ * Markup is Bootstrap 5.3 + FAO DS, as elsewhere in fao_lean; module styles
+ * use only the --fao-* tokens. Icons are limited to the theme's subset.
+ */
+#}
+<div class="sge" data-sti-graph-explorer>
+  <div class="sge__toolbar">
+    <div class="btn-group" role="group" aria-label="{{ 'View'|t }}">
+      <button type="button" class="btn btn-sm btn-primary" data-sge-mode="schema" aria-pressed="true">{{ 'Schema'|t }}</button>
+      <button type="button" class="btn btn-sm btn-outline-primary" data-sge-mode="explore" aria-pressed="false">{{ 'Explore'|t }}</button>
+    </div>
+
+    <form class="sge__search" role="search" data-sge-search>
+      <label class="visually-hidden" for="sge-search-input">{{ 'Filter classes, or paste an IRI to explore it'|t }}</label>
+      <div class="input-group input-group-sm">
+        <span class="input-group-text"><span class="bi bi-search" aria-hidden="true"></span></span>
+        <input id="sge-search-input" class="form-control" type="search" autocomplete="off"
+               placeholder="{{ 'Filter classes, or paste an IRI'|t }}">
+      </div>
+    </form>
+
+    <button type="button" class="btn btn-sm btn-outline-primary" data-sge-action="refresh"
+            title="{{ 'Recompute the schema from the triplestore (scans the whole graph)'|t }}">{{ 'Refresh schema'|t }}</button>
+    <button type="button" class="btn btn-sm btn-outline-primary" data-sge-action="fit">{{ 'Fit to view'|t }}</button>
+    <button type="button" class="btn btn-sm btn-outline-primary" data-sge-action="clear" hidden>{{ 'Clear canvas'|t }}</button>
+
+  </div>
+
+  <div data-sge-alerts></div>
+
+  <div class="sge__body">
+    <aside class="sge__panel" aria-label="{{ 'Details'|t }}" data-sge-panel></aside>
+    <div class="sge__stage">
+      <svg class="sge__canvas" data-sge-canvas role="img"
+           aria-label="{{ 'Graph drawing. The details panel lists the same information as text.'|t }}"></svg>
+      <ul class="sge__legend" data-sge-legend aria-label="{{ 'Namespace groups; select to hide or show'|t }}"></ul>
+      <p class="sge__hint small" data-sge-hint></p>
+      {# Overlaid, not in the toolbar: text appearing there wrapped the
+         toolbar and moved the canvas between the two clicks of a double-click. #}
+      <p class="sge__status small" role="status" aria-live="polite" data-sge-status></p>
+    </div>
+  </div>
+</div>

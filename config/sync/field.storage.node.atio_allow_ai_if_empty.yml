@@ -7,8 +7,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: _hmlBLRYWgDAXp6gRRiFAbJfMLT_RKMYP6HUEjQYIcc
 id: node.atio_allow_ai_if_empty
 field_name: atio_allow_ai_if_empty
 entity_type: node

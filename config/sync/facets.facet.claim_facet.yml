@@ -11,7 +11,7 @@ missing_label: others
 url_alias: claim_facet
 facet_source_id: 'search_api_field:meta_entity.collection_settings.listing_content'
 field_identifier: claim_facet
-query_operator: or
+query_operator: and
 hard_limit: 0
 exclude: false
 use_hierarchy: false
@@ -26,6 +26,7 @@ widget:
   config:
     show_numbers: true
     arbitrary_facet_plugin: _none
+    multiple: '0'
 empty_behavior:
   behavior: empty
 only_visible_when_facet_source_is_visible: true

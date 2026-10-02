@@ -9,14 +9,12 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: mVvPyMWhg6XNxUu6BG6mi1BEtE4wO9MQ-NuzOxd81R4
 id: node.atio_innovation.atio_actual_users
 field_name: atio_actual_users
 entity_type: node
 bundle: atio_innovation
 label: 'Actual users'
-description: ''
+description: "The categories of users that are actually using the innovation, based on some evidence.\r\nInclude evidence in the \"Adoption: narrative\" field."
 required: false
 translatable: false
 default_value: {  }

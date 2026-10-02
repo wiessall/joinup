@@ -9,14 +9,12 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: 1_jS65EXRUhJ4eDjNWcdw_O70fiGwwM8ymNuxM58cGY
 id: node.atio_innovation.atio_ai_quality
 field_name: atio_ai_quality
 entity_type: node
 bundle: atio_innovation
 label: 'Record quality - AI assessment'
-description: ''
+description: 'DO NOT EDIT: QA DONE BY AI'
 required: false
 translatable: false
 default_value: {  }

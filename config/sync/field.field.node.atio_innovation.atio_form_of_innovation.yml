@@ -9,14 +9,12 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: ohTjjZ-3bg4Fhi3pY_O54G3-dGum-hioKvLQ5lDvv6s
 id: node.atio_innovation.atio_form_of_innovation
 field_name: atio_form_of_innovation
 entity_type: node
 bundle: atio_innovation
 label: 'Form of innovation'
-description: ''
+description: "This taxonomy classifies innovations by their nature and mode of manifestation — i.e., the tangible or conceptual form in which they are delivered, applied, or made accessible to users:  whether they are tangible products, traditional or modern techniques, outputs of research processes, packages or bundles of multiple solutions, or structured processes that can be adopted.. It represents how the innovation is packaged, experienced, or deployed in practice. (Different from he innovation 'type\" which classifies  according to the innovation's functional domain and mechanism of change in agrifood systems, reflecting how it functions / operates to drive transformation. )"
 required: false
 translatable: false
 default_value: {  }

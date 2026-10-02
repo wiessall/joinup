@@ -3,20 +3,17 @@ langcode: en
 status: true
 dependencies:
   module:
-    - datetime
     - node
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: Nj8HkTPJsmMoyaJscAENTh4l8ymS4hSzXV04UqTPAIo
 id: node.atio_start_date
 field_name: atio_start_date
 entity_type: node
 type: datetime
 settings:
   datetime_type: datetime
-module: datetime
+module: core
 locked: false
 cardinality: 1
 translatable: true

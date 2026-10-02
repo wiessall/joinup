@@ -3,20 +3,19 @@ _core:
 threshold: 0.8
 max_candidates: 5
 indexes:
-- published
-- unpublished
+  - published
+  - unpublished
+migration_tags:
+  - IRD
 compare_fields:
-- title
-- body
-- field_country_origin
-- field_start_year
-- owner
-- landing_page
+  - title
+  - body
+  - field_country_origin
+  - field_start_year
+  - owner
+  - landing_page
 weights:
   title: 0.6
   owner: 0.2
   country: 0.15
   year: 0.05
-exclusive_properties:
-  add: []
-  remove: []

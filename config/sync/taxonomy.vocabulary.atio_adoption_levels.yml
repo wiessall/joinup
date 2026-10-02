@@ -10,8 +10,8 @@ dependencies:
 third_party_settings:
   rdf_sync:
     type: 'http://www.w3.org/2004/02/skos/core#Concept'
-    uri_plugin: 'sti_namespace:concept'
     uri_field_name: term_uri
+    uri_plugin: 'sti_namespace:concept'
     fields:
       vid:
         target_id:
@@ -25,8 +25,6 @@ third_party_settings:
         target_id:
           predicate: 'http://www.w3.org/2004/02/skos/core#broaderTransitive'
           type: resource
-_core:
-  default_config_hash: _YUG0biOjSt8C8L0UCM0s0ntZaTLAp--M2Lx91t1lc0
 name: 'Adoption levels'
 vid: atio_adoption_levels
 description: 'Ported from the production STI Portal vocabulary "adoption_levels".'

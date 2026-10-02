@@ -5,11 +5,8 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: DibETCP9ATMmkGzrzXbas0v-dBRGA-Ae_Ahl8UHN8Nw
 id: atio_innovation_types_terms
 class: null
-idMap: {  }
 field_plugin_method: null
 cck_plugin_method: null
 migration_tags:
@@ -58,6 +55,7 @@ process:
 destination:
   plugin: 'entity:taxonomy_term'
   default_bundle: atio_innovation_types
+idMap: {  }
 migration_dependencies:
   required: {  }
   optional: {  }

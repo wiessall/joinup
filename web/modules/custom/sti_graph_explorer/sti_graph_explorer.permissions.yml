@@ -1,0 +1,4 @@
+explore sti graph:
+  title: 'Explore the knowledge graph'
+  description: 'Read everything rdf_sync has projected into the triplestore. The graph is not filtered by Drupal node access or OG membership.'
+  restrict access: true

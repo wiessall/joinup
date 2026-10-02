@@ -9,14 +9,12 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: 37T3cQw2gy1-N8_DYtJCqlFaz2Mosi_E5ntBkS9qdRA
 id: node.atio_innovation.atio_languages
 field_name: atio_languages
 entity_type: node
 bundle: atio_innovation
 label: Language(s)
-description: ''
+description: 'Language(s) in which the resource or related resurces are available'
 required: false
 translatable: false
 default_value: {  }

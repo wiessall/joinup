@@ -5,11 +5,8 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: _tW7xiRf7IiB_uwb4GPFQgNdVutVr1TavySJBiZ5dxY
 id: atio_investment_types_terms
 class: null
-idMap: {  }
 field_plugin_method: null
 cck_plugin_method: null
 migration_tags:
@@ -57,6 +54,7 @@ process:
 destination:
   plugin: 'entity:taxonomy_term'
   default_bundle: atio_investment_types
+idMap: {  }
 migration_dependencies:
   required: {  }
   optional: {  }

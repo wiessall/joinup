@@ -8,8 +8,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: T2m_PmsOhs4uD4dneR8LCqSWY3UZMpHdGsm6s-a12I0
 id: node.atio_geo_scale
 field_name: atio_geo_scale
 entity_type: node

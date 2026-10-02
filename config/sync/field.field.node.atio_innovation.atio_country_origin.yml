@@ -9,14 +9,12 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: 63GMvGjSQ2uIYmk3dRJ4BxvS3EoqQb9PWU_rZAE1Vbc
 id: node.atio_innovation.atio_country_origin
 field_name: atio_country_origin
 entity_type: node
 bundle: atio_innovation
 label: 'Country (origin)'
-description: ''
+description: 'The country where the innovation was designed / created'
 required: false
 translatable: false
 default_value: {  }

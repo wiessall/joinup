@@ -4,15 +4,13 @@ status: true
 dependencies:
   config:
     - field.storage.node.og_audience
-    - node.type.atio_innovation
     - node.type.collection
+    - node.type.atio_innovation
   module:
     - og
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: R21s04wK_6n4mN7GPGKRk7xezZyzFZ0A0krL_-UNdYY
 id: node.atio_innovation.og_audience
 field_name: og_audience
 entity_type: node

@@ -1,0 +1,34 @@
+uuid: b21a322d-03a8-4817-9afb-fab948401816
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.representation_technique
+    - node.type.distribution
+    - taxonomy.vocabulary.representation_technique
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://www.w3.org/ns/adms#representationTechnique'
+      type: resource
+id: node.distribution.representation_technique
+field_name: representation_technique
+entity_type: node
+bundle: distribution
+label: 'Representation technique'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      representation_technique: representation_technique
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

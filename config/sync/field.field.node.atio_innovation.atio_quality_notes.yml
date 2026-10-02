@@ -5,13 +5,9 @@ dependencies:
   config:
     - field.storage.node.atio_quality_notes
     - node.type.atio_innovation
-  module:
-    - text
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: HFIZ6YDReZbmL5_aGaA_324GFK8LGg7vFIB_YEWYFXE
 id: node.atio_innovation.atio_quality_notes
 field_name: atio_quality_notes
 entity_type: node

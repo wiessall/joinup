@@ -1,0 +1,11 @@
+uuid: 461bd830-729f-4ea3-a7bf-c894a69e73c6
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.atio_innovation
+id: node.atio_innovation
+target_entity_type_id: node
+target_bundle: atio_innovation
+default_langcode: site_default
+language_alterable: false

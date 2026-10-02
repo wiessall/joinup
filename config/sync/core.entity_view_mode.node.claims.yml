@@ -1,0 +1,14 @@
+uuid: 06b9ffb0-ff8c-4054-89fb-d245aea17f18
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+  enforced:
+    module:
+      - atio
+id: node.claims
+label: Claims
+description: ''
+targetEntityType: node
+cache: true

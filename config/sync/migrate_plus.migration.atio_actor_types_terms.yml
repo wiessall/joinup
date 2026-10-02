@@ -5,11 +5,8 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: q7pQvm_8LFdOHlSob716DAYwGXlYMQ0BZ28w-QTeD3U
 id: atio_actor_types_terms
 class: null
-idMap: {  }
 field_plugin_method: null
 cck_plugin_method: null
 migration_tags:
@@ -57,6 +54,7 @@ process:
 destination:
   plugin: 'entity:taxonomy_term'
   default_bundle: atio_actor_types
+idMap: {  }
 migration_dependencies:
   required: {  }
   optional: {  }

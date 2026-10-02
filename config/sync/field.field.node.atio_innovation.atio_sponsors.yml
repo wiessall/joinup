@@ -9,14 +9,12 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: COlfZe2A6XDHFfX2NS2LV7ZGGCxDZv10ZnI2bljpogU
 id: node.atio_innovation.atio_sponsors
 field_name: atio_sponsors
 entity_type: node
 bundle: atio_innovation
 label: 'Link(s) to sponsor organization(s)'
-description: ''
+description: 'Sponsors and investors in the innovation'
 required: false
 translatable: false
 default_value: {  }

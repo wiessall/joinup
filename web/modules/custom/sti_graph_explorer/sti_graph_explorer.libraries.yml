@@ -1,0 +1,23 @@
+# Vendored, not loaded from a CDN: fao_lean serves no third-party JS.
+d3:
+  version: 7.9.0
+  remote: https://github.com/d3/d3
+  license:
+    name: ISC
+    url: https://github.com/d3/d3/blob/main/LICENSE
+    gpl-compatible: true
+  js:
+    vendor/d3/d3.min.js: { minified: true }
+
+explorer:
+  version: VERSION
+  css:
+    component:
+      css/graph-explorer.css: {}
+  js:
+    js/graph-explorer.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/once
+    - sti_graph_explorer/d3

@@ -8,14 +8,12 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: 5HN8PpfcKc8UJVn8JKuow9Ceir8kx6J1tGrxcj75beg
 id: node.atio_innovation.atio_use_cases_description
 field_name: atio_use_cases_description
 entity_type: node
 bundle: atio_innovation
 label: 'Use cases: narrative'
-description: ''
+description: 'Narrative description / justification of the selection of the use cases of the innovation, and elaboration on additional use cases if not present in the list.'
 required: false
 translatable: false
 default_value: {  }

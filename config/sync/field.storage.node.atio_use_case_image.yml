@@ -8,8 +8,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: sFzLFo-1syaCWgs7cnEO-B5YrNHlO_snWutdnwQkBGE
 id: node.atio_use_case_image
 field_name: atio_use_case_image
 entity_type: node

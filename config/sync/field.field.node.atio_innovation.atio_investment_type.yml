@@ -9,8 +9,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: eFqG71ZtftE3mgPvsxQ50xdTc4ddXoZzkehlDj12XYM
 id: node.atio_innovation.atio_investment_type
 field_name: atio_investment_type
 entity_type: node
