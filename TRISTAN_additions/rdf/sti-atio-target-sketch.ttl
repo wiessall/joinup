@@ -5,8 +5,10 @@
 # property is here only if something emits or queries it.
 #
 # The idea in four lines:
-#   1. A Collection speaks. It holds source records and emits claims about
-#      them, in its own vocabulary.
+#   1. Anyone can say anything about anything, as a claim: who says it, about
+#      what, which property, which value. In practice the Collection is the
+#      main speaker: it holds source records and emits claims about them, in
+#      its own vocabulary.
 #   2. Source records are never merged. "Same innovation" links them.
 #   3. An ATIO Innovation is a digest of the claims on its source records.
 #   4. SKOS mappings say which claims bear on which ATIO field, and how
@@ -47,12 +49,25 @@ sti:inCollection a owl:ObjectProperty ;
     schema:domainIncludes sti:SourceRecord ; schema:rangeIncludes dcat:Catalog .
 
 sti:FieldClaim a owl:Class ;
-    rdfs:comment """A statement by one collection about one source record:
-    this property has this value. Reified so that who said it stays with
-    what was said."""@en .
+    rdfs:comment """A statement by an agent about a subject: this property
+    has this value. Reified so that who said it stays with what was said.
+    The subject is whatever carries the claim through sti:hasFieldClaim, and
+    can be anything with a URI: a source record (the common case), an
+    innovation, an organisation, a collection, or another claim."""@en .
+# OPEN the name. "FieldClaim" dates from claims about record fields only;
+#      sti:Claim would fit the general form. Renaming means a re-sync.
 
-sti:hasFieldClaim     a owl:ObjectProperty ; schema:domainIncludes sti:SourceRecord ; schema:rangeIncludes sti:FieldClaim .
-sti:claimedBy         a owl:ObjectProperty ; schema:domainIncludes sti:FieldClaim ; schema:rangeIncludes dcat:Catalog .
+# No rdfs:domain on hasFieldClaim, on purpose: any resource may carry claims.
+sti:hasFieldClaim     a owl:ObjectProperty ; schema:rangeIncludes sti:FieldClaim ;
+    schema:domainIncludes sti:SourceRecord, atio:Innovation, foaf:Agent, dcat:Catalog, sti:FieldClaim .
+# Who says it: any agent. A collection today; an organisation, a curator or
+# an AI model are equally valid.
+sti:claimedBy         a owl:ObjectProperty ; schema:domainIncludes sti:FieldClaim ;
+    schema:rangeIncludes dcat:Catalog, prov:Agent .
+# TODO today only source records carry claims and only collections make them.
+#      Opening it up: the claims field on further bundles (config), a
+#      "claimed by" that accepts other agents, and imports that leave claims
+#      they did not create alone (already done for sameInnovationAs).
 sti:claimProperty     a owl:ObjectProperty ; schema:domainIncludes sti:FieldClaim ; schema:rangeIncludes rdf:Property .
 sti:claimRefValue     a owl:ObjectProperty ; schema:domainIncludes sti:FieldClaim ;
     rdfs:comment "A concept from the collection's own value vocabulary, or another source record."@en .
@@ -115,17 +130,26 @@ atio:derivedFromSource a owl:ObjectProperty ;
 #
 # Conflict = two candidate claims for one single-valued field with different
 # values. It is a query result that the digest step reads. No verdict is
-# stored and nobody adjudicates.
+# stored and nobody is required to adjudicate.
+#
+# Anyone who does have something to say about a claim says it as a claim:
+# a claim whose subject is that claim ("ATIO disputes this", "this source
+# confirms that one"). Attributed, optional, and the same shape as the rest.
+#
+# One rule against a loop: the digest reads claims on its source records.
+# Claims made directly about the Innovation are responses to the digest
+# (feedback, corrections); it does not consume them automatically.
 
 # ── Deliberately not in the model ────────────────────────────────────────────
 #
 #   ClaimResolution, ClaimVerdict   no one has a basis to rule, and no one
 #                                   would at this scale; the mappings and the
-#                                   claims are the evidence.
+#                                   claims are the evidence. A view on a
+#                                   claim is itself a claim.
 #   MergeStrategy, merged records   records are linked, not merged.
 #   DataSource                      it is the Collection.
-#   claimSubject                    the record holds the claim; the innovation
-#                                   reaches it through derivedFromSource.
+#   claimSubject                    the subject is whatever carries the claim
+#                                   (^sti:hasFieldClaim); no second property.
 #   claimEligible, FieldSchemeUsage,
 #   inferredScheme, scheme rules    follow from the collection's vocabulary.
 #   named graphs for access         access is decided in Drupal; unpublished
@@ -172,6 +196,13 @@ ex:concept\/eca-pilot      a skos:Concept ; skos:prefLabel "Pilot" .
 # Mappings (mappings graph): one direct, one that reaches ATIO indirectly.
 ex:property\/stf-readiness skos:exactMatch atio:readinessLevel .
 ex:property\/eca-stage     skos:closeMatch ex:property\/stf-readiness .
+
+# A claim about a claim: ATIO, as an agent, on the ECA stage claim.
+ex:agent\/atio a foaf:Agent ; foaf:name "ATIO" .
+ex:claim\/3 sti:hasFieldClaim ex:claim\/5 .
+ex:claim\/5 a sti:FieldClaim ; sti:claimedBy ex:agent\/atio ;
+    sti:claimProperty ex:property\/atio-note ; sti:claimLiteralValue "Stage scale differs from TRL; treat as indicative." .
+ex:property\/atio-note a rdf:Property ; skos:prefLabel "curation note" .
 
 # The digest. Candidates for atio:readinessLevel: "TRL 6" (direct, 1.0) and
 # "Pilot" (indirect, 0.8). They differ, which is a computed conflict.
