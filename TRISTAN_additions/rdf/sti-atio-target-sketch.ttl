@@ -1,0 +1,180 @@
+# STI / ATIO target model: sketch, 2026-10-02.
+#
+# What the platform writes to the graph today, plus what is planned (marked
+# TODO) and what is undecided (marked OPEN). Slim on purpose: a class or
+# property is here only if something emits or queries it.
+#
+# The idea in four lines:
+#   1. A Collection speaks. It holds source records and emits claims about
+#      them, in its own vocabulary.
+#   2. Source records are never merged. "Same innovation" links them.
+#   3. An ATIO Innovation is a digest of the claims on its source records.
+#   4. SKOS mappings say which claims bear on which ATIO field, and how
+#      closely. Nobody rules on claims; disagreement is computed.
+
+@prefix sti:     <https://sti-portal.fao.org/sti#> .
+@prefix atio:    <https://sti-portal.fao.org/atio#> .
+@prefix dcat:    <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix schema:  <https://schema.org/> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# ── Tier 1, sti: the platform ────────────────────────────────────────────────
+
+# The Collection is the central class. No new class is minted for it: it is a
+# dcat:Catalog. Everything below is attributed to one.
+dcat:Catalog
+    rdfs:label "Collection"@en ;
+    rdfs:comment """A partner's data source as it exists on the platform. Holds
+    source records, emits every claim about them, and owns the vocabulary
+    those claims use: its properties and its values."""@en .
+
+sti:SourceRecord a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:comment """One collection's record of an innovation, as harvested.
+    Carries only the few fields normalised at ingestion (title, country,
+    year, owner); everything else the source says is a FieldClaim. Never
+    merged with another collection's record, never deleted by curation."""@en .
+
+sti:inCollection a owl:ObjectProperty ;
+    rdfs:subPropertyOf dcterms:isPartOf ;
+    schema:domainIncludes sti:SourceRecord ; schema:rangeIncludes dcat:Catalog .
+
+sti:FieldClaim a owl:Class ;
+    rdfs:comment """A statement by one collection about one source record:
+    this property has this value. Reified so that who said it stays with
+    what was said."""@en .
+
+sti:hasFieldClaim     a owl:ObjectProperty ; schema:domainIncludes sti:SourceRecord ; schema:rangeIncludes sti:FieldClaim .
+sti:claimedBy         a owl:ObjectProperty ; schema:domainIncludes sti:FieldClaim ; schema:rangeIncludes dcat:Catalog .
+sti:claimProperty     a owl:ObjectProperty ; schema:domainIncludes sti:FieldClaim ; schema:rangeIncludes rdf:Property .
+sti:claimRefValue     a owl:ObjectProperty ; schema:domainIncludes sti:FieldClaim ;
+    rdfs:comment "A concept from the collection's own value vocabulary, or another source record."@en .
+sti:claimLiteralValue a owl:DatatypeProperty ; schema:domainIncludes sti:FieldClaim .
+sti:claimedAt         a owl:DatatypeProperty ; schema:domainIncludes sti:FieldClaim ; rdfs:range xsd:dateTime ;
+    rdfs:comment "When the claim was imported. Not when the source asserted it, and not which source is newer."@en .
+
+# A collection's vocabulary. Property terms are rdf:Property, value terms
+# skos:Concept; both carry skos:prefLabel.
+# TODO value terms are still typed rdfs:Resource; make them skos:Concept.
+# TODO emit skos:inScheme <collection> on both, so "whose term is this" is a
+#      triple and not only a position in a Drupal vocabulary.
+
+# Deduplication. A claim like any other, whose value is another source
+# record. Written on both records by duplicate review; kept across re-imports.
+# Sameness is transitive in effect: records linked this way form a cluster.
+sti:sameInnovationAs a rdf:Property ;
+    rdfs:label "same innovation as"@en ;
+    schema:domainIncludes sti:SourceRecord ; schema:rangeIncludes sti:SourceRecord .
+# OPEN (issue 14) who states it. Today the claim is claimedBy the record's own
+#      collection, though a reviewer decided. Options: keep; attribute to the
+#      reviewer or to ATIO; or make it a plain triple between the records.
+
+# ── Tier 2, atio: curation ───────────────────────────────────────────────────
+
+atio:Innovation a owl:Class ;
+    rdfs:comment """The curated innovation: a digest of what its source
+    records' collections claim, in ATIO's vocabulary. Its typed fields
+    (atio:readinessLevel, atio:innovationType, …) are defined by the
+    atio_innovation mapping and listed at /atio; they are not repeated here."""@en .
+
+atio:derivedFromSource a owl:ObjectProperty ;
+    rdfs:subPropertyOf prov:wasDerivedFrom ;
+    schema:domainIncludes atio:Innovation ; schema:rangeIncludes sti:SourceRecord ;
+    rdfs:comment "Every source record the digest draws on: one record, or a whole sameInnovationAs cluster."@en .
+
+# ── The bridge: SKOS mappings, in their own named graph ──────────────────────
+#
+#   <collection property>  skos:exactMatch | closeMatch | broadMatch |
+#                          narrowMatch | relatedMatch   atio:<field> .
+#   <collection property>  skos:…Match  <another collection's property> .
+#   <collection value>     skos:exactMatch  <ATIO or external concept> .
+#
+# Authored in the mapper (/admin/curate/skos), loaded into
+# <https://sti-portal.fao.org/graph/mappings>. Not in rdf_sync's graph, which
+# rewrites a term's triples whenever the term is saved.
+#
+# Which claims can fill an ATIO field is then derived, never stored:
+#
+#   ?innovation atio:derivedFromSource ?record .
+#   ?record sti:hasFieldClaim ?claim .
+#   ?claim sti:claimProperty ?property .
+#   { ?property ?match atio:someField }                          # direct
+#   UNION
+#   { ?property ?m1 ?other . ?other ?m2 atio:someField }         # indirect
+#
+# Ranking convention (OPEN: a convention, not something a curator states):
+#   exactMatch 1.0, closeMatch 0.8, broadMatch/narrowMatch 0.6,
+#   relatedMatch 0.4; an indirect route weighs the product of its two steps.
+#
+# Conflict = two candidate claims for one single-valued field with different
+# values. It is a query result that the digest step reads. No verdict is
+# stored and nobody adjudicates.
+
+# ── Deliberately not in the model ────────────────────────────────────────────
+#
+#   ClaimResolution, ClaimVerdict   no one has a basis to rule, and no one
+#                                   would at this scale; the mappings and the
+#                                   claims are the evidence.
+#   MergeStrategy, merged records   records are linked, not merged.
+#   DataSource                      it is the Collection.
+#   claimSubject                    the record holds the claim; the innovation
+#                                   reaches it through derivedFromSource.
+#   claimEligible, FieldSchemeUsage,
+#   inferredScheme, scheme rules    follow from the collection's vocabulary.
+#   named graphs for access         access is decided in Drupal; unpublished
+#                                   content never reaches the graph.
+
+# ── Still open ───────────────────────────────────────────────────────────────
+#
+#   OPEN  Should the digest record which claims it actually used, per field?
+#         Derivable candidates are not the same as used ones. Cheapest form:
+#         atio:Innovation prov:wasDerivedFrom <claim>, without per-field detail.
+#   OPEN  Claim history. A re-import replaces a collection's claims, so "what
+#         did the source say last year" is not answerable.
+#   OPEN  Issue 14 (above), and the ranking convention (above).
+
+# ── Example ──────────────────────────────────────────────────────────────────
+
+@prefix ex: <https://sti-portal.fao.org/id/> .
+
+ex:collection\/stf a dcat:Catalog ; dcterms:title "STF" .
+ex:collection\/eca a dcat:Catalog ; dcterms:title "ECA" .
+
+ex:source-record\/a a sti:SourceRecord ; sti:inCollection ex:collection\/stf ;
+    dcterms:title "Solar pump" ;
+    sti:hasFieldClaim ex:claim\/1, ex:claim\/2 .
+ex:source-record\/b a sti:SourceRecord ; sti:inCollection ex:collection\/eca ;
+    dcterms:title "Solar water pump" ;
+    sti:hasFieldClaim ex:claim\/3, ex:claim\/4 .
+
+ex:claim\/1 a sti:FieldClaim ; sti:claimedBy ex:collection\/stf ;
+    sti:claimProperty ex:property\/stf-readiness ; sti:claimLiteralValue "TRL 6" .
+ex:claim\/3 a sti:FieldClaim ; sti:claimedBy ex:collection\/eca ;
+    sti:claimProperty ex:property\/eca-stage ; sti:claimRefValue ex:concept\/eca-pilot .
+
+# The two records describe the same innovation.
+ex:claim\/2 a sti:FieldClaim ; sti:claimedBy ex:collection\/stf ;
+    sti:claimProperty sti:sameInnovationAs ; sti:claimRefValue ex:source-record\/b .
+ex:claim\/4 a sti:FieldClaim ; sti:claimedBy ex:collection\/eca ;
+    sti:claimProperty sti:sameInnovationAs ; sti:claimRefValue ex:source-record\/a .
+
+ex:property\/stf-readiness a rdf:Property ; skos:prefLabel "technical_readiness" .
+ex:property\/eca-stage     a rdf:Property ; skos:prefLabel "Development stage" .
+ex:concept\/eca-pilot      a skos:Concept ; skos:prefLabel "Pilot" .
+
+# Mappings (mappings graph): one direct, one that reaches ATIO indirectly.
+ex:property\/stf-readiness skos:exactMatch atio:readinessLevel .
+ex:property\/eca-stage     skos:closeMatch ex:property\/stf-readiness .
+
+# The digest. Candidates for atio:readinessLevel: "TRL 6" (direct, 1.0) and
+# "Pilot" (indirect, 0.8). They differ, which is a computed conflict.
+ex:innovation\/x a atio:Innovation ;
+    dcterms:title "Solar-powered irrigation pump" ;
+    atio:derivedFromSource ex:source-record\/a, ex:source-record\/b .
