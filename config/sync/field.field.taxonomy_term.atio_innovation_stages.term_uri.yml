@@ -8,8 +8,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: HSu2PAy2Z-Y1YJtdH4l53wqM8Ld5PY04CvLtRqYoLRE
 id: taxonomy_term.atio_innovation_stages.term_uri
 field_name: term_uri
 entity_type: taxonomy_term

@@ -4,18 +4,15 @@ status: true
 dependencies:
   module:
     - node
-    - text
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: XA7fFNiTjupwe245cAKU3iLSQUKh1OAYRxHvMoyKHEQ
 id: node.atio_quality_notes
 field_name: atio_quality_notes
 entity_type: node
 type: text_long
 settings: {  }
-module: text
+module: core
 locked: false
 cardinality: 1
 translatable: true

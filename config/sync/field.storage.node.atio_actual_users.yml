@@ -8,8 +8,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: U2BbxuCk-CSIg1QSJlpVK83k4-AZGQcKSwWL4W7eGC8
 id: node.atio_actual_users
 field_name: atio_actual_users
 entity_type: node

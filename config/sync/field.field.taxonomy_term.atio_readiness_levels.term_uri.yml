@@ -8,8 +8,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: vffLUi7Vhle6p3TS0kTgkMDHOMFcut2LZWHZZInqe94
 id: taxonomy_term.atio_readiness_levels.term_uri
 field_name: term_uri
 entity_type: taxonomy_term

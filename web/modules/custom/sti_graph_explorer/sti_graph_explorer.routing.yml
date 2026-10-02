@@ -1,0 +1,41 @@
+# Not under /admin, so the page renders in the front-end theme (fao_lean).
+sti_graph_explorer.page:
+  path: '/explore/graph'
+  defaults:
+    _controller: '\Drupal\sti_graph_explorer\Controller\ExplorerController::page'
+    _title: 'Knowledge graph explorer'
+  requirements:
+    _permission: 'explore sti graph'
+
+# JSON endpoints. The browser never sends SPARQL: each endpoint runs a fixed
+# query, and the only inputs (IRIs, a search string, an offset) are validated
+# or escaped before they reach it.
+sti_graph_explorer.api.schema:
+  path: '/explore/graph/api/schema'
+  methods: [GET]
+  defaults:
+    _controller: '\Drupal\sti_graph_explorer\Controller\ExplorerController::schema'
+  requirements:
+    _permission: 'explore sti graph'
+  options:
+    no_cache: true
+
+sti_graph_explorer.api.instances:
+  path: '/explore/graph/api/instances'
+  methods: [GET]
+  defaults:
+    _controller: '\Drupal\sti_graph_explorer\Controller\ExplorerController::instances'
+  requirements:
+    _permission: 'explore sti graph'
+  options:
+    no_cache: true
+
+sti_graph_explorer.api.resource:
+  path: '/explore/graph/api/resource'
+  methods: [GET]
+  defaults:
+    _controller: '\Drupal\sti_graph_explorer\Controller\ExplorerController::resource'
+  requirements:
+    _permission: 'explore sti graph'
+  options:
+    no_cache: true

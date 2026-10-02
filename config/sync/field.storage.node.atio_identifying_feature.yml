@@ -7,8 +7,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: iEBBLaYb0oz9IG0Rpi25FAKBxXqoUPWuM_8xzYmJ1oM
 id: node.atio_identifying_feature
 field_name: atio_identifying_feature
 entity_type: node

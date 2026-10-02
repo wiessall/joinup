@@ -4,18 +4,15 @@ status: true
 dependencies:
   module:
     - node
-    - text
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: tc6Pk-bsdkr3lwsx1v3xa2lPkQ22WvEb3sM6nI1oUmg
 id: node.atio_shorter_description
 field_name: atio_shorter_description
 entity_type: node
 type: text_long
 settings: {  }
-module: text
+module: core
 locked: false
 cardinality: 1
 translatable: true

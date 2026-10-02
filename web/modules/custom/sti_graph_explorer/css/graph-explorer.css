@@ -1,0 +1,339 @@
+/**
+ * Knowledge graph explorer. Reads only fao_lean's --fao-* tokens, with the
+ * FAO DS values as fallbacks so the page still works under another theme.
+ */
+.sge {
+  --sge-primary: var(--fao-primary, #116bac);
+  --sge-text: var(--fao-text, #545454);
+  --sge-muted: var(--fao-text-muted, #999);
+  --sge-border: var(--fao-border, #dee2e6);
+  --sge-line: var(--fao-line, #f2f2f2);
+  --sge-surface: var(--fao-surface, #fff);
+  --sge-tint: var(--fao-primary-light, #e5ecf4);
+  --sge-radius: var(--fao-radius, 5px);
+
+  /* One colour per namespace group (Prefixes::GROUPS order). FAO blue first;
+     the rest are mid-tone hues distinguishable from it and from each other,
+     all with at least 3:1 contrast against white for the node fill. */
+  --sge-group-0: var(--sge-primary);
+  --sge-group-1: #0f8a7e;
+  --sge-group-2: #b3591d;
+  --sge-group-3: #7a4fb0;
+  --sge-group-4: #a7801a;
+  --sge-group-5: #c2334f;
+  --sge-group-6: #4f6a7d;
+  --sge-group-7: #8a8a8a;
+
+  color: var(--sge-text);
+}
+
+.sge__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.sge__search {
+  flex: 1 1 18rem;
+  max-width: 28rem;
+}
+
+.sge__status {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.25rem;
+  margin: 0;
+  max-width: 60%;
+  color: var(--sge-text);
+  pointer-events: none;
+}
+
+.sge__status:empty {
+  display: none;
+}
+
+.sge__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+
+@media (min-width: 992px) {
+  .sge__body {
+    grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr);
+  }
+}
+
+/* Panel: the accessible, text version of whatever the drawing shows. */
+.sge__panel {
+  border: 1px solid var(--sge-border);
+  border-radius: var(--sge-radius);
+  background: var(--sge-surface);
+  padding: 1rem;
+  max-height: clamp(28rem, 72vh, 60rem);
+  overflow-y: auto;
+  font-size: 0.9rem;
+  order: 2;
+}
+
+@media (min-width: 992px) {
+  .sge__panel {
+    order: 0;
+  }
+}
+
+.sge__panel h2 {
+  font-size: 1.1rem;
+  margin: 0 0 0.25rem;
+  word-break: break-word;
+}
+
+.sge__panel h3 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--sge-muted);
+  margin: 1.25rem 0 0.5rem;
+}
+
+.sge__iri {
+  font-family: var(--bs-font-monospace, monospace);
+  font-size: 0.75rem;
+  color: var(--sge-muted);
+  word-break: break-all;
+}
+
+.sge__rows {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sge__rows > li {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--sge-line);
+}
+
+.sge__rows > li > :first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.sge__count {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--sge-muted);
+}
+
+/* Links in the panel are buttons (they act on the page), styled as links. */
+.sge__link {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--sge-primary);
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.sge__link:hover,
+.sge__link:focus-visible {
+  color: var(--fao-primary-hover, #1688da);
+}
+
+.sge__pred {
+  font-family: var(--bs-font-monospace, monospace);
+  font-size: 0.8rem;
+}
+
+.sge__chip {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 0.05rem 0.55rem;
+  margin: 0 0.25rem 0.25rem 0;
+  font-size: 0.75rem;
+  background: var(--sge-tint);
+  color: var(--sge-text);
+  border: 0;
+}
+
+.sge__swatch {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  margin-right: 0.35rem;
+  vertical-align: baseline;
+}
+
+.sge__literal {
+  white-space: pre-wrap;
+  max-height: 8rem;
+  overflow: auto;
+}
+
+/* Stage: the drawing, with legend and hint overlaid. */
+.sge__stage {
+  position: relative;
+  border: 1px solid var(--sge-border);
+  border-radius: var(--sge-radius);
+  background: var(--sge-surface);
+  min-height: clamp(28rem, 72vh, 60rem);
+  overflow: hidden;
+}
+
+.sge__canvas {
+  display: block;
+  width: 100%;
+  height: clamp(28rem, 72vh, 60rem);
+  cursor: grab;
+  touch-action: none;
+}
+
+.sge__canvas:active {
+  cursor: grabbing;
+}
+
+.sge__legend {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  background: color-mix(in srgb, var(--sge-surface) 92%, transparent);
+  border: 1px solid var(--sge-border);
+  border-radius: var(--sge-radius);
+  font-size: 0.75rem;
+}
+
+.sge__legend button {
+  background: none;
+  border: 0;
+  padding: 0.1rem 0;
+  color: var(--sge-text);
+  cursor: pointer;
+  font: inherit;
+}
+
+.sge__legend button[aria-pressed="false"] {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
+/* Narrow screens: legend below the drawing instead of over it. */
+@media (max-width: 575.98px) {
+  .sge__hint {
+    display: none;
+  }
+
+  .sge__legend {
+    position: static;
+    border: 0;
+    border-top: 1px solid var(--sge-border);
+    border-radius: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1rem;
+  }
+}
+
+.sge__hint {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 0.25rem;
+  margin: 0;
+  color: var(--sge-muted);
+  pointer-events: none;
+}
+
+/* SVG marks. */
+.sge-link {
+  fill: none;
+  stroke: var(--sge-muted);
+  stroke-opacity: 0.55;
+}
+
+.sge-link.is-active {
+  stroke: var(--sge-primary);
+  stroke-opacity: 1;
+}
+
+.sge-node circle {
+  stroke: var(--sge-surface);
+  stroke-width: 1.5px;
+  cursor: pointer;
+}
+
+/* Keyboard focus shows on the circle; no browser box around the group. */
+.sge-node:focus {
+  outline: none;
+}
+
+.sge-node:focus-visible circle {
+  stroke: var(--sge-primary);
+  stroke-width: 4px;
+}
+
+.sge-node.is-selected circle {
+  stroke: var(--sge-text);
+  stroke-width: 3px;
+}
+
+/* Not yet expanded: lighter, so expanded nodes read as the skeleton. */
+.sge-node.is-leaf circle {
+  fill-opacity: 0.5;
+}
+
+/* In a busy drawing, leaf labels show only near the hovered/selected node. */
+.sge.is-busy .sge-node.is-leaf:not(.is-near):not(.is-selected) text {
+  display: none;
+}
+
+.sge-node text {
+  font-size: 11px;
+  fill: var(--sge-text);
+  paint-order: stroke;
+  stroke: var(--sge-surface);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.sge-node.is-dimmed,
+.sge-link.is-dimmed {
+  opacity: 0.12;
+}
+
+.sge-arrow {
+  fill: var(--sge-muted);
+}
+
+.sge-edge-label.is-active {
+  opacity: 1;
+  fill: var(--sge-text);
+}
+
+.sge-edge-label {
+  opacity: 0;
+  font-size: 10px;
+  fill: var(--sge-muted);
+  paint-order: stroke;
+  stroke: var(--sge-surface);
+  stroke-width: 3px;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sge * {
+    transition: none !important;
+  }
+}

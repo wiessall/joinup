@@ -1,0 +1,14 @@
+uuid: 3e9f3b9f-c351-4ff2-a557-c4ef143fde29
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+  enforced:
+    module:
+      - atio
+id: node.atio_fields
+label: 'ATIO fields'
+description: ''
+targetEntityType: node
+cache: true

@@ -7,8 +7,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: tEXiZ9slwFuD-U0eZ_38KLNJU5kWd3iqfd1pPXoPYck
 id: node.atio_grassroot_partner
 field_name: atio_grassroot_partner
 entity_type: node

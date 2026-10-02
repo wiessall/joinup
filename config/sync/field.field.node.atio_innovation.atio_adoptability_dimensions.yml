@@ -8,14 +8,12 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: HlIbGjWBjM2f5yT3mA-5sMFomk69HQA_3lZ6qtCPUqU
 id: node.atio_innovation.atio_adoptability_dimensions
 field_name: atio_adoptability_dimensions
 entity_type: node
 bundle: atio_innovation
 label: 'Adoptability dimensions'
-description: ''
+description: 'Elaborate on what features the innovation has that makes it adoptable. Address: Profitability, Accessibility, Acceptability, Sustainability, Co-development.'
 required: false
 translatable: false
 default_value: {  }

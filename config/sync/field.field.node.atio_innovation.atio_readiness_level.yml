@@ -9,8 +9,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: Y-GOPr9cPt22Ss4CxpyeG55p7MDEbAY7w07TnyDgAQA
 id: node.atio_innovation.atio_readiness_level
 field_name: atio_readiness_level
 entity_type: node

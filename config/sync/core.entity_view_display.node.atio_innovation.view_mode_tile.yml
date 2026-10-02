@@ -1,0 +1,100 @@
+uuid: ffd5d942-ff5c-4224-bcad-4ba6c9f781ab
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.view_mode_tile
+    - field.field.node.atio_innovation.body
+    - node.type.atio_innovation
+  module:
+    - joinup_html_stripper
+    - template_suggestion
+  enforced:
+    module:
+      - atio
+id: node.atio_innovation.view_mode_tile
+targetEntityType: node
+bundle: atio_innovation
+mode: view_mode_tile
+content:
+  body:
+    type: joinup_html_stripper_stripped
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
+  report:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 50
+    region: content
+hidden:
+  atio_actual_users: true
+  atio_adoptability_dimensions: true
+  atio_adoption_description: true
+  atio_adoption_level: true
+  atio_ai_enriched_description: true
+  atio_ai_quality: true
+  atio_allow_ai_if_empty: true
+  atio_allow_ai_update: true
+  atio_allow_overwrite_by_origin: true
+  atio_allow_overwrite_if_empty: true
+  atio_bib_citation: true
+  atio_challenges_addressed: true
+  atio_city: true
+  atio_countries_adoption: true
+  atio_country_origin: true
+  atio_curation_notes: true
+  atio_derived_from: true
+  atio_fields_view: true
+  atio_form_of_innovation: true
+  atio_geo_scale: true
+  atio_grassroot_partner: true
+  atio_grassroots_narrative: true
+  atio_identifying_feature: true
+  atio_innovation_stage: true
+  atio_innovation_type: true
+  atio_innovative_features: true
+  atio_innovative_narrative: true
+  atio_investment_type: true
+  atio_is_grassroots: true
+  atio_languages: true
+  atio_long_term_beneficiaries: true
+  atio_owner: true
+  atio_partners: true
+  atio_prospective_users: true
+  atio_quality: true
+  atio_quality_notes: true
+  atio_readiness_description: true
+  atio_readiness_level: true
+  atio_record_status: true
+  atio_region: true
+  atio_sdg_targets: true
+  atio_shorter_description: true
+  atio_sponsors: true
+  atio_start_date: true
+  atio_start_year: true
+  atio_thematic_area: true
+  atio_use_case_image: true
+  atio_use_cases: true
+  atio_use_cases_description: true
+  atio_view_switch: true
+  langcode: true
+  links: true
+  og_audience: true
+  private_message_link: true
+  published_at: true
+  search_api_excerpt: true
+  uri: true
+  uuid: true

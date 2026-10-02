@@ -5,11 +5,8 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: WznAJBC252T9aXnLENNW20NUOAeh2nEgNWsrMoThdX4
 id: atio_innovation_forms_terms
 class: null
-idMap: {  }
 field_plugin_method: null
 cck_plugin_method: null
 migration_tags:
@@ -57,6 +54,7 @@ process:
 destination:
   plugin: 'entity:taxonomy_term'
   default_bundle: atio_innovation_forms
+idMap: {  }
 migration_dependencies:
   required: {  }
   optional: {  }

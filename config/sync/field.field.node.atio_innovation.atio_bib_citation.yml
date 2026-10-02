@@ -8,14 +8,12 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: ARyRjbtjirtZEIOdfdytMo3mei33fFLkb6k6k9sA4eo
 id: node.atio_innovation.atio_bib_citation
 field_name: atio_bib_citation
 entity_type: node
 bundle: atio_innovation
 label: 'Bibliographic citation of publication'
-description: ''
+description: 'If the source of the description of the innovation was a publication, provide the bibliographic citation.'
 required: false
 translatable: false
 default_value: {  }

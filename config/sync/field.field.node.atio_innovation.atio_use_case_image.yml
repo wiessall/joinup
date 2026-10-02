@@ -9,8 +9,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: p93QwFI_6W-HZeEK9g90k1WlMAunUOdR0ykjg87IKJM
 id: node.atio_innovation.atio_use_case_image
 field_name: atio_use_case_image
 entity_type: node

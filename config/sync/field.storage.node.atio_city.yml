@@ -7,16 +7,14 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: Zv0MqTr-W0V0LwwfrM_Hos5T3K37YB1zGXl1InMLq8Q
 id: node.atio_city
 field_name: atio_city
 entity_type: node
 type: string
 settings:
   max_length: 255
-  is_ascii: false
   case_sensitive: false
+  is_ascii: false
 module: core
 locked: false
 cardinality: 1

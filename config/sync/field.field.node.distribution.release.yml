@@ -1,0 +1,29 @@
+uuid: 5bbf513d-69fe-409a-8bc0-5ddfabe0833b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.release
+    - node.type.distribution
+    - node.type.release
+id: node.distribution.release
+field_name: release
+entity_type: node
+bundle: distribution
+label: Release
+description: 'Parent release'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      release: release
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

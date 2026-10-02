@@ -8,8 +8,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: nnV-byUjFsV41aJs1cAEQ5aLk5QIjaWaZEjpgcXQCyI
 id: taxonomy_term.atio_investment_types.term_uri
 field_name: term_uri
 entity_type: taxonomy_term

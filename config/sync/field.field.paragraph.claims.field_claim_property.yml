@@ -14,7 +14,7 @@ third_party_settings:
     excluded: false
   rdf_sync:
     target_id:
-      predicate: 'https://sti-portal.fao.org/sti#claimProperty'
+      predicate: 'https://sti-portal.fao.org/ontology#claimProperty'
       type: resource
 id: paragraph.claims.field_claim_property
 field_name: field_claim_property

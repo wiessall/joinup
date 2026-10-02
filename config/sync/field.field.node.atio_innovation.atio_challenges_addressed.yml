@@ -9,8 +9,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: diMGR5EnxbXySY_uqwCZNC93PgaJ2wURTkKB58kI0cs
 id: node.atio_innovation.atio_challenges_addressed
 field_name: atio_challenges_addressed
 entity_type: node

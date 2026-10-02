@@ -5,11 +5,8 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: bxci2semeAzUqR5oMBGJz4PjWMciQbFLCWKbOaLPzxU
 id: atio_adoption_levels_terms
 class: null
-idMap: {  }
 field_plugin_method: null
 cck_plugin_method: null
 migration_tags:
@@ -62,6 +59,7 @@ process:
 destination:
   plugin: 'entity:taxonomy_term'
   default_bundle: atio_adoption_levels
+idMap: {  }
 migration_dependencies:
   required: {  }
   optional: {  }

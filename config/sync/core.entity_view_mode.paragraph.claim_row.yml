@@ -1,0 +1,14 @@
+uuid: b07cff4a-c4d4-4cac-acc9-0a8b0cfb0da7
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+  enforced:
+    module:
+      - atio
+id: paragraph.claim_row
+label: 'Claim row'
+description: 'One claim as a property / value row, as on the solution page.'
+targetEntityType: paragraph
+cache: true

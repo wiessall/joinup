@@ -1,0 +1,34 @@
+uuid: cb404a81-1181-4fc4-94d8-6e35cd94d2d6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_licence
+    - node.type.distribution
+    - node.type.licence
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://purl.org/dc/terms/license'
+      type: resource
+id: node.distribution.field_licence
+field_name: field_licence
+entity_type: node
+bundle: distribution
+label: Licence
+description: 'If you cannot find the desired licence in the list above, please request a new one by <a href="/contact?category=legal">contacting us</a>.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      licence: licence
+    sort:
+      field: title
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

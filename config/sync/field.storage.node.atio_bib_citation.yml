@@ -7,8 +7,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: 0pQoPwzlC9jzVnu0iEJn8JVatewuTJ5KHBgu9a3KSxQ
 id: node.atio_bib_citation
 field_name: atio_bib_citation
 entity_type: node

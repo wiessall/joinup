@@ -1,0 +1,83 @@
+uuid: 687562dc-f2f5-44ee-a37d-86bf133faff7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.solution.field_claims
+    - node.type.solution
+    - core.entity_view_mode.node.claims
+    - core.entity_view_mode.paragraph.claim_row
+  module:
+    - entity_reference_revisions
+  enforced:
+    module:
+      - atio
+id: node.solution.claims
+targetEntityType: node
+bundle: solution
+mode: claims
+content:
+  field_claims:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: claim_row
+      link: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  abstract: true
+  classification: true
+  collections: true
+  contact: true
+  description: true
+  distributions: true
+  domain: true
+  download_total: true
+  eif_perspective: true
+  featured: true
+  field_is_description: true
+  field_machine_record: true
+  field_original_internal_id: true
+  field_shared_in: true
+  field_state: true
+  field_topic: true
+  flag_interoperability: true
+  flag_like: true
+  group_moderation: true
+  keywords: true
+  landing_page: true
+  langcode: true
+  language: true
+  links: true
+  logo: true
+  members: true
+  metrics_page: true
+  node_solution_listing_content_inline_facets: true
+  node_solution_listing_content_top: true
+  og_audience: true
+  og_group: true
+  owner: true
+  pinned_in: true
+  private_message_link: true
+  process_status: true
+  published_at: true
+  read_more: true
+  related_solution: true
+  related_solutions: true
+  release_number: true
+  releases_overview: true
+  report: true
+  resources: true
+  search_api_excerpt: true
+  share_link: true
+  shared_in: true
+  short_id: true
+  site_featured: true
+  solution_settings: true
+  solution_subscribe: true
+  solution_type: true
+  translation: true
+  uri: true
+  uuid: true

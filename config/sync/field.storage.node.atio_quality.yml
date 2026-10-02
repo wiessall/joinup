@@ -8,8 +8,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: IQ0BXohi0tsX0eQ9RKyCK-IJIDwlF7JyQWVeexM5RfA
 id: node.atio_quality
 field_name: atio_quality
 entity_type: node

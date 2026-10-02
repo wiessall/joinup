@@ -8,6 +8,16 @@ dependencies:
     - field.storage.meta_entity.field_pinned_in
     - field.storage.meta_entity.field_shared_in
     - field.storage.node.abstract
+    - field.storage.node.atio_adoption_level
+    - field.storage.node.atio_challenges_addressed
+    - field.storage.node.atio_country_origin
+    - field.storage.node.atio_form_of_innovation
+    - field.storage.node.atio_innovation_stage
+    - field.storage.node.atio_innovation_type
+    - field.storage.node.atio_readiness_level
+    - field.storage.node.atio_sdg_targets
+    - field.storage.node.atio_thematic_area
+    - field.storage.node.atio_use_cases
     - field.storage.node.body
     - field.storage.node.classification
     - field.storage.node.contact
@@ -97,12 +107,12 @@ third_party_settings:
       include_language_independent: true
       use_language_undefined_as_fallback_language: false
       specific_languages:
+        en: '0'
         bg: '0'
         hr: '0'
         cs: '0'
         da: '0'
         nl: '0'
-        en: '0'
         et: '0'
         fi: '0'
         fr: '0'
@@ -152,6 +162,86 @@ field_settings:
     dependencies:
       module:
         - assessments
+  atio_adoption_level:
+    label: 'Adoption level'
+    datasource_id: 'entity:node'
+    property_path: atio_adoption_level
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.atio_adoption_level
+  atio_challenges_addressed:
+    label: 'Challenge addressed'
+    datasource_id: 'entity:node'
+    property_path: atio_challenges_addressed
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.atio_challenges_addressed
+  atio_country_origin:
+    label: 'Country of origin'
+    datasource_id: 'entity:node'
+    property_path: atio_country_origin
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.atio_country_origin
+  atio_form_of_innovation:
+    label: 'Form of innovation'
+    datasource_id: 'entity:node'
+    property_path: atio_form_of_innovation
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.atio_form_of_innovation
+  atio_innovation_stage:
+    label: 'Innovation stage'
+    datasource_id: 'entity:node'
+    property_path: atio_innovation_stage
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.atio_innovation_stage
+  atio_innovation_type:
+    label: 'Type of innovation'
+    datasource_id: 'entity:node'
+    property_path: atio_innovation_type
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.atio_innovation_type
+  atio_readiness_level:
+    label: 'Readiness level'
+    datasource_id: 'entity:node'
+    property_path: atio_readiness_level
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.atio_readiness_level
+  atio_sdg_targets:
+    label: 'SDG target'
+    datasource_id: 'entity:node'
+    property_path: atio_sdg_targets
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.atio_sdg_targets
+  atio_thematic_area:
+    label: 'Thematic area'
+    datasource_id: 'entity:node'
+    property_path: atio_thematic_area
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.atio_thematic_area
+  atio_use_cases:
+    label: 'Use case'
+    datasource_id: 'entity:node'
+    property_path: atio_use_cases
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.atio_use_cases
   body:
     label: 'Body » Processed text'
     datasource_id: 'entity:node'
@@ -870,12 +960,11 @@ datasource_settings:
       default: false
       selected:
         - assessment_report
+        - atio_innovation
         - collection
         - custom_page
         - discussion
-        - distribution
         - document
-        - dv_solutions_annotation
         - event
         - licence
         - news

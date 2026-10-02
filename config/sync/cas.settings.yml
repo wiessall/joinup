@@ -27,7 +27,7 @@ forced_login:
     negate: false
     pages: /user/login
 user_accounts:
-  prevent_normal_login: true
+  prevent_normal_login: false
   auto_register: true
   auto_register_follow_registration_policy: true
   email_assignment_strategy: 1

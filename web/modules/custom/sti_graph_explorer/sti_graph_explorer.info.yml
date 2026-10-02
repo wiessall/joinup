@@ -1,0 +1,9 @@
+name: 'STI graph explorer'
+type: module
+description: 'Interactive d3 exploration of the rdf_sync projection: a schema view derived from the data, and a neighbourhood view per resource.'
+package: STI
+core_version_requirement: ^11.1
+dependencies:
+  - drupal:system
+  - rdf_sync:rdf_sync
+  - sparql_endpoint:sparql_endpoint

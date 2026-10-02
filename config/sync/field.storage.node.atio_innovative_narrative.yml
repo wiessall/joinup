@@ -7,8 +7,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: C6Hvz7gJQFQMCE_6wf47B87J_6nlX5i2wsbhC83LfdY
 id: node.atio_innovative_narrative
 field_name: atio_innovative_narrative
 entity_type: node

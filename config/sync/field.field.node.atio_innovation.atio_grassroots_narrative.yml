@@ -8,8 +8,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: LImgw9_0xj_dYIic_FTpIRKE3gH7uEhe-_VFCJHpEIg
 id: node.atio_innovation.atio_grassroots_narrative
 field_name: atio_grassroots_narrative
 entity_type: node

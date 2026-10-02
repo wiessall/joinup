@@ -13,7 +13,7 @@ third_party_settings:
     excluded: false
   rdf_sync:
     value:
-      predicate: 'https://sti-portal.fao.org/sti#claimedAt'
+      predicate: 'https://sti-portal.fao.org/ontology#claimedAt'
       type: 'xsd:dateTime'
 id: paragraph.claims.field_claimed_at
 field_name: field_claimed_at

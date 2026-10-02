@@ -8,8 +8,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: ATD0Vwgm9bWwX701eU57ulXpjK3_gzhROEdnY_5unVk
 id: taxonomy_term.atio_use_cases.variant
 field_name: variant
 entity_type: taxonomy_term

@@ -8,8 +8,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: Dmm1_nndkee9K3Qocr9LR3368BsODKbG-nel1SHnbeg
 id: node.atio_investment_type
 field_name: atio_investment_type
 entity_type: node

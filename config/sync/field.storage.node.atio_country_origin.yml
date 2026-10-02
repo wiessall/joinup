@@ -8,8 +8,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: ovdim5vIAdnBLLtzsl9HSiDOiHwitgsimA4X7BuUQqM
 id: node.atio_country_origin
 field_name: atio_country_origin
 entity_type: node

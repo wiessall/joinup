@@ -20,6 +20,7 @@ module:
   cas_attributes: 0
   changed_fields: 0
   chosen: 0
+  chosen_field: 0
   chosen_lib: 0
   ckeditor5: 0
   code_of_conduct: 0
@@ -60,6 +61,9 @@ module:
   entityqueue: 0
   entityqueue_block: 0
   error_page: 0
+  eu_oss_catalogue: 0
+  eu_oss_translation: 0
+  eu_oss_vitality_index: 0
   eupl: 0
   facets: 0
   facets_block: 0
@@ -211,7 +215,6 @@ module:
   owner: 0
   page_cache: 0
   page_manager: 0
-  page_manager_ui: 0
   paragraphs_type_permissions: 0
   path: 0
   path_alias: 0
@@ -259,6 +262,7 @@ module:
   state_machine_permissions: 0
   state_machine_revisions: 0
   sti_dedupe: 0
+  sti_graph_explorer: 0
   sti_portal_api: 0
   sti_qa: 0
   sti_rdf: 0
@@ -280,6 +284,7 @@ module:
   toolbar: 0
   topic: 0
   tour: 0
+  tracer: 0
   track_usage: 0
   twig_field_value: 0
   twig_tweak: 0

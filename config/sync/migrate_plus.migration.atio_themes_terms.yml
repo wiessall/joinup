@@ -5,11 +5,8 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: SFcjFmoLNU8J97QtIKAfFvWQfvQT21SBH_0Kzhipj9Y
 id: atio_themes_terms
 class: null
-idMap: {  }
 field_plugin_method: null
 cck_plugin_method: null
 migration_tags:
@@ -57,6 +54,7 @@ process:
 destination:
   plugin: 'entity:taxonomy_term'
   default_bundle: atio_themes
+idMap: {  }
 migration_dependencies:
   required: {  }
   optional: {  }

@@ -8,8 +8,6 @@ dependencies:
   enforced:
     module:
       - atio
-_core:
-  default_config_hash: BnujHORqEz4LS4rim8enwsX2Y-Priy8hDmRfvieYFhQ
 id: taxonomy_term.atio_readiness_levels.level_no
 field_name: level_no
 entity_type: taxonomy_term
@@ -21,8 +19,8 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  min: ''
-  max: ''
+  min: null
+  max: null
   prefix: ''
   suffix: ''
 field_type: integer
