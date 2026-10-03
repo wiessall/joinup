@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\sti_rdf\Drush\Commands;
 
+use Drupal\sti_rdf\Service\MappingImporter;
 use Drupal\sti_rdf\Service\UriReminter;
 use Drush\Attributes as CLI;
 use Drush\Commands\AutowireTrait;
@@ -26,8 +27,69 @@ final class StiRdfUriCommands extends DrushCommands {
   public function __construct(
     #[Autowire(service: 'sti_rdf.uri_reminter')]
     private readonly UriReminter $reminter,
+    #[Autowire(service: 'sti_rdf.mapping_importer')]
+    private readonly MappingImporter $mappingImporter,
   ) {
     parent::__construct();
+  }
+
+  /**
+   * Brings rdf_sync mappings from config/sync into the live site.
+   *
+   * For when a full config import is blocked by unrelated differences. Only
+   * the rdf_sync mapping of config that already exists is touched. Without
+   * --apply it only lists what differs.
+   */
+  #[CLI\Command(name: 'sti-rdf:mappings-import')]
+  #[CLI\Option(name: 'apply', description: 'Write the mappings. Without it, only the differences are listed.')]
+  #[CLI\Usage(name: 'drush sti-rdf:mappings-import', description: 'Lists config whose rdf_sync mapping differs from config/sync.')]
+  #[CLI\Usage(name: 'drush sti-rdf:mappings-import --apply', description: 'Writes the config/sync mappings into active configuration.')]
+  public function mappingsImport(array $options = ['apply' => FALSE]): int {
+    $diff = $this->mappingImporter->diff();
+
+    if ($diff['missing']) {
+      $this->io()->section('In config/sync with a mapping, but not on the site (needs a real config import)');
+      $this->io()->listing($diff['missing']);
+    }
+    if (!$diff['changed']) {
+      $this->io()->success('Every rdf_sync mapping on the site matches config/sync.');
+      return self::EXIT_SUCCESS;
+    }
+
+    $this->io()->section('rdf_sync mapping differs from config/sync');
+    $rows = [];
+    foreach ($diff['changed'] as $name => $change) {
+      $rows[] = [$name, self::summarise($change['from']), self::summarise($change['to'])];
+    }
+    $this->io()->table(['Config', 'On the site', 'In config/sync'], $rows);
+
+    if (!$options['apply']) {
+      $this->io()->note('Nothing was changed. Run again with --apply to write these mappings.');
+      return self::EXIT_FAILURE;
+    }
+    $names = $this->mappingImporter->apply();
+    $this->logger()->success(dt('Imported the rdf_sync mapping of @count config object(s). Rebuild caches (drush cr) before syncing.', ['@count' => count($names)]));
+    return self::EXIT_SUCCESS;
+  }
+
+  /**
+   * One line describing a mapping: its type, or its predicates.
+   */
+  private static function summarise(mixed $mapping): string {
+    if (!is_array($mapping)) {
+      return '(none)';
+    }
+    $parts = [];
+    if (isset($mapping['type'])) {
+      $parts[] = 'type ' . $mapping['type'];
+    }
+    array_walk_recursive($mapping, static function ($value, $key) use (&$parts): void {
+      if ($key === 'predicate' && is_string($value)) {
+        $parts[] = $value;
+      }
+    });
+    $shown = array_slice($parts, 0, 3);
+    return implode("\n", $shown) . (count($parts) > 3 ? "\n… +" . (count($parts) - 3) : '');
   }
 
   /**

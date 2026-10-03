@@ -36,6 +36,12 @@ services:
       - '@entity_field.manager'
   Drupal\sti_rdf\Service\MappingReaderInterface: '@sti_rdf.mapping_reader'
 
+  sti_rdf.mapping_importer:
+    class: Drupal\sti_rdf\Service\MappingImporter
+    arguments:
+      - '@config.factory'
+      - '@config.storage.sync'
+
   sti_rdf.mapping_term_source:
     class: Drupal\sti_rdf\Service\MappingTermSource
     arguments:

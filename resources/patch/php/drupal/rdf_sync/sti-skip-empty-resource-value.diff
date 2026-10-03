@@ -1,19 +1,25 @@
 diff --git a/src/Normalizer/RdfSyncNormalizer.php b/src/Normalizer/RdfSyncNormalizer.php
 --- a/src/Normalizer/RdfSyncNormalizer.php
 +++ b/src/Normalizer/RdfSyncNormalizer.php
-@@ -97,8 +97,13 @@ class RdfSyncNormalizer extends EntityNormalizer {
+@@ -97,8 +97,20 @@ class RdfSyncNormalizer extends EntityNormalizer {
              }
            }
  
 -          if ($value === NULL) {
 -            // Don't store NULLs.
-+          if ($value === NULL || $value === '' || ($mapping->type === 'resource' && is_string($value) === FALSE)) {
-+            // Don't store NULLs. Two more cases are skipped, because
-+            // EasyRdf\Resource throws on both and that aborts the whole
-+            // synchronization batch, not just this triple: an empty string
-+            // (a mapped target whose URI field is empty), and a non-string
-+            // (a reference to an entity that is not mapped keeps its raw
-+            // numeric id, which is not a URI).
++          if ($value === NULL || $value === '') {
++            // Don't store NULLs or empty strings.
++            continue;
++          }
++          if ($mapping->type === 'resource' && (!is_string($value) || preg_match('/[\s<>"{}|\\\\^`]/', $value) === 1)) {
++            // Not usable as an IRI, so skipped. Each of these otherwise
++            // aborts the whole synchronization batch, not just this triple:
++            // - a non-string: a reference to an entity that is not mapped
++            //   keeps its raw numeric id, and EasyRdf\Resource throws;
++            // - a string with whitespace or one of <>"{}|\^`: it is written
++            //   between angle brackets unescaped and breaks the SPARQL
++            //   statement (Virtuoso SP030), e.g. a landing page typed in as
++            //   free text.
              continue;
            }
  
