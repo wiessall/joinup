@@ -36,6 +36,14 @@ services:
       - '@entity_field.manager'
   Drupal\sti_rdf\Service\MappingReaderInterface: '@sti_rdf.mapping_reader'
 
+  sti_rdf.graph_synchronizer:
+    class: Drupal\sti_rdf\Service\GraphSynchronizer
+    arguments:
+      - '@entity_type.manager'
+      - '@rdf_sync.synchronizer'
+      - '@rdf_sync.mapper'
+      - '@entity.memory_cache'
+
   sti_rdf.mapping_importer:
     class: Drupal\sti_rdf\Service\MappingImporter
     arguments:

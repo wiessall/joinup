@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\sti_rdf\Drush\Commands;
 
+use Drupal\sti_rdf\Service\GraphSynchronizer;
 use Drupal\sti_rdf\Service\MappingImporter;
 use Drupal\sti_rdf\Service\UriReminter;
 use Drush\Attributes as CLI;
@@ -29,8 +30,66 @@ final class StiRdfUriCommands extends DrushCommands {
     private readonly UriReminter $reminter,
     #[Autowire(service: 'sti_rdf.mapping_importer')]
     private readonly MappingImporter $mappingImporter,
+    #[Autowire(service: 'sti_rdf.graph_synchronizer')]
+    private readonly GraphSynchronizer $graphSynchronizer,
   ) {
     parent::__construct();
+  }
+
+  /**
+   * Writes existing entities to the graph, in chunks, at a steady pace.
+   *
+   * For rebuilding the graph: the same result as rdf_sync:synchronize,
+   * without its slowdown on large entity types. Nothing is saved. Safe to
+   * stop and to repeat; --after-id resumes where a run stopped.
+   */
+  #[CLI\Command(name: 'sti-rdf:graph-sync')]
+  #[CLI\Argument(name: 'entityTypeId', description: 'node, paragraph or taxonomy_term.')]
+  #[CLI\Option(name: 'bundle', description: 'Comma-separated bundles; all mapped bundles when omitted.')]
+  #[CLI\Option(name: 'after-id', description: 'Resume after this entity id.')]
+  #[CLI\Option(name: 'chunk', description: 'Entities per write.')]
+  #[CLI\Usage(name: 'drush sti-rdf:graph-sync node', description: 'Writes every mapped node to the graph.')]
+  #[CLI\Usage(name: 'drush sti-rdf:graph-sync paragraph --after-id=412000', description: 'Resumes the paragraphs after id 412000.')]
+  public function graphSync(string $entityTypeId, array $options = ['bundle' => '', 'after-id' => 0, 'chunk' => 50]): int {
+    $bundles = array_values(array_filter(array_map('trim', explode(',', (string) $options['bundle']))));
+    $cursor = max(0, (int) $options['after-id']);
+    $chunk = max(1, (int) $options['chunk']);
+
+    $total = $this->graphSynchronizer->count($entityTypeId, $bundles, $cursor);
+    $this->io()->writeln(sprintf('%d %s entit(ies) to go, %d per write.', $total, $entityTypeId, $chunk));
+
+    $started = microtime(TRUE);
+    $done = 0;
+    $synced = 0;
+    $failed = [];
+    $nextReport = 0;
+    do {
+      $result = $this->graphSynchronizer->syncChunk($entityTypeId, $bundles, $cursor, $chunk);
+      $cursor = $result['last_id'];
+      $done += $result['examined'];
+      $synced += $result['synced'];
+      $failed += $result['failed'];
+      if ($done >= $nextReport && $result['examined'] > 0) {
+        $elapsed = max(0.001, microtime(TRUE) - $started);
+        $this->io()->writeln(sprintf('%d of %d  |  %.0f per second  |  %s elapsed  |  last id %d  |  %d failed',
+          $done, $total, $done / $elapsed, gmdate('H:i:s', (int) $elapsed), $cursor, count($failed)));
+        $nextReport = $done + max(1000, $chunk);
+      }
+    } while ($result['examined'] > 0);
+
+    $this->io()->writeln(sprintf('Handed to rdf_sync: %d (it leaves out unpublished ones). Not mapped: %d. Failed: %d. Last id: %d.',
+      $synced, $done - $synced - count($failed), count($failed), $cursor));
+    if ($failed) {
+      $this->io()->section('Entities rdf_sync could not write');
+      foreach (array_slice($failed, 0, 50, TRUE) as $id => $message) {
+        $this->io()->writeln("  $entityTypeId $id: $message");
+      }
+      if (count($failed) > 50) {
+        $this->io()->writeln(sprintf('  … and %d more.', count($failed) - 50));
+      }
+      return self::EXIT_FAILURE;
+    }
+    return self::EXIT_SUCCESS;
   }
 
   /**
