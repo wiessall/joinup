@@ -1,0 +1,25 @@
+uuid: 46037265-152a-439f-9c54-9edf8afcfafb
+langcode: en
+status: false
+dependencies:
+  module:
+    - eif
+    - system
+  theme:
+    - fao_lean
+id: fao_lean_eiffilterblock
+theme: fao_lean
+region: content
+weight: -7
+provider: null
+plugin: eif_filter_block
+settings:
+  id: eif_filter_block
+  label: 'Eif filter block'
+  label_display: '0'
+  provider: eif
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /node/705372

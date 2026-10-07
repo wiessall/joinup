@@ -1,0 +1,18 @@
+uuid: ca92e7d7-a250-43c7-86f1-1ee8278d5b65
+langcode: en
+status: true
+dependencies: {  }
+id: city_of_ghent
+label: 'City of Ghent'
+type: local
+country: BE
+weblinks:
+  -
+    url: 'https://district09.gent'
+    title: 'Digitaal gedreven door Gent | District09'
+description: "The City of Ghent's open-source software catalogue showcases digital solutions developed and used by the local administration to promote transparency, innovation, and interoperability."
+platformId: github
+platformSettings:
+  baseUrl: 'https://github.com'
+  projects:
+    StadGent: null

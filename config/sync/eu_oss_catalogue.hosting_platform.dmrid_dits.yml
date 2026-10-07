@@ -1,0 +1,18 @@
+uuid: 4589f5e8-b7b6-4648-bca7-3f9176d841b0
+langcode: en
+status: true
+dependencies: {  }
+id: dmrid_dits
+label: 'Department of Information Technology Services'
+type: national
+country: CY
+weblinks:
+  -
+    url: 'https://www.gov.cy/dmrid-dits'
+    title: null
+description: 'The Department of Information Technology Services promotes open-source solutions for public sector IT.'
+platformId: github
+platformSettings:
+  baseUrl: ''
+  projects:
+    gov-cy: null

@@ -3,13 +3,19 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.paragraph.social_media.field_paragraphs_social_media
     - paragraphs.paragraphs_type.social_media
+  module:
+    - social_media_links_field
 id: paragraph.social_media.default
 targetEntityType: paragraph
 bundle: social_media
 mode: default
 content:
   field_paragraphs_social_media:
+    type: social_media_links_field_select
+    weight: 0
+    region: content
     settings: {  }
     third_party_settings: {  }
 hidden:

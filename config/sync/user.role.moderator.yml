@@ -40,6 +40,7 @@ dependencies:
     - joinup_featured
     - joinup_group
     - joinup_group_content_management
+    - joinup_legal
     - joinup_licence
     - joinup_log
     - joinup_newsletter
@@ -90,6 +91,7 @@ permissions:
   - 'add sitewide alert entities'
   - 'administer collection ownership'
   - 'administer comments'
+  - 'administer entity legal document versions'
   - 'administer footer-about-us menu items'
   - 'administer footer-european-commission menu items'
   - 'administer footer-follow-us menu items'

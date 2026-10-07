@@ -1,6 +1,8 @@
 _core:
   default_config_hash: 4GIX5Esnc_umpXUBj4IIocRX7Mt5fPhm4AgXfE3E56E
 module:
+  addtocal: 0
+  adms_validator: 0
   allowed_formats: 0
   antibot: 0
   assessments: 0
@@ -16,6 +18,7 @@ module:
   block_field: 0
   breakpoint: 0
   cached_computed_field: 0
+  calendar_view: 0
   cas: 0
   cas_attributes: 0
   changed_fields: 0
@@ -52,6 +55,7 @@ module:
   dynamic_page_cache: 0
   editor: 0
   editor_file: 0
+  eif: 0
   email_confirmer: 0
   email_contact: 0
   entity_form_field_label: 0
@@ -122,6 +126,7 @@ module:
   joinup_i18n: 0
   joinup_invite: 0
   joinup_layout: 0
+  joinup_legal: 0
   joinup_licence: 0
   joinup_like: 0
   joinup_log: 0
@@ -256,6 +261,8 @@ module:
   sitewide_alert_block: 0
   slick: 0
   smart_trim: 0
+  social_media_links: 0
+  social_media_links_field: 0
   sparql_endpoint: 0
   sparql_endpoint_piwik: 0
   state_machine: 0
@@ -280,11 +287,11 @@ module:
   tmgmt: 0
   tmgmt_content: 0
   tmgmt_ec_etranslation: 0
+  tmgmt_file: 0
   token: 0
   toolbar: 0
   topic: 0
   tour: 0
-  tracer: 0
   track_usage: 0
   twig_field_value: 0
   twig_tweak: 0
