@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.user.compact
     - field.field.user.user.blocked_reason
+    - field.field.user.user.field_social_media
     - field.field.user.user.field_user_business_title
     - field.field.user.user.field_user_content
     - field.field.user.user.field_user_family_name
@@ -44,6 +45,7 @@ content:
 hidden:
   block_user: true
   blocked_reason: true
+  field_social_media: true
   field_user_business_title: true
   field_user_content: true
   field_user_family_name: true

@@ -11,7 +11,7 @@ dependencies:
 third_party_settings:
   rdf_sync:
     value:
-      predicate: 'https://sti-portal.fao.org/ontology#claimLiteralValue'
+      predicate: 'https://sti-portal.fao.org/sti#claimLiteralValue'
       type: 'xsd:string'
   tmgmt_content:
     excluded: false

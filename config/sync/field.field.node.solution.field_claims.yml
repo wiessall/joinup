@@ -15,7 +15,7 @@ third_party_settings:
     excluded: false
   rdf_sync:
     target_id:
-      predicate: 'https://sti-portal.fao.org/ontology#hasFieldClaim'
+      predicate: 'https://sti-portal.fao.org/sti#hasFieldClaim'
       type: resource
 id: node.solution.field_claims
 field_name: field_claims

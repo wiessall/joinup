@@ -1,10 +1,12 @@
 uuid: 7233b3a4-3b0f-4f41-8df3-e15eeb90569d
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - rdf_sync
 third_party_settings:
   rdf_sync:
-    type: 'https://sti-portal.fao.org/ontology#FieldClaim'
+    type: 'https://sti-portal.fao.org/sti#FieldClaim'
     uri_plugin: 'sti_namespace:claim'
 id: claims
 label: Claims

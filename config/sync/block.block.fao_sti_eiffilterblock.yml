@@ -1,0 +1,25 @@
+uuid: bcd58d04-1cc2-4918-a9c8-ffcb97a782c6
+langcode: en
+status: false
+dependencies:
+  module:
+    - eif
+    - system
+  theme:
+    - fao_sti
+id: fao_sti_eiffilterblock
+theme: fao_sti
+region: content
+weight: -7
+provider: null
+plugin: eif_filter_block
+settings:
+  id: eif_filter_block
+  label: 'Eif filter block'
+  label_display: '0'
+  provider: eif
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /node/705372

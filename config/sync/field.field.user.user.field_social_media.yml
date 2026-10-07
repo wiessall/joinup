@@ -1,0 +1,173 @@
+uuid: b562ea19-10f0-48e1-8491-f771a6db60d3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_social_media
+  module:
+    - social_media_links_field
+    - user
+id: user.user.field_social_media
+field_name: field_social_media
+entity_type: user
+bundle: user
+label: 'Social media accounts'
+description: 'Enter your social media accounts, but only the relative part for each. The website will automatically prepend the full URL. For example if your Facebook page is <em>https://www.facebook.com/myname</em>, then add only <em>myname</em>.'
+required: false
+translatable: false
+default_value:
+  -
+    platform: null
+    value: null
+    platform_values:
+      facebook:
+        value: ''
+      github:
+        value: ''
+      linkedin:
+        value: ''
+      slideshare:
+        value: ''
+      twitter:
+        value: ''
+      vimeo:
+        value: ''
+      youtube:
+        value: ''
+default_value_callback: ''
+settings:
+  iconset: 'joinup:default'
+  platforms:
+    goodreads:
+      enabled: false
+      description: ''
+      weight: -10
+    behance:
+      enabled: false
+      description: ''
+      weight: -10
+    googleplay:
+      enabled: false
+      description: ''
+      weight: -9
+    bitbucket:
+      enabled: false
+      description: ''
+      weight: -9
+    telegram:
+      enabled: false
+      description: ''
+      weight: -8
+    contact:
+      enabled: false
+      description: ''
+      weight: -8
+    meetup:
+      enabled: false
+      description: ''
+      weight: -7
+    drupal:
+      enabled: false
+      description: ''
+      weight: -7
+    email:
+      enabled: false
+      description: ''
+      weight: -6
+    website:
+      enabled: false
+      description: ''
+      weight: -6
+    mastodon:
+      enabled: true
+      description: ''
+      weight: -5
+    facebook:
+      enabled: true
+      description: ''
+      weight: -5
+    github:
+      enabled: true
+      description: ''
+      weight: -4
+    gitlab:
+      enabled: false
+      description: ''
+      weight: -4
+    flickr:
+      enabled: false
+      description: ''
+      weight: -3
+    instagram:
+      enabled: false
+      description: ''
+      weight: -2
+    tiktok:
+      enabled: false
+      description: ''
+      weight: -2
+    glassdoor:
+      enabled: false
+      description: ''
+      weight: -1
+    linkedin:
+      enabled: true
+      description: ''
+      weight: -1
+    patreon:
+      enabled: false
+      description: ''
+      weight: 0
+    pinterest:
+      enabled: false
+      description: ''
+      weight: 0
+    rss:
+      enabled: false
+      description: ''
+      weight: 1
+    xing:
+      enabled: false
+      description: ''
+      weight: 1
+    whatsapp:
+      enabled: false
+      description: ''
+      weight: 2
+    slideshare:
+      enabled: true
+      description: ''
+      weight: 2
+    tumblr:
+      enabled: false
+      description: ''
+      weight: 3
+    vkontakte:
+      enabled: false
+      description: ''
+      weight: 3
+    twitter:
+      enabled: true
+      description: ''
+      weight: 4
+    amazon:
+      enabled: false
+      description: ''
+      weight: 4
+    vimeo:
+      enabled: true
+      description: ''
+      weight: 5
+    googleplus:
+      enabled: false
+      description: ''
+      weight: 5
+    youtube:
+      enabled: true
+      description: ''
+      weight: 6
+    youtube_channel:
+      enabled: false
+      description: ''
+      weight: 7
+field_type: social_media_links_field

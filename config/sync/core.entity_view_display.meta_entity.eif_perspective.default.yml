@@ -7,9 +7,11 @@ dependencies:
     - field.field.meta_entity.eif_perspective.eif_layer
     - field.field.meta_entity.eif_perspective.eif_model
     - field.field.meta_entity.eif_perspective.eif_principle
+    - field.field.meta_entity.eif_perspective.eif_recommendation
     - field.field.meta_entity.eif_perspective.eif_solution_type
     - meta_entity.type.eif_perspective
   module:
+    - eif
     - field_delimiter
     - field_formatter_range
     - joinup_slick
@@ -52,8 +54,12 @@ content:
     weight: 3
     region: content
   eif_recommendation:
+    type: eif_qualified_recommendation
+    label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 6
+    region: content
   eif_solution_type:
     type: entity_reference_label
     label: inline
