@@ -36,7 +36,6 @@ dependencies:
     - field.storage.node.keywords
     - field.storage.node.organization
     - field.storage.node.owner
-    - field.storage.node.solution_type
     - field.storage.node.spatial_coverage
     - field.storage.node.spdx_licence
     - field.storage.node.submission
@@ -839,14 +838,6 @@ field_settings:
         - field.storage.meta_entity.field_featured
       module:
         - meta_entity
-  solution_type:
-    label: 'Solution type'
-    datasource_id: 'entity:node'
-    property_path: solution_type
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.solution_type
   spatial_coverage:
     label: 'Geographical coverage'
     datasource_id: 'entity:node'

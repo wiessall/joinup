@@ -1,0 +1,51 @@
+# ===========================================================================
+#  ALIGNMENTS TO EXTERNAL VOCABULARIES
+#  (Mapping ATIO classes and properties to standard vocabularies)
+# ===========================================================================
+
+# ===========================================================================
+#  SCHEMA.ORG ALIGNMENTS  (v0.6)
+#
+#  Design rationale:
+#
+#  sti_atio:Innovation rdfs:subClassOf schema:Product
+#    The most appropriate general alignment. An innovation is a product in
+#    the broad schema.org sense: something developed, owned, deployed, and
+#    offered in a value chain. This is a universal IS-A relationship that
+#    fires automatically for all instances via OWL reasoning.
+#    owl:equivalentClass schema:SoftwareApplication (v0.1-v0.5) is replaced:
+#    it was too narrow (software only) and too strong (equivalentClass implies
+#    every schema:SoftwareApplication is also a sti_atio:Innovation).
+#    sti_atio:DigitalInnovation rdfs:subClassOf schema:SoftwareApplication
+#    provides the precise alignment for digital subtypes only.
+#
+#  schema:ProductGroup NOT used for InnovationFamily.
+#    schema:ProductGroup describes variants of the same product (size, colour)
+#    -- shallow variation. Innovation families group genuinely distinct
+#    implementations sharing a mechanism. Semantic mismatch too large.
+#    InnovationFamily keeps only schema:Thing as external parent.
+#
+#  sti_atio:BundleRelation rdfs:subClassOf schema:ProductCollection
+#    A bundle is a typed collection of innovations. Loose alignment;
+#    sti_atio:BundleRelation retains its own typed properties.
+# ===========================================================================
+
+# PROV-O mappings (already declared via rdfs:subClassOf / rdfs:subPropertyOf above)
+# Summary of key PROV-O alignments:
+#   sti_atio:SourceRecord          rdfs:subClassOf prov:Entity
+#   sti_atio:AIExtractedInnovation rdfs:subClassOf prov:Entity
+#   sti_atio:AIEnrichmentActivity  rdfs:subClassOf prov:Activity
+#   sti_atio:Innovation            NOT prov:Entity (v0.7 -- real-world thing)
+#   sti_atio:InnovationRecord      rdfs:subClassOf prov:Entity  (NEW v0.7)
+#   sti_atio:InnovationVersion     rdfs:subClassOf prov:Entity
+#   sti_atio:derivedFromSource     rdfs:subPropertyOf prov:wasDerivedFrom
+#   sti_atio:derivedFromExtracted  rdfs:subPropertyOf prov:wasDerivedFrom
+#   sti_atio:extractedFromSource   rdfs:subPropertyOf prov:wasDerivedFrom
+#   sti_atio:extractionActivity    rdfs:subPropertyOf prov:wasGeneratedBy
+#   sti_atio:enrichmentAgent       rdfs:subPropertyOf prov:wasAssociatedWith
+#   sti_atio:inputSourceRecord     rdfs:subPropertyOf prov:used
+#   sti_atio:previousVersion       rdfs:subPropertyOf prov:wasDerivedFrom
+
+# ===========================================================================
+#  END OF ONTOLOGY
+# ===========================================================================

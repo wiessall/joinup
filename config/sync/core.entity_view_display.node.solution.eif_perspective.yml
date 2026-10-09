@@ -27,7 +27,6 @@ dependencies:
     - field.field.node.solution.resources
     - field.field.node.solution.short_id
     - field.field.node.solution.site_featured
-    - field.field.node.solution.solution_type
     - field.field.node.solution.translation
     - node.type.solution
     - responsive_image.styles.highlighted_content
@@ -121,25 +120,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 3
-    region: content
-  solution_type:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: false
-    third_party_settings:
-      field_delimiter:
-        delimiter: ''
-      field_formatter_range:
-        order: 0
-        limit: 0
-        offset: 0
-      joinup_slick:
-        preset: ''
-        field_label: true
-      template_suggestion:
-        template_suggestion: ''
-    weight: 2
     region: content
 hidden:
   classification: true

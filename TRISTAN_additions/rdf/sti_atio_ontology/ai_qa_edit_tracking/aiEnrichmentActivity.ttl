@@ -1,0 +1,53 @@
+@prefix sti_atio: <https://sti-portal.fao.org/ontology/sti-atio#> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+
+# ---------------------------------------------------------------------------
+#  L3.3  sti_atio:AIEnrichmentActivity   (prov:Activity)
+# ---------------------------------------------------------------------------
+
+sti_atio:AIEnrichmentActivity
+    a owl:Class ;
+    rdfs:label "AI Enrichment Activity"@en ;
+    rdfs:comment """A specific run of the AI enrichment pipeline processing one or more
+    source records. Implements prov:Activity. The combination of agent (AI model),
+    prompt version, and execution timestamp makes each enrichment activity
+    deterministic and auditable."""@en ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:enrichmentAgent
+    a owl:ObjectProperty ;
+    rdfs:label "enrichment agent"@en ;
+    rdfs:comment "The AI software agent (model + configuration) that performed the enrichment."@en ;
+    rdfs:domain sti_atio:AIEnrichmentActivity ;
+    rdfs:range prov:SoftwareAgent ;
+    rdfs:subPropertyOf prov:wasAssociatedWith ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:enrichmentStartedAt
+    a owl:DatatypeProperty ;
+    rdfs:label "enrichment started at"@en ;
+    rdfs:domain sti_atio:AIEnrichmentActivity ;
+    rdfs:subPropertyOf prov:startedAtTime ;
+    rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:enrichmentEndedAt
+    a owl:DatatypeProperty ;
+    rdfs:label "enrichment ended at"@en ;
+    rdfs:domain sti_atio:AIEnrichmentActivity ;
+    rdfs:subPropertyOf prov:endedAtTime ;
+    rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:inputSourceRecord
+    a owl:ObjectProperty ;
+    rdfs:label "input source record"@en ;
+    rdfs:domain sti_atio:AIEnrichmentActivity ;
+    rdfs:range sti_atio:SourceRecord ;
+    rdfs:subPropertyOf prov:used ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+

@@ -1,0 +1,69 @@
+@prefix sti_atio: <https://sti-portal.fao.org/ontology/sti-atio#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+
+# SHACL shape moved from utils/filled_example_onthology.ttl
+
+<https://sti-portal.fao.org/ontology/sti-atio#shapes/InnovationShape>
+    a sh:NodeShape ;
+    sh:targetClass sti_atio:Innovation ;
+
+    # -- readinessLevel: value must belong to a registered MaturityScheme --
+    sh:property [
+        sh:path sti_atio:readinessLevel ;
+        sh:class skos:Concept ;
+        sh:name "readiness level"@en ;
+        sh:description """Value must be a skos:Concept whose skos:inScheme
+        is typed as sti_atio:MaturityScheme. To use a new framework, declare
+        its ConceptScheme as sti_atio:MaturityScheme -- no shape edit needed."""@en ;
+        sh:sparql [
+            a sh:SPARQLConstraint ;
+            sh:message """readinessLevel value {$value} does not belong to any
+            registered sti_atio:MaturityScheme (checked via skos:inScheme and
+            sti_atio:inferredScheme). Declare its ConceptScheme as sti_atio:MaturityScheme,
+            or add a FieldSchemeUsage declaration to the DataSource."""@en ;
+            sh:select """
+                PREFIX sti_atio: <https://sti-portal.fao.org/ontology/sti-atio#>
+                PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+                SELECT $this ?value WHERE {
+                    $this sti_atio:readinessLevel ?value .
+                    FILTER NOT EXISTS {
+                        # Path 1: concept carries explicit skos:inScheme
+                        ?value skos:inScheme ?scheme1 .
+                        ?scheme1 a sti_atio:MaturityScheme .
+                    }
+                    FILTER NOT EXISTS {
+                        # Path 2: scheme inferred from DataSource FieldSchemeUsage
+                        ?claim a sti_atio:FieldClaim ;
+                               sti_atio:claimProperty sti_atio:readinessLevel ;
+                               sti_atio:claimRefValue ?value ;
+                               sti_atio:inferredScheme ?scheme2 .
+                        ?scheme2 a sti_atio:MaturityScheme .
+                    }
+                }
+            """ ;
+        ] ;
+    ] ;
+
+    # -- adoptionLevel: value must belong to a registered AdoptionScheme ---
+    sh:property [
+        sh:path sti_atio:adoptionLevel ;
+        sh:class skos:Concept ;
+        sh:name "adoption level"@en ;
+        sh:description """Value must be a skos:Concept whose skos:inScheme
+        is typed as sti_atio:AdoptionScheme."""@en ;
+        sh:sparql [
+            a sh:SPARQLConstraint ;
+            sh:message """adoptionLevel value {$value} does not belong to any
+            registered sti_atio:AdoptionScheme."""@en ;
+            sh:select """
+                SELECT $this ?value WHERE {
+                    $this sti_atio:adoptionLevel ?value .
+                    FILTER NOT EXISTS {
+                        ?value skos:inScheme ?scheme .
+                        ?scheme a sti_atio:AdoptionScheme .
+                    }
+                }
+            """ ;
+        ] ;
+    ] .

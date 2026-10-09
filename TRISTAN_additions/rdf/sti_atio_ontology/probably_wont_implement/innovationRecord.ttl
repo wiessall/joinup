@@ -1,0 +1,232 @@
+@prefix sti_atio: <https://sti-portal.fao.org/ontology/sti-atio#> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+
+# ---------------------------------------------------------------------------
+#  L1.0  Real-world / information-object bridge  (v0.7)
+# ---------------------------------------------------------------------------
+#? This seems like the joinup meta-entity pattern. I doubt we need it in the triplestore
+#> WONT, but not because it's the meta-entity pattern (TODO.org A15). meta_entity is a settings
+#> sidecar on a group; InnovationRecord is the "record about the thing" (foaf:primaryTopic). In
+#> the fork the node URI plays both roles and the management fields stay in SQL. One piece to carry
+#> across: after a dedupe merge the losing URI must keep resolving (dcterms:isReplacedBy).
+
+sti_atio:InnovationRecord
+    a owl:Class ;
+    rdfs:label "Innovation Record"@en ;
+    rdfs:comment """The information object (data record) describing a
+    sti_atio:Innovation. Carries all data-management concerns:
+    provenance, versioning, curation, access control, field claims, QA.
+
+    sti_atio:Innovation is the real-world entity — pure semantic content.
+    sti_atio:InnovationRecord is the information artifact — prov:Entity,
+    foaf:Document. They are linked via sti_atio:isDescribedBy
+    (subPropertyOf foaf:isPrimaryTopicOf).
+
+    In Drupal/JoinUp this is the node--innovation entity.
+    One innovation may be described by multiple records (one per source
+    before curator merge; one published record after)."""@en ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:subClassOf foaf:Document ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+
+sti_atio:describes
+    a owl:ObjectProperty ;
+    rdfs:label "describes"@en ;
+    rdfs:comment "Inverse of sti_atio:isDescribedBy. Links a record to its subject innovation."@en ;
+    rdfs:domain sti_atio:InnovationRecord ;
+    rdfs:range  sti_atio:Innovation ;
+    rdfs:subPropertyOf foaf:primaryTopic ;
+    owl:inverseOf sti_atio:isDescribedBy ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# InnovationRecord data-management properties
+# (moved from sti_atio:Innovation in v0.7)
+
+sti_atio:recordPublishedAt
+    a owl:DatatypeProperty ; rdfs:label "record first published"@en ;
+    rdfs:domain sti_atio:InnovationRecord ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:recordLastUpdated
+    a owl:DatatypeProperty ; rdfs:label "record last updated"@en ;
+    rdfs:domain sti_atio:InnovationRecord ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:recordCurationStatus
+    a owl:ObjectProperty ; rdfs:label "curation status"@en ;
+    rdfs:domain sti_atio:InnovationRecord ; rdfs:range sti_atio:CurationStatus ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:recordAccessLevel
+    a owl:ObjectProperty ; rdfs:label "access level"@en ;
+    rdfs:domain sti_atio:InnovationRecord ; rdfs:range sti_atio:AccessLevel ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:recordAllowAIUpdate
+    a owl:DatatypeProperty ; rdfs:label "allow AI update of record"@en ;
+    rdfs:domain sti_atio:InnovationRecord ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:recordDataLicense
+    a owl:ObjectProperty ; rdfs:label "record data license"@en ;
+    rdfs:subPropertyOf dcterms:license ;
+    rdfs:domain sti_atio:InnovationRecord ; rdfs:range dcterms:LicenseDocument ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:recordDataRights
+    a owl:ObjectProperty ; rdfs:label "record data rights"@en ;
+    rdfs:subPropertyOf dcterms:rights ;
+    rdfs:domain sti_atio:InnovationRecord ; rdfs:range dcterms:RightsStatement ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:recordAttributionRequired
+    a owl:DatatypeProperty ; rdfs:label "attribution required"@en ;
+    rdfs:domain sti_atio:InnovationRecord ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:recordQAScore
+    a owl:DatatypeProperty ; rdfs:label "record QA score"@en ;
+    rdfs:domain sti_atio:InnovationRecord ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:recordAIEnrichmentStamp
+    a owl:DatatypeProperty ; rdfs:label "AI enrichment stamp"@en ;
+    rdfs:domain sti_atio:InnovationRecord ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:aiGeneratedDescription
+    a owl:DatatypeProperty ; rdfs:label "AI-generated description"@en ;
+    rdfs:comment "Internal AI description — data artifact, not real-world property."@en ;
+    rdfs:domain sti_atio:InnovationRecord ; rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+
+sti_atio:recordDerivedFromSource
+    a owl:ObjectProperty ; rdfs:label "record derived from source record"@en ;
+    rdfs:domain sti_atio:InnovationRecord ; rdfs:range sti_atio:SourceRecord ;
+    rdfs:subPropertyOf prov:wasDerivedFrom ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:recordProvidedBySource
+    a owl:ObjectProperty ; rdfs:label "record provided by data source"@en ;
+    rdfs:domain sti_atio:InnovationRecord ; rdfs:range sti_atio:DataSource ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:providedBySource
+    a owl:ObjectProperty ;
+    rdfs:label "provided by data source"@en ;
+    rdfs:comment "The data source (sti_atio:DataSource) from which the innovation originates."@en ;
+    rdfs:domain sti_atio:InnovationRecord ;  # moved from Innovation in v0.7
+    rdfs:range sti_atio:DataSource ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:publishedAt
+    a owl:DatatypeProperty ;
+    rdfs:label "first published date"@en ;
+    rdfs:domain sti_atio:InnovationRecord ;  # moved from Innovation in v0.7
+    rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:lastUpdated
+    a owl:DatatypeProperty ;
+    rdfs:label "last updated"@en ;
+    rdfs:domain sti_atio:InnovationRecord ;  # moved from Innovation in v0.7
+    rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:curationStatus
+    a owl:ObjectProperty ;
+    rdfs:label "curation status"@en ;
+    rdfs:comment "Current editorial/workflow status of this innovation record."@en ;
+    rdfs:domain sti_atio:InnovationRecord ;  # moved from Innovation in v0.7
+    rdfs:range sti_atio:CurationStatus ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- L1.1.M  Access & Rights (on the Innovation) ---
+
+sti_atio:accessLevel
+    a owl:ObjectProperty ;
+    rdfs:label "access level"@en ;
+    rdfs:comment "Governs visibility: public | partner-only | internal | embargoed."@en ;
+    rdfs:domain sti_atio:InnovationRecord ;  # moved from Innovation in v0.7
+    rdfs:range sti_atio:AccessLevel ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:dataLicense
+    a owl:ObjectProperty ;
+    rdfs:label "data license"@en ;
+    rdfs:comment "License under which this innovation record's data is shared."@en ;
+    rdfs:domain sti_atio:InnovationRecord ;  # moved from Innovation in v0.7
+    rdfs:subPropertyOf dcterms:license ;
+    rdfs:range dcterms:LicenseDocument ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:dataRights
+    a owl:ObjectProperty ;
+    rdfs:label "data rights"@en ;
+    rdfs:domain sti_atio:InnovationRecord ;  # moved from Innovation in v0.7
+    rdfs:subPropertyOf dcterms:rights ;
+    rdfs:range dcterms:RightsStatement ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:attributionRequired
+    a owl:DatatypeProperty ;
+    rdfs:label "attribution required"@en ;
+    rdfs:domain sti_atio:InnovationRecord ;  # moved from Innovation in v0.7
+    rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:attributionText
+    a owl:DatatypeProperty ;
+    rdfs:label "attribution text"@en ;
+    rdfs:domain sti_atio:InnovationRecord ;  # moved from Innovation in v0.7
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+
+sti_atio:qaScore
+    a owl:DatatypeProperty ;
+    rdfs:label "overall QA score"@en ;
+    rdfs:comment "Aggregate quality score for the innovation record (0.0-1.0 or 0-100). Now on InnovationRecord (v0.7)."@en ;
+    rdfs:domain sti_atio:InnovationRecord ;
+    rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:qaFlag
+    a owl:ObjectProperty ;
+    rdfs:label "QA flag"@en ;
+    rdfs:comment "Quality issue flag requiring curator attention."@en ;
+    rdfs:domain sti_atio:InnovationRecord ;
+    rdfs:range sti_atio:QAFlag ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- moved from innovation.ttl ---
+
+sti_atio:isDescribedBy
+    a owl:ObjectProperty ;
+    rdfs:label "is described by"@en ;
+    rdfs:comment """Links a sti_atio:Innovation (real-world thing) to its
+    sti_atio:InnovationRecord (information object). Subproperty of
+    foaf:isPrimaryTopicOf. The innovation is the primary topic of its record.
+    One innovation may have multiple records before merge."""@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range  sti_atio:InnovationRecord ;
+    rdfs:subPropertyOf foaf:isPrimaryTopicOf ;
+    owl:inverseOf sti_atio:describes ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- moved from utils/leftovers.ttl ---
+
+# Record-level QA score
+sti_atio:QAFlag             a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "QA Flag"@en ;
+    rdfs:comment "duplicate-suspected | low-completeness | AI-confidence-low | needs-curator-review | rights-unclear"@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .

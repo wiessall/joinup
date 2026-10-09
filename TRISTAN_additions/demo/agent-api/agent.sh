@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 # Simulated agent: fetches raw Drupal data over REST and its semantic
 # connections over SPARQL, writing every response as JSON to out/.
 #
@@ -10,13 +10,13 @@ set -euo pipefail
 # bash 5.2 treats & in ${var//pattern/replacement} as the match; URIs may contain it.
 shopt -u patsub_replacement 2>/dev/null || true
 
-SITE="${SITE:-https://digit-joinup-reference-2.ddev.site}"
+SITE="${SITE:-http://digit-joinup-reference-2.ddev.site}"
 SPARQL="${SPARQL:-http://digit-joinup-reference-2.ddev.site:8890/sparql}"
 COLLECTION="${COLLECTION:?set COLLECTION to a collection nid, uuid or alias}"
 SOLUTION_NID="${SOLUTION_NID:-}"
 # Namespace of the sti: predicates in the graph. Entities not re-synced since
-# P0 still carry the old one: STI_NS=https://sti-portal.fao.org/ontology#
-STI_NS="${STI_NS:-https://sti-portal.fao.org/sti#}"
+# P0 still carry the old one: STI_NS=http://sti-portal.fao.org/ontology#
+STI_NS="${STI_NS:-http://sti-portal.fao.org/sti#}"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 OUT="${OUT:-$HERE/out}"
 mkdir -p "$OUT"
@@ -28,7 +28,7 @@ sparql() {
   local file="$1"; shift
   local query
   query="$(cat "$HERE/queries/$file")"
-  query="${query//<https:\/\/sti-portal.fao.org\/sti#>/<$STI_NS>}"
+  query="${query//<http:\/\/sti-portal.fao.org\/sti#>/<$STI_NS>}"
   while [ $# -gt 0 ]; do
     query="${query//__$1__/$2}"
     shift 2

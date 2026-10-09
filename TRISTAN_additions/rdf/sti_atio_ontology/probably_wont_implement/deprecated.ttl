@@ -1,0 +1,9 @@
+@prefix sti_atio: <https://sti-portal.fao.org/ontology/sti-atio#> .
+
+# Terms referenced by v8 but deprecated or never declared.
+
+# --- moved: property is never declared in v8 ---
+
+sti_atio:scalingLevelIDIA
+    sti_atio:claimEligible true ;
+    sti_atio:claimEligibilityRationale "Sub-property of readinessLevel; same rationale."@en .

@@ -1,0 +1,43 @@
+#+TITLE: sti_atio ontology, split into class files
+
+The v8 ontology (=sti-atio-ontology-v8.ttl=), one file per class, PHP-style:
+- Each file carries its own =@prefix= block (the =use= statements) and parses on its own.
+- A property lives in the file of the class it depends on (its domain, or its range if
+  the range is the less stable class). Dropping a folder therefore never leaves
+  dangling terms behind in =base_classes/=.
+- Enumeration classes sit next to their individuals, in the file of the property that
+  uses them.
+- =ontology.ttl= is the =owl:Ontology= header. =build.py= concatenates a profile into =dist/=.
+
+* Folders
+| Folder                             | Status                       |
+|------------------------------------+------------------------------|
+| =base_classes/=                    | MVP candidates (see TODO.org: about half is WONT) |
+| =advanced_classes/=                | LATER                        |
+| =definitions_relative_to_outside/= | WONT, replaced by SKOS mappings |
+| =ai_qa_edit_tracking/=             | WONT in the graph (FieldQA stays in Drupal) |
+| =dont_understand/=                 | WONT / LATER, answered       |
+| =probably_wont_implement/=         | WONT                         |
+| =utils/=                           | example data, workflow/access individuals |
+| =shapes/=                          | SHACL (validation, not ontology) |
+| =_notes/=                          | v8 alignment rationale (comments only) |
+
+* Comment markers
+- =#?= your questions (2026-09)
+- =#>= answers, short form; the full reasoning is in =TODO.org=, section "Answers"
+
+* Build and check
+: pip install --break-system-packages rdflib owlrl
+: python3 build.py                  # base profile -> dist/sti-atio-base.ttl
+: python3 build.py --profile all    # everything
+: python3 build.py --strict         # non-zero exit on findings (CI)
+
+* Changes vs v8
+Checked with an isomorphic graph diff. The split is v8, except:
+- removed: the stale v0.6 copy of =aiGeneratedDescription= (domain Innovation) and the
+  duplicate short =claimSubject= declaration;
+- added: =MaturityScheme= and =AdoptionScheme= class declarations (v8 uses them, never declares them);
+- moved: =scalingLevelIDIA='s =claimEligible= triples to =probably_wont_implement/deprecated.ttl=
+  (v8 never declares the property);
+- SHACL shape → =shapes/=; SPARQL rules → =fieldSchemeUsage.ttl= (their only consumer).
+No modelling changes. Those are in =TODO.org=, so they can land as reviewable commits.

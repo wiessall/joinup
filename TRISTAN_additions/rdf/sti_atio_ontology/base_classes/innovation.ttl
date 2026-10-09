@@ -1,0 +1,539 @@
+# ATIO innovation: the atio: vocabulary, 2026-10-08.
+#
+# Three sections:
+#   1. EXISTS IN DRUPAL. What the atio_innovation bundle emits today. This is
+#      the reference until ATIO decides otherwise (see OPEN ISSUE on the ATIO
+#      file versus the bundle). Ranges describe what is emitted.
+#   2. SHOULD WE ADD THIS? Properties in ATIO's draft that the bundle does not
+#      have. Kept as comments so this file never declares what nothing emits.
+#      Questions for ATIO.
+#   3. PROPOSED: per-field provenance. How a builder (AI or curator) records
+#      which source data it used for which field, in Drupal. Needs ATIO's
+#      agreement, since it adds fields to their bundle.
+
+@prefix atio:    <https://sti-portal.fao.org/atio#> .
+@prefix sti:     <https://sti-portal.fao.org/sti#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema:  <https://schema.org/> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# ===========================================================================
+#  1. EXISTS IN DRUPAL
+# ===========================================================================
+
+atio:Innovation
+    a owl:Class ;
+    rdfs:label "Innovation"@en ;
+    rdfs:comment """The curated innovation in the ATIO knowledge base: one
+    record per real-world innovation, built from the claims of one or more
+    source records (atio:derivedFromSource)."""@en ;
+    rdfs:subClassOf prov:Entity ;
+    skos:editorialNote "Drupal: node bundle atio_innovation." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+# Also emitted, standard terms (not redeclared):
+#   dcterms:title (title), dcterms:description (body),
+#   dcterms:bibliographicCitation (atio_bib_citation).
+#   sti:inCollection (og_audience): the collection the innovation belongs to,
+#   the same link a source record has to its collection. (Was sti:statedBy,
+#   left over from core_annotation; changed 2026-10-08.)
+# Not emitted, on purpose (editorial): atio_ai_quality, atio_quality,
+#   atio_quality_notes, atio_curation_notes, atio_record_status,
+#   atio_allow_ai_update, atio_allow_ai_if_empty, atio_allow_overwrite_by_origin,
+#   atio_allow_overwrite_if_empty.
+
+atio:actualUser
+    a owl:ObjectProperty ;
+    rdfs:label "actual user"@en ;
+    rdfs:comment """Actor type(s) that are currently using the innovation. Multi-valued."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range skos:Concept ;
+    skos:editorialNote "Drupal: atio_actual_users (entity_reference → atio_actor_types)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:adoptabilityNarrative
+    a owl:DatatypeProperty ;
+    rdfs:label "adoptability narrative"@en ;
+    rdfs:comment """One narrative covering the adoptability dimensions (accessibility,
+    acceptability, profitability, sustainability, co-development)."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range rdfs:Literal ;
+    skos:editorialNote "Drupal: atio_adoptability_dimensions (string_long)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:adoptionCountry
+    a owl:ObjectProperty ;
+    rdfs:label "adoption country"@en ;
+    rdfs:comment """Country (or countries) where the innovation has been adopted or is
+    actively used. Multi-valued."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range skos:Concept ;
+    skos:editorialNote "Drupal: atio_countries_adoption (entity_reference → countries)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:adoptionLevel
+    a owl:ObjectProperty ;
+    rdfs:label "adoption level"@en ;
+    rdfs:comment """CGIAR 9-level adoption scale. Reflects the actual spread and uptake of the
+    innovation in real-world use. References ATIO adoption levels
+    taxonomy."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range skos:Concept ;
+    skos:editorialNote "Drupal: atio_adoption_level (entity_reference → atio_adoption_levels)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:adoptionNarrative
+    a owl:DatatypeProperty ;
+    rdfs:label "adoption narrative"@en ;
+    rdfs:comment """Free-text description of the adoption context, evidence, and trajectory."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range rdfs:Literal ;
+    skos:editorialNote "Drupal: atio_adoption_description (string_long)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:aiEnrichedDescription
+    a owl:DatatypeProperty ;
+    rdfs:label "AI-enriched description"@en ;
+    rdfs:comment """Description written or extended by an AI step."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range rdfs:Literal ;
+    skos:editorialNote "Drupal: atio_ai_enriched_description (text_long)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:challengeAddressed
+    a owl:ObjectProperty ;
+    rdfs:label "challenge addressed"@en ;
+    rdfs:comment """Agrifood systems challenge(s) the innovation responds to. Multi-valued."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range skos:Concept ;
+    skos:editorialNote "Drupal: atio_challenges_addressed (entity_reference → atio_challenges)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:derivedFromSource
+    a owl:ObjectProperty ;
+    rdfs:label "derived from source record"@en ;
+    rdfs:comment """A source record this innovation was derived from. Lists every record the
+    builder used: one, or several records describing the same innovation."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range sti:SourceRecord ;
+    rdfs:subPropertyOf prov:wasDerivedFrom ;
+    skos:editorialNote "Drupal: atio_derived_from (entity_reference_revisions → solution)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:fundedBy
+    a owl:ObjectProperty ;
+    rdfs:label "funded by"@en ;
+    rdfs:comment """Organisation(s) providing funding for the innovation's development or
+    scaling."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range foaf:Agent ;
+    skos:editorialNote "Drupal: atio_sponsors (entity_reference → owner)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:geographicScale
+    a owl:ObjectProperty ;
+    rdfs:label "geographic scale"@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range skos:Concept ;
+    skos:editorialNote "Drupal: atio_geo_scale (entity_reference → geographic_scope)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:grassrootsNarrative
+    a owl:DatatypeProperty ;
+    rdfs:label "grassroots narrative"@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range rdfs:Literal ;
+    skos:editorialNote "Drupal: atio_grassroots_narrative (string_long)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:grassrootsPartner
+    a owl:ObjectProperty ;
+    rdfs:label "grassroots partner"@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range foaf:Agent ;
+    skos:editorialNote "Drupal: atio_grassroot_partner (entity_reference → owner)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:identifyingFeature
+    a owl:DatatypeProperty ;
+    rdfs:label "identifying feature"@en ;
+    rdfs:comment """Narrative description of what makes this innovation recognisable and
+    distinct from similar innovations -- used for deduplication and
+    disambiguation."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range rdfs:Literal ;
+    skos:editorialNote "Drupal: atio_identifying_feature (string_long)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:innovationForm
+    a owl:ObjectProperty ;
+    rdfs:label "form of innovation"@en ;
+    rdfs:comment """Form of the innovation (e.g. product, practice, service)."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range skos:Concept ;
+    skos:editorialNote "Drupal: atio_form_of_innovation (entity_reference → atio_innovation_forms)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:innovationStage
+    a owl:ObjectProperty ;
+    rdfs:label "innovation stage"@en ;
+    rdfs:comment """Lifecycle stage of the innovation (pre-emergent / emergent / mature /
+    obsolete). References ATIO innovation stages taxonomy."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range skos:Concept ;
+    skos:editorialNote "Drupal: atio_innovation_stage (entity_reference → atio_innovation_stages)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:innovationType
+    a owl:ObjectProperty ;
+    rdfs:label "innovation type"@en ;
+    rdfs:comment """Classification by functional domain and mechanism (e.g. precision
+    agriculture, biological pest control, financial inclusion instrument).
+    Multi-valued. References the ATIO innovation type taxonomy (SKOS)."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range skos:Concept ;
+    skos:editorialNote "Drupal: atio_innovation_type (entity_reference → atio_innovation_types)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:innovativeFeature
+    a owl:ObjectProperty ;
+    rdfs:label "innovative dimension"@en ;
+    rdfs:comment """The specific dimension(s) of innovativeness: what makes it novel relative
+    to existing solutions. References ATIO innovative features taxonomy
+    (built from FAO S&I Strategy innovation criteria). Multi-valued."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range skos:Concept ;
+    skos:editorialNote "Drupal: atio_innovative_features (entity_reference → atio_innovative_features)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:innovativeFeaturesNarrative
+    a owl:DatatypeProperty ;
+    rdfs:label "innovative dimensions narrative"@en ;
+    rdfs:comment """Free-text narrative elaborating the innovation's key novel dimensions."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range rdfs:Literal ;
+    skos:editorialNote "Drupal: atio_innovative_narrative (string_long)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:investmentType
+    a owl:ObjectProperty ;
+    rdfs:label "investment type"@en ;
+    rdfs:comment """Type(s) of investment required or involved in the innovation."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range skos:Concept ;
+    skos:editorialNote "Drupal: atio_investment_type (entity_reference → atio_investment_types)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:isGrassroots
+    a owl:DatatypeProperty ;
+    rdfs:label "is grassroots innovation"@en ;
+    rdfs:comment """Boolean flag indicating that this innovation originates from farmer-led,
+    community-driven, or grassroots knowledge systems rather than formal
+    R&D. Triggers special handling for attribution, consent, and
+    governance."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range xsd:boolean ;
+    skos:editorialNote "Drupal: atio_is_grassroots (boolean)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:language
+    a owl:ObjectProperty ;
+    rdfs:label "language"@en ;
+    rdfs:comment """Language(s) in which the innovation documentation or interface is
+    available."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range skos:Concept ;
+    skos:editorialNote "Drupal: atio_languages (entity_reference → languages)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:longTermBeneficiary
+    a owl:ObjectProperty ;
+    rdfs:label "long-term beneficiary"@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range skos:Concept ;
+    skos:editorialNote "Drupal: atio_long_term_beneficiaries (entity_reference → atio_actor_types)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:mainUseCaseImage
+    a owl:ObjectProperty ;
+    rdfs:label "main use case (for image selection)"@en ;
+    rdfs:comment """The single use case selected as the primary label for image/icon display."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range skos:Concept ;
+    skos:editorialNote "Drupal: atio_use_case_image (entity_reference → atio_use_cases)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:originCity
+    a owl:DatatypeProperty ;
+    rdfs:label "city of origin"@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range rdfs:Literal ;
+    skos:editorialNote "Drupal: atio_city (string)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:originCountry
+    a owl:ObjectProperty ;
+    rdfs:label "country of origin"@en ;
+    rdfs:comment """Country where the innovation was first developed or deployed."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range skos:Concept ;
+    skos:editorialNote "Drupal: atio_country_origin (entity_reference → countries)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:originRegion
+    a owl:ObjectProperty ;
+    rdfs:label "region of origin"@en ;
+    rdfs:comment """UN M49 or FAO geographic region of origin."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range skos:Concept ;
+    skos:editorialNote "Drupal: atio_region (entity_reference → geographic_regions)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:ownedBy
+    a owl:ObjectProperty ;
+    rdfs:label "owned by"@en ;
+    rdfs:comment """Organisation that claims intellectual property or management rights over
+    the innovation."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range foaf:Agent ;
+    skos:editorialNote "Drupal: atio_owner (entity_reference → owner)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:partner
+    a owl:ObjectProperty ;
+    rdfs:label "partner"@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range foaf:Agent ;
+    skos:editorialNote "Drupal: atio_partners (entity_reference → owner)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:prospectiveUser
+    a owl:ObjectProperty ;
+    rdfs:label "prospective user"@en ;
+    rdfs:comment """Actor type(s) identified as potential future users. Multi-valued."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range skos:Concept ;
+    skos:editorialNote "Drupal: atio_prospective_users (entity_reference → atio_actor_types)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:readinessLevel
+    a owl:ObjectProperty ;
+    rdfs:label "readiness level"@en ;
+    rdfs:comment """CGIAR Scaling Readiness level (0–9). An intrinsic property of the
+    innovation reflecting evidence-based validation of its development
+    stage. References ATIO readiness levels taxonomy aligned to CGIAR
+    CLARISA."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range skos:Concept ;
+    skos:editorialNote "Drupal: atio_readiness_level (entity_reference → atio_readiness_levels)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:readinessNarrative
+    a owl:DatatypeProperty ;
+    rdfs:label "readiness narrative"@en ;
+    rdfs:comment """Free-text justification or description of the assessed readiness level."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range rdfs:Literal ;
+    skos:editorialNote "Drupal: atio_readiness_description (string_long)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:sdgTarget
+    a owl:ObjectProperty ;
+    rdfs:label "SDG"@en ;
+    rdfs:comment """Sustainable Development Goal(s) the innovation contributes to. The
+    vocabulary (sdg_targets) holds the 17 goals, not the 169 targets,
+    despite its name."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range skos:Concept ;
+    skos:editorialNote "Drupal: atio_sdg_targets (entity_reference → sdg_targets)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:shortDescription
+    a owl:DatatypeProperty ;
+    rdfs:label "short description"@en ;
+    rdfs:comment """A concise summary (approx. 100–200 words) of the innovation."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range rdfs:Literal ;
+    skos:editorialNote "Drupal: atio_shorter_description (text_long)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:startDate
+    a owl:DatatypeProperty ;
+    rdfs:label "start date"@en ;
+    rdfs:comment """Precise start date of the innovation (when available)."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range xsd:date ;
+    skos:editorialNote "Drupal: atio_start_date (datetime)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:startYear
+    a owl:DatatypeProperty ;
+    rdfs:label "start year"@en ;
+    rdfs:comment """Year in which the innovation was first documented or implemented."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range xsd:integer ;
+    skos:editorialNote "Drupal: atio_start_year (integer)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:thematicArea
+    a owl:ObjectProperty ;
+    rdfs:label "thematic area"@en ;
+    rdfs:comment """FAO agrifood systems thematic area(s). Multi-valued."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range skos:Concept ;
+    skos:editorialNote "Drupal: atio_thematic_area (entity_reference → atio_themes)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:useCase
+    a owl:ObjectProperty ;
+    rdfs:label "use case"@en ;
+    rdfs:comment """Intended use case(s) or need(s) addressed by the innovation. Multi-valued."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range skos:Concept ;
+    skos:editorialNote "Drupal: atio_use_cases (entity_reference → atio_use_cases)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:useCaseNarrative
+    a owl:DatatypeProperty ;
+    rdfs:label "use case narrative"@en ;
+    rdfs:comment """Free-text narrative describing the specific use case context."""@en ;
+    rdfs:domain atio:Innovation ;
+    rdfs:range rdfs:Literal ;
+    skos:editorialNote "Drupal: atio_use_cases_description (string_long)." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+# ===========================================================================
+#  2. SHOULD WE ADD THIS?  (ATIO's draft; not in Drupal)
+# ===========================================================================
+#
+# Probably already covered under another name:
+#   innovationName      -> title (dcterms:title)
+#   longDescription     -> body (dcterms:description) or atio:aiEnrichedDescription
+#   impactSDG           -> atio:sdgTarget (same thing: the vocabulary holds the 17 goals)
+#   developedBy,
+#   implementedBy       -> atio:partner (one undifferentiated field)
+#   allowAIUpdate       -> atio_allow_ai_update exists, kept out of the graph on purpose
+#
+# Modelled coarser in Drupal. Question: graded values, or one narrative?
+#   accessibility, acceptability, profitability, sustainability, coDevelopment
+#   (each an AdoptabilityLevel) and their five narratives
+#                       -> one text field, atio:adoptabilityNarrative
+#   communityOwner, communityConsent, grassrootsAssessment, localResourceBased
+#                       -> atio:grassrootsPartner, atio:grassrootsNarrative
+#
+# Not in Drupal at all. Question: wanted, or leftovers from an earlier draft?
+#   alternativeName     literal          alternative or local names
+#   originState         literal          state / province of origin
+#   estimatedUsers      xsd:integer      estimated number of users
+#   impactNarrative     literal          narrative of observed or expected impact
+#   farmingSystem       concept          needs a vocabulary
+#   impactFourBetters   concept          needs a vocabulary (FAO Four Betters)
+#   sourceURL           xsd:anyURI       reachable already: derivedFromSource -> dcat:landingPage
+#   relatedInnovation   Innovation       marked "planned" in the draft
+#   componentOf         Innovation       marked "planned" in the draft
+#   innovationReview    schema:Review    marked "planned" in the draft
+#
+# Classes in the draft with no use yet: DigitalInnovation, ConsentStatus and
+# its four values, and the range classes (Country, ActorType, UseCase, ...).
+# In the graph every value is a skos:Concept from a Drupal vocabulary.
+
+# ===========================================================================
+#  3. PROPOSED: per-field provenance, stored in Drupal
+# ===========================================================================
+#
+# Whoever builds an ATIO innovation (an AI agent, a curator) records, per
+# field, which source data it used. Stored in Drupal like everything else and
+# projected by rdf_sync, using the standard PROV-O qualified-derivation pattern.
+# Needs ATIO's agreement: it adds three fields and one paragraph type to their
+# bundle.
+#
+# Why the derivation points at a source record plus a claim property, and not
+# at the claim itself: a re-import replaces a collection's claim paragraphs
+# with new ones, so a reference to a claim breaks at the next import. The
+# record and the property term survive re-imports. The claim currently holding
+# that value is one query away (record -> hasFieldClaim -> claimProperty).
+#
+# Drupal side (proposed):
+#
+#   On atio_innovation:
+#     atio_field_derivations  entity_reference_revisions -> paragraph
+#                             atio_field_derivation, unlimited
+#                                                 -> prov:qualifiedDerivation
+#     atio_built_by           entity_reference -> taxonomy atio_builders,
+#                             terms carry a URI, typed prov:SoftwareAgent
+#                             or prov:Person      -> prov:wasAttributedTo
+#     atio_built_at           datetime            -> prov:generatedAtTime
+#
+#   Paragraph type atio_field_derivation (rdf_sync type prov:Derivation):
+#     field_for_field         list_string; keys are the full atio: property
+#                             URIs, labels the field labels
+#                                                 -> atio:forField    (resource)
+#     field_source_record     entity_reference -> node solution
+#                                                 -> prov:entity      (resource)
+#     field_claim_property    entity_reference -> taxonomy claim_properties
+#                                                 -> atio:fromProperty (resource)
+#     field_via_mapping       list_string; keys are skos:exactMatch,
+#                             closeMatch, broadMatch, narrowMatch,
+#                             relatedMatch (full URIs); empty if direct
+#                                                 -> atio:viaMapping  (resource)
+#
+# One paragraph per (field, source record, property) the builder used. A
+# rebuild replaces the paragraphs. Using a one-sided "same innovation" link,
+# ignoring a collection, or preferring one source over another are all
+# visible here.
+
+atio:forField
+    a owl:ObjectProperty ;
+    rdfs:label "for field"@en ;
+    rdfs:comment """The ATIO field this derivation contributed to, given as the
+    atio: property itself (e.g. atio:readinessLevel)."""@en ;
+    schema:domainIncludes prov:Derivation ;
+    skos:editorialNote "PROPOSED. Drupal: field_for_field on paragraph atio_field_derivation." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:fromProperty
+    a owl:ObjectProperty ;
+    rdfs:label "from property"@en ;
+    rdfs:comment """The claim property, in the source collection's vocabulary,
+    whose value was used (e.g. STF's technical_readiness)."""@en ;
+    schema:domainIncludes prov:Derivation ;
+    schema:rangeIncludes skos:Concept ;
+    skos:editorialNote "PROPOSED. Drupal: field_claim_property on paragraph atio_field_derivation." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+atio:viaMapping
+    a owl:ObjectProperty ;
+    rdfs:label "via mapping"@en ;
+    rdfs:comment """The SKOS relation that connected the claim property to the
+    field (skos:exactMatch, skos:closeMatch, ...). Empty when the builder used
+    the value without a mapping."""@en ;
+    schema:domainIncludes prov:Derivation ;
+    skos:editorialNote "PROPOSED. Drupal: field_via_mapping on paragraph atio_field_derivation." ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/atio> .
+
+# Example, as rdf_sync would emit it:
+#
+#   <id/innovation/x>
+#       prov:wasAttributedTo   <id/builder/atio-ai-v1> ;
+#       prov:generatedAtTime   "2026-10-08T15:00:00"^^xsd:dateTime ;
+#       prov:qualifiedDerivation <id/derivation/1>, <id/derivation/2> .
+#
+#   <id/derivation/1> a prov:Derivation ;
+#       atio:forField     atio:readinessLevel ;
+#       prov:entity       <id/source-record/stf-123> ;
+#       atio:fromProperty <id/property/stf-technical-readiness> ;
+#       atio:viaMapping   skos:exactMatch .
+#
+#   <id/derivation/2> a prov:Derivation ;        # used via a one-sided same-as link
+#       atio:forField     atio:readinessLevel ;
+#       prov:entity       <id/source-record/eca-456> ;
+#       atio:fromProperty <id/property/eca-maturity> ;
+#       atio:viaMapping   skos:closeMatch .
+#
+#   <id/builder/atio-ai-v1> a prov:SoftwareAgent ; skos:prefLabel "ATIO builder, prompt v1" .

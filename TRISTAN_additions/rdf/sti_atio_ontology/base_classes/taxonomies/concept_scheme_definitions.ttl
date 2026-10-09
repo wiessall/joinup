@@ -1,0 +1,257 @@
+@prefix sti_atio: <https://sti-portal.fao.org/ontology/sti-atio#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+
+# ===========================================================================
+#  CONCEPT SCHEME DECLARATIONS
+#  Each framework that provides values for sti_atio:readinessLevel or
+#  sti_atio:adoptionLevel is declared as a skos:ConceptScheme.
+#  Concept instances are managed in VocBench; the schemes are declared
+#  here so that the ontology is self-contained and GraphDB can resolve
+#  skos:inScheme queries without needing to import a separate vocabulary file.
+# ===========================================================================
+#? I have the taxonomies already; do I need this scheme mapping?
+#> You need one skos:ConceptScheme per vocabulary, but rdf_sync should emit it from vocabulary
+#> config (vid -> skos:inScheme), not hand-written here (TODO.org A11). Drop the representative
+#> concepts: their hand-made URIs (/taxonomy/readiness/cgiar-0) won't match the ones your Drupal terms get.
+#> Keep the MaturityScheme/AdoptionScheme typing only if IDIA really is used alongside CGIAR.
+
+# --- Readiness / Maturity Schemes ---
+
+<https://sti-portal.fao.org/ontology/sti-atio#scheme/cgiar-trl>
+    a skos:ConceptScheme , sti_atio:MaturityScheme ;
+    skos:prefLabel "CGIAR Scaling Readiness Scale"@en ;
+    dcterms:description """9-level scale derived from NASA TRL. Tracks innovations
+    from idea (Level 0) to ready-for-scale (Level 9) with evidence-based
+    validation at each stage. Standard for CGIAR portfolio management."""@en ;
+    dcterms:source <https://scalingreadiness.org> ;
+    dcterms:publisher <https://sti-portal.fao.org/orgs/cgiar> ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+<https://sti-portal.fao.org/ontology/sti-atio#scheme/idia-stages>
+    a skos:ConceptScheme , sti_atio:MaturityScheme ;
+    skos:prefLabel "IDIA Scaling Stages"@en ;
+    dcterms:description """6-stage overlapping continuum from ideation through
+    research & development, proof of concept, transition to scale, scaling,
+    to sustainable scale. Developed by the International Development Innovation
+    Alliance; suited to social, institutional, and policy innovations."""@en ;
+    dcterms:source <https://www.idiaplatform.org> ;
+    dcterms:publisher <https://sti-portal.fao.org/orgs/idia> ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- Adoption / Uptake Schemes ---
+
+<https://sti-portal.fao.org/ontology/sti-atio#scheme/cgiar-adoption>
+    a skos:ConceptScheme , sti_atio:AdoptionScheme ;
+    skos:prefLabel "CGIAR Adoption Scale"@en ;
+    dcterms:description """9-level adoption scale measuring the actual spread and
+    uptake of an innovation across target user populations."""@en ;
+    dcterms:publisher <https://sti-portal.fao.org/orgs/cgiar> ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# ---------------------------------------------------------------------------
+#  REPRESENTATIVE CONCEPT INSTANCES
+#  (Illustrative; full concept lists are managed in VocBench / GraphDB)
+# ---------------------------------------------------------------------------
+
+# CGIAR TRL concepts (Levels 0–9)
+<https://sti-portal.fao.org/taxonomy/readiness/cgiar-0>
+    a skos:Concept , sti_atio:ReadinessLevel ;
+    skos:inScheme <https://sti-portal.fao.org/ontology/sti-atio#scheme/cgiar-trl> ;
+    skos:prefLabel "Level 0 -- Idea"@en ;
+    skos:notation "TRL-0" ;
+    skos:definition "Concept or idea stage; no evidence of feasibility yet."@en .
+
+<https://sti-portal.fao.org/taxonomy/readiness/cgiar-1>
+    a skos:Concept , sti_atio:ReadinessLevel ;
+    skos:inScheme <https://sti-portal.fao.org/ontology/sti-atio#scheme/cgiar-trl> ;
+    skos:prefLabel "Level 1 -- Research"@en ;
+    skos:notation "TRL-1" ;
+    skos:broader <https://sti-portal.fao.org/taxonomy/readiness/cgiar-0> .
+
+<https://sti-portal.fao.org/taxonomy/readiness/cgiar-5>
+    a skos:Concept , sti_atio:ReadinessLevel ;
+    skos:inScheme <https://sti-portal.fao.org/ontology/sti-atio#scheme/cgiar-trl> ;
+    skos:prefLabel "Level 5 -- Controlled testing"@en ;
+    skos:notation "TRL-5" .
+
+<https://sti-portal.fao.org/taxonomy/readiness/cgiar-6>
+    a skos:Concept , sti_atio:ReadinessLevel ;
+    skos:inScheme <https://sti-portal.fao.org/ontology/sti-atio#scheme/cgiar-trl> ;
+    skos:prefLabel "Level 6 -- Uncontrolled testing"@en ;
+    skos:notation "TRL-6" .
+
+<https://sti-portal.fao.org/taxonomy/readiness/cgiar-7>
+    a skos:Concept , sti_atio:ReadinessLevel ;
+    skos:inScheme <https://sti-portal.fao.org/ontology/sti-atio#scheme/cgiar-trl> ;
+    skos:prefLabel "Level 7 -- Uncontrolled testing at scale"@en ;
+    skos:notation "TRL-7" .
+
+<https://sti-portal.fao.org/taxonomy/readiness/cgiar-9>
+    a skos:Concept , sti_atio:ReadinessLevel ;
+    skos:inScheme <https://sti-portal.fao.org/ontology/sti-atio#scheme/cgiar-trl> ;
+    skos:prefLabel "Level 9 -- Ready for scaling"@en ;
+    skos:notation "TRL-9" .
+
+# IDIA stage concepts
+<https://sti-portal.fao.org/taxonomy/readiness/idia-ideation>
+    a skos:Concept , sti_atio:IDIAScalingLevel ;
+    skos:inScheme <https://sti-portal.fao.org/ontology/sti-atio#scheme/idia-stages> ;
+    skos:prefLabel "Ideation"@en ;
+    skos:notation "IDIA-1" .
+
+<https://sti-portal.fao.org/taxonomy/readiness/idia-rd>
+    a skos:Concept , sti_atio:IDIAScalingLevel ;
+    skos:inScheme <https://sti-portal.fao.org/ontology/sti-atio#scheme/idia-stages> ;
+    skos:prefLabel "Research and Development"@en ;
+    skos:notation "IDIA-2" .
+
+<https://sti-portal.fao.org/taxonomy/readiness/idia-poc>
+    a skos:Concept , sti_atio:IDIAScalingLevel ;
+    skos:inScheme <https://sti-portal.fao.org/ontology/sti-atio#scheme/idia-stages> ;
+    skos:prefLabel "Proof of Concept"@en ;
+    skos:notation "IDIA-3" .
+
+<https://sti-portal.fao.org/taxonomy/readiness/idia-transition>
+    a skos:Concept , sti_atio:IDIAScalingLevel ;
+    skos:inScheme <https://sti-portal.fao.org/ontology/sti-atio#scheme/idia-stages> ;
+    skos:prefLabel "Transition to Scale"@en ;
+    skos:notation "IDIA-4" .
+
+<https://sti-portal.fao.org/taxonomy/readiness/idia-scaling>
+    a skos:Concept , sti_atio:IDIAScalingLevel ;
+    skos:inScheme <https://sti-portal.fao.org/ontology/sti-atio#scheme/idia-stages> ;
+    skos:prefLabel "Scaling"@en ;
+    skos:notation "IDIA-5" .
+
+<https://sti-portal.fao.org/taxonomy/readiness/idia-sustainable>
+    a skos:Concept , sti_atio:IDIAScalingLevel ;
+    skos:inScheme <https://sti-portal.fao.org/ontology/sti-atio#scheme/idia-stages> ;
+    skos:prefLabel "Sustainable Scale"@en ;
+    skos:notation "IDIA-6" .
+
+# CGIAR adoption concepts (representative)
+<https://sti-portal.fao.org/taxonomy/adoption/cgiar-1>
+    a skos:Concept , sti_atio:AdoptionLevel ;
+    skos:inScheme <https://sti-portal.fao.org/ontology/sti-atio#scheme/cgiar-adoption> ;
+    skos:prefLabel "Level 1 -- Awareness"@en ;
+    skos:notation "ADO-1" .
+
+<https://sti-portal.fao.org/taxonomy/adoption/cgiar-4>
+    a skos:Concept , sti_atio:AdoptionLevel ;
+    skos:inScheme <https://sti-portal.fao.org/ontology/sti-atio#scheme/cgiar-adoption> ;
+    skos:prefLabel "Level 4 -- Early adoption"@en ;
+    skos:notation "ADO-4" .
+
+<https://sti-portal.fao.org/taxonomy/adoption/cgiar-5>
+    a skos:Concept , sti_atio:AdoptionLevel ;
+    skos:inScheme <https://sti-portal.fao.org/ontology/sti-atio#scheme/cgiar-adoption> ;
+    skos:prefLabel "Level 5 -- Significant adoption"@en ;
+    skos:notation "ADO-5" .
+
+<https://sti-portal.fao.org/taxonomy/adoption/cgiar-9>
+    a skos:Concept , sti_atio:AdoptionLevel ;
+    skos:inScheme <https://sti-portal.fao.org/ontology/sti-atio#scheme/cgiar-adoption> ;
+    skos:prefLabel "Level 9 -- Widespread sustained adoption"@en ;
+    skos:notation "ADO-9" .
+
+# ---------------------------------------------------------------------------
+#  Additional scheme marker classes  (v0.5)
+#  Same pattern as sti_atio:MaturityScheme / sti_atio:AdoptionScheme.
+#  A skos:ConceptScheme typed as one of these is registered as a valid
+#  source of values for the corresponding property.
+# ---------------------------------------------------------------------------
+#? Does this belong here? Is this outdated?
+#> Outdated, WONT (TODO.org A12). Marker classes only matter to a SHACL shape, and no shape targets
+#> any of these six. For a single-scheme property, skos:inScheme already says everything they do.
+
+sti_atio:InnovationTypeScheme
+    a owl:Class ;
+    rdfs:label "Innovation Type Scheme"@en ;
+    rdfs:comment """Marker class. A skos:ConceptScheme typed as sti_atio:InnovationTypeScheme
+    is registered as a valid source of concepts for sti_atio:innovationType.
+    Currently registered: sti_atio:scheme/innovation-types (ATIO native)."""@en ;
+    rdfs:subClassOf skos:ConceptScheme ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:ThematicAreaScheme
+    a owl:Class ;
+    rdfs:label "Thematic Area Scheme"@en ;
+    rdfs:comment """Marker class for sti_atio:thematicArea. Currently registered:
+    sti_atio:scheme/afs-themes."""@en ;
+    rdfs:subClassOf skos:ConceptScheme ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:UseCaseScheme
+    a owl:Class ;
+    rdfs:label "Use Case Scheme"@en ;
+    rdfs:comment """Marker class for sti_atio:useCase. Currently registered:
+    sti_atio:scheme/use-cases."""@en ;
+    rdfs:subClassOf skos:ConceptScheme ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:ActorTypeScheme
+    a owl:Class ;
+    rdfs:label "Actor Type Scheme"@en ;
+    rdfs:comment """Marker class for sti_atio:actualUser and sti_atio:prospectiveUser."""@en ;
+    rdfs:subClassOf skos:ConceptScheme ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:InnovationStageScheme
+    a owl:Class ;
+    rdfs:label "Innovation Stage Scheme"@en ;
+    rdfs:subClassOf skos:ConceptScheme ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:ChallengeScheme
+    a owl:Class ;
+    rdfs:label "Challenge Scheme"@en ;
+    rdfs:subClassOf skos:ConceptScheme ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# Register ATIO native schemes
+<https://sti-portal.fao.org/ontology/sti-atio#scheme/innovation-types>
+    a skos:ConceptScheme , sti_atio:InnovationTypeScheme ;
+    skos:prefLabel "ATIO Innovation Types"@en .
+
+<https://sti-portal.fao.org/ontology/sti-atio#scheme/afs-themes>
+    a skos:ConceptScheme , sti_atio:ThematicAreaScheme ;
+    skos:prefLabel "ATIO AFS Thematic Areas"@en .
+
+<https://sti-portal.fao.org/ontology/sti-atio#scheme/use-cases>
+    a skos:ConceptScheme , sti_atio:UseCaseScheme ;
+    skos:prefLabel "ATIO Use Cases"@en .
+
+<https://sti-portal.fao.org/ontology/sti-atio#scheme/actors>
+    a skos:ConceptScheme , sti_atio:ActorTypeScheme ;
+    skos:prefLabel "ATIO Actor Types"@en .
+
+<https://sti-portal.fao.org/ontology/sti-atio#scheme/innovation-stages>
+    a skos:ConceptScheme , sti_atio:InnovationStageScheme ;
+    skos:prefLabel "ATIO Innovation Stages"@en .
+
+<https://sti-portal.fao.org/ontology/sti-atio#scheme/challenges>
+    a skos:ConceptScheme , sti_atio:ChallengeScheme ;
+    skos:prefLabel "ATIO AFS Challenges"@en .
+
+# --- ADDED in the split: used throughout v8 but never declared ---
+#  v8 types cgiar-trl / idia-stages / cgiar-adoption with these and the SHACL
+#  shape tests for them, but no owl:Class declaration existed.
+
+sti_atio:MaturityScheme
+    a owl:Class ;
+    rdfs:label "Maturity Scheme"@en ;
+    rdfs:comment """Marker class. A skos:ConceptScheme typed as sti_atio:MaturityScheme
+    is registered as a valid source of values for sti_atio:readinessLevel."""@en ;
+    rdfs:subClassOf skos:ConceptScheme ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:AdoptionScheme
+    a owl:Class ;
+    rdfs:label "Adoption Scheme"@en ;
+    rdfs:comment """Marker class. A skos:ConceptScheme typed as sti_atio:AdoptionScheme
+    is registered as a valid source of values for sti_atio:adoptionLevel."""@en ;
+    rdfs:subClassOf skos:ConceptScheme ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .

@@ -1,0 +1,17 @@
+# A collection is a dcat:Catalog (not redeclared here). It holds source
+# records (sti:inCollection points to it), states their claims
+# (sti:claimedBy points to it), and owns the vocabulary those claims use.
+# Standard terms it uses: 
+#------------Literal fields-----------------------
+# dcterms:title
+# dcterms:issued
+# dcterms:modified
+# dcterms:description
+# dcat:keyword
+# dct:alternative
+# foaf:homepage
+#-----------Connections---------------------------
+# dcterms:publisher => foaf:Agent
+# dcat:contactPoint => vCard:Kind
+# dcterms:spatial => dct:Location
+# dcterms:license => <dcterms:LicenseDocument>

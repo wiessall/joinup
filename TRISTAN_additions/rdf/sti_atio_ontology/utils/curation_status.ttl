@@ -1,0 +1,18 @@
+@prefix sti_atio: <https://sti-portal.fao.org/ontology/sti-atio#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+
+# --- Curation Status ---
+sti_atio:Draft          a sti_atio:CurationStatus ; rdfs:label "Draft"@en .
+sti_atio:Staged         a sti_atio:CurationStatus ; rdfs:label "Staged"@en .
+sti_atio:Published      a sti_atio:CurationStatus ; rdfs:label "Published"@en .
+sti_atio:Archived       a sti_atio:CurationStatus ; rdfs:label "Archived"@en .
+sti_atio:FlaggedStatus  a sti_atio:CurationStatus ; rdfs:label "Flagged"@en .
+
+# --- moved from utils/leftovers.ttl ---
+
+sti_atio:CurationStatus     a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Curation Status"@en ;
+    rdfs:comment "draft | staged | published | archived | flagged"@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .

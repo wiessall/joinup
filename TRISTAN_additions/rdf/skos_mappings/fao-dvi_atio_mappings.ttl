@@ -1,0 +1,38 @@
+# SKOS mappings: fao-dvi -> ATIO, 2026-10-07
+# Load into the named graph https://sti-portal.fao.org/graph/mappings,
+# not into rdf_sync's graph: rdf_sync rewrites a term's triples on save.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix atio: <https://sti-portal.fao.org/atio#> .
+@prefix prop: <https://sti-portal.fao.org/id/property/> .
+
+# Labels
+prop:ec9f8d5b-3482-42f1-8cee-79185b9739f3 rdfs:label "Primary users" .
+prop:ed96af86-37b3-4c79-b180-992774f4a788 rdfs:label "Type" .
+prop:96ada393-a7a9-4f28-a1e1-749d692f8e1c rdfs:label "Digital Solution delivery format (Mandatory)" .
+prop:bebd4148-2e0a-405e-8002-96d44f03d843 rdfs:label "Digital Solution Type (Category & sub-category)" .
+prop:b54b1aca-174f-4aa9-bb8d-5c930ba1dfe1 rdfs:label "Digital Solution Development Stage" .
+prop:6eb213fe-2b1a-4f3e-abf7-f1137981abb7 rdfs:label "List country" .
+prop:54172320-4afa-4a56-bf65-a4f6f47f4599 rdfs:label "Name of Digital village(s), districts, communes where DS is used/ deployed (Enter text)." .
+prop:94b532ae-ab88-4f1f-aff2-b10b76a84cab rdfs:label "Measurable positive impact(s) by Digital Solution (DS) on target users and/or audience (Enter text)." .
+prop:44c8948d-a47d-4198-a96c-b4895e1f593d rdfs:label "Digital Solution Geographic scope (Enter text)." .
+atio:actualUser rdfs:label "Actual users" .
+atio:innovationType rdfs:label "Innovation types" .
+atio:innovationForm rdfs:label "Form of innovation" .
+atio:thematicArea rdfs:label "Thematic area" .
+atio:readinessLevel rdfs:label "Readiness level" .
+atio:adoptionCountry rdfs:label "Country (adoption)" .
+atio:originCity rdfs:label "City" .
+atio:adoptionNarrative rdfs:label "Adoption: narrative" .
+atio:geographicScale rdfs:label "Geographic scale" .
+
+# Mappings
+prop:ec9f8d5b-3482-42f1-8cee-79185b9739f3 skos:closeMatch atio:actualUser .
+prop:ed96af86-37b3-4c79-b180-992774f4a788 skos:closeMatch atio:innovationType .
+prop:96ada393-a7a9-4f28-a1e1-749d692f8e1c skos:relatedMatch atio:innovationForm .
+prop:bebd4148-2e0a-405e-8002-96d44f03d843 skos:relatedMatch atio:thematicArea .
+prop:b54b1aca-174f-4aa9-bb8d-5c930ba1dfe1 skos:closeMatch atio:readinessLevel .
+prop:6eb213fe-2b1a-4f3e-abf7-f1137981abb7 skos:closeMatch atio:adoptionCountry .
+prop:54172320-4afa-4a56-bf65-a4f6f47f4599 skos:relatedMatch atio:originCity .
+prop:94b532ae-ab88-4f1f-aff2-b10b76a84cab skos:relatedMatch atio:adoptionNarrative .
+prop:44c8948d-a47d-4198-a96c-b4895e1f593d skos:relatedMatch atio:geographicScale .

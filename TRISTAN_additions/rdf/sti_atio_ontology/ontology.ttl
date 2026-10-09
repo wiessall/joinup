@@ -1,0 +1,28 @@
+#  sti_atio ontology header (verbatim from v8).  Every class file is
+#  self-contained; build.py concatenates them with this header.
+
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix vann:    <http://purl.org/vocab/vann/> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+
+# ---------------------------------------------------------------------------
+#  ONTOLOGY DECLARATION
+# ---------------------------------------------------------------------------
+
+<https://sti-portal.fao.org/ontology/sti-atio>
+    a owl:Ontology ;
+    dcterms:title "ATIO Knowledge Base Ontology"@en ;
+    dcterms:description """Ontology for the Agrifood Systems Technologies and Innovations
+    Outlook (ATIO) Knowledge Base, developed by the FAO Office of Innovation.
+    Covers the full semantic model: innovations, families, bundles, organisations,
+    data sources, provenance, versioning, multi-source field divergence,
+    and access governance."""@en ;
+    dcterms:creator <https://sti-portal.fao.org/orgs/fao-oin> ;
+    dcterms:rights "© FAO 2026. Licensed under CC-BY 4.0 for the ontology schema itself." ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    owl:versionInfo "0.8-draft-2026-05" ;
+    owl:priorVersion <https://sti-portal.fao.org/ontology/atio/0.4> ;
+    vann:preferredNamespacePrefix "atio" ;
+    vann:preferredNamespaceUri "https://sti-portal.fao.org/ontology/sti-atio#" ;
+    rdfs:seeAlso <https://sti-portal.fao.org/pages/atio-knowledge-base> .

@@ -1,0 +1,34 @@
+@prefix atio: <http://data.fao.org/ird/atio#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <https://schema.org/> .
+@prefix sti: <https://sti-portal.fao.org/sti#> .
+
+sti:SourceRecord
+    a owl:Class ;
+    rdfs:label "Source Record"@en ;
+    rdfs:comment """One collection's record of an innovation, as imported: a few
+    fields normalised at import (title, country, owner), and everything else the
+    source says as claims. Reflects the current state of the source; a re-import
+    replaces its fields and claims. Never merged with another collection's
+    record: records describing the same innovation are linked by a
+    sameInnovationAs claim."""@en ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/sti> .
+
+sti:inCollection
+    a owl:ObjectProperty ;
+    rdfs:label "in collection"@en ;
+    rdfs:subPropertyOf dcterms:isPartOf ;
+    schema:domainIncludes sti:SourceRecord, atio:Innovation ;
+    schema:rangeIncludes dcat:Catalog ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/sti> .
+
+# Standard terms a source record uses (not redeclared here):
+#   dcterms:title, dcterms:description, dcterms:issued, dcterms:modified,
+#   dcterms:publisher, dcterms:identifier (the source's own ID),
+#   dcat:landingPage (the record's page at the source), dcat:contactPoint,
+#   dcat:keyword, sti:hasFieldClaim.

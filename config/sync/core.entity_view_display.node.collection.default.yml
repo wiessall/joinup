@@ -7,6 +7,7 @@ dependencies:
     - field.field.node.collection.closed_group
     - field.field.node.collection.contact
     - field.field.node.collection.description
+    - field.field.node.collection.field_licence
     - field.field.node.collection.field_state
     - field.field.node.collection.field_topic
     - field.field.node.collection.keywords
@@ -201,6 +202,24 @@ third_party_settings:
               context_mapping:
                 entity: layout_builder.entity
             weight: 5
+            additional: {  }
+          8fc0cbe9-fc0b-46d8-aa43-a047c9ed90c0:
+            uuid: 8fc0cbe9-fc0b-46d8-aa43-a047c9ed90c0
+            region: content
+            configuration:
+              id: 'field_block:node:collection:field_licence'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_label
+                label: hidden
+                settings:
+                  link: true
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: fieldset
+            weight: 0
             additional: {  }
         third_party_settings: {  }
       -
@@ -611,6 +630,16 @@ targetEntityType: node
 bundle: collection
 mode: default
 content:
+  field_licence:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: fieldset
+    weight: 1
+    region: content
   keywords:
     type: entity_reference_label
     label: above

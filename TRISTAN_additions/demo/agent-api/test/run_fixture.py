@@ -76,5 +76,37 @@ origin = [(r["role"], r["route"], round(float(r["weight"]), 2), r["value"])
 check("04: originCountry ranked: eca Kenya (1.0), then own Kenya via eca origin (0.4)",
       origin == [("duplicate", "direct", 1.0, "Kenya"), ("self", "indirect", 0.4, "Kenya")])
 
+rows = run("10-semantic-map.rq")
+check("10: all four mappings listed, two of each kind",
+      sorted(r["kind"] for r in rows) == ["property to ATIO field"] * 2 + ["property to property"] * 2
+      and all(r["fromLabel"] and r["toLabel"] for r in rows))
+
+STF, ECA = ID + "collection/stf", ID + "collection/eca"
+rows = run("11-collections-compared.rq", COLLECTION_A=STF, COLLECTION_B=ECA)
+check("11: stf vs eca: readiness~maturity (0.8), country~origin (0.4), both direct, authored either way",
+      [(r["labelA"], r["route"], float(r["weight"]), r["labelB"]) for r in rows]
+      == [("technical_readiness", "direct", 0.8, "Development stage"),
+          ("country", "direct", 0.4, "Country of origin")])
+check("11: a collection compared with itself has no rows here",
+      run("11-collections-compared.rq", COLLECTION_A=STF, COLLECTION_B=STF) == [])
+
+rows = run("12-same-as-pairs.rq")
+check("12: s1 and s2 are one pair, listed once",
+      [(r["recordA"], r["recordB"], r["collectionA"], r["collectionB"]) for r in rows]
+      == [(S1, ID + "source-record/s2", STF, ECA)])
+
+# Last, because it changes the data: eca maturity also maps to the ATIO field
+# stf readiness maps to, so the two meet there as well.
+from rdflib import URIRef
+ds.graph(URIRef("https://sti-portal.fao.org/graph/mappings")).add((
+    URIRef(ID + "property/eca-maturity"),
+    URIRef("http://www.w3.org/2004/02/skos/core#closeMatch"),
+    URIRef(ATIO + "readinessLevel")))
+rows = run("11-collections-compared.rq", COLLECTION_A=STF, COLLECTION_B=ECA)
+via = [r for r in rows if r["route"] == "via ATIO field"]
+check("11: shared ATIO field route: exact (1.0) * close (0.8) = 0.8 via Readiness level",
+      len(via) == 1 and abs(float(via[0]["weight"]) - 0.8) < 1e-9
+      and via[0]["viaLabel"] == "Readiness level" and via[0]["labelB"] == "Development stage")
+
 print(f"\n{len(failures)} failure(s)")
 sys.exit(1 if failures else 0)

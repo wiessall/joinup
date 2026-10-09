@@ -1,0 +1,75 @@
+@prefix sti_atio: <https://sti-portal.fao.org/ontology/sti-atio#> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+
+# ===========================================================================
+#  LAYER 6 -- ACCESS, GOVERNANCE & INTERNAL DATA MANAGEMENT
+#  Named graph: sti_atio:graph/internal  (strictly internal)
+# ===========================================================================
+
+# ---------------------------------------------------------------------------
+#  L6.1  sti_atio:FieldQA  (per-field quality assessment)
+# ---------------------------------------------------------------------------
+
+sti_atio:FieldQA
+    a owl:Class ;
+    rdfs:label "Field QA Assessment"@en ;
+    rdfs:comment """A quality assessment record for a specific field on a specific
+    innovation. Captures whether the field is complete, AI-generated, curated,
+    or flagged for review. Stored in the internal named graph."""@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:qaField
+    a owl:DatatypeProperty ;
+    rdfs:label "assessed field"@en ;
+    rdfs:domain sti_atio:FieldQA ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:qaStatus
+    a owl:ObjectProperty ;
+    rdfs:label "QA status"@en ;
+    rdfs:domain sti_atio:FieldQA ;
+    rdfs:range sti_atio:QAStatus ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:qaAssessedAt
+    a owl:DatatypeProperty ;
+    rdfs:label "QA assessed at"@en ;
+    rdfs:domain sti_atio:FieldQA ;
+    rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:qaAssessedBy
+    a owl:ObjectProperty ;
+    rdfs:label "QA assessed by"@en ;
+    rdfs:domain sti_atio:FieldQA ;
+    rdfs:range prov:Agent ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:qaNote
+    a owl:DatatypeProperty ;
+    rdfs:label "QA note"@en ;
+    rdfs:domain sti_atio:FieldQA ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- moved from innovationRecord.ttl ---
+
+sti_atio:hasFieldQA
+    a owl:ObjectProperty ;
+    rdfs:label "has field QA"@en ;
+    rdfs:domain sti_atio:InnovationRecord ;
+    rdfs:range sti_atio:FieldQA ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- moved from utils/leftovers.ttl ---
+
+sti_atio:QAStatus           a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "QA Status"@en ;
+    rdfs:comment "complete | incomplete | AI-generated | curator-curated | flagged | missing"@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .

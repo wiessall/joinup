@@ -1,0 +1,34 @@
+@prefix sti_atio: <https://sti-portal.fao.org/ontology/sti-atio#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix schema:  <https://schema.org/> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+
+#> What this is (TODO.org A18): schema.org alignments, so schema.org-aware consumers can read
+#> sti_atio data. Two of them are bugs: owl:equivalentProperty runs in both directions, so every
+#> schema:name / dcterms:creator anywhere implies innovationName / ownedBy, and the rdfs:domain then
+#> makes the subject an sti_atio:Innovation (the ontology header itself included; see build.py TRAP).
+#> Use rdfs:subPropertyOf only, or skip custom properties and emit dcterms/schema directly.
+
+# --- Property alignments: sti_atio → schema:Product ---
+
+# Ownership / development / funding
+sti_atio:ownedBy      rdfs:subPropertyOf schema:brand .
+sti_atio:developedBy  rdfs:subPropertyOf schema:manufacturer .
+sti_atio:fundedBy     rdfs:subPropertyOf schema:funding .
+sti_atio:ownedBy      owl:equivalentProperty dcterms:creator .
+
+# Geography
+sti_atio:originCountry  rdfs:subPropertyOf schema:countryOfOrigin .
+
+# Classification
+sti_atio:innovationType  rdfs:subPropertyOf schema:category .
+sti_atio:thematicArea    rdfs:subPropertyOf schema:category .
+
+# Identity / description
+sti_atio:innovationName   owl:equivalentProperty schema:name .
+sti_atio:shortDescription owl:equivalentProperty schema:description .
+sti_atio:sourceURL        rdfs:subPropertyOf schema:url .
+sti_atio:startDate        rdfs:subPropertyOf schema:foundingDate .
+sti_atio:implementedBy    rdfs:subPropertyOf schema:provider .
+

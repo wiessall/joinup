@@ -1,0 +1,22 @@
+@prefix sti_atio: <https://sti-portal.fao.org/ontology/sti-atio#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+
+# ===========================================================================
+#  INDIVIDUAL CONTROLLED VOCABULARY VALUES
+#  (OWL Named Individuals -- manageable as SKOS concepts in VocBench)
+# ===========================================================================
+
+# --- Access Levels ---
+sti_atio:Public         a sti_atio:AccessLevel ; rdfs:label "Public"@en .
+sti_atio:PartnerOnly    a sti_atio:AccessLevel ; rdfs:label "Partner-only"@en .
+sti_atio:Internal       a sti_atio:AccessLevel ; rdfs:label "Internal"@en .
+sti_atio:Embargoed      a sti_atio:AccessLevel ; rdfs:label "Embargoed"@en .
+
+# --- moved from utils/leftovers.ttl ---
+
+sti_atio:AccessLevel        a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Access Level"@en ;
+    rdfs:comment "public | partner-only | internal | embargoed"@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .

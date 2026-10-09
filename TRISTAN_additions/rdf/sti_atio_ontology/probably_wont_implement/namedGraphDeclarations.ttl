@@ -1,0 +1,41 @@
+@prefix sti_atio: <https://sti-portal.fao.org/ontology/sti-atio#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+
+# ---------------------------------------------------------------------------
+#  L6.2  Named Graph Declarations
+# ---------------------------------------------------------------------------
+#  These are documentary declarations; the actual graph management happens
+#  in GraphDB via the sparql_entity_storage module configuration.
+#? I don't think this is supported. Amazing detail & graphDB consideration. Should I yield and simply accept the wisdom of Valeria('s AI)?
+#> Don't yield (TODO.org A14). rdf_sync writes one graph (rdf_sync.settings graph_uri: http://data),
+#> and rdf_sync_published (enabled) keeps unpublished nodes out of it. Access control is OG plus
+#> published state in SQL, so "internal" data never has to reach the triplestore. Named graphs are
+#> worth it only once partner-restricted but *published* data must be queryable over SPARQL.
+
+<https://sti-portal.fao.org/ontology/sti-atio#graph/public>
+    a sti_atio:NamedGraph ;
+    rdfs:label "Public KG graph"@en ;
+    rdfs:comment """Contains all triples for published innovations with accessLevel = public:
+    core descriptive properties, taxonomy classifications, family membership,
+    bundle relations, geographic data, actor types, impact dimensions.
+    Served via the public SPARQL endpoint and JSON-LD / RDF exports."""@en .
+
+<https://sti-portal.fao.org/ontology/sti-atio#graph/provenance>
+    a sti_atio:NamedGraph ;
+    rdfs:label "Provenance graph"@en ;
+    rdfs:comment """Contains the full PROV-O chain (SourceRecord, AIExtractedInnovation,
+    FieldClaim, TaxonomyMapping, InnovationVersion, FieldTemporalValue).
+    Accessible to internal curators and authorised partner organisations."""@en .
+
+<https://sti-portal.fao.org/ontology/sti-atio#graph/internal>
+    a sti_atio:NamedGraph ;
+    rdfs:label "Internal graph"@en ;
+    rdfs:comment """Contains QA scores, editorial workflow states, collection assignments,
+    FieldQA assessments, and curator notes. Strictly internal."""@en .
+
+sti_atio:NamedGraph
+    a owl:Class ;
+    rdfs:label "Named Graph"@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+

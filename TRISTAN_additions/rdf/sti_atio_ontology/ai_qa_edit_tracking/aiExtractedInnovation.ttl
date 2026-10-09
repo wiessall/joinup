@@ -1,0 +1,126 @@
+@prefix sti_atio: <https://sti-portal.fao.org/ontology/sti-atio#> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+
+# ===========================================================================
+#  LAYER 3 -- PIPELINE / PROVENANCE LAYER
+#  The three-stage ingestion model. Implements W3C PROV-O.
+#  Primary named graph: <https://sti-portal.fao.org/ontology/sti-atio#graph/provenance>
+#  Accessible to: internal curators and authorised partners.
+# ===========================================================================
+#? I don't see the point in having this separate entity. Pipeline tracing in triplestore seems unnecessary
+#? overly complex approach, what's the upside?
+#> WONT (TODO.org A2). Agree. The upside it claimed: a buffer between raw and published, so you
+#> can re-run enrichment without touching the published record. In the fork that buffer is Drupal:
+#> solution (raw) -> core_annotation (state_machine draft) -> published, and rdf_sync_published keeps
+#> drafts out of the graph. Keep only a provenance stamp (model, profile, datetime) on the annotation.
+
+
+# ---------------------------------------------------------------------------
+#  L3.2  sti_atio:AIExtractedInnovation
+# ---------------------------------------------------------------------------
+
+sti_atio:AIExtractedInnovation
+    a owl:Class ;
+    rdfs:label "AI-Extracted Innovation"@en ;
+    rdfs:comment """The intermediate bridge entity produced by the AI enrichment pipeline.
+    Holds all fields from the source record(s) plus AI-generated values for
+    fields absent or incomplete in the source. May be linked to multiple source
+    records (in multi-source merging scenarios). Acts as the buffer between
+    raw ingestion and curated publication -- allowing enrichment experiments
+    without affecting the published record.
+    Implements prov:Entity derived from sti_atio:SourceRecord."""@en ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:extractedFromSource
+    a owl:ObjectProperty ;
+    rdfs:label "extracted from source record"@en ;
+    rdfs:comment "The source record(s) from which this extracted innovation was derived. Multi-valued."@en ;
+    rdfs:domain sti_atio:AIExtractedInnovation ;
+    rdfs:range sti_atio:SourceRecord ;
+    rdfs:subPropertyOf prov:wasDerivedFrom ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:extractionActivity
+    a owl:ObjectProperty ;
+    rdfs:label "extraction activity"@en ;
+    rdfs:domain sti_atio:AIExtractedInnovation ;
+    rdfs:range sti_atio:AIEnrichmentActivity ;
+    rdfs:subPropertyOf prov:wasGeneratedBy ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:aiExtractionVersion
+    a owl:DatatypeProperty ;
+    rdfs:label "AI extraction version"@en ;
+    rdfs:comment "Version identifier of the extraction run (date + prompt version)."@en ;
+    rdfs:domain sti_atio:AIExtractedInnovation ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:aiModelUsed
+    a owl:DatatypeProperty ;
+    rdfs:label "AI model used"@en ;
+    rdfs:comment "Identifier of the LLM or AI model used for enrichment (e.g. gemini-1.5-pro)."@en ;
+    rdfs:domain sti_atio:AIExtractedInnovation ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:aiPromptVersion
+    a owl:DatatypeProperty ;
+    rdfs:label "AI prompt version"@en ;
+    rdfs:comment "Version of the enrichment prompt template used."@en ;
+    rdfs:domain sti_atio:AIExtractedInnovation ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:mergeStrategy
+    a owl:ObjectProperty ;
+    rdfs:label "merge strategy"@en ;
+    rdfs:comment "How multiple source records were combined into this extracted entity."@en ;
+    rdfs:domain sti_atio:AIExtractedInnovation ;
+    rdfs:range sti_atio:MergeStrategy ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:hasFieldProvenance
+    a owl:ObjectProperty ;
+    rdfs:label "has field provenance"@en ;
+    rdfs:domain sti_atio:AIExtractedInnovation ;
+    rdfs:range sti_atio:FieldProvenance ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- moved from innovationRecord.ttl (range is AIExtractedInnovation) ---
+
+sti_atio:recordDerivedFromExtracted
+    a owl:ObjectProperty ; rdfs:label "record derived from extracted innovation"@en ;
+    rdfs:comment "Links InnovationRecord to its AIExtractedInnovation precursor."@en ;
+    rdfs:domain sti_atio:InnovationRecord ; rdfs:range sti_atio:AIExtractedInnovation ;
+    rdfs:subPropertyOf prov:wasDerivedFrom ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:derivedFromExtracted
+    a owl:ObjectProperty ;
+    rdfs:label "derived from extracted innovation"@en ;
+    rdfs:comment "Links the published innovation back to its AI-extracted precursor."@en ;
+    rdfs:domain sti_atio:InnovationRecord ;  # moved from Innovation in v0.7
+    rdfs:range sti_atio:AIExtractedInnovation ;
+    rdfs:subPropertyOf prov:wasDerivedFrom ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- moved from utils/leftovers.ttl ---
+
+sti_atio:MergeStrategy      a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Merge Strategy"@en ;
+    rdfs:comment "AI-merge (many-to-one) | curator-merge (many-extracted-to-one-published)"@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:AIMerge             a sti_atio:MergeStrategy ;
+    rdfs:label "AI merge"@en ;
+    rdfs:comment "AI identified the duplicate and merged multiple source records into one extracted entity."@en .
+
+sti_atio:CuratorMerge        a sti_atio:MergeStrategy ;
+    rdfs:label "Curator merge"@en ;
+    rdfs:comment "One AI-extracted entity per source; curator selected best field values for the published record."@en .

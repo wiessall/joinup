@@ -26,7 +26,6 @@ dependencies:
     - field.field.node.solution.resources
     - field.field.node.solution.short_id
     - field.field.node.solution.site_featured
-    - field.field.node.solution.solution_type
     - field.field.node.solution.translation
     - node.type.solution
     - og_menu.ogmenu.quick_links
@@ -1043,52 +1042,6 @@ third_party_settings:
                   class: ''
                   style: ''
                   data: ''
-          11816b4b-fea8-433f-99b5-bd0a68a5990c:
-            uuid: 11816b4b-fea8-433f-99b5-bd0a68a5990c
-            region: content
-            configuration:
-              id: 'field_block:node:solution:solution_type'
-              label: 'Solution type'
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: entity_reference_label
-                label: above
-                settings:
-                  link: false
-                third_party_settings:
-                  field_delimiter:
-                    delimiter: ','
-                  field_formatter_range:
-                    order: 0
-                    limit: 0
-                    offset: 0
-                  joinup_slick:
-                    preset: ''
-                    field_label: true
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 9
-            additional:
-              component_attributes:
-                block_attributes:
-                  id: ''
-                  class: 'pe-5 pb-4'
-                  style: ''
-                  data: ''
-                block_title_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
-                block_content_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
           564968b5-69a6-4fc4-af9d-6a2e2eceee95:
             uuid: 564968b5-69a6-4fc4-af9d-6a2e2eceee95
             region: content
@@ -1401,7 +1354,6 @@ hidden:
   site_featured: true
   solution_settings: true
   solution_subscribe: true
-  solution_type: true
   translation: true
   uri: true
   uuid: true

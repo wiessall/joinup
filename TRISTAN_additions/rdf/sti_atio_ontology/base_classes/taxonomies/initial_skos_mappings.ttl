@@ -1,0 +1,32 @@
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+
+# ---------------------------------------------------------------------------
+#  CROSS-SCHEME ALIGNMENT MAPPINGS
+#  SKOS mapping relations between CGIAR-TRL and IDIA-stages concepts.
+#  These are approximate; documented with skos:closeMatch (not exactMatch)
+#  because the scales have different evidence requirements and granularity.
+#  Full alignment to be validated by KOS specialists in VocBench.
+# ---------------------------------------------------------------------------
+
+<https://sti-portal.fao.org/taxonomy/readiness/idia-ideation>
+    skos:closeMatch <https://sti-portal.fao.org/taxonomy/readiness/cgiar-0> ,
+                    <https://sti-portal.fao.org/taxonomy/readiness/cgiar-1> .
+
+<https://sti-portal.fao.org/taxonomy/readiness/idia-rd>
+    skos:closeMatch <https://sti-portal.fao.org/taxonomy/readiness/cgiar-1> ,
+                    <https://sti-portal.fao.org/taxonomy/readiness/cgiar-5> .
+
+<https://sti-portal.fao.org/taxonomy/readiness/idia-poc>
+    skos:closeMatch <https://sti-portal.fao.org/taxonomy/readiness/cgiar-5> ,
+                    <https://sti-portal.fao.org/taxonomy/readiness/cgiar-6> .
+
+<https://sti-portal.fao.org/taxonomy/readiness/idia-transition>
+    skos:closeMatch <https://sti-portal.fao.org/taxonomy/readiness/cgiar-6> ,
+                    <https://sti-portal.fao.org/taxonomy/readiness/cgiar-7> .
+
+<https://sti-portal.fao.org/taxonomy/readiness/idia-scaling>
+    skos:closeMatch <https://sti-portal.fao.org/taxonomy/readiness/cgiar-7> .
+
+<https://sti-portal.fao.org/taxonomy/readiness/idia-sustainable>
+    skos:closeMatch <https://sti-portal.fao.org/taxonomy/readiness/cgiar-9> .
+

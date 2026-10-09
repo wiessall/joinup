@@ -197,7 +197,7 @@ third_party_settings:
           type: resource
       og_audience:
         target_id:
-          predicate: 'https://sti-portal.fao.org/sti#statedBy'
+          predicate: 'https://sti-portal.fao.org/sti#inCollection'
           type: resource
       title:
         value:

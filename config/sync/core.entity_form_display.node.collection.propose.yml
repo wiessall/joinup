@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.collection.closed_group
     - field.field.node.collection.contact
     - field.field.node.collection.description
+    - field.field.node.collection.field_licence
     - field.field.node.collection.field_state
     - field.field.node.collection.field_topic
     - field.field.node.collection.keywords
@@ -250,6 +251,7 @@ content:
 hidden:
   created: true
   current_workflow_state: true
+  field_licence: true
   langcode: true
   last_content_deletion: true
   newsletter: true

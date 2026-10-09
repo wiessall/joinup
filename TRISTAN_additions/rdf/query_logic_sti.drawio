@@ -1,0 +1,87 @@
+<mxfile host="Electron">
+  <diagram name="Page-1" id="VRBOwtHRe9qH9Iqd0PmA">
+    <mxGraphModel dx="1927" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Plq3Y2yhUFmkIzFLm7Nz-1" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" value="Drupal&lt;br&gt;(SQL)" vertex="1">
+          <mxGeometry height="80" width="60" x="40" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="Plq3Y2yhUFmkIzFLm7Nz-2" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" value="Virtuoso&lt;br&gt;(SPARQL)" vertex="1">
+          <mxGeometry height="80" width="60" x="464" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="Plq3Y2yhUFmkIzFLm7Nz-3" edge="1" parent="1" source="Plq3Y2yhUFmkIzFLm7Nz-1" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="270" y="460" as="sourcePoint" />
+            <mxPoint x="70" y="440" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Plq3Y2yhUFmkIzFLm7Nz-4" connectable="0" parent="Plq3Y2yhUFmkIzFLm7Nz-3" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="GET all solutions from collection x&lt;br&gt;for which no derived atio-innovations exist" vertex="1">
+          <mxGeometry relative="1" x="0.0657" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Plq3Y2yhUFmkIzFLm7Nz-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="list of full solution content (json)" vertex="1">
+          <mxGeometry height="60" width="120" x="10" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="Plq3Y2yhUFmkIzFLm7Nz-7" edge="1" parent="1" source="Plq3Y2yhUFmkIzFLm7Nz-2" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" target="Plq3Y2yhUFmkIzFLm7Nz-10" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <Array as="points">
+              <mxPoint x="644" y="270" />
+            </Array>
+            <mxPoint x="344" y="460" as="sourcePoint" />
+            <mxPoint x="494" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Plq3Y2yhUFmkIzFLm7Nz-9" connectable="0" parent="Plq3Y2yhUFmkIzFLm7Nz-7" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="WHICH claims does the solution&#39;s collection have&amp;nbsp;&lt;br&gt;and HOW do they relate to the atio-innovation fields?" vertex="1">
+          <mxGeometry relative="1" x="-0.035" y="-3" as="geometry">
+            <mxPoint x="3" y="54" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Plq3Y2yhUFmkIzFLm7Nz-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="semantic map: &lt;br&gt;claim &amp;lt;-&amp;gt; ATIO fields" vertex="1">
+          <mxGeometry height="60" width="120" x="584" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="Plq3Y2yhUFmkIzFLm7Nz-11" edge="1" parent="1" source="Plq3Y2yhUFmkIzFLm7Nz-2" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" target="Plq3Y2yhUFmkIzFLm7Nz-12" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <Array as="points">
+              <mxPoint x="374" y="270" />
+            </Array>
+            <mxPoint x="344" y="450" as="sourcePoint" />
+            <mxPoint x="304" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Plq3Y2yhUFmkIzFLm7Nz-13" connectable="0" parent="Plq3Y2yhUFmkIzFLm7Nz-11" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="WHICH solutions are marked as duplicates of this one?&lt;br&gt;WHICH claims do their collections have for the duplicates?&lt;br&gt;HOW do the other claims relate to atio-innovation fields?&lt;br&gt;HOW do the other claims relate to the main claims?" vertex="1">
+          <mxGeometry relative="1" x="0.3269" y="-2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Plq3Y2yhUFmkIzFLm7Nz-12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="semantic map:&lt;br&gt;claim &amp;lt;-&amp;gt; other_claim &amp;lt;-&amp;gt; ATIO fields" vertex="1">
+          <mxGeometry height="60" width="200" x="274" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="Plq3Y2yhUFmkIzFLm7Nz-22" edge="1" parent="1" source="Plq3Y2yhUFmkIzFLm7Nz-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Plq3Y2yhUFmkIzFLm7Nz-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Plq3Y2yhUFmkIzFLm7Nz-23" edge="1" parent="1" source="Plq3Y2yhUFmkIzFLm7Nz-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" target="Plq3Y2yhUFmkIzFLm7Nz-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Plq3Y2yhUFmkIzFLm7Nz-14" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="Agent" vertex="1">
+          <mxGeometry height="60" width="30" x="240" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="Plq3Y2yhUFmkIzFLm7Nz-15" parent="1" style="swimlane;startSize=0;" value="" vertex="1">
+          <mxGeometry height="430" width="240" x="-50" y="170" as="geometry">
+            <mxRectangle height="40" width="50" x="-50" y="170" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Plq3Y2yhUFmkIzFLm7Nz-16" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Data query" vertex="1">
+          <mxGeometry height="30" width="110" x="-60" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="Plq3Y2yhUFmkIzFLm7Nz-17" parent="1" style="swimlane;startSize=0;" value="" vertex="1">
+          <mxGeometry height="430" width="570" x="210" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="Plq3Y2yhUFmkIzFLm7Nz-20" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Semantic query" vertex="1">
+          <mxGeometry height="30" width="110" x="270" y="170" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

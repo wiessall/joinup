@@ -1,0 +1,49 @@
+# SKOS mappings: whh-stf → fao-dvi, 2026-10-07T10:22:58.288Z
+# Load into the named graph https://sti-portal.fao.org/graph/mappings,
+# not into rdf_sync's graph: rdf_sync rewrites a term's triples on save.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix stf:  <https://data.joinup.fao.org/annotation/stf/> .
+@prefix eca:  <https://data.joinup.fao.org/annotation/eca/> .
+# WARNING: some terms came from annotation JSON and have made-up URIs;
+# their mappings will not join the claims in the graph.
+
+# ── Labels ───────────────────────────────────────────────────────────────────
+<https://sti-portal.fao.org/id/property/fc007c86-eb82-4cab-8cdf-89ef3dff223a> rdfs:label "Country" .
+<https://sti-portal.fao.org/id/property/6eb213fe-2b1a-4f3e-abf7-f1137981abb7> rdfs:label "List country" .
+<https://sti-portal.fao.org/id/property/a84456a7-d8b2-40b9-80f6-7139c56221a5> rdfs:label "Domain" .
+<https://sti-portal.fao.org/id/property/ed96af86-37b3-4c79-b180-992774f4a788> rdfs:label "Type" .
+<https://sti-portal.fao.org/id/property/96fa31e0-faaa-4edb-83f2-16e7de8328e5> rdfs:label "human_impact_in_11-15_years" .
+<https://sti-portal.fao.org/id/property/b856ed0a-ef2d-43e3-aecc-9a4d1f0b10a5> rdfs:label "Number of users or subscribers of the Digital Solution (DS)." .
+<https://sti-portal.fao.org/id/property/f215bcaf-a34f-4c53-854f-a73ba8cf46b6> rdfs:label "human_impact_in_6-10_years" .
+<https://sti-portal.fao.org/id/property/b856ed0a-ef2d-43e3-aecc-9a4d1f0b10a5> rdfs:label "Number of users or subscribers of the Digital Solution (DS)." .
+<https://sti-portal.fao.org/id/property/ffc7f7b8-fba3-49d5-8347-d7b8e15caf2f> rdfs:label "human_impact_in_1-5_years" .
+<https://sti-portal.fao.org/id/property/7121c00f-2cfb-444a-83c7-30d9deb5e538> rdfs:label "Inclusion and Representation" .
+<https://sti-portal.fao.org/id/property/94b532ae-ab88-4f1f-aff2-b10b76a84cab> rdfs:label "Measurable positive impact(s) by Digital Solution (DS) on target users and/or audience (Enter text)." .
+<https://sti-portal.fao.org/id/property/d65004ca-e442-4f9b-8b1a-93d7497fa9ee> rdfs:label "Innovation Domains Addressed" .
+<https://sti-portal.fao.org/id/property/0978dfc3-2ad7-4f56-91b6-b6b9aa1eed56> rdfs:label "Greenhouse Gasses_impact" .
+<https://sti-portal.fao.org/id/property/90a86708-073b-4b56-aa70-d5425118a619> rdfs:label "Nitrogen Use_impact" .
+<https://sti-portal.fao.org/id/property/6aff60fa-cac3-4f9e-9205-ff3c71abf809> rdfs:label "Land Use_impact" .
+<https://sti-portal.fao.org/id/property/841650bb-9997-4d0b-a7f3-cc75f20a9e00> rdfs:label "Phosphorus Use_impact" .
+<https://sti-portal.fao.org/id/property/a2785693-27b5-4b02-b451-17819c6ef972> rdfs:label "Water Use_impact" .
+<https://sti-portal.fao.org/id/property/06c1364b-4123-494d-958c-8fcf23f20218> rdfs:label "SDGs Addressed" .
+<https://sti-portal.fao.org/id/property/63e01bc9-56a0-41b4-9eff-44454e8997ba> rdfs:label "Biodiversity_impact" .
+<https://sti-portal.fao.org/id/property/d155c87c-7bd5-4a62-9454-5519f62e72d2> rdfs:label "Network Contact Emails or LinkedIN Profiles" .
+<https://sti-portal.fao.org/id/property/baf83a39-b932-45a1-9d7a-a772dde543ae> rdfs:label "Other relevant links and information sources on DS" .
+
+# ── Mappings ─────────────────────────────────────────────────────────────────
+<https://sti-portal.fao.org/id/property/fc007c86-eb82-4cab-8cdf-89ef3dff223a> skos:closeMatch <https://sti-portal.fao.org/id/property/6eb213fe-2b1a-4f3e-abf7-f1137981abb7> .
+<https://sti-portal.fao.org/id/property/a84456a7-d8b2-40b9-80f6-7139c56221a5> skos:relatedMatch <https://sti-portal.fao.org/id/property/ed96af86-37b3-4c79-b180-992774f4a788> .
+<https://sti-portal.fao.org/id/property/96fa31e0-faaa-4edb-83f2-16e7de8328e5> skos:broadMatch <https://sti-portal.fao.org/id/property/b856ed0a-ef2d-43e3-aecc-9a4d1f0b10a5> .
+<https://sti-portal.fao.org/id/property/f215bcaf-a34f-4c53-854f-a73ba8cf46b6> skos:broadMatch <https://sti-portal.fao.org/id/property/b856ed0a-ef2d-43e3-aecc-9a4d1f0b10a5> .
+<https://sti-portal.fao.org/id/property/ffc7f7b8-fba3-49d5-8347-d7b8e15caf2f> skos:broadMatch <https://sti-portal.fao.org/id/property/b856ed0a-ef2d-43e3-aecc-9a4d1f0b10a5> .
+<https://sti-portal.fao.org/id/property/7121c00f-2cfb-444a-83c7-30d9deb5e538> skos:relatedMatch <https://sti-portal.fao.org/id/property/94b532ae-ab88-4f1f-aff2-b10b76a84cab> .
+<https://sti-portal.fao.org/id/property/d65004ca-e442-4f9b-8b1a-93d7497fa9ee> skos:relatedMatch <https://sti-portal.fao.org/id/property/94b532ae-ab88-4f1f-aff2-b10b76a84cab> .
+<https://sti-portal.fao.org/id/property/0978dfc3-2ad7-4f56-91b6-b6b9aa1eed56> skos:relatedMatch <https://sti-portal.fao.org/id/property/94b532ae-ab88-4f1f-aff2-b10b76a84cab> .
+<https://sti-portal.fao.org/id/property/90a86708-073b-4b56-aa70-d5425118a619> skos:relatedMatch <https://sti-portal.fao.org/id/property/94b532ae-ab88-4f1f-aff2-b10b76a84cab> .
+<https://sti-portal.fao.org/id/property/6aff60fa-cac3-4f9e-9205-ff3c71abf809> skos:relatedMatch <https://sti-portal.fao.org/id/property/94b532ae-ab88-4f1f-aff2-b10b76a84cab> .
+<https://sti-portal.fao.org/id/property/841650bb-9997-4d0b-a7f3-cc75f20a9e00> skos:relatedMatch <https://sti-portal.fao.org/id/property/94b532ae-ab88-4f1f-aff2-b10b76a84cab> .
+<https://sti-portal.fao.org/id/property/a2785693-27b5-4b02-b451-17819c6ef972> skos:relatedMatch <https://sti-portal.fao.org/id/property/94b532ae-ab88-4f1f-aff2-b10b76a84cab> .
+<https://sti-portal.fao.org/id/property/06c1364b-4123-494d-958c-8fcf23f20218> skos:relatedMatch <https://sti-portal.fao.org/id/property/94b532ae-ab88-4f1f-aff2-b10b76a84cab> .
+<https://sti-portal.fao.org/id/property/63e01bc9-56a0-41b4-9eff-44454e8997ba> skos:relatedMatch <https://sti-portal.fao.org/id/property/94b532ae-ab88-4f1f-aff2-b10b76a84cab> .
+<https://sti-portal.fao.org/id/property/d155c87c-7bd5-4a62-9454-5519f62e72d2> skos:relatedMatch <https://sti-portal.fao.org/id/property/baf83a39-b932-45a1-9d7a-a772dde543ae> .

@@ -6,13 +6,21 @@ dependencies:
     - rdf_sync
 third_party_settings:
   rdf_sync:
-    type: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#Property'
+    type: 'http://www.w3.org/2004/02/skos/core#Concept'
     uri_field_name: claim_property_uri
     uri_plugin: 'sti_namespace:property'
     fields:
       name:
         value:
           predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
+          type: null
+      vid:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#inScheme'
+          type: resource
+      description:
+        processed:
+          predicate: 'http://www.w3.org/2004/02/skos/core#definition'
           type: null
 name: 'Claim properties'
 vid: claim_properties

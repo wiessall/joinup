@@ -1,0 +1,91 @@
+@prefix sti:     <https://sti-portal.fao.org/sti#> .
+@prefix dcat:    <http://www.w3.org/ns/dcat#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema:  <https://schema.org/> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# Claims: statements made by a collection (later: any agent) about a
+# source record, in the collection's own vocabulary. Nobody rules on them;
+# disagreement between claims is computed, not stored.
+
+sti:FieldClaim
+    a owl:Class ;
+    rdfs:label "Field Claim"@en ;
+    rdfs:comment """A statement by an agent about a subject: this property has
+    this value. Reified so that who said it stays attached to what was said.
+    Claims from different collections about the same innovation coexist and
+    may disagree. The subject is whatever carries the claim through
+    sti:hasFieldClaim; today that is a source record."""@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/sti> .
+
+sti:hasFieldClaim
+    a owl:ObjectProperty ;
+    rdfs:label "has field claim"@en ;
+    schema:domainIncludes sti:SourceRecord ;
+    schema:rangeIncludes sti:FieldClaim ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/sti> .
+
+# Recorded intent only; not emitted. Use ^sti:hasFieldClaim in SPARQL.
+sti:claimSubject
+    a owl:ObjectProperty ;
+    rdfs:label "claim subject"@en ;
+    owl:inverseOf sti:hasFieldClaim ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/sti> .
+
+sti:claimedBy
+    a owl:ObjectProperty ;
+    rdfs:label "claimed by"@en ;
+    rdfs:comment "The agent making the claim. Today always a collection."@en ;
+    schema:domainIncludes sti:FieldClaim ;
+    schema:rangeIncludes dcat:Catalog, prov:Agent ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/sti> .
+
+sti:claimProperty
+    a owl:ObjectProperty ;
+    rdfs:label "claim property"@en ;
+    rdfs:comment """What the claim is about: a term in the claiming
+    collection's vocabulary of properties. Mapped to ATIO fields and to other
+    collections' properties by SKOS mappings in a separate graph."""@en ;
+    schema:domainIncludes sti:FieldClaim ;
+    schema:rangeIncludes skos:Concept ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/sti> .
+
+sti:claimRefValue
+    a owl:ObjectProperty ;
+    rdfs:label "claim value (reference)"@en ;
+    rdfs:comment """The claimed value when it is a term in the collection's
+    vocabulary of values, or another source record (same-innovation claims)."""@en ;
+    schema:domainIncludes sti:FieldClaim ;
+    schema:rangeIncludes skos:Concept, sti:SourceRecord ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/sti> .
+
+sti:claimLiteralValue
+    a owl:DatatypeProperty ;
+    rdfs:label "claim value (literal)"@en ;
+    rdfs:comment "The claimed value when it is free text or a number."@en ;
+    schema:domainIncludes sti:FieldClaim ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/sti> .
+
+sti:claimedAt
+    a owl:DatatypeProperty ;
+    rdfs:label "claimed at"@en ;
+    rdfs:comment "When the claim was imported. Not when the source asserted it."@en ;
+    schema:domainIncludes sti:FieldClaim ;
+    rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/sti> .
+
+sti:sameInnovationAs
+    a skos:Concept ;
+    skos:prefLabel "same innovation as"@en ;
+    rdfs:comment """A claim property, not a predicate: a claim with this
+    property and a source record as value says the two records describe the
+    same innovation. Kept across re-imports."""@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/sti> .
+
+# Removed (2 Oct 2026): claimField, curatorResolution, claimResolutionNote,
+# ClaimResolution and its four values, inferredScheme, claimEligible,
+# claimEligibilityRationale. Which claims an ATIO innovation used, if ever
+# recorded, belongs on the ATIO innovation.

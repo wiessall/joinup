@@ -1,0 +1,459 @@
+#+TITLE: sti_atio ontology: MVP port plan
+#+DATE: 2026-09-29
+#+TODO: TODO DECIDE TEST | DONE WONT LATER
+#+STARTUP: overview
+
+* How to read this
+- *Triplestore = rdf_sync projection of SQL.* "Port X into the triplestore" means two
+  things: an =rdf_sync= mapping in bundle or vocabulary config, and a declaration in this
+  ontology of the predicate or class that mapping emits. Nothing here proposes storing
+  anything in the graph that isn't in Drupal first.
+- *Predicates are cheap to change; instance URIs are not.* A predicate change is a config
+  edit plus a re-sync. An instance URI, once a partner or crawler has seen it, is
+  permanent. So nearly all the foreclosure risk sits in P0.
+- *Pattern first, then copy config.* Get one categorical+narrative pair (readiness) working
+  end to end: vocabulary, term reference, projection, ontology term. After that, most of
+  ATIO's ~80 fields are repetition of that pattern, not new design.
+- Evidence comes from fork =edge= @ =fd52eab= (2026-09-16), v8 as uploaded, and your split.
+  =build.py= output is quoted verbatim where cited.
+- Folder status: =base_classes/= = MVP candidates (not all of it survives, see below);
+  everything else = LATER or WONT. That matches your instinct, with two exceptions:
+  =hasFieldClaim= lived in =probably_wont_implement/= but the fork emits it (now moved to
+  =fieldClaim.ttl=), and =base_classes/= contains roughly as much to delete as to keep.
+
+* Bugs in v8 itself (fix or drop regardless of MVP scope)
+| # | Finding                                                                                                                         | Evidence                                                                         | Consequence                                                                                            |
+|---+---------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------|
+| 1 | =owl:equivalentProperty= to generic terms: innovationName≡schema:name, shortDescription≡schema:description, ownedBy≡dcterms:creator, correspondingConcept≡skos:exactMatch | =build.py --profile all= → =TRAP urn:fixture:org is inferred to be ['sti_atio:Innovation']=; same for the ontology header itself; a concept with an exactMatch becomes =InnovationFamily= | Any reasoning store (GraphDB OWL-RL / OWL-Horst rulesets) turns organisations, the ontology document and SKOS concepts into innovations/families |
+| 2 | =rdfs:domain= on nearly every property                                                                                          | v8's own example innovation is inferred to be an =InnovationRecord= (its v0.7 domains contradict its example) | In the fork, ATIO properties will sit on =sti:Annotation= nodes; with domains, every annotation *becomes* an =sti_atio:Innovation= → two innovations per real thing. Use =schema:domainIncludes= / =rangeIncludes= for documentation |
+| 3 | Terms used but never declared                                                                                                   | =MaturityScheme=, =AdoptionScheme= (added in the split), =scalingLevelIDIA= (→ =deprecated.ttl=), =sparqlConstruct= (still =UNDECLARED=) | Breaks any tool that resolves terms; the SHACL shape queries undeclared classes                            |
+| 4 | Duplicate declarations                                                                                                          | =claimSubject= ×2; =aiGeneratedDescription= with domain Innovation *and* InnovationRecord | Removed in the split (only change vs v8 besides #3)                                                    |
+| 5 | =communityConsent= is a =DatatypeProperty= whose range is a class of concepts                                                   | innovation.ttl                                                                   | Should be =ObjectProperty=                                                                              |
+| 6 | =hasVersion= (domain InnovationRecord) declared inverse of =versionOf= (range Innovation)                                       | innovationVersion.ttl                                                            | Inconsistent; moot if WONT                                                                             |
+| 7 | Changelog says v0.3 replaced the =owl:unionOf= range classes; =MaturityLevel= / =AdoptionOrUptakeLevel= still carry =owl:unionOf= | atio_skos_taxonomy_fields.ttl                                                   | Dead classes; nothing uses them as a range any more                                                    |
+| 8 | Header: =vann:preferredNamespacePrefix "atio"= while the prefix is =sti_atio=; =owl:priorVersion= → =.../atio/0.4=; v8 binds =sti:= to =.../ontology/sti#=, the fork's =sti:= is =.../ontology#= | ontology.ttl                                                   | Prefix collision the moment the two are loaded together                                                |
+| 9 | Example uses =skos:closeMatch= (a property) as the value of =mappingType= (range =MappingType=)                                 | filled_example_onthology.ttl                                                     | Symptom of A4: the mapping should *be* a skos:closeMatch triple                                        |
+
+* P0: Identity (namespaces, instance URIs)                             :foreclosure:
+Current state in the fork:
+| What                            | Where                                             | Value                                                         |
+|---------------------------------+---------------------------------------------------+---------------------------------------------------------------|
+| v8 ontology terms               | v8                                                | =https://sti-portal.fao.org/ontology/sti-atio#=               |
+| v8 =sti:= (declared, unused)    | v8                                                | =https://sti-portal.fao.org/ontology/sti#=                    |
+| platform terms actually emitted | =node.type.solution=, =paragraphs_type.claims=    | =https://sti-portal.fao.org/ontology#= (Innovation, FieldClaim, hasFieldClaim, claim*, inCollection, annotates, statedBy) |
+| ATIO annotation predicates      | =node.type.core_annotation=                       | =https://sti-portal.fao.org/collection/core#<machine name>=, truncated (=…#extracted_original_innovat=) |
+| solution/annotation/claim URIs  | =StiRdfUriGenerator= (=sti_namespace=)            | =http://sti-portal.fao.org/{bundle}/{uuid}=                    |
+| collection/owner URIs           | =JoinupRdfUriGenerator= (=joinup_po_namespace:w21=) | =http://data.europa.eu/w21/{uuid}=                          |
+
+** TODO Stop minting FAO URIs in the EU Publications Office namespace
+=node.type.collection= and =node.type.owner= still use Joinup's =joinup_po_namespace:w21=,
+so every collection and owner is currently =http://data.europa.eu/w21/{uuid}=. Switch
+both to =sti_namespace:<slug>=. Do this *before anything is published or shared*.
+** TODO Instance URI pattern: https, and a fixed slug instead of the bundle id
+=StiRdfUriGenerator= builds =http://sti-portal.fao.org/{bundle}/{uuid}=. Two problems:
+- The bundle machine name is in the URI. Resolving question C by renaming =solution=
+  would silently change every innovation URI. The plugin already prefers the derivative
+  id (=$this->getDerivativeId() ?? $this->getEntity()->bundle()=), so
+  =uri_plugin: 'sti_namespace:innovation'= pins the slug. That is config only.
+- =http://= is hardcoded; switching to https is a one-line code change in the plugin. It
+  needs a =hook_update_N= plus a full re-sync, which is cheap now and expensive later.
+** DECIDE Namespaces: see OPEN ISSUE 12
+Recommendation: two namespaces, split by ownership.
+- =sti:= → =https://sti-portal.fao.org/ontology#=: platform (Unit 5). Innovation,
+  FieldClaim, Annotation, inCollection, annotates, statedBy, claim*. Already emitted, so keep it.
+- =sti_atio:= → =https://sti-portal.fao.org/ontology/sti-atio#=: ATIO's vocabulary
+  (Valeria's). readinessLevel, adoptionLevel, thematicArea, narratives and so on. This
+  *replaces* =collection/core#=, which is derived from field machine names and changes
+  when a field is renamed.
+- Retire v8's unused =sti: .../ontology/sti#= binding.
+** TODO Make the namespace dereference
+Serve =dist/sti-atio-base.ttl= at =https://sti-portal.fao.org/ontology/sti-atio= (FAIR, and
+the "predictable stable URLs" constraint). Content negotiation can come later.
+** TEST Dedupe must not break URIs
+When a merge happens (=sti_dedupe=, which *is not on =edge=*, so I couldn't read it), the
+losing node's URI should resolve to the winner (=dcterms:isReplacedBy=, or a redirect;
+check whether =joinup_core='s =IdRedirect= can cover it) rather than 404. This fails
+silently, so it needs a kernel test.
+
+* P1: Innovation core (=solution=)
+** DONE Already projected
+title→dcterms:title, landing_page→dcat:landingPage, language→dcterms:language (EU language
+authority), published_at→dcterms:issued, changed→dcterms:modified,
+og_audience→sti:inCollection, field_claims→sti:hasFieldClaim, type =ontology#Innovation=.
+** TODO Resolve the double mapping of solution fields
+The bundle-level map (=node.type.solution.yml=) has =owner → dcterms:creator=. The
+field-level map (=field.field.node.solution.owner.yml=) has =owner → dcterms:publisher=.
+rdf_sync's own test fixture maps configurable fields on =FieldConfig=, and the bundle
+form writes only the bundle-level map. Work out which one the mapper reads and delete the
+other. =body= and =description= both map to =dcterms:description= as well.
+** TODO =field_start_year= → =dcterms:created= is typed =xsd:integer=; make it =xsd:gYear=
+** TODO =field_country_origin= → =dcterms:spatial= is ambiguous once adoption countries exist
+Emit =sti_atio:originCountry= (=rdfs:subPropertyOf dcterms:spatial=) now, while it's a re-sync.
+** TODO =solution_type= → =dcterms:type= points at Joinup's EIRA vocabulary (=http://data.europa.eu/dr8/6.0.0=)
+That isn't an innovation type. Drop the mapping, or carry the source's own type as a claim.
+=field_topic= → =dcat:theme= targets Joinup's =topic= vocabulary; same question.
+** TODO Remove the second =ontology#Innovation= bundle
+=sti_rdf/config/install/node.type.innovation.yml= projects another bundle to the same
+class with a different field map. See question C.
+
+* P2: Claims
+Fork state: =field_claims= (ERR, card. -1) → =claims= paragraph typed =ontology#FieldClaim=;
+=field_claimed_by= targets =collection= nodes (verified). Re-import (=IrdClaims=, lines
+~137-160) *hard-deletes* the collection's previous claim paragraphs, then mints fresh ones.
+** TODO Align the ontology to the fork (fieldClaim.ttl)
+- =claimedBy= range =SourceRecord= → =dcat:Catalog= (collection).
+- =hasFieldClaim=: drop the domain (was =InnovationRecord=); document with
+  =schema:domainIncludes=. Claims can then hang on any non-AI-curated class, per your rule.
+- Drop =claimSubject=: it is the inverse of =hasFieldClaim= (=^sti:hasFieldClaim= in SPARQL).
+- Drop =claimField= (string) and the string-fallback rule; the fork uses =claimProperty= URIs.
+- Move the terms to =sti:= (OPEN ISSUE 12).
+** TEST Claim deletion runs before the node save
+=IrdClaims::transform()= deletes the old paragraphs while processing the row; the node is
+saved later by the destination. If the row fails in between, the collection's claims are
+gone and nothing replaces them, and the only trace is a migrate message. A failed
+=$paragraph->delete()= is caught, logged as a warning, and the run continues, so the old
+claim survives *next to* its replacement. Both are silent. Kernel test: two invariants
+(after a failed row, old claims still attached; after a failed delete, no duplicate
+claims per collection+property).
+** DECIDE Claim retention (feeds A16)
+Today it's replace-on-reimport, with a hard delete. That also means *solution revisions
+don't preserve claim history*: old parent revisions reference paragraphs that no longer
+exist. If readiness/adoption trajectories matter to ATIO, keep superseded claims (a flag or
+=claimedAt= window) instead of deleting them. That gets you InnovationSnapshot without the class.
+** TODO Document =claimedAt=: extraction time, or when the source asserted it?
+** LATER =curatorResolution= / =ClaimResolution= (A9)
+
+* P3: Vocabularies as SKOS
+** TODO Project =claim_properties= / =claim_values= properly
+Both have =third_party_settings.rdf_sync.fields: {}=, so their terms reach the graph as bare
+URIs with no label, scheme or hierarchy. Map =name → skos:prefLabel=,
+=vid → skos:inScheme=, =parent → skos:broader= (copy =taxonomy.vocabulary.licence_type.yml=).
+=claim_values= is typed =rdfs:Resource=; make it =skos:Concept=. For one scheme per
+collection (A13), emit =skos:inScheme <collection root>= from a =NormalizeSubscriber=
+(the =eif=/=eira= pattern).
+** TODO Create the ATIO vocabularies (they aren't in the fork)
+=core_annotation='s categorical fields are all =string_long= (card. -1) and project as
+untyped literals: =field_core_readiness_level=, =field_core_adoption_level=,
+=field_core_impact_sdgs=. Make them vocabularies with URIs: readiness (CGIAR, and IDIA if
+used), adoption, innovation type, thematic area, use case, actor type, SDG, adoptability
+level. Reuse external URIs via =uri_field_name= where they exist (UN SDGs; countries and
+languages already come from the EU authority tables in =spatial= / =language=). =sti_rdf=
+already ships a =dah_use_case= vocabulary (=skos:Concept=, =sti_namespace=); decide
+whether that *is* the use case scheme.
+** TODO SKOS mappings (A4)
+Add an entity-reference field on vocabulary terms (for example =field_close_match=,
+=field_exact_match=, =field_broad_match=, targeting any vocabulary) and project it as
+=skos:closeMatch= / =exactMatch= / =broadMatch=. That covers collection→ATIO and
+collection↔collection. Check first whether =voc_comparer= or the =sti_rdf= SKOS curation
+asset already stores mappings.
+** WONT Hand-written schemes and concepts (A11, A12)
+Keep only =MaturityScheme= / =AdoptionScheme= typing, and only if IDIA is really used
+alongside CGIAR.
+
+* P4: ATIO annotation (=core_annotation=)
+** TODO Remove =rdfs:domain= from =sti_atio:= properties before anything emits them (bug #2)
+** TODO Readiness end to end: the pattern
+term reference to the readiness vocabulary → =sti_atio:readinessLevel= (resource), plus
+=sti_atio:readinessNarrative= (lang-tagged literal; in rdf_sync's own test an untyped
+title comes out as ="…"@en=, but check this for =string_long= fields).
+After that, everything tagged P4 in the table below is copy-config.
+** TODO Replace =collection/core#…= predicates with =sti_atio:= ones (table below)
+** TODO Provenance stamp (A2)
+Declare =sti:annotates rdfs:subPropertyOf prov:wasDerivedFrom=: one ontology triple, no
+new data. I found no per-node stamp written by =ai_enhancement= (it loads an
+=enhancement_profile= and saves the entity). Decide which fields hold model / profile /
+timestamp, then map them to =prov:wasAttributedTo= (profile URI) and =prov:generatedAtTime=.
+=field_core_last_ingestion_dateti= may already be the timestamp.
+** TODO Two innovation references on =core_annotation=
+=field_innovation= (entity_reference, mapped to =sti:annotates=) and =annotated_innovation=
+(=joinup_group_reference_with_timestamp=, unmapped). One of them is a leftover.
+** Note on CON-03
+Nothing in P4 removes a curation capability. QA (=quality_assessment=), the allow-AI-update
+protection and workflow all stay in Drupal; they just aren't projected.
+
+* P5: Collection = DataSource (A5)
+** DONE =collection= → =dcat:Catalog= with title, description, publisher, contactPoint, keyword, spatial, homepage
+** TODO =dcterms:license= on the collection (default CC BY 4.0, per-source variation)
+** WONT Operational DataSource properties in the graph
+trustLevel, harvestingMethod/Status, lastHarvestedAt, sourceAPIEndpoint,
+sourceSchemaFormat, sharingAgreement, allowsAIEnrichment, allowsPublicDisplay,
+fieldSharingScope → fields on the =collection_settings= meta-entity, enforced by Drupal
+(=ai_enhancement=, access). Enforcement is what keeps restricted data out of the graph.
+
+* P6: The ontology artefact
+** TODO Delete the WONT blocks from =base_classes/=, then ship =dist/sti-atio-base.ttl=
+** TODO Run =python3 build.py --strict= in CI
+It needs rdflib + owlrl; Python is already in the repo for =ird_normalize.py=.
+** TODO Extend =build.py=: every predicate in =config/sync= rdf_sync YAML is declared here or is a standard term
+This is the check that keeps the ontology honest about what the site emits. About 30
+lines; I can write it.
+** LATER One SHACL shape per emitted bundle
+These replace =InnovationShape=, which validates through =inferredScheme= and we won't have that.
+
+* Property port table (=innovation.ttl=)
+S = =solution=, A = =core_annotation=. "Fork today" is verified against config.
+| v8 property                                    | Bundle | Fork today                                                    | Action                                          | When  |
+|------------------------------------------------+--------+---------------------------------------------------------------+-------------------------------------------------+-------|
+| innovationName                                 | S      | title → dcterms:title                                         | keep dcterms:title; drop the custom term        | DONE  |
+| sourceURL                                      | S      | landing_page → dcat:landingPage                               | keep                                            | DONE  |
+| language                                       | S      | language → dcterms:language                                   | keep                                            | DONE  |
+| startYear                                      | S      | field_start_year → dcterms:created, xsd:integer               | xsd:gYear                                       | P1    |
+| originCountry                                  | S      | field_country_origin → dcterms:spatial                        | sti_atio:originCountry ⊑ dcterms:spatial        | P1    |
+| innovationType                                 | A (+claim on S) | solution_type → dcterms:type (EIRA vocab)             | ATIO vocab term ref                             | P4    |
+| thematicArea                                   | A      | S.field_topic → dcat:theme (Joinup topic)                     | sti_atio:thematicArea ⊑ dcat:theme              | P4    |
+| shortDescription                               | A      | field_core_shorter_description → core#shorter_description     | → sti_atio:shortDescription                     | P4    |
+| longDescription                                | A      | field_core_body → core#body                                   | → sti_atio:longDescription                      | P4    |
+| readinessLevel + readinessNarrative            | A      | field_core_readiness_level (string) → core#readiness_level    | term ref + narrative (the pattern)              | P4    |
+| adoptionLevel + adoptionNarrative              | A      | field_core_adoption_level (string)                            | term ref + narrative                            | P4    |
+| impactSDG                                      | A      | field_core_impact_sdgs (string)                               | term ref, UN SDG URIs                           | P4    |
+| useCase                                        | A      | (dah_use_case vocab exists in sti_rdf)                        | term ref                                        | P4    |
+| adoptionCountry                                | A      | –                                                             | term ref, spatial vocab                         | P4    |
+| actualUser / prospectiveUser                   | A      | –                                                             | term ref, actor vocab                           | P4b   |
+| accessibility … coDevelopment (+5 narratives)  | A      | –                                                             | ATIO's differentiator; copy the readiness pattern | P4b |
+| impactFourBetters, impactNarrative             | A      | –                                                             | copy pattern                                    | P4b   |
+| developedBy / ownedBy / implementedBy / fundedBy | S/A  | S.owner → creator *and* publisher (conflict, P1)              | ⊑ schema: terms, never ≡                        | P4b   |
+| alternativeName                                | A      | –                                                             | skos:altLabel                                   | LATER |
+| innovationStage, challengeAddressed, farmingSystem, investmentType, innovativeFeature (+narr.), useCaseNarrative, estimatedUsers | A | – | copy pattern | LATER |
+| isGrassroots, communityOwner, communityConsent, grassrootsAssessment, localResourceBased | A | – | governance block; consent is a publication gate in Drupal, not a public triple | LATER |
+| memberOfFamily                                 | –      | –                                                             | with InnovationFamily                           | LATER |
+| relatedInnovation, componentOf, innovationReview | –    | –                                                             | typed relations (A17)                           | LATER |
+| identifyingFeature                             | A      | –                                                             | Drupal only (dedupe input)                      | WONT  |
+| aiGeneratedDescription, allowAIUpdate          | A      | –                                                             | Drupal only                                     | WONT  |
+| derivedFromSource                              | –      | sti:annotates                                                 | sti:annotates ⊑ prov:wasDerivedFrom             | WONT  |
+| participatesInBundle                           | –      | –                                                             | A17                                             | WONT  |
+| startDate, originRegion, originCity, originState, mainUseCaseImage | – | –                                                 | derive / display concern                        | WONT  |
+| DigitalInnovation (subclass)                   | –      | –                                                             | a type *value*; rdf_sync emits one class per bundle | WONT |
+
+* Won't do, and what replaces it
+| v8 item                                                         | Instead                                                        | See |
+|-----------------------------------------------------------------+----------------------------------------------------------------+-----|
+| InnovationRecord + ~25 record properties, isDescribedBy/describes | the node URI plays both roles; management fields stay in SQL; issued/modified already emitted | A15 |
+| AIExtractedInnovation, AIEnrichmentActivity, MergeStrategy      | draft state + rdf_sync_published; provenance stamp on the annotation | A2  |
+| FieldProvenance, FieldValueSource                               | FieldQA in Drupal (=quality_assessment=)                       | A1  |
+| InnovationVersion, VersionTrigger                               | Drupal revisions (=state_machine_revisions=)                   | A16 |
+| InnovationSnapshot, FieldTemporalValue                          | retained claims with =claimedAt=                               | A16 |
+| TaxonomyMapping, MappingType                                    | =skos:*Match= between term URIs                                | A4  |
+| FieldSchemeUsage, inferredScheme, both SPARQL rules, SPARQLRule, fieldNameString | vocabulary structure + claim_values projection | A13 |
+| claimEligible, claimEligibilityRationale                        | the =claim_properties= vocabulary                              | A8  |
+| claimSubject, claimField                                        | =^sti:hasFieldClaim=; =claimProperty= URIs                     | A7  |
+| 6 scheme marker classes, MaturityLevel/AdoptionOrUptakeLevel unions | =skos:inScheme=                                            | A12 |
+| representative concept instances                                | real vocabulary terms via rdf_sync                             | A11 |
+| NamedGraph + 3 graph declarations                               | one graph, =rdf_sync_published=, access in SQL                 | A14 |
+| BundleRelation (n-ary), BundleType, BundleEvidenceType          | typed binary predicates, LATER                                 | A17 |
+| DataSource operational properties, TrustLevel, Harvesting*, FieldSharingScope | =collection_settings= meta-entity                | A5  |
+| CurationStatus, AccessLevel individuals                         | =state_machine= states, OG; not in the graph                   | —   |
+| schema.org =owl:equivalentProperty= alignments                  | =rdfs:subPropertyOf= only, or emit dcterms/schema directly     | A18 |
+
+* Later (post-MVP), roughly in order
+1. P4b fields: config-only once the readiness pattern works.
+2. Organisation relations (developedBy, fundedBy, implementedBy) against =owner= nodes.
+3. InnovationFamily as a node bundle (A3).
+4. Typed inter-innovation relations (A17).
+5. FieldQA projection, if consumers need the per-field "AI-generated" disclaimer in RDF.
+6. SHACL shapes per bundle.
+7. ClaimResolution, if curators really do adjudicate claims (A9).
+8. ATIO-AP as a DCAT/ADMS-AP extension (question G): what's left after this list is small enough to write one.
+
+* Answers to the #? comments
+The short versions are inline in the =.ttl= files as =#>= lines directly under each =#?=.
+The ones that need more room are below.
+
+** A1 fieldProvenance: "artifact of poor AI hygiene?"
+Less bad hygiene than residue from the three-stage pipeline: it attributed fields on the
+intermediate AIExtractedInnovation. The need behind it is real and protected by CON-03:
+production's QA paragraphs carry a per-field "AI-generated" boolean. That is FieldQA's
+job, and in the fork it's =core_annotation.quality_assessment=. WONT.
+
+** A2 aiExtractedInnovation: "what's the upside?"
+The upside it claimed was a buffer between raw and published, so you could re-run
+enrichment without touching the published record, plus a place to merge sources before
+curation. The fork already has that buffer, in Drupal: =solution= (raw) →
+=core_annotation= in draft → published, and =rdf_sync_published= (enabled in
+=core.extension.yml=) keeps drafts out of the graph. The one thing auditors legitimately
+want from pipeline tracing is "which published values came from model X / prompt v3".
+That is two or three properties on the annotation, not an entity. You lose multi-run
+history in the graph; SQL revisions keep it.
+
+** A3 innovationFamily: "will port but doesn't exist yet"
+Fine as LATER. When you port it: make it a node bundle, not a taxonomy. The design
+calls for temporal identity and split/merge history, which means revisions plus edges
+between family entities, and terms have neither. Name the facets (=mechanism=, =domain=,
+=target=, =context=, =form=) instead of =featureDimensionA..E=. Drop the
+=correspondingConcept ≡ skos:exactMatch= equivalence (bug #1, shown by the build.py TRAP).
+
+** A4 taxonomyMapping: "both collection → ATIO and collection ↔ collection"
+As modelled it can't do the second one at all. It is per-record (=hasTaxonomyMapping= on
+InnovationRecord), one-directional (=mappedToATIOConcept=), and it stores the source term
+as a string (=sourceTaxonomyTerm=). That is also the wrong grain: "TechnoServe's 'Solar
+water lifting' ≈ ATIO water-management" is a fact about the vocabulary, and v8 repeats it
+on every innovation that uses the term. Your =claim_values= terms already have URIs, so:
+: <claim_values/technoserve/solar-water-lifting> skos:closeMatch <atio/type/water-management> .
+: <claim_values/technoserve/solar-water-lifting> skos:exactMatch <claim_values/gardian/solar-pumps> .
+That's standard, VocBench-native and bidirectional by definition (=skos:closeMatch= is
+symmetric). What you lose is per-mapping metadata (who validated it, and when). For the MVP
+accept that; later, keep it on the Drupal field and don't project it.
+
+** A5 dataSource: "merge with collection?"
+Yes. =DataSource ⊑ dcat:Dataset= and the fork's =collection= is a =dcat:Catalog=, which is
+itself a subclass of =dcat:Dataset= in DCAT 2/3, so nothing conflicts. It isn't urgent for
+the triplestore beyond licence (P5). The rest is operational configuration, and Joinup's
+=collection_settings= meta-entity is the right home for it: it's the same pattern you
+already use for the facet source.
+
+** A6 sourceRecord: "fits solution; solution can be edited, but it's versioned"
+Revisions answer "what was the history of this node". v8's SourceRecord promises "what
+did source X say, verbatim, at time T". Those come apart in three places:
+1. rdf_sync projects the *current* revision only, so graph consumers never see history.
+2. Claim history doesn't survive: =IrdClaims= hard-deletes superseded claim paragraphs,
+   so earlier solution revisions point at paragraphs that no longer exist.
+3. After a dedupe merge one solution carries claims from N collections but has one
+   =field_machine_record=. Whose raw payload survives? =sti_dedupe= isn't on =edge=, so
+   I couldn't check.
+So solution works as SourceRecord only if you also decide its identity role. That's
+OPEN ISSUE 13. The raw-preservation guarantee (ELT, auditability) is the part at risk,
+and it fails silently.
+
+** A7 fieldClaim: "claims are issued by collections, target any non-AI-curated class"
+The fork gets the core right: =field_claimed_by= → =collection= (verified), and claims hang
+on =solution=. v8 contradicts that in three places (see P2). One thing to be aware of:
+"not innovations" holds only in your vocabulary. In the graph, =solution= *is*
+=ontology#Innovation= and =core_annotation= is =ontology#Annotation=. So today, claims do
+target the class called Innovation, and ATIO's curated record is the one that isn't.
+That's question C showing up in the ontology. Whichever bundle takes the Innovation class,
+the claim rule should read "claims target source-level entities, never
+=sti:Annotation=", which is also a cleaner way to say it.
+
+** A8 claimEligible: "not sure this belongs here"
+It doesn't. Which properties go through claims is decided per collection by what's in
+=claim_properties=. A second copy in the ontology is duplicate state, and it will drift.
+
+** A9 ClaimResolution
+It assumes a curator issues a verdict on each claim. At 200 × 1400 × 30 nobody will. In
+your design the ATIO annotation *is* the resolution (AI synthesis, curator-reviewed), and
+the claims are its evidence. Revisit only if a real per-claim review workflow appears.
+
+** A10 claim eligibility and "lift the solution dedupe mechanism?"
+Right: v8 puts claims *and* ATIO vocabularies on one entity, which is the "AI digest
+inside the ATIO innovation" you're objecting to. In your design:
+- claims carry *source* vocabulary values, on =solution=, scoped by collection;
+- ATIO properties carry *ATIO* vocabulary values, on the annotation;
+- the bridge between them is SKOS mapping (A4), and the AI enhancement uses it as input.
+The not-eligible list in v8 (country, region, language) is exactly what the fork already
+puts directly on =solution=, normalised. That's consistent.
+On lifting dedupe: the compare-two-records UI and the "decision recorded" log carry over
+well. The unit doesn't: dedupe decides entity identity, whereas claim comparison decides
+a field value. Reuse the UI pattern for a curator "pick the value" step on the
+annotation form. Don't reuse the merge service.
+
+** A11 concept schemes: "I have the taxonomies already; do I need this?"
+You need one =skos:ConceptScheme= per vocabulary, and rdf_sync can emit it from vocabulary
+config, as the Joinup vocabularies do (=vid → skos:inScheme=). You don't need
+hand-written representative concepts; their URIs won't match the ones your terms get.
+Two caveats: in the fork the *claim* vocabularies exist but project nothing (P3), and the
+*ATIO* vocabularies don't exist at all (=core_annotation= stores strings). Keep the CGIAR↔IDIA
+=closeMatch= alignment only if both frameworks are really in use.
+
+** A12 extra scheme marker classes: "belongs here? outdated?"
+Outdated. Marker classes only earn their keep in a SHACL shape, and the only shape
+targets readiness and adoption. For single-scheme properties, =skos:inScheme= already
+says everything they do.
+
+** A13 FieldSchemeUsage: "solved with claims scoped by collection"
+Solved in Drupal: a value term's position under its collection in =claim_values= *is* its
+scheme, so no declaration or inference rule is needed. Not yet solved in the graph,
+because those vocabularies project nothing (P3). Fix that and the SPARQL
+=?value skos:inScheme ?collectionScheme= works directly.
+
+** A14 named graphs: "should I yield?"
+Don't yield. Replace the design with the one you already have:
+- =rdf_sync= writes to one graph (=rdf_sync.settings.graph_uri: http://data=).
+- =rdf_sync_published= is enabled, so unpublished entities never reach the store.
+- Access control is OG plus published state in SQL. "Internal" data (QA, workflow,
+  curator notes) has no reason to be in the triplestore at all.
+v8's three graphs are an access-control design for a system where the triplestore was
+the store of record. Yours isn't. Named graphs start to pay off in one case: *published*
+content that must still be partner-restricted over SPARQL. That would need either a
+connector-level patch to route by bundle or a second endpoint. Park it as LATER, with
+that trigger written down.
+
+** A15 innovationRecord: "Joinup meta-entity pattern?"
+Same conclusion as you, for a different reason. Joinup's =meta_entity= is a settings
+sidecar attached to a group. InnovationRecord is the FRBR-style "information object about
+the thing" (=foaf:primaryTopic=). It's semantically correct, but it doubles every URI and
+turns every query into a hop through =isDescribedBy=. In the fork the node URI plays both
+roles, and the management properties stay in SQL. The one idea worth keeping: the
+real-world identity must survive record operations, which is the dedupe URI test in P0.
+
+** A16 innovationSnapshot: "own class? RDF revisions? who'd query it?"
+- RDF has no revisions. The options are one named graph per version (what
+  =sparql_entity_storage= did), RDF 1.2 triple terms with a time annotation, or an n-ary
+  node like InnovationSnapshot. The first two are poorly supported by rdf_sync and by
+  most tools.
+- It's *not* versioning. v8 itself separates it: it's time-qualified real-world state
+  (TRL 5 in 2022, TRL 7 in 2024).
+- Who'd query it: ATIO analysts doing readiness and adoption trajectories for the Outlook.
+  That is Unit 1's sensemaking use case, so it's real.
+- But a FieldClaim with =claimedAt= already *is* a time-stamped assertion. Keep superseded
+  claims instead of hard-deleting them (P2 "Claim retention") and you have the trajectory,
+  without a class. FieldTemporalValue gets the same answer.
+
+** A17 bundleRelation: "don't see the point"
+Production already rejected the separate entity: bundles are "typed relations between
+innovation records". The n-ary class exists to hold confidence and curator confirmation
+on the relation itself. That's workflow, so it belongs in Drupal: project only confirmed
+relations, as binary predicates (=sti_atio:complementaryTo=, =requires=, =precedes=,
+=coCitedWith=, all =⊑ schema:isRelatedTo=). LATER.
+
+** A18 =dont_understand/atio_onth_type_definitions.ttl=
+These are schema.org alignments, so a schema.org-aware consumer can read sti_atio data.
+The idea is fine, but half the execution is a bug (bug #1). =owl:equivalentProperty= runs
+in both directions: every =schema:name= anywhere implies =innovationName=, whose domain
+then makes the subject an innovation. The pragmatic version is simpler still: wherever a
+standard term exists, emit it directly from rdf_sync (the fork already does, with
+dcterms:title and dcat:landingPage). Declare =rdfs:subPropertyOf= only for the few
+custom =sti_atio:= terms. Also, =ownedBy ≡ dcterms:creator= is wrong on meaning: the
+creator is =developedBy=.
+
+* Open issues
+** OPEN ISSUE 12: Namespaces and instance URI pattern                  :foreclosure:
+- Decision needed :: namespaces for platform vs ATIO terms; instance URI scheme, host
+  and path.
+- A: keep the fork as-is :: =ontology#= + =collection/core#=, =http://…/{bundle}/{uuid}=,
+  EU namespace for collections and owners. Zero work now. Breaks on the first bundle
+  rename, and the EU namespace is simply wrong.
+- B: two namespaces by ownership, fixed slugs, https (recommended) :: =sti:= platform,
+  =sti_atio:= ATIO; =https://sti-portal.fao.org/{slug}/{uuid}= via plugin derivatives.
+  About a day of config plus a re-sync. Ownership becomes visible in the vocabulary too
+  (question D).
+- C: single =sti_atio:= namespace for everything :: matches v8. Blurs the tier-1/tier-2
+  split, and re-labels platform terms that already exist in the fork.
+- Pending on :: Valeria (owns =sti_atio:=); CSI (https and hosting the namespace document).
+  Must close before any public SPARQL endpoint or partner integration.
+
+** OPEN ISSUE 13: What =solution= is: per-source record or deduped identity
+- Decision needed :: whether one =solution= node = one source's record, or one real-world
+  innovation after dedupe.
+- A: per-source record :: type it as a record (not =sti:Innovation=); dedupe *links*
+  (=owl:sameAs=-like) instead of merging; innovation identity lives elsewhere (the
+  annotation, or a thin identity node). Raw payloads are trivially preserved; queries
+  need one more hop.
+- B: deduped identity (the fork today) :: =sti:Innovation= + merging dedupe. Simple to
+  query. The loser's =field_machine_record= and URI must survive the merge, and that needs
+  the P0 and P2 tests.
+- C: both :: per-source solution plus an identity node. The most correct, and the most
+  work for a 0.5 FTE maintainer.
+- Pending on :: question C (who takes the Innovation class); reading =sti_dedupe= (not on
+  =edge=). Recommendation: B for the MVP, because it's what exists, plus the two invariant tests.
+
+* Verification
+- Fidelity: isomorphic graph diff, split vs v8 → only in v8: 2 triples (the stale
+  =aiGeneratedDescription= domain Innovation + its comment); only in split: 10 (the
+  =MaturityScheme= / =AdoptionScheme= declarations). Everything else is identical.
+- =python3 build.py= (base): =UNDECLARED sti_atio:InnovationRecord <- used by
+  sti_atio:hasFieldClaim=; =UNDECLARED sti_atio:sparqlConstruct=. Both are P2/P6 work.
+- =python3 build.py --profile all=: the three TRAP lines under bug #1, and
+  =scalingLevelIDIA= undeclared.
+- Fork facts are quoted from =config/sync= and module code at =edge= @ =fd52eab=. Not
+  verified, because the code wasn't reachable (drupal.org git is blocked from here and
+  =sti_dedupe= isn't on =edge=): which rdf_sync mapping location wins (P1); rdf_sync
+  behaviour on paragraph deletion; =sti_dedupe= merge behaviour.

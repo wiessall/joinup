@@ -1,0 +1,118 @@
+@prefix sti_atio: <https://sti-portal.fao.org/ontology/sti-atio#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix schema:  <https://schema.org/> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+
+# ---------------------------------------------------------------------------
+#  L1.3  sti_atio:BundleRelation
+# ---------------------------------------------------------------------------
+#? Don't see the point
+#> Agree (TODO.org A17). Production already dropped the separate entity ("typed relations between
+#> innovation records"). LATER: typed binary predicates, subPropertyOf schema:isRelatedTo.
+
+sti_atio:BundleRelation
+    a owl:Class ;
+    rdfs:label "Innovation Bundle Relation"@en ;
+    rdfs:comment """A reified typed relation between two or more innovations that are
+    complementary, interdependent, sequentially deployed, or frequently co-cited.
+    Reification is semantically appropriate here: the bundle type and evidence are
+    properties of the relation itself, not of either participating innovation."""@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:bundleType
+    a owl:ObjectProperty ;
+    rdfs:label "bundle type"@en ;
+    rdfs:comment "The type of complementarity linking innovations in this bundle."@en ;
+    rdfs:domain sti_atio:BundleRelation ;
+    rdfs:range sti_atio:BundleType ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:bundleMember
+    a owl:ObjectProperty ;
+    rdfs:label "bundle member"@en ;
+    rdfs:comment "An innovation participating in this bundle relation. Multi-valued (≥2)."@en ;
+    rdfs:domain sti_atio:BundleRelation ;
+    rdfs:range sti_atio:Innovation ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:bundleEvidenceType
+    a owl:ObjectProperty ;
+    rdfs:label "bundle evidence type"@en ;
+    rdfs:comment "How this bundle relation was established."@en ;
+    rdfs:domain sti_atio:BundleRelation ;
+    rdfs:range sti_atio:BundleEvidenceType ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:bundleConfidenceScore
+    a owl:DatatypeProperty ;
+    rdfs:label "bundle confidence score"@en ;
+    rdfs:comment "AI confidence score for AI-detected bundles (0.0–1.0)."@en ;
+    rdfs:domain sti_atio:BundleRelation ;
+    rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:bundleCuratorConfirmed
+    a owl:DatatypeProperty ;
+    rdfs:label "curator confirmed"@en ;
+    rdfs:comment "Whether a human curator has confirmed this bundle relation."@en ;
+    rdfs:domain sti_atio:BundleRelation ;
+    rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:bundleNarrative
+    a owl:DatatypeProperty ;
+    rdfs:label "bundle narrative"@en ;
+    rdfs:comment "Explanation of how and why these innovations are bundled."@en ;
+    rdfs:domain sti_atio:BundleRelation ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- moved from innovation.ttl ---
+
+sti_atio:participatesInBundle
+    a owl:ObjectProperty ;
+    rdfs:label "participates in bundle"@en ;
+    rdfs:comment "Bundle relation in which this innovation participates. Multi-valued."@en ;
+    rdfs:domain sti_atio:Innovation ;
+    rdfs:range sti_atio:BundleRelation ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- moved from utils/leftovers.ttl ---
+
+sti_atio:BundleType         a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Bundle Type"@en ;
+    rdfs:comment "complementary | interdependent | sequential | co-cited"@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:BundleEvidenceType a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Bundle Evidence Type"@en ;
+    rdfs:comment "AI-detected | curator-confirmed | partner-stated | use-case-overlap"@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:Complementary  a sti_atio:BundleType ; rdfs:label "Complementary"@en ;
+    rdfs:comment "Innovations that enhance each other when deployed together."@en .
+
+sti_atio:Interdependent a sti_atio:BundleType ; rdfs:label "Interdependent"@en ;
+    rdfs:comment "Innovations that require each other to function effectively."@en .
+
+sti_atio:Sequential     a sti_atio:BundleType ; rdfs:label "Sequential"@en ;
+    rdfs:comment "Innovations deployed in sequence in an adoption pathway."@en .
+
+sti_atio:CoCited        a sti_atio:BundleType ; rdfs:label "Co-cited"@en ;
+    rdfs:comment "Innovations frequently mentioned together in source documents."@en .
+
+sti_atio:AIDetected          a sti_atio:BundleEvidenceType ; rdfs:label "AI-detected"@en .
+
+sti_atio:CuratorConfirmed    a sti_atio:BundleEvidenceType ; rdfs:label "Curator-confirmed"@en .
+
+sti_atio:PartnerStated       a sti_atio:BundleEvidenceType ; rdfs:label "Partner-stated"@en .
+
+sti_atio:UseCaseOverlap      a sti_atio:BundleEvidenceType ; rdfs:label "Use-case overlap"@en .
+
+sti_atio:BundleRelation
+    rdfs:subClassOf schema:ProductCollection ;
+    rdfs:comment """Loose alignment to schema:ProductCollection. Declarative
+    only; sti_atio:BundleRelation retains its typed properties."""@en .

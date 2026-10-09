@@ -1,0 +1,118 @@
+@prefix sti_atio: <https://sti-portal.fao.org/ontology/sti-atio#> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+
+# ===========================================================================
+#  LAYER 4 -- VERSIONING
+#  Record-level versioning and field-level temporal tracking.
+#  Named graph: sti_atio:graph/provenance  (internal / partner)
+# ===========================================================================
+
+# ---------------------------------------------------------------------------
+#  L4.1  sti_atio:InnovationVersion
+# ---------------------------------------------------------------------------
+
+sti_atio:InnovationVersion
+    a owl:Class ;
+    rdfs:label "Innovation Version"@en ;
+    rdfs:comment """A timestamped snapshot of the state of a published innovation record.
+    Created at every significant change: new ingestion run with updated source content,
+    manual curator edit, AI enrichment update, or merge event. Implements prov:Entity."""@en ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+
+sti_atio:versionOf
+    a owl:ObjectProperty ;
+    rdfs:label "version of"@en ;
+    rdfs:domain sti_atio:InnovationVersion ;
+    rdfs:range sti_atio:Innovation ;
+    owl:inverseOf sti_atio:hasVersion ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:versionNumber
+    a owl:DatatypeProperty ;
+    rdfs:label "version number"@en ;
+    rdfs:domain sti_atio:InnovationVersion ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:versionCreatedAt
+    a owl:DatatypeProperty ;
+    rdfs:label "version created at"@en ;
+    rdfs:domain sti_atio:InnovationVersion ;
+    rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:versionCreatedBy
+    a owl:ObjectProperty ;
+    rdfs:label "version created by"@en ;
+    rdfs:comment "Human curator (foaf:Person) or AI pipeline agent (prov:SoftwareAgent)."@en ;
+    rdfs:domain sti_atio:InnovationVersion ;
+    rdfs:range prov:Agent ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:versionTrigger
+    a owl:ObjectProperty ;
+    rdfs:label "version trigger"@en ;
+    rdfs:comment "What caused this new version to be created."@en ;
+    rdfs:domain sti_atio:InnovationVersion ;
+    rdfs:range sti_atio:VersionTrigger ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:versionChangeSummary
+    a owl:DatatypeProperty ;
+    rdfs:label "change summary"@en ;
+    rdfs:comment "Human-readable description of what changed in this version."@en ;
+    rdfs:domain sti_atio:InnovationVersion ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:versionState
+    a owl:DatatypeProperty ;
+    rdfs:label "serialised state"@en ;
+    rdfs:comment """The full serialised state of the innovation record at this version
+    (JSON snapshot), allowing full revert without re-querying the triple store."""@en ;
+    rdfs:domain sti_atio:InnovationVersion ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:previousVersion
+    a owl:ObjectProperty ;
+    rdfs:label "previous version"@en ;
+    rdfs:domain sti_atio:InnovationVersion ;
+    rdfs:range sti_atio:InnovationVersion ;
+    rdfs:subPropertyOf prov:wasDerivedFrom ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- moved from innovationRecord.ttl ---
+
+sti_atio:hasVersion
+    a owl:ObjectProperty ;
+    rdfs:label "has version"@en ;
+    rdfs:comment "Links the current published innovation to its historical version snapshots."@en ;
+    rdfs:domain sti_atio:InnovationRecord ;
+    rdfs:range sti_atio:InnovationVersion ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- moved from utils/leftovers.ttl ---
+
+sti_atio:VersionTrigger     a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Version Trigger"@en ;
+    rdfs:comment "new-ingestion-run | curator-edit | ai-enrichment | merge-event | source-update"@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:NewIngestionRun     a sti_atio:VersionTrigger ; rdfs:label "New ingestion run"@en .
+
+sti_atio:CuratorEdit         a sti_atio:VersionTrigger ; rdfs:label "Curator edit"@en .
+
+sti_atio:AIEnrichmentUpdate  a sti_atio:VersionTrigger ; rdfs:label "AI enrichment update"@en .
+
+sti_atio:MergeEvent          a sti_atio:VersionTrigger ; rdfs:label "Merge event"@en .
+
+sti_atio:SourceUpdate        a sti_atio:VersionTrigger ; rdfs:label "Source content update"@en .

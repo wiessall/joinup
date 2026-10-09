@@ -6,7 +6,6 @@ dependencies:
     - menu_ui
     - node_revision_delete
     - rdf_sync
-    - sti_rdf
 third_party_settings:
   menu_ui:
     available_menus: {  }
@@ -30,7 +29,7 @@ third_party_settings:
         age: 0
   rdf_sync:
     type: 'https://sti-portal.fao.org/sti#SourceRecord'
-    uri_plugin: 'sti_namespace:source-record'
+    uri_plugin: null
     fields:
       title:
         value:
@@ -44,41 +43,13 @@ third_party_settings:
         value:
           predicate: 'http://purl.org/dc/terms/issued'
           type: 'xsd:dateTime'
-      og_audience:
-        target_id:
-          predicate: 'https://sti-portal.fao.org/sti#inCollection'
-          type: resource
-      body:
-        value:
-          predicate: 'http://purl.org/dc/terms/description'
-          type: null
-      field_country_origin:
-        target_id:
-          predicate: 'http://purl.org/dc/terms/spatial'
-          type: resource
-      field_start_year:
-        value:
-          predicate: 'http://purl.org/dc/terms/created'
-          type: 'xsd:integer'
-      owner:
-        target_id:
-          predicate: 'http://purl.org/dc/terms/creator'
-          type: resource
-      landing_page:
-        uri:
-          predicate: 'http://www.w3.org/ns/dcat#landingPage'
-          type: resource
-      field_topic:
-        target_id:
-          predicate: 'http://www.w3.org/ns/dcat#theme'
-          type: resource
 label_singular: innovation
 label_plural: innovations
 label_count:
   no_count_capitalize: !!binary SW5ub3ZhdGlvbgNJbm5vdmF0aW9ucw==
-name: Innovation
+name: 'Source record'
 type: solution
-description: 'A curated record describing an agricultural technology or innovation, derived from one or more external sources and annotated for the ATIO Knowledge Base.'
+description: null
 help: null
 new_revision: true
 preview_mode: 0

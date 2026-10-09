@@ -1,0 +1,58 @@
+# SKOS mappings: whh-stf → ATIO, reviewed 2026-10-06
+# Load into <https://sti-portal.fao.org/graph/mappings>.
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dcat:    <http://www.w3.org/ns/dcat#> .
+@prefix atio:    <https://sti-portal.fao.org/atio#> .
+@prefix p:       <https://sti-portal.fao.org/id/property/> .
+
+# ── Labels ──────────────────────────────────────────────────────────────
+p:fc007c86-eb82-4cab-8cdf-89ef3dff223a rdfs:label "Country" .
+p:9225b323-fbb6-4bf6-a73c-58116abe467a rdfs:label "Benefitting Country" .
+p:06c1364b-4123-494d-958c-8fcf23f20218 rdfs:label "SDGs Addressed" .
+p:69d85620-c498-4a57-908e-513ec887f01a rdfs:label "Development Status" .
+p:a84456a7-d8b2-40b9-80f6-7139c56221a5 rdfs:label "Domain" .
+p:ffc7f7b8-fba3-49d5-8347-d7b8e15caf2f rdfs:label "human_impact_in_1-5_years" .
+atio:originCountry   rdfs:label "Country (origin)" .
+atio:originRegion    rdfs:label "Region (origin)" .
+atio:adoptionCountry rdfs:label "Countries (adoption)" .
+atio:sdgTarget       rdfs:label "Impact: SDGs" .
+atio:innovationStage rdfs:label "Innovation stage" .
+atio:readinessLevel  rdfs:label "Readiness level" .
+atio:thematicArea    rdfs:label "Themes" .
+atio:adoptionLevel   rdfs:label "Adoption level" .
+
+# ── 1. STF claim properties → ATIO fields (ready) ───────────────────────
+p:fc007c86-eb82-4cab-8cdf-89ef3dff223a skos:closeMatch   atio:originCountry .
+p:fc007c86-eb82-4cab-8cdf-89ef3dff223a skos:broadMatch   atio:originRegion .
+p:9225b323-fbb6-4bf6-a73c-58116abe467a skos:closeMatch   atio:adoptionCountry .
+p:06c1364b-4123-494d-958c-8fcf23f20218 skos:exactMatch   atio:sdgTarget .
+p:69d85620-c498-4a57-908e-513ec887f01a skos:closeMatch   atio:innovationStage .
+p:69d85620-c498-4a57-908e-513ec887f01a skos:relatedMatch atio:readinessLevel .
+p:a84456a7-d8b2-40b9-80f6-7139c56221a5 skos:relatedMatch atio:thematicArea .
+p:ffc7f7b8-fba3-49d5-8347-d7b8e15caf2f skos:relatedMatch atio:adoptionLevel .
+
+# ── 2. STF claim properties → ATIO fields ───────
+p:057e88fd-0e5e-4668-9713-baeb5d6ba29c rdfs:label "Areas_of_Focus" .
+p:d65004ca-e442-4f9b-8b1a-93d7497fa9ee rdfs:label "Innovation Domains Addressed" .
+atio:useCase            rdfs:label "Use cases" .
+atio:challengeAddressed rdfs:label "AFS challenges" .
+
+p:057e88fd-0e5e-4668-9713-baeb5d6ba29c skos:closeMatch   atio:useCase .
+p:d65004ca-e442-4f9b-8b1a-93d7497fa9ee skos:relatedMatch atio:challengeAddressed .
+
+# ── 3. Core fields of every source record → ATIO fields ─────────────────
+# These are the predicates the record itself carries, the same for all
+# collections. Title and description use the same predicate on both sides,
+# so they need no mapping.
+dcterms:spatial skos:exactMatch atio:originCountry .
+dcterms:created skos:exactMatch atio:startYear .
+dcterms:creator skos:closeMatch atio:ownedBy .
+dcat:theme      skos:closeMatch atio:thematicArea .
+
+# ── 4. STF text columns, once they are imported as claims ───────────────
+# <Project Title>           skos:exactMatch dcterms:title .
+# <Executive Summary>       skos:closeMatch atio:shortDescription .
+# <Innovation Description>  skos:closeMatch dcterms:description .
+# <Submitting Organization> skos:closeMatch atio:ownedBy .

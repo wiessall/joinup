@@ -1,0 +1,159 @@
+@prefix sti_atio: <https://sti-portal.fao.org/ontology/sti-atio#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+
+# ---------------------------------------------------------------------------
+#  L1.5  sti_atio:FieldSchemeUsage  (v0.4)
+#  Declares which vocabulary scheme a DataSource uses for a given RDF property.
+#  Declared ONCE at data source onboarding; never repeated per innovation.
+#  The inference rule in the SPARQL RULES section derives sti_atio:inferredScheme
+#  on every FieldClaim produced from that source, without any repetition at
+#  the individual claim level.
+# ---------------------------------------------------------------------------
+#? I think I have this solved already with the field claims scoped by collection
+#> Agree: solved in Drupal, not yet in the graph (TODO.org A13). A value term's place under its
+#> collection in claim_values IS the scheme. But claim_values/claim_properties project with
+#> `fields: {}`, so their terms reach the graph with no prefLabel, inScheme or broader. Fix that
+#> instead of porting this class and its two SPARQL rules.
+
+sti_atio:FieldSchemeUsage
+    a owl:Class ;
+    rdfs:label "Field Scheme Usage"@en ;
+    rdfs:comment """A declaration that a specific data source uses a specific
+    vocabulary scheme for values of a specific RDF property.
+    Declared once at onboarding on the sti_atio:DataSource node.
+    Enables scheme inference on all sti_atio:FieldClaim nodes produced from
+    that source for that property, without repeating scheme information
+    at the individual claim level.
+
+    Example: CGIAR Catalog uses cgiar-catalog/vocab/scaling-readiness
+    for the sti_atio:readinessLevel property. Once declared, every FieldClaim
+    originating from CGIAR Catalog records for readinessLevel automatically
+    has its scheme resolved by inference."""@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:usesSchemeForField
+    a owl:ObjectProperty ;
+    rdfs:label "uses scheme for field"@en ;
+    rdfs:comment """Links a DataSource to a FieldSchemeUsage declaration.
+    Multi-valued: a source may use different schemes for different properties."""@en ;
+    rdfs:domain sti_atio:DataSource ;
+    rdfs:range  sti_atio:FieldSchemeUsage ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:forProperty
+    a owl:ObjectProperty ;
+    rdfs:label "for property"@en ;
+    rdfs:comment """The RDF property (by URI) for which the scheme usage is declared.
+    Using the property URI (not a string name) enables clean SPARQL inference
+    without string matching."""@en ;
+    rdfs:domain sti_atio:FieldSchemeUsage ;
+    rdfs:range  rdf:Property ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:usesScheme
+    a owl:ObjectProperty ;
+    rdfs:label "uses scheme"@en ;
+    rdfs:comment """The skos:ConceptScheme that this data source uses for the
+    declared property. Should ideally be typed as sti_atio:MaturityScheme or
+    sti_atio:AdoptionScheme as appropriate; if not yet registered, the inference
+    rule still fires but the SHACL shape will emit a warning."""@en ;
+    rdfs:domain sti_atio:FieldSchemeUsage ;
+    rdfs:range  skos:ConceptScheme ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- moved from utils/leftovers.ttl ---
+
+sti_atio:adoptionLevel  sti_atio:fieldNameString "adoptionLevel" .
+
+sti_atio:innovationType sti_atio:fieldNameString "innovationType" .
+
+sti_atio:originCountry  sti_atio:fieldNameString "originCountry" .
+
+sti_atio:innovationName sti_atio:fieldNameString "innovationName" .
+
+# --- moved from utils/filled_example_onthology.ttl (inference rules for FieldSchemeUsage) ---
+
+<https://sti-portal.fao.org/ontology/sti-atio#rule/InferClaimScheme>
+    a sti_atio:SPARQLRule ;
+    rdfs:label "Infer FieldClaim scheme from DataSource usage declaration"@en ;
+    rdfs:comment """SPARQL CONSTRUCT rule. Run against the provenance named graph.
+    For each FieldClaim, find the DataSource it ultimately came from
+    (via SourceRecord), look up that source's FieldSchemeUsage for the
+    claimed property, and assert sti_atio:inferredScheme on the claim."""@en ;
+    sti_atio:sparqlConstruct """
+PREFIX sti_atio:  <https://sti-portal.fao.org/ontology/sti-atio#>
+
+CONSTRUCT {
+    ?claim sti_atio:inferredScheme ?scheme .
+}
+WHERE {
+    # The claim and its property
+    ?claim a sti_atio:FieldClaim ;
+           sti_atio:claimProperty  ?prop ;
+           sti_atio:claimedBy      ?sourceRecord .
+
+    # Trace back to the DataSource
+    ?sourceRecord sti_atio:harvestedFrom ?dataSource .
+
+    # Look up the scheme the DataSource declared for this property
+    ?dataSource sti_atio:usesSchemeForField ?usage .
+    ?usage sti_atio:forProperty ?prop ;
+           sti_atio:usesScheme   ?scheme .
+}
+""" ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:SPARQLRule
+    a owl:Class ;
+    rdfs:label "SPARQL Rule"@en ;
+    rdfs:comment "A SPARQL CONSTRUCT rule to be executed by the triplestore inference engine."@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# Fallback rule: also infer from string-based claimField for v0.1-v0.3 data
+# that uses claimField (string) rather than claimProperty (URI).
+# Requires a mapping from field name string to property URI.
+<https://sti-portal.fao.org/ontology/sti-atio#rule/InferClaimSchemeFromString>
+    a sti_atio:SPARQLRule ;
+    rdfs:label "Infer FieldClaim scheme (string field name fallback)"@en ;
+    rdfs:comment """Fallback SPARQL CONSTRUCT rule for FieldClaim nodes that carry
+    sti_atio:claimField (string) instead of sti_atio:claimProperty (URI).
+    Requires sti_atio:fieldNameString on each property to bridge string to URI.
+    Less efficient than the URI-based rule; migrate to claimProperty when possible."""@en ;
+    sti_atio:sparqlConstruct """
+PREFIX sti_atio:  <https://sti-portal.fao.org/ontology/sti-atio#>
+PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
+
+CONSTRUCT {
+    ?claim sti_atio:inferredScheme ?scheme .
+}
+WHERE {
+    ?claim a sti_atio:FieldClaim ;
+           sti_atio:claimField     ?fieldName ;
+           sti_atio:claimedBy      ?sourceRecord .
+    ?sourceRecord sti_atio:harvestedFrom ?dataSource .
+    ?dataSource sti_atio:usesSchemeForField ?usage .
+    ?usage sti_atio:forProperty ?prop ;
+           sti_atio:usesScheme   ?scheme .
+    # Bridge string field name to property URI via declared label
+    ?prop sti_atio:fieldNameString ?fieldName .
+}
+""" ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:fieldNameString
+    a owl:DatatypeProperty ;
+    rdfs:label "field name string"@en ;
+    rdfs:comment """The Drupal machine name of a field, declared on the corresponding
+    sti_atio: property URI. Used by the fallback inference rule to bridge
+    string-based claimField values to property URIs.
+    Example: sti_atio:readinessLevel sti_atio:fieldNameString 'readinessLevel' ."""@en ;
+    rdfs:domain rdf:Property ;
+    rdfs:range  xsd:string ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# Field name string declarations for properties that commonly appear in FieldClaims
+sti_atio:readinessLevel sti_atio:fieldNameString "readinessLevel" .

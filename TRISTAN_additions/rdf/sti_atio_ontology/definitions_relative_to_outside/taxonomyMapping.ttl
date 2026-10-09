@@ -1,0 +1,96 @@
+@prefix sti_atio: <https://sti-portal.fao.org/ontology/sti-atio#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+
+# ---------------------------------------------------------------------------
+#  L5.2  sti_atio:TaxonomyMapping
+# ---------------------------------------------------------------------------
+#? make sure it's implemented properly both for collection -> atio and collection <-> collection mappings
+#> WONT as a class (TODO.org A4). It is per-record, one-directional (source -> ATIO) and holds the
+#> source term as a string, so collection<->collection mappings can't be expressed at all. Put
+#> skos:exactMatch/closeMatch/broadMatch directly between term URIs (claim_values terms <-> ATIO concepts,
+#> claim_values <-> claim_values). That gives both directions and the collection<->collection case for free.
+
+sti_atio:TaxonomyMapping
+    a owl:Class ;
+    rdfs:label "Source Taxonomy Mapping"@en ;
+    rdfs:comment """Records how a classification term in a source system's original
+    vocabulary maps to the corresponding ATIO taxonomy concept. Preserves the
+    original classification even when it does not have a precise ATIO equivalent.
+    Enables multi-system taxonomy alignment (CGIAR, IDIA, GARDIAN, partner-specific)."""@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:MappingType        a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Taxonomy Mapping Type"@en ;
+    rdfs:comment "exactMatch | closeMatch | broadMatch | narrowMatch | noMapping"@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+
+
+sti_atio:mappingSourceSystem
+    a owl:DatatypeProperty ;
+    rdfs:label "source system"@en ;
+    rdfs:comment "Identifier of the source taxonomy system (e.g. 'CGIAR-TRL', 'IDIA-stages', 'GARDIAN')."@en ;
+    rdfs:domain sti_atio:TaxonomyMapping ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:sourceTaxonomyTerm
+    a owl:DatatypeProperty ;
+    rdfs:label "source taxonomy term"@en ;
+    rdfs:comment "The original label or code used in the source system's vocabulary."@en ;
+    rdfs:domain sti_atio:TaxonomyMapping ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:sourceTaxonomyURI
+    a owl:DatatypeProperty ;
+    rdfs:label "source taxonomy URI"@en ;
+    rdfs:comment "URI of the source concept, if the source system uses Linked Data."@en ;
+    rdfs:domain sti_atio:TaxonomyMapping ;
+    rdfs:range xsd:anyURI ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:mappedToATIOConcept
+    a owl:ObjectProperty ;
+    rdfs:label "mapped to ATIO concept"@en ;
+    rdfs:comment "The ATIO SKOS concept that corresponds (approximately or exactly) to the source term."@en ;
+    rdfs:domain sti_atio:TaxonomyMapping ;
+    rdfs:range skos:Concept ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:mappingType
+    a owl:ObjectProperty ;
+    rdfs:label "mapping type"@en ;
+    rdfs:comment "Precision of the correspondence (SKOS mapping vocabulary + sti_atio:noMapping)."@en ;
+    rdfs:domain sti_atio:TaxonomyMapping ;
+    rdfs:range sti_atio:MappingType ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:mappingField
+    a owl:DatatypeProperty ;
+    rdfs:label "mapped field"@en ;
+    rdfs:comment "The innovation field to which this taxonomy mapping applies."@en ;
+    rdfs:domain sti_atio:TaxonomyMapping ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:mappingValidatedBy
+    a owl:ObjectProperty ;
+    rdfs:label "validated by"@en ;
+    rdfs:comment "Curator or KOS specialist who validated this mapping."@en ;
+    rdfs:domain sti_atio:TaxonomyMapping ;
+    rdfs:range foaf:Person ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# --- moved from innovationRecord.ttl ---
+
+sti_atio:hasTaxonomyMapping
+    a owl:ObjectProperty ;
+    rdfs:label "has taxonomy mapping"@en ;
+    rdfs:domain sti_atio:InnovationRecord ;
+    rdfs:range sti_atio:TaxonomyMapping ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .

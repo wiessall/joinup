@@ -1,0 +1,253 @@
+@prefix sti_atio: <https://sti-portal.fao.org/ontology/sti-atio#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+
+# ===========================================================================
+#  LAYER 2 -- KOS / TAXONOMY LAYER
+#  All taxonomies are SKOS ConceptSchemes.
+#  Concept instances are not defined here -- they are managed in VocBench.
+#  Classes below are owl:Class declarations acting as rdfs:range targets,
+#  each corresponding to one SKOS ConceptScheme.
+# ===========================================================================
+
+sti_atio:InnovationType     a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Innovation Type"@en ;
+    rdfs:comment "Concept in the ATIO Innovation Types taxonomy (functional domain + mechanism)."@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:InnovationStage    a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Innovation Stage"@en ;
+    rdfs:comment "Pre-emergent | emergent | mature | obsolete."@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:ThematicArea       a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Thematic Area"@en ;
+    rdfs:comment "FAO agrifood systems thematic area."@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:Challenge          a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Challenge"@en ;
+    rdfs:comment "Agrifood systems challenge addressed by the innovation."@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:UseCase            a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Use Case"@en ;
+    rdfs:comment "Intended use case or need addressed."@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# -----------------------------------------------------------------------
+#  Maturity / Readiness -- union range class and constituent scheme classes
+# -----------------------------------------------------------------------
+
+sti_atio:MaturityLevel
+    a owl:Class ;
+    rdfs:label "Maturity / Readiness Level"@en ;
+    rdfs:comment """Union range for sti_atio:readinessLevel. Any SKOS concept that is
+    a member of a recognised readiness or scaling framework qualifies.
+    Currently two constituent classes (one per supported scheme):
+      sti_atio:ReadinessLevel   -- concepts in <https://sti-portal.fao.org/ontology/sti-atio#scheme/cgiar-trl>
+      sti_atio:IDIAScalingLevel -- concepts in <https://sti-portal.fao.org/ontology/sti-atio#scheme/idia-stages>
+    The union is declared via owl:unionOf to allow OWL reasoners to
+    validate that a referenced concept belongs to at least one scheme."""@en ;
+    owl:unionOf ( sti_atio:ReadinessLevel sti_atio:IDIAScalingLevel ) ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:ReadinessLevel
+    a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:subClassOf sti_atio:MaturityLevel ;
+    rdfs:label "CGIAR Readiness Level"@en ;
+    rdfs:comment """A concept in the CGIAR Scaling Readiness 9-level scale
+    (<https://sti-portal.fao.org/ontology/sti-atio#scheme/cgiar-trl>). Aligned to NASA TRL. Managed in VocBench."""@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:IDIAScalingLevel
+    a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:subClassOf sti_atio:MaturityLevel ;
+    rdfs:label "IDIA Scaling Stage"@en ;
+    rdfs:comment """A concept in the IDIA 6-stage scaling continuum
+    (<https://sti-portal.fao.org/ontology/sti-atio#scheme/idia-stages>). Suited to social, institutional, and
+    policy innovations. Managed in VocBench."""@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# -----------------------------------------------------------------------
+#  Adoption / Uptake -- union range class and constituent scheme class
+# -----------------------------------------------------------------------
+
+sti_atio:AdoptionOrUptakeLevel
+    a owl:Class ;
+    rdfs:label "Adoption / Uptake Level"@en ;
+    rdfs:comment """Union range for sti_atio:adoptionLevel. Currently one constituent class
+    (CGIAR adoption scale); extensible to additional frameworks via owl:unionOf."""@en ;
+    owl:unionOf ( sti_atio:AdoptionLevel ) ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:AdoptionLevel
+    a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:subClassOf sti_atio:AdoptionOrUptakeLevel ;
+    rdfs:label "CGIAR Adoption Level"@en ;
+    rdfs:comment """A concept in the CGIAR 9-level adoption scale
+    (<https://sti-portal.fao.org/ontology/sti-atio#scheme/cgiar-adoption>). Managed in VocBench."""@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:AdoptabilityLevel  a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Adoptability Level"@en ;
+    rdfs:comment "Ordinal level for adoptability dimensions (high/medium/low or 1–5 scale)."@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:ActorType          a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Actor Type"@en ;
+    rdfs:comment "Type of actor (smallholder farmer, extension agent, government, etc.)."@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:InvestmentType     a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Investment Type"@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:InnovativeFeature  a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Innovative Feature"@en ;
+    rdfs:comment "Dimension of innovativeness per FAO S&I Strategy criteria."@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:SDGGoal            a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "SDG Goal"@en ;
+    rdfs:comment "UN Sustainable Development Goal. Aligned to UN SDG Linked Data URIs."@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:FourBetter         a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "FAO Four Better"@en ;
+    rdfs:comment "FAO Four Betters dimension: better production / nutrition / environment / life."@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:Country            a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Country"@en ;
+    rdfs:comment "Country. Aligned to UN M49 and ISO 3166-1 alpha-3."@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:GeographicRegion   a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Geographic Region"@en ;
+    rdfs:comment "FAO/UN M49 geographic region or sub-region."@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:Language           a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Language"@en ;
+    rdfs:comment "BCP47 / ISO 639 language code."@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+sti_atio:FarmingSystem      a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Farming System"@en ;
+    rdfs:isDefinedBy <https://sti-portal.fao.org/ontology/sti-atio> .
+
+# ===========================================================================
+#  CLAIM ELIGIBILITY DECLARATIONS  (v0.5)
+#  Applied to all sti_atio: ObjectProperties that reference taxonomy concepts.
+# ===========================================================================
+#? Check the claim eligibility. Putting an ai-digest into atio innovation clearly was not the actual design
+#? who would however go through all this claim comparison work at the atio-innovation level? Could we lift the 
+#? solution deduplicate mechanism I have now?
+#> Agree the list doesn't fit your design (TODO.org A10). Claims carry source-vocabulary values on
+#> solution; ATIO properties carry ATIO-vocabulary values on the annotation. The bridge between the
+#> two is SKOS mapping (A4), not eligibility. v8's own rationale admits it: innovativeFeature is
+#> "ATIO-specific; sources rarely use an equivalent vocabulary". Lifting sti_dedupe: its compare
+#> UI and decision log carry over; its unit (whole entity) does not.
+
+# --- CLAIM-ELIGIBLE (true) ---
+# These fields may use different source vocabularies; FieldClaim applies.
+
+sti_atio:readinessLevel
+    sti_atio:claimEligible true ;
+    sti_atio:claimEligibilityRationale """Multiple readiness frameworks exist
+    (CGIAR TRL, IDIA stages, partner-specific scales). Sources use different
+    schemes and may assign different levels."""@en .
+
+sti_atio:adoptionLevel
+    sti_atio:claimEligible true ;
+    sti_atio:claimEligibilityRationale """Multiple adoption scales exist.
+    Sources may use different frameworks or assess differently."""@en .
+
+sti_atio:innovationType
+    sti_atio:claimEligible true ;
+    sti_atio:claimEligibilityRationale """Source databases use heterogeneous
+    innovation type taxonomies. Alignment to ATIO types is approximate;
+    original source classifications are preserved via FieldClaim."""@en .
+
+sti_atio:innovationStage
+    sti_atio:claimEligible true ;
+    sti_atio:claimEligibilityRationale """Stage vocabularies vary across sources
+    (pre-emergent/emergent/mature vs. source-specific lifecycle terms)."""@en .
+
+sti_atio:thematicArea
+    sti_atio:claimEligible true ;
+    sti_atio:claimEligibilityRationale """Thematic area classifications differ
+    across FAO, CGIAR, and partner taxonomies."""@en .
+
+sti_atio:challengeAddressed
+    sti_atio:claimEligible true ;
+    sti_atio:claimEligibilityRationale """Challenge taxonomies vary widely
+    across source databases."""@en .
+
+sti_atio:useCase
+    sti_atio:claimEligible true ;
+    sti_atio:claimEligibilityRationale """Use case vocabularies are
+    source-specific; ATIO use case taxonomy is ATIO-native."""@en .
+
+sti_atio:innovativeFeature
+    sti_atio:claimEligible true ;
+    sti_atio:claimEligibilityRationale """Innovative feature classification
+    is ATIO-specific; sources rarely use an equivalent vocabulary."""@en .
+
+sti_atio:investmentType
+    sti_atio:claimEligible true ;
+    sti_atio:claimEligibilityRationale """Investment type taxonomies vary
+    across funding and development organisations."""@en .
+
+sti_atio:actualUser
+    sti_atio:claimEligible true ;
+    sti_atio:claimEligibilityRationale """Actor type taxonomies vary across
+    sources; user categories are source-specific."""@en .
+
+sti_atio:prospectiveUser
+    sti_atio:claimEligible true ;
+    sti_atio:claimEligibilityRationale """Actor type taxonomies vary across
+    sources."""@en .
+
+sti_atio:impactSDG
+    sti_atio:claimEligible true ;
+    sti_atio:claimEligibilityRationale """SDG mapping is source-assessed;
+    different sources may assign different SDGs to the same innovation.
+    Note: the SDG concepts themselves are globally standardised (UN URIs),
+    but which SDGs a source assigns is a claim, not a fact."""@en .
+
+
+sti_atio:farmingSystem
+    sti_atio:claimEligible true ;
+    sti_atio:claimEligibilityRationale """Farming system classifications vary
+    across FAO, CGIAR, and regional taxonomies."""@en .
+
+# --- NOT CLAIM-ELIGIBLE (false) ---
+# These fields are normalised at ingestion; no source divergence to preserve.
+
+sti_atio:originCountry
+    sti_atio:claimEligible false ;
+    sti_atio:claimEligibilityRationale """Normalised at ingestion to UN M49 /
+    FAO standard country terms (ISO 3166-1 alpha-3). All source variants
+    (country names, codes, alternate spellings) are resolved to the canonical
+    FAO concept at extraction time. No FieldClaim needed."""@en .
+
+sti_atio:adoptionCountry
+    sti_atio:claimEligible false ;
+    sti_atio:claimEligibilityRationale "Same as originCountry — normalised to FAO standard."@en .
+
+sti_atio:originRegion
+    sti_atio:claimEligible false ;
+    sti_atio:claimEligibilityRationale """Normalised to UN M49 / FAO geographic
+    regions at ingestion."""@en .
+
+sti_atio:language
+    sti_atio:claimEligible false ;
+    sti_atio:claimEligibilityRationale """Normalised to BCP47 / ISO 639 language
+    codes at ingestion."""@en .
+

@@ -27,16 +27,12 @@ dependencies:
     - field.field.node.solution.resources
     - field.field.node.solution.short_id
     - field.field.node.solution.site_featured
-    - field.field.node.solution.solution_type
     - field.field.node.solution.translation
     - image.style.thumbnail
     - node.type.solution
   module:
     - entity_reference_revisions
-    - field_delimiter
-    - field_formatter_range
     - field_group
-    - joinup_slick
     - layout_builder
     - link
     - options
@@ -298,25 +294,6 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 1
-    region: content
-  solution_type:
-    type: entity_reference_label
-    label: inline
-    settings:
-      link: false
-    third_party_settings:
-      field_delimiter:
-        delimiter: ','
-      field_formatter_range:
-        order: 0
-        limit: 0
-        offset: 0
-      joinup_slick:
-        preset: ''
-        field_label: true
-      template_suggestion:
-        template_suggestion: inline
-    weight: 7
     region: content
 hidden:
   collections: true

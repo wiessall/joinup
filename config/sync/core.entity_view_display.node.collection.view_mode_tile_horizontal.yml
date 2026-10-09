@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.collection.closed_group
     - field.field.node.collection.contact
     - field.field.node.collection.description
+    - field.field.node.collection.field_licence
     - field.field.node.collection.field_state
     - field.field.node.collection.field_topic
     - field.field.node.collection.keywords
@@ -25,7 +26,7 @@ dependencies:
     - field_fallback_formatter
     - joinup_html_stripper
     - layout_builder
-    - responsive_image
+    - svg_image_responsive
     - template_suggestion
     - user
 third_party_settings:
@@ -51,6 +52,14 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 1
+    region: content
+  field_licence:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
     weight: 1
     region: content
   logo:

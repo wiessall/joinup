@@ -1,0 +1,128 @@
+@prefix sti_atio: <https://sti-portal.fao.org/ontology/sti-atio#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# ===========================================================================
+#  EXAMPLE INSTANCE DATA  (illustrative; not normative)
+# ===========================================================================
+
+# Example: A published innovation with multi-source divergence preserved
+
+<https://sti-portal.fao.org/innovations/I-20241015-00042>
+    a sti_atio:Innovation ;
+    sti_atio:innovationName "SolarPump Micro-Drip Irrigation System" ;
+    sti_atio:shortDescription """Low-cost solar-powered micro-drip irrigation technology
+    for smallholder vegetable producers in semi-arid regions of East Africa."""@en ;
+    sti_atio:originCountry <https://sti-portal.fao.org/taxonomy/countries/KEN> ;
+    sti_atio:adoptionCountry
+        <https://sti-portal.fao.org/taxonomy/countries/TZA> ,
+        <https://sti-portal.fao.org/taxonomy/countries/UGA> ,
+        <https://sti-portal.fao.org/taxonomy/countries/ETH> ;
+    sti_atio:innovationType <https://sti-portal.fao.org/taxonomy/types/water-management-technology> ;
+    sti_atio:innovationStage <https://sti-portal.fao.org/taxonomy/stages/mature> ;
+    sti_atio:useCase <https://sti-portal.fao.org/taxonomy/use-cases/water-efficient-irrigation> ;
+    # Multi-scheme readiness: both CGIAR-TRL and IDIA assessments on one property
+    sti_atio:readinessLevel
+        <https://sti-portal.fao.org/taxonomy/readiness/cgiar-7> ,      # CGIAR TRL-7
+        <https://sti-portal.fao.org/taxonomy/readiness/idia-transition> ;  # IDIA Stage 4
+    sti_atio:adoptionLevel  <https://sti-portal.fao.org/taxonomy/adoption/cgiar-5> ;
+    sti_atio:isGrassroots false ;
+    sti_atio:accessibility <https://sti-portal.fao.org/taxonomy/adoptability/medium> ;
+    sti_atio:memberOfFamily <https://sti-portal.fao.org/families/F-solar-irrigation> ;
+    sti_atio:ownedBy <https://sti-portal.fao.org/orgs/icrisat> ;
+    sti_atio:fundedBy <https://sti-portal.fao.org/orgs/bmgf> ;
+    sti_atio:impactSDG
+        <https://sti-portal.fao.org/taxonomy/sdgs/sdg-2> ,
+        <https://sti-portal.fao.org/taxonomy/sdgs/sdg-13> ;
+    sti_atio:accessLevel sti_atio:Public ;
+    sti_atio:allowAIUpdate true ;
+    sti_atio:curationStatus sti_atio:Published ;
+    sti_atio:publishedAt "2024-10-15T12:00:00Z"^^xsd:dateTime ;
+    sti_atio:lastUpdated "2025-03-22T09:14:00Z"^^xsd:dateTime ;
+    sti_atio:derivedFromSource
+        <https://sti-portal.fao.org/source-records/gardian-44210> ,
+        <https://sti-portal.fao.org/source-records/technoserve-887> ;
+    # Multi-source divergence: readiness level differs between sources
+    sti_atio:hasFieldClaim
+        [   a sti_atio:FieldClaim ;
+            sti_atio:claimField "readinessLevel" ;
+            sti_atio:claimRefValue <https://sti-portal.fao.org/taxonomy/readiness/cgiar-7> ;
+            sti_atio:claimedBy <https://sti-portal.fao.org/source-records/gardian-44210> ;
+            sti_atio:claimedAt "2024-10-15T08:30:00Z"^^xsd:dateTime ;
+            sti_atio:curatorResolution sti_atio:Authoritative
+        ] ,
+        [   a sti_atio:FieldClaim ;
+            sti_atio:claimField "readinessLevel" ;
+            sti_atio:claimRefValue <https://sti-portal.fao.org/taxonomy/readiness/cgiar-6> ;
+            sti_atio:claimedBy <https://sti-portal.fao.org/source-records/technoserve-887> ;
+            sti_atio:claimedAt "2024-10-15T08:30:00Z"^^xsd:dateTime ;
+            sti_atio:curatorResolution sti_atio:Supplementary ;
+            sti_atio:claimResolutionNote "Source uses older CGIAR scale version; GARDIAN value is more recent."@en
+        ] ;
+    # Taxonomy mapping: TechnoServe uses internal category not in ATIO taxonomy
+    sti_atio:hasTaxonomyMapping
+        [   a sti_atio:TaxonomyMapping ;
+            sti_atio:mappingField "innovationType" ;
+            sti_atio:mappingSourceSystem "TechnoServe-internal-v2" ;
+            sti_atio:sourceTaxonomyTerm "Solar water lifting" ;
+            sti_atio:mappedToATIOConcept <https://sti-portal.fao.org/taxonomy/types/water-management-technology> ;
+            sti_atio:mappingType skos:closeMatch
+        ] .
+
+# Example: An Innovation Family
+<https://sti-portal.fao.org/families/F-solar-irrigation>
+    a sti_atio:InnovationFamily ;
+    sti_atio:familyName "Solar-powered irrigation systems"@en ;
+    sti_atio:familyDescription """A family of innovations using photovoltaic energy
+    to power irrigation pumps and distribution systems for smallholder agriculture."""@en ;
+    sti_atio:featureDimensionA <https://sti-portal.fao.org/taxonomy/mechanisms/solar-photovoltaic> ;
+    sti_atio:featureDimensionB <https://sti-portal.fao.org/taxonomy/themes/water-management> ;
+    sti_atio:featureDimensionC <https://sti-portal.fao.org/taxonomy/actors/smallholder-farmer> ;
+    sti_atio:featureDimensionD <https://sti-portal.fao.org/taxonomy/contexts/semi-arid-region> ;
+    sti_atio:familyBirthDate "2024-03-01"^^xsd:date ;
+    sti_atio:familyRegistryVersion "FRv1.0" ;
+    sti_atio:familyStatus sti_atio:FamilyActive .
+
+# ===========================================================================
+#  SHACL VALIDATION SHAPES
+#  Open-world validation: these shapes enforce that concepts used as values
+#  of open-range properties belong to a registered scheme.
+#  Evaluated by a SHACL processor (e.g. GraphDB SHACL engine, pySHACL).
+#  They do NOT constrain the OWL model -- consistent with open-world semantics.
+# ===========================================================================
+
+
+# -- How to register a new external framework (documentary example) ---------
+#
+#  Suppose a partner uses the "XYZ Readiness Scale". To make its concepts
+#  valid values of sti_atio:readinessLevel, add only these triples (in their
+#  own data file or the shared graph -- no ontology edit):
+#
+#    <https://partner.example.org/xyz-scale>
+#        a skos:ConceptScheme , sti_atio:MaturityScheme ;
+#        skos:prefLabel "XYZ Readiness Scale"@en .
+#
+#    <https://partner.example.org/xyz-scale/level-3>
+#        a skos:Concept ;
+#        skos:inScheme <https://partner.example.org/xyz-scale> ;
+#        skos:prefLabel "Level 3 -- Pilot tested"@en .
+#
+#  That is the entire registration. The SHACL shape above will immediately
+#  accept this scheme's concepts as valid sti_atio:readinessLevel values.
+#  Cross-scheme mappings (skos:closeMatch to CGIAR-TRL or IDIA concepts)
+#  can be added optionally for navigation and interoperability.
+
+# ===========================================================================
+#  SPARQL INFERENCE RULE — scheme derivation  (v0.4)
+#
+#  This CONSTRUCT rule derives sti_atio:inferredScheme on every FieldClaim
+#  from the FieldSchemeUsage declared on its originating DataSource.
+#  Run as a scheduled GraphDB CONSTRUCT or a SPARQL Update on the
+#  provenance named graph.
+#
+#  No scheme information needs to be repeated at the individual
+#  FieldClaim or innovation property level.  The DataSource record
+#  is the single point of truth for "what vocabulary this source uses."
+# ===========================================================================
+
+
