@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.collection.closed_group
     - field.field.node.collection.contact
     - field.field.node.collection.description
+    - field.field.node.collection.field_licence
     - field.field.node.collection.field_state
     - field.field.node.collection.field_topic
     - field.field.node.collection.keywords
@@ -35,6 +36,16 @@ targetEntityType: node
 bundle: collection
 mode: compact
 content:
+  field_licence:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: fieldset
+    weight: 2
+    region: content
   logo:
     type: image
     label: hidden

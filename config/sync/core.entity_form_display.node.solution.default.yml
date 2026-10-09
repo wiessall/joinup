@@ -27,7 +27,6 @@ dependencies:
     - field.field.node.solution.resources
     - field.field.node.solution.short_id
     - field.field.node.solution.site_featured
-    - field.field.node.solution.solution_type
     - field.field.node.solution.translation
     - image.style.thumbnail
     - media.type.solution_logo
@@ -404,20 +403,6 @@ content:
     settings:
       size: 60
       placeholder: 'Minimum 4 characters required.'
-    third_party_settings: {  }
-  solution_type:
-    type: tagify_entity_reference_autocomplete_widget
-    weight: 42
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 200
-      placeholder: 'Start typing to select the solution type...'
-      suggestions_dropdown: 1
-      show_entity_id: 0
-      show_info_label: 0
-      info_label: ''
-      parent_selection: 0
     third_party_settings: {  }
   tca:
     weight: 18

@@ -10,10 +10,15 @@ use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Returns the published solutions belonging to one collection.
+ * Returns the solutions belonging to one collection.
+ *
+ * Published ones by default. With ?status=all, also the unpublished ones the
+ * current user may view; each row says which it is. ?limit (1 to 500,
+ * default 200) and ?page (from 0) walk through a large collection.
  *
  * One endpoint, every collection. The response shape is a flat array of
  * objects, deliberately matching what a Views REST export would emit, so
@@ -49,6 +54,17 @@ class CollectionSolutionsResource extends ResourceBase {
    */
   private const COLLECTION_BUNDLE = 'collection';
 
+  /**
+   * Workflow state field on the solution node.
+   */
+  private const STATE_FIELD = 'field_state';
+
+  /**
+   * Rows per page: default and upper bound.
+   */
+  private const DEFAULT_LIMIT = 200;
+  private const MAX_LIMIT = 500;
+
   public function __construct(
     array $configuration,
     $plugin_id,
@@ -58,6 +74,7 @@ class CollectionSolutionsResource extends ResourceBase {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected FileUrlGeneratorInterface $fileUrlGenerator,
     protected Connection $database,
+    protected RequestStack $requestStack,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
   }
@@ -72,6 +89,7 @@ class CollectionSolutionsResource extends ResourceBase {
       $container->get('entity_type.manager'),
       $container->get('file_url_generator'),
       $container->get('database'),
+      $container->get('request_stack'),
     );
   }
 
@@ -86,22 +104,39 @@ class CollectionSolutionsResource extends ResourceBase {
       throw new NotFoundHttpException(sprintf('Collection "%s" not found.', $collection));
     }
 
+    $query = $this->requestStack->getCurrentRequest()?->query;
+    $includeUnpublished = $query?->get('status') === 'all';
+    $limit = min(self::MAX_LIMIT, max(1, (int) ($query?->get('limit') ?? self::DEFAULT_LIMIT)));
+    $page = max(0, (int) ($query?->get('page') ?? 0));
+
     $storage = $this->entityTypeManager->getStorage('node');
-    $ids = $storage->getQuery()
+    $entityQuery = $storage->getQuery()
       ->accessCheck(TRUE)
       ->condition('type', self::SOLUTION_BUNDLE)
-      ->condition('status', 1)
       ->condition(self::AUDIENCE_FIELD . '.target_id', $collectionNode->id())
       ->sort('title', 'ASC')
-      ->range(0, 200)
-      ->execute();
+      ->sort('nid', 'ASC')
+      ->range($page * $limit, $limit);
+    if (!$includeUnpublished) {
+      $entityQuery->condition('status', 1);
+    }
+    $ids = $entityQuery->execute();
 
     $uris = $this->graphUris($ids);
     $rows = [];
     foreach ($storage->loadMultiple($ids) as $node) {
+      // The query's access check does not hide unpublished nodes on a site
+      // without node grants, so each unpublished one is checked on its own.
+      // A page can therefore hold fewer rows than the limit.
+      if (!$node->isPublished() && !$node->access('view')) {
+        continue;
+      }
       $rows[] = [
         'nid'      => (int) $node->id(),
         'uuid'     => $node->uuid(),
+        'published' => $node->isPublished(),
+        // The workflow state; NULL if the state field is gone.
+        'state'    => $node->hasField(self::STATE_FIELD) ? $node->get(self::STATE_FIELD)->value : NULL,
         // The subject of this solution's triples in the graph, so a client
         // can go from this list straight to SPARQL. NULL until first synced.
         'uri'      => $uris[(int) $node->id()] ?? NULL,
@@ -118,7 +153,12 @@ class CollectionSolutionsResource extends ResourceBase {
     // own tag once the traffic justifies it.
     $cache = new CacheableMetadata();
     $cache->addCacheTags(['node_list:' . self::SOLUTION_BUNDLE]);
-    $cache->addCacheContexts(['user.permissions', 'url.path']);
+    // What is listed depends on the query string and, once unpublished
+    // nodes are included, on who is asking.
+    $cache->addCacheContexts(['user.permissions', 'url.path', 'url.query_args']);
+    if ($includeUnpublished) {
+      $cache->addCacheContexts(['user']);
+    }
     $cache->setCacheMaxAge(300);
     $response->addCacheableDependency($cache);
 

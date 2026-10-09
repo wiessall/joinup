@@ -6,7 +6,7 @@ dependencies:
     - rdf_sync
 third_party_settings:
   rdf_sync:
-    type: 'http://www.w3.org/2000/01/rdf-schema#Resource'
+    type: 'http://www.w3.org/2004/02/skos/core#concept'
     uri_field_name: claim_value_uri
     uri_plugin: 'sti_namespace:concept'
     fields:
@@ -14,6 +14,18 @@ third_party_settings:
         value:
           predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
           type: null
+      vid:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#inScheme'
+          type: resource
+      description:
+        processed:
+          predicate: 'http://www.w3.org/2004/02/skos/core#definition'
+          type: null
+      parent:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#broader'
+          type: resource
 name: 'Claim values'
 vid: claim_values
 description: null

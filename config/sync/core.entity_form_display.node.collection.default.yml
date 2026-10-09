@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.collection.closed_group
     - field.field.node.collection.contact
     - field.field.node.collection.description
+    - field.field.node.collection.field_licence
     - field.field.node.collection.field_state
     - field.field.node.collection.field_topic
     - field.field.node.collection.keywords
@@ -146,6 +147,12 @@ content:
     settings:
       rows: 5
       placeholder: ''
+    third_party_settings: {  }
+  field_licence:
+    type: options_select
+    weight: 3
+    region: content
+    settings: {  }
     third_party_settings: {  }
   field_state:
     type: state_machine_buttons

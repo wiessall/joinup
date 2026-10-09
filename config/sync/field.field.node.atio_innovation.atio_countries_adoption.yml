@@ -6,9 +6,19 @@ dependencies:
     - field.storage.node.atio_countries_adoption
     - node.type.atio_innovation
     - taxonomy.vocabulary.countries
+  module:
+    - rdf_sync
+    - tmgmt_content
   enforced:
     module:
       - atio
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    target_id:
+      predicate: 'http://data.fao.org/ird/atio#originCountry'
+      type: null
 id: node.atio_innovation.atio_countries_adoption
 field_name: atio_countries_adoption
 entity_type: node

@@ -1,0 +1,39 @@
+uuid: 8b586280-7ccd-442c-9b02-d0f0ca2ca825
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_licence
+    - node.type.collection
+    - node.type.licence
+  module:
+    - rdf_sync
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+  rdf_sync:
+    target_id:
+      predicate: 'https://sti-portal.fao.org/sti#license'
+      type: resource
+id: node.collection.field_licence
+field_name: field_licence
+entity_type: node
+bundle: collection
+label: Licence
+description: 'Under which permissions and constraints is the data in this collection shared?'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      licence: licence
+    sort:
+      field: title
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
