@@ -1,0 +1,5 @@
+services:
+  import_ird_jsons.intake_file:
+    class: Drupal\import_ird_jsons\IntakeFile
+    arguments:
+      - '@plugin.manager.migrate_plus.data_fetcher'
