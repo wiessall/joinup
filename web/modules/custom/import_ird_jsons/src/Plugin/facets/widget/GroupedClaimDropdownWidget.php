@@ -402,7 +402,7 @@ class GroupedClaimDropdownWidget extends WidgetPluginBase {
    * Parses a newline- or comma-separated list of slugs.
    */
   private function parseList(string $raw): array {
-    $parts = preg_split('/[\R,]+/', $raw) ?: [];
+    $parts = preg_split('/[\r\n,]+/', $raw) ?: [];
     return array_values(array_filter(array_map('trim', $parts)));
   }
 
