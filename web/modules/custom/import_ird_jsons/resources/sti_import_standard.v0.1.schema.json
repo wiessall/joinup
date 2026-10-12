@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sti-portal.fao.org/schema/ird-standard/0.1",
+  "title": "STI Portal standard intake file, v0.1 (as produced by ird_normalize.py)",
+  "description": "One file = one collection. Each record becomes one source record (Drupal bundle 'solution'); every claim becomes a claims paragraph issued by the collection. meta.field_config states once, for the whole file, which claim keys are categorical.",
+  "type": "object",
+  "required": ["meta", "records"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["collection_id", "field_config"],
+      "properties": {
+        "collection_id": {
+          "description": "The collection's short_id in the portal.",
+          "type": "string",
+          "minLength": 1
+        },
+        "collection_label": { "type": "string" },
+        "collection_nid": { "type": "integer" },
+        "record_count": { "type": "integer", "minimum": 0 },
+        "export_timestamp": { "type": "string" },
+        "field_config": {
+          "description": "One entry per claim key used in records[].claims.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["categorical"],
+            "properties": {
+              "categorical": {
+                "description": "true: each value becomes a term in the collection's vocabulary (facetable, mappable). false: stored as text.",
+                "type": "boolean"
+              },
+              "separator": {
+                "description": "Documents how the source string was split. Values in the file are already arrays.",
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "records": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/record" }
+    }
+  },
+  "$defs": {
+    "record": {
+      "type": "object",
+      "required": ["core_fields", "claims"],
+      "additionalProperties": false,
+      "properties": {
+        "core_fields": {
+          "type": "object",
+          "required": ["id", "title", "description"],
+          "properties": {
+            "id": {
+              "description": "Provider's identifier; unique within the collection and stable across exports (re-import matches on it).",
+              "type": "string",
+              "minLength": 1
+            },
+            "title": { "type": "string", "minLength": 1 },
+            "description": { "type": "string", "minLength": 1 },
+            "abstract": { "type": ["string", "null"] },
+            "date": { "type": ["string", "null"] },
+            "url": { "type": ["string", "null"] },
+            "language_names": { "type": ["array", "null"], "items": { "type": "string" } },
+            "owner_name": { "type": ["string", "null"] },
+            "owner_id": { "type": ["string", "null"] },
+            "contact_name": { "type": ["string", "null"] }
+          }
+        },
+        "claims": {
+          "description": "Key = the provider's own property name, verbatim; must have an entry in meta.field_config.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["value"],
+            "additionalProperties": false,
+            "properties": {
+              "value": {
+                "oneOf": [
+                  { "type": "string" },
+                  { "type": "array", "items": { "type": "string" } }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

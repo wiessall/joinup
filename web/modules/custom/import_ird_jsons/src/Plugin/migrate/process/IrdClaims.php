@@ -8,6 +8,7 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\import_ird_jsons\IntakeFile;
 use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\ProcessPluginBase;
@@ -56,9 +57,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * Config (set per migration in YAML):
  *   plugin: ird_claims
- *   collection_id: 'fao-teca'
  *   source: claims
- *   field_config: { <key>: { categorical: bool, separator: '|'? }, … }
+ *
+ * The collection and the per-key settings come from the intake file itself:
+ * meta.collection_id and meta.field_config ({ <key>: { categorical: bool,
+ * separator: '|'? } }), read once per run by import_ird_jsons.intake_file.
+ * collection_id / field_config in the YAML are no longer read.
  *
  * @\Drupal\migrate\Annotation\MigrateProcessPlugin(
  *   id = "ird_claims",
@@ -84,6 +88,7 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
     $plugin_definition,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected TimeInterface $time,
+    protected IntakeFile $intakeFile,
     protected ?MigrationInterface $migration,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -102,6 +107,7 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
       $plugin_definition,
       $container->get('entity_type.manager'),
       $container->get('datetime.time'),
+      $container->get('import_ird_jsons.intake_file'),
       $migration,
     );
   }
@@ -115,14 +121,21 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
   public function transform($value, MigrateExecutableInterface $migrate_executable, Row $row, $destination_property): array {
     $logger = \Drupal::logger('ird_claims');
 
-    $collection_id = (string) ($this->configuration['collection_id'] ?? '');
-    $field_config  = (array) ($this->configuration['field_config'] ?? []);
-    $source_id     = (string) $row->getSourceProperty('id');
+    $source_id = (string) $row->getSourceProperty('id');
 
-    if ($collection_id === '') {
-      $logger->error('ird_claims: missing collection_id in plugin config; skipping claims.');
+    // Collection and per-key settings come from the intake file's meta block.
+    if (!$this->migration) {
+      $logger->error('ird_claims: no migration context; skipping claims.');
       return [];
     }
+    try {
+      $meta = $this->intakeFile->meta($this->migration);
+    }
+    catch (\Throwable $e) {
+      $logger->error('ird_claims: cannot read the intake file meta: @m', ['@m' => $e->getMessage()]);
+      return [];
+    }
+    $collection_id = $meta->collectionId;
 
     // Resolve collection nid once per run; a missing collection is fatal for
     // claims but must NOT abort the node import, so log and bail with [].
@@ -182,9 +195,8 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
         }
         $raw_value = is_array($claim) && array_key_exists('value', $claim) ? $claim['value'] : $claim;
 
-        $meta           = $field_config[$key] ?? [];
-        $is_categorical = (bool) ($meta['categorical'] ?? FALSE);
-        $separator      = $meta['separator'] ?? NULL;
+        $is_categorical = $meta->isCategorical($key);
+        $separator      = $meta->separator($key);
         $property_term  = $this->ensureKeyTerm(self::VOCAB_PROPERTIES, $key, $properties_parent);
 
         foreach ($this->normalizeValues($raw_value, $separator) as $single) {
