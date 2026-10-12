@@ -20,8 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Builds reified field-claim paragraphs for a solution row, inline in migrate.
  *
- * This is the migrate-native replacement for the standalone `ird:annotate`
- * Drush command. Given a row's `claims` object and the collection's
+ * Given a row's `claims` object and the collection's
  * `field_config`, it mints one `claims` paragraph per asserted value and
  * returns the reference list to be written to the solution's `field_claims`.
  *
@@ -29,7 +28,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   solution  sti:hasFieldClaim  claim
  *     claim   sti:claimProperty     <property-uri>     (predicate)
  *     claim   sti:claimLiteralValue "…"  |  sti:claimRefValue <value-uri> (object)
- *     claim   sti:claimedBy         <collection-nid>   (provenance)
+ *     claim   sti:claimedBy         <collection-nid>   (provenance) //! future changes might allow for non-collection claim issuers
  *     claim   sti:claimedAt         "…"                (provenance)
  *
  * Predicates and categorical values live in two shared hierarchical vocabularies
@@ -38,9 +37,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   claim_values:      {collection} → {key} → {value}
  * Term URIs are minted by rdf_sync itself: claim_properties uses the
  * 'sti_namespace:property' URI plugin and claim_values 'sti_namespace:concept'
- * (https://sti-portal.fao.org/id/{type}/{uuid}). This plugin used to write
- * http://data.fao.org/ird/… URIs into field_property_uri, a field that never
- * existed, so the terms ended up with no URI at all.
+ * (https://sti-portal.fao.org/id/{type}/{uuid}). //! Confirmed, need to check label emitting
  *
  * Idempotency: because this runs during import (and the destination lists
  * `field_claims` in overwrite_properties), on re-import we look up the already
@@ -73,7 +70,7 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
   private const VOCAB_PROPERTIES  = 'claim_properties';
   private const VOCAB_VALUES      = 'claim_values';
   private const PARAGRAPH_BUNDLE  = 'claims';
-  private const SOLUTION_BUNDLE   = 'solution';
+  private const SOLUTION_BUNDLE   = 'solution'; //! might change once joinup naming is replaced
   private const COLLECTION_BUNDLE = 'collection';
   private const MAX_TERM_NAME     = 255;
 

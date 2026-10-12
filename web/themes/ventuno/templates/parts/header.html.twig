@@ -2,8 +2,8 @@
   <div role="complementary" class="w-100 shadow-sm navbar navbar-expand-lg navbar-light" aria-label="{{ 'Site branding'|t }}">
     <div class="container">
       <div class="d-flex w-100 justify-content-between align-items-end">
-        <a class="navbar-brand" href="https://ec.europa.eu/info/index_en" aria-label="{{ 'Visit European Commission website'|t }}">
-          <img src="{{ file_url('themes/ventuno/assets/images/logo-ec-en.svg') }}" alt="{{ 'European Commission logo'|t }}" width="100" height="25"/>
+        <a class="navbar-brand" href="https://fao.org" aria-label="{{ 'Visit FAO homepage'|t }}">
+          <img src="https://www.fao.org/images/corporatelibraries/logos/fao-logo-archive/fao-logo-blue-2lines-en.svg" alt="{{ 'FAO logo'|t }}" width="100" height="25"/>
         </a>
         {% if top_bar %}
           <div class="region-top-bar">
@@ -55,7 +55,7 @@
 {% endif %}
 {{ include(directory ~ '/templates/navigation/navbar.html.twig', {
   brand: {
-    title: 'Interoperable Europe Portal'|t,
+    title: 'Science, Technology and Innovation Portal'|t,
     src: file_url('themes/ventuno/assets/images/logo-interoperable-europe.svg'),
     alt: 'Interoperable Europe logo'|t,
     link: path('<front>'),

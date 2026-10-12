@@ -6,7 +6,7 @@ dependencies:
     - rdf_sync
 third_party_settings:
   rdf_sync:
-    type: 'http://www.w3.org/2004/02/skos/core#concept'
+    type: 'http://www.w3.org/2004/02/skos/core#Concept'
     uri_field_name: claim_value_uri
     uri_plugin: 'sti_namespace:concept'
     fields:
