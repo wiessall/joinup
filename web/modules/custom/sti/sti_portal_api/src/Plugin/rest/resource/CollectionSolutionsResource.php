@@ -114,7 +114,7 @@ class CollectionSolutionsResource extends ResourceBase {
   public function __construct(
     array $configuration,
     $plugin_id,
-    $plugin_definition, //? what is the plugin definition?
+    $plugin_definition,
     array $serializer_formats,
     LoggerInterface $logger,
     protected EntityTypeManagerInterface $entityTypeManager,
@@ -173,7 +173,7 @@ class CollectionSolutionsResource extends ResourceBase {
     }
     if ($query?->has('limit')) {
       $limit = min(self::MAX_LIMIT, max(1, (int) $query->get('limit')));
-      $page = max(0, (int) ($query->get('page') ?? 0)); //? so I'd need to set limit *and* page, never just one of them?
+      $page = max(0, (int) ($query->get('page') ?? 0));
       $entityQuery->range($page * $limit, $limit);
     }
     $ids = array_values($entityQuery->execute());
@@ -191,7 +191,7 @@ class CollectionSolutionsResource extends ResourceBase {
         if (!$node->isPublished() && !$node->access('view')) {
           continue;
         }
-        $rows[] = [ //? This is the output format, I guess I'd need to check if it looks fine for datalab/ if it looks similar to the standard schema?
+        $rows[] = [
           'nid'       => (int) $node->id(),
           'uuid'      => $node->uuid(),
           'type'      => $types[$node->bundle()],
@@ -222,7 +222,7 @@ class CollectionSolutionsResource extends ResourceBase {
     // own tag once the traffic justifies it.
     $cache = new CacheableMetadata();
     foreach ($bundles as $bundle) {
-      $cache->addCacheTags(['node_list:' . $bundle]); //? I'd like to know better how the cache-tag works?
+      $cache->addCacheTags(['node_list:' . $bundle]);
     }
     if ($includeClaims) {
       // Renamed properties and values change the output too.
@@ -232,7 +232,7 @@ class CollectionSolutionsResource extends ResourceBase {
     // nodes are included, on who is asking.
     $cache->addCacheContexts(['user.permissions', 'url.path', 'url.query_args']);
     if ($moderation !== 'published') {
-      $cache->addCacheContexts(['user']); //? This checks if the user has access? If I run a curl GET how does the system know who I am?
+      $cache->addCacheContexts(['user']);
     }
     $cache->setCacheMaxAge(300);
     $response->addCacheableDependency($cache);
