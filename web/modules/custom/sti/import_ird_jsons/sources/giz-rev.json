@@ -1,0 +1,229 @@
+{
+  "meta": {
+    "collection_id": "giz",
+    "collection_label": "GIZ Innovations",
+    "collection_nid": 0,
+    "record_count": 1,
+    "export_timestamp": "2026-07-16T15:47:59.841348",
+    "field_config": {
+      "Innovation Type": {
+        "categorical": false,
+        "separator": "|"
+      },
+      "(GIZ) Scaling Ambition": {
+        "categorical": false
+      },
+      "Scaling Strategy": {
+        "categorical": false,
+        "separator": "|"
+      },
+      "Market Analysis": {
+        "categorical": false,
+        "separator": "|"
+      },
+      "Economic Feasibility": {
+        "categorical": false,
+        "separator": "|"
+      },
+      "Cost/Benefit Analysis": {
+        "categorical": false,
+        "separator": "|"
+      },
+      "Social Return on Investment": {
+        "categorical": false
+      },
+      "Innovative dimensions narrative": {
+        "categorical": true
+      },
+      "Administrative region": {
+        "categorical": false
+      },
+      "Country (adoption)": {
+        "categorical": false
+      },
+      "Subregion/Macro region": {
+        "categorical": false
+      },
+      "Challenges addressed": {
+        "categorical": false,
+        "separator": "|"
+      },
+      "SDG´s": {
+        "categorical": false,
+        "separator": "|"
+      },
+      "Human impact": {
+        "categorical": false,
+        "separator": "|"
+      },
+      "Environmental impact": {
+        "categorical": false,
+        "separator": "|"
+      },
+      "Theory of Change": {
+        "categorical": false
+      },
+      "Use cases": {
+        "categorical": false,
+        "separator": "|"
+      },
+      "Thematic area": {
+        "categorical": false
+      },
+      "Innovation stage": {
+        "categorical": false
+      },
+      "Readiness level": {
+        "categorical": false
+      },
+      "Target Innovation User": {
+        "categorical": false
+      },
+      "Value Chain": {
+        "categorical": false
+      },
+      "Sponsor": {
+        "categorical": false,
+        "separator": "|"
+      },
+      "Partners": {
+        "categorical": false,
+        "separator": "|"
+      }
+    }
+  },
+  "records": [
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "0",
+        "title": "Regenerative cotton farming package using enriched biochar from cotton stalks combined with bokashi and jeevamrit, delivered through a train-the-trainer model to boost yields, soil carbon, and farmer incomes in Cameroon.",
+        "description": "The innovation rejuvenates soil health by producing biochar from cotton stalks and enriching it with bokashi (microorganism source) and jeevamrit (microbial “food”). The porous biochar structure retains water and nutrients; combined amendments stimulate microbial activity, improve fertility, and can neutralize acidic soils. Delivery uses a cascade model: 60 agricultural advisors train 3,000 lead farmers, who demonstrate and train ~42,000 farmers via farmer field schools. Early outputs include thousands trained, hundreds of trial plots, >200 t of biochar produced, and preliminary yield gains with an average yield increase of around 40% across participating farmers (from ~1.356 t/ha to ~2.956 t/ha on trial plots). Soil carbon increases are being measured; potential sequestration is ~3 t CO?-eq/ha/yr.",
+        "abstract": "Cotton stalks that are normally burned after harvest are collected and converted into biochar using simple, low-cost pyrolysis methods. The biochar is then combined with microbial soil amendments such as bokashi or jeevamrit to enhance soil biological activity. Farmers apply this mixture to their cotton fields, where the porous structure of biochar improves soil moisture retention, nutrient availability, and soil structure. As soil health improves, cotton yields increase while the need for chemical inputs such as fertilizers and insecticides decreases. At the same time, carbon stored in biochar remains stable in the soil, enabling carbon sequestration and the potential ",
+        "date": null,
+        "url": "sample url",
+        "owner_name": "CIRAD (Innovation Partner - International research organization) | ICAC (Innovation Partner - International Cotton Advisory Committee)",
+        "owner_id": "giz-rev_cirad-innovation-partner-international-research-organization-icac-innovation-partner-international-cotton-advisory-committee"
+      },
+      "claims": {
+        "Innovation Type": {
+          "value": [
+            "2077, Practice / Technique",
+            "2082, Platform"
+          ]
+        },
+        "(GIZ) Scaling Ambition": {
+          "value": "By April 2027, institutionalize enriched biochar practices within Cameroon’s cotton value chain by embedding the train the trainer model into SODECOTON and national advisory systems, reaching about 45 000 farmers. Once standard operating procedures, co funding commitments and research?backed monitoring are firmly in place, scale the solution to other cotton?growing countries in the global south. Success will be measured by higher and more stable yields, measurable soil carbon gains (~3 t COeq ha2 yr2 potential) and durable income growth, underpinned by monetization of carbon credits and ongoing research and farmer feedback"
+        },
+        "Scaling Strategy": {
+          "value": [
+            "Scale through institutional integration of the cascade model: equip advisors (SODECOTON, public services) who train lead farmers to run demonstration plots and farmer field schools. Efficiency: leverages existing networks and locally available feedstocks (cotton stalks), minimizing input costs. Sustainability: embed protocols, budgets, and supervision into partner work plans; align with research partners (IRAD, CIRAD/ICAC) for continuous improvement and monitoring. Responsibility: avoid burning residues; co-design training with local institutions; track participation by women; verify soil-carbon and yield changes before wide rollout.",
+            "Potential extension to implementation of a landscape-based approach to enhance the living conditions of local farmers and promote women's empowerment"
+          ]
+        },
+        "Market Analysis": {
+          "value": [
+            "SAM (Serviceable Addressable Market): ~957,597 cotton producers in 8 key West/Central African countries (per crop statistics).  ~1,956,524 cotton producers in East, South and North African countries (ICAC Databook)",
+            "SOM (Serviceable Obtainable Market): Initial scaling target of 45,000 farmers in Cameroon (current project structure), with high potential for replication in neighbouring cotton-producing countries."
+          ]
+        },
+        "Economic Feasibility": {
+          "value": [
+            "Status Quo. In Cameroon’s cotton sector, post?harvest residues are typically burned in the field to control pests. The scaling assessment notes that the biochar used in this project comes from cotton stalks that are normally burnt by farmers in the fields; burning releases additional CO?, whereas converting the stalks to biochar retains the carbon. These stalks therefore represent a biomass resource that is currently wasted and whose combustion deprives soils of organic matter. Research on crop?residue management shows that burning wet biomass produces large quantities of CO? and fine particulate matter. Although the project documents focus on biochar, agronomic studies have highlighted that intensive use of synthetic fertilisers often leads to soil degradation and poor nutrient?use efficiency, only 30–50 % of applied nutrients are taken up, with the remainder lost to the environment, and that fertiliser expenses are a substantial cost component in crop production.",
+            "Alternatives & Competitive Position. Conventional organic amendments such as compost improve fertility but lack the long?term structural benefits of biochar. The scaling document describe biochar as a porous product that increases water?storage capacity, enabling soils to absorb more rainfall and neutralise acidity. The project’s regenerative package combines biochar derived from cotton stalks with Bokashi (a source of microorganisms) and Jeevamrit (a nutrient?rich microbial inoculant); together these three supplements create a balanced and dynamic soil ecosystem. Preliminary field results in Cameroon support this synergy: on trial plots, average seed?cotton yields rose from 1.356 t?ha?¹ in 2023 to 2.956 t?ha?¹ in 2024/25, an approximate 100 % increase. Across farmers participating in the programme, the average cotton yield increase is approximately 40 %. Because biochar’s carbon matrix is stable, it can sequester about 3 t CO??eq per hectare per year, offering a climate benefit absent from compost?only systems. By turning a waste product into a valuable amendment and combining it with potent microbial inoculants, this innovation provides a circular, climate?positive alternative to residue burning or compost alone. Adoption challenges such as labour and knowledge are mitigated through a train?the?trainer cascade: 60 agricultural advisors train 3 000 lead farmers, who in turn train 42 000 farmers via farmer field schools, keeping per?farmer costs low and ensuring wide dissemination."
+          ]
+        },
+        "Cost/Benefit Analysis": {
+          "value": [
+            "For a scaling investment of €25 per farmer, the project delivers a high cost-benefit ratio. Beneficiaries utilize zero-cost agricultural waste (cotton stalks) to produce biochar, requiring only labor and basic tools.",
+            "This results in an average yield increase of around 40 %, alongside improved cotton quality (whiter fiber, heavier capsules), effectively doubling economic resilience. Farmers gain two revenue streams: increased crop income and new carbon credit payments (potential 3 t CO?-eq/ha/yr). Additionally, the method reduces costs by lowering the need for chemical fertilizers and pesticides."
+          ]
+        },
+        "Social Return on Investment": {
+          "value": "Against a total immediate investment ask of €1 million (covering infrastructure and training), the project projects a massive return by unlocking the verification of ~135,000 tons of CO?-equivalent credits annually by 2027 and doubling the economic resilience of 45,000 smallholder households."
+        },
+        "Administrative region": {
+          "value": "102, Africa"
+        },
+        "Country (adoption)": {
+          "value": "304,Cameroon,,,"
+        },
+        "Subregion/Macro region": {
+          "value": "North Cameroon (Garoua, Ngong, Guider, Maroua)"
+        },
+        "Challenges addressed": {
+          "value": [
+            "566, Poverty",
+            "564, Climate change",
+            "569, Soil degradation",
+            "567, Drought / water scarcity"
+          ]
+        },
+        "SDG´s": {
+          "value": [
+            "1158,\"Goal 1: No poverty\"",
+            "1159,\"Goal 2: Zero hunger\"",
+            "1170,\"Goal 13: Climate action\"",
+            "1172,\"Goal 15: Life on Land\""
+          ]
+        },
+        "Human impact": {
+          "value": [
+            "For farmers: higher yields (average yield increase of 40%, with 12% of monitored farmers achieving increases above 100%), improved soil moistur and nutrient retention, reduced use and cost of insecticides (approx. EUR 97/ha/year, about 18% cost savings), and increased revenues (around +27%) resulting in significantly higher profits (around +123%). Additional income potential may arise from the monetization of carbon credits.",
+            "For buyers and national systems: better cotton quality/quantity and climate benefits via carbon sequestration and elimination of stalk burning.",
+            "For partners: a low-cost, scalable training model using local resources and existing advisory structures. (Yield/carbon measurements: preliminary/indicative; verification ongoing.)"
+          ]
+        },
+        "Environmental impact": {
+          "value": [
+            "517, Greenhouse gases",
+            "518, Land",
+            "513, Biodiversity and ecosystems"
+          ]
+        },
+        "Theory of Change": {
+          "value": "Transforming cotton stalks into biochar and integrating it with bokashi or jeevamrit enhances soil structure, moisture, and nutrient retention while neutralizing acidity. Improved soil health leads to higher and more stable cotton yields, reducing residue burning and fertilizer dependence. In addition, as old cotton stalks are cut down and processed into biochar, this kills the larvae that normally survives the dry season on the stalks and consequently reducing the amount of insecticides and the costs for chemicals.These agronomic gains translate into higher incomes and greater resilience for farming households. These improvements contribute to an average cotton yield increase of around 40%, alongside reduced input costs. As residue burning declines, long-term soil-carbon sequestration increases, contributing to climate mitigation. Through advisor and lead-farmer training, peer learning, and local demonstrations, these regenerative practices become embedded within farming systems, reinforcing a sustainable cycle of soil restoration, productivity, and environmental recovery."
+        },
+        "Use cases": {
+          "value": [
+            "897, Production",
+            "916,\"Natural resources management & sustainable practices\"",
+            "928,\"Access to markets\"",
+            "1180,\"income increase\",",
+            "908,\"precision seeding and fertilization for better production\"",
+            "917,\"biodiversity preservation, agroecology, conservation ag\","
+          ]
+        },
+        "Thematic area": {
+          "value": "574, Carbon footprint and greenhouse gas emissions"
+        },
+        "Innovation stage": {
+          "value": "535, Mature"
+        },
+        "Readiness level": {
+          "value": "89,\"8. Incubation\""
+        },
+        "Target Innovation User": {
+          "value": "7,\"Smallholder farms / farmers\",,,"
+        },
+        "Value Chain": {
+          "value": "sample value chain"
+        },
+        "Sponsor": {
+          "value": [
+            "BMZ (Federal Ministry for Economic Cooperation and Development)"
+          ]
+        },
+        "Partners": {
+          "value": [
+            "(GIZ) Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ) GmbH",
+            "SODECOTON (Scaling & Demand Partner - Semi-public cotton company)",
+            "IRAD (Innovation & Scaling Partner - Local agricultural research organisation)",
+            "bizpando (Scaling partner - Developing carbon credit platform)"
+          ]
+        }
+      }
+    }
+  ]
+}

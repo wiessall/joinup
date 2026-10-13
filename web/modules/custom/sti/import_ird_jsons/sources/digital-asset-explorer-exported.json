@@ -1,0 +1,2263 @@
+{
+  "meta": {
+    "collection_id": "dae",
+    "collection_label": "Digital Asset Explorer",
+    "collection_nid": 0,
+    "record_count": 12,
+    "export_timestamp": "2026-07-16T15:47:56.030868",
+    "field_config": {
+      "D4a_1 - Online Source Type (deprecated)": {
+        "categorical": false
+      },
+      "C2c - Solution (innovation) module": {
+        "categorical": true
+      },
+      "C3c - Knowledge (concept, model, science, workflow) Solutions": {
+        "categorical": true
+      },
+      "C2d - Science (evidence) module": {
+        "categorical": true
+      },
+      "C3a - Product (tool, product, device, machine, hardware) Solutions": {
+        "categorical": true
+      },
+      "C3b - Service (process, service, arrangement) solutions": {
+        "categorical": true
+      },
+      "C2a - Impact (SDGs, goals, problems) module": {
+        "categorical": true
+      },
+      "C2b - Intervention (programs, projects, policies, initiatives) module": {
+        "categorical": true
+      },
+      "C2e2 - Detailed Stakeholder type": {
+        "categorical": false
+      },
+      "C2z - Other modules": {
+        "categorical": true
+      },
+      "C1b - Quality Assurance": {
+        "categorical": true
+      },
+      "U3 - Ease of navigation": {
+        "categorical": true
+      },
+      "U4 - User pain points": {
+        "categorical": false
+      },
+      "F6 - User support provided": {
+        "categorical": true
+      },
+      "F1 - API": {
+        "categorical": true
+      },
+      "U5 - User access policy": {
+        "categorical": true
+      },
+      "F5 - Preservation (Unique-persistent identifier)": {
+        "categorical": true
+      },
+      "F2 - Use Authentification": {
+        "categorical": true
+      },
+      "F3 - Main interface elements": {
+        "categorical": false
+      },
+      "C1a - Database size": {
+        "categorical": false
+      },
+      "M1d - Notes of the submitter": {
+        "categorical": false,
+        "separator": ";"
+      },
+      "M1b - Submitter Email address": {
+        "categorical": true
+      },
+      "F4 - Other interfaces": {
+        "categorical": true
+      },
+      "U2b1 - Good for user": {
+        "categorical": true
+      },
+      "D3b - Online source active maintenance end": {
+        "categorical": true
+      },
+      "C3d - Solution package": {
+        "categorical": true
+      },
+      "C4 - Digital content lifecycle": {
+        "categorical": true
+      },
+      "C6b - Other fields": {
+        "categorical": true
+      },
+      "C2f - capacity development module (training course webinars)": {
+        "categorical": true
+      },
+      "C2g - Peer to peer matching": {
+        "categorical": true
+      },
+      "C2h - investment matching": {
+        "categorical": true
+      },
+      "C1c - Unique content": {
+        "categorical": true
+      },
+      "C1d - External content": {
+        "categorical": true
+      },
+      "R1 - FAO Strategy Relevance": {
+        "categorical": true
+      },
+      "D2b - Hosting Organization Other": {
+        "categorical": true
+      },
+      "D4b - Online source type other": {
+        "categorical": true
+      },
+      "M1a1 - Submitter name - select": {
+        "categorical": true
+      },
+      "M1c - Submitter Organization and Department": {
+        "categorical": true
+      },
+      "FULLY CURATED": {
+        "categorical": true
+      },
+      "created time": {
+        "categorical": false
+      },
+      "Last updated": {
+        "categorical": true
+      },
+      "provide information about the content of the platform": {
+        "categorical": true
+      },
+      "C2e1 - Stakeholder (partner, expert, community) module": {
+        "categorical": true
+      },
+      "U1b - Use relevance detailed": {
+        "categorical": true
+      },
+      "U2a2 - Best-fit user detailed": {
+        "categorical": false
+      },
+      "U2c2 - Not recommended for users detailed": {
+        "categorical": true
+      },
+      "D1b - Online Source URL - Alternative": {
+        "categorical": true
+      },
+      "D4a_2 - Online Source Type - Industry classification": {
+        "categorical": true
+      },
+      "C5_0 Geographical specification - country removed": {
+        "categorical": true
+      },
+      "Consent Box": {
+        "categorical": true
+      },
+      "Use Rights": {
+        "categorical": true
+      },
+      "Use Rights Evidence": {
+        "categorical": false
+      },
+      "D0b - Previously entered online source": {
+        "categorical": true
+      },
+      "D2b - Acronym (from Hosting Organization)": {
+        "categorical": false
+      },
+      "Hosting Organization lookup": {
+        "categorical": false
+      },
+      "C5_1_b region (from C5 - Geographical Focus)": {
+        "categorical": false
+      },
+      "D2c_1 - Organization Type (from Hosting Organization)": {
+        "categorical": false
+      },
+      "C5_1_d intermediate-region (from C5 - Geographical Focus)": {
+        "categorical": true
+      },
+      "C5_1_c sub-region (from C5 - Geographical Focus)": {
+        "categorical": false
+      },
+      "C5_1_a name comma replaced (from C5 - Geographical Focus)": {
+        "categorical": false
+      },
+      "u2A1BestFitUser lookup original": {
+        "categorical": false
+      },
+      "u1AUseRelevance_lookup": {
+        "categorical": false
+      },
+      "D2a - Hosting Organization": {
+        "categorical": false
+      },
+      "U2a1 - Best-fit user": {
+        "categorical": false
+      },
+      "Best fit user lookup": {
+        "categorical": false
+      },
+      "C6a - Fields": {
+        "categorical": true
+      },
+      "U1a - Use relevance": {
+        "categorical": false
+      },
+      "Use relevance lookup": {
+        "categorical": false
+      },
+      "U2c1 - Not recommended for users": {
+        "categorical": true
+      },
+      "Not recommended for users lookup": {
+        "categorical": true
+      },
+      "C5_1 - Geographical Focus": {
+        "categorical": false
+      },
+      "Geographic focus lookup": {
+        "categorical": false
+      },
+      "Geographic focus ISO3 lookup": {
+        "categorical": true
+      },
+      "Duplicates": {
+        "categorical": true
+      },
+      "FAO_regions": {
+        "categorical": false
+      },
+      "FAO_region_string": {
+        "categorical": true
+      },
+      "looking_for": {
+        "categorical": true
+      },
+      "Publish": {
+        "categorical": true
+      },
+      "U2A1stringBestFitUser": {
+        "categorical": true
+      }
+    }
+  },
+  "records": [
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "",
+        "id": "0",
+        "title": "FAO Virtual Learning Center (VLC) Latin America and the Caribbean (RLC)",
+        "description": "FAO Virtual Learning Center (VLC) Latin America and the Caribbean (RLC)\r\n\r\nFAO Public Policies Training Center for Latin America and the Caribbean\r\nSince its creation in 2008, the Public Policies Training Center for Latin America and the Caribbean has provided training to almost 170,000 professionals and technicians from FAO and from governments, NGOs and academia. It offers self-paced courses, tutored courses, and training formats tailored to the needs of FAO programs and projects in the region.\r\n\r\n------\r\n\r\nThe Virtual Learning Centers (VLCs)\r\nBuilding capacity for effective online learning tailored to regional needs\r\nThe establishment of Virtual Learning Centers (VLCs) was conceived as a mechanism to improve regional delivery of online training and to transfer competences required to organize and deliver online training to FAO regional and sub-regional offices. This approach aims to ensure courses offered are in line with the training needs of the countries in the target regions and are well tailored to the local languages and contexts. Our mission is to provide our trainees with access to inclusive, engaging and high-quality training using a variety of methodologies such as online tutored courses, blended learning, technical webinars and mobile learning.\r\n\r\nUsing skills in instructional design and learning technologies the VLCs develop courses that readily respond to regional needs and fill skills gaps identified in a range of One Health areas.\r\n\r\nBy the end of 2021, six VLCs were established in all five FAO regions. Each of them has a VLC coordinator, who is in close contact with countries’ training focal points. The VLCs are coordinated by an FAO team based in Rome.\r\n\r\nWhat are the advantages of an online approach?\r\nBy using information and communication technology to deliver and cascade courses and resources, the VLCs allow ample and geographically disparate audiences to be trained in an economical and environmentally friendly manner. Virtual networking allows colleagues in distant locations to easily share experiences with those they might otherwise never meet.\r\n\r\nThe online approach also facilitates the capacity to develop and deliver virtual training including courses, modules, webinars and discussion fora, where participants can discuss and share experiences with colleagues, FAO staff and international experts.\r\n\r\nClick here to find out more about the benefits of virtual learning.\r\n\r\nWho are the courses for?\r\nThe courses aim to enhance the capacities of national stakeholders within interdisciplinary areas including animal health, animal production, food and feed safety and quality, aquaculture and environment and natural resources (i.e. forestry and wildlife).\r\n\r\nClick here to view our courses.\r\nClick here to view our regional VLC course page. \r\n\r\nStrategic fit\r\nThe implementation of the VLCs is in line with FAO’s strategic framework  and will deliver its activities against SO2 output indicators (2.1.1.A and 2.1.1.B), particularly SDG targets 2.3 for improving productivity and incomes of smallholders, and SDG 2.4 for ensuring sustainable agriculture and food production systems.\r\n\r\nVLC activities\r\nThe VLCs specifically support the following activities:\r\nEstablish regional VLCs to deliver virtual training programmes. In addition, to the existing VLC in Southern Africa, the project will assist FAO Regional Offices to establish one VLC in each of the five regions (Africa, Asia/Pacific, Near East and North Africa, Eastern Europe and Central Asia, Latin America and the Caribbean).\r\nDesign new courses and develop digital tools, platforms, and resource material for virtual training programmes including training modules in the disciplines mentioned above.\r\n\r\nWho is involved?\r\nThe VLCS are managed by the FAO Animal Production and Health Division (NSA) in close collaboration with the Zoonoses/AMR Center (CJWZ), Forestry Division (NFO), Fishery Division (NFI) and the regional FAO offices in Africa (RAF), Near East and North Africa (RNE), Eastern Europe and Central Asia (REU) and the Asia and the Pacific (RAP). The European Commission for the Control of Foot-and-Mouth Disease  launched the VLCs concept in 2020, and continues to provide technical and operational support.",
+        "abstract": null,
+        "date": "",
+        "url": "https://virtual-learning-center.fao.org/course/index.php?categoryid=3",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "D4a_1 - Online Source Type (deprecated)": {
+          "value": "Initiative webpage"
+        },
+        "C2c - Solution (innovation) module": {
+          "value": "false"
+        },
+        "C3c - Knowledge (concept, model, science, workflow) Solutions": {
+          "value": "false"
+        },
+        "C2d - Science (evidence) module": {
+          "value": "false"
+        },
+        "C3b - Service (process, service, arrangement) solutions": {
+          "value": "false"
+        },
+        "C2a - Impact (SDGs, goals, problems) module": {
+          "value": "false"
+        },
+        "F1 - API": {
+          "value": "false"
+        },
+        "F5 - Preservation (Unique-persistent identifier)": {
+          "value": "false"
+        },
+        "F2 - Use Authentification": {
+          "value": "false"
+        },
+        "C3d - Solution package": {
+          "value": "false"
+        },
+        "C2f - capacity development module (training course webinars)": {
+          "value": "true"
+        },
+        "C2g - Peer to peer matching": {
+          "value": "false"
+        },
+        "C2h - investment matching": {
+          "value": "false"
+        },
+        "C1c - Unique content": {
+          "value": "false"
+        },
+        "C1d - External content": {
+          "value": "false"
+        },
+        "FULLY CURATED": {
+          "value": "false"
+        },
+        "provide information about the content of the platform": {
+          "value": "false"
+        },
+        "C2e1 - Stakeholder (partner, expert, community) module": {
+          "value": "false"
+        },
+        "Consent Box": {
+          "value": "false"
+        },
+        "Use Rights": {
+          "value": "Full"
+        },
+        "Use Rights Evidence": {
+          "value": "https://www.fao.org/contact-us/terms/en/"
+        },
+        "D0b - Previously entered online source": {
+          "value": "0"
+        },
+        "D2b - Acronym (from Hosting Organization)": {
+          "value": "FAO"
+        },
+        "Hosting Organization lookup": {
+          "value": "Food and Agriculture Organization of the United Nations"
+        },
+        "C5_1_b region (from C5 - Geographical Focus)": {
+          "value": "Americas"
+        },
+        "D2c_1 - Organization Type (from Hosting Organization)": {
+          "value": "Organization (other than financial or research) International\r\n"
+        },
+        "C5_1_c sub-region (from C5 - Geographical Focus)": {
+          "value": "Latin America and the Caribbean"
+        },
+        "C5_1_a name comma replaced (from C5 - Geographical Focus)": {
+          "value": "Latin America and the Carribean"
+        },
+        "D2a - Hosting Organization": {
+          "value": "1"
+        },
+        "U2a1 - Best-fit user": {
+          "value": "0"
+        },
+        "C6a - Fields": {
+          "value": "0"
+        },
+        "U1a - Use relevance": {
+          "value": "0"
+        },
+        "U2c1 - Not recommended for users": {
+          "value": "0"
+        },
+        "C5_1 - Geographical Focus": {
+          "value": "1"
+        },
+        "Geographic focus lookup": {
+          "value": "Latin America and the Carribean"
+        },
+        "Duplicates": {
+          "value": "false"
+        },
+        "FAO_regions": {
+          "value": "Latin America and the Caribbean"
+        },
+        "FAO_region_string": {
+          "value": "ERR"
+        },
+        "looking_for": {
+          "value": "None"
+        },
+        "Publish": {
+          "value": "true"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "",
+        "id": "1",
+        "title": "EU Common Agricultural Policy (CAP) Network - Innovation & knowledge exchange | EIP-AGRI",
+        "description": "EU Common Agricultural Policy (CAP) Network - Innovation & knowledge exchange | EIP-AGRI\r\n\r\nThe ‘Support Facility for Innovation and Knowledge exchange including EIP-AGRI’ is a key part of the EU CAP Network. Its role is to facilitate cooperation between those with a keen interest in sharing knowledge and innovative ideas for sustainable agriculture, forestry and rural areas.\r\n\r\nBuilding robust knowledge flows and speeding up innovation\r\n\r\nThe EU CAP Network, with the support of the EIP-AGRI Support Facility, connects farmers, foresters, advisors, researchers, business representatives, environmental groups, NGOs, consumer interest groups and other innovators in the EU CAP Network. Its ultimate aim is to help build robust knowledge flows and speed up innovation in agriculture, forestry and rural areas.\r\n\r\nThe activities of the EU CAP Network focusing on innovation and knowledge exchange, including EIP-AGRI, cover all nine specific CAP objectives as well as the cross-cutting objective of ‘modernising agriculture and rural areas by fostering and sharing knowledge, innovation and digitalisation’. They connect research and practice, bringing together people and different types of innovative multi-actor projects.\r\n\r\nThe EU CAP Network helps to bridge research and practice by sharing results from research and innovation (R&I), best practices and innovative solutions with farmers, foresters, advisors, rural communities and innovative projects. Practical knowledge and research needs can eventually also be taken up in dedicated R&I activities under future Horizon Europe Work Programmes.\r\n\r\nEfforts to promote innovation and knowledge exchange:\r\n- contribute to building effective Agricultural Knowledge and Innovation Systems (AKIS) across the EU;\r\n- foster smart and resilient agricultural, forestry and rural sectors, and ensure food security;\r\n- reinforce environmental care and climate action;\r\n- strengthen the socio-economic fabric of rural areas.\r\n\r\nFunding opportunities to support collaboration and turn innovative ideas into actions\r\n\r\nFunding sources are available to support R&I, get innovative projects started and turn new ideas into actions. These include EIP-AGRI Operational Groups (OG) and Horizon Europe multi-actor projects and thematic networks.\r\n\r\nThe Common Agricultural Policy provides opportunities for setting up and funding EIP-AGRI OGs. These are innovative projects that aim to explore opportunities or find practical solutions to problems that European farmers, foresters and rural communities are facing. OGs were formerly funded through European Rural Development Programmes and currently through national CAP Strategic Plans, which are developed in each Member State. More information on EIP-AGRI OGs and previous OGs.\r\n\r\nUnder Cluster 6 on 'Food, Bioeconomy, Natural Resources, Agriculture and Environment', Horizon Europe offers funding for research and innovation projects that allow researchers to develop innovative solutions together with practitioners, advisors and other stakeholders, sharing knowledge and producing results that are ready to be put into practice. In addition, it provides support for thematic and advisory networks, which collect R&I solutions and good practices and make them widely available.\r\n\r\nFind out more about Horizon Europe and its multi-actor projects, including thematic networks and advisory networks. Or take a look at opportunities under the EU Mission: A Soil Deal for Europe, addressing issues that farmers, foresters and rural communities face.\r\n\r\nMain activities\r\nInnovation & knowledge exchange - main activities\r\nThe activities of the EU CAP Network focusing on innovation and knowledge exchange, including EIP-AGRI, inform, engage and inspire innovators across Europe through the following services:\r\n\r\n- A helpdesk answering your questions.\r\n- Networking activities to connect interested parties from research and practice to foster knowledge exchange and innovation. This includes EIP-AGRI Focus Groups, workshops and seminars, cross-visits between projects and brokerage activities.\r\n- Identifying synergies and opportunities for collaboration between projects; contributing to closing the gap between research and practice.\r\n- Informing, inspiring and sharing innovation through publications, a newsletter, an annual magazine, social media and the press.\r\n\r\nInspiring networking events on Innovation & Knowledge exchange | EIP-AGRI\r\n\r\nBetween September 2023 and June 2024, the EU CAP Network is organising 16 networking events with the support of the EIP-AGRI Support Facility. Topics include 'competitive mountain areas', 'skills and lifelong learning', 'women-led innovation' and more.\r\n\r\n- Effective ‘Agricultural Knowledge and Innovation Systems’ (AKIS)\r\n- Digital Agriculture\r\n- EIP-AGRI Projects Database\r\n- EIP-AGRI Operational Groups\r\n- Focus Groups\r\n- EU CAP Network publications on innovation, knowledge exchange and more\r\n\r\n------\r\n\r\nAbout the European CAP Network\r\n\r\nOptimising the flow of information about agriculture and rural policy within the EU is what the EU’s Common Agricultural Policy (CAP) Network is all about.\r\n\r\nWelcome to the EU CAP Network!\r\n\r\nThe Network is a forum through which National CAP Networks, organisations, administrations, researchers, entrepreneurs and practitioners can share knowledge and information (e.g. via peer-to-peer learning and good practices) about agriculture and rural policy. \r\n\r\nThe European Commission set up the EU CAP Network in line with the Regulation of the European Parliament and of the Council to support CAP strategic plans (CSPs). \r\n\r\nThe Network supports the design and implementation of CAP strategic plans, innovation and knowledge exchange, including EIP-AGRI, and evaluation and monitoring of the CAP.\r\n\r\nHow does it work?\r\n\r\nThe Network brings together stakeholders from the European Network for Rural Development (including the Evaluation Helpdesk) and EIP-AGRIOpen link in new window, and welcomes new stakeholders.(i) Through networking, the EU CAP Network helps drive and steer all aspects of the implementation of the EU Common Agricultural Policy (CAP) by: \r\n\r\n- involving people interested in agriculture, - forestry and rural areas across the European Union;  \r\n- providing opportunities for European peer-to-peer networking and exchange; \r\n- sharing information, including good practices and funding opportunities; \r\nimproving skills;  \r\n- encouraging the exchange of knowledge; \r\n- Supporting the uptake of innovations in agriculture; and \r\n- Strengthening AKIS approaches.\r\n\r\nBuilding the Network  \r\nThe EU CAP Network welcomes anyone with an interest in and commitment to sustainable agriculture, forestry and rural development in Europe, including:  \r\n\r\n- National CAP Networks; \r\nfarmers, foresters and rural enterprises;  \r\nevaluators; \r\n- CAP managing authorities and paying agencies; \r\n- Local Action Groups (LAGs); \r\n- European organisations; \r\n- agricultural and forest advisory services; \r\n- innovation support services.",
+        "abstract": null,
+        "date": "2022-09-30 22:00:00+00:00",
+        "url": "https://eu-cap-network.ec.europa.eu/support/innovation-knowledge-exchange-eip-agri_en",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "D4a_1 - Online Source Type (deprecated)": {
+          "value": "Initiative webpage"
+        },
+        "C2c - Solution (innovation) module": {
+          "value": "true"
+        },
+        "C3c - Knowledge (concept, model, science, workflow) Solutions": {
+          "value": "false"
+        },
+        "C2d - Science (evidence) module": {
+          "value": "false"
+        },
+        "C3b - Service (process, service, arrangement) solutions": {
+          "value": "true"
+        },
+        "C2a - Impact (SDGs, goals, problems) module": {
+          "value": "false"
+        },
+        "C2e2 - Detailed Stakeholder type": {
+          "value": "sponsors,innovators and researchers,users,governance actors"
+        },
+        "C1b - Quality Assurance": {
+          "value": "Partial"
+        },
+        "U3 - Ease of navigation": {
+          "value": "Easy"
+        },
+        "U4 - User pain points": {
+          "value": "The website and initiative is still very young and the website is not yet populated properly as many links lead to archived and static websites of previous initiatives which is why the full functionality and services are unclear"
+        },
+        "F6 - User support provided": {
+          "value": "No"
+        },
+        "F1 - API": {
+          "value": "false"
+        },
+        "U5 - User access policy": {
+          "value": "Open source"
+        },
+        "F5 - Preservation (Unique-persistent identifier)": {
+          "value": "false"
+        },
+        "F2 - Use Authentification": {
+          "value": "false"
+        },
+        "F3 - Main interface elements": {
+          "value": "Interactive elements,multiple filters,limited filtering (1 level granularity),video content,news,events description,social media links"
+        },
+        "C1a - Database size": {
+          "value": "Unclear but if content from previous initiatives is integrated, it will be very large"
+        },
+        "M1d - Notes of the submitter": {
+          "value": [
+            "The website and initiative is still very young and the website is not yet populated properly as many links lead to archived and static websites of previous initiatives which is why the full functionality and services are unclear"
+          ]
+        },
+        "C3d - Solution package": {
+          "value": "false"
+        },
+        "C4 - Digital content lifecycle": {
+          "value": "general recommendation"
+        },
+        "C2f - capacity development module (training course webinars)": {
+          "value": "false"
+        },
+        "C2g - Peer to peer matching": {
+          "value": "false"
+        },
+        "C2h - investment matching": {
+          "value": "false"
+        },
+        "C1c - Unique content": {
+          "value": "false"
+        },
+        "C1d - External content": {
+          "value": "true"
+        },
+        "M1a1 - Submitter name - select": {
+          "value": "Jonathan"
+        },
+        "FULLY CURATED": {
+          "value": "true"
+        },
+        "created time": {
+          "value": "2023-04-05 15:49:00+00:00"
+        },
+        "Last updated": {
+          "value": "2023-10-15 22:43:00+00:00"
+        },
+        "provide information about the content of the platform": {
+          "value": "false"
+        },
+        "C2e1 - Stakeholder (partner, expert, community) module": {
+          "value": "true"
+        },
+        "U2a2 - Best-fit user detailed": {
+          "value": "Stakeholder manager"
+        },
+        "D4a_2 - Online Source Type - Industry classification": {
+          "value": "Webpage"
+        },
+        "C5_0 Geographical specification - country removed": {
+          "value": "Europe,Europe"
+        },
+        "Consent Box": {
+          "value": "false"
+        },
+        "Use Rights": {
+          "value": "Full"
+        },
+        "Use Rights Evidence": {
+          "value": "https://commission.europa.eu/legal-notice_en#copyright-notice"
+        },
+        "D0b - Previously entered online source": {
+          "value": "0"
+        },
+        "D2b - Acronym (from Hosting Organization)": {
+          "value": "EU"
+        },
+        "Hosting Organization lookup": {
+          "value": "European Union"
+        },
+        "C5_1_b region (from C5 - Geographical Focus)": {
+          "value": "Europe"
+        },
+        "D2c_1 - Organization Type (from Hosting Organization)": {
+          "value": "Organization (other than financial or research) Regional\r\n"
+        },
+        "C5_1_a name comma replaced (from C5 - Geographical Focus)": {
+          "value": "European Union"
+        },
+        "u2A1BestFitUser lookup original": {
+          "value": "Researcher, Public Expert, Private Sector, Farmer, Innovator"
+        },
+        "u1AUseRelevance_lookup": {
+          "value": "Policy Maker, Private Sector, Public Expert, Researcher, Innovator, Donor, Farmer"
+        },
+        "D2a - Hosting Organization": {
+          "value": "1"
+        },
+        "U2a1 - Best-fit user": {
+          "value": "5"
+        },
+        "Best fit user lookup": {
+          "value": "Researcher, Public Expert, Private Sector, Farmer, Innovator"
+        },
+        "C6a - Fields": {
+          "value": "0"
+        },
+        "U1a - Use relevance": {
+          "value": "7"
+        },
+        "Use relevance lookup": {
+          "value": "Policy Maker, Private Sector, Public Expert, Researcher, Innovator, Donor, Farmer"
+        },
+        "U2c1 - Not recommended for users": {
+          "value": "0"
+        },
+        "C5_1 - Geographical Focus": {
+          "value": "1"
+        },
+        "Geographic focus lookup": {
+          "value": "European Union"
+        },
+        "Geographic focus ISO3 lookup": {
+          "value": "EUR"
+        },
+        "Duplicates": {
+          "value": "false"
+        },
+        "FAO_regions": {
+          "value": "No specific location"
+        },
+        "FAO_region_string": {
+          "value": "ERR"
+        },
+        "looking_for": {
+          "value": "Tools"
+        },
+        "Publish": {
+          "value": "true"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "",
+        "id": "2",
+        "title": "Census and Survey Processing System (CSPro)",
+        "description": "Census and Survey Processing System",
+        "abstract": null,
+        "date": "",
+        "url": "https://www.census.gov/data/software/cspro.html",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "C2c - Solution (innovation) module": {
+          "value": "true"
+        },
+        "C3c - Knowledge (concept, model, science, workflow) Solutions": {
+          "value": "false"
+        },
+        "C2d - Science (evidence) module": {
+          "value": "false"
+        },
+        "C3b - Service (process, service, arrangement) solutions": {
+          "value": "true"
+        },
+        "C2a - Impact (SDGs, goals, problems) module": {
+          "value": "false"
+        },
+        "F1 - API": {
+          "value": "false"
+        },
+        "F5 - Preservation (Unique-persistent identifier)": {
+          "value": "false"
+        },
+        "F2 - Use Authentification": {
+          "value": "false"
+        },
+        "C3d - Solution package": {
+          "value": "true"
+        },
+        "C4 - Digital content lifecycle": {
+          "value": "data"
+        },
+        "C2f - capacity development module (training course webinars)": {
+          "value": "false"
+        },
+        "C2g - Peer to peer matching": {
+          "value": "false"
+        },
+        "C2h - investment matching": {
+          "value": "false"
+        },
+        "C1c - Unique content": {
+          "value": "false"
+        },
+        "C1d - External content": {
+          "value": "false"
+        },
+        "D2b - Hosting Organization Other": {
+          "value": "other"
+        },
+        "D4b - Online source type other": {
+          "value": "Application"
+        },
+        "FULLY CURATED": {
+          "value": "true"
+        },
+        "provide information about the content of the platform": {
+          "value": "false"
+        },
+        "C2e1 - Stakeholder (partner, expert, community) module": {
+          "value": "false"
+        },
+        "U2a2 - Best-fit user detailed": {
+          "value": "Researcher"
+        },
+        "D4a_2 - Online Source Type - Industry classification": {
+          "value": "Webpage"
+        },
+        "Consent Box": {
+          "value": "false"
+        },
+        "Use Rights": {
+          "value": "Restricted"
+        },
+        "Use Rights Evidence": {
+          "value": "https://www.census.gov/data/developers/about/terms-of-service.html"
+        },
+        "D0b - Previously entered online source": {
+          "value": "0"
+        },
+        "D2b - Acronym (from Hosting Organization)": {
+          "value": "GUS"
+        },
+        "Hosting Organization lookup": {
+          "value": "Government of United States"
+        },
+        "C5_1_b region (from C5 - Geographical Focus)": {
+          "value": ", "
+        },
+        "D2c_1 - Organization Type (from Hosting Organization)": {
+          "value": "Government (National)\r\n"
+        },
+        "C5_1_d intermediate-region (from C5 - Geographical Focus)": {
+          "value": ", "
+        },
+        "C5_1_c sub-region (from C5 - Geographical Focus)": {
+          "value": "No specific location, "
+        },
+        "C5_1_a name comma replaced (from C5 - Geographical Focus)": {
+          "value": "No specific location, Global (Worldwide)"
+        },
+        "u2A1BestFitUser lookup original": {
+          "value": "Researcher"
+        },
+        "u1AUseRelevance_lookup": {
+          "value": "Researcher"
+        },
+        "D2a - Hosting Organization": {
+          "value": "1"
+        },
+        "U2a1 - Best-fit user": {
+          "value": "1"
+        },
+        "Best fit user lookup": {
+          "value": "Researcher"
+        },
+        "C6a - Fields": {
+          "value": "0"
+        },
+        "U1a - Use relevance": {
+          "value": "1"
+        },
+        "Use relevance lookup": {
+          "value": "Researcher"
+        },
+        "U2c1 - Not recommended for users": {
+          "value": "0"
+        },
+        "C5_1 - Geographical Focus": {
+          "value": "2"
+        },
+        "Geographic focus lookup": {
+          "value": "No specific location, Global (Worldwide)"
+        },
+        "Geographic focus ISO3 lookup": {
+          "value": ", "
+        },
+        "Duplicates": {
+          "value": "false"
+        },
+        "FAO_regions": {
+          "value": "No specific location, No specific location"
+        },
+        "FAO_region_string": {
+          "value": "ERR"
+        },
+        "looking_for": {
+          "value": "Tools"
+        },
+        "Publish": {
+          "value": "true"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "",
+        "id": "3",
+        "title": "FAO Climate Change Kotherwledge Hub (CC-Hub) ",
+        "description": "Climate change support kotherwledge",
+        "abstract": null,
+        "date": "",
+        "url": "https://www.fao.org/climate-change/kotherwledge-hub/en/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "C2c - Solution (innovation) module": {
+          "value": "false"
+        },
+        "C3c - Knowledge (concept, model, science, workflow) Solutions": {
+          "value": "false"
+        },
+        "C2d - Science (evidence) module": {
+          "value": "false"
+        },
+        "C3b - Service (process, service, arrangement) solutions": {
+          "value": "false"
+        },
+        "C2a - Impact (SDGs, goals, problems) module": {
+          "value": "false"
+        },
+        "F1 - API": {
+          "value": "false"
+        },
+        "F5 - Preservation (Unique-persistent identifier)": {
+          "value": "false"
+        },
+        "F2 - Use Authentification": {
+          "value": "false"
+        },
+        "C3d - Solution package": {
+          "value": "false"
+        },
+        "C2f - capacity development module (training course webinars)": {
+          "value": "false"
+        },
+        "C2g - Peer to peer matching": {
+          "value": "false"
+        },
+        "C2h - investment matching": {
+          "value": "false"
+        },
+        "C1c - Unique content": {
+          "value": "false"
+        },
+        "C1d - External content": {
+          "value": "false"
+        },
+        "D2b - Hosting Organization Other": {
+          "value": "FAO"
+        },
+        "D4b - Online source type other": {
+          "value": "Platform"
+        },
+        "FULLY CURATED": {
+          "value": "false"
+        },
+        "provide information about the content of the platform": {
+          "value": "false"
+        },
+        "C2e1 - Stakeholder (partner, expert, community) module": {
+          "value": "false"
+        },
+        "Consent Box": {
+          "value": "false"
+        },
+        "D0b - Previously entered online source": {
+          "value": "0"
+        },
+        "D2a - Hosting Organization": {
+          "value": "0"
+        },
+        "U2a1 - Best-fit user": {
+          "value": "0"
+        },
+        "C6a - Fields": {
+          "value": "0"
+        },
+        "U1a - Use relevance": {
+          "value": "0"
+        },
+        "U2c1 - Not recommended for users": {
+          "value": "0"
+        },
+        "C5_1 - Geographical Focus": {
+          "value": "0"
+        },
+        "Duplicates": {
+          "value": "true"
+        },
+        "FAO_region_string": {
+          "value": "ERR"
+        },
+        "looking_for": {
+          "value": "None"
+        },
+        "Publish": {
+          "value": "false"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "",
+        "id": "4",
+        "title": "FAO Virtual Learning Center (VLC) Near East and North Africa (RNE)",
+        "description": "**FAO Virtual Learning Center (VLC) Near East and North Africa (RNE)**\r\n\r\nThe Virtual Learning Centre for Near East and North Africa (VLC RNE) will be officially launched during the second half of 2021.\r\n\r\nThe VLC RNE is being established to address the regional training needs, using digital solutions that ensure access to courses to large audiences at a lower cost. Special attention will be given to ensure courses are tailored to local languages and contexts.\r\n\r\nTo find out more about the VLC RNE and the courses available in the region please contact: RNE-Virtual-Learning-Center@fao.org\r\n------\r\n\r\n**The Virtual Learning Centers (VLCs)**\r\nBuilding capacity for effective online learning tailored to regional needs\r\nThe establishment of Virtual Learning Centers (VLCs) was conceived as a mechanism to improve regional delivery of online training and to transfer competences required to organize and deliver online training to FAO regional and sub-regional offices. This approach aims to ensure courses offered are in line with the training needs of the countries in the target regions and are well tailored to the local languages and contexts. Our mission is to provide our trainees with access to inclusive, engaging and high-quality training using a variety of methodologies such as online tutored courses, blended learning, technical webinars and mobile learning.\r\n\r\nUsing skills in instructional design and learning technologies the VLCs develop courses that readily respond to regional needs and fill skills gaps identified in a range of One Health areas.\r\n\r\nBy the end of 2021, six VLCs were established in all five FAO regions. Each of them has a VLC coordinator, who is in close contact with countries’ training focal points. The VLCs are coordinated by an FAO team based in Rome.\r\n\r\n**What are the advantages of an online approach?**\r\nBy using information and communication technology to deliver and cascade courses and resources, the VLCs allow ample and geographically disparate audiences to be trained in an economical and environmentally friendly manner. Virtual networking allows colleagues in distant locations to easily share experiences with those they might otherwise never meet.\r\n\r\nThe online approach also facilitates the capacity to develop and deliver virtual training including courses, modules, webinars and discussion fora, where participants can discuss and share experiences with colleagues, FAO staff and international experts.\r\n\r\nClick here to find out more about the benefits of virtual learning.\r\n\r\n**Who are the courses for?**\r\nThe courses aim to enhance the capacities of national stakeholders within interdisciplinary areas including animal health, animal production, food and feed safety and quality, aquaculture and environment and natural resources (i.e. forestry and wildlife).\r\n\r\nClick here to view our courses.\r\nClick here to view our regional VLC course page. \r\n\r\n**Strategic fit**\r\nThe implementation of the VLCs is in line with FAO’s strategic framework  and will deliver its activities against SO2 output indicators (2.1.1.A and 2.1.1.B), particularly SDG targets 2.3 for improving productivity and incomes of smallholders, and SDG 2.4 for ensuring sustainable agriculture and food production systems.\r\n\r\n**VLC activities**\r\nThe VLCs specifically support the following activities:\r\nEstablish regional VLCs to deliver virtual training programmes. In addition, to the existing VLC in Southern Africa, the project will assist FAO Regional Offices to establish one VLC in each of the five regions (Africa, Asia/Pacific, Near East and North Africa, Eastern Europe and Central Asia, Latin America and the Caribbean).\r\nDesign new courses and develop digital tools, platforms, and resource material for virtual training programmes including training modules in the disciplines mentioned above.\r\n\r\n**Who is involved?**\r\nThe VLCS are managed by the FAO Animal Production and Health Division (NSA) in close collaboration with the Zoonoses/AMR Center (CJWZ), Forestry Division (NFO), Fishery Division (NFI) and the regional FAO offices in Africa (RAF), Near East and North Africa (RNE), Eastern Europe and Central Asia (REU) and the Asia and the Pacific (RAP). The European Commission for the Control of Foot-and-Mouth Disease  launched the VLCs concept in 2020, and continues to provide technical and operational support.",
+        "abstract": null,
+        "date": "",
+        "url": "https://virtual-learning-center.fao.org/course/index.php?categoryid=7",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "D4a_1 - Online Source Type (deprecated)": {
+          "value": "Initiative webpage"
+        },
+        "C2c - Solution (innovation) module": {
+          "value": "false"
+        },
+        "C3c - Knowledge (concept, model, science, workflow) Solutions": {
+          "value": "false"
+        },
+        "C2d - Science (evidence) module": {
+          "value": "false"
+        },
+        "C3b - Service (process, service, arrangement) solutions": {
+          "value": "false"
+        },
+        "C2a - Impact (SDGs, goals, problems) module": {
+          "value": "false"
+        },
+        "F1 - API": {
+          "value": "false"
+        },
+        "F5 - Preservation (Unique-persistent identifier)": {
+          "value": "false"
+        },
+        "F2 - Use Authentification": {
+          "value": "false"
+        },
+        "C3d - Solution package": {
+          "value": "false"
+        },
+        "C2f - capacity development module (training course webinars)": {
+          "value": "true"
+        },
+        "C2g - Peer to peer matching": {
+          "value": "false"
+        },
+        "C2h - investment matching": {
+          "value": "false"
+        },
+        "C1c - Unique content": {
+          "value": "false"
+        },
+        "C1d - External content": {
+          "value": "false"
+        },
+        "FULLY CURATED": {
+          "value": "false"
+        },
+        "provide information about the content of the platform": {
+          "value": "false"
+        },
+        "C2e1 - Stakeholder (partner, expert, community) module": {
+          "value": "false"
+        },
+        "Consent Box": {
+          "value": "false"
+        },
+        "Use Rights": {
+          "value": "Full"
+        },
+        "Use Rights Evidence": {
+          "value": "https://www.fao.org/contact-us/terms/en/"
+        },
+        "D0b - Previously entered online source": {
+          "value": "0"
+        },
+        "D2b - Acronym (from Hosting Organization)": {
+          "value": "FAO"
+        },
+        "Hosting Organization lookup": {
+          "value": "Food and Agriculture Organization of the United Nations"
+        },
+        "C5_1_b region (from C5 - Geographical Focus)": {
+          "value": "Asia, Africa"
+        },
+        "D2c_1 - Organization Type (from Hosting Organization)": {
+          "value": "Organization (other than financial or research) International\r\n"
+        },
+        "C5_1_d intermediate-region (from C5 - Geographical Focus)": {
+          "value": ", "
+        },
+        "C5_1_c sub-region (from C5 - Geographical Focus)": {
+          "value": "Western Asia, Northern Africa"
+        },
+        "C5_1_a name comma replaced (from C5 - Geographical Focus)": {
+          "value": "Western Asia, Northern Africa"
+        },
+        "D2a - Hosting Organization": {
+          "value": "1"
+        },
+        "U2a1 - Best-fit user": {
+          "value": "0"
+        },
+        "C6a - Fields": {
+          "value": "0"
+        },
+        "U1a - Use relevance": {
+          "value": "0"
+        },
+        "U2c1 - Not recommended for users": {
+          "value": "0"
+        },
+        "C5_1 - Geographical Focus": {
+          "value": "2"
+        },
+        "Geographic focus lookup": {
+          "value": "Western Asia, Northern Africa"
+        },
+        "Geographic focus ISO3 lookup": {
+          "value": ", "
+        },
+        "Duplicates": {
+          "value": "false"
+        },
+        "FAO_regions": {
+          "value": "Near East and North Africa, Near East and North Africa"
+        },
+        "FAO_region_string": {
+          "value": "ERR"
+        },
+        "looking_for": {
+          "value": "None"
+        },
+        "Publish": {
+          "value": "true"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "",
+        "id": "5",
+        "title": "Agricultural Science and Technology Indicators (ASTI)",
+        "description": "**ASTI** provides trusted open-source data on agricultural research systems across the developing world. ASTI works with a large network of national collaborators to collect, compile, and disseminate information on financial, human, and institutional resources at both country and regional levels across government, higher education, nonprofit, and (where possible) private for-profit agricultural research agencies.\r\n",
+        "abstract": null,
+        "date": "2016-12-31 23:00:00+00:00",
+        "url": "https://www.asti.cgiar.org/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "D4a_1 - Online Source Type (deprecated)": {
+          "value": "Initiative webpage"
+        },
+        "C2c - Solution (innovation) module": {
+          "value": "true"
+        },
+        "C3c - Knowledge (concept, model, science, workflow) Solutions": {
+          "value": "true"
+        },
+        "C2d - Science (evidence) module": {
+          "value": "true"
+        },
+        "C2a - Impact (SDGs, goals, problems) module": {
+          "value": "true"
+        },
+        "C2e2 - Detailed Stakeholder type": {
+          "value": "sponsors"
+        },
+        "C1b - Quality Assurance": {
+          "value": "Complete"
+        },
+        "U3 - Ease of navigation": {
+          "value": "Easy"
+        },
+        "U4 - User pain points": {
+          "value": "The platform has been well-designed, however accessing direct information takes time due to  the absence of search bar."
+        },
+        "F6 - User support provided": {
+          "value": "Advanced"
+        },
+        "F1 - API": {
+          "value": "true"
+        },
+        "U5 - User access policy": {
+          "value": "Open source"
+        },
+        "F3 - Main interface elements": {
+          "value": "dashboard,multiple filters,Interactive elements,news"
+        },
+        "C1a - Database size": {
+          "value": "ASTI’s available indicators, for multiple years, in bulk for countries"
+        },
+        "C4 - Digital content lifecycle": {
+          "value": "data"
+        },
+        "C2g - Peer to peer matching": {
+          "value": "true"
+        },
+        "C2h - investment matching": {
+          "value": "true"
+        },
+        "C1d - External content": {
+          "value": "true"
+        },
+        "M1a1 - Submitter name - select": {
+          "value": "Zeynep"
+        },
+        "FULLY CURATED": {
+          "value": "true"
+        },
+        "created time": {
+          "value": "2023-03-14 10:25:00+00:00"
+        },
+        "Last updated": {
+          "value": "2023-10-15 22:43:00+00:00"
+        },
+        "provide information about the content of the platform": {
+          "value": "false"
+        },
+        "C2e1 - Stakeholder (partner, expert, community) module": {
+          "value": "true"
+        },
+        "U1b - Use relevance detailed": {
+          "value": "Researcher,MELIA expert,Program manager,Project manager,Stakeholder manager"
+        },
+        "U2a2 - Best-fit user detailed": {
+          "value": "Project manager"
+        },
+        "U2c2 - Not recommended for users detailed": {
+          "value": "Investment manager"
+        },
+        "D4a_2 - Online Source Type - Industry classification": {
+          "value": "Portal"
+        },
+        "C5_0 Geographical specification - country removed": {
+          "value": "No specific location"
+        },
+        "Use Rights": {
+          "value": "Full"
+        },
+        "Use Rights Evidence": {
+          "value": "https://www.cgiar.org/legal/"
+        },
+        "D0b - Previously entered online source": {
+          "value": "0"
+        },
+        "D2b - Acronym (from Hosting Organization)": {
+          "value": "IFPRI, SMO, FAO"
+        },
+        "Hosting Organization lookup": {
+          "value": "International Food Policy Research Institute, CGIAR System Organization, Food and Agriculture Organization of the United Nations"
+        },
+        "C5_1_b region (from C5 - Geographical Focus)": {
+          "value": "Africa, Asia, Africa, Africa, , Asia, , Africa, Africa, Americas, Africa, Africa"
+        },
+        "D2c_1 - Organization Type (from Hosting Organization)": {
+          "value": "Research organizations and universities International (CGIAR)\r\n, Research organizations and universities International (CGIAR)\r\n, Organization (other than financial or research) International\r\n"
+        },
+        "C5_1_d intermediate-region (from C5 - Geographical Focus)": {
+          "value": "Middle Africa, , Western Africa, , , , , , Eastern Africa, , Southern Africa, "
+        },
+        "C5_1_c sub-region (from C5 - Geographical Focus)": {
+          "value": "Sub-Saharan Africa, , Sub-Saharan Africa, Northern Africa, , Western Asia, No specific location, Sub-Saharan Africa, Sub-Saharan Africa, Latin America and the Caribbean, Sub-Saharan Africa, "
+        },
+        "C5_1_a name comma replaced (from C5 - Geographical Focus)": {
+          "value": "Middle Africa, Asia, Western Africa, Northern Africa, Global (Worldwide), Western Asia, No specific location, Sub-Saharan Africa, Eastern Africa, Latin America and the Carribean, Southern Africa, Africa"
+        },
+        "u2A1BestFitUser lookup original": {
+          "value": "Public Expert, Researcher"
+        },
+        "u1AUseRelevance_lookup": {
+          "value": "Researcher, Public Expert, Innovator, Private Sector, Policy Maker, Donor"
+        },
+        "D2a - Hosting Organization": {
+          "value": "3"
+        },
+        "U2a1 - Best-fit user": {
+          "value": "2"
+        },
+        "Best fit user lookup": {
+          "value": "Public Expert, Researcher"
+        },
+        "C6a - Fields": {
+          "value": "0"
+        },
+        "U1a - Use relevance": {
+          "value": "6"
+        },
+        "Use relevance lookup": {
+          "value": "Researcher, Public Expert, Innovator, Private Sector, Policy Maker, Donor"
+        },
+        "U2c1 - Not recommended for users": {
+          "value": "0"
+        },
+        "C5_1 - Geographical Focus": {
+          "value": "12"
+        },
+        "Geographic focus lookup": {
+          "value": "Middle Africa, Asia, Western Africa, Northern Africa, Global (Worldwide), Western Asia, No specific location, Sub-Saharan Africa, Eastern Africa, Latin America and the Carribean, Southern Africa, Africa"
+        },
+        "Geographic focus ISO3 lookup": {
+          "value": ", , , , , , , , , , , "
+        },
+        "Duplicates": {
+          "value": "false"
+        },
+        "FAO_regions": {
+          "value": "Africa, No specific location, Africa, Near East and North Africa, No specific location, Near East and North Africa, No specific location, Africa, Africa, Latin America and the Caribbean, Africa, No specific location"
+        },
+        "FAO_region_string": {
+          "value": "ERR"
+        },
+        "looking_for": {
+          "value": "Combination of above"
+        },
+        "Publish": {
+          "value": "true"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "",
+        "id": "6",
+        "title": "FAO Virtual Learning Center (VLC) Southern Africa (SFS)",
+        "description": "FAO Virtual Learning Center (VLC) Southern Africa (SFS)\r\n\r\nThe Virtual Learning Center for Southern Africa (VLC-SFS) was established in January 2020 as a collaboration of the FAO sub-regional office for Southern Africa (FAO SFS) and the European commission for the control of foot and mouth disease (EuFMD). The Foot-and-Mouth Disease investigation training course for southern Africa (FITC-SADC) became the first course to run on the platform. The four-week course was very well received in the region and this attracted more courses on different topics and for different target audiences. \r\n\r\nCourse identification and prioritization is guided by a training needs assessment. The primary focus is capacity building amongst veterinarians and veterinary paraprofessionals for them to be able to recognize, diagnose and control transboundary animal diseases in the region. The VLC-SFS is also active in supporting animal health networks in the region through hosting of meetings and workshops. The VLC SFS is also available to deliver training in other FAO areas of work that contribute to achieve the SDGs.\r\n\r\nTo find out more about the VLC SFS and the courses available in the region please contact: SFS-VLC@fao.org\r\n\r\n------\r\n\r\nThe Virtual Learning Centers (VLCs)\r\nBuilding capacity for effective online learning tailored to regional needs\r\nThe establishment of Virtual Learning Centers (VLCs) was conceived as a mechanism to improve regional delivery of online training and to transfer competences required to organize and deliver online training to FAO regional and sub-regional offices. This approach aims to ensure courses offered are in line with the training needs of the countries in the target regions and are well tailored to the local languages and contexts. Our mission is to provide our trainees with access to inclusive, engaging and high-quality training using a variety of methodologies such as online tutored courses, blended learning, technical webinars and mobile learning.\r\n\r\nUsing skills in instructional design and learning technologies the VLCs develop courses that readily respond to regional needs and fill skills gaps identified in a range of One Health areas.\r\n\r\nBy the end of 2021, six VLCs were established in all five FAO regions. Each of them has a VLC coordinator, who is in close contact with countries’ training focal points. The VLCs are coordinated by an FAO team based in Rome.\r\n\r\nWhat are the advantages of an online approach?\r\nBy using information and communication technology to deliver and cascade courses and resources, the VLCs allow ample and geographically disparate audiences to be trained in an economical and environmentally friendly manner. Virtual networking allows colleagues in distant locations to easily share experiences with those they might otherwise never meet.\r\n\r\nThe online approach also facilitates the capacity to develop and deliver virtual training including courses, modules, webinars and discussion fora, where participants can discuss and share experiences with colleagues, FAO staff and international experts.\r\n\r\nClick here to find out more about the benefits of virtual learning.\r\n\r\nWho are the courses for?\r\nThe courses aim to enhance the capacities of national stakeholders within interdisciplinary areas including animal health, animal production, food and feed safety and quality, aquaculture and environment and natural resources (i.e. forestry and wildlife).\r\n\r\nClick here to view our courses.\r\nClick here to view our regional VLC course page. \r\n\r\nStrategic fit\r\nThe implementation of the VLCs is in line with FAO’s strategic framework  and will deliver its activities against SO2 output indicators (2.1.1.A and 2.1.1.B), particularly SDG targets 2.3 for improving productivity and incomes of smallholders, and SDG 2.4 for ensuring sustainable agriculture and food production systems.\r\n\r\nVLC activities\r\nThe VLCs specifically support the following activities:\r\nEstablish regional VLCs to deliver virtual training programmes. In addition, to the existing VLC in Southern Africa, the project will assist FAO Regional Offices to establish one VLC in each of the five regions (Africa, Asia/Pacific, Near East and North Africa, Eastern Europe and Central Asia, Latin America and the Caribbean).\r\nDesign new courses and develop digital tools, platforms, and resource material for virtual training programmes including training modules in the disciplines mentioned above.\r\n\r\nWho is involved?\r\nThe VLCS are managed by the FAO Animal Production and Health Division (NSA) in close collaboration with the Zoonoses/AMR Center (CJWZ), Forestry Division (NFO), Fishery Division (NFI) and the regional FAO offices in Africa (RAF), Near East and North Africa (RNE), Eastern Europe and Central Asia (REU) and the Asia and the Pacific (RAP). The European Commission for the Control of Foot-and-Mouth Disease  launched the VLCs concept in 2020, and continues to provide technical and operational support.",
+        "abstract": null,
+        "date": "",
+        "url": "https://virtual-learning-center.fao.org/course/index.php?categoryid=8",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "D4a_1 - Online Source Type (deprecated)": {
+          "value": "Initiative webpage"
+        },
+        "C2c - Solution (innovation) module": {
+          "value": "false"
+        },
+        "C3c - Knowledge (concept, model, science, workflow) Solutions": {
+          "value": "false"
+        },
+        "C2d - Science (evidence) module": {
+          "value": "false"
+        },
+        "C3b - Service (process, service, arrangement) solutions": {
+          "value": "false"
+        },
+        "C2a - Impact (SDGs, goals, problems) module": {
+          "value": "false"
+        },
+        "F1 - API": {
+          "value": "false"
+        },
+        "F5 - Preservation (Unique-persistent identifier)": {
+          "value": "false"
+        },
+        "F2 - Use Authentification": {
+          "value": "false"
+        },
+        "C3d - Solution package": {
+          "value": "false"
+        },
+        "C2f - capacity development module (training course webinars)": {
+          "value": "true"
+        },
+        "C2g - Peer to peer matching": {
+          "value": "false"
+        },
+        "C2h - investment matching": {
+          "value": "false"
+        },
+        "C1c - Unique content": {
+          "value": "false"
+        },
+        "C1d - External content": {
+          "value": "false"
+        },
+        "FULLY CURATED": {
+          "value": "false"
+        },
+        "provide information about the content of the platform": {
+          "value": "false"
+        },
+        "C2e1 - Stakeholder (partner, expert, community) module": {
+          "value": "false"
+        },
+        "Consent Box": {
+          "value": "false"
+        },
+        "Use Rights": {
+          "value": "Full"
+        },
+        "Use Rights Evidence": {
+          "value": "https://www.fao.org/contact-us/terms/en/"
+        },
+        "D0b - Previously entered online source": {
+          "value": "0"
+        },
+        "D2b - Acronym (from Hosting Organization)": {
+          "value": "FAO"
+        },
+        "Hosting Organization lookup": {
+          "value": "Food and Agriculture Organization of the United Nations"
+        },
+        "C5_1_b region (from C5 - Geographical Focus)": {
+          "value": "Africa"
+        },
+        "D2c_1 - Organization Type (from Hosting Organization)": {
+          "value": "Organization (other than financial or research) International\r\n"
+        },
+        "C5_1_d intermediate-region (from C5 - Geographical Focus)": {
+          "value": "Southern Africa"
+        },
+        "C5_1_c sub-region (from C5 - Geographical Focus)": {
+          "value": "Sub-Saharan Africa"
+        },
+        "C5_1_a name comma replaced (from C5 - Geographical Focus)": {
+          "value": "Southern Africa"
+        },
+        "D2a - Hosting Organization": {
+          "value": "1"
+        },
+        "U2a1 - Best-fit user": {
+          "value": "0"
+        },
+        "C6a - Fields": {
+          "value": "0"
+        },
+        "U1a - Use relevance": {
+          "value": "0"
+        },
+        "U2c1 - Not recommended for users": {
+          "value": "0"
+        },
+        "C5_1 - Geographical Focus": {
+          "value": "1"
+        },
+        "Geographic focus lookup": {
+          "value": "Southern Africa"
+        },
+        "Duplicates": {
+          "value": "false"
+        },
+        "FAO_regions": {
+          "value": "Africa"
+        },
+        "FAO_region_string": {
+          "value": "ERR"
+        },
+        "looking_for": {
+          "value": "None"
+        },
+        "Publish": {
+          "value": "true"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "",
+        "id": "7",
+        "title": "Agricultural Science and Technology Indicators (ASTI) - CGIAR Data Tool",
+        "description": "ASTI provides trusted open-source data on agricultural research systems across the developing world. ASTI works with a large network of national collaborators to collect, compile, and disseminate information on financial, human, and institutional resources at both country and regional levels across government, higher education, nonprofit, and (where possible) private for-profit agricultural research agencies.\r\n",
+        "abstract": null,
+        "date": "2016-12-31 23:00:00+00:00",
+        "url": "https://www.asti.cgiar.org/cgiar-data",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "D4a_1 - Online Source Type (deprecated)": {
+          "value": "other"
+        },
+        "C2c - Solution (innovation) module": {
+          "value": "true"
+        },
+        "C3c - Knowledge (concept, model, science, workflow) Solutions": {
+          "value": "true"
+        },
+        "C2d - Science (evidence) module": {
+          "value": "true"
+        },
+        "C3b - Service (process, service, arrangement) solutions": {
+          "value": "false"
+        },
+        "C2a - Impact (SDGs, goals, problems) module": {
+          "value": "true"
+        },
+        "C2e2 - Detailed Stakeholder type": {
+          "value": "sponsors"
+        },
+        "C1b - Quality Assurance": {
+          "value": "Complete"
+        },
+        "U3 - Ease of navigation": {
+          "value": "Easy"
+        },
+        "U4 - User pain points": {
+          "value": "The platform has been well-designed, however accessing direct information takes time due to  the absence of search bar."
+        },
+        "F6 - User support provided": {
+          "value": "Advanced"
+        },
+        "F1 - API": {
+          "value": "true"
+        },
+        "U5 - User access policy": {
+          "value": "Open source"
+        },
+        "F5 - Preservation (Unique-persistent identifier)": {
+          "value": "false"
+        },
+        "F2 - Use Authentification": {
+          "value": "false"
+        },
+        "F3 - Main interface elements": {
+          "value": "dashboard,multiple filters,Interactive elements,news"
+        },
+        "C1a - Database size": {
+          "value": "ASTI’s available indicators, for multiple years, in bulk for countries"
+        },
+        "C3d - Solution package": {
+          "value": "false"
+        },
+        "C4 - Digital content lifecycle": {
+          "value": "data"
+        },
+        "C2f - capacity development module (training course webinars)": {
+          "value": "false"
+        },
+        "C2g - Peer to peer matching": {
+          "value": "true"
+        },
+        "C2h - investment matching": {
+          "value": "true"
+        },
+        "C1c - Unique content": {
+          "value": "false"
+        },
+        "C1d - External content": {
+          "value": "true"
+        },
+        "M1a1 - Submitter name - select": {
+          "value": "Zeynep"
+        },
+        "FULLY CURATED": {
+          "value": "true"
+        },
+        "created time": {
+          "value": "2023-03-14 10:25:00+00:00"
+        },
+        "Last updated": {
+          "value": "2023-10-15 22:43:00+00:00"
+        },
+        "provide information about the content of the platform": {
+          "value": "false"
+        },
+        "C2e1 - Stakeholder (partner, expert, community) module": {
+          "value": "true"
+        },
+        "U1b - Use relevance detailed": {
+          "value": "Researcher,MELIA expert,Program manager,Project manager,Stakeholder manager"
+        },
+        "U2a2 - Best-fit user detailed": {
+          "value": "Project manager"
+        },
+        "U2c2 - Not recommended for users detailed": {
+          "value": "Investment manager"
+        },
+        "D4a_2 - Online Source Type - Industry classification": {
+          "value": "Portal"
+        },
+        "C5_0 Geographical specification - country removed": {
+          "value": "No specific location"
+        },
+        "Consent Box": {
+          "value": "false"
+        },
+        "Use Rights": {
+          "value": "Full"
+        },
+        "Use Rights Evidence": {
+          "value": "https://www.cgiar.org/legal/"
+        },
+        "D0b - Previously entered online source": {
+          "value": "0"
+        },
+        "D2b - Acronym (from Hosting Organization)": {
+          "value": "IFPRI, FAO, SMO"
+        },
+        "Hosting Organization lookup": {
+          "value": "International Food Policy Research Institute, Food and Agriculture Organization of the United Nations, CGIAR System Organization"
+        },
+        "C5_1_b region (from C5 - Geographical Focus)": {
+          "value": "Africa, Asia, Africa, Africa, , Asia, , Africa, Africa, Americas, Africa, Africa"
+        },
+        "D2c_1 - Organization Type (from Hosting Organization)": {
+          "value": "Research organizations and universities International (CGIAR)\r\n, Organization (other than financial or research) International\r\n, Research organizations and universities International (CGIAR)\r\n"
+        },
+        "C5_1_d intermediate-region (from C5 - Geographical Focus)": {
+          "value": "Middle Africa, , Western Africa, , , , , , Eastern Africa, , Southern Africa, "
+        },
+        "C5_1_c sub-region (from C5 - Geographical Focus)": {
+          "value": "Sub-Saharan Africa, , Sub-Saharan Africa, Northern Africa, , Western Asia, No specific location, Sub-Saharan Africa, Sub-Saharan Africa, Latin America and the Caribbean, Sub-Saharan Africa, "
+        },
+        "C5_1_a name comma replaced (from C5 - Geographical Focus)": {
+          "value": "Middle Africa, Asia, Western Africa, Northern Africa, Global (Worldwide), Western Asia, No specific location, Sub-Saharan Africa, Eastern Africa, Latin America and the Carribean, Southern Africa, Africa"
+        },
+        "u2A1BestFitUser lookup original": {
+          "value": "Donor"
+        },
+        "u1AUseRelevance_lookup": {
+          "value": "Public Expert, Researcher, Donor"
+        },
+        "D2a - Hosting Organization": {
+          "value": "3"
+        },
+        "U2a1 - Best-fit user": {
+          "value": "1"
+        },
+        "Best fit user lookup": {
+          "value": "Donor"
+        },
+        "C6a - Fields": {
+          "value": "0"
+        },
+        "U1a - Use relevance": {
+          "value": "3"
+        },
+        "Use relevance lookup": {
+          "value": "Public Expert, Researcher, Donor"
+        },
+        "U2c1 - Not recommended for users": {
+          "value": "0"
+        },
+        "C5_1 - Geographical Focus": {
+          "value": "12"
+        },
+        "Geographic focus lookup": {
+          "value": "Middle Africa, Asia, Western Africa, Northern Africa, Global (Worldwide), Western Asia, No specific location, Sub-Saharan Africa, Eastern Africa, Latin America and the Carribean, Southern Africa, Africa"
+        },
+        "Geographic focus ISO3 lookup": {
+          "value": ", , , , , , , , , , , "
+        },
+        "Duplicates": {
+          "value": "false"
+        },
+        "FAO_regions": {
+          "value": "Africa, No specific location, Africa, Near East and North Africa, No specific location, Near East and North Africa, No specific location, Africa, Africa, Latin America and the Caribbean, Africa, No specific location"
+        },
+        "FAO_region_string": {
+          "value": "ERR"
+        },
+        "looking_for": {
+          "value": "Combination of above"
+        },
+        "Publish": {
+          "value": "true"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "",
+        "id": "8",
+        "title": "Codex Alimentarius - Online Databases",
+        "description": "Codex Alimentarius - Online Databases\r\n\r\nThe numerical Codex standards for food additives, veterinary drugs maximum residue levels and pesticide maximum residue levels, can also be accessed via databases that facilitate their use.\r\n\r\n- Pesticides Residues in Food\r\n- Veterinary Drug Residue in Food\r\n- General Standard for Food Additives (GSFA)\r\n\r\n------\r\n\r\nC O D E X  A L I M E N T A R I U S is about safe, good food for everyone - everywhere.\r\nInternational food trade has existed for thousands of years but until not too long ago food was mainly produced, sold and consumed locally. Over the last century the amount of food traded internationally has grown exponentially, and a quantity and variety of food never before possible travels the globe today.\r\n",
+        "abstract": null,
+        "date": "1984-12-31 23:00:00+00:00",
+        "url": "https://www.fao.org/fao-who-codexalimentarius/codex-texts/dbs/en/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "D4a_1 - Online Source Type (deprecated)": {
+          "value": "other"
+        },
+        "C2c - Solution (innovation) module": {
+          "value": "true"
+        },
+        "C3c - Knowledge (concept, model, science, workflow) Solutions": {
+          "value": "true"
+        },
+        "C2d - Science (evidence) module": {
+          "value": "true"
+        },
+        "C3b - Service (process, service, arrangement) solutions": {
+          "value": "false"
+        },
+        "C2a - Impact (SDGs, goals, problems) module": {
+          "value": "false"
+        },
+        "C2e2 - Detailed Stakeholder type": {
+          "value": "innovators and researchers"
+        },
+        "C1b - Quality Assurance": {
+          "value": "Complete"
+        },
+        "U3 - Ease of navigation": {
+          "value": "Easy"
+        },
+        "U4 - User pain points": {
+          "value": "There is a lot of content jumping into your face when opening the website, it can be a bit overwhelming;"
+        },
+        "F6 - User support provided": {
+          "value": "Basic"
+        },
+        "F1 - API": {
+          "value": "false"
+        },
+        "U5 - User access policy": {
+          "value": "Open source"
+        },
+        "F5 - Preservation (Unique-persistent identifier)": {
+          "value": "false"
+        },
+        "F2 - Use Authentification": {
+          "value": "false"
+        },
+        "F3 - Main interface elements": {
+          "value": "Interactive elements,news,social media integration (showing content),limited filtering (1 level granularity)"
+        },
+        "C1a - Database size": {
+          "value": "Medium but exact size unknown (several lists of Codes of Practices, Standards as well as few databases are integrated in separate sections)"
+        },
+        "M1d - Notes of the submitter": {
+          "value": [
+            "Launch date is obviously wrong but exact date could not be found and the year of the endorsement of the Codex selected",
+            "Stakeholder module should be \"experts\" but option not yet integrated",
+            "I was unsure about the type of solutions to select here since the Codex provides legal guidelines for aspects of object solutions, for now I have selected knowledge solutions"
+          ]
+        },
+        "C3d - Solution package": {
+          "value": "false"
+        },
+        "C4 - Digital content lifecycle": {
+          "value": "specific recommendation"
+        },
+        "C2f - capacity development module (training course webinars)": {
+          "value": "true"
+        },
+        "C2g - Peer to peer matching": {
+          "value": "false"
+        },
+        "C2h - investment matching": {
+          "value": "false"
+        },
+        "C1c - Unique content": {
+          "value": "true"
+        },
+        "C1d - External content": {
+          "value": "false"
+        },
+        "M1a1 - Submitter name - select": {
+          "value": "Jonathan"
+        },
+        "FULLY CURATED": {
+          "value": "true"
+        },
+        "created time": {
+          "value": "2023-03-14 11:28:00+00:00"
+        },
+        "Last updated": {
+          "value": "2023-10-15 22:46:00+00:00"
+        },
+        "provide information about the content of the platform": {
+          "value": "false"
+        },
+        "C2e1 - Stakeholder (partner, expert, community) module": {
+          "value": "false"
+        },
+        "U1b - Use relevance detailed": {
+          "value": "Solution user,Use supporter (Extension. training),MELIA expert,Project manager,Researcher"
+        },
+        "U2a2 - Best-fit user detailed": {
+          "value": "Solution user"
+        },
+        "U2c2 - Not recommended for users detailed": {
+          "value": "Investment manager,Impact manager,Program manager"
+        },
+        "D4a_2 - Online Source Type - Industry classification": {
+          "value": "Portal"
+        },
+        "C5_0 Geographical specification - country removed": {
+          "value": "No specific location"
+        },
+        "Consent Box": {
+          "value": "false"
+        },
+        "Use Rights": {
+          "value": "Full"
+        },
+        "Use Rights Evidence": {
+          "value": "https://www.fao.org/contact-us/terms/en/"
+        },
+        "D0b - Previously entered online source": {
+          "value": "0"
+        },
+        "D2b - Acronym (from Hosting Organization)": {
+          "value": "FAO, WHO"
+        },
+        "Hosting Organization lookup": {
+          "value": "Food and Agriculture Organization of the United Nations, World Health Organization"
+        },
+        "C5_1_b region (from C5 - Geographical Focus)": {
+          "value": ", "
+        },
+        "D2c_1 - Organization Type (from Hosting Organization)": {
+          "value": "Organization (other than financial or research) International\r\n, Organization (other than financial or research) International\r\n"
+        },
+        "C5_1_d intermediate-region (from C5 - Geographical Focus)": {
+          "value": ", "
+        },
+        "C5_1_c sub-region (from C5 - Geographical Focus)": {
+          "value": "No specific location, "
+        },
+        "C5_1_a name comma replaced (from C5 - Geographical Focus)": {
+          "value": "No specific location, Global (Worldwide)"
+        },
+        "u2A1BestFitUser lookup original": {
+          "value": "Private Sector, Policy Maker"
+        },
+        "u1AUseRelevance_lookup": {
+          "value": "Policy Maker, Private Sector, Public Expert, Researcher"
+        },
+        "D2a - Hosting Organization": {
+          "value": "2"
+        },
+        "U2a1 - Best-fit user": {
+          "value": "2"
+        },
+        "Best fit user lookup": {
+          "value": "Private Sector, Policy Maker"
+        },
+        "C6a - Fields": {
+          "value": "0"
+        },
+        "U1a - Use relevance": {
+          "value": "4"
+        },
+        "Use relevance lookup": {
+          "value": "Policy Maker, Private Sector, Public Expert, Researcher"
+        },
+        "U2c1 - Not recommended for users": {
+          "value": "0"
+        },
+        "C5_1 - Geographical Focus": {
+          "value": "2"
+        },
+        "Geographic focus lookup": {
+          "value": "No specific location, Global (Worldwide)"
+        },
+        "Geographic focus ISO3 lookup": {
+          "value": ", "
+        },
+        "Duplicates": {
+          "value": "false"
+        },
+        "FAO_regions": {
+          "value": "No specific location, No specific location"
+        },
+        "FAO_region_string": {
+          "value": "ERR"
+        },
+        "looking_for": {
+          "value": "Combination of above"
+        },
+        "Publish": {
+          "value": "true"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "",
+        "id": "9",
+        "title": "CGIAR Co-Lab",
+        "description": "CGIAR Co-Lab\r\n\r\nDigital innovations can enable an unprecedented transformation of food, land and water systems for greater climate resilience and sustainability. To realize this potential, multidisciplinary expertise across the CGIAR must find solutions to three challenges affecting the Global South: **The digital divide, Weak information systems, Limited digital capabilities**\r\n",
+        "abstract": null,
+        "date": "",
+        "url": "https://co-lab.cgiar.org/index.php",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "D4a_1 - Online Source Type (deprecated)": {
+          "value": "regular"
+        },
+        "C2c - Solution (innovation) module": {
+          "value": "true"
+        },
+        "C3c - Knowledge (concept, model, science, workflow) Solutions": {
+          "value": "true"
+        },
+        "C2d - Science (evidence) module": {
+          "value": "true"
+        },
+        "C3b - Service (process, service, arrangement) solutions": {
+          "value": "true"
+        },
+        "C2a - Impact (SDGs, goals, problems) module": {
+          "value": "false"
+        },
+        "C2e2 - Detailed Stakeholder type": {
+          "value": "innovators and researchers,governance actors,users"
+        },
+        "C1b - Quality Assurance": {
+          "value": "Partial"
+        },
+        "U3 - Ease of navigation": {
+          "value": "Easy"
+        },
+        "U4 - User pain points": {
+          "value": "All the information was showed in the main page. This information should be clustered and showed under the related sections/modules. "
+        },
+        "F6 - User support provided": {
+          "value": "Basic"
+        },
+        "F1 - API": {
+          "value": "false"
+        },
+        "U5 - User access policy": {
+          "value": "Open source"
+        },
+        "F5 - Preservation (Unique-persistent identifier)": {
+          "value": "false"
+        },
+        "F2 - Use Authentification": {
+          "value": "false"
+        },
+        "F3 - Main interface elements": {
+          "value": "news"
+        },
+        "C1a - Database size": {
+          "value": "1 related publications, but it provides database button, which directs to large number of CGIAR publications"
+        },
+        "M1d - Notes of the submitter": {
+          "value": [
+            "The initiative focuses on more than one region (eg: ''Central and West Asia and North Africa (CWANA), East and Southern Africa (ESA), Latin America and the Caribbean (LAC), South Asia (SA), Southeast Asia and the Pacific (SEA), West and Central Africa (WCA)''). However, I  selected '' NO GEOGRAPHICAL FOCUS'' , since this part is not multiple options."
+          ]
+        },
+        "C3d - Solution package": {
+          "value": "true"
+        },
+        "C4 - Digital content lifecycle": {
+          "value": "specific recommendation"
+        },
+        "C2f - capacity development module (training course webinars)": {
+          "value": "true"
+        },
+        "C2g - Peer to peer matching": {
+          "value": "true"
+        },
+        "C2h - investment matching": {
+          "value": "true"
+        },
+        "C1c - Unique content": {
+          "value": "false"
+        },
+        "C1d - External content": {
+          "value": "true"
+        },
+        "M1a1 - Submitter name - select": {
+          "value": "Zeynep"
+        },
+        "FULLY CURATED": {
+          "value": "true"
+        },
+        "created time": {
+          "value": "2023-04-07 16:10:00+00:00"
+        },
+        "Last updated": {
+          "value": "2023-10-15 22:46:00+00:00"
+        },
+        "provide information about the content of the platform": {
+          "value": "false"
+        },
+        "C2e1 - Stakeholder (partner, expert, community) module": {
+          "value": "true"
+        },
+        "U2a2 - Best-fit user detailed": {
+          "value": "Solution user"
+        },
+        "D4a_2 - Online Source Type - Industry classification": {
+          "value": "Platform"
+        },
+        "C5_0 Geographical specification - country removed": {
+          "value": "No specific location"
+        },
+        "Consent Box": {
+          "value": "false"
+        },
+        "Use Rights": {
+          "value": "Full"
+        },
+        "Use Rights Evidence": {
+          "value": "https://www.cgiar.org/legal/"
+        },
+        "D0b - Previously entered online source": {
+          "value": "0"
+        },
+        "D2b - Acronym (from Hosting Organization)": {
+          "value": "SMO"
+        },
+        "Hosting Organization lookup": {
+          "value": "CGIAR System Organization"
+        },
+        "C5_1_b region (from C5 - Geographical Focus)": {
+          "value": ", "
+        },
+        "D2c_1 - Organization Type (from Hosting Organization)": {
+          "value": "Research organizations and universities International (CGIAR)\r\n"
+        },
+        "C5_1_d intermediate-region (from C5 - Geographical Focus)": {
+          "value": ", "
+        },
+        "C5_1_c sub-region (from C5 - Geographical Focus)": {
+          "value": "No specific location, "
+        },
+        "C5_1_a name comma replaced (from C5 - Geographical Focus)": {
+          "value": "No specific location, Global (Worldwide)"
+        },
+        "u2A1BestFitUser lookup original": {
+          "value": "Farmer, Innovator, Researcher"
+        },
+        "u1AUseRelevance_lookup": {
+          "value": "Policy Maker, Private Sector, Public Expert, Researcher, Donor, Farmer, Innovator"
+        },
+        "D2a - Hosting Organization": {
+          "value": "1"
+        },
+        "U2a1 - Best-fit user": {
+          "value": "3"
+        },
+        "Best fit user lookup": {
+          "value": "Farmer, Innovator, Researcher"
+        },
+        "C6a - Fields": {
+          "value": "0"
+        },
+        "U1a - Use relevance": {
+          "value": "7"
+        },
+        "Use relevance lookup": {
+          "value": "Policy Maker, Private Sector, Public Expert, Researcher, Donor, Farmer, Innovator"
+        },
+        "U2c1 - Not recommended for users": {
+          "value": "0"
+        },
+        "C5_1 - Geographical Focus": {
+          "value": "2"
+        },
+        "Geographic focus lookup": {
+          "value": "No specific location, Global (Worldwide)"
+        },
+        "Geographic focus ISO3 lookup": {
+          "value": ", "
+        },
+        "Duplicates": {
+          "value": "false"
+        },
+        "FAO_regions": {
+          "value": "No specific location, No specific location"
+        },
+        "FAO_region_string": {
+          "value": "ERR"
+        },
+        "looking_for": {
+          "value": "Combination of above"
+        },
+        "Publish": {
+          "value": "true"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "",
+        "id": "10",
+        "title": "World Organisation for Animal Health (WOAH) - Publications",
+        "description": "The Organisation was founded as a response to a cattle plague called rinderpest, which swept across the globe, ravaging livestock and devastating livelihoods. The crisis clearly demonstrated how animal diseases can pose a threat to food security and economic growth, and that the global community needed to address them in a coordinated way. \r\nAn intergovernmental organisation, we focus on transparently disseminating information on animal diseases, improving animal health globally and thus build a safer, healthier and more sustainable world.\r\n",
+        "abstract": null,
+        "date": "1923-12-31 23:00:00+00:00",
+        "url": "https://www.woah.org/en/what-we-do/publications/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "D4a_1 - Online Source Type (deprecated)": {
+          "value": "independent portal"
+        },
+        "C2c - Solution (innovation) module": {
+          "value": "true"
+        },
+        "C3c - Knowledge (concept, model, science, workflow) Solutions": {
+          "value": "true"
+        },
+        "C2d - Science (evidence) module": {
+          "value": "true"
+        },
+        "C3b - Service (process, service, arrangement) solutions": {
+          "value": "false"
+        },
+        "C2a - Impact (SDGs, goals, problems) module": {
+          "value": "true"
+        },
+        "C1b - Quality Assurance": {
+          "value": "Partial"
+        },
+        "U3 - Ease of navigation": {
+          "value": "Easy"
+        },
+        "U4 - User pain points": {
+          "value": "There is no pain point."
+        },
+        "F6 - User support provided": {
+          "value": "Basic"
+        },
+        "F1 - API": {
+          "value": "false"
+        },
+        "U5 - User access policy": {
+          "value": "Open source"
+        },
+        "F5 - Preservation (Unique-persistent identifier)": {
+          "value": "false"
+        },
+        "F2 - Use Authentification": {
+          "value": "false"
+        },
+        "F3 - Main interface elements": {
+          "value": "blogs/stories,news,events description"
+        },
+        "C1a - Database size": {
+          "value": "28 publications; 2 bulletins;19 products in bookshop"
+        },
+        "C3d - Solution package": {
+          "value": "false"
+        },
+        "C4 - Digital content lifecycle": {
+          "value": "specific recommendation"
+        },
+        "C2f - capacity development module (training course webinars)": {
+          "value": "true"
+        },
+        "C2g - Peer to peer matching": {
+          "value": "true"
+        },
+        "C2h - investment matching": {
+          "value": "false"
+        },
+        "C1c - Unique content": {
+          "value": "false"
+        },
+        "C1d - External content": {
+          "value": "false"
+        },
+        "M1a1 - Submitter name - select": {
+          "value": "Zeynep"
+        },
+        "FULLY CURATED": {
+          "value": "false"
+        },
+        "created time": {
+          "value": "2023-04-08 21:30:00+00:00"
+        },
+        "Last updated": {
+          "value": "2023-10-15 22:44:00+00:00"
+        },
+        "provide information about the content of the platform": {
+          "value": "false"
+        },
+        "C2e1 - Stakeholder (partner, expert, community) module": {
+          "value": "true"
+        },
+        "D4a_2 - Online Source Type - Industry classification": {
+          "value": "Portal"
+        },
+        "C5_0 Geographical specification - country removed": {
+          "value": "No specific location"
+        },
+        "Consent Box": {
+          "value": "false"
+        },
+        "Use Rights": {
+          "value": "Restricted"
+        },
+        "D0b - Previously entered online source": {
+          "value": "0"
+        },
+        "D2a - Hosting Organization": {
+          "value": "0"
+        },
+        "U2a1 - Best-fit user": {
+          "value": "0"
+        },
+        "C6a - Fields": {
+          "value": "0"
+        },
+        "U1a - Use relevance": {
+          "value": "0"
+        },
+        "U2c1 - Not recommended for users": {
+          "value": "0"
+        },
+        "C5_1 - Geographical Focus": {
+          "value": "0"
+        },
+        "Duplicates": {
+          "value": "false"
+        },
+        "FAO_region_string": {
+          "value": "ERR"
+        },
+        "looking_for": {
+          "value": "Combination of above"
+        },
+        "Publish": {
+          "value": "false"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "",
+        "id": "11",
+        "title": "Reefi-Mauritanie",
+        "description": "REEFI is a Game Play for children.  REEFI means ‘my rural place’ in English.  It is intended to enable children and adolescents aged 10-18 to know how to protect their health in different farm/agricultural settings, such as greenhouses, open field, orchards, and others. The intent is also to have children and youth as transformative agents relaying simple messages of good and safe agricultural practices in their communities.\r\n\r\nREEFI will be attractive to rural children and youth and enable them to recognize and avoid physical hazards in agriculture, namely weather (sun, cold, rain), pollution, animal bites/stings, chemicals (greenhouses, pesticides), loads, sharp tools and to introduce some protective measures. \r\n\r\nREEFI will work on android and iOS platforms.Avoid hazards in farm/agricultural settings",
+        "abstract": null,
+        "date": "",
+        "url": "https://play.google.com/store/apps/details?id=org.fao.reefimauritania&hl=en_US",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "D4a_1 - Online Source Type (deprecated)": {
+          "value": "other"
+        },
+        "C2c - Solution (innovation) module": {
+          "value": "false"
+        },
+        "C3c - Knowledge (concept, model, science, workflow) Solutions": {
+          "value": "false"
+        },
+        "C2d - Science (evidence) module": {
+          "value": "false"
+        },
+        "C3b - Service (process, service, arrangement) solutions": {
+          "value": "false"
+        },
+        "C2a - Impact (SDGs, goals, problems) module": {
+          "value": "false"
+        },
+        "C2e2 - Detailed Stakeholder type": {
+          "value": "innovators and researchers,governance actors,users,beneficiaries"
+        },
+        "U3 - Ease of navigation": {
+          "value": "Easy"
+        },
+        "F1 - API": {
+          "value": "false"
+        },
+        "U5 - User access policy": {
+          "value": "Open source"
+        },
+        "F5 - Preservation (Unique-persistent identifier)": {
+          "value": "false"
+        },
+        "F2 - Use Authentification": {
+          "value": "false"
+        },
+        "C3d - Solution package": {
+          "value": "false"
+        },
+        "C2f - capacity development module (training course webinars)": {
+          "value": "false"
+        },
+        "C2g - Peer to peer matching": {
+          "value": "false"
+        },
+        "C2h - investment matching": {
+          "value": "false"
+        },
+        "C1c - Unique content": {
+          "value": "false"
+        },
+        "C1d - External content": {
+          "value": "false"
+        },
+        "D2b - Hosting Organization Other": {
+          "value": "FAO"
+        },
+        "D4b - Online source type other": {
+          "value": "Mobile App"
+        },
+        "FULLY CURATED": {
+          "value": "true"
+        },
+        "provide information about the content of the platform": {
+          "value": "false"
+        },
+        "C2e1 - Stakeholder (partner, expert, community) module": {
+          "value": "false"
+        },
+        "U1b - Use relevance detailed": {
+          "value": "Program manager"
+        },
+        "Consent Box": {
+          "value": "false"
+        },
+        "Use Rights": {
+          "value": "Full"
+        },
+        "D0b - Previously entered online source": {
+          "value": "0"
+        },
+        "D2b - Acronym (from Hosting Organization)": {
+          "value": "FAO"
+        },
+        "Hosting Organization lookup": {
+          "value": "Food and Agriculture Organization of the United Nations"
+        },
+        "C5_1_b region (from C5 - Geographical Focus)": {
+          "value": ", "
+        },
+        "D2c_1 - Organization Type (from Hosting Organization)": {
+          "value": "Organization (other than financial or research) International\r\n"
+        },
+        "C5_1_d intermediate-region (from C5 - Geographical Focus)": {
+          "value": ", "
+        },
+        "C5_1_c sub-region (from C5 - Geographical Focus)": {
+          "value": "No specific location, "
+        },
+        "C5_1_a name comma replaced (from C5 - Geographical Focus)": {
+          "value": "No specific location, Global (Worldwide)"
+        },
+        "u2A1BestFitUser lookup original": {
+          "value": "Innovator"
+        },
+        "u1AUseRelevance_lookup": {
+          "value": "Innovator, Farmer, Private Sector"
+        },
+        "D2a - Hosting Organization": {
+          "value": "1"
+        },
+        "U2a1 - Best-fit user": {
+          "value": "1"
+        },
+        "Best fit user lookup": {
+          "value": "Innovator"
+        },
+        "C6a - Fields": {
+          "value": "0"
+        },
+        "U1a - Use relevance": {
+          "value": "3"
+        },
+        "Use relevance lookup": {
+          "value": "Innovator, Farmer, Private Sector"
+        },
+        "U2c1 - Not recommended for users": {
+          "value": "0"
+        },
+        "C5_1 - Geographical Focus": {
+          "value": "2"
+        },
+        "Geographic focus lookup": {
+          "value": "No specific location, Global (Worldwide)"
+        },
+        "Geographic focus ISO3 lookup": {
+          "value": ", "
+        },
+        "Duplicates": {
+          "value": "false"
+        },
+        "FAO_regions": {
+          "value": "No specific location, No specific location"
+        },
+        "FAO_region_string": {
+          "value": "ERR"
+        },
+        "looking_for": {
+          "value": "None"
+        },
+        "Publish": {
+          "value": "false"
+        }
+      }
+    }
+  ]
+}

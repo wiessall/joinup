@@ -1,0 +1,2164 @@
+{
+  "meta": {
+    "collection_id": "fao-car",
+    "collection_label": "FAO CAR Innovations",
+    "collection_nid": 0,
+    "record_count": 39,
+    "export_timestamp": "2026-07-21T14:13:49.593531",
+    "field_config": {
+      "Innovation type": {
+        "categorical": false
+      },
+      "Innovation Key words 1": {
+        "categorical": true
+      },
+      "Adoption level": {
+        "categorical": true
+      },
+      "Links": {
+        "categorical": true
+      },
+      "project_symbol": {
+        "categorical": true
+      },
+      "SDGs": {
+        "categorical": false
+      },
+      "kw COMPILED": {
+        "categorical": false
+      },
+      "Innovation Key words 3": {
+        "categorical": false
+      },
+      "Comments": {
+        "categorical": false
+      },
+      "Use cases": {
+        "categorical": false
+      },
+      "Innovation stage": {
+        "categorical": true
+      },
+      "Title of innovation": {
+        "categorical": true
+      },
+      "Innovation Key words 2": {
+        "categorical": false
+      },
+      "Region": {
+        "categorical": true
+      },
+      "Readiness level": {
+        "categorical": true
+      },
+      "Top Innovations": {
+        "categorical": true
+      },
+      "Type of innovation": {
+        "categorical": true
+      },
+      "Information on main beneficiaries of reported innovation": {
+        "categorical": false
+      },
+      "Other key words": {
+        "categorical": false
+      }
+    }
+  },
+  "records": [
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "0",
+        "title": "Digital agriculture – Albania (2023)",
+        "description": "In the agriculture domain, the Ministry of Agriculture and Rural Development (MARD), was supported in the establishment of the system for collecting microeconomic data at farm level know as Farm Accountancy Data Network (FADN). By the end of the project FAO supported the ministry to adopt FADN action plan, establish FADN working group and FADN unit, pilot an Albanian FADN data collection with 60 farmers interviewed by FADN experts and the experts from the advisory services. FAO supported with the creation of RICA1 account where 40 farms have been uploaded and MARD staff trained for data quality checks followed on job trainings of FADN data collectors and study visits in Kosovo and Hungary.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Europe"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "The Ministry of Agriculture and Rural Development (MARD), MARD staff, FADN working group"
+        },
+        "Top Innovations": {
+          "value": "High"
+        },
+        "Comments": {
+          "value": "SD -  High, Farm Accountancy Data Network (FADN) platform ... microeconomic data at farm level.. record keeping for effective planning of agricultural service activities."
+        },
+        "Innovation type": {
+          "value": "Knowledge management function - Digital technologies - Financial"
+        },
+        "Use cases": {
+          "value": "Access to knowledge and advisory - Access to finance"
+        },
+        "Readiness level": {
+          "value": "Ready"
+        },
+        "Innovation stage": {
+          "value": "Mature (1)"
+        },
+        "Adoption level": {
+          "value": "Innovation network"
+        },
+        "SDGs": {
+          "value": "2.3, 17.8, 2.c"
+        },
+        "project_symbol": {
+          "value": "TCP/ALB/3802"
+        },
+        "Title of innovation": {
+          "value": "Farm Accountancy Data Network (FADN)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "1",
+        "title": "Digital agriculture – Algeria (2023)",
+        "description": "As part of the WaPOR phase 2 project (GCP/INT/729/NET), supported by the FAO and funded by the Netherlands, Algeria has implemented a WAPOR digitization Cell  within the Ministry of Agriculture. This initiative aims to strengthen national capacities in monitoring land and water productivity thru remote sensing. The WaPOR cell  plays a central role in integrating satellite data to improve the management of agricultural water resources, optimize cultivation practices, and support data-driven decision-making. It is part of a regional strategy for the digital transformation of agriculture, with activities in training, technology transfer, and inter-institutional collaboration. Algeria, alongside countries like Tunisia, Morocco, and Egypt, benefits from technical support to adapt WaPOR tools to local realities and promote more sustainable and resilient agriculture.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Near East"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Ministère de l'agriculture, INRAA et INSID"
+        },
+        "Top Innovations": {
+          "value": "Medium"
+        },
+        "Comments": {
+          "value": "SD- Valuable , WAPOR"
+        },
+        "Innovation Key words 1": {
+          "value": "digital"
+        },
+        "Innovation Key words 2": {
+          "value": "Wapor"
+        },
+        "Innovation Key words 3": {
+          "value": "water managment"
+        },
+        "Other key words": {
+          "value": "Data managment, water productivity,"
+        },
+        "kw COMPILED": {
+          "value": "digital, Wapor, water managment, Data managment, water productivity,"
+        },
+        "Innovation type": {
+          "value": "Digital technologies"
+        },
+        "Use cases": {
+          "value": "Supply chain management  - Natural resources management"
+        },
+        "Readiness level": {
+          "value": "Ready (1)"
+        },
+        "Innovation stage": {
+          "value": "Mature (1)"
+        },
+        "Adoption level": {
+          "value": "Innovation network"
+        },
+        "SDGs": {
+          "value": "6.4 ,2.4"
+        },
+        "project_symbol": {
+          "value": "GCP /INT/729/NET"
+        },
+        "Title of innovation": {
+          "value": "WaPOR digitization  Cell"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "2",
+        "title": "Digital agriculture – Antigua and Barbuda (2023)",
+        "description": "In Antigua and Barbuda, FAO introduced a precision agriculture innovation by providing farmers with portable environmental sensors capable of measuring soil pH, electrical conductivity (EC), moisture, and nutrient levels. These digital tools enable real-time analysis via mobile apps, helping farmers make informed decisions about fertilization and irrigation. A hands-on training workshop was conducted for 21 participants, including farmers and extension officers, to build capacity in using the technology. This initiative, part of the project TCP/SLC/3808, aims to enhance productivity, resilience, and sustainability in horticultural crop management, addressing challenges like land degradation, water variability, and nutrient depletion.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Lat.Ame. & the Caribbean"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Ministry of Agriculture\r\nFarmers"
+        },
+        "Top Innovations": {
+          "value": "Medium"
+        },
+        "Comments": {
+          "value": "SD - Medium, environmental sensors ... more information is needed."
+        },
+        "Innovation Key words 2": {
+          "value": "environmental"
+        },
+        "Innovation Key words 3": {
+          "value": "sensors"
+        },
+        "kw COMPILED": {
+          "value": "environmental, sensors"
+        },
+        "Innovation type": {
+          "value": "Technological - Digital technologies"
+        },
+        "Use cases": {
+          "value": "Natural resources management - Production"
+        },
+        "Readiness level": {
+          "value": "Proof of application (0)"
+        },
+        "Innovation stage": {
+          "value": "Emergent (0)"
+        },
+        "Adoption level": {
+          "value": "Innovation network"
+        },
+        "SDGs": {
+          "value": "9.3 , 5.b,9.c, \t1.b"
+        },
+        "project_symbol": {
+          "value": "TCP/SLC/3808"
+        },
+        "Title of innovation": {
+          "value": "Precision Agriculture Innovation"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "3",
+        "title": "Digital agriculture – Armenia (2023)",
+        "description": "Under the Digitalization in the Agriculture Sector, FAO promotes digital technologies in support of agricultural value chains and rural community development in Armenia by providing technical support to the Government for setting up and deploying a sustainable Vineyard registry system (VRS) by developing capacities for the effective use of the VRS and development of a mobile application to enhance farmers' access to digital services. The operation of the VRS will foster informed policy-making while supporting farmers in improving vineyard management and enabling quality assurance in the wine-making process.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Europe"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Government, farmers, agriculture and food processors and producers."
+        },
+        "Top Innovations": {
+          "value": "Medium"
+        },
+        "Comments": {
+          "value": "SD- Valuable.  vineyard registry system (VRS) .. supporting policy making and farmers/producers  in improving the value chain.  (wine production is particularly important for the national economy of Armenia, and this innovation looks like filling an important gap in the value chain)    \n\nHigh"
+        },
+        "Innovation Key words 1": {
+          "value": "Digital"
+        },
+        "Innovation Key words 3": {
+          "value": "Registry"
+        },
+        "Other key words": {
+          "value": "Vineyard"
+        },
+        "kw COMPILED": {
+          "value": "Digital, Registry, Vineyard"
+        },
+        "Innovation type": {
+          "value": "Digital technologies - Technological"
+        },
+        "Use cases": {
+          "value": "Governance, policy support, and intelligence - Supply chain management - Access to markets"
+        },
+        "Readiness level": {
+          "value": "Proof of application (0)"
+        },
+        "Innovation stage": {
+          "value": "Emergent (0)/ early phase of implementation"
+        },
+        "Adoption level": {
+          "value": "Pilot deployment / Innovation network"
+        },
+        "SDGs": {
+          "value": "2.3, 2.4"
+        },
+        "project_symbol": {
+          "value": "TCP/ARM/3903"
+        },
+        "Title of innovation": {
+          "value": "Vineyard Registry System (VRS)"
+        },
+        "Links": {
+          "value": "https://www.fao.org/europe/news/detail/armenia-and-georgia-enhance-collaboration-on-grapevine-nurseries-and-digital-vineyard-data-systems/en"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "4",
+        "title": "Digital agriculture – Armenia (2023)",
+        "description": "Under the Digitalization in the Agriculture Sector, FAO promotes digital technologies in support of agricultural value chains and rural community development in Armenia by providing technical support to the Government for setting up and deploying a sustainable vineyard registry system (VRS) by developing capacities for the effective use of the VRS and development of a mobile application to enhance farmers' access to digital services. The operation of the VRS will foster informed policy-making while supporting farmers in improving vineyard management and enabling quality assurance in the wine-making process.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Europe"
+        },
+        "Type of innovation": {
+          "value": "Technical"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Government, farmers, agriculture and food processors and producers."
+        },
+        "Top Innovations": {
+          "value": "Medium"
+        },
+        "Comments": {
+          "value": "SD- Valuable.  vineyard registry system (VRS) .. supporting policy making and farmers/producers  in improving the value chain.  (wine production is particularly important for the national economy of Armenia, and this innovation looks like filling an important gap in the value chain)    \n\nHigh"
+        },
+        "Innovation Key words 1": {
+          "value": "Digital"
+        },
+        "Innovation Key words 3": {
+          "value": "Registry"
+        },
+        "Other key words": {
+          "value": "Vineyard"
+        },
+        "kw COMPILED": {
+          "value": "Digital, Registry, Vineyard"
+        },
+        "Innovation type": {
+          "value": "Digital technologies - Technological"
+        },
+        "Use cases": {
+          "value": "Governance, policy support, and intelligence - Production - Access to markets"
+        },
+        "Readiness level": {
+          "value": "Proof of application (0)"
+        },
+        "Innovation stage": {
+          "value": "Emergent (0)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "5",
+        "title": "Digital agriculture – Bahamas (2023)",
+        "description": "The Ministry of Agriculture, Marine Resources and Family Island Affairs (MAMRFIA) approves and adopts agribusiness policy and a corresponding legislative framework to promote digital ecosystems to strengthen inclusive and resilient agriculture and agrifood systems.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Lat.Ame. & the Caribbean"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Key stakeholders in the agricultural setor"
+        },
+        "Top Innovations": {
+          "value": "Medium"
+        },
+        "Comments": {
+          "value": "SD - Medium, Agricubusiness policy and its corresponding legislative framework to promote digital ecosystems"
+        },
+        "Innovation Key words 1": {
+          "value": "digital"
+        },
+        "Innovation Key words 2": {
+          "value": "Agribusiness"
+        },
+        "Innovation Key words 3": {
+          "value": "ecosystem"
+        },
+        "kw COMPILED": {
+          "value": "digital, Agribusiness, ecosystem"
+        },
+        "Innovation type": {
+          "value": "Digital technologies - Technological"
+        },
+        "Use cases": {
+          "value": "Natural resources management  and sustainable practices - Food quality and safety"
+        },
+        "Readiness level": {
+          "value": "Proof of application (0)"
+        },
+        "Innovation stage": {
+          "value": "Emergent (0)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "6",
+        "title": "Digital agriculture – Bangladesh (2023)",
+        "description": "Dissemination of Information through Digital Village Centers/Aggregation Centers\n- Virtual Call Centers (VCO)",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Asia & the Pacific"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "- Farmers Organizations/ Producer Organizations\r\n- Farmers, Fishers and livestock rearing communities"
+        },
+        "Top Innovations": {
+          "value": "High/Medium"
+        },
+        "Comments": {
+          "value": "SD- High, information , advices, knowledge sharing and dissemination through DVcenter and vertical call centers."
+        },
+        "Innovation Key words 1": {
+          "value": "Digital"
+        },
+        "Innovation Key words 2": {
+          "value": "Village"
+        },
+        "Innovation Key words 3": {
+          "value": "Information"
+        },
+        "Other key words": {
+          "value": "call, centers"
+        },
+        "kw COMPILED": {
+          "value": "Digital , Village, Information, call, centers"
+        },
+        "Innovation type": {
+          "value": "Digital technologies - Technological"
+        },
+        "Use cases": {
+          "value": "Collective action and aggregation - Access to knowledge and advisory - Access to markets"
+        },
+        "Readiness level": {
+          "value": "Ready"
+        },
+        "Innovation stage": {
+          "value": "Mature (1)"
+        },
+        "Title of innovation": {
+          "value": "Virtual Call Centers (VCO)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "7",
+        "title": "Digital agriculture – Belize (2023)",
+        "description": "This seeks to support the Government of Belize implement a strategy to digitize services and technological tools and approaches to enable the agri-food system using a value chain development approach focus on improving agricultural, Cooperative and Agritourism services for the most vulnerable groups including rural small holder farmers, youths, and women.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Lat.Ame. & the Caribbean"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Rural small holders"
+        },
+        "Top Innovations": {
+          "value": "High"
+        },
+        "Comments": {
+          "value": "SD- high , support the country national digital agriculture strategy for improving agricultural, Cooperative and Agritourism services for the most vulnerable groups including rural small holder farmers, youths, and women."
+        },
+        "Innovation type": {
+          "value": "Digital technologies - Technological - Knolwedge management functions"
+        },
+        "Use cases": {
+          "value": "Governance, policy support, and intelligence - Access to markets"
+        },
+        "Readiness level": {
+          "value": "Ready"
+        },
+        "Innovation stage": {
+          "value": "Mature (1)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "8",
+        "title": "Digital agriculture – Benin (2023)",
+        "description": "Support to the Federation of Women Fishmongers and Fish Processors on the e-commerce of fresh fish.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Africa"
+        },
+        "Type of innovation": {
+          "value": "Social"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Femmes mareyeuses"
+        },
+        "Comments": {
+          "value": "sd-  this is to support cooperatives for empowering women for marketing and online trading of the fish production. MI value chain"
+        },
+        "Innovation Key words 2": {
+          "value": "e-commerce"
+        },
+        "Innovation Key words 3": {
+          "value": "Markets"
+        },
+        "Other key words": {
+          "value": "women"
+        },
+        "kw COMPILED": {
+          "value": "e-commerce, Markets, women"
+        },
+        "Innovation type": {
+          "value": "Social impacts bonds"
+        },
+        "Use cases": {
+          "value": "Supply chain management - Food quality and safety - Business models support"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "9",
+        "title": "Digital agriculture – Chile (2023)",
+        "description": "During 2023, the implementation of the PREDIAPP technological tool began, used for property diagnosis in the agroecological transition within the framework of the project \"Establishment of a National Network of Important Sites for National Agricultural Heritage (NIAHS)\" (GCP /CHI /041/GFF).",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Lat.Ame. & the Caribbean"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "- Agricultores y Agricultoras, técnicos y extensionistas del  Instituto Nacional de Desarrollo Agropecuario (INDAP)."
+        },
+        "Innovation type": {
+          "value": "Technological - Digital technologies"
+        },
+        "Use cases": {
+          "value": "Access to knowledge and advisory"
+        },
+        "Readiness level": {
+          "value": "Proof of application"
+        },
+        "Innovation stage": {
+          "value": "Emergent (0)"
+        },
+        "Adoption level": {
+          "value": "Innovation network"
+        },
+        "SDGs": {
+          "value": "12.2, 2.4, 15.9, 15.a,\t2.5,  15.5"
+        },
+        "project_symbol": {
+          "value": "GCP /CHI/041/GFF"
+        },
+        "Title of innovation": {
+          "value": "PREDIAPP Technological Tool"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "10",
+        "title": "Digital agriculture – Chile (2023)",
+        "description": "Considering the importance of moving towards greater connectivity and the generation at the territorial and rural level of a digital ecosystem, FAO and the Government of Chile inaugurated a pilot that seeks to improve access, quality and use of the Internet for family farming and rural tourism in the Ñuble region, within the framework of the FAO initiative \"1000 Digital Villages\" together with the South-South Cooperation project of FAO and the CELAC countries: \"Digital transformation and innovation in agriculture\" financed by the China Cooperation.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Lat.Ame. & the Caribbean"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Personas de la agricultura familiar campesina, que se dedican al turismo rural y la población rural."
+        },
+        "Other key words": {
+          "value": "1000 DVI"
+        },
+        "kw COMPILED": {
+          "value": "1000 DVI"
+        },
+        "Innovation type": {
+          "value": "Digtial technologies"
+        },
+        "Use cases": {
+          "value": "Governance, policy support, and intelligence - Business models support"
+        },
+        "Readiness level": {
+          "value": "Incubation (0)"
+        },
+        "Innovation stage": {
+          "value": "Pre-emergent (0)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "11",
+        "title": "Digital agriculture – China (2023)",
+        "description": "\"Development of SDG Villages\" Project, funded by Guangfa Securities created the model of \"Internet + Agriculture + Finance\" to revitalize rural development.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Asia & the Pacific"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "FAO China has implemented customised Farmer Field Business Schools (FFBS) in 16 pilot villages, extending to 3000+ local farmers in Chinese rural areas."
+        },
+        "Top Innovations": {
+          "value": "High"
+        },
+        "Comments": {
+          "value": "SD-High, Farmer Field business shcool , more details required.  (it could be strategic for OIN to showcase something from China)"
+        },
+        "Innovation Key words 1": {
+          "value": "Digital"
+        },
+        "Innovation Key words 2": {
+          "value": "FFBS"
+        },
+        "Innovation Key words 3": {
+          "value": "Finance"
+        },
+        "Other key words": {
+          "value": "Villages"
+        },
+        "kw COMPILED": {
+          "value": "Digital, FFBS, Finance, Villages"
+        },
+        "Innovation type": {
+          "value": "Digital technologies"
+        },
+        "Use cases": {
+          "value": "Access to finance - Business models support"
+        },
+        "Readiness level": {
+          "value": "Ready (1)"
+        },
+        "Innovation stage": {
+          "value": "Mature (1)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "12",
+        "title": "Digital agriculture – El Salvador (2023)",
+        "description": "An entire monitoring network has been created for the families participating in the RECLIMA project. Different WhatsApp groups were established, 100% Community Promoters (1,287) with CENTA and 15 partners for implementation, where the 8 practices to promote RECLIMA, Field School guides for Farmers, other important information were shared. for crops and relevant news about the climate or activities to be developed in the project. Use of the Kobo Toolbox for the survey, digitization of information and registration of 44,872 producers with whom RECLIMA works, with their respective geolocation (Farm Plan). A Tool Box was created for the implementation of the Extension Model with adaptation measures for climate change with direct access through QRs for the use of Google Drive. Storage of information directly from implementing partners through a Monitoring System in Google Drive, with its own verification tool: https://ee.humanitarianresponse.info/x/rOG8uci1. Use of programs for creating maps such as QGIS, Maps, with georeferences acquired by the RECLIMA project (See HiH link below). Tool design in Kobo ToolBox for measuring capabilities and measuring skills and knowledge of the extension technical team that reduced data collection time from three months to two days. Work was done on the HiH platform for the georeferencing of RECLIMA",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Lat.Ame. & the Caribbean"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Más 50,000 familias de agricultores familiares que participan en programas y proyectos de FAO"
+        },
+        "Top Innovations": {
+          "value": "Medium"
+        },
+        "Comments": {
+          "value": "High, Use of the Kobo Toolbox for the survey, digitization of information and registration of  producers  to promote agricultural innovations with their respective geolocation (Farm Plan).     a platform for extension  model  with adaptation of climate change. use of the pogram to create maps .... integrated to the HIH Geospetial platform."
+        },
+        "Innovation Key words 1": {
+          "value": "Kobo Toolbox"
+        },
+        "Innovation Key words 2": {
+          "value": "Extension"
+        },
+        "Innovation Key words 3": {
+          "value": "GIS"
+        },
+        "Other key words": {
+          "value": "climate change, adaptation, HIH"
+        },
+        "kw COMPILED": {
+          "value": "Kobo Toolbox, Extension , GIS, climate change, adaptation, HIH"
+        },
+        "Innovation type": {
+          "value": "Digital technologies"
+        },
+        "Use cases": {
+          "value": "Access to knowledge and advisory - Business models support"
+        },
+        "Readiness level": {
+          "value": "Working application (0)"
+        },
+        "Innovation stage": {
+          "value": "Emerget (0)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "13",
+        "title": "Digital agriculture – El Salvador (2023)",
+        "description": "Improvements in MAG agricultural statistics. Support to MAG/General Directorate of Agricultural Statistics, for the migration of traditional data collection with paper surveys to digital mode, the technical staff of the DGEA has been trained to capture information using Survey Solution, it has been migrated to digital the Agricultural Producer Price Survey and there is a work plan for the migration of the remaining 5 surveys. A dashboard of agricultural statistics has also been created for decision making. Pilot information gathering (EOSTAT Project). Within the framework of the Hand-in-Hand Initiative, a pilot information gathering is carried out as part of the EOSTAT project implemented by FAO with the technical support of the Catholic University of Louvain (UCLouvain). It is expected that these products can be used as prototypes to demonstrate their added value in the \"traditional\" process of calculating agricultural statistics.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Lat.Ame. & the Caribbean"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "34 encuestadores de la Dirección General de Economía Agropecuaria"
+        },
+        "Top Innovations": {
+          "value": "Medium"
+        },
+        "Comments": {
+          "value": "Medium: digitization for improvement of agricultural statistics data collection, analysis, and reporting. EO (Earth Observation) project implementation for evidence-based decision-making. , use of EO for agro-statistics survey."
+        },
+        "Innovation Key words 1": {
+          "value": "Digital"
+        },
+        "Innovation Key words 2": {
+          "value": "data managment"
+        },
+        "Innovation Key words 3": {
+          "value": "agricultural statistics"
+        },
+        "kw COMPILED": {
+          "value": "Digital, data managment , agricultural statistics"
+        },
+        "Innovation type": {
+          "value": "Technological - Digital technologies"
+        },
+        "Use cases": {
+          "value": "Access to knowledge and advisory - Governance, policy support and intelligence"
+        },
+        "Readiness level": {
+          "value": "Working model (0)"
+        },
+        "Innovation stage": {
+          "value": "Emerget (0)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "14",
+        "title": "Digital agriculture – El Salvador (2023)",
+        "description": "An App called \"Siembra IA\" is being developed, which will be a virtual technical assistance tool to support the productive decision-making of farming families. It has been programmed for corn and beans and contains: 1) Crop management and pest identification, 2) Location of extension agencies, 3) COSECHA Magazine and Radio Programs, 4) AGROCENTA and 5) Digital soil mapping.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Lat.Ame. & the Caribbean"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "20,000 agricultores de maíz y frijol."
+        },
+        "Top Innovations": {
+          "value": "High"
+        },
+        "Comments": {
+          "value": "High, Siembra IA  application development; an application that is for beans and corn's crop managment nd pest identification; location extension agencies, digital soil mapping; Magazine and Radio.., Use of Ai in crop & pest  managment, and advisory service delivery"
+        },
+        "Innovation Key words 1": {
+          "value": "AI"
+        },
+        "Innovation Key words 2": {
+          "value": "crop managment"
+        },
+        "Innovation Key words 3": {
+          "value": "Pest identification"
+        },
+        "Other key words": {
+          "value": "soil mapping"
+        },
+        "kw COMPILED": {
+          "value": "AI, crop managment , Pest identification, soil mapping"
+        },
+        "Innovation type": {
+          "value": "Technological - Nature-based solutions"
+        },
+        "Use cases": {
+          "value": "Access to markets - Collective action and aggregation - Natural resources management"
+        },
+        "Readiness level": {
+          "value": "Incubation (0)"
+        },
+        "Innovation stage": {
+          "value": "Pre-emergent (0)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "15",
+        "title": "Digital agriculture – Ethiopia (2023)",
+        "description": "The Flexible Multiparter Mechanism (FVC) sub-programme within the Global Network on Digital Agriculture Innovation Hubs (FMM/GLO/159/MUL) is actively implemented in Ethiopia to advance the integration of digital agriculture innovations and foster the transformation of agri-food systems. The FAO office in Ethiopia has established the Digital Agriculture and Innovation Hub, aligning with Ethiopia's Digital 2025 strategy for Agriculture and Food Transformation. \nIn the current implementation cycle, the hub prioritized supporting producers, value chain actors, and young women innovators. An Agri-innovation Bootcamp capacitated 80 youths on translating innovative ideas into scalable ventures, addressing challenges in agriculture and the agrifood system. Demand-driven innovation and rural entrepreneurship training for 35 youth farmers were conducted, promoting innovative solutions to enhance productivity. \nThe Digital Agriculture and Innovation Hub launched a monthly webinar, serving as a platform for government representatives, private sectors, farmers, and development partners to discuss challenges and opportunities in the digital agriculture ecosystem. This initiative has influenced policy development and legislation to support the startup ecosystem in Ethiopia. \nThe sub-program stimulated innovation by sharing knowledge and methods among innovators, farmers, and experts. It emphasized a unique learning approach, focusing on experience sharing among developing countries facing similar challenges, rather than solely relying on insights from developed nations.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Africa"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Women and youth"
+        },
+        "Top Innovations": {
+          "value": "High"
+        },
+        "Comments": {
+          "value": "SD-FVC with global network on digital agriculture innovation Hub for advancing the integration of digital agriculture innovations and foster the transformation of agri-food systems in Ethiopia. Digital agriculture innovation hub established is aligned with the country digital strategy for agric and food transformation."
+        },
+        "Innovation Key words 1": {
+          "value": "digital"
+        },
+        "Innovation Key words 2": {
+          "value": "Innovation Hub"
+        },
+        "Innovation Key words 3": {
+          "value": "GIS"
+        },
+        "Other key words": {
+          "value": "women, youth"
+        },
+        "kw COMPILED": {
+          "value": "digital, Innovation Hub, GIS, women, youth"
+        },
+        "Innovation type": {
+          "value": "Social impacts bonds - Technological - Digital technologies"
+        },
+        "Use cases": {
+          "value": "Production - Natural resources management and sustainable practices - Access to knowledge and advisory"
+        },
+        "Readiness level": {
+          "value": "Ready (1)"
+        },
+        "Innovation stage": {
+          "value": "Mature (1)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "16",
+        "title": "Digital agriculture – Venezuela (Bolivarian Republic of) (2023)",
+        "description": "Launch of the Digital Services Portfolio (DSP) in Venezuela.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Lat.Ame. & the Caribbean"
+        },
+        "Type of innovation": {
+          "value": "Technical"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Ministerio de Agricultura, Ministerio de Ciencia y Tecnología y comunidades."
+        },
+        "Top Innovations": {
+          "value": "High"
+        },
+        "Comments": {
+          "value": "SD- High, Launch of DSP  \" Digital service portifolio\" with four mobile services : weather and climate information, information and advice on  Nutrition, cure and feed your livestock and Market proce information"
+        },
+        "Innovation Key words 1": {
+          "value": "digital"
+        },
+        "Innovation Key words 2": {
+          "value": "mobile"
+        },
+        "Other key words": {
+          "value": "extension, advisory, knowledge sharing"
+        },
+        "kw COMPILED": {
+          "value": "digital, mobile, extension, advisory, knowledge sharing"
+        },
+        "Innovation type": {
+          "value": "Technological - Digital technologies"
+        },
+        "Use cases": {
+          "value": "Access to markets - Governance, policy support, and intelligence - Access to markets"
+        },
+        "Readiness level": {
+          "value": "Ready (1)"
+        },
+        "Innovation stage": {
+          "value": "Mature (1)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "17",
+        "title": "Digital agriculture – Honduras (2023)",
+        "description": "Information for Family Farming and Climate Change for the Secretary of Agriculture and Livestock",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Lat.Ame. & the Caribbean"
+        },
+        "Type of innovation": {
+          "value": "Technical"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Información para la Agricultura Familiar y el Cambio Climático para la Secretaria de Agricultura y Ganaderia"
+        },
+        "Innovation Key words 2": {
+          "value": "information"
+        },
+        "Innovation Key words 3": {
+          "value": "Farmily farming"
+        },
+        "Other key words": {
+          "value": "climate change"
+        },
+        "kw COMPILED": {
+          "value": "information, Farmily farming, climate change"
+        },
+        "Innovation type": {
+          "value": "Nature- based solutions - Knowledge management function"
+        },
+        "Use cases": {
+          "value": "Natural resources management and sustainable practices - Access to knowledge and advisory"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "18",
+        "title": "Digital agriculture – Guyana (2023)",
+        "description": "FAO is implementing the pilot \"Enhancing precision farming practices in rice production for Guyana's small farmers using drone technology\". The pilot aims to optimize rice production for small farmers of Guyana using drone and GIS technologies for monitoring rice cultivation areas and provide farmers with information to make data driven decisions for crop management, improved efficiency and maximize yields",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Lat.Ame. & the Caribbean"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Small Scale Rice farmers \r\n\r\nThe Guyana Rice Development Board"
+        },
+        "Top Innovations": {
+          "value": "High"
+        },
+        "Comments": {
+          "value": "High,enhancing precision farming practices in rice production for Guyana's small farmers using drone technology.   (1 of the 5 examples selected for the GMR)"
+        },
+        "Innovation Key words 1": {
+          "value": "Drones"
+        },
+        "Innovation Key words 3": {
+          "value": "GIS"
+        },
+        "Other key words": {
+          "value": "Precision Farming"
+        },
+        "kw COMPILED": {
+          "value": "Drones, GIS, Precision Farming"
+        },
+        "Innovation type": {
+          "value": "Technological - Digital technologies - Geospatial technologies"
+        },
+        "Use cases": {
+          "value": "Natural resources management and sustainable practices - Farm management - Production - access to markets"
+        },
+        "Readiness level": {
+          "value": "Formulating working model"
+        },
+        "Innovation stage": {
+          "value": "Pre-emergent (0)"
+        },
+        "Adoption level": {
+          "value": "Innovation network"
+        },
+        "SDGs": {
+          "value": "9.3,5b,9.c,1.b"
+        },
+        "project_symbol": {
+          "value": "TCP/SLC/3808"
+        },
+        "Title of innovation": {
+          "value": "Drone and GIS-Based Monitoring of Rice Cultivation"
+        },
+        "Links": {
+          "value": "https://kaieteurnewsonline.com/2023/09/21/guyana-gets-drones-from-fao-to-enhance-precision-farming-in-rice-production/  and                                                                                                                    https://engage.cloud.microsoft/main/org/unfao.onmicrosoft.com/threads/eyJfdHlwZSI6IlRocmVhZCIsImlkIjoiMzA3NTIwNzg4MTIwMzcxMiJ9?trk_copy_link=V2"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "19",
+        "title": "Digital agriculture – Guyana (2023)",
+        "description": "Under the \"Development and operationalization of an improved Fisheries Management and Information System (FMIS) in Guyana\", Project a FMIS is being developed. In 2023,  \"a Review and assessment of marine fisheries data  collection and data management\" was conducted as a key step towards the development of the system",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Lat.Ame. & the Caribbean"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "The Ministry of Agriculture, fishers and stakeholders."
+        },
+        "Top Innovations": {
+          "value": "Medium"
+        },
+        "Comments": {
+          "value": "Medium, Fisheries Management and Information System (FMIS) in Guyana. , Fisheries Management and information system"
+        },
+        "Innovation Key words 1": {
+          "value": "Data management"
+        },
+        "Innovation Key words 2": {
+          "value": "Information system"
+        },
+        "Other key words": {
+          "value": "Fisheries Managment"
+        },
+        "kw COMPILED": {
+          "value": "Data management, Information system, Fisheries Managment"
+        },
+        "Innovation type": {
+          "value": "Knowledge management function"
+        },
+        "Use cases": {
+          "value": "Access to knowledge and advisory - Collective action and aggregation -"
+        },
+        "Readiness level": {
+          "value": "Proof of application (0)"
+        },
+        "Innovation stage": {
+          "value": "Emergent (0)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "20",
+        "title": "Digital agriculture – Guyana (2023)",
+        "description": "Through the SLDM Project , the Guyana Lands and Survey Commission (GLSC) is upgrading its land information system to a new integrated workflow-based system, which will combine spatial and non-spatial lease data and other land tenure records to create a tenure security system. In 2023, a fully functional first version for key components of a Next Generation Lease Management System and Tenure Security System commenced and an an application was developed and utilized for the transformation of cadastral plans -from paper-based to digital.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Lat.Ame. & the Caribbean"
+        },
+        "Type of innovation": {
+          "value": "Institutional"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "The Guyana Lands and Survey Commission (GLSC)"
+        },
+        "Top Innovations": {
+          "value": "Medium"
+        },
+        "Comments": {
+          "value": "Medium, a land information management system with spatial and non-spatial data on leases and other land registers, as well as the functionalities/  possibilities of creating a land security system. Digitilisation of cadastral plans. , Land information system with ( security system) using Earth observation ( spartial and non spartial)."
+        },
+        "Innovation Key words 1": {
+          "value": "Digital"
+        },
+        "Innovation Key words 3": {
+          "value": "spatial data"
+        },
+        "Other key words": {
+          "value": "land tenure, cadastral plan"
+        },
+        "kw COMPILED": {
+          "value": "Digital, spatial data, land tenure, cadastral plan"
+        },
+        "Innovation type": {
+          "value": "Institutional - Knowledge management function"
+        },
+        "Use cases": {
+          "value": "Access to knowledge and advisory - Governance, policy support and intelligence - Geospatial technologies"
+        },
+        "Readiness level": {
+          "value": "Working model (0)"
+        },
+        "Innovation stage": {
+          "value": "Emergent (0)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "21",
+        "title": "Digital agriculture – Honduras (2023)",
+        "description": "Information for Family Farming and Climate Change for the Secretary of Agriculture and Livestock",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Lat.Ame. & the Caribbean"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Información para la Agricultura Familiar y el Cambio Climático para la Secretaria de Agricultura y Ganaderia"
+        },
+        "Innovation Key words 2": {
+          "value": "information"
+        },
+        "Innovation Key words 3": {
+          "value": "Farmily farming"
+        },
+        "Other key words": {
+          "value": "climate change"
+        },
+        "kw COMPILED": {
+          "value": "information, Farmily farming, climate change"
+        },
+        "Innovation type": {
+          "value": "Knowledge management function"
+        },
+        "Use cases": {
+          "value": "Access to knowledge and advisory - Supply chain management"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "22",
+        "title": "Digital agriculture – Indonesia (2023)",
+        "description": "National e-agriculture strategy",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Asia & the Pacific"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "National e-agriculture strategy and its action plan, including a vision and strategic recommendations for the sustainable implementation of ICT in agricultural services."
+        },
+        "Top Innovations": {
+          "value": "High/Medium"
+        },
+        "Comments": {
+          "value": "SD- high , country leading strategy for implementation of ICT in agricultural service delivery"
+        },
+        "Innovation Key words 1": {
+          "value": "strategy"
+        },
+        "Innovation Key words 2": {
+          "value": "ICT"
+        },
+        "Innovation Key words 3": {
+          "value": "E-agriculture"
+        },
+        "kw COMPILED": {
+          "value": "strategy, ICT, E-agriculture"
+        },
+        "Innovation type": {
+          "value": "Technological - Capacity development function"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "23",
+        "title": "Digital agriculture – Jamaica (2023)",
+        "description": "Through the TAMADAS PROJECT, an innovative prototype for a digital agriculture platform is currently under development. This platform is designed to seamlessly connect producers with consumers, leveraging the power of digital technology to enhance the efficiency and accessibility of agricultural transactions. The project aims to create a user-friendly interface that empowers both producers and consumers, fostering a more direct and transparent exchange of agricultural products.\n\nIn addition to the platform's development, the TAMADAS PROJECT prioritizes user training programs to ensure that both producers and consumers can maximize the benefits of this digital connection. By facilitating a more efficient and direct link between these two key stakeholders, the project envisions not only improving market access for producers but also providing consumers with a convenient and reliable source of agricultural products.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Lat.Ame. & the Caribbean"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "40 farmers in Manchester will be included as part of the pilot"
+        },
+        "Top Innovations": {
+          "value": "Medium"
+        },
+        "Comments": {
+          "value": "Medium, an innovative prototype for digital agriculture platform that will connect the producers to the consumers and organisation of the trainings to benefit from it."
+        },
+        "Innovation Key words 1": {
+          "value": "Digital"
+        },
+        "Innovation Key words 2": {
+          "value": "e-commerce"
+        },
+        "kw COMPILED": {
+          "value": "Digital, e-commerce"
+        },
+        "Innovation type": {
+          "value": "Governance function - Policy - Digital technologies - Digital technologies"
+        },
+        "Use cases": {
+          "value": "Access to knowledge and advisory - Production"
+        },
+        "Readiness level": {
+          "value": "Working model (0)"
+        },
+        "Innovation stage": {
+          "value": "Pre-emergent (0)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "24",
+        "title": "Digital agriculture – Madagascar (2023)",
+        "description": "Development of digital solution to facilitate the national organic certification process. Following the development of the national organic specifications, the FAO, the Ministry of Agriculture and Livestock are collaborating together to carry out an action research project to facilitate the integration of producers and the private sector into the organic market in order to offer the population healthy and nutritious food",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Africa"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Le Ministere de l'Agriculture et de l'Elevage dispose d'un outil qui facilite le controle et la gestion du cahier de charge biologique, \r\nles producteurs renforcent leurs compétences techniques et ont acces à la solution numerique pour faciliter la certification biologique"
+        },
+        "Top Innovations": {
+          "value": "Medium/High"
+        },
+        "Comments": {
+          "value": "SD_ Medium/High, this is the platform that will manage the process of the certification of Bio-Producs."
+        },
+        "Innovation Key words 1": {
+          "value": "Digital"
+        },
+        "Innovation Key words 2": {
+          "value": "Platform"
+        },
+        "Innovation Key words 3": {
+          "value": "Bio-products"
+        },
+        "Other key words": {
+          "value": "value chain, certification"
+        },
+        "kw COMPILED": {
+          "value": "Digital, Platform, Bio-products, value chain, certification"
+        },
+        "Innovation type": {
+          "value": "Digital technologies - Technological"
+        },
+        "Use cases": {
+          "value": "Food quality and safety - Access to markets"
+        },
+        "Readiness level": {
+          "value": "Incubation (0)"
+        },
+        "Innovation stage": {
+          "value": "Pre-emergent (0)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "25",
+        "title": "Digital agriculture – Malawi (2023)",
+        "description": "Digitization of the M&E system. Use of tablets for data collection, storage and utilization. Migrating from paper based data collection and storage.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Africa"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Government extension workers"
+        },
+        "Top Innovations": {
+          "value": "Medium"
+        },
+        "Comments": {
+          "value": "SD- High, Digitilisation of M&E system"
+        },
+        "Innovation Key words 1": {
+          "value": "Digital"
+        },
+        "Innovation Key words 3": {
+          "value": "M&E"
+        },
+        "kw COMPILED": {
+          "value": "Digital, M&E"
+        },
+        "Innovation type": {
+          "value": "Knowledge management function"
+        },
+        "Use cases": {
+          "value": "Production - Access to knowledge and advisory - Collective action and aggregation"
+        },
+        "Readiness level": {
+          "value": "Formulating working model"
+        },
+        "Innovation stage": {
+          "value": "Pre-emergent (0)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "26",
+        "title": "Digital agriculture – Mauritania (2023)",
+        "description": "Setting up a digital village in the Gorgol region Equip the country with a data and information source platform to achieve the specific objectives, namely: (i) the realization of a strategic assessment of priority and/or high-potential value chains with high exclusivity potential to meet the objectives of SDG1 and SDG2; (ii) Strengthening the technical capacities of the MoM Task Force; (iii) the preparation or consolidation of the investment and innovation plan document.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Near East"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Agropasteurs"
+        },
+        "Top Innovations": {
+          "value": "High"
+        },
+        "Comments": {
+          "value": "SD-High, is a digital village with a platform that aims to strengthen the preparation of the investment plan document, expose data and information on priority or potential value chains to achieve SDGs 1 and 2, and strengthen the local  technical capacities."
+        },
+        "Innovation Key words 1": {
+          "value": "digital"
+        },
+        "Innovation Key words 2": {
+          "value": "DVI"
+        },
+        "kw COMPILED": {
+          "value": "digital, DVI"
+        },
+        "Innovation type": {
+          "value": "Technological - Digital technologies"
+        },
+        "Use cases": {
+          "value": "Access to knowledge and advisory - Collective action and aggregation"
+        },
+        "Readiness level": {
+          "value": "Formulating working model"
+        },
+        "Innovation stage": {
+          "value": "Pre-emergent (0)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "27",
+        "title": "Digital agriculture – Morocco (2023)",
+        "description": "Participation in a global network on digital agriculture innovation hubs to promote innovation and digital technologies in the agriculture, fisheries, aquaculture, and forestry sectors.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Near East"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Agriculteurs, communautés rurales, acteurs de la chaîne alimentaire, organisations impliquées dans l'agriculture numérique."
+        },
+        "Top Innovations": {
+          "value": "High"
+        },
+        "Comments": {
+          "value": "SD - digital innovation hub"
+        },
+        "Innovation Key words 1": {
+          "value": "digital"
+        },
+        "Innovation Key words 2": {
+          "value": "Innovation Hub"
+        },
+        "kw COMPILED": {
+          "value": "digital, Innovation Hub"
+        },
+        "Innovation type": {
+          "value": "Access to markets - Access to knowledge and advisory"
+        },
+        "Use cases": {
+          "value": "Capacity development function"
+        },
+        "Readiness level": {
+          "value": "Formulating working model"
+        },
+        "Innovation stage": {
+          "value": "Pre-emergent (0)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "28",
+        "title": "Digital agriculture – Nepal (2023)",
+        "description": "FAO-Nepal piloted and implemented the Tele Plant Doctor. Powered by Artificial Intelligence (AI) and computer vision, this mobile application helps crop disease detection by allowing farmers and technicians to simply upload images of infected plant leaves for instant analysis and diagnosis. The app then analyzes these images, identifies disease symptoms and pests, and provides management recommendations in the local language. This approach helps reduce crop losses, promotes the judicious use of pesticides, and enhances food security and safety.\n\nThe app is a game-changer, especially given that diseases and pests account for approximately 40% of agricultural production losses globally. The Tele Plant Doctor not only detects these issues but also recommends eco-friendly management solutions, directly contributing to sustainable agrifood systems. It empowers farmers to make informed decisions and adopt best practices by providing accurate and timely information.\n\nSupported by the FAO's Digital Village Initiative (DVI), this innovation leverages advanced AI, Machine Learning, and Computer Vision technologies. It empowers farmers by providing timely, accurate disease-pest identification and effective management recommendations, reducing reliance on traditional, resource-intensive plant protection services.\n\nCurrently used for crops like potatoes and tomatoes, the app detects diseases such as Potato Early Blight, Tomato Bacterial Leaf Spot, and many more. The success of this initiative has led to plans for expanding its capabilities, including identifying nutrient deficiencies and predicting disease occurrences based on geolocation-specific data.\n\n\nNepal's Minister for Agriculture and Livestock Development has highlighted the importance of the Tele Plant Doctor application, marking it as a significant step towards elevating agrifood systems in Nepal. This recognition underscores the app's potential to transform traditional agricultural practices and enhance the efficiency of crop management across the country.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Asia & the Pacific"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "The applicaiton was launched by FAO DG at Kuntabesi Kavre where farmers are adopting IPM and grow mainly potatoes.\r\nThis mobile application can be directly used by farmers or agricultural technician to accurately detect the plant diseases."
+        },
+        "Top Innovations": {
+          "value": "High"
+        },
+        "Comments": {
+          "value": "SD-High, AI/Machine learning powerd solution for crop desease detection, treatment and prevention . (1 of the 5 examples selected for the GMR)"
+        },
+        "Innovation Key words 1": {
+          "value": "AI"
+        },
+        "Innovation Key words 2": {
+          "value": "DVI"
+        },
+        "Innovation Key words 3": {
+          "value": "Machine learning"
+        },
+        "Other key words": {
+          "value": "IPM, Tele plant, Doctor"
+        },
+        "kw COMPILED": {
+          "value": "AI, DVI, Machine learning, IPM, Tele plant, Doctor"
+        },
+        "Innovation type": {
+          "value": "Supply chain management - Natural resources management"
+        },
+        "Use cases": {
+          "value": "Technological - Digital technologies"
+        },
+        "Readiness level": {
+          "value": "Proof of application (0)"
+        },
+        "Innovation stage": {
+          "value": "Emergent (0)"
+        },
+        "Adoption level": {
+          "value": "Innovation network"
+        },
+        "SDGs": {
+          "value": "SDG 1, SDG 2, SDG 3 and SDG 13"
+        },
+        "project_symbol": {
+          "value": "Digital Village Initiative (DVI)."
+        },
+        "Title of innovation": {
+          "value": "The Tele Plant Doctor"
+        },
+        "Links": {
+          "value": "https://engage.cloud.microsoft/main/threads/eyJfdHlwZSI6IlRocmVhZCIsImlkIjoiMjg0MTgxMjEyMDg0NjMzNiJ9"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "29",
+        "title": "Digital agriculture – Niger (2023)",
+        "description": "Geomatics: remote sensing, satellite and drone image processing, geographic information systems (GIS) are used to create land use maps, crop maps and climate evolution and change maps. , as well as to develop maps of agricultural typologies in the Sahel and identify priority areas for investment based on certain defined criteria, including agricultural opportunities, poverty, potential and efficiency in association with econometrics as in the case of Hand in Hand",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Africa"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Cellule de géomatique mis en place au Ministère de l'agriculture avec l'appui de la FAO, Institutions gouvernementales, communautés, Donateurs."
+        },
+        "Top Innovations": {
+          "value": "High"
+        },
+        "Comments": {
+          "value": "SD - High, Remote sensing, satellite and drone imagery , geographic information systems (GIS) used to create land use maps, land cover maps,  crop maps and climate evolution and change maps. identification of the priority area for investment, .....  (it seems that \"drones\" are becoming more and more impactful, so we might decide to get more info on this experience)"
+        },
+        "Innovation Key words 1": {
+          "value": "Drones"
+        },
+        "Innovation Key words 2": {
+          "value": "Platform"
+        },
+        "Innovation Key words 3": {
+          "value": "GIS"
+        },
+        "Other key words": {
+          "value": "Investment, Land use, Maps"
+        },
+        "kw COMPILED": {
+          "value": "Drones, Platform, GIS, Investment, Land use, Maps"
+        },
+        "Innovation type": {
+          "value": "Natural resources management and sustainable practices"
+        },
+        "Use cases": {
+          "value": "Policy - Geospatial technologies"
+        },
+        "Readiness level": {
+          "value": "Proof of application (0)"
+        },
+        "Innovation stage": {
+          "value": "Emergent (0)"
+        },
+        "Adoption level": {
+          "value": "Innovation network"
+        },
+        "SDGs": {
+          "value": "17.8"
+        },
+        "project_symbol": {
+          "value": "Hand in Hand , \tTCP/SNE/3801"
+        },
+        "Title of innovation": {
+          "value": "Geomatics: Drone - powered digital innovation"
+        },
+        "Links": {
+          "value": "https://engage.cloud.microsoft/main/threads/eyJfdHlwZSI6IlRocmVhZCIsImlkIjoiMzA3NTIwNzg4MTIwMzcxMiJ9?trk_copy_link=V1"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "30",
+        "title": "Digital agriculture – Saint Kitts and Nevis (2023)",
+        "description": "The introduction of digital equipment to monitor the climatic, soil and fertilizers status in optimized greenhouses in St. Kitts and Nevis. Farmers are now in a better position to correct the humidity in their greenhouses, regulate the fertilizers status in the soil  and apply fertilizer when it is actually needed by the crop.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Lat.Ame. & the Caribbean"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "The main beneficiaries are protected crop farmers, extension officers and farmers organisations."
+        },
+        "Top Innovations": {
+          "value": "High"
+        },
+        "Comments": {
+          "value": "SD- High, introduction of digital equipments to monitor climatic, soil, and fertilizers status in green houses. , High, digital equipment for greenhouse management and monitoring increases yield , profitability, and effective resource management."
+        },
+        "Innovation Key words 1": {
+          "value": "digital"
+        },
+        "Innovation Key words 2": {
+          "value": "Greenhouses"
+        },
+        "Innovation Key words 3": {
+          "value": "equipements"
+        },
+        "Other key words": {
+          "value": "climate management, fertilizer managment, .."
+        },
+        "kw COMPILED": {
+          "value": "digital, Greenhouses, equipements, climate management, fertilizer managment, .."
+        },
+        "Innovation type": {
+          "value": "Supply chain management"
+        },
+        "Use cases": {
+          "value": "Digital technologies - Technological - Geospatial technologies"
+        },
+        "Readiness level": {
+          "value": "Proof of application (0)"
+        },
+        "Innovation stage": {
+          "value": "Emergent (0)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "31",
+        "title": "Digital agriculture – Suriname (2023)",
+        "description": "Development of an Agriculture Information framework/system to improve agriculture data management, extension services, and facilitate e-commerce.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Lat.Ame. & the Caribbean"
+        },
+        "Type of innovation": {
+          "value": "Institutional"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "LVV\r\nBuyers and Sellers of agriculture produce\r\nFarmers"
+        },
+        "Top Innovations": {
+          "value": "High"
+        },
+        "Comments": {
+          "value": "SD - high, agricultural information system"
+        },
+        "Innovation Key words 1": {
+          "value": "data management"
+        },
+        "Innovation Key words 2": {
+          "value": "Extension"
+        },
+        "Innovation Key words 3": {
+          "value": "e-commerce"
+        },
+        "kw COMPILED": {
+          "value": "data management, Extension, e-commerce"
+        },
+        "Innovation type": {
+          "value": "Access to knowledge and advisory - Business models support"
+        },
+        "Use cases": {
+          "value": "Policy - Knowledge management function"
+        },
+        "Readiness level": {
+          "value": "Working model (0)"
+        },
+        "Innovation stage": {
+          "value": "Pre-emergent (0)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "32",
+        "title": "Other Area – Syrian Arab Republic (2023)",
+        "description": "Innovative response to the impact of high fertilizers prices nationally and globally and promoting the adoption of organic farming practices.\nFertilizer prices have risen over the past several months (and years) in Syria due to high energy prices and reduced supply. The conflict in Europe has also reduced global supply of fertilizer, coupled with the economic challenges affecting Syria, which in turn affect the importation of some types of fertilizer.  \nTo circumvent the high fertilizer prices and limited supply and availability of imported fertilizers, FAO Syria incorporated the production of organic liquid fertilizer into the FFS curriculum as an alternative using their own resources This is being done to improve the resilience of vulnerable smallholder farmers to this specific shock, at the same time promoting organic production. The production of organic liquid fertilizer from cattle manure is a ,low cost and short term process, minimum work load mainly for women, simple, practical and easy to apply innovation. \nIn 2023 FAO built the capacity of farmers to produce organic liquid fertilizer from cow manure and this improved the adoption of sustainable agricultural practices and reduced the reliance on synthetic inputs. Additionally, the organic fertilizer will help farmers to improve soil structure and fertility, soil microbial activity and promote overall soil health in the medium to long-term.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Near East"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Male and female Farmer field school (FFS) participants, including those with disability."
+        },
+        "Top Innovations": {
+          "value": "High"
+        },
+        "Comments": {
+          "value": "(1 of the 5 examples selected for the GMR)"
+        },
+        "Innovation Key words 2": {
+          "value": "FFS"
+        },
+        "kw COMPILED": {
+          "value": "FFS"
+        },
+        "Innovation type": {
+          "value": "Farm management - Production"
+        },
+        "Use cases": {
+          "value": "Technological - Capacity development function"
+        },
+        "Readiness level": {
+          "value": "Ready (1)"
+        },
+        "Innovation stage": {
+          "value": "Mature (1)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "33",
+        "title": "Digital agriculture – Trinidad and Tobago (2023)",
+        "description": "Development of the Farmvue mobile app. to facilitate the collection of price and volume data at markets, thereby increasing accessibility to value chain information",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Lat.Ame. & the Caribbean"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "NAMDEVCO\nBuyers and Sellers of agriculture produce\nFarmers"
+        },
+        "Top Innovations": {
+          "value": "High"
+        },
+        "Comments": {
+          "value": "SD- high, the development of Farmvue mobile app."
+        },
+        "Innovation Key words 2": {
+          "value": "mobile"
+        },
+        "Innovation Key words 3": {
+          "value": "Markets"
+        },
+        "Other key words": {
+          "value": "Value chains"
+        },
+        "kw COMPILED": {
+          "value": "mobile, Markets, Value chains"
+        },
+        "Innovation type": {
+          "value": "Supply chain management - Access to knowledge and advisory"
+        },
+        "Use cases": {
+          "value": "Technological - Digital technologies - Knowledge management function"
+        },
+        "Readiness level": {
+          "value": "Working application (0)"
+        },
+        "Innovation stage": {
+          "value": "Pre-emergent (0)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "34",
+        "title": "Digital agriculture – Venezuela (Bolivarian Republic of) (2023)",
+        "description": "Launch of the Digital Services Portfolio (DSP) in Venezuela.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Lat.Ame. & the Caribbean"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Ministerio de Agricultura, Ministerio de Ciencia y Tecnología y comunidades."
+        },
+        "Top Innovations": {
+          "value": "High"
+        },
+        "Comments": {
+          "value": "SD- High, Launch of DSP  \" Digital service portifolio\" with four mobile services : weather and climate information, information and advice on  Nutrition, cure and feed your livestock and Market proce information"
+        },
+        "Innovation Key words 1": {
+          "value": "digital"
+        },
+        "Innovation Key words 2": {
+          "value": "mobile"
+        },
+        "Other key words": {
+          "value": "extension, advisory, knowledge sharing"
+        },
+        "kw COMPILED": {
+          "value": "digital, mobile, extension, advisory, knowledge sharing"
+        },
+        "Innovation type": {
+          "value": "Business models support - Access to knolwedge and advisory"
+        },
+        "Use cases": {
+          "value": "Policy - Capacity development function"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "35",
+        "title": "Digital agriculture – Saint Kitts and Nevis (2023)",
+        "description": "The introduction of digital equipment to monitor the climatic, soil and fertilizers status in optimized greenhouses in St. Kitts and Nevis. Farmers are now in a better position to correct the humidity in their greenhouses, regulate the fertilizers status in the soil  and apply fertilizer when it is actually needed by the crop.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Lat.Ame. & the Caribbean"
+        },
+        "Type of innovation": {
+          "value": "Technological"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "The main beneficiaries are protected crop farmers, extension officers and farmers organisations."
+        },
+        "Top Innovations": {
+          "value": "High"
+        },
+        "Comments": {
+          "value": "SD- High, introduction of digital equipments to monitor climatic, soil, and fertilizers status in green houses. , High, digital equipment for greenhouse management and monitoring increases yield , profitability, and effective resource management."
+        },
+        "Innovation Key words 1": {
+          "value": "digital"
+        },
+        "Innovation Key words 2": {
+          "value": "Greenhouses"
+        },
+        "Innovation Key words 3": {
+          "value": "equipements"
+        },
+        "Other key words": {
+          "value": "climate management, fertilizer managment, .."
+        },
+        "kw COMPILED": {
+          "value": "digital, Greenhouses, equipements, climate management, fertilizer managment, .."
+        },
+        "Innovation type": {
+          "value": "Food quality and safety - Access to markets - Farm management"
+        },
+        "Use cases": {
+          "value": "Mechanization - Manufacturing technologies - Technological"
+        },
+        "Readiness level": {
+          "value": "Proof of application (0)"
+        },
+        "Innovation stage": {
+          "value": "Emerget (0)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "36",
+        "title": "Digital agriculture – Sri Lanka (2023)",
+        "description": "The initiative focuses on establishing an interoperability framework and an integrated database for Sri Lanka's agriculture sector. It aims to enhance data accessibility, streamline operations, and improve decision-making to boost agricultural productivity and economic growth. The project plans to create a unified platform for data exchange, breaking down silos among agricultural entities and fostering a more integrated, efficient, and effective agriculture sector.",
+        "abstract": null,
+        "date": "2023",
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Region": {
+          "value": "Asia & the Pacific"
+        },
+        "Type of innovation": {
+          "value": "Legislative"
+        },
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Ministry of Agriculture and Plantation Industries"
+        },
+        "Top Innovations": {
+          "value": "Medium"
+        },
+        "Comments": {
+          "value": "SD - Valuable,   a unified platform for data exchange developmen.... more details on the status of its development, integrated databases  and its impact will be needed .. data privacy requirements for datasets from  different sources....etc ,   the platform data exchange will harmonize data exchanges and improve interoperability in digital agriculture ecosystems,"
+        },
+        "Innovation Key words 1": {
+          "value": "database"
+        },
+        "Innovation Key words 2": {
+          "value": "platform"
+        },
+        "Other key words": {
+          "value": "unified , data, exchange"
+        },
+        "kw COMPILED": {
+          "value": "database, platform, unified , data, exchange"
+        },
+        "Innovation type": {
+          "value": "Access to knowledge and advisory - Collective action and aggregation - Access to knowledge and advisory"
+        },
+        "Use cases": {
+          "value": "Knowledge management function"
+        },
+        "Readiness level": {
+          "value": "Ideal / Hypothesis"
+        },
+        "Innovation stage": {
+          "value": "Pre-emergent (0)"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "38",
+        "title": "Innovation",
+        "description": null,
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Ministry of Irrigation"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "40",
+        "title": "Innovation",
+        "description": null,
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "Information on main beneficiaries of reported innovation": {
+          "value": "Ministry of Fisheries"
+        }
+      }
+    }
+  ]
+}

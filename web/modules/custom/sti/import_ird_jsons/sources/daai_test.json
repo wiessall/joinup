@@ -1,0 +1,102 @@
+{
+  "meta": {
+    "collection_id": "daai",
+    "collection_label": "daai",
+    "collection_nid": 0,
+    "record_count": 1,
+    "export_timestamp": "2026-10-01T10:00:00.00",
+    "field_config": {
+      "name": {
+        "categorical": false
+      },
+      "mission": {
+        "categorical": true
+      },
+      "geography": {
+        "categorical": true
+      },
+      "key_partners_involved": {
+        "categorical": true
+      },
+      "target_users": {
+        "categorical": true
+      },
+      "maturity_phase": {
+        "categorical": true
+      },
+      "problem_statement": {
+        "categorical": false
+      },
+      "solution_statement": {
+        "categorical": false
+      },
+      "solution_snapshot": {
+        "categorical": false,
+        "separator": "|"
+      },
+      "key_hypotheses": {
+        "categorical": false,
+        "separator": "|"
+      },
+      "kpis": {
+        "categorical": false,
+        "separator": "|"
+      },
+      "inclusion_by_design": {
+        "categorical": false
+      },
+      "risk_management": {
+        "categorical": false
+      },
+      "blueprint_gate": {
+        "categorical": true
+      }
+  },
+  "records": [
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": null,
+        "title": "Open IoT Platform for Smallholder Protected Horticulture",
+        "description": "Messaging-based climate alerts based on greenhouse sensor data for vegetable farmers in Vietnam.",
+        "abstract": "Build an open-source, farmer-owned IoT sensor platform - developed as a Digital Public Good from inception - to create the local microclimate data layer that doesn't yet exist. From day one, simple rule-based alerts via Zalo* (e.g. humidity levels) already deliver farmer value with no AI required, and farmer groups relay alerts to unequipped neighbours, organically driving new sign-ups. Once a full season of real multi-farm data accumulates, AI adds predictive advisory (pest and disease forecasts, irrigation scheduling etc.) and, later, optional farmer-confirmed automation. ",
+        "date": "2026-10-01",
+        "url": "https://unfao.sharepoint.com/:w:/r/sites/OIN-Office-of-Innovation-Team/_layouts/15/Doc.aspx?sourcedoc=%7BA4D4FEC9-0FA1-4087-9CAC-F61C13FF562B%7D&file=Example_Vietnam%20Horticulture_2pager.docx&action=default&mobileredirect=true&wdwpf=doclib-c",
+        "owner_name": "FAO",
+        "owner_id": "fao"
+      },
+      "claims": {
+        "key_partners_involved": {
+          "value": [
+            "FAO Vietnam country office",
+          ]
+        },
+        "target_users": {
+          "value": "Smallholder farmers"
+        },
+        "maturity_phase": {
+          "value": "At design stage: the problem has been clearly documented and backed by real evidence from the field. Now working out exactly how a pilot would run before proposing it for funding and testing with real farmers."
+        },
+        "problem_statement": {
+          "value": "Smallholder vegetable farmers in northern Vietnam are rapidly adopting greenhouses to meet growing demand for fresh, safe produce: greenhouse area in Moc Chau grew tenfold in four years (17 ha in 2021 to 196 ha in 2025). But farmers lack affordable, context-aware microclimate monitoring, so irrigation, ventilation and pest-response decisions rely on intuition rather than data. This causes avoidable crop losses and blocks replication of successful models. Satellite data doesn't work inside a greenhouse, and commercial IoT solutions exist locally but are priced out of reach for smallholders."
+        },
+        "solution_statement": {
+          "value": "Build an open-source, farmer-owned IoT sensor platform - developed as a Digital Public Good from inception - to create the local microclimate data layer that doesn't yet exist. From day one, simple rule-based alerts via Zalo* (e.g. humidity levels) already deliver farmer value with no AI required, and farmer groups relay alerts to unequipped neighbours, organically driving new sign-ups. Once a full season of real multi-farm data accumulates, AI adds predictive advisory (pest and disease forecasts, irrigation scheduling etc.) and, later, optional farmer-confirmed automation."
+        },
+        "solution_snapshot": {
+          "value": [
+            "Data / Sensing: Low-cost, open-source sensors installed inside each farmer's greenhouse continuously measure temperature, humidity, soil moisture and light. Because they're farmer-owned and openly designed, any farmer group can build or repair them locally, without relying on one costly supplier. This real, local data is the foundation the rest of the platform depends on.",
+            "Farmer Dashboard": "Readings and alerts reach farmers through Zalo, the messaging app most households already use (nothing new to install or learn). The Vietnamese-language interface shows current conditions and simple alerts like "humidity too high for 6 hours," designed for people with little digital experience.",
+            "AI / Advisory": "S The system starts with simple rule-based alerts (no AI needed), so farmers see value from day one. Once enough real data builds up across farms, it adds AI-based predictions, like forecasting disease risk days in advance. Only once these prove reliable does it offer optional, farmer-controlled automation of actions like ventilation."
+          ]
+        }
+        "key_hypotheses": "Low-cost sensors can reliably work in real greenhouse conditions, at a price farmers can afford. Test devices on real farms for a full growing season."
+        "kpis": 
+        "inclusion_by_design": 
+        "risk_management": 
+        "blueprint_gate": 
+      }
+    }
+  ]
+}

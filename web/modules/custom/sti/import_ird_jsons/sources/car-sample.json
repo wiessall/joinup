@@ -1,0 +1,76 @@
+{
+  "_comment": "Normalized intermediate format. IRD lib produces this from any source (CSV, API, JSON). One file per collection import run.",
+  "meta": {
+    "collection_id": "car",
+    "collection_label": "CAR - Compendium of Agricultural Research",
+    "og_audience_nid": 42,
+    "owner_nid": 17,
+    "contact_nid": 17,
+    "default_language_tid": 31,
+    "default_classification_tid": 5,
+    "default_domain_tid": 8,
+    "import_timestamp": "2026-05-04T10:00:00Z"
+  },
+  "records": [
+    {
+      "id": "car_proj_001",
+      "title": "Drone-based crop monitoring in Eastern Province",
+      "abstract": "Short summary for listing pages (255 char max). Optional — falls back to truncated description.",
+      "description": "Full description of the innovation, potentially multi-paragraph HTML.",
+      "date": "2024-03-15",
+      "url": "https://example.org/innovations/001",
+      "domain_names": ["Agriculture"],
+      "topic_names": ["Precision Agriculture", "Remote Sensing"],
+      "language_names": ["English"],
+      "owner_name": "Eastern Agricultural Research Institute",
+      "contact_name": null,
+      "_raw": {
+        "project_id": "car_proj_001",
+        "description_of_innovation": "Full description...",
+        "type_of_innovation": "Complete Solution",
+        "date_of_collection": "2024-03-15",
+        "any_other_original_field": "preserved here"
+      },
+      "_annotations": {
+        "technologies": ["drone", "multispectral imaging", "IoT"],
+        "countries": ["RW", "KE"],
+        "use_cases": ["crop health monitoring"],
+        "channels": ["extension services"],
+        "custom_fields": {
+          "readiness_level": "TRL 7",
+          "delivery_format": "SaaS"
+        }
+      }
+    },
+    {
+      "id": "car_proj_002",
+      "title": "Mobile soil testing kit",
+      "abstract": null,
+      "description": "A portable kit for...",
+      "date": "2023-11-01",
+      "url": null,
+      "classification_name": "Solution Component",
+      "domain_names": ["Agriculture", "Environment"],
+      "topic_names": [],
+      "language_names": ["English", "French"],
+      "owner_name": null,
+      "contact_name": null,
+      "_raw": {
+        "project_id": "car_proj_002",
+        "description_of_innovation": "A portable kit for...",
+        "type_of_innovation": "Solution Component",
+        "date_of_collection": "2023-11-01"
+      },
+      "_annotations": {
+        "technologies": ["solar", "IoT"],
+        "countries": ["DE", "NL"],
+        "use_cases": ["solar panels that connect to the internet"],
+        "channels": ["extension services"],
+        "custom_fields": {
+          "readiness_level": "TRL 3",
+          "delivery_format": "hardware"
+        }
+      }
+    }
+  ]
+}

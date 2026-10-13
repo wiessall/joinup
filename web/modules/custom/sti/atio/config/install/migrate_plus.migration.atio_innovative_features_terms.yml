@@ -1,0 +1,50 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+    - atio
+id: atio_innovative_features_terms
+label: Innovative features terms
+migration_group: sti_vocabularies
+migration_tags:
+- vocabulary
+- atio
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+  - modules/custom/sti/atio/data/atio_innovative_features.json
+  item_selector: ''
+  ids:
+    tid:
+      type: integer
+  fields:
+  - name: tid
+    label: tid
+    selector: tid
+  - name: name
+    label: name
+    selector: name
+  - name: parent
+    label: parent
+    selector: parent
+process:
+  name: name
+  vid:
+    plugin: default_value
+    default_value: atio_innovative_features
+  parent:
+  - plugin: skip_on_empty
+    method: process
+    source: parent
+  - plugin: migration_lookup
+    migration: atio_innovative_features_terms
+    no_stub: true
+destination:
+  plugin: entity:taxonomy_term
+  default_bundle: atio_innovative_features
+migration_dependencies:
+  required: []
+  optional: []
