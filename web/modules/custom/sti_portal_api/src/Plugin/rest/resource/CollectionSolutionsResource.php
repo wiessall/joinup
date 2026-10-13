@@ -11,14 +11,22 @@ use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Returns the solutions belonging to one collection.
+ * Returns the content belonging to one collection.
  *
- * Published ones by default. With ?status=all, also the unpublished ones the
- * current user may view; each row says which it is. ?limit (1 to 500,
- * default 200) and ?page (from 0) walk through a large collection.
+ * Query parameters, all optional:
+ * - ?type=source_record,atio_innovation  Which content types; comma-separated.
+ *   Default: both. Public names, mapped to the bundles in TYPES.
+ * - ?moderation=published|unpublished|all  Published status. Default:
+ *   published. Unpublished rows are only returned to users who may view them.
+ * - ?limit=N (1 to 500) and ?page=P (from 0)  Page through the result.
+ *   Default: no limit, everything is returned.
+ *
+ * An unknown type or moderation value is a 400, not an empty list, so a typo
+ * in a client never looks like an empty collection.
  *
  * One endpoint, every collection. The response shape is a flat array of
  * objects, deliberately matching what a Views REST export would emit, so
@@ -35,9 +43,17 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class CollectionSolutionsResource extends ResourceBase {
 
   /**
-   * Content type holding solutions.
+   * Public type name => node bundle.
    */
-  private const SOLUTION_BUNDLE = 'solution';
+  private const TYPES = [
+    'source_record' => 'solution',
+    'atio_innovation' => 'atio_innovation',
+  ];
+
+  /**
+   * Accepted ?moderation values.
+   */
+  private const MODERATION = ['published', 'unpublished', 'all'];
 
   /**
    * Group audience field on the solution node.
@@ -60,10 +76,14 @@ class CollectionSolutionsResource extends ResourceBase {
   private const STATE_FIELD = 'field_state';
 
   /**
-   * Rows per page: default and upper bound.
+   * Upper bound for ?limit.
    */
-  private const DEFAULT_LIMIT = 200;
   private const MAX_LIMIT = 500;
+
+  /**
+   * Nodes loaded at a time when building the response.
+   */
+  private const LOAD_CHUNK = 100;
 
   public function __construct(
     array $configuration,
@@ -105,46 +125,61 @@ class CollectionSolutionsResource extends ResourceBase {
     }
 
     $query = $this->requestStack->getCurrentRequest()?->query;
-    $includeUnpublished = $query?->get('status') === 'all';
-    $limit = min(self::MAX_LIMIT, max(1, (int) ($query?->get('limit') ?? self::DEFAULT_LIMIT)));
-    $page = max(0, (int) ($query?->get('page') ?? 0));
+    $bundles = $this->requestedBundles($query?->get('type'));
+    $moderation = $query?->get('moderation') ?? 'published';
+    if (!in_array($moderation, self::MODERATION, TRUE)) {
+      throw new BadRequestHttpException(sprintf('Unknown moderation "%s"; use one of: %s.', $moderation, implode(', ', self::MODERATION)));
+    }
 
     $storage = $this->entityTypeManager->getStorage('node');
     $entityQuery = $storage->getQuery()
       ->accessCheck(TRUE)
-      ->condition('type', self::SOLUTION_BUNDLE)
+      ->condition('type', array_values($bundles), 'IN')
       ->condition(self::AUDIENCE_FIELD . '.target_id', $collectionNode->id())
       ->sort('title', 'ASC')
-      ->sort('nid', 'ASC')
-      ->range($page * $limit, $limit);
-    if (!$includeUnpublished) {
+      ->sort('nid', 'ASC');
+    if ($moderation === 'published') {
       $entityQuery->condition('status', 1);
     }
-    $ids = $entityQuery->execute();
+    elseif ($moderation === 'unpublished') {
+      $entityQuery->condition('status', 0);
+    }
+    if ($query?->has('limit')) {
+      $limit = min(self::MAX_LIMIT, max(1, (int) $query->get('limit')));
+      $page = max(0, (int) ($query->get('page') ?? 0));
+      $entityQuery->range($page * $limit, $limit);
+    }
+    $ids = array_values($entityQuery->execute());
 
+    $types = array_flip(self::TYPES);
     $uris = $this->graphUris($ids);
     $rows = [];
-    foreach ($storage->loadMultiple($ids) as $node) {
-      // The query's access check does not hide unpublished nodes on a site
-      // without node grants, so each unpublished one is checked on its own.
-      // A page can therefore hold fewer rows than the limit.
-      if (!$node->isPublished() && !$node->access('view')) {
-        continue;
+    foreach (array_chunk($ids, self::LOAD_CHUNK) as $chunk) {
+      foreach ($storage->loadMultiple($chunk) as $node) {
+        // The query's access check does not hide unpublished nodes on a site
+        // without node grants, so each unpublished one is checked on its own.
+        // A page can therefore hold fewer rows than the limit.
+        if (!$node->isPublished() && !$node->access('view')) {
+          continue;
+        }
+        $rows[] = [
+          'nid'       => (int) $node->id(),
+          'uuid'      => $node->uuid(),
+          'type'      => $types[$node->bundle()],
+          'published' => $node->isPublished(),
+          // The workflow state; NULL where the bundle has no state field.
+          'state'     => $node->hasField(self::STATE_FIELD) ? $node->get(self::STATE_FIELD)->value : NULL,
+          // The subject of this node's triples in the graph, so a client can
+          // go from this list straight to SPARQL. NULL until first synced.
+          'uri'       => $uris[(int) $node->id()] ?? NULL,
+          'title'     => $node->label(),
+          'abstract'  => $this->abstractOf($node),
+          'logo'      => $this->logoOf($node),
+          'path'      => [['alias' => $node->toUrl()->toString()]],
+        ];
       }
-      $rows[] = [
-        'nid'      => (int) $node->id(),
-        'uuid'     => $node->uuid(),
-        'published' => $node->isPublished(),
-        // The workflow state; NULL if the state field is gone.
-        'state'    => $node->hasField(self::STATE_FIELD) ? $node->get(self::STATE_FIELD)->value : NULL,
-        // The subject of this solution's triples in the graph, so a client
-        // can go from this list straight to SPARQL. NULL until first synced.
-        'uri'      => $uris[(int) $node->id()] ?? NULL,
-        'title'    => $node->label(),
-        'abstract' => $this->abstractOf($node),
-        'logo'     => $this->logoOf($node),
-        'path'     => [['alias' => $node->toUrl()->toString()]],
-      ];
+      // Without this a full collection stays in the entity static cache.
+      $storage->resetCache($chunk);
     }
 
     $response = new ResourceResponse($rows, 200);
@@ -152,17 +187,43 @@ class CollectionSolutionsResource extends ResourceBase {
     // Invalidate whenever any node changes; narrow this to the collection's
     // own tag once the traffic justifies it.
     $cache = new CacheableMetadata();
-    $cache->addCacheTags(['node_list:' . self::SOLUTION_BUNDLE]);
+    foreach ($bundles as $bundle) {
+      $cache->addCacheTags(['node_list:' . $bundle]);
+    }
     // What is listed depends on the query string and, once unpublished
     // nodes are included, on who is asking.
     $cache->addCacheContexts(['user.permissions', 'url.path', 'url.query_args']);
-    if ($includeUnpublished) {
+    if ($moderation !== 'published') {
       $cache->addCacheContexts(['user']);
     }
     $cache->setCacheMaxAge(300);
     $response->addCacheableDependency($cache);
 
     return $response;
+  }
+
+  /**
+   * Turns ?type into bundles.
+   *
+   * @return array<string, string>
+   *   Bundle keyed by public type name.
+   *
+   * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
+   *   For an unknown type name.
+   */
+  private function requestedBundles(?string $type): array {
+    if ($type === NULL || trim($type) === '') {
+      return self::TYPES;
+    }
+    $bundles = [];
+    foreach (array_filter(array_map('trim', explode(',', $type))) as $name) {
+      if (!isset(self::TYPES[$name])) {
+        throw new BadRequestHttpException(sprintf('Unknown type "%s"; use one of: %s.', $name, implode(', ', array_keys(self::TYPES))));
+      }
+      $bundles[$name] = self::TYPES[$name];
+    }
+    // "?type=," names nothing; treat it like no filter.
+    return $bundles ?: self::TYPES;
   }
 
   /**
