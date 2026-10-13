@@ -29,8 +29,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  *   "claims": { "<property>": [ { "value": "…", "term_uri": "…",
  *   "claimed_by": "<collection short_id>", "claimed_at": "<ISO 8601>" } ] }
  *   term_uri only for categorical values; same-innovation claims carry the
- *   other record's "nid" and its graph URI as value. Records without a
- *   claims field (atio_innovation) get an empty object.
+ *   other record's "nid" and its graph URI as value. Records without
+ *   claims (atio_innovation) get an empty list, [].
  *
  * Claims follow node access: whoever may see the record sees its claims.
  * The paragraph-type permission for claims is not consulted.
@@ -207,8 +207,9 @@ class CollectionSolutionsResource extends ResourceBase {
           'path'      => [['alias' => $node->toUrl()->toString()]],
         ];
         if ($includeClaims) {
-          // An object, also when empty, so clients can rely on the type.
-          $rows[array_key_last($rows)]['claims'] = (object) ($claims[(int) $node->id()] ?? []);
+          // A plain array: Drupal's serializer cannot normalize stdClass.
+          // Serialized as an object, or as [] when there are no claims.
+          $rows[array_key_last($rows)]['claims'] = $claims[(int) $node->id()] ?? [];
         }
       }
       // Without this a full collection stays in the entity static cache.
