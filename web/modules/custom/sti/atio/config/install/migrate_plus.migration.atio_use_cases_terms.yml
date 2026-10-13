@@ -1,0 +1,55 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+    - atio
+id: atio_use_cases_terms
+label: AFS innovation use cases terms
+migration_group: sti_vocabularies
+migration_tags:
+- vocabulary
+- atio
+- hierarchical
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+  - modules/custom/sti/atio/data/atio_use_cases.json
+  item_selector: ''
+  ids:
+    tid:
+      type: integer
+  fields:
+  - name: tid
+    label: tid
+    selector: tid
+  - name: name
+    label: name
+    selector: name
+  - name: parent
+    label: parent
+    selector: parent
+  - name: variant
+    label: variant
+    selector: variant
+process:
+  name: name
+  vid:
+    plugin: default_value
+    default_value: atio_use_cases
+  parent:
+  - plugin: skip_on_empty
+    method: process
+    source: parent
+  - plugin: migration_lookup
+    migration: atio_use_cases_terms
+    no_stub: true
+  variant: variant
+destination:
+  plugin: entity:taxonomy_term
+  default_bundle: atio_use_cases
+migration_dependencies:
+  required: []
+  optional: []

@@ -1,0 +1,146 @@
+#+Title: README
+
+This module is built around the central idea to collect innovation data from many sources from within and outside FAO. All of these sources hold structured data in different forms, ranging from JSON-friendly APIs to csv and excel files. Everyone uses their own taxonomies and ways to structure the data and we want everyone to be able to keep using them and to recognize the data structure that is presented to them.
+On first import in our system we are accepting any strucutured data and migrate it into a slim core entity, the ~source_record~. The ~source_record~ has just a couple of required fields that serve as data intake gates: ~title~, ~description~, ~collection~, (internal) ~id~. Any other information that the data provider has about the data is being imported as a ~field_claim~. The data provider will be recorded into the system as a ~collection~ and ~field_claims~ are recorded to be issued by that ~collection~. They are reified statements of the shape:
+#+begin_src 
+  A claim is a reified statement:
+    solution  sti:hasFieldClaim  claim
+      claim   sti:claimProperty     <property-uri>     (predicate)
+      claim   sti:claimLiteralValue "…"  |  sti:claimRefValue <value-uri> (object)
+      claim   sti:claimedBy         <collection-uri>   (provenance) //! future changes might allow for non-collection claim issuers
+      claim   sti:claimedAt         "…"                (provenance)
+#+end_src
+This means we can record any sort of statement that any ~collection~ makes about any ~source_record~ during data import, without discarding or altering anything at this stage.
+
+This module is leveraging the ~migrate_plus~ Drupal module and to make data import (migration in drupal terms) as easy as possible it is always using a standard migration config template, provided as ~config/optional/migrate.migrate_plus.source_record_import.yml~. This works, since we are formatting any imcoming data so that it adheres to a standardized, but very flexible json schema. The general migration pipeline is:
+
+#+begin_src mermaid :file source_record_import.svg
+  flowchart TD
+  subgraph IRD library
+    f1["sql"] --> f5["standard json"]
+    f2["csv"] --> f5["standard json"]
+    f3["API"] --> f5["standard json"]
+    f4["html"] --> f5["standard json"]
+  end
+  subgraph STI Portal
+    subgraph collection
+      f5 --> d2
+      f5 --> d1
+      d2["field_claim"] --> d1["source_record"] 
+    end
+  end
+#+end_src 
+
+The derivation of the claim is done by ~IrdClaims.php~ at migration time. It ensures that a json record/entry is parsed correctly into the ~source_record~ and its ~field_claims~. ~IntakeFile.php~ and ~IrdFileMeta.php~ parse out the per-claim meta-properties, e.g. whether or not a claim property holds categorical values or not.
+#+begin_src json
+  {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sti-portal.fao.org/schema/ird-standard/0.1",
+  "title": "STI Portal standard intake file, v0.1 (as produced by ird_normalize.py)",
+  "description": "One file = one collection. Each record becomes one source record (Drupal bundle 'solution'); every claim becomes a claims paragraph issued by the collection. meta.field_config states once, for the whole file, which claim keys are categorical.",
+  "type": "object",
+  "required": ["meta", "records"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["collection_id", "field_config"],
+      "properties": {
+        "collection_id": {
+          "description": "The collection's short_id in the portal.",
+          "type": "string",
+          "minLength": 1
+        },
+        "collection_label": { "type": "string" },
+        "collection_nid": { "type": "integer" },
+        "record_count": { "type": "integer", "minimum": 0 },
+        "export_timestamp": { "type": "string" },
+        "field_config": {
+          "description": "One entry per claim key used in records[].claims.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["categorical"],
+            "properties": {
+              "categorical": {
+                "description": "true: each value becomes a term in the collection's vocabulary (facetable, mappable). false: stored as text.",
+                "type": "boolean"
+              },
+              "separator": {
+                "description": "Documents how the source string was split. Values in the file are already arrays.",
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "records": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/record" }
+    }
+  },
+  "$defs": {
+    "record": {
+      "type": "object",
+      "required": ["core_fields", "claims"],
+      "additionalProperties": false,
+      "properties": {
+        "core_fields": {
+          "type": "object",
+          "required": ["id", "title", "description"],
+          "properties": {
+            "id": {
+              "description": "Provider's identifier; unique within the collection and stable across exports (re-import matches on it).",
+              "type": "string",
+              "minLength": 1
+            },
+            "title": { "type": "string", "minLength": 1 },
+            "description": { "type": "string", "minLength": 1 },
+            "abstract": { "type": ["string", "null"] },
+            "date": { "type": ["string", "null"] },
+            "url": { "type": ["string", "null"] },
+            "language_names": { "type": ["array", "null"], "items": { "type": "string" } },
+            "owner_name": { "type": ["string", "null"] },
+            "owner_id": { "type": ["string", "null"] },
+            "contact_name": { "type": ["string", "null"] }
+          }
+        },
+        "claims": {
+          "description": "Key = the provider's own property name, verbatim; must have an entry in meta.field_config.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["value"],
+            "additionalProperties": false,
+            "properties": {
+              "value": {
+                "oneOf": [
+                  { "type": "string" },
+                  { "type": "array", "items": { "type": "string" } }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+#+end_src
+
+The json claim is migrated to these targets:
+1. Drupal / sql
+2. Solr
+3. RDF triplestore
+   + [Drupal/sql] the paragraph ~field_claims~ that can store the claim in 5 fields (~field_claimed_by~, ~field_claimed_at~, ~field_claim_property~, ~field_claim_literal_value~, ~field_claim_ref_value~).There is a 6th value on the ~field_claims~, it's used to mark duplicate ~source_record~ entries. If the value is 'categorical' the value will be added to a taxonomy vocabulary and added to the ~field_claim~ ~field_claim_ref_value~ as an entity reference to that taxonomy vocabulary term. Else claimLiteralValue will store the value as plain text.
+   The ~IrdClaims.php~ migrate plugin is ~ird_claims~ used like this:
+   #+begin_src yaml
+     # In the migration config
+     field_claims:
+       plugin: ird_claims
+       source: claims
+  
+   #+end_src
+   + [Solr] ~search_api/processor/ClaimFieldsProcessor.php~ fills in claim information into the Solr fields ~claim_facet~, ~claim_key~ and ~claim_collection~. Key is structure as ~collection::property~ and value as ~collection::property::value~. Collection is filled using the collection's ~short_id~. Properties are shortened as slugs.
+   + [RDF] When it comes to the triplestore, the ~claims~ paragraph entity has ~rdf_sync~ configured, so that any claim that gets saved to drupal, will be automatically synced to the knowledge graph. This setting is found in ~paragraphs.paragraphs_type.claims~ and the ~field.field.paragraph.claims.*~.

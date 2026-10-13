@@ -1,0 +1,50 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+    - sti_qa
+id: sti_record_status_terms
+label: Record status terms
+migration_group: sti_vocabularies
+migration_tags:
+- vocabulary
+- sti_qa
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+  - modules/custom/sti/sti_qa/data/sti_record_status.json
+  item_selector: ''
+  ids:
+    tid:
+      type: integer
+  fields:
+  - name: tid
+    label: tid
+    selector: tid
+  - name: name
+    label: name
+    selector: name
+  - name: parent
+    label: parent
+    selector: parent
+process:
+  name: name
+  vid:
+    plugin: default_value
+    default_value: sti_record_status
+  parent:
+  - plugin: skip_on_empty
+    method: process
+    source: parent
+  - plugin: migration_lookup
+    migration: sti_record_status_terms
+    no_stub: true
+destination:
+  plugin: entity:taxonomy_term
+  default_bundle: sti_record_status
+migration_dependencies:
+  required: []
+  optional: []

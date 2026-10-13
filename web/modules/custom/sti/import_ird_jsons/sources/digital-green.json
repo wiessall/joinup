@@ -1,0 +1,4199 @@
+{
+  "meta": {
+    "collection_id": "dig-green",
+    "collection_label": "Digital Green",
+    "collection_nid": 0,
+    "record_count": 190,
+    "export_timestamp": "2026-07-16T15:47:59.833052",
+    "field_config": {
+      "image_url": {
+        "categorical": false
+      },
+      "category": {
+        "categorical": true
+      }
+    }
+  },
+  "records": [
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "0",
+        "title": "Farmer.Chat: Shaping Modern Agriculture for Youth in Kenya",
+        "description": "In Meru County, Kenya, at the vibrant heart of its agricultural community, Annred Gakii’s farm stands as a testament to innovation and resilience. At 29, this single mother has dramatically transformed her agricultural practices and economic outlook through the strategic use of advanced technology. By leveraging the capabilities of Farmer.Chat Kenya, an AI-powered digital assistant […]",
+        "abstract": null,
+        "date": "December 4, 2024",
+        "url": "https://digitalgreen.org/farmer-chat-shaping-modern-agriculture-for-youth-in-kenya/",
+        "owner_name": "Digital Green Team",
+        "owner_id": "digital-green_digital-green-team"
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/12/Photo-.jpg"
+        },
+        "category": {
+          "value": "Blog"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "1",
+        "title": "Tackling Methane Emissions in Dairy Farming: A Collaborative Effort for Sustainable Agriculture",
+        "description": "Agriculture is a key driver of global food security, but it also significantly contributes to methane emissions, particularly from livestock. With the growing need to address climate change while enhancing agricultural productivity and reducing costs for farmers, a new initiative led by the University of California (UC Davis), college of Agricultural and Environmental Sciences, through […]",
+        "abstract": null,
+        "date": "October 30, 2024",
+        "url": "https://digitalgreen.org/tackling-methane-emissions-in-dairy-farming-a-collaborative-effort-for-sustainable-agriculture/",
+        "owner_name": "Digital Green Team",
+        "owner_id": "digital-green_digital-green-team"
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/10/DSC09875.jpg"
+        },
+        "category": {
+          "value": "Blog"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "2",
+        "title": "Rural Women Rise: Stories of Resilience and Leadership in Ethiopia",
+        "description": "On October 15th, as we mark the International Day of Rural Women, we celebrate the strength, resilience, and leadership of women in rural communities. In Ethiopia, where women often face limited access to education, financial services, and leadership roles, programs like Digital Green’s Self-Help Groups (SHGs) are changing lives. These SHGs are more than just […]",
+        "abstract": null,
+        "date": "October 10, 2024",
+        "url": "https://digitalgreen.org/rural-women-rise-stories-of-resilience-and-leadership-in-ethiopia/",
+        "owner_name": "Digital Green Team",
+        "owner_id": "digital-green_digital-green-team"
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/10/Dararcho-SHG.jpg"
+        },
+        "category": {
+          "value": "Blog"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "3",
+        "title": "From Unemployment to Entrepreneurs: The Transformative Impact of a Youth-Led Enterprise in Ethiopia",
+        "description": "In the vibrant region of Oromia, specifically in Jimma, a remarkable youth-led enterprise named Sabit, Medina, and Mubarak Youth-Led Enterprise (YLE) has emerged as a beacon of hope and change. This group of 30 determined young men and women came together in December 2022 as part of the ACAL-II Phase II project, which focuses on […]",
+        "abstract": null,
+        "date": "August 9, 2024",
+        "url": "https://digitalgreen.org/from-unemployment-to-entrepreneurs-the-transformative-impact-of-a-youth-led-enterprise-in-ethiopia/",
+        "owner_name": "Digital Green Team",
+        "owner_id": "digital-green_digital-green-team"
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/08/DSC07392.jpg"
+        },
+        "category": {
+          "value": "Blog"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "4",
+        "title": "Celebrating the Strength of Cooperatives: The Transformation of Gonde Cooperative in Ethiopia",
+        "description": "As we celebrate International Cooperative Day (July 1st), we’re reminded of the essential role cooperatives play in fostering sustainable development, ensuring food security, and empowering communities. Cooperatives help farmers pool resources, share crucial farming knowledge, and access broader markets, which drives economic growth and improves their lives. At Digital Green, we work with many types […]",
+        "abstract": null,
+        "date": "June 28, 2024",
+        "url": "https://digitalgreen.org/celebrating-the-strength-of-cooperatives-the-transformation-of-gonde-cooperative-in-ethiopia/",
+        "owner_name": "Digital Green Team",
+        "owner_id": "digital-green_digital-green-team"
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/06/ETH-Oromia-60.jpg"
+        },
+        "category": {
+          "value": "Blog"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "5",
+        "title": "Embracing AI: A Leap Towards Enhanced Productivity and Skill Development at Digital Green",
+        "description": "At Digital Green, we believe in the power of generative Artificial Intelligence (AI) for agricultural extension to transform the lives of the farmers we work with. Now, we are harnessing that same transformative power of AI to reshape our work dynamics and enhance productivity. By integrating AI into daily tasks, key deliverables, and organizational systems, […]",
+        "abstract": null,
+        "date": "June 27, 2024",
+        "url": "https://digitalgreen.org/embracing-ai-a-leap-towards-enhanced-productivity-and-skill-development-at-digital-green/",
+        "owner_name": "Digital Green Team",
+        "owner_id": "digital-green_digital-green-team"
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/06/DSC01403.jpg"
+        },
+        "category": {
+          "value": "Blog"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "6",
+        "title": "Embracing Climate-Smart Farming in Ethiopia",
+        "description": "Digital Green has been working to improve farming advice through videos, focusing on climate-smart agriculture (CSA) in Gumer woreda, Ethiopia. This pilot project aims to educate farmers about climate change and how to adapt their farming practices to mitigate its effects. We produced two videos demonstrating climate-smart practices, such as making vermicompost and using cow […]",
+        "abstract": null,
+        "date": "June 27, 2024",
+        "url": "https://digitalgreen.org/embracing-climate-smart-farming-in-ethiopia/",
+        "owner_name": "Digital Green Team",
+        "owner_id": "digital-green_digital-green-team"
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/06/OOPC1.jpg"
+        },
+        "category": {
+          "value": "Blog"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "7",
+        "title": "Transforming Lives Through Self-Help Groups: A Farmer’s Journey to Economic Prosperity",
+        "description": "Alimaze Zawuge lives in a small village in Ethiopia. As a wife, mother of five, and farmer, her goal was simple: improve her family’s living conditions. However, her small farm size limited her ability to grow various crops or earn enough income from farming alone. In June 2023, Alimaze’s situation began to improve when she […]",
+        "abstract": null,
+        "date": "March 11, 2024",
+        "url": "https://digitalgreen.org/transforming-lives-through-self-help-groups-a-farmers-journey-to-economic-prosperity/",
+        "owner_name": "Digital Green",
+        "owner_id": "digital-green_digital-green"
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/Picture1.jpg"
+        },
+        "category": {
+          "value": "Blog"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "8",
+        "title": "How Video-Based Extension Transformed Wheat Farming in Bonga, Ethiopia",
+        "description": "A remarkable transformation is unfolding among a dedicated group of wheat farmers in the lush landscapes of Bonga, Ethiopia. These farmers, who had been tilling the land together for nearly a decade, found themselves at the heart of a revolutionary change brought about by a collaboration between Digital Green, the Bill & Melinda Gates Foundation, […]",
+        "abstract": null,
+        "date": "March 4, 2024",
+        "url": "https://digitalgreen.org/cultivating-change-how-video-based-extension-transformed-wheat-farming-in-bonga-ethiopia/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/photo_2024-02-29_23-04-27.jpg"
+        },
+        "category": {
+          "value": "Blog"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "9",
+        "title": "Cultivating Knowledge: Bridging Agriculture, Technology and Indigenous Wisdom",
+        "description": "As we observed International Indigenous Languages Day this week, we reflected on the unique intersection of language, agriculture, and technology and how these elements combine to support farmers around the world, particularly in culturally rich regions like Ethiopia. Farming embodies a heritage interwoven with the cultural and linguistic fabric of communities. Recognizing this, Digital Green […]",
+        "abstract": null,
+        "date": "February 23, 2024",
+        "url": "https://digitalgreen.org/cultivating-knowledge-bridging-agriculture-technology-and-indigenous-wisdom/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/02/ETH-Oromia-6.jpg"
+        },
+        "category": {
+          "value": "Blog"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "10",
+        "title": "Unleashing the Power of Technology and Data in Agribusiness",
+        "description": "Digital Green joins forces with the FAO to bridge this information divide in a groundbreaking partnership. Together, we're crafting a digital haven – a data-sharing platform that promises to be the compass for agripreneurs navigating the complex agricultural ecosystem.",
+        "abstract": null,
+        "date": "December 12, 2023",
+        "url": "https://digitalgreen.org/unleashing-the-power-of-technology-and-data-in-agribusiness/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/DSC01393-scaled.jpg"
+        },
+        "category": {
+          "value": "Blog"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "11",
+        "title": "Growing Smarter: Embracing Site-Specific Fertilizer Recommendations in Ethiopia",
+        "description": "Gone are the days of one-size-fits-all fertilizer recommendations. Imagine a world where farmers receive personalized advice, as unique as the soil they till.",
+        "abstract": null,
+        "date": "December 11, 2023",
+        "url": "https://digitalgreen.org/growing-smarter-embracing-site-specific-fertilizer-recommendations-in-ethiopia/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Copy-of-102623_72-scaled.jpg"
+        },
+        "category": {
+          "value": "Blog"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "12",
+        "title": "Reviving Soil, Transforming Lives",
+        "description": "At Digital Green, we're pioneering a movement to restore soil fertility and health. Our approach? A blend of traditional wisdom and modern technology.",
+        "abstract": null,
+        "date": "December 5, 2023",
+        "url": "https://digitalgreen.org/reviving-soil-transforming-lives/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/102423_16-scaled.jpg"
+        },
+        "category": {
+          "value": "Blog"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "13",
+        "title": "Nurturing Knowledge & Growth: Supporting Extension Agents & Small-Scale Farmers with AI",
+        "description": "We've been enhancing public extension systems in India, Ethiopia, and Kenya by leveraging digital technologies to provide farmers with timely, locally tailored advisory videos.",
+        "abstract": null,
+        "date": "November 22, 2023",
+        "url": "https://digitalgreen.org/nurturing-knowledge-growth-supporting-extension-agents-small-scale-farmers-with-ai/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/0M4A0068-scaled.jpg"
+        },
+        "category": {
+          "value": "Blog"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "14",
+        "title": "Farmer.CHAT by Digital Green – Making Vetted Farmer Knowledge Accessible",
+        "description": "Farmer.CHAT An AI Assistant created by Digital Green to make vetted farmer knowledge accessible. Experience the power of Farmer.CHAT! Scan or click image to chat: Background and Focus Raising small-scale farmers’ productivity and incomes is critical to improving rural livelihoods. However, most farmers lack access to relevant and actionable information that could help them to improve their productivity […]",
+        "abstract": null,
+        "date": "October 16, 2023",
+        "url": "https://digitalgreen.org/farmerchat/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Group-84-2.png"
+        },
+        "category": {
+          "value": "Blog"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "15",
+        "title": "Impact of video advisories dissemination on Climate Smart Agriculture (CSA) practices using digital tools",
+        "description": "In pursuing sustainable agricultural practices amidst the challenges posed by climate change, the video-based extension has emerged as a powerful tool.",
+        "abstract": null,
+        "date": "September 28, 2023",
+        "url": "https://digitalgreen.org/impact-of-video-advisories-dissemination-on-climate-smart-agriculture-csa-practices/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/6a-scaled.jpg"
+        },
+        "category": {
+          "value": "Blog"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "16",
+        "title": "Launching a Data Sharing Network in Kenya",
+        "description": "Along with The Kenya Agricultural and Livestock Research Organization (KALRO), we are proud to announce the launch of the Kenya Agriculture Data Sharing Platform (KADP), powered by FarmStack",
+        "abstract": null,
+        "date": "September 6, 2023",
+        "url": "https://digitalgreen.org/launching-a-data-sharing-network-in-kenya/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/LinkedIn-11.png"
+        },
+        "category": {
+          "value": "Blog"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "17",
+        "title": "Changing Lives by Empowering Women",
+        "description": "By participating in the self-help group, Teguaded Yehunie was able to receive a loan to expand her business and improve her livelihood.",
+        "abstract": null,
+        "date": "August 24, 2023",
+        "url": "https://digitalgreen.org/changing-lives-by-empowering-women/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Teguaded-1.png"
+        },
+        "category": {
+          "value": "Blog"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "18",
+        "title": "What works to empower women farmers?",
+        "description": "Digital Green organized a roundtable dialogue in New Delhi; a day of deliberations with experts and development professionals from organizations that engage with women farmers.",
+        "abstract": null,
+        "date": "April 19, 2023",
+        "url": "https://digitalgreen.org/what-works-to-empower-women-farmers/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/DSC02636-scaled.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "19",
+        "title": "Climate-smart practices become more accessible for farmers through Farmer.CHAT, a Generative AI assistant from Digital Green and Gooey.AI",
+        "description": "Digital Green has announced a new product that aims to enhance the development of farmer-driven content, research outputs, and policy guidance at scale.",
+        "abstract": null,
+        "date": "April 12, 2023",
+        "url": "https://digitalgreen.org/climate-smart-practices-become-more-accessible-for-farmers-through-farmer-chat-a-generative-ai-assistant-from-digital-green-and-gooey-ai/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/0M4A0734-scaled.jpg"
+        },
+        "category": {
+          "value": "Announcement"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "20",
+        "title": "Improving Interactive Voice Response Technology for Dairy Farmers",
+        "description": "The Dairy Use-case of the DAAS project is being implemented by Precision Agriculture for Development (PAD) and utilizes the Agricultural Transformation Institution’s 8028 IVR line to disseminate advisory information.",
+        "abstract": null,
+        "date": "April 10, 2023",
+        "url": "https://digitalgreen.org/improving-interactive-voice-response-technology-for-dairy-farmers/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/ETH-Success-story-Felekech-Negatu-Oromia-12-scaled.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "21",
+        "title": "A Step Forward to Climate Smart Agriculture with the Digital Empowerment of Women Farmers",
+        "description": "Digital Green's Digital Empowerment to Enhance Productivity’ (DEEP) project is building technological skills of frontline workers (FLWs) and farmers, especially women led farmers organizations, and small and marginal farmer collectives.",
+        "abstract": null,
+        "date": "April 3, 2023",
+        "url": "https://digitalgreen.org/a-step-forward-to-climate-smart-agriculture-with-the-digital-empowerment-of-women-farmers/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/01-scaled.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "22",
+        "title": "Digital Farmer Registry and Tailored Extension and Advisory Services in Ethiopia",
+        "description": "In Ethiopia, Digital Green, in partnership with the Ministry of Agriculture (MoA), is piloting the digital farmer registry which aims to empower the country’s agricultural extension capacity and impact by facilitating demand-driven extension and advisory services.",
+        "abstract": null,
+        "date": "March 29, 2023",
+        "url": "https://digitalgreen.org/digital-farmer-registry-and-tailored-extension-and-advisory-services-in-ethiopia/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/FArmer-registry-2.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "23",
+        "title": "How Worm Composting Training Helped Increase my Income",
+        "description": "Emuye began compost harvesting about 1 and a half years ago and has been utilizing it for her backyard vegetables, fruits, and maize productions.",
+        "abstract": null,
+        "date": "March 20, 2023",
+        "url": "https://digitalgreen.org/how-worm-composting-training-helped-increase-my-income/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Picture-3.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "24",
+        "title": "How Innovation and Technology Advance Gender Equity",
+        "description": "To ensure women’s economic, social, and political empowerment, Digital Green started implementing the self-help group (SHG) model in the Advancing Conservation, Agriculture and Livelihoods project funded by the Packard Foundation in Jimma, Ethiopia in 2019.",
+        "abstract": null,
+        "date": "March 8, 2023",
+        "url": "https://digitalgreen.org/how-innovation-and-technology-advance-gender-equity/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/1H4A5824-scaled.jpg"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "25",
+        "title": "Gender Integration in Digital Green’s Work",
+        "description": "Women farmers conduct up to 75% of farm work, accounting for 70% of family food production in Ethiopia. However, women produce up to 35% less than male farmers because they have less access to extension services and inputs",
+        "abstract": null,
+        "date": "September 6, 2022",
+        "url": "https://digitalgreen.org/gender-integration-in-digital-greens-work/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "26",
+        "title": "Creating a world for all ages: Safeguarding the environment while empowering youth to build better futures",
+        "description": "International Youth Day 2022 focuses on creating a world for all ages. Young people continue facing age-related barriers in many spheres of life, including employment.",
+        "abstract": null,
+        "date": "August 12, 2022",
+        "url": "https://digitalgreen.org/iyd2022/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "27",
+        "title": "Transforming agricultural extension for indigenous farmers by providing advisories in their local languages",
+        "description": "In celebration of International Day of the World’s Indigenous Peoples and in observation of the International Decade of Indigenous Languages, Digital Green would like to draw attention to the importance of supporting indigenous people and preserving indigenous languages and their unique cultures.",
+        "abstract": null,
+        "date": "August 8, 2022",
+        "url": "https://digitalgreen.org/transforming-agricultural-extension-for-indigenous-farmers-by-providing-advisories-in-their-local-languages/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "28",
+        "title": "Improved agricultural practices that yield happiness and resilient livelihoods",
+        "description": "In Ethiopia, Digital Green has been implementing our flagship community video approach to build the capacity of extension agents.",
+        "abstract": null,
+        "date": "August 2, 2022",
+        "url": "https://digitalgreen.org/videoimprovedagpractices/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "29",
+        "title": "One Step for Collectivization, A Giant Leap for Tribal Women Farmers",
+        "description": "We have always been farmers, and we have been doing things individually for a long time, but this is the first time we have gotten together and realized what can be accomplished as a group, whether it is in sharing knowledge, or identifying, and working through our challenges, or even farming practices.",
+        "abstract": null,
+        "date": "July 28, 2022",
+        "url": "https://digitalgreen.org/one-step-for-collectivization-a-giant-leap-for-tribal-women-farmers/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Untitled-design-10.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "30",
+        "title": "Opportunities in using data to strengthen FPOs: DG’s Field Visit to Guntur",
+        "description": "During the May cross-country visit, teams from India, the USA, Ethiopia, and Kenya came together to learn more about how we are moving towards making our vision of digitized farmer networks (DFN) a reality. this article focuses on the use of digital data collection tools and chili quality assaying. To read about our digital extension visit, please visit this blog.",
+        "abstract": null,
+        "date": "May 24, 2022",
+        "url": "https://digitalgreen.org/opportunities-in-using-data-to-strengthen-fpos-dgs-field-visit-to-guntur/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/11OGSMR9775HI-W12VJPAGECHILLI-min-1.jpg"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "31",
+        "title": "Digital Green’s Field Visit in Guntur: Digital Extension & Opportunities to Explore",
+        "description": "May was an exciting month for us at Digital Green. After more than 2 years, our teams across India, Ethiopia, USA, and Kenya huddled together in Guntur district in Andhra Pradesh and Bengaluru to make our vision of digitized farmer networks a reality, and discuss key themes emerging from our new strategy going forward.",
+        "abstract": null,
+        "date": "May 20, 2022",
+        "url": "https://digitalgreen.org/digital-greens-field-visit-in-guntur-digital-extension-opportunities-to-explore/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Digital-Green_Bihar_157_Homepage-1st-scroll_3-scaled.jpeg"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "32",
+        "title": "When women have agency over their own data: Kisan Diary Enterprise (KDE) in action",
+        "description": "Women leaders are a major focus of the ATLAS project. The project pairs scalable and high quality agricultural and post-harvest advisory, and mobile coaching with our  FPO strengthening and data sharing solution - Kisan Diary Enterprise (KDE) to enable women leaders to negotiate in the market and fetch competitive prices for women-led producer groups.",
+        "abstract": null,
+        "date": "May 17, 2022",
+        "url": "https://digitalgreen.org/when-women-have-agency-over-their-own-data-kisan-diary-enterprise-kde-in-action/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Digital-Green_JH_37-scaled.jpeg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "33",
+        "title": "Empowered Women Empower Communities",
+        "description": "Women are the backbone of agriculture in India, and that is no exaggeration. They play a pivotal role in agriculture: 85% of rural women in our country are engaged in agricultural activities, and 75% of the farmers in the agriculture field are women. In addition, women are also responsible for the majority of household chores, such as cooking and taking care of children. Despite their efforts, they are hardly recognised as farmers and in most the communities, d power largely lies with the men of the household. Women have restricted mobility, and require permission from their elders and husband. Their stake in intra-household decision making still remains a grey area and is a deep-rooted issue that needs to be worked upon.",
+        "abstract": null,
+        "date": "May 13, 2022",
+        "url": "https://digitalgreen.org/empowered-women-empower-communities/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/FS-header-image2.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "34",
+        "title": "Teach by showing and learn by doing: Insights from a development agent in Ethiopia",
+        "description": "Tejo Teneshu, 25 years of age, is a development agent. Over the past five years, the development agents in Edo Balo have adopted Digital Green’s video extension approach in order to improve how they deliver advisory services to these farmers.",
+        "abstract": null,
+        "date": "May 6, 2022",
+        "url": "https://digitalgreen.org/teach-by-showing-ethiopia/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "35",
+        "title": "Farmers’ resilience in times of crisis",
+        "description": "Smallholder farmers contribute the most to our food systems, and yet they are amongst the most vulnerable groups in poverty. With COVID-19 posing a threat to their livelihoods, to bolster the resilience of smallholder farmers in Andhra Pradesh, Digital Green’s COVID-19 Resilience Support Program enabled efficient delivery of targeted, relevant and timely advisory recommendations, and worked on improving access to markets and market information.",
+        "abstract": null,
+        "date": "April 26, 2022",
+        "url": "https://digitalgreen.org/farmers-resilience-in-times-of-crisis-a-collection-of-stories-from-the-covid-19-resilience-support-program/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/1-2-scaled.jpg"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "36",
+        "title": "Using gender analysis to ensure the inclusion of women in agricultural extension services",
+        "description": "In order to identify and respond to the barriers that women face in accessing technology and extension services, DAAS undertook a gender analysis.",
+        "abstract": null,
+        "date": "March 30, 2022",
+        "url": "https://digitalgreen.org/gender-analysis-daas/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/photo_2022-03-06_10-14-32.jpg"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "37",
+        "title": "Advancing the livelihoods and resilience of women farmers in India",
+        "description": "Women small-scale producers across India lack the information, and agency to lead resilient and sustainable livelihoods.",
+        "abstract": null,
+        "date": "March 28, 2022",
+        "url": "https://digitalgreen.org/advancing-women-farmers/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "38",
+        "title": "Foundational and complementary approaches nutrition sensitive agriculture: UPAVAN’s legacy",
+        "description": "Maternal and child undernutrition in tribal areas of rural India has been one of the most pressing issues in the Indian development landscape.",
+        "abstract": null,
+        "date": "March 23, 2022",
+        "url": "https://digitalgreen.org/foundational-and-complementary-approaches-nutrition-sensitive-agriculture-upavans-legacy/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "39",
+        "title": "Reaching more women farmers via empowering extension agents",
+        "description": "Digital Green recognizes that engaging institutions in change processes is critical to removing structural barriers that reinforce gender norms. We are committed to support government partners in implementing strategies that advance women's access to agricultural extension services by acknowledging the power of incentives and informal systems that reinforce norms.",
+        "abstract": null,
+        "date": "March 4, 2022",
+        "url": "https://digitalgreen.org/reaching-more-women-farmers-via-empowering-extension-agents/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Reflections,Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "40",
+        "title": "A Hope for a Healthier Tomorrow in India",
+        "description": "Munnawar is a 42-year-old ASHA worker hailing from a Muslim family in Banera which is one of the Muslim dominant villages of Naarsan block in Haridwar. She has four daughters and four sons, and her husband works as an agricultural laborer - they both work hard to ensure that their children obtain formal education which they were not able to as they did not have the means. Despite this, Munnawar has gone on to become one of the most well-known ASHA workers in her community, catering to more than 1400 families, because of how well she connects with mothers and their families.",
+        "abstract": null,
+        "date": "March 2, 2022",
+        "url": "https://digitalgreen.org/a-hope-for-a-better-tomorrow-bidding-adieu-to-project-samvad/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Donate_FINAL-scaled.jpg"
+        },
+        "category": {
+          "value": "Samvad"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "41",
+        "title": "Reaching More Farmers through IVR",
+        "description": "Digital Green reached more than 18600 farmers, including 1957 female farmers, with various seasonal agricultural messages in five different languages through ATA’s 8028 in the past six months. The messages, transmitted starting from June, 2021; focuses on Harvest and Post-Harvest, Weeding & Fertilizer Application, Pest & Disease Control, Row Planting, Land Preparation, Seed Selection for crops like Wheat, Tef, Barley, Maize, Sorghum, Coffee.",
+        "abstract": null,
+        "date": "February 17, 2022",
+        "url": "https://digitalgreen.org/reaching-more-farmers-through-ivr/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "42",
+        "title": "“ I have witnessed the social change the video extension has brought to farmers” a reflection from a Model Master Trainer",
+        "description": "In Ethiopia, Digital Green is training government agriculture office staff in video production and video dissemination.",
+        "abstract": null,
+        "date": "February 2, 2022",
+        "url": "https://digitalgreen.org/i-have-witnessed-the-social-change-the-video-extension-has-brought-to-farmers-a-reflection-from-a-model-master-trainer/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "43",
+        "title": "Digital Green and KALRO partner to improve the data sharing ecosystem in Kenyan agriculture",
+        "description": "We are honored to announce a new partnership with the Kenya Agricultural and Livestock Research Organization (KALRO) to improve the agricultural data ecosystem in Kenya.",
+        "abstract": null,
+        "date": "January 31, 2022",
+        "url": "https://digitalgreen.org/digital-green-and-kalro-partner-to-improve-the-data-sharing-ecosystem-in-kenyan-agriculture/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "44",
+        "title": "Humanizing a Product",
+        "description": "Koteshwaramma and her husband Venkateshwar Rao are a farmer couple from Kopparu village in the Guntur district of Andhra Pradesh. Like many farmers around their village and district, they have been cultivating chilli on their one-acre rented agricultural land.",
+        "abstract": null,
+        "date": "November 25, 2021",
+        "url": "https://digitalgreen.org/humanizing-a-product/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/IMG_0033-scaled.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "45",
+        "title": "Delivering customized and climate smart dairy cattle advisory services in Ethiopia",
+        "description": "This project brief outlines the Digital Agriculture Advisory Services (DAAS) project’s approach to climate smart livestock advisories.",
+        "abstract": null,
+        "date": "November 16, 2021",
+        "url": "https://digitalgreen.org/delivering-customized-and-climate-smart-dairy-cattle-advisory-services-in-ethiopia/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/DigitalGreenEthiopia2017-PhotoDianaMrazikova-180-scaled.jpg"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "46",
+        "title": "Starting Dialogues: Including Hybrid Approaches One Step at a Time",
+        "description": "It is times like this, where it is imperative to acknowledge the availability and access to proper health and nutrition services especially in rural and remote communities that are often risk-averse. Utmost importance must be given to strengthening these systems in place.",
+        "abstract": null,
+        "date": "September 13, 2021",
+        "url": "https://digitalgreen.org/starting-dialogues/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Susan-blog-banner.png"
+        },
+        "category": {
+          "value": "Reflections,Samvad"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "47",
+        "title": "Digital Green signs MoU with JSLPS to jointly implement ATLAS (Advancing Tribal Livelihoods and Self-reliance) Project in Jharkhand",
+        "description": "Digital Green signed an MoU with Jharkhand State Livelihoods Promotion Society (JSLPS) to jointly implement the ATLAS (Advancing Tribal Livelihoods and Self-reliance) project in the state of Jharkhand over the next 18 months.",
+        "abstract": null,
+        "date": "August 26, 2021",
+        "url": "https://digitalgreen.org/dgatlasinjharkhand/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "48",
+        "title": "Summary of the seminar on the Role of Technology and Data Science in Accelerating Climate Smart Agriculture Outcomes",
+        "description": "Digital Green, in collaboration with JEEViKA and RySS, organized a seminar on the “Role of Technology and Data Science in Accelerating Climate Smart Agriculture Outcomes” on 5th August 2021.",
+        "abstract": null,
+        "date": "August 11, 2021",
+        "url": "https://digitalgreen.org/summary-of-the-seminar-on-the-role-of-technology-and-data-science-in-accelerating-climate-smart-agriculture-outcomes/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "49",
+        "title": "The Role of Technology & Data Science in Climate Smart Agriculture",
+        "description": "The threat of global warming and climate change to agriculture is real and severe, affecting food systems locally and globally.",
+        "abstract": null,
+        "date": "August 3, 2021",
+        "url": "https://digitalgreen.org/the-role-of-technology-data-science-in-climate-smart-agriculture/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "50",
+        "title": "Catalyzing the Data Sharing Ecosystem – Introducing FarmStack",
+        "description": "Today we’re announcing the release of FarmStack, an open-source protocol which powers the secure transfer of data. FarmStack enables secure and controlled exchange of data which can inform tailored solutions for farmers, greatly reduce costs for organizations, and expand the reach of existing tools.",
+        "abstract": null,
+        "date": "July 26, 2021",
+        "url": "https://digitalgreen.org/catalyzing-the-data-sharing-ecosystem-introducing-farmstack/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-header-1.png"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "51",
+        "title": "Farming the Future: Covid19 and beyond",
+        "description": "Our India Country Director, shares his thoughts on the opportunity that digital technology provides us to empower farmers with choices to make informed decisions, making them active partners and participants in the development outcome.",
+        "abstract": null,
+        "date": "June 30, 2021",
+        "url": "https://digitalgreen.org/farming-the-future-covid19-and-beyond/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "52",
+        "title": "A Transformative Grant to Empower the Voices of Women Farmers",
+        "description": "Digital Green is delighted to share that we received a $15 million unrestricted grant from MacKenzie Scott. This is an extremely generous gift that will be exceptionally transformational for Digital Green and the small-scale growers, especially women, that we serve.",
+        "abstract": null,
+        "date": "June 16, 2021",
+        "url": "https://digitalgreen.org/a-transformative-grant-to-empower-the-voices-of-women-farmers/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "53",
+        "title": "Analysis of Digital Agriculture Extension and Advisory Services in Niger: Conclusions and Recommendations",
+        "description": "The Feed the Future Developing Local Extension Capacity (DLEC) project  undertook a study to analyze the digital agricultural extension and advisory services in Niger.",
+        "abstract": null,
+        "date": "May 25, 2021",
+        "url": "https://digitalgreen.org/analysis-of-digital-agriculture-extension-and-advisory-services-in-niger-conclusions-and-recommendations/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "DLEC"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "54",
+        "title": "Covid-19 resurgence in India: Supporting our team during this crisis",
+        "description": "The resurgence of the Covid-19 pandemic in India has affected more than 23 million people in the country, including Digital Green staff who have gotten sick or sadly, lost loved ones. We grieve with our staff during these difficult times.",
+        "abstract": null,
+        "date": "May 25, 2021",
+        "url": "https://digitalgreen.org/covid-19-resurgence-in-india-supporting-our-team-during-this-crisis/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "55",
+        "title": "Improving maternal and child nutrition through participatory video, nutrition-sensitive agriculture interventions, and women’s groups: Evidence from a peer-reviewed study",
+        "description": "Access our peer-reviewed paper on the RCT UPAVAN published in the Lancet here. UPAVAN was designed as a four-arm cluster RCT assessing the nutrition and agricultural impact and cost-effectiveness.",
+        "abstract": null,
+        "date": "April 7, 2021",
+        "url": "https://digitalgreen.org/improving-maternal-and-child-nutrition-through-participatory-video-nutrition-sensitive-agriculture-interventions-and-womens-groups-evidence-from-a-peer-reviewed-study/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "56",
+        "title": "Gender Gaps and Women’s History: Reflections on Women Leading the Way",
+        "description": "Digital Green takes inspiration from women as we press forward to achieve gender equality and close gender gaps in digital literacy and access, agricultural productivity, nutrition and health, and access to extension and other services.",
+        "abstract": null,
+        "date": "March 26, 2021",
+        "url": "https://digitalgreen.org/gender-gaps-and-womens-history-reflections-on-women-leading-the-way/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "57",
+        "title": "On the Effectiveness of Using Low Cost Technology to Reach Farmers",
+        "description": "The advisory and research organization IDinsight worked with Digital Green to assess the effectiveness of our low cost tech solutions for farmers. Here we share a summary and link to the study.",
+        "abstract": null,
+        "date": "February 22, 2021",
+        "url": "https://digitalgreen.org/on-the-effectiveness-of-using-low-cost-technology-to-reach-farmers/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "58",
+        "title": "Capturing Digital Green’s evolution in a new e-book published by Michigan State University",
+        "description": "A chapter on Digital Green told through the eyes of an extension worker - published in the Michigan State University e-book on Innovations in Agricultural Extension",
+        "abstract": null,
+        "date": "February 19, 2021",
+        "url": "https://digitalgreen.org/capturing-digital-greens-evolution-in-a-new-e-book-published-by-michigan-state-university/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "59",
+        "title": "Fighting Desert Locust Together: Innovations and Solutions to Combat an Agrarian & Food Crisis",
+        "description": "If it was not for COVID-19, the desert locust crisis would be the most significant challenge facing Africa this decade. Read about this webinar focusing on innovations and last mile solutions to dealing with the desert locust crisis.",
+        "abstract": null,
+        "date": "February 5, 2021",
+        "url": "https://digitalgreen.org/fighting-desert-locust-together-innovations-and-solutions-to-combat-an-agrarian-food-crisis/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "DLEC"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "60",
+        "title": "Supporting livelihoods and the environment through video extension : Experience from Ethiopia",
+        "description": "Integrating Natural Resource Management into video based Agricultural Extension Services to support livelihoods and the environment: Experience from Ethiopia",
+        "abstract": null,
+        "date": "January 5, 2021",
+        "url": "https://digitalgreen.org/supporting-livelihoods-and-the-environment-through-video-extension-experience-from-ethiopia/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "61",
+        "title": "Advancing Conservation, Agriculture and Livelihoods in Oromia",
+        "description": "Digital Green, with the support from the David and Lucile Packard Foundation and in Collaboration with Environment and Coffee Forest Forum (ECFF), plans to reach 42,000 smallholder farmers, women and youth through the Advancing Conservation, Agriculture and Livelihoods in Oromia project.",
+        "abstract": null,
+        "date": "December 21, 2020",
+        "url": "https://digitalgreen.org/advancing-conservation-agriculture-and-livelihoods-in-oromia/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "62",
+        "title": "Laying the Foundation of a National County Forum in Guinea",
+        "description": "DLEC is setting the foundation of a national EAS country forum in Guinea, including hosting learning events such as this webinar, continue socializing the country forum concept to relevant stakeholders in Guinea, and holding participatory discussions on the mandate of the forum, its structure, and how to make it inclusive and sustainable.",
+        "abstract": null,
+        "date": "December 18, 2020",
+        "url": "https://digitalgreen.org/laying-the-foundation-of-a-national-county-forum-in-guinea/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Vision,DLEC"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "63",
+        "title": "Future of Food Systems? Platform for Digital Food and Agriculture",
+        "description": "How are digital technologies contributing towards a transformation of our current agri-food systems?",
+        "abstract": null,
+        "date": "December 11, 2020",
+        "url": "https://digitalgreen.org/future-of-food-systems-platform-for-digital-food-and-agriculture/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "64",
+        "title": "Co-creating an Industry Standard for Sharing Agricultural Data Globally",
+        "description": "On August 20th,  we were invited along with Hewlett Packard Enterprise & Microsoft to participate in a World Bank led webinar series on ‘Co-creating an industry standard for sharing agricultural data globally’. The discussions focused on farmers and the organizations that serve them don't have an easy and secure way to exchange data which leads to fragmentation and silos",
+        "abstract": null,
+        "date": "October 20, 2020",
+        "url": "https://digitalgreen.org/co-creating-an-industry-standard-for-sharing-agricultural-data-globally/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "65",
+        "title": "A Youthful Vision of the Future of Food",
+        "description": "In this blog, read about how we're engaging with the future of agriculture and the question of how to engage with youth in extension and young agripreneurs.",
+        "abstract": null,
+        "date": "October 14, 2020",
+        "url": "https://digitalgreen.org/a-youthful-vision-of-the-future-of-food/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "66",
+        "title": "Empowering FPOs to Sell Directly to Retail Customers to Improve Farmers’ Earnings",
+        "description": "Read about our service/digital platform that Farmer Producer Groups (FPOs) can use to easily publish a product catalogue, receive orders, collect payments and communicate with their customers through chat and automated notifications.",
+        "abstract": null,
+        "date": "September 30, 2020",
+        "url": "https://digitalgreen.org/empowering-fpos-to-sell-directly-to-retail-customers-to-improve-farmers-earnings/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "67",
+        "title": "Effective Monitoring & Evaluation of Health & Nutrition Program Performance",
+        "description": "Lean surveys have the unique strength of serving the purpose of program surveillance to understand the current performance and also to assess the impact of any intervention. The statistical process control method used in these surveys brings the rigor of classical statistical methods.",
+        "abstract": null,
+        "date": "September 28, 2020",
+        "url": "https://digitalgreen.org/effective-monitoring-evaluation-of-health-nutrition-program-performance/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Samvad"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "68",
+        "title": "Building a Healthy Online Community on WhatsApp with Farmers",
+        "description": "Sharing here some insights from our experience of building on technology and peer to peer networks using WhatsApp's Group feature.",
+        "abstract": null,
+        "date": "September 3, 2020",
+        "url": "https://digitalgreen.org/building-a-healthy-online-community-on-whatsapp-with-farmers/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "69",
+        "title": "Our Journey: Staying farmer focused and learning from evidence",
+        "description": "We recently brought to a close two flagship investments supported by BMGF. Read on for insight into the lessons we learnt",
+        "abstract": null,
+        "date": "September 3, 2020",
+        "url": "https://digitalgreen.org/our-journey-staying-farmer-focused-and-learning-from-evidence/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "70",
+        "title": "How Tech Solutions are Minimizing Disruptions to Agriculture Extension",
+        "description": "Digital technology has helped extension agents maintain physical distance while continuing regular follow-ups with farmers and supporting them. Read how this happened in our project funded by Walmart Foundation.",
+        "abstract": null,
+        "date": "August 10, 2020",
+        "url": "https://digitalgreen.org/how-tech-solutions-are-minimizing-disruptions-to-agriculture-extension/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "71",
+        "title": "Video-based Agriculture Extension in the Time of Physical Distancing",
+        "description": "Read how we're supporting farmers in Jharkhand, India during COVID-19 with videos on non-pesticide management to avoid dependence on market inputs",
+        "abstract": null,
+        "date": "June 24, 2020",
+        "url": "https://digitalgreen.org/4563-2/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "72",
+        "title": "Extension and Advisory Services Role in the COVID-19 Crisis",
+        "description": "Extension and Advisory Services can offer much needed support during uncertainty accompanying a pandemic, and strategies to bounce back from shocks and enhance resilience.",
+        "abstract": null,
+        "date": "May 11, 2020",
+        "url": "https://digitalgreen.org/extension-and-advisory-services-role-in-the-covid-19-crisis/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "DLEC"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "73",
+        "title": "Reaching Farmers in Times of COVID-19",
+        "description": "Digital Green is exploring how we can adapt our approaches and leverage technologies to communicate vital information amidst social distancing and lockdowns and to support smallholder farmers.",
+        "abstract": null,
+        "date": "April 20, 2020",
+        "url": "https://digitalgreen.org/reaching-farmers-in-times-of-covid-19/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "74",
+        "title": "COVID-19 and Agriculture: Resources and Recommendations",
+        "description": "Here's a compendium of resources addressing agricultural challenges surging under this pandemic and responses from various actors.",
+        "abstract": null,
+        "date": "April 14, 2020",
+        "url": "https://digitalgreen.org/covid-19-and-agriculture-resources-and-recommendations/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "75",
+        "title": "Message from Rikin Gandhi, our Co-Founder",
+        "description": "A message from our co-founder on the COVID-19 crisis and DG's commitment to serving smallholder farming communities in this crisis.",
+        "abstract": null,
+        "date": "April 14, 2020",
+        "url": "https://digitalgreen.org/message-from-rikin-gandhi-our-co-founder/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "76",
+        "title": "DG’s organizational response to COVID-19",
+        "description": "Read more about how we're working together and responding to the COVID-19 crisis as an organization.",
+        "abstract": null,
+        "date": "April 13, 2020",
+        "url": "https://digitalgreen.org/dgs-organizational-response-to-covid-19/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-header-test.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "77",
+        "title": "Remote Tribal Cashew Farmers Use the Digital Advantage",
+        "description": "Read how we're reaching farmers in remote locations with technology and through grassroots partnerships.",
+        "abstract": null,
+        "date": "April 8, 2020",
+        "url": "https://digitalgreen.org/remote-tribal-cashew-farmers-use-the-digital-advantage/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Cashew-farmer-blog-header.jpg"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "78",
+        "title": "Life in the times of COVID-19",
+        "description": "As the COVID-19 pandemic grips the world our offices have been locked down to promote social distancing. Hear how our field teams are coping with the situation.",
+        "abstract": null,
+        "date": "April 3, 2020",
+        "url": "https://digitalgreen.org/life-in-the-times-of-covid-19/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Virtual-team-meeting.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "79",
+        "title": "Our COVID-19 Response",
+        "description": "Learn more about how we're helping smallholder farmers stay healthy, make a living, and feed the world in the midst of COVID-19 and beyond...",
+        "abstract": null,
+        "date": "April 1, 2020",
+        "url": "https://digitalgreen.org/our-covid-19-response/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "80",
+        "title": "Envisioning the Future of Extension",
+        "description": "“What will extension look like 10-20 years from now? What will change or won’t? What are we already learning that relates to that future?” These are some of the questions that were investigated during the annual Community of Practice convening that took place in March 2020.",
+        "abstract": null,
+        "date": "March 25, 2020",
+        "url": "https://digitalgreen.org/envisioning-the-future-of-extension/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/DLEC-COP-Header.jpg"
+        },
+        "category": {
+          "value": "Reflections,DLEC"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "81",
+        "title": "Videos Help Fight Misconceptions Around Male Sterilization Procedures",
+        "description": "Digital Green's video-enabled extension approach is helping frontline workers fight myths around male sterilization procedures and engaging men in conversations around family planning. Read on to see how.",
+        "abstract": null,
+        "date": "February 10, 2020",
+        "url": "https://digitalgreen.org/videos-help-fight-misconceptions-around-male-sterilization-procedures/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Balaje-blog-header.png"
+        },
+        "category": {
+          "value": "Inspiration,Samvad"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "82",
+        "title": "Fighting FAW With Video-Based Agriculture Extension",
+        "description": "The Fallarmy worm has wreaked havoc on farms across the globe. Read here an inspiring story from one of our project areas in Ethiopia.",
+        "abstract": null,
+        "date": "February 4, 2020",
+        "url": "https://digitalgreen.org/fighting-faw-with-video-based-agriculture-extension/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Fasika-FAW-blog-header.png"
+        },
+        "category": {
+          "value": "Inspiration,DLEC"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "83",
+        "title": "Video-based Mobile Courseware for Agriculture Extension Workers",
+        "description": "Read here about a mobile courseware that we've built to help scale up our video-based training for agriculture extension workers.",
+        "abstract": null,
+        "date": "January 10, 2020",
+        "url": "https://digitalgreen.org/video-based-mobile-courseware-for-agriculture-extension-workers/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Mobile-courseware-blog-header.jpg"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "84",
+        "title": "Uncovering the Link Between Access to Nutrition and Markets Through Research",
+        "description": "A guest post about a research project that aims to explore the nutritional aspects of the market and technical interventions in vegetable and poultry value chains in Bihar and Bangladesh involving an innovative project of Digital Green.",
+        "abstract": null,
+        "date": "January 9, 2020",
+        "url": "https://digitalgreen.org/uncovering-the-link-between-access-to-nutrition-and-markets-through-research/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Greg-blog-header.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "85",
+        "title": "Videos Open Up Opportunities for a Better Tomorrow",
+        "description": "A fascinating story of an organic fertiliser preparation from a woman farmer in Shashemene Kebele, Seka-Chekorsa woreda, Ethiopia",
+        "abstract": null,
+        "date": "September 25, 2019",
+        "url": "https://digitalgreen.org/videos-open-up-opportunities-for-a-better-tomorrow/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Aregash-blog-header.png"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "86",
+        "title": "Communicating Best Practices in Maternal Child Health, Nutrition & Family Planning Through ICTs",
+        "description": "Leveraging its experience in agriculture extension, Digital Green is now working with the Government's health extension system to benefit the rural farming families  in a holistic manner. Read on to understand how.",
+        "abstract": null,
+        "date": "September 19, 2019",
+        "url": "https://digitalgreen.org/communicating-best-practices-in-maternal-child-health-nutrition-family-planning-through-icts/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Samvad-photo-book-blog-header.png"
+        },
+        "category": {
+          "value": "Reflections,Samvad"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "87",
+        "title": "Integrated and Collaborative Approach Key for Impact on Health Behaviors",
+        "description": "We’re working closely with the various departments and their frontline staff to embed the video-based approach to scale the reach and impact on MCH, nutrition and family planning.",
+        "abstract": null,
+        "date": "August 7, 2019",
+        "url": "https://digitalgreen.org/integrated-and-collaborative-approach-key-for-impact-on-health-behaviors/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Blog-header-JSNM-video-integration.png"
+        },
+        "category": {
+          "value": "Reflections,Samvad"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "88",
+        "title": "IVR-based Messaging Complements Impact of Video-based Health Extension",
+        "description": "Increased mobile penetration in rural India and available ICT solutions provide opportunities to adopt an integrated and comprehensive approach to increase awareness.",
+        "abstract": null,
+        "date": "August 5, 2019",
+        "url": "https://digitalgreen.org/ivr-based-messaging-complements-impact-of-video-based-health-extension/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/mobile-vaani-header.png"
+        },
+        "category": {
+          "value": "Reflections,Samvad"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "89",
+        "title": "Embracing local cultures to promote nutrition messages",
+        "description": "The Samvad project is particularly concerned about addressing social taboos and embracing social practices that can enable and maximize social behavior change through its videos.",
+        "abstract": null,
+        "date": "July 19, 2019",
+        "url": "https://digitalgreen.org/embracing-local-cultures-to-promote-nutrition-messages/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Satya-samvad-header-image.png"
+        },
+        "category": {
+          "value": "Reflections,Samvad"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "90",
+        "title": "Tech Solutions for Smallholder Farmers in Bangladesh’s Jessore district",
+        "description": "Farmers in Bangladesh are vulnerable to counterfeit inputs, dearth of relevant advisory, lack of access to market and lack of collective bargaining power to negotiate better prices. Here's how DLEC's interventions sought to bridge the gap.",
+        "abstract": null,
+        "date": "July 15, 2019",
+        "url": "https://digitalgreen.org/tech-solutions-for-smallholder-farmers-in-bangladeshs-jessore-district/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/BNG-blog-header.png"
+        },
+        "category": {
+          "value": "Reflections,DLEC"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "91",
+        "title": "Combating Malnutrition Through Agri-Nutrition Gardens",
+        "description": "During the last kharif and rabi seasons (2018-19), more than 12,000 women in Jharkhand planted agri-nutrition gardens and they are saving up to Rs. 1,200 per month.",
+        "abstract": null,
+        "date": "July 8, 2019",
+        "url": "https://digitalgreen.org/combating-malnutrition-through-videos-on-agri-nutrition-gardens/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Nutri-garden-header-image.png"
+        },
+        "category": {
+          "value": "Inspiration,Samvad"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "92",
+        "title": "Triggering Synergies Between Demand & Supply in Government Health Systems in Uttarakhand",
+        "description": "Read this blog to see how Digital Green's Samvad Project is working with Government institutions to address the gaps in demand and supply of IFA tablets in Uttarakhand, India.",
+        "abstract": null,
+        "date": "April 29, 2019",
+        "url": "https://digitalgreen.org/triggering-synergies-between-demand-supply-in-government-health-systems-in-uttarakhand/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/demand-supply-blog-header.png"
+        },
+        "category": {
+          "value": "Reflections,Samvad"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "93",
+        "title": "Natural Farming Yields a Debt-free Future",
+        "description": "Natural farming has made a world of difference to 30-year-old Arisetti Naga Malleshwari's 60 cents of her family-owned land",
+        "abstract": null,
+        "date": "April 26, 2019",
+        "url": "https://digitalgreen.org/natural-farming-yields-a-debt-free-future/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Naga-malleshwari-header-blog.png"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "94",
+        "title": "How Samvad Project’s Video-based Intervention in Jharkhand is Addressing Supply Side Gaps",
+        "description": "Video disseminations encourage a healthy discussion among the community members and motivates them to identify any gaps in the supply of service and demand for it.",
+        "abstract": null,
+        "date": "April 15, 2019",
+        "url": "https://digitalgreen.org/how-samvad-projects-video-based-intervention-in-jharkhand-is-addressing-supply-side-gaps/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Community-video-supply-side-blog-header.png"
+        },
+        "category": {
+          "value": "Reflections,Samvad"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "95",
+        "title": "Breaking barriers around IFA supplementation for pregnant women through videos",
+        "description": "The side-effects of the iron supplement and the stigma related to having any medicine during pregnancy has been a big barrier to the work of frontline workers. See how videos enable them to break through it all.",
+        "abstract": null,
+        "date": "April 5, 2019",
+        "url": "https://digitalgreen.org/breaking-barriers-around-ifa-supplementation-for-pregnant-women-through-videos/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/IFA-Blog-header-image.png"
+        },
+        "category": {
+          "value": "Inspiration,Samvad"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "96",
+        "title": "Videos Boost the Efforts of Chhattisgarh’s Frontline Health Workers",
+        "description": "Digital Green entered into a partnership with the State Health Mission in Chhattisgarh in January 2018 under its USAID funded Samvad project to introduce its video-based approach into the health extension efforts of the State.",
+        "abstract": null,
+        "date": "January 18, 2019",
+        "url": "https://digitalgreen.org/videos-boost-the-efforts-of-chhattisgarhs-frontline-health-workers/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Samvad-children-handwashing.png"
+        },
+        "category": {
+          "value": "Inspiration,Samvad"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "97",
+        "title": "How Videos Played a Part in Scaling a Farming Revolution",
+        "description": "This initiative has received worldwide acclaim and was chosen as the top 10 projects at the Paris Peace Forum. Digital Green's video based extension approach helped achieve scale.",
+        "abstract": null,
+        "date": "December 18, 2018",
+        "url": "https://digitalgreen.org/how-videos-played-a-part-in-scaling-a-farming-revolution/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/9-scaled.jpg"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "98",
+        "title": "Combatting Fall Armyworm in Ethiopia",
+        "description": "Digital Green's DLEC project is working with the Government of Ethiopia to control Fall Army Worm using videos. Read on to understand how.",
+        "abstract": null,
+        "date": "October 19, 2018",
+        "url": "https://digitalgreen.org/combatting-fall-armyworm-in-ethiopia/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Suprita-FAW-header.png"
+        },
+        "category": {
+          "value": "Reflections,DLEC"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "99",
+        "title": "Keeping it Simple: Technology for Smallholder Farmers",
+        "description": "The key to meeting the ever-increasing demand for food in a world that has many young farmers struggling with a grim future, lies is capitalising ICTs and simple technologies such as videos and text messages with contextual content",
+        "abstract": null,
+        "date": "October 5, 2018",
+        "url": "https://digitalgreen.org/keeping-it-simple-technology-for-smallholder-farmers/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Susan-blog-banner.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "100",
+        "title": "PMSMA: A golden opportunity for health extension in India",
+        "description": "Read how India's national program providing quality maternal care services is providing a great platform for SBCC.",
+        "abstract": null,
+        "date": "June 12, 2018",
+        "url": "https://digitalgreen.org/pmsma-a-golden-opportunity-for-health-extension-in-india/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/WhatsApp-Image-2018-06-11-at-5.01.38-PM.jpeg"
+        },
+        "category": {
+          "value": "Vision,Samvad"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "101",
+        "title": "Principles of an Excellent Partnership",
+        "description": "While celebrating a successful partnership of over 6 years with a Government partner in India, we reflect on what made it possible.",
+        "abstract": null,
+        "date": "May 9, 2018",
+        "url": "https://digitalgreen.org/principles-of-an-excellent-partnership/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/DSC_0974-1.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "102",
+        "title": "Diffusing a Wave of Change through Videos",
+        "description": "Digital Green's model and constant efforts to innovate and refine it bears testimony to E.M. Rogers' theory of diffusion of innovation.",
+        "abstract": null,
+        "date": "April 5, 2018",
+        "url": "https://digitalgreen.org/diffusing-a-wave-of-change-through-videos/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Banner-image_Rishis-blog-PoP-study.png"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "103",
+        "title": "Witnessing Solidarity, Sisterhood and Success",
+        "description": "A member of our Training team shares her reflections on the unique role of Self Help Groups in creating a more enabling and supportive environment for rural women.",
+        "abstract": null,
+        "date": "March 9, 2018",
+        "url": "https://digitalgreen.org/witnessing-solidarity-sisterhood-and-success/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Banner-Image-Ankitas-blog.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "104",
+        "title": "Discovering Empowerment and Knowledge in Rural Jharkhand",
+        "description": "A new joiner's first field visit after joining Digital Green, which helped dispel some myths and reinstated hope for the communities we work with.",
+        "abstract": null,
+        "date": "March 8, 2018",
+        "url": "https://digitalgreen.org/discovering-empowerment-and-knowledge-in-rural-jharkhand/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Untitled-1-2.jpg"
+        },
+        "category": {
+          "value": "Inspiration,Samvad"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "105",
+        "title": "How will you transform extension in 2018?",
+        "description": "Blog on transforming agricultural extension",
+        "abstract": null,
+        "date": "January 22, 2018",
+        "url": "https://digitalgreen.org/how-will-you-transform-extension-in-2018/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/WhatsApp-Image-2018-01-22-at-12.07.54-PM.jpeg"
+        },
+        "category": {
+          "value": "Reflections,DLEC"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "106",
+        "title": "Designing a Training with Participatory and Co-Creative Process",
+        "description": "The final blog of a 3 part series from our Head of Training about Human Centered Design process that informs our work at Digital Green.",
+        "abstract": null,
+        "date": "December 28, 2017",
+        "url": "https://digitalgreen.org/designing-a-training-with-participatory-and-co-creative-process/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/HCD-3-symbols.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "107",
+        "title": "Inspiration and Ideation for Designers and Researchers",
+        "description": "Second of three part blogs from our Head of Training on Human Centered Design and its applicability in non-profit organizations.",
+        "abstract": null,
+        "date": "December 14, 2017",
+        "url": "https://digitalgreen.org/inspiration-and-ideation-for-designers-and-researchers/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/HCD-2-peer-to-peer.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "108",
+        "title": "Marigold Farmers Adopt Technology and Maximise Profits",
+        "description": "Blog on Marigold Farmers in Maharashtra",
+        "abstract": null,
+        "date": "November 30, 2017",
+        "url": "https://digitalgreen.org/marigold-farmers/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/DSC_7367-scaled.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "109",
+        "title": "Eager for Video-Based Extension",
+        "description": "Notes from Andhra Pradesh AgTech Summit 2017, Visakhapatnam",
+        "abstract": null,
+        "date": "November 24, 2017",
+        "url": "https://digitalgreen.org/eager-for-video-based-extension/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/10Ex-scaled.jpeg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "110",
+        "title": "Human Centered Design – from the eyes of a self-taught designer",
+        "description": "First of three part blogs from our Head of Training on Human Centered Design and its applicability in non-profit organizations.",
+        "abstract": null,
+        "date": "November 20, 2017",
+        "url": "https://digitalgreen.org/human-centered-design-from-the-eyes-of-a-self-taught-designer/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/HCD1-thumbnail.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "111",
+        "title": "A Country on the Cusp of a Digital Revolution in Agricultural Development",
+        "description": "Last month, I was in Dhaka, Bangladesh with my colleagues hosting an event on “Exploring Agriculture Innovations in Bangladesh to Improve Food Security” on behalf of Feed the Future’s Developing Local Extension Capacity (DLEC) program, which Digital Green leads in collaboration with the International Food Policy Research Institute (IFPRI), CARE International (CARE) and the Global Forum for Rural Advisory Services (GFRAS). Bangladesh is one of the countries in which DLEC is operating to measurably improve extension programs, policies and service delivery by creating locally tailored, partnership-based solutions and by mobilizing active communities of practice to scale this work.",
+        "abstract": null,
+        "date": "November 2, 2017",
+        "url": "https://digitalgreen.org/a-country-on-the-cusp-of-a-digital-revolution-in-agricultural-development/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/A-Country-on-the-Cusp-of-a-Digital-Revolution-in-Agricultural-Development-blog-photo-scaled.jpg"
+        },
+        "category": {
+          "value": "Reflections,DLEC"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "112",
+        "title": "Breaking the Cycle of Debt",
+        "description": "Vijay Lakshmi, a smallholder farmer, shares her farming success made possible by videos.",
+        "abstract": null,
+        "date": "June 21, 2017",
+        "url": "https://digitalgreen.org/breaking-the-cycle-of-debt/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/dsc_0262.jpg"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "113",
+        "title": "Reaping the Benefits of New Knowledge",
+        "description": "Farmers in Kurnool are learning how organic farming techniques can lower their expenses and increase their profits.",
+        "abstract": null,
+        "date": "June 15, 2017",
+        "url": "https://digitalgreen.org/reaping-the-benefits-of-new-knowledge/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/dsc_0223.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "114",
+        "title": "Reducing Time and Increasing Profits for Farmers in Bangladesh",
+        "description": "An unpredictable summer storm in southwest Bangladesh last April caused many farmers, like Abdul Mannan, to make some tough decisions.",
+        "abstract": null,
+        "date": "May 24, 2017",
+        "url": "https://digitalgreen.org/reducing-time-and-increasing-profits-for-farmers-in-bangladesh/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/img_20170524_093637.jpg"
+        },
+        "category": {
+          "value": "Reflections,DLEC"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "115",
+        "title": "think-cell: Powerpoint charting. Done right.",
+        "description": "think-cell is a presentation software that makes the task of creating professional PowerPoint presentations easy and efficient. The think-cell software facilitates quick creation of complex charts and visualizations (such as waterfalls, Marimekkos and Gantts) and clean slide formatting/layouts in PowerPoint. The software is offered for free to academic and nonprofit organizations. For additional information on think-cell […]",
+        "abstract": null,
+        "date": "January 16, 2017",
+        "url": "https://digitalgreen.org/think-cell-powerpoint-charting-done-right/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Blog"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "116",
+        "title": "LOOP  Mobile App Makes Farm to Market Linkages Easy",
+        "description": "Smallholder farmers spend considerable time and money transporting their produce to markets, yet do not get suitable returns. But that is changing.",
+        "abstract": null,
+        "date": "January 15, 2017",
+        "url": "https://digitalgreen.org/loop-mobile-app-makes-farm-to-market-linkages-easy/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/img_9902-240x240-4.jpeg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "117",
+        "title": "An Empowered Woman and a Prosperous Village",
+        "description": "A trained frontline veterinarian, Radha Devi supports her village with valuable knowledge via Digital Green videos.",
+        "abstract": null,
+        "date": "October 13, 2016",
+        "url": "https://digitalgreen.org/an-empowered-woman-and-a-prosperous-village/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/dsc04980-scaled.jpeg"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "118",
+        "title": "Digital Classrooms for Farmers",
+        "description": "The Pico Projector makes my job easier. It has helped me in nurturing the farmers' knowledge on the skills required for farming with lower input cost.",
+        "abstract": null,
+        "date": "September 27, 2016",
+        "url": "https://digitalgreen.org/digital-classrooms-for-farmers/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/20160109_102124-scaled.jpeg"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "119",
+        "title": "Haima’s journey of empowering farming families through videos",
+        "description": "It was difficult to convince the farmers to adopt any new agriculture practice due to my own limited knowledge on the subject.",
+        "abstract": null,
+        "date": "September 13, 2016",
+        "url": "https://digitalgreen.org/haimas-journey-of-empowering-farming-families-through-videos/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/dsc02603-scaled.jpeg"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "120",
+        "title": "Videos Show a New Way of Life",
+        "description": "Manju Devi's introduction to sack farming and other best practices through Digital Green Videos.",
+        "abstract": null,
+        "date": "August 31, 2016",
+        "url": "https://digitalgreen.org/videos-show-a-new-way-of-life/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/img_20160731_154434_039.jpeg"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "121",
+        "title": "How Munni Became a Pro Mediator",
+        "description": "About twenty women were packed into a small room in Dharahara village, Banmankhi block of Purnea district of Bihar, and concentrating on a video about the practice of Systematic Rice Intensification (SRI) for an improved yield of paddy being projected onto a white sheet pinned to the wall.",
+        "abstract": null,
+        "date": "July 28, 2016",
+        "url": "https://digitalgreen.org/how-munni-became-a-pro-mediator/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/img_20160629_171818201-scaled.jpeg"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "122",
+        "title": "How Digital Green Approach Helps Adnch Realise Her Dream For Her Community",
+        "description": "Adnch a health-extension worker in Dembecha, a woreda in the Amhara region of Ethiopia uses Digital Green's community video approach",
+        "abstract": null,
+        "date": "June 21, 2016",
+        "url": "https://digitalgreen.org/how-digital-green-approach-helps-adnch-realise-her-dream-for-her-community/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/img_20160525_022204-scaled.jpeg"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "123",
+        "title": "Quality Assurance Within the Community As We Scale Up",
+        "description": "How DG and JEEViKA built a band of master trainers to help scale and achieve quality for rolling out of the community video approach.",
+        "abstract": null,
+        "date": "April 28, 2016",
+        "url": "https://digitalgreen.org/quality-assurance-within-the-community-as-we-scale-up/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "124",
+        "title": "NPM as a route to self-sufficiency and quality produce for small farmers",
+        "description": "Anantapur, one of the most arid and drought affected districts in India, is often in the news due to high levels of agrarian distress. Despite being from the same district, Devammaâ€™s story is different.",
+        "abstract": null,
+        "date": "April 3, 2016",
+        "url": "https://digitalgreen.org/npm-as-a-route-to-self-sufficiency-and-quality-produce-for-small-farmers/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Blog-thumbnail-Devamma-Anantapur.jpg"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "125",
+        "title": "A Tippy Tap Revolution",
+        "description": "A Digital Green case study from Niger on how video-enabled health extension prompts behaviour change",
+        "abstract": null,
+        "date": "April 3, 2016",
+        "url": "https://digitalgreen.org/a-tippy-tap-revolution/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Niger-tippy-tap-revolution.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "126",
+        "title": "OUR FIRST MILLION!",
+        "description": "Digital Green is proud to share that we since we began our work in 2009, we have engaged over a million people across Asia and Africa.",
+        "abstract": null,
+        "date": "March 30, 2016",
+        "url": "https://digitalgreen.org/our-first-million/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Blog_thumbnail_1-million.jpg"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "127",
+        "title": "How videos helped a woman farmer turn organic and reap greater profits",
+        "description": "Though Soora Munijanaki's success might look small in nature, it is in fact a bright spot on a larger landscape of small subsistence farmers in rural India.",
+        "abstract": null,
+        "date": "February 10, 2016",
+        "url": "https://digitalgreen.org/how-videos-helped-a-woman-farmer-turn-organic-and-reap-greater-profits/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Soora-Munijanaki.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "128",
+        "title": "When Settipalli Farmers’ Producer Group Resolved to Tell Their Story",
+        "description": "Thousands of farmers watching the video created by Settipalli farmers are captivated and eager to follow in their footsteps.",
+        "abstract": null,
+        "date": "January 12, 2016",
+        "url": "https://digitalgreen.org/when-settipalli-farmers-producer-groups-resolved-to-tell-their-story/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Settipalli-farmers-group.jpg"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "129",
+        "title": "Towards a happier, healthier future",
+        "description": "Safiya Yakubu, 28, lives with her husband in Jikata, Niger since they got married in 2004. They are both farmers and have four children. Their eldest child is a 11-year-old boy named Naziru and their youngest is Youssoufa who is just 3 months old.",
+        "abstract": null,
+        "date": "January 7, 2016",
+        "url": "https://digitalgreen.org/towards-a-happier-healthier-future/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Safiya-Niger-thumbnail.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "130",
+        "title": "Seeing is Believing",
+        "description": "Somia Devi is proud that women of the village now consider her a role model and people come to learn from her through the videos.",
+        "abstract": null,
+        "date": "December 16, 2015",
+        "url": "https://digitalgreen.org/seeing-is-believing/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Blog-thumbnail-Somia-devi.jpg"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "131",
+        "title": "Finding Hope Amidst Despair",
+        "description": "Agriculture is the primary source of livelihood and the mainstay of about 80 per cent of the rural population in the state of Jharkhand. Most of the farmers are small and marginal landholders. In Jharkhand 92 per cent of the total cultivated area is un-irrigated thus agriculture here is characterized as nature dependent, coupled with mono cropping and low investment capacity of farmers pushing them into the vicious cycle of poverty.",
+        "abstract": null,
+        "date": "December 13, 2015",
+        "url": "https://digitalgreen.org/finding-hope-amidst-despair-farmers-in-jharkhand-india/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/img-20151124-wa0002.jpeg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "132",
+        "title": "A lesson learnt well",
+        "description": "I've been training extension workers to produce and disseminate videos that capture best practices in the field of agriculture, health and nutrition.",
+        "abstract": null,
+        "date": "December 2, 2015",
+        "url": "https://digitalgreen.org/a-lesson-learnt-well/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Blog-thumbnail_-Lesson-learnt-well.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "133",
+        "title": "Change begins at home",
+        "description": "Rinki Devi has been one of the best mediators in her block - it wasn't easy given the stiff resistance she faced from her family.",
+        "abstract": null,
+        "date": "November 17, 2015",
+        "url": "https://digitalgreen.org/creating-a-video-revolution/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/rinki_devi_is_disseminating_the_video_at_her_villagebesradihbundu_ranchi-scaled.jpeg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "134",
+        "title": "A good farmer and neighbour",
+        "description": "Kinu Yadav, is a local hero and inspiration for farmers in and around Dumaria village, Muraliganj block of Madhepura district, Bihar.",
+        "abstract": null,
+        "date": "November 5, 2015",
+        "url": "https://digitalgreen.org/a-good-farmer-and-neighbour/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Kinu-Yadav.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "135",
+        "title": "Man on a mission",
+        "description": "A seemingly ordinary small farmer, single-handedly mobilized the women of his village in 2007 to form self-help groups...",
+        "abstract": null,
+        "date": "October 30, 2015",
+        "url": "https://digitalgreen.org/gomeshris-world/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/screen_shot_2015-11-26_at_4.21.26_pm.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "136",
+        "title": "Strengthening Existing Partnership",
+        "description": "Our partnership with Bihar Rural Livelihood Promotion Society (BRLPS) has been going from strength to strength and we're dedicated to it.",
+        "abstract": null,
+        "date": "October 26, 2015",
+        "url": "https://digitalgreen.org/strengthening-existing-partnership/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Strengthening-partnership-with-BRLPS.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "137",
+        "title": "All about partnerships",
+        "description": "Our colleague shares some of the lessons learnt from the field over the last couple of years as a program manager.",
+        "abstract": null,
+        "date": "October 16, 2015",
+        "url": "https://digitalgreen.org/what-i-have-learnt-about-partnerships/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/pic.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "138",
+        "title": "Learning from Each Other",
+        "description": "Watch as Bharathi learns about sustainable cost-effective farming practices from Sanjeevamma, both women smallholder farmers in Chittoor district of Andhra Pradesh.",
+        "abstract": null,
+        "date": "August 14, 2015",
+        "url": "https://digitalgreen.org/learning-from-each-other/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Learning-from-each-other-through-video.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "139",
+        "title": "Notes from ‘Think Week’",
+        "description": "Rikin Gandhi, Founder & Executive Director shares his vision for Think Week",
+        "abstract": null,
+        "date": "August 6, 2015",
+        "url": "https://digitalgreen.org/notes-from-think-week/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Think-week-Rikin.jpg"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "140",
+        "title": "Creating spaces for dialogues",
+        "description": "Read about our training programs for extension workers and community members who spearhead our peer-to-peer learning system directed towards building and enhancing their skills.",
+        "abstract": null,
+        "date": "July 31, 2015",
+        "url": "https://digitalgreen.org/creating-spaces-for-dialogues/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Dissemination3-scaled.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "141",
+        "title": "Green Champion: Showcasing Opportunities That Can Drive a Greener India",
+        "description": "Reblog of our CEO, Rikin Gandhi's original post for the NDTV Godrej Green Champion show, India's first 'green' reality show that Digital Green is proud to be associated withÂ",
+        "abstract": null,
+        "date": "July 27, 2015",
+        "url": "https://digitalgreen.org/green-champion-showcasing-opportunities-that-can-drive-a-greener-india/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/green-champion.png"
+        },
+        "category": {
+          "value": "Vision"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "142",
+        "title": "Becoming Super-Trainers!",
+        "description": "14 trainers from across our state teams in India came together to improve their participatory facilitation skills and methods.",
+        "abstract": null,
+        "date": "July 27, 2015",
+        "url": "https://digitalgreen.org/becoming-super-trainers/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Namita-ToT-scaled.jpeg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "143",
+        "title": "Institutionalizing our approach among JEEViKA staff",
+        "description": "As we celebrate three years of some very challenging and fulfilling work in Bihar, we thought it was time to start exploring ways to strengthen our partnership with our partner, JEEViKA",
+        "abstract": null,
+        "date": "July 17, 2015",
+        "url": "https://digitalgreen.org/institutionalizing-our-approach-among-jeevika-staff/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Blog-thumbnail-institutionalising-our-approach-with-Jeevika-staff.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "144",
+        "title": "Samastipur Sisters – Harbingers of Change",
+        "description": "The story of Usha and Reena - two sisters who were inspired by videos to work on their kitchen garden and are now themselves an inspiration.",
+        "abstract": null,
+        "date": "July 2, 2015",
+        "url": "https://digitalgreen.org/samastipur-sisters-harbingers-of-change/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Blog-thumbnail-Samastipur-sisters.jpg"
+        },
+        "category": {
+          "value": "Inspiration"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "145",
+        "title": "Understanding technology beyond broadband internet",
+        "description": "Text by Ajinkya Deshmukh, Program Manager, Digital Green",
+        "abstract": null,
+        "date": "June 17, 2015",
+        "url": "https://digitalgreen.org/understanding-technology-beyond-broadband-internet/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "146",
+        "title": "The World is Flat",
+        "description": "Contributed by Nisha Tirkey, Assistant Program Manager, Digital Green",
+        "abstract": null,
+        "date": "April 30, 2015",
+        "url": "https://digitalgreen.org/the-world-is-flat/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "147",
+        "title": "Skilling new teams and building new partnerships",
+        "description": "Text and photos contributed by Ajinkya Deshmukh, Program Manager",
+        "abstract": null,
+        "date": "April 28, 2015",
+        "url": "https://digitalgreen.org/skilling-new-teams-and-building-new-partnerships/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "148",
+        "title": "Facilitating better communication with frontline workers via IVR system",
+        "description": "Contributed by Tanmay Goel, Assistant Software Engineer, Digital Green",
+        "abstract": null,
+        "date": "March 31, 2015",
+        "url": "https://digitalgreen.org/ivr-pilot/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/untitled.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "149",
+        "title": "Images from the field – Bihar",
+        "description": "Posted by digitalgreen",
+        "abstract": null,
+        "date": "March 31, 2015",
+        "url": "https://digitalgreen.org/bihar-photos/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "150",
+        "title": "Between work and witnessing the world",
+        "description": "Contributed by Ajinkya Deshmukh, Program Manager",
+        "abstract": null,
+        "date": "March 31, 2015",
+        "url": "https://digitalgreen.org/between-work-and-witnessing-the-world/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/dscn0175-scaled.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "151",
+        "title": "Despatch from the field – Experiences from Gopalganj and West Champaran, Bihar, India",
+        "description": "Contributed by Rishiraj Shukla, Assistant Program Manager, Digital Green",
+        "abstract": null,
+        "date": "March 31, 2015",
+        "url": "https://digitalgreen.org/despatch-from-the-field-experiences-from-gopalganj-and-west-champaran-bihar-india/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/dsc_0170-scaled.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "152",
+        "title": "digitalGREEN team retreats – a quick look back",
+        "description": "Our team in Karnataka surprised us all by screening this short video that captured the team retreats of the past through bits of videos and photos they had collected over the years from various colleagues.",
+        "abstract": null,
+        "date": "March 30, 2015",
+        "url": "https://digitalgreen.org/digitalgreen-team-retreats-a-quick-look-back/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/Yaadein-video-blog.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "153",
+        "title": "Digital Green Annual Staff Retreat 2015 – Rajgir, Bihar",
+        "description": "The Digital Green family spread across India and Ethiopia came together for a three-day retreat in Rajgir, Bihar from March 24 - 26th.",
+        "abstract": null,
+        "date": "March 27, 2015",
+        "url": "https://digitalgreen.org/digital-green-annual-staff-retreat-2015-rajgir-bihar/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/img_3183-scaled.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "154",
+        "title": "When 20 people said Lights, Camera Action!",
+        "description": "Contributed by Namita Singh, Senior Program Manager - Training, Digital Green",
+        "abstract": null,
+        "date": "March 18, 2015",
+        "url": "https://digitalgreen.org/training-with-a-difference/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/image-scaled.jpeg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "155",
+        "title": "Voice from the field: Letebrihen Gidey, Ethiopia",
+        "description": "Meet Letebrihen Gidey, 42, mother of three, resident of Medebay Zana village, Hekifen district, Ethiopia.",
+        "abstract": null,
+        "date": "March 18, 2015",
+        "url": "https://digitalgreen.org/voice-from-the-field-letebrihen-gidey-model-farmer-and-community-change-agent-ethiopia/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/dsc04241.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "156",
+        "title": "Scaling up the Digital Green approach in Ethiopia",
+        "description": "Posted by digitalgreen",
+        "abstract": null,
+        "date": "March 9, 2015",
+        "url": "https://digitalgreen.org/scaling-up-the-digital-green-approach-in-ethiopia/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog_eth_film.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "157",
+        "title": "Inspiring stories of change from Ethiopia",
+        "description": "Gebru Dereje, from Gumer District in SNNPR State gave up city life to move back to his place of birth (Zizencho Kebele) and became a farmer.",
+        "abstract": null,
+        "date": "March 5, 2015",
+        "url": "https://digitalgreen.org/inspiring-stories-of-change/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "158",
+        "title": "Voice from the field – Dharmender Kumar, Village Resource Person, Bihar",
+        "description": "Dharmender Kumar is thrilled that the best practice videos he helps disseminate among women farmers in his community lead to increased yield and farm productivity. Here's his story: Â",
+        "abstract": null,
+        "date": "March 4, 2015",
+        "url": "https://digitalgreen.org/voice-from-the-field-dharmender-kumar-village-resource-person-bihar/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/pic.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "159",
+        "title": "Testing instructional design for Indian farmers",
+        "description": "Aman Bhardwaj is part of the extended family of Digital Green. He is a student of visual communication at National Institute of Design (NID), Ahmedabad and is interested in linguistics, ethnography, and technology and is curious to learn more about how design interventions are carried out at the grassroots level in the Indian development sector.",
+        "abstract": null,
+        "date": "March 3, 2015",
+        "url": "https://digitalgreen.org/testing-instructional-design-for-indian-farmers/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/blog-line-header-01.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "160",
+        "title": "Theory of Change Workshop, Addis Ababa, Ethiopia (February 5-6, 2015)",
+        "description": "A Monitoring, Evaluation and Learning workshop for the Digital Integration to Amplify Agricultural Extension Project was held in Addis Ababa, Ethiopia on February 5th and 6th, 2015.",
+        "abstract": null,
+        "date": "March 2, 2015",
+        "url": "https://digitalgreen.org/theory-of-change-workshop-addis-ababa-ethiopia-february-5-6-2015/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/dsc04857_crop.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "161",
+        "title": "Revised RFP for Value Chain Consultant (IndicatorsTools)",
+        "description": "Revised RFP for Value Chain Consultant (IndicatorsTools)",
+        "abstract": null,
+        "date": "February 3, 2015",
+        "url": "https://digitalgreen.org/revised-rfp-for-value-chain-consultant-indicatorstools/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "162",
+        "title": "Insights from a training program in Tanzania",
+        "description": "ByÂ ArchanaÂ Kulkarni, Program Manager - Training, Digital Green",
+        "abstract": null,
+        "date": "January 30, 2015",
+        "url": "https://digitalgreen.org/insights-from-a-training-program-in-tanzania/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "163",
+        "title": "Meera Devi – Story from the Field – DARSHAN Project – Project Concern International and Digital Green",
+        "description": "Meera Devi - A Parivartan self-help group member",
+        "abstract": null,
+        "date": "January 20, 2015",
+        "url": "https://digitalgreen.org/meera-devi-story-from-the-field-darshan-project-project-concern-international-and-digital-green/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "164",
+        "title": "Mohamed Saluh – Story from the Field – DARSHAN Project – Project Concern International and Digital Green",
+        "description": "Mohamed Saluh",
+        "abstract": null,
+        "date": "January 20, 2015",
+        "url": "https://digitalgreen.org/mohamed-saluh-story-from-the-field-darshan-project-project-concern-international-and-digital-green/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "165",
+        "title": "Sushma Devi – Story from the Field – DARSHAN Project – Project Concern International and Digital Green",
+        "description": "Sushma Kumari - A Saheli",
+        "abstract": null,
+        "date": "January 20, 2015",
+        "url": "https://digitalgreen.org/sushma-devi-story-from-the-field-darshan-project-project-concern-international-and-digital-green/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "166",
+        "title": "Investigating bottlenecks in our agriculture-centered project in Bihar",
+        "description": "By Swati Gaur, Program Manager â€“ Monitoring, Evaluation, Research and Learning, Digital Green",
+        "abstract": null,
+        "date": "January 14, 2015",
+        "url": "https://digitalgreen.org/investigating-bottlenecks-in-our-agriculture-centric-project-in-bihar/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "167",
+        "title": "Learning from our achievements in Bihar",
+        "description": "From the desk of Rikin Gandhi, Chief Executive Officer, Digital Green",
+        "abstract": null,
+        "date": "January 13, 2015",
+        "url": "https://digitalgreen.org/learning-from-our-achievements-in-bihar/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/dsc_0852.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "168",
+        "title": "Planning Meeting in Ethiopia to discuss scale-up of the Digital Green approach (December 20-21, 2014)",
+        "description": "Digital Green and Ethiopia's Ministry of Agriculture have been collaborating since 2012 to pilot the Digital Green approach to improve agricultural productivity in four regions (Tigray, Oromia, Amhara and Southern Nations, Nationalities, and Peoples' Region), reachingÂ over 25,000 farmers till date.",
+        "abstract": null,
+        "date": "December 25, 2014",
+        "url": "https://digitalgreen.org/planning-meeting-to-strategize-institutionalization-of-digital-green-approach-within-ethiopias-public-extension-system/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/20141220_160054.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "169",
+        "title": "Request for Proposals for Value Chain Consultants",
+        "description": "",
+        "abstract": null,
+        "date": "December 24, 2014",
+        "url": "https://digitalgreen.org/request-for-proposals-for-value-chain-consultants/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "170",
+        "title": "Health Behavior Change – A long road ahead",
+        "description": "Contributed by Nidhi Chakrabarty (edited by Susan Thomas)",
+        "abstract": null,
+        "date": "December 19, 2014",
+        "url": "https://digitalgreen.org/health-behavior-change-a-long-road-ahead/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/20140710_175117-scaled.jpeg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "171",
+        "title": "The Digital Green Story",
+        "description": "Posted by digitalgreen",
+        "abstract": null,
+        "date": "December 16, 2014",
+        "url": "https://digitalgreen.org/the-digital-green-story/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/dg_film.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "172",
+        "title": "Short film on CSISA – Digital Green collaboration in Odisha, India",
+        "description": "A pilot project to increase the scale of access of farmers to improved crop production technologies by integrating Digital Greenâ€™s technology-enabled extension model was implemented in collaboration with CSISA (Cereal Systems Initiatives in South Asia) in Odisha layering over Krishi Vigyan Kendra (KVK) and Government of Odisha agriculture extension systems.",
+        "abstract": null,
+        "date": "December 16, 2014",
+        "url": "https://digitalgreen.org/short-film-on-csisa-digital-green-collaboration-in-odisha-india/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "173",
+        "title": "Digital Green: Targeting. Empowering. Connecting.",
+        "description": "The concept of user-generated content has seeped into and transformed traditional information dissemination channels for the rural population. Stepping out of the passive consumption mode, rural community members are now playing an active role in developing and sharing content on improved practices and behaviors within their immediate network. Much like urban folks who are influenced by peers on social networks and add their own 'Like' or RT to help a meme or video go viral, farmers tend to be convinced of the benefits of a practice when a fellow farmer promotes it - convinced enough to adopt the practice and help spread the word within their own groups.Â",
+        "abstract": null,
+        "date": "December 14, 2014",
+        "url": "https://digitalgreen.org/social-networking-how-our-future-of-food-depends-on-it/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "174",
+        "title": "Focus on the Audience Behaviour",
+        "description": "Our Brown Bag session today, where we bring in experts from within Digital Green and outside to spark our imagination and inspire us to do something different and something more, did exactly that.",
+        "abstract": null,
+        "date": "December 12, 2014",
+        "url": "https://digitalgreen.org/focus-on-the-audience-behaviour/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/image_2.jpeg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "175",
+        "title": "Workshop Gallery",
+        "description": "Posted by digitalgreen",
+        "abstract": null,
+        "date": "December 5, 2014",
+        "url": "https://digitalgreen.org/workshop-gallery/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "176",
+        "title": "SAFANSI JEEViKA Topics",
+        "description": "Posted by digitalgreen",
+        "abstract": null,
+        "date": "December 5, 2014",
+        "url": "https://digitalgreen.org/safansi-jeevika-topics/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "177",
+        "title": "Basanti Majhi’s Story",
+        "description": "Basanti Majhi, farmer, secretary of a women's self help group, mother and community change agent",
+        "abstract": null,
+        "date": "December 5, 2014",
+        "url": "https://digitalgreen.org/basantis-story-spring/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "178",
+        "title": "SPRING Overview",
+        "description": "Posted by digitalgreen",
+        "abstract": null,
+        "date": "December 5, 2014",
+        "url": "https://digitalgreen.org/spring-overview/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "179",
+        "title": "SAFANSI pilot in Bihar",
+        "description": "Posted by digitalgreen",
+        "abstract": null,
+        "date": "December 5, 2014",
+        "url": "https://digitalgreen.org/safansi-pilot-in-bihar/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "180",
+        "title": "Request for Proposal – Quality Assessment Protocol",
+        "description": "Posted by digitalgreen",
+        "abstract": null,
+        "date": "November 6, 2014",
+        "url": "https://digitalgreen.org/request-for-proposal/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "181",
+        "title": "Madhubanis farmers are learning from videos and each other",
+        "description": "To see what farmers are saying about the Digital Green videos and the practical application of the information in their fields I visited a few farms.",
+        "abstract": null,
+        "date": "October 21, 2014",
+        "url": "https://digitalgreen.org/madhubanis-farmers-are-learning-from-videos-and-each-other/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/img_1535_2-scaled.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "182",
+        "title": "Message from Vinay Kumar, COO, Digital Green",
+        "description": "Posted by digitalgreen",
+        "abstract": null,
+        "date": "October 20, 2014",
+        "url": "https://digitalgreen.org/message-from-vinay-kumar-coo-digital-green/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "183",
+        "title": "Message from Rikin Gandhi, CEO, Digital Green",
+        "description": "Posted by digitalgreen",
+        "abstract": null,
+        "date": "October 20, 2014",
+        "url": "https://digitalgreen.org/message-from-rikin-gandhi-ceo-digital-green/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "184",
+        "title": "Thank You to our crowdfunding campaign supporters from the video production team in Odisha, India",
+        "description": "Posted by digitalgreen",
+        "abstract": null,
+        "date": "October 20, 2014",
+        "url": "https://digitalgreen.org/thank-you-to-our-crowdfunding-campaign-supporters-from-the-video-production-team-in-odisha-india/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "185",
+        "title": "Short film on Digital Green (2014)",
+        "description": "Posted by digitalgreen",
+        "abstract": null,
+        "date": "October 20, 2014",
+        "url": "https://digitalgreen.org/short-film-on-digital-green-2014/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/screen_shot_2015-03-12_at_4.06.18_pm.png"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "186",
+        "title": "Kalavati Devi: Using Videos to Trigger Behavior Change",
+        "description": "Contributed by Pallavi Lal",
+        "abstract": null,
+        "date": "September 26, 2014",
+        "url": "https://digitalgreen.org/kalavati-devi-using-videos-to-trigger-behavior-change/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/01/dsc_0181-scaled.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "187",
+        "title": "Sushila’s Story",
+        "description": "By Nidhi Chakrabarty, Digital Green",
+        "abstract": null,
+        "date": "September 19, 2014",
+        "url": "https://digitalgreen.org/when-i-met-sushila-devi/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "188",
+        "title": "Video screening in Sirbaa village, Rift Valley, Ethiopia",
+        "description": "From the desk of Vinay Kumar, Chief Operating Officer, Digital Green",
+        "abstract": null,
+        "date": "September 16, 2014",
+        "url": "https://digitalgreen.org/field-visit-to-sirbaa-village-ethiopia-2/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": null,
+        "id": "189",
+        "title": "Annual Report 2013",
+        "description": "Posted by digitalgreen",
+        "abstract": null,
+        "date": "July 8, 2014",
+        "url": "https://digitalgreen.org/annual-report-2013/",
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "image_url": {
+          "value": "https://digitalgreen.org/wp-content/uploads/2024/03/digital-placeholder.jpg"
+        },
+        "category": {
+          "value": "Reflections"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,1551 @@
+{
+  "meta": {
+    "collection_id": "fao-bp5",
+    "collection_label": "FAO Best Practices (BP5)",
+    "collection_nid": 0,
+    "record_count": 32,
+    "export_timestamp": "2026-07-16T15:47:58.380921",
+    "field_config": {
+      "#": {
+        "categorical": false
+      },
+      "project_symbol": {
+        "categorical": false
+      },
+      "Main SDG (voluntary)": {
+        "categorical": false
+      },
+      "Projects Name": {
+        "categorical": false
+      },
+      "Implementing Region": {
+        "categorical": true
+      },
+      "Implementing countries": {
+        "categorical": false
+      },
+      "Scaling Stage": {
+        "categorical": true
+      },
+      "Comments (Project Description)": {
+        "categorical": false
+      },
+      "Initiative or Innovation": {
+        "categorical": true
+      },
+      "Innovation Type": {
+        "categorical": false
+      },
+      "Use Cases": {
+        "categorical": false
+      },
+      "Adaption level": {
+        "categorical": true
+      }
+    }
+  },
+  "records": [
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Extavour, Vermaran (SLCDD)",
+        "id": "0",
+        "title": "Policy & strategy innovation",
+        "description": "An innovation in the form of a regional e-agriculture platform that helps national governments to develop and implement gender-sensitive e-agriculture strategies and roadmaps. The platform also facilitates the dissemination of information and best practices on e-agriculture solutions adapted to the Caribbean context",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "2"
+        },
+        "project_symbol": {
+          "value": "TCP/SLC/3808"
+        },
+        "Main SDG (voluntary)": {
+          "value": "9.3, 5.9, 9.c, 1.9"
+        },
+        "Projects Name": {
+          "value": "Regional e-agriculture for the Caribbean – A post COVID – 19 Mechanism to promote resilient agri-food"
+        },
+        "Implementing Region": {
+          "value": "RLC - Latin America and the Caribbean Region"
+        },
+        "Implementing countries": {
+          "value": "Bahamas-Belize-Dominica-Grenada-Guyana-Saint Kitts and Nevis"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project aims to build the capacities of CARICOM governments to create an enabling environment for the adoption of e-agriculture solutions at the national level. The expected results are: a regional platform to support national e-agriculture strategies, national e-agriculture strategies and roadmaps, technical capacity building for young entrepreneurs, and investment opportunities for e-agriculture applications."
+        },
+        "Initiative or Innovation": {
+          "value": "Innovation "
+        },
+        "Innovation Type": {
+          "value": "Digital technologies "
+        },
+        "Use Cases": {
+          "value": "Farm managemnet - Access to knowledge and advisory "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Aw-Dahir, Mohamed (SFEDD) &\tHeyman, Amy (ESSDD)",
+        "id": "1",
+        "title": "Farm and Farmers management platform",
+        "description": "Land cover & land suitability : use of earth observation and satellite image data in development of the land cover and land suitability for ievidence based information in HIH investment plan development",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "3"
+        },
+        "project_symbol": {
+          "value": "TCP/RWA/3805"
+        },
+        "Main SDG (voluntary)": {
+          "value": "2.3, 2.4, 2.1, 1.2, 2.c"
+        },
+        "Projects Name": {
+          "value": "Transformational Change in Rwanda Through Hand-in-Hand Initiative"
+        },
+        "Implementing Region": {
+          "value": "RAF - Africa Region"
+        },
+        "Implementing countries": {
+          "value": "\tRwanda"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project aims to use analysis, consultation, matchmaking, and investment planning to accelerate agricultural and rural transformation in Rwanda, a country that faces high poverty and malnutrition rates and challenges in the agriculture sector"
+        },
+        "Initiative or Innovation": {
+          "value": "Initiative "
+        },
+        "Innovation Type": {
+          "value": "Technological "
+        },
+        "Use Cases": {
+          "value": "Access to knowledge and advisory "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Al-Hamdi, Mohamed Ibrahim Mohamed (RNETD) & Hoogeveen, Jippe (NSLDD)",
+        "id": "2",
+        "title": "Precision Agriculture",
+        "description": "Some of the innovations that the project will implement are: (i) the development of WaPOR Level 3 data, which will provide high-resolution information on evapotranspiration, land use, and water productivity to the WUAs and other stakeholders; (ii) the development of a mobile application linked to WaPOR, which will enable easy access and use of the data for decision-making and planning; (iii) the promotion of rainwater harvesting and groundwater recharge techniques to enhance the availability and quality of water resources; and (iv) the formation of a Sana'a Basin Water Association Union, which will strengthen the coordination and cooperation among the WUAs and other water governance institutions",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "4"
+        },
+        "project_symbol": {
+          "value": "GCP /YEM/048/NET"
+        },
+        "Main SDG (voluntary)": {
+          "value": "6.4, 6.5, 6.3, 13.1, 2.4, 2.3, 5.5"
+        },
+        "Projects Name": {
+          "value": "Consolidating the Decentralized Integrated Water Resource Management System in Sanaa Basin, Yemen"
+        },
+        "Implementing Region": {
+          "value": "RNE - Near East Region"
+        },
+        "Implementing countries": {
+          "value": "\tYemen"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project will work with local stakeholders, especially water user associations (WUAs), to enhance their capacity and knowledge on water resources investments and management, water conflict resolution, climate-smart agriculture, and water productivity monitoring."
+        },
+        "Initiative or Innovation": {
+          "value": "Innovation "
+        },
+        "Innovation Type": {
+          "value": "Multi-stakeholder platforms - Partnerships "
+        },
+        "Use Cases": {
+          "value": "Production, natural resources management and sustainable practices, access to knowledge and advisory, Governance, policy support, and intelligence. "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Teillard, Felix (RAPDD), Besbes, Badi (NSAPD)",
+        "id": "3",
+        "title": "Precision Agriculture",
+        "description": "Use of digital technologies such as mobile applications, online systems, blockchain, and geospatial technologies to create a comprehensive database that will inform livestock policy interventions throughout livestock value chains.",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "7"
+        },
+        "project_symbol": {
+          "value": "TCP/BHU/3903"
+        },
+        "Main SDG (voluntary)": {
+          "value": "2.1 , 2.4"
+        },
+        "Projects Name": {
+          "value": "Enhancing livestock production efficiency through digitalization and precision farming"
+        },
+        "Implementing Region": {
+          "value": "RAP - Asia and Pacific Region"
+        },
+        "Implementing countries": {
+          "value": "Bhutan"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project aims to leverage digital technology to create a comprehensive database that will inform livestock policy interventions across various value chains. It focuses on enhancing poultry and pig production by providing technical support for informed business decisions, improving efficiency, management, and tracking product movement. Additionally, it seeks to promote and improve dairy production through better farming practices and reduced labor. The project also aims to strengthen institutional capacities within the livestock sector to elevate quality and standards. Lastly, it endeavors to boost fish production to replace imports and penetrate niche export markets."
+        },
+        "Initiative or Innovation": {
+          "value": "Innovation "
+        },
+        "Innovation Type": {
+          "value": "Digital technologies - Institutional - Capacity development function "
+        },
+        "Use Cases": {
+          "value": "Supply chain management - Collective action and aggregation - Business models support - Production - Access to markets - Governance, policy support, and intelligence"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Ramirez Vera, Eduardo (RLC1D)",
+        "id": "4",
+        "title": "Precision Agriculture",
+        "description": "Digital Villages in Action with LiDAR Technology, Digital Technologies Deployment and Innovative Agroecological Models: (1) promoting the use of LiDAR metrics and demonstrating their value for sustainable and resilient agricultural development, (2) deployment of various digital technologies such as ICT tools, decision support systems, databases, Agri-based Apps, drones, soil testing services, remote sensing, GIS, AI, and machine learning in agricultural transformation, digital village in action with digital soil maps, online and blended training approaches, precision agriculture technologies, and agritourism capacity development to strengthen value chains and provide income diversification opportunities (4) and developed new agroecological innovative models like \"CHITAKA\" to fight hunger and drought, and \"OTCHITANDA\" for on-farm agri-processing to improve smallholder agri-processing, increase income, and reduce food loss and waste",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "8"
+        },
+        "project_symbol": {
+          "value": "TCP/BOL/3903"
+        },
+        "Main SDG (voluntary)": {
+          "value": "2.4 ,\t1.4,2.1"
+        },
+        "Projects Name": {
+          "value": "Asistencia Técnica en la digitalización en la agricultura familiar para el incremento de rendimientos y rentabilidad en los cultivos priorizados en zonas estratégicas de Bolivia \"Technical Assistance in Digitalization in Family Farming for Increased Yields and Profitability in Priority Crops in Strategic Areas of Bolivia\""
+        },
+        "Implementing Region": {
+          "value": "RLC - Latin America and the Caribbean Region"
+        },
+        "Implementing countries": {
+          "value": "Bolivia"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project's objective (translated) is to support the government in implementing a strategy to scale the application of precision agriculture (PA) in family farming that supports the deployment of sustainable information and communication technologies (ICT) solutions."
+        },
+        "Initiative or Innovation": {
+          "value": "Initiative "
+        },
+        "Innovation Type": {
+          "value": "Digital technologies "
+        },
+        "Use Cases": {
+          "value": "Governance, policy support, and intelligence - Farm management "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Okoth, James Robert (FAPAK) +\tHugo, Wilson (NSPDD)",
+        "id": "5",
+        "title": "Farm and Farmers management platform",
+        "description": "1. E-voucher for agricultural input distribution through a network of agrodealers;\n2. Mobile cash transfer though the IDEA ecosystem;                                                            3. agroecological",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "15"
+        },
+        "project_symbol": {
+          "value": "GCP /MOZ/127/EC"
+        },
+        "Main SDG (voluntary)": {
+          "value": "2.4 ,2.3,1.4"
+        },
+        "Projects Name": {
+          "value": "PROMOVE Agribiz"
+        },
+        "Implementing Region": {
+          "value": "RAF - Africa Region"
+        },
+        "Implementing countries": {
+          "value": "Mozambique"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project promote digital services initially for\naddressing emergency and social protection goals\nby providing mobile redeemable vouchers to preestablished agrodealers. This was supported by the\nuse of mobile apps for farmers’ registration and the\nFAO-developed IDEA platform"
+        },
+        "Initiative or Innovation": {
+          "value": "Innovation "
+        },
+        "Innovation Type": {
+          "value": "Digital technologies - Financial - Fintech solutions"
+        },
+        "Use Cases": {
+          "value": "Business model support - Farm management "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Rabczuk, Pablo (RLC1D) + Rabczuk, Pablo (RLC1D)",
+        "id": "6",
+        "title": "Farm and Farmers management platform",
+        "description": "SIGAP: Improved version of the Integrated Agricultural Management System (SIGAP), a tool that allows a detailed record of agricultural producers, the characteristics of their georeferenced plots, their products, all of which contributes to having an updated database of the agricultural sector .",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "16"
+        },
+        "project_symbol": {
+          "value": "TCP/PAN/3901"
+        },
+        "Main SDG (voluntary)": {
+          "value": "6.4 ,2.4,2.3 ,\t15.2,\t9.c ,\t5.b,\t1.4,\t17.8"
+        },
+        "Projects Name": {
+          "value": "Crisis alimentaria y digitalización agricultura: modernización MIDA Panamá \"Food crisis and agricultural digitalization: MIDA Panama modernization\""
+        },
+        "Implementing Region": {
+          "value": "RLC - Latin America and the Caribbean Region"
+        },
+        "Implementing countries": {
+          "value": "Panama"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project aims to support the public institutions in Panamanian agriculture in adopting and implementing digital innovation mechanisms and generating public goods for use by the public and private sectors (transparency and institutional functionality), accelerating the response to the food crisis. \"Translated\""
+        },
+        "Initiative or Innovation": {
+          "value": "Innovation "
+        },
+        "Innovation Type": {
+          "value": "Institutional - Digital technologies - Knowledge management function"
+        },
+        "Use Cases": {
+          "value": "Governance,  policy support, and intelligence - Access to markets - Food quality and safety "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Medina Navarro, Melvin Leonardo (SLCMD) + Magliocchetti Lombi, Leone (NSPDD)",
+        "id": "7",
+        "title": "IOT and sensors application in agriculture",
+        "description": "use of digital sensors for micro-agro-climate dataset collection and access to protect agriculture systems & precise fertilizer application .",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "17"
+        },
+        "project_symbol": {
+          "value": "FVC/SLC/215/MUL"
+        },
+        "Main SDG (voluntary)": {
+          "value": "2.3 ,\t2.4"
+        },
+        "Projects Name": {
+          "value": "Digital Solutions to Improve Horticultural Crop Management in the Caribbean"
+        },
+        "Implementing Region": {
+          "value": "RLC - Latin America and the Caribbean Region"
+        },
+        "Implementing countries": {
+          "value": "Antigua and Barbuda-Jamaica-SLC - Subregional Office for the Caribbean, Bridgetown"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project has objective of implementing and piloting the use low-cost digital solutions with practical applicability to improve crop management and productivity, increasing yield amd support the application of required inputs precisely and improving advisory services in collaboration with private sector to achieve adaptation to small-scale farmers and academia. additipanally , the project will validate and test innovative technologies as well as supporting the governments in providing the enabling environment for sustainability."
+        },
+        "Initiative or Innovation": {
+          "value": "Innovation "
+        },
+        "Innovation Type": {
+          "value": "Digital technologies "
+        },
+        "Use Cases": {
+          "value": "Farm management - Production - Natural resources management and sustainable practices - Business models support - Governance, policy support, and intelligence -"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Gbaguidi, Lionel (SFWDD) + Besbes, Badi (NSAPD)",
+        "id": "8",
+        "title": "IOT and sensors application in agriculture",
+        "description": " National Cattle tracking systems, the digitalization of the Livestock Sector, which is an essential solution for the sustainable transformation of livestock farming and helps secure the livelihoods of livestock breeders and agro-pastoralists confronted with livestock rustling.",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "19"
+        },
+        "project_symbol": {
+          "value": "FVC/SFW/201/MUL"
+        },
+        "Main SDG (voluntary)": {
+          "value": "1.1,1.4 ,1.5"
+        },
+        "Projects Name": {
+          "value": "Prévention et contrôle du vol de bétail à l`aide de technologies numériques"
+        },
+        "Implementing Region": {
+          "value": "RAF - Africa Region"
+        },
+        "Implementing countries": {
+          "value": "SFW - Subregional Office for West Africa, Dakar"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project aims at improving the resilience of livestock keepers against theft through the deployment of technological devices, strengthening the national and regional regulatory framework, and strengthening regional capacities and business opportunities in the field of remote livestock monitoring technologies."
+        },
+        "Initiative or Innovation": {
+          "value": "Initiative "
+        },
+        "Innovation Type": {
+          "value": "Technological - Financial "
+        },
+        "Use Cases": {
+          "value": "Governance, policy support, and intelligence - Business models support - Access to markets "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Lohento, Ken Gemma (RAFTD) &\tNikola Trendov (OIN)",
+        "id": "9",
+        "title": "Supply chain management  ",
+        "description": "Agroecological farming managment : Development of the national digital agriculture strategy and a digital solution to facilitate the certification process of the national organic farming.",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "21"
+        },
+        "project_symbol": {
+          "value": "TCP/MAG/3810"
+        },
+        "Main SDG (voluntary)": {
+          "value": "2.4 , 1.4,\t5.b,9.c ,1.4,\t17.8,\t1.1,8.5 ,8.3"
+        },
+        "Projects Name": {
+          "value": "Appui à l`innovation et la digitalisation des systèmes agroalimentaires"
+        },
+        "Implementing Region": {
+          "value": "RAF - Africa Region"
+        },
+        "Implementing countries": {
+          "value": "Madagascar"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project has the objective of supporting the development of the national digital agriculture strategy, the certification process, and market access for agroecologic production. nutritious food."
+        },
+        "Initiative or Innovation": {
+          "value": "Initiative "
+        },
+        "Innovation Type": {
+          "value": "Digtial technologies "
+        },
+        "Use Cases": {
+          "value": "Access to markets - Production - Food quality and safety "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Parsa, Souroush (SLMDD) +\tCheaz Pelaez, Juan Manuel (SLCMD)",
+        "id": "10",
+        "title": "Digital Village initiative (DVI)",
+        "description": " Digital market place, the creation of Territorial Digital Centers and a Digital Territorial Hub to adopt digital agriculture solutions for rural agricultural development, particularly in the Family Islands of The Bahamas",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "22"
+        },
+        "project_symbol": {
+          "value": "TCP/BHA/3901"
+        },
+        "Main SDG (voluntary)": {
+          "value": "2.4,\t9.b ,\t8.2"
+        },
+        "Projects Name": {
+          "value": "Digital Village in Bahamas - Innovative mechanism to promote inclusive digital agriculture solutions in agrifood systems in Family Islands"
+        },
+        "Implementing Region": {
+          "value": "RLC - Latin America and the Caribbean Region"
+        },
+        "Implementing countries": {
+          "value": "Bahamas"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project aims at ensuring that the Ministry of Agriculture, Marine Resources, and Family Island Affairs (MAMRFIA) approves and adopts agribusiness policy and a corresponding legislative framework to promote digital ecosystems to strengthen inclusive and resilient agriculture and agrifood systems."
+        },
+        "Initiative or Innovation": {
+          "value": "Initiative "
+        },
+        "Innovation Type": {
+          "value": "Digital technologies "
+        },
+        "Use Cases": {
+          "value": "Natural resources management and sustainable practices - Business models support "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Raizman, Eran (REUTD) + Nampanya, Sonevilay (NSAPD)",
+        "id": "11",
+        "title": "Supply chain management  ",
+        "description": "Pasture managment digital tool: a GIS based and remote nsensing digital solution with soil, topography, land cover, vegetation, hydrology, climate developed for pasture managment and creation of a science-basedGuidelines for development of grazing management plans.",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "24"
+        },
+        "project_symbol": {
+          "value": "TCP/TUK/3903/C1"
+        },
+        "Main SDG (voluntary)": {
+          "value": "12.2,\t2.4"
+        },
+        "Projects Name": {
+          "value": "Developing digital solutions for sustainable pasture management"
+        },
+        "Implementing Region": {
+          "value": "REU - Europe and Central Asia Region"
+        },
+        "Implementing countries": {
+          "value": "Turkmenistan"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project aims to support the development of science-based guidelines for livestock keepers (pasture users) in the Dashoguz region on sustainable use of rangeland ecosystems."
+        },
+        "Initiative or Innovation": {
+          "value": "Innovation "
+        },
+        "Innovation Type": {
+          "value": "Digital technologies - Geospatial technologies "
+        },
+        "Use Cases": {
+          "value": "Production - Natural resources management and sustainable practices - Access to knowledge and advisory - Supply chain management "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Hoton, Lazare (CFIED) + Koroma, Suffyan (SFEMD)",
+        "id": "12",
+        "title": "Supply chain management  ",
+        "description": "online trade of fish , use of ruralinvest toolkit : supports the Federation of Women Fishmongers and Fish Processors on the online trade of fresh fish (reported under CAR) and use of RuralInvest methodology and software to develop business plans for the benefit of the beneficiaries of the various productive partnerships",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "27"
+        },
+        "project_symbol": {
+          "value": "UTF /BEN/062/BEN"
+        },
+        "Main SDG (voluntary)": {
+          "value": "8.3 ,\t9.3 ,\t8.10"
+        },
+        "Projects Name": {
+          "value": "Project to support the implementation of PADAAM Project to support agricultural development and market access"
+        },
+        "Implementing Region": {
+          "value": "RAF - Africa Region"
+        },
+        "Implementing countries": {
+          "value": "Benin"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "PADAAM project is an IFAD project, and FAO supports it. This project has partnered with 2 banks and 4 microfinance institutions to facilitate access to credit for beneficiaries.the initiative aims to empower women's cooperatives for the marketing and online commerce of fish production"
+        },
+        "Initiative or Innovation": {
+          "value": "Initiative "
+        },
+        "Innovation Type": {
+          "value": "Digital technologies - Microcredit "
+        },
+        "Use Cases": {
+          "value": "Production - Access to markets - Supply chain management - Business models support - Access to finance"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Bennett, Anthony (DDCGD) & Grinspun, Alejandro Jose (ESPDD)",
+        "id": "13",
+        "title": "Rural advisory sercice for farmers ",
+        "description": " (1) Development of a centralized and integrated digitalized agricultural platform for increased access and sharing of agricultural information, partnerships, and new agricultural investment potentials, and the use of various digital technologies in both ground-proofing and analysis for the successful development of investment plans in selected territories and value chains, skills development in the digital extension service, and the establishment of a call center for livestock and fisheries call centers and emergency services.                                                                                                        (2)access to finance ",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "30"
+        },
+        "project_symbol": {
+          "value": "TCP/URT/3901"
+        },
+        "Main SDG (voluntary)": {
+          "value": "5.b"
+        },
+        "Projects Name": {
+          "value": "Digital Agriculture Transformation and Partnership through Hand in Hand Initiative in Tanzania"
+        },
+        "Implementing Region": {
+          "value": "RAF - Africa Region"
+        },
+        "Implementing countries": {
+          "value": "\tTanzania"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project has some elements of innovation, such as the use of the Hand-in-Hand initiative and the GIS data platform to identify and prioritize the most impactful interventions, the development of a centralized and integrated digital agricultural platform for increased access and sharing of agricultural information, and the establishment of a livestock and fisheries call center and emergency services. These innovations aim to enhance the efficiency, effectiveness, and inclusiveness of the agricultural sector development in Tanzania."
+        },
+        "Initiative or Innovation": {
+          "value": "Initiative "
+        },
+        "Innovation Type": {
+          "value": "Digital agricutlrue - Knowledge management function "
+        },
+        "Use Cases": {
+          "value": "Access to knowledge and advisory - Supply chain managemnet - Production - Farm management - Collective action and aggregation "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Li, Xuan (RAPDD) +\tMuminjanov, Hafiz (NSPDD)",
+        "id": "14",
+        "title": "Digital Village initiative (DVI)",
+        "description": " Digital village initiative; an online learning platform. In this platform, people can access various food safety related legal documents, policies, strategies, standards, and publications. To test the knowledge, one can take exam (quiz) and can get digital certificate upon successfully passing the exam.",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "31"
+        },
+        "project_symbol": {
+          "value": "TCP/NEP/3901"
+        },
+        "Main SDG (voluntary)": {
+          "value": "2.3"
+        },
+        "Projects Name": {
+          "value": "Promoting large cardamom value chain in Nepal under One Country One Priority Product (OCOP) framework"
+        },
+        "Implementing Region": {
+          "value": "RAP - Asia and Pacific Region"
+        },
+        "Implementing countries": {
+          "value": "Nepal"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project aims to increase and sustain access of Nepalese large cardamom in the international market through quality production, value addition and trade promotion."
+        },
+        "Initiative or Innovation": {
+          "value": "Initiative "
+        },
+        "Innovation Type": {
+          "value": "Digital agriculture "
+        },
+        "Use Cases": {
+          "value": "Access to markets - Production - Food quality and safety - Natural resouces management and sustainable practices "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Elbehri, Aziz (RAPDD) + Stanislaus, Asil Gerard Sylves (CFIAD)",
+        "id": "15",
+        "title": "Digital Village initiative (DVI)",
+        "description": "digital village ecosystem with a digital platform that enables smart farming solutions and integrated e-extension services for farmers and rural entrepreneurs, leveraging digital technological innovations such as ICT, remote sensing, GIS, drones, AI, and machine learning. The project will also foster a participatory and inclusive co-design process with the stakeholders and beneficiaries, and explore potential partnerships with other agencies and service providers",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "32"
+        },
+        "project_symbol": {
+          "value": "TCP/NEP/3902"
+        },
+        "Main SDG (voluntary)": {
+          "value": "2.3,8.3"
+        },
+        "Projects Name": {
+          "value": "Support to enhancing agricultural productivity and livelihoods of farmers through Digital Village Initiatives"
+        },
+        "Implementing Region": {
+          "value": "RAP - Asia and Pacific Region"
+        },
+        "Implementing countries": {
+          "value": "Nepal"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project aims to open a new horizon to transform existing agriculture and food systems into more smart, efficient, profitable, and sustainable ones and improve the quality of life of rural people by addressing the existing constraints of digitalization in agriculture."
+        },
+        "Initiative or Innovation": {
+          "value": "Initiative "
+        },
+        "Innovation Type": {
+          "value": "Digital agriculture - Multi-stakeholders platforms "
+        },
+        "Use Cases": {
+          "value": "Production - Farm management - Access to market - Supply chain management - Access to knowledge and adivsory "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Elbehri, Aziz (RAPDD) + Stanislaus, Asil Gerard Sylves (CFIAD)",
+        "id": "16",
+        "title": "Rural advisory sercice for farmers ",
+        "description": " Online and Blended Training, digital extension services: Face-to-face training through the \"mesovet\" online platform and mobile app, Digital agriculture/e-agriculture solutions and advisories.",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "34"
+        },
+        "project_symbol": {
+          "value": "TCP/DRK/3901"
+        },
+        "Main SDG (voluntary)": {
+          "value": "17.8, 9.c"
+        },
+        "Projects Name": {
+          "value": "Strengthening digital agriculture ecosystem and developing e-agriculture solutions"
+        },
+        "Implementing Region": {
+          "value": "RAP - Asia and Pacific Region"
+        },
+        "Implementing countries": {
+          "value": "Democratic People's Republic of Korea"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project aims to improve the capacities of agriculture stakeholders (including co-ops), strengthen women and youth participation, create rural entrepreneurs to build and sustain rural digital ecosystems, and localize digital solutions and advisories."
+        },
+        "Initiative or Innovation": {
+          "value": "Initiative "
+        },
+        "Innovation Type": {
+          "value": "Digital agricutlrue "
+        },
+        "Use Cases": {
+          "value": "Governance, policy support, and intelligence - Natural resources management and sustianable practices - Supply chain managemnet - Access to knowledge and advisory "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Temba, Bonaventura Gervas (FRURT)",
+        "id": "17",
+        "title": "Digital Village initiative (DVI)",
+        "description": "DVI initiative with azzelerated digitilisation, digital skills and services, and development of ICT solutions to address national agricultural goals, thereby improving agricultural productivity and rural livelihoods ( Accelerated Digitalization, digital solution and services)",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "43"
+        },
+        "project_symbol": {
+          "value": "TCP/NIR/3905"
+        },
+        "Main SDG (voluntary)": {
+          "value": "5.b,\t1.1"
+        },
+        "Projects Name": {
+          "value": "Digital Village Initiative to combat hunger, poverty, and inequality in Nigeria"
+        },
+        "Implementing Region": {
+          "value": "RAF - Africa Region"
+        },
+        "Implementing countries": {
+          "value": "Nigeria"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "the project aims to increase Agricultural production, efficiency and incomes of food and agricultural value chain actors, rural entrepreneurs and rural households through digital innovations"
+        },
+        "Initiative or Innovation": {
+          "value": "Initiative "
+        },
+        "Innovation Type": {
+          "value": "Digtial agricultrue "
+        },
+        "Use Cases": {
+          "value": "Production- Supply chain management - Access to markets "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Hani, May (RNE1D) and Henry, Matieu (NSLSD)",
+        "id": "18",
+        "title": "(1)Rural advisory sercice for farmers, smart Farmer Field Schools , (2) Artificial intelligence for fisheries management system in Saudi Arabia\n(3) Digital auction system for traceability of Saudi Arabian aquatic products\n(4) Artificial intelligence solutions for small ruminant farm management and decision support\n(5) Establishing e-Saudi Agriculture Management Information System (6) Agritourism Atlas for Saudi Arabia",
+        "description": "The Smart Farmer Field Schools in Saudi Arabia are an innovative approach developed in collaboration with the FAO and reported in CAR 2023; AI for fisheries management system, Digital Auction system",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "44"
+        },
+        "project_symbol": {
+          "value": "UTF /SAU/051/SAU"
+        },
+        "Main SDG (voluntary)": {
+          "value": "2.4,2.3,14.b,\t15.2,\t12.2"
+        },
+        "Projects Name": {
+          "value": "Strengthening MoEWA`s Capacity to implement its Sustainable Rural Agricultural Development Programme"
+        },
+        "Implementing Region": {
+          "value": "RNE - Near East Region"
+        },
+        "Implementing countries": {
+          "value": "Saudi Arabia"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project aims to strengthen MoEWA's capacity to implement its Sustainable Rural Agricultural Development Program. It initiated the Smart Farmer Field Schools, and these schools are part of the program and aim to enhance the capacities of farmers by integrating smart agriculture technologies and precision farming."
+        },
+        "Initiative or Innovation": {
+          "value": "Initiative "
+        },
+        "Innovation Type": {
+          "value": "Technological - Digital agriculture"
+        },
+        "Use Cases": {
+          "value": "Farm management - Natural resources  management and sustainable practices - Access to markets - Collective action and aggregation "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "",
+        "id": "19",
+        "title": "Rural advisory sercice for farmers ",
+        "description": "e-extension, development of a national monitoring-evaluation system for the SN-SEFROU roadmap (food systems)",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "45"
+        },
+        "project_symbol": {
+          "value": "TCP/ALG/3902"
+        },
+        "Main SDG (voluntary)": {
+          "value": "2.4 ,\t9.3,12.a,2.3"
+        },
+        "Projects Name": {
+          "value": "Développement des options de réponses aux conséquences du Covid-19 sur l`agriculture, la pêche et la sécurité alimentaire en Algérie"
+        },
+        "Implementing Region": {
+          "value": "RAF - Africa Region"
+        },
+        "Implementing countries": {
+          "value": "Algeria"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Sosa, Orlando (SFEMD) & Mascaretti, Alberta (CFIAD)",
+        "id": "20",
+        "title": "Rural advisory sercice for farmers ",
+        "description": "The use of Ruralinvest toolkit (RIV) in the development of the matching grant business plan ( Accelerated Digitalization, Access to Finance : Rural Invest & Revolving Funds)",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "46"
+        },
+        "project_symbol": {
+          "value": "UTF /RWA/037/RWA"
+        },
+        "Main SDG (voluntary)": {
+          "value": "2.3, 1.4, 2.2, 2.1"
+        },
+        "Projects Name": {
+          "value": "Technical Assistance to the Sustainable Agricultural Intensification and Food Security Project (TA-SAIP)"
+        },
+        "Implementing Region": {
+          "value": "RAF - Africa Region"
+        },
+        "Implementing countries": {
+          "value": "Rwanda "
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project aims to increase agricultural productivity, market access and food security in targeted rural areas."
+        },
+        "Initiative or Innovation": {
+          "value": "Initiative "
+        },
+        "Innovation Type": {
+          "value": "Digital technologies - Financial "
+        },
+        "Use Cases": {
+          "value": "Production - Access to markets - Food quality and safety "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Lohento, Ken Gemma (RAFTD) + Liang, Wei (OINDD)",
+        "id": "21",
+        "title": "Digital Village initiative (DVI)",
+        "description": "Digital village Initiative, A holistic community development program leveraging digital technologies to accelerate livelihood improvements and rural transformation.                                                                                                                         E-extension and access to market ,                                                                                        (1)DVI with several key innovations aimed at promoting digital transformation in rural areas to combat hunger, poverty, and inequality. (2) developing national digital village strategies and identifying and supporting digital villages. This initiative aims to narrow the urban-rural digital gap, create jobs, promote economic diversification, and agri-tourism",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "47"
+        },
+        "project_symbol": {
+          "value": "TCP/ZIM/3901/C1"
+        },
+        "Main SDG (voluntary)": {
+          "value": "17.8, 1.2"
+        },
+        "Projects Name": {
+          "value": "Technical support towards the launch of the Digital Villages Initiative in Zimbabwe"
+        },
+        "Implementing Region": {
+          "value": "RAF - Africa Region"
+        },
+        "Implementing countries": {
+          "value": "Zimbabwe"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project has the objective of strengthening the understanding of the local ecosystem and enhancing national capacity to design, plan, and deploy digital village services for improved food security and rural transformation."
+        },
+        "Initiative or Innovation": {
+          "value": "Initiative "
+        },
+        "Innovation Type": {
+          "value": "Digital technologies "
+        },
+        "Use Cases": {
+          "value": "Business model suppot"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Arya, Aziz (RAPDD) & Heyman, Amy (ESSDD)",
+        "id": "22",
+        "title": "Access to Finance ",
+        "description": "The project will select and fund/co-finance innovations that have potential to provide solutions to agri-challenges and can be scaled up through the Agriculture Transformation Programme (ATP). The project will develop a framework for operationalizing and evaluating the innovations, and will monitor and assess their impact and scalability. The innovations will be selected based on the evidence and priority areas generated by the data and analysis work stream",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "48"
+        },
+        "project_symbol": {
+          "value": "MTF /BGD/090/BMG"
+        },
+        "Main SDG (voluntary)": {
+          "value": "2.1, 2.3, 2.4"
+        },
+        "Projects Name": {
+          "value": "TSU for Bangladesh ATP (BMG Investment ID: INV-043927)"
+        },
+        "Implementing Region": {
+          "value": "RAP - Asia and Pacific Region"
+        },
+        "Implementing countries": {
+          "value": "\tBangladesh"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The proposed Technical Support Unit (TSU) for the Food and Agriculture System Transformation Programme (ATP) has two core functions: 1) It will work as an innovation unit, bringing analytics and innovation to agricultural transformation; and 2) It will be an incubation hub for pilot ideas that can drive the country's agricultural transformation."
+        },
+        "Initiative or Innovation": {
+          "value": "Innovation "
+        },
+        "Innovation Type": {
+          "value": "Technological "
+        },
+        "Use Cases": {
+          "value": "Access to finance - Access to knowledge and advisory "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Rose, Simmone (OSLDD) + Alderighi, Cristina (OSLDD)",
+        "id": "23",
+        "title": "Access to Finance ",
+        "description": "The project is highly innovative in using and applying the Hand in Hand approach, which involves advanced geospatial modelling and analytics, a robust partnership-building approach, and a problem-solving matchmaking process to identify and address investment opportunities and gaps. The project will also support the development and use of innovative tools and methods for assessing governance, institutions and equity in agrifood value chains, as well as for enhancing digitalization and resilience.",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "49"
+        },
+        "project_symbol": {
+          "value": "FVC/GLO/222/MUL"
+        },
+        "Main SDG (voluntary)": {
+          "value": "1.1"
+        },
+        "Projects Name": {
+          "value": "Hand in Hand Initiative: Innovation in Agricultural Transformation and Investments in Member Countries"
+        },
+        "Implementing Region": {
+          "value": "Global"
+        },
+        "Implementing countries": {
+          "value": "Member Countries (Global)"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project aims to ensure that Hand in Hand (HIH) supports the implementation of nationally led, ambitious programmes to accelerate agrifood systems transformations by eradicating poverty (SDG1), ending hunger and malnutrition (SDG2), and reducing inequalities (SDG10)."
+        },
+        "Initiative or Innovation": {
+          "value": "Innovation "
+        },
+        "Innovation Type": {
+          "value": "Geospatial technologies "
+        },
+        "Use Cases": {
+          "value": "Governance, policy support and intelligence - Access to knowledge and advisory - Supply chain management "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Nyemah, Joseph (SAPDD)",
+        "id": "24",
+        "title": "Policy & strategy innovation",
+        "description": "Integrated and holistic approach to digital transformation, which goes beyond technology adoption and addresses the policy, legislative, strategic, capacity, and service delivery aspects of digital transformation.",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "50"
+        },
+        "project_symbol": {
+          "value": "UNJP/SAP/005/UNJ"
+        },
+        "Main SDG (voluntary)": {
+          "value": "17.8,\t2.1, 9.c , 2.3,\t5.b ,2.1"
+        },
+        "Projects Name": {
+          "value": "Accelerating SDG achievement through digital transformation to strengthen community resilience in Micronesia"
+        },
+        "Implementing Region": {
+          "value": "RAP - Asia and Pacific Region"
+        },
+        "Implementing countries": {
+          "value": "Kiribati-Marshall Islands-Micronesia, Federated States of-Nauru-Palau"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The core objective of the program is to gradually transfer the ownership of services to government institutions. It is innovative in its integrated and holistic approach to digital transformation, which goes beyond technology adoption and addresses the policy, legislative, strategic, capacity, and service delivery aspects of digital transformation, and in its smart islands concept, which aims to create a model of sustainable and inclusive development for remote and vulnerable communities, leveraging digital solutions across multiple sectors and SDGs. The project will also explore the use of emerging technologies and data-driven decision-making to enhance the impact and efficiency of digital transformation."
+        },
+        "Initiative or Innovation": {
+          "value": "Initiative "
+        },
+        "Innovation Type": {
+          "value": "Digital agriculture "
+        },
+        "Use Cases": {
+          "value": "Governance, policy support and intelligence"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Priestley, Phillip (OERDD) +\tMuminjanov, Hafiz (NSPDD)",
+        "id": "25",
+        "title": "Youth, & Women empowement ",
+        "description": "Organization of agro-Hackathon to collect best IT solutions to increase efficiency of agro- production and processing",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "56"
+        },
+        "project_symbol": {
+          "value": "UNJP/KYR/026/PBF"
+        },
+        "Main SDG (voluntary)": {
+          "value": "2.1 ,1.5"
+        },
+        "Projects Name": {
+          "value": "Shared prosperity through cooperation in border regions of Kyrgyzstan and Uzbekistan"
+        },
+        "Implementing Region": {
+          "value": "REU - Europe and Central Asia Region"
+        },
+        "Implementing countries": {
+          "value": "Kyrgyzstan and Uzbekistan"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project will build confidence and trust between local governments, communities and CSOs through empowerment of women and youth, as important peacebuilding agents. among activities :\"Organise agro-Hackathon to collect best IT solutions to increase efficiency of agro- production and processing\""
+        },
+        "Initiative or Innovation": {
+          "value": "Initiative "
+        },
+        "Innovation Type": {
+          "value": "Technological "
+        },
+        "Use Cases": {
+          "value": "Governance, policy support and intelligence - Production "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Buenfil Friedman, Jason Jacinto (SLCMD)+Hinojosa Ramos, Sergio Manuel (OCBDD)",
+        "id": "26",
+        "title": "Rural advisory sercice for farmers ",
+        "description": "operational Knowledge management web portal and communication system for climate adaptation initiatives in the agriculture and fisheries sector ( extension services,weather and climate service and Market access).",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "65"
+        },
+        "project_symbol": {
+          "value": "\tTCP/GRN/3901"
+        },
+        "Main SDG (voluntary)": {
+          "value": "15.1, 15.2, 15.3"
+        },
+        "Projects Name": {
+          "value": "Promoting competitive, sustainable and resilient national value chain development in Grenada"
+        },
+        "Implementing Region": {
+          "value": "RLC - Latin America and the Caribbean Region"
+        },
+        "Implementing countries": {
+          "value": "\tGrenada"
+        },
+        "Scaling Stage": {
+          "value": "0 - Stage agnostic"
+        },
+        "Comments (Project Description)": {
+          "value": "The project has objective of strengthening the generation, management, dissemination and building capacities for the use of critical information to accelerate adaptation action in Grenada's agriculture and fisheries sector"
+        },
+        "Initiative or Innovation": {
+          "value": "Initiative "
+        },
+        "Innovation Type": {
+          "value": "Knowledge management  function "
+        },
+        "Use Cases": {
+          "value": "Supply chain management - Access to knowledge and advisory - Market access - Natural resouces management and sustainable practices "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Cheaz Pelaez, Juan Manuel (SLCMD) + \tLi, Lan (ESADD)",
+        "id": "27",
+        "title": "Rural advisory sercice for farmers ",
+        "description": "strengthening  capacity for digital solutions including e-extension services and an online repository.\n",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "77"
+        },
+        "project_symbol": {
+          "value": "\tGCP /TRI/008/DBL"
+        },
+        "Main SDG (voluntary)": {
+          "value": "\t2.3, 2.b, 2.c"
+        },
+        "Projects Name": {
+          "value": "Digitization and Innovation for the Competitiveness and Sustainability of The Agribusiness Sector in Trinidad and Tobago"
+        },
+        "Implementing Region": {
+          "value": "RLC - Latin America and the Caribbean Region"
+        },
+        "Implementing countries": {
+          "value": "Trinidad and Tobago (TT, FLTRI)"
+        },
+        "Comments (Project Description)": {
+          "value": "The project has objective of  promiting the use of innovation and technology to strengthen local agriculture value chains to meet domestic demand."
+        },
+        "Initiative or Innovation": {
+          "value": "Initiative "
+        },
+        "Innovation Type": {
+          "value": "Digital technologies"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Elbehri, Aziz (RAPDD) + Stanislaus, Asil Gerard Sylves (CFIAD)",
+        "id": "28",
+        "title": "Supply chain management  ",
+        "description": "Digital market place,the objective of this project is to establish and implement a comprehensive interoperability framework for the agricultural sector in Sri Lanka, fostering efficient data-sharing, promoting standardized digital practices, enhancing stakeholder capacity in data management and privacy, and driving digital transformation through integrated databases and API gateways. This initiative aims to optimize service delivery, bolster data-driven decision-making, and strengthen collaboration across agricultural entities and related sectors.",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "89"
+        },
+        "project_symbol": {
+          "value": "MTF /SRL/083/BMG         "
+        },
+        "Main SDG (voluntary)": {
+          "value": "17.8, 9.c"
+        },
+        "Projects Name": {
+          "value": "UniNet Ag - Interoperability Framework and Integrated Database for Agriculture Sector in Sri Lanka"
+        },
+        "Implementing Region": {
+          "value": "RAP - Asia and Pacific Region"
+        },
+        "Implementing countries": {
+          "value": "Sri Lanka"
+        },
+        "Initiative or Innovation": {
+          "value": "Initiative "
+        },
+        "Innovation Type": {
+          "value": "Digital technologies "
+        },
+        "Use Cases": {
+          "value": "Supply chain management - Access to knowledge and advisory "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Nyemah, Joseph (SAPDD) + Bogazzi, Sergio (CSIDD)",
+        "id": "29",
+        "title": "Farm and Farmers management platform",
+        "description": " development of national (1) e-agriculture strategies in Cook Islands, Samoa, Solomon Islands, Tonga and Vanuatu, aid Fiji in the revision of its existing e-agriculture strategy, and contribute to initiatives related to stakeholder capacity building on farmer community database management and implementing a robust farmer registration/identification system.",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "90"
+        },
+        "project_symbol": {
+          "value": "TCP/SAP/3909             "
+        },
+        "Main SDG (voluntary)": {
+          "value": "1.4, 2.4, 5.b"
+        },
+        "Projects Name": {
+          "value": "Catalyzing agrifood systems through digitalization"
+        },
+        "Implementing Region": {
+          "value": "RAP - Asia and Pacific Region"
+        },
+        "Implementing countries": {
+          "value": "Cook Islands-Fiji-Samoa-SAP - Subregional Office for the Pacific Islands, Apia-Solomon Islands-Tonga-Vanuatu"
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Machoko, Roy (SFSDD) + Morteo, Karl (CSIDD)",
+        "id": "30",
+        "title": "Rural advisory sercice for farmers ",
+        "description": "the projects aims to foster digital transformation within Tanzania's \nagricultural sector aiming to enhance job creation, income generation, \nand livelihood resilience of smallholder farmers, especially women and \nyouth.  The program will also support the refinement of regulatory frameworks \nrelated todata governance, management, and interoperability, while \nenforcing rigorous data security, protection standards, and privacy \nnorms.",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "91"
+        },
+        "project_symbol": {
+          "value": "\tUNJP/URT/167/UNJ"
+        },
+        "Main SDG (voluntary)": {
+          "value": "5.b"
+        },
+        "Projects Name": {
+          "value": "Data for Digital Agriculture Transformation"
+        },
+        "Implementing Region": {
+          "value": "RAF - Africa Region"
+        },
+        "Implementing countries": {
+          "value": "Tanzania"
+        },
+        "Innovation Type": {
+          "value": "Digital technologies "
+        }
+      }
+    },
+    {
+      "core_fields": {
+        "language_names": [],
+        "contact_name": "Musumbale Abang, Mathew (SFSMD) + Stanislaus, Asil Gerard Sylves (CFIAD)",
+        "id": "31",
+        "title": "Digital Village initiative (DVI),Farm and Farmers management platform",
+        "description": "The project aims to  build initiatives and leverage geospatial technology and artificial intelligence to develop information system cadastral of national crop field boundaries, indicating size, location and crop type.",
+        "abstract": null,
+        "date": null,
+        "url": null,
+        "owner_name": null,
+        "owner_id": null
+      },
+      "claims": {
+        "#": {
+          "value": "93"
+        },
+        "project_symbol": {
+          "value": "TCP/LES/4002"
+        },
+        "Main SDG (voluntary)": {
+          "value": "\t2.a, \t2.3"
+        },
+        "Projects Name": {
+          "value": "Promoting digital agriculture under Digital Village Initiative"
+        },
+        "Implementing Region": {
+          "value": "RAF - Africa Region"
+        },
+        "Implementing countries": {
+          "value": "Lesotho"
+        },
+        "Innovation Type": {
+          "value": "Digital technologies "
+        }
+      }
+    }
+  ]
+}

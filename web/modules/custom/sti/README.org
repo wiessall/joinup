@@ -1,0 +1,56 @@
+#+Title: README - MVP
+
+* Scope
+The MVP shows the proof that a joinup-based STI portal will be able to achieve the project aims as defined in the CAPEX proposal and the ATIO design doc.
+It will deliver:
+** Sitemap
+  - Welcome: Landing page with access to ATIO and STI collections
+  - Collection pages
+    + Faceted search
+    + Customization of about, logo, banner
+    + ~source_record~ (> 100) and ~atio_innovation~ (2-3)
+** Datamodel
+  - ~source_record~: fully modeled in both RDF and SQL
+  - ~atio_innovation~: fully modeled in both RDF and SQL
+  - ~collection~: fully modeled in both RDF and SQL
+  - ~claim~: fully modeled in both RDF and SQL
+** Curation views
+  Curators will be able to solve
+  - deduplication of ~source_record~
+  - update of a semantic map using skos and projected to the triplestore
+  - editing of all 4 types of the current data model in dedicated views
+  - QA review of relevant content
+** Data access
+  - ~source_record~ will be readable using REST
+  - all data will be accessible using SPARQL
+  - ~atio_innovation~ will be writeable using REST
+** Out-of-scope
+  - ECAs / algorithms transforming ~source_record~ into ~atio_innovation~
+  - Full UX/style copy of current site (e.g. ATIO landing page)
+  - Innovation family has to be actually figured out by ATIO
+  - Integration with open social will be built later
+  - Joinup pruning / new distribution generation will happen later
+* Stakeholders
+
+| Audience      | Expectation                                                                                                              |
+|---------------+--------------------------------------------------------------------------------------------------------------------------|
+| Valeria/Diego | 1. Ontology is implemented as closely as possible, especially when it comes to atio-innovation, innovation families, etc |
+| Datalab       | Fixed contract of data input format & APIs (both rest and sparql)                                                        |
+| Henry         | We can actually give everyone (collection) their own landing page, and curation space                                    |
+| Alessia       | I can do my blueprint work (register innovations in 'Roadmap' following taxonomy defined in blueprint)                   |
+* Documentation of features
+** REST API and GET/POST access :datalab:
+
+Joinup uses the ~rest~ module (config: /admin/config/services/rest) to define REST endpoints one-by-one. I prefer this over the REST-JSON module, because that one opens REST endpoints to any node in the system. The preferred control to only open access to specific resources makes more sense from a security perspective.
+*** GET: Collection-scoped content
+The relevant GET endpoint is: ~/api/collection-solutions/v1/{collection}: GET~. It is defined by the ~sti_portal_api~ module. It retrieves all content for a given collection. Filters are:
+ + ~?moderation=|all|published|unpublished|~ : published status. Default: published
+ + ~?type=|source_record|atio_innovation|~ : which content types, comma-separated
+ + ~?limit=N~ : set a maximum amount to content to retrieve. Default: no limit
+ + ~?page=P~ : page through results. Default: all pages
+* Documentation of custom modules
+** atio
+** ~import_ird_json~
+** ~sti_rdf~
+** ~sti_graph_explorer~
+** ~sti_dedupe~
