@@ -9,7 +9,6 @@ _core:
   default_config_hash: SioMwWXl4fq_uvXoQDYlXTicRrCyCSiu55eCWIPhGVI
 id: sti_record_status_terms
 class: null
-idMap: {  }
 field_plugin_method: null
 cck_plugin_method: null
 migration_tags:
@@ -22,7 +21,7 @@ source:
   data_fetcher_plugin: file
   data_parser_plugin: json
   urls:
-    - modules/custom/sti_qa/data/sti_record_status.json
+    - modules/custom/sti/sti_qa/data/sti_record_status.json
   item_selector: ''
   ids:
     tid:
@@ -57,6 +56,7 @@ process:
 destination:
   plugin: 'entity:taxonomy_term'
   default_bundle: sti_record_status
+idMap: {  }
 migration_dependencies:
   required: {  }
   optional: {  }

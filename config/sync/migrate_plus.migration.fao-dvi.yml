@@ -21,7 +21,7 @@ source:
   data_fetcher_plugin: file
   data_parser_plugin: json
   urls:
-    - modules/custom/import_ird_jsons/sources/dv_solutions.json
+    - modules/custom/sti/import_ird_jsons/sources/dv_solutions.json
   constants:
     OG_AUDIENCE_NID: '5538'
     OWNER_NID: 33

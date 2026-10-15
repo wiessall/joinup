@@ -38,19 +38,84 @@ It will deliver:
 | Datalab       | Fixed contract of data input format & APIs (both rest and sparql)                                                        |
 | Henry         | We can actually give everyone (collection) their own landing page, and curation space                                    |
 | Alessia       | I can do my blueprint work (register innovations in 'Roadmap' following taxonomy defined in blueprint)                   |
+* Milestones after MVP
+** Stable endpoints for REST/SPARQL
+DEADLINE: <2026-10-29 gio>
+** Minimal drupal distribution
+** Full data input of all STI resources
+  - depends on distribution
+** User-scoped curation workflow views
+DEADLINE: <2026-10-29 gio>
+** Tested&confirmed ATIO data model in system
+DEADLINE: <2026-11-12 gio>
+** Addtional curation workflows
+** source record -> atio innovation derivation by AI
+DEADLINE: <2026-12-31 gio>
+** Content display portal -> open social
+DEADLINE: <2026-11-12 gio>
+** role mapping open social <-> portal
 * Documentation of features
-** REST API and GET/POST access :datalab:
+All documentation also lives in the respective modules, a copy for context below
+** REST API and GET access                                          :datalab:
 
 Joinup uses the ~rest~ module (config: /admin/config/services/rest) to define REST endpoints one-by-one. I prefer this over the REST-JSON module, because that one opens REST endpoints to any node in the system. The preferred control to only open access to specific resources makes more sense from a security perspective.
 *** GET: Collection-scoped content
 The relevant GET endpoint is: ~/api/collection-solutions/v1/{collection}: GET~. It is defined by the ~sti_portal_api~ module. It retrieves all content for a given collection. Filters are:
  + ~?moderation=|all|published|unpublished|~ : published status. Default: published
  + ~?type=|source_record|atio_innovation|~ : which content types, comma-separated
- + ~?limit=N~ : set a maximum amount to content to retrieve. Default: no limit
+ + ~?include=claims~ : whether or not to include the claim information. Default: false
+ + ~?limit=N~ : set a maximum amount to content to retrieve. This copies the pagination on the collection, so a page needs to be speciefied. Default: no limit
  + ~?page=P~ : page through results. Default: all pages
+** Drupal: ~source_record~ -> ~atio_innovation~ derivation and AI-enrichment
+Improving the traceability, quality and modularity of the creation of the ~atio_innovation~ is the core reason for the creation of this MVP. While the STI namespace now handles data input of any strucuture, it results in collections that each present data in their own, unique way. The important step is standardization: The derivation of comparable innovation records requires a centralized format. This is provided by the ATIO team; the only thing changing is the input format of the data they work with to derive this standardized view.
+[[./atio_enrichment.png]]
+#+begin_src mermaid :file claims-to-atio-flow.pdf :pdf-fit t :theme neutral :exports results :eval no-export
+    flowchart LR
+    subgraph STI["STI"]
+        subgraph sr1["source_record A"]
+            cl1["claim 1"]
+            cl2["claim 2"]
+        end
+        subgraph sr2["source_record B"]
+            cl3["claim 3"]
+            cl4["claim 4"]
+        end
+    end
+    subgraph ATIO["ATIO"]
+        subgraph in["Innovation"]
+            f1["Readiness level"]
+            f2["Innovative dimensions"]
+        end
+    end
+    cl1 -->|skos:closeMatch| f1
+    cl3 -->|skos:closeMatch| f1
+    f1 -->|atio:derivedFrom| cl1
+    f1 -->|atio:derivedFrom| cl3
+#+end_src
+*** TODO Next steps :atio:
+  Valeria has created a rather complex claimResolution model. Since historically all ~atio_innovation~ generation has been done by AI and the fact that a single collection easily provides hundreds of thousands of claims, I think claim to ~atio_innovation~ matching will not be done manually. That means we likely will need a more pragmatic claim resolution. Simply by exclusion of ~atio:derivedFrom~ statements, decisions of which content is used to fill an ~atio_innovation~ fields are implicitly recorded. In Drupal, this could be modeled as a paragraph ~[field_derievd_from~, ~explanation~ ] of which only the claim derivation is synced to the triplestore, while the explanation plain text is recorded Drupal-side for potential human revision.
 * Documentation of custom modules
 ** atio
+This module is a port of the existing core features of the current STI portal implementation. This is mainly a list of content type entities and taxonomy vocabularies. The main difference is a clearer namespace separation to make clear which content belongs to the ATIO work, and which is simply imported to the platform ('sti').
 ** ~import_ird_json~
 ** ~sti_rdf~
+*** TODO Next steps
+  - The README.md mentions that this module is responsible for rendering claim facets, but I thought the code in ~import_ird_json~ is the relevant one for this task?
 ** ~sti_graph_explorer~
 ** ~sti_dedupe~
+Deduplication is an important task an registered as not fully resolved in the current ATIO design document. It could be done at the ~source_record~ or the ~atio_innovation~ level. This module solves it at the ~source_record~ level. The rationale is that data input from many different sources might likely contain duplicates. Registering this early will allow to map potentially differing claims from different collections about the same ~source_record~ possible. It also makes the derivation of an ~atio_innovation~ easier. Technically this is solved by another field on the claims paragraph: ~duplicate_of~ has claimedAt and claimedBy fields. This also solves the issue of agreement: If collection A claims ~source_record~ A is a duplicate of ~source_record~ B from collection B this statement is recorded. Only if collection B also makes the reverse claim do we have a confirmed agreement.
+The module provides an easy interface for data curators to register this duplicate claim.
+*** TODO Next steps
+  - Role-scoping: Global admin roles should be able to make any claims, collection owners and facilitators can only claim uni-directionally.
+  - Role-scoping: The interface should only show potential duplicates to resolve scoped by the current user's role
+  - There is already a whole section on claim resolution, but I haven't decided yet how to handle it. It also relies on fields that don't exist yet
+** ~sti_portal_api~
+  This module provides the API endpoint to read a collection's content. It should be the main entrypoint to the system that is being built by the datalab colleagues to get content data. Ideally it is used in conjunction with sparql queries that provide semantic context to the content.
+  For the data retrieval it is assumed that it is done per-collection and that the user only wishes to filter by publication status, content type and whether or not to add the detailed claims or to only return the content core fields.
+ + ~?moderation=|all|published|unpublished|~ : published status. Default: published
+ + ~?type=|source_record|atio_innovation|~ : which content types, comma-separated
+ + ~?include=claims~ : whether or not to include the claim information. Default: false
+ + ~?limit=N~ : set a maximum amount to content to retrieve. This copies the pagination on the collection, so a page needs to be speciefied. Default: no limit
+ + ~?page=P~ : page through results. Default: all pages
+*** TODO Next steps
+  Access needs to be aligned with the future roles&permissions model. Ideally, a future version would allow the same group scoping that should exist for the website: Global admin roles can access & edit any content, but groups also have an owner, facilitator and member scope, where a groups owner and facilitator have read/write access to only their own group's content.

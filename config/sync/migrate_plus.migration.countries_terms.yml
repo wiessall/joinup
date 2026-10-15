@@ -9,7 +9,6 @@ _core:
   default_config_hash: BGGkv70YEuAVudUllw6NcMCg8PBTilkyy7E0HHRtepc
 id: countries_terms
 class: null
-idMap: {  }
 field_plugin_method: null
 cck_plugin_method: null
 migration_tags:
@@ -22,7 +21,7 @@ source:
   data_fetcher_plugin: file
   data_parser_plugin: json
   urls:
-    - modules/custom/sti_reference/data/countries.json
+    - modules/custom/sti/sti_reference/data/countries.json
   item_selector: ''
   ids:
     tid:
@@ -72,6 +71,7 @@ process:
 destination:
   plugin: 'entity:taxonomy_term'
   default_bundle: countries
+idMap: {  }
 migration_dependencies:
   required: {  }
   optional: {  }

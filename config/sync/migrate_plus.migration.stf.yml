@@ -21,7 +21,7 @@ source:
   data_fetcher_plugin: file
   data_parser_plugin: json
   urls:
-    - modules/custom/import_ird_jsons/sources/stf_2.json
+    - modules/custom/sti/import_ird_jsons/sources/stf_2.json
   constants:
     OG_AUDIENCE_NID: '2423'
     OWNER_NID: 33

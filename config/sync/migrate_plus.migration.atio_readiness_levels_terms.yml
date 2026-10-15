@@ -19,7 +19,7 @@ source:
   data_fetcher_plugin: file
   data_parser_plugin: json
   urls:
-    - modules/custom/atio/data/atio_readiness_levels.json
+    - modules/custom/sti/atio/data/atio_readiness_levels.json
   item_selector: ''
   ids:
     tid:
