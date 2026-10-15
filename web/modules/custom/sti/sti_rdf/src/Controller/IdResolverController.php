@@ -25,7 +25,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * page, so the answer is 303 See Other to the page that describes it. A
  * superseded resource answers 301 to the URI that replaced it. Anything the
  * visitor may not view answers 404, never 403, so that the resolver does not
- * confirm the existence of unpublished records.
+ * confirm the existence of unpublished records. //? Don't really understand even the basics: The uris in the triplestore are actually reacheable URLs? And thus we need safe handling?
  */
 final class IdResolverController implements ContainerInjectionInterface {
 
@@ -100,7 +100,7 @@ final class IdResolverController implements ContainerInjectionInterface {
   /**
    * Returns the entity whose page describes the given one.
    *
-   * Paragraphs (claims, claim resolutions) have no page of their own; they
+   * Paragraphs (claims) have no page of their own; they
    * are described on their host. Nested paragraphs are walked up to the
    * first non-paragraph host.
    */

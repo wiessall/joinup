@@ -2,7 +2,3 @@ review sti duplicates:
   title: 'Review possible duplicate solutions'
   description: 'Decide whether two source records describe the same innovation. A "same" decision can unpublish an ATIO innovation in favour of another; nothing is deleted.'
   restrict access: true
-resolve sti claim conflicts:
-  title: 'Rule on conflicting claims'
-  description: 'Choose the authoritative value when the sources of an ATIO innovation disagree on a single-valued property.'
-  restrict access: true

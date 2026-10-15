@@ -1,27 +1,10 @@
 services:
-  sti_rdf.dah_annotation_normalize_subscriber:
-    class: Drupal\sti_rdf\EventSubscriber\DahAnnotationNormalizeSubscriber
-    tags:
-      - { name: event_subscriber }
-
   sti_rdf.logger:
     parent: logger.channel_base
     arguments: ['sti_rdf']
 
-  sti_rdf.annotation_indexer:
-    class: Drupal\sti_rdf\Service\AnnotationIndexer
-    arguments:
-      - '@entity_type.manager'
-      - '@config.factory'
-      - '@sti_rdf.logger'
-
-  sti_rdf.annotation_library:
-    class: Drupal\sti_rdf\Service\AnnotationLibrary
-    arguments:
-      - '@database'
-
   sti_rdf.uri_reminter:
-    class: Drupal\sti_rdf\Service\UriReminter
+    class: Drupal\sti_rdf\Service\UriReminter #? a fix to work with the existing test data. The final mvp should come without data and import working as expected should make this superfluous?
     arguments:
       - '@entity_type.manager'
       - '@entity_field.manager'
@@ -37,7 +20,7 @@ services:
   Drupal\sti_rdf\Service\MappingReaderInterface: '@sti_rdf.mapping_reader'
 
   sti_rdf.graph_synchronizer:
-    class: Drupal\sti_rdf\Service\GraphSynchronizer
+    class: Drupal\sti_rdf\Service\GraphSynchronizer #? one-off artifact to quickly re-sync to the triplestore, shouldn't be needed if migrate works as expected?
     arguments:
       - '@entity_type.manager'
       - '@rdf_sync.synchronizer'
@@ -58,7 +41,7 @@ services:
       - '@database'
 
   sti_rdf.ontology_document_builder:
-    class: Drupal\sti_rdf\Service\OntologyDocumentBuilder
+    class: Drupal\sti_rdf\Service\OntologyDocumentBuilder #? WHY?
     arguments:
       - '@sti_rdf.mapping_reader'
       - '@extension.list.module'

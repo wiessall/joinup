@@ -15,6 +15,3 @@ weights:
   owner: 0.2
   country: 0.15
   year: 0.05
-exclusive_properties:
-  add: []
-  remove: []

@@ -1,6 +1,6 @@
 name: 'STI Duplicate Resolution'
 type: module
-description: 'Post-import review of possible duplicate solutions, linked through the ATIO innovation instead of merged, and curator rulings on mutually exclusive claims.'
+description: 'Post-import review of possible duplicate solutions, linked through the ATIO innovation instead of merged.'
 package: 'ATIO KB'
 core_version_requirement: ^11.2
 dependencies:

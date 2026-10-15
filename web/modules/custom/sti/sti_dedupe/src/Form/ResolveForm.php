@@ -25,10 +25,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * ATIO innovation; "not the same" stops the pair being offered again.
  *
  * The comparison shows core fields only. Claims are summarised, not diffed:
- * collections disagreeing is normal, and the disagreements that matter
- * (single-valued properties) are surfaced as claim conflicts on the
- * innovation once the pair is linked.
- */
+ * collections disagreeing is normal. 
+ * TODO add claim conflict resolution 
+ *  */
 final class ResolveForm extends FormBase {
 
   /**
@@ -252,7 +251,6 @@ final class ResolveForm extends FormBase {
       '#items' => [
         $this->t('New: @count claims.', ['@count' => $count($new)]),
         $this->t('Existing: @count claims.', ['@count' => $count($existing)]),
-        $this->t('Claims are never moved or merged. Disagreements on single-valued ATIO properties appear under "Claim conflicts" once the records share an innovation.'),
       ],
     ];
   }

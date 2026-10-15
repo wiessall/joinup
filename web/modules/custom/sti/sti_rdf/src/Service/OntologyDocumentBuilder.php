@@ -19,20 +19,20 @@ use EasyRdf\Literal;
  *
  * Axioms that config cannot express (subPropertyOf links to PROV-O, defined
  * classes, ranges of curated terms) live in a hand-written file per
- * namespace, sti_rdf/ontology/{prefix}.ttl, which is merged in verbatim.
+ * namespace, sti_rdf/ontology/{prefix}.ttl, which is merged in verbatim. //? Those don't exist in the ontology, right? 
  */
 final class OntologyDocumentBuilder {
 
   /**
    * Namespaces this site is authoritative for, keyed by prefix.
    */
-  public const NAMESPACES = [
+  public const NAMESPACES = [ //? those are the inputs, but the module writes to a new graph, correct?
     'sti' => StiUri::STI,
     'atio' => StiUri::ATIO,
   ];
 
   /**
-   * Content entity types whose bundles can carry an rdf_sync mapping.
+   * Content entity types whose bundles can carry an rdf_sync mapping. 
    */
   private const ENTITY_TYPES = ['node', 'paragraph', 'taxonomy_term'];
 

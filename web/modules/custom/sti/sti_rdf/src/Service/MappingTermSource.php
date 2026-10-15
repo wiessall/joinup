@@ -45,7 +45,7 @@ final class MappingTermSource {
     $storage = $this->entityTypeManager->getStorage('taxonomy_term');
     $roots = $storage->loadTree(self::PROPERTIES, 0, 1, FALSE);
     foreach ($roots as $root) {
-      // Root terms with children are collections; childless roots are
+      // Root terms with children are collections; childless roots are //? that seems to be an assumption that might not hold forever. Is there no explicit match yet between a collection and it's vocabulary?
       // system predicates such as sameInnovationAs.
       if ($storage->loadChildren((int) $root->tid, self::PROPERTIES)) {
         $sources[] = ['id' => (string) $root->tid, 'label' => (string) $root->name];
@@ -97,7 +97,7 @@ final class MappingTermSource {
       throw new \InvalidArgumentException(sprintf('Unknown mapping source "%s".', $source));
     }
 
-    $children = $storage->loadChildren((int) $root->id(), self::PROPERTIES);
+    $children = $storage->loadChildren((int) $root->id(), self::PROPERTIES); //?    Call to unknown method: Drupal\Core\Entity\EntityStorageInterface::loadChildren() 
     $uris = $children ? $this->storedUris(array_keys($children)) : [];
 
     $terms = [];
