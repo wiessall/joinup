@@ -38,7 +38,7 @@ drush sti-dedupe:scan <collection>    → candidates, precomputed into a table
 Scoring uses core fields only (title, owner, country, year), never mapped
 claim values: duplicate review must not wait on vocabulary mappings.
 
-## Claim conflicts
+## TODO Claim conflicts
 
 ```
 /admin/content/dedupe/conflicts             → pending and stale resolutions
@@ -96,31 +96,6 @@ full pass, however many terms are edited).
 
 Rollback covers SQL only. rdf_sync writes to the triplestore as entities are
 saved, so after a failed link, re-sync the innovations involved.
-
-## Upgrading from the merge version
-
-`ddev drush deploy` (updb, cim, then deploy hooks) does everything, in this
-order:
-
-1. `sti_rdf_update_11001()`: typed URI plugins (config only).
-2. `sti_dedupe_update_11001()`: replacement table, decision indexes, and
-   "same, keep both" → "same".
-3. `sti_dedupe_update_11002()`: every legacy `sameInnovationAs` claim is
-   also recorded as a "same" decision. The claims stay. URL-literal fallback
-   claims are removed and rewritten in step 5.
-4. `cim` creates the new fields, paragraph types and settings, and
-   `field_claim_ref_node`, from `config/sync`.
-5. Deploy hook `restore_same_as_claims`: writes the missing
-   `sameInnovationAs` claims for every "same" cluster. Idempotent; fails
-   loudly, after finishing the other clusters, if one cannot be written
-   (usually a solution without a collection).
-
-An earlier revision of step 3 deleted the claims, their `related_solutions`
-mirrors, the property term and `field_claim_ref_node`. The pairs survived as
-decisions, and step 5 writes the claims back from them.
-
-"Merged" decisions from the old version name deleted nodes. They are kept as
-history and still count towards clusters.
 
 ## Tests
 

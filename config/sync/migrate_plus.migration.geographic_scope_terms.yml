@@ -9,7 +9,6 @@ _core:
   default_config_hash: dcOlBhCCOZz-tzaSkSpbzVJ4DhhmBnNplGHxE_syRhY
 id: geographic_scope_terms
 class: null
-idMap: {  }
 field_plugin_method: null
 cck_plugin_method: null
 migration_tags:
@@ -22,7 +21,7 @@ source:
   data_fetcher_plugin: file
   data_parser_plugin: json
   urls:
-    - modules/custom/sti_reference/data/geographic_scope.json
+    - modules/custom/sti/sti_reference/data/geographic_scope.json
   item_selector: ''
   ids:
     tid:
@@ -57,6 +56,7 @@ process:
 destination:
   plugin: 'entity:taxonomy_term'
   default_bundle: geographic_scope
+idMap: {  }
 migration_dependencies:
   required: {  }
   optional: {  }

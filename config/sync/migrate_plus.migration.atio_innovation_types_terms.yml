@@ -20,7 +20,7 @@ source:
   data_fetcher_plugin: file
   data_parser_plugin: json
   urls:
-    - modules/custom/atio/data/atio_innovation_types.json
+    - modules/custom/sti/atio/data/atio_innovation_types.json
   item_selector: ''
   ids:
     tid:

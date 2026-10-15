@@ -9,7 +9,6 @@ _core:
   default_config_hash: nY7YXXZ4Rm9N3Ec9ty299FyH72JWgJt4-tmZiboR-gU
 id: geographic_regions_terms
 class: null
-idMap: {  }
 field_plugin_method: null
 cck_plugin_method: null
 migration_tags:
@@ -23,7 +22,7 @@ source:
   data_fetcher_plugin: file
   data_parser_plugin: json
   urls:
-    - modules/custom/sti_reference/data/geographic_regions.json
+    - modules/custom/sti/sti_reference/data/geographic_regions.json
   item_selector: ''
   ids:
     tid:
@@ -63,6 +62,7 @@ process:
 destination:
   plugin: 'entity:taxonomy_term'
   default_bundle: geographic_regions
+idMap: {  }
 migration_dependencies:
   required: {  }
   optional: {  }

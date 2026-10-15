@@ -9,7 +9,6 @@ _core:
   default_config_hash: mJBh-YpqO93-7jRd51nFfeynIzpi-dPoAUHYq-FpvC0
 id: languages_terms
 class: null
-idMap: {  }
 field_plugin_method: null
 cck_plugin_method: null
 migration_tags:
@@ -22,7 +21,7 @@ source:
   data_fetcher_plugin: file
   data_parser_plugin: json
   urls:
-    - modules/custom/sti_reference/data/languages.json
+    - modules/custom/sti/sti_reference/data/languages.json
   item_selector: ''
   ids:
     tid:
@@ -57,6 +56,7 @@ process:
 destination:
   plugin: 'entity:taxonomy_term'
   default_bundle: languages
+idMap: {  }
 migration_dependencies:
   required: {  }
   optional: {  }

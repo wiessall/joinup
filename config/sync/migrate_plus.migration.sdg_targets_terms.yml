@@ -9,7 +9,6 @@ _core:
   default_config_hash: hImC18-mKigD487ej6Xv4oRUTWQtS1SpLhcL72dwqVQ
 id: sdg_targets_terms
 class: null
-idMap: {  }
 field_plugin_method: null
 cck_plugin_method: null
 migration_tags:
@@ -22,7 +21,7 @@ source:
   data_fetcher_plugin: file
   data_parser_plugin: json
   urls:
-    - modules/custom/sti_reference/data/sdg_targets.json
+    - modules/custom/sti/sti_reference/data/sdg_targets.json
   item_selector: ''
   ids:
     tid:
@@ -62,6 +61,7 @@ process:
 destination:
   plugin: 'entity:taxonomy_term'
   default_bundle: sdg_targets
+idMap: {  }
 migration_dependencies:
   required: {  }
   optional: {  }
