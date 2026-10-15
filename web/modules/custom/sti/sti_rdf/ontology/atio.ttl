@@ -32,14 +32,3 @@ atio:GrassrootsInnovation
         owl:onProperty atio:isGrassroots ;
         owl:hasValue true
     ] .
-
-atio:ClaimResolution
-    a owl:Class ;
-    rdfs:comment """A curator's ruling on mutually exclusive claims that the
-    source records of one innovation make about one single-valued ATIO
-    property. Its verdicts name the claims by collection, property and value,
-    not by claim URI, because re-import replaces claim paragraphs."""@en .
-
-atio:ClaimVerdict
-    a owl:Class ;
-    rdfs:comment "One claimed value and the curator's verdict on it."@en .

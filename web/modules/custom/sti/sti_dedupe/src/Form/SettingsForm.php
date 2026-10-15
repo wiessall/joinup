@@ -8,9 +8,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\sti_dedupe\Claims\ExclusiveProperties;
-use Drupal\sti_dedupe\ConflictQueue;
-use Drupal\sti_dedupe\Prefixes;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -23,8 +20,6 @@ final class SettingsForm extends ConfigFormBase {
   public function __construct(
     ConfigFactoryInterface $config_factory,
     TypedConfigManagerInterface $typed_config_manager,
-    private readonly ExclusiveProperties $exclusive,
-    private readonly ConflictQueue $conflictQueue,
   ) {
     parent::__construct($config_factory, $typed_config_manager);
   }
@@ -93,31 +88,6 @@ final class SettingsForm extends ConfigFormBase {
       '#title' => $this->t('Compared core fields'),
       '#description' => $this->t('One machine name per line. Claims are summarised rather than compared, so they do not belong here.'),
       '#default_value' => implode("\n", (array) $config->get('compare_fields')),
-    ];
-
-    $form['conflicts'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Claim conflicts'),
-      '#open' => TRUE,
-    ];
-    $computed = array_map([Prefixes::class, 'compact'], $this->exclusive->all());
-    $form['conflicts']['computed'] = [
-      '#theme' => 'item_list',
-      '#title' => $this->t('Single-valued ATIO properties, compared across sources'),
-      '#items' => $computed ?: [$this->t('None.')],
-      '#description' => $this->t('Every single-valued, non-narrative field of the ATIO innovation, through its RDF mapping, adjusted by the two lists below.'),
-    ];
-    $form['conflicts']['exclusive_add'] = [
-      '#type' => 'textarea',
-      '#title' => $this->t('Also treat as single-valued'),
-      '#description' => $this->t('One full property URI per line.'),
-      '#default_value' => implode("\n", (array) $config->get('exclusive_properties.add')),
-    ];
-    $form['conflicts']['exclusive_remove'] = [
-      '#type' => 'textarea',
-      '#title' => $this->t('Never compare'),
-      '#description' => $this->t('One full property URI per line. Saving a change to either list queues a recomputation of every innovation.'),
-      '#default_value' => implode("\n", (array) $config->get('exclusive_properties.remove')),
     ];
 
     return parent::buildForm($form, $form_state);

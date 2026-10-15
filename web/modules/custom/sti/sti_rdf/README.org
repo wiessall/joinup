@@ -1,0 +1,26 @@
+#+Title: README
+
+This module takes care of minting the URIs and providing functionality to write to the triplestore. It extends ~rdf_sync~ in the following ways:
+  - skos mapping functionality. This is a basic design decision: Curators (human or machine) should be able to create semantic mappings between the various collection taxonomies. This is needed for a semantically meaninful derivation of a standardized derivation across all ~source_record~. This derivation is the ~atio_innovation~.
+  -
+
+** MappingTermSource
+Fetches the ATIO and STI taxonomies to populate the dropdown menu in ~skos_curation.html.~ It knows about which taxonomies to fetch by selecting those with child terms. It also gets the relevant triplestore uris for each of them. Controlled by ~MappingTermsController~.
+** OntologyDocumentBuilder
+The output layer of ~skos_curation.html~. Handled by ~OntologyController~. The controller ultimately returns the response (by default the ttl mappings).
+** MappingReader
+This gets the bundle rdf third-party config alongside the bundles fields' rdf third-party configs, to be used by: OntologyDocumentBuilder, MappingTermSource
+** StiRdfUriCommands
+This controlls all remaining services:
++ ~MappingImporter~
++ ~UriReminter~
++ ~GraphSynchronizer~
+My suspicion is that these are useful tools for development on a live database on-the-fly, but might not be needed in final production
+
+* TODO Steps for MVP
+- html monolith not nice. This should provide a proper Drupal curation view, similarly styled to sti-dedupe.
+- added functionality: there should be three output options:
+  + ttl files (currently the only one)
+  + ask for triplestore write (e.g. a collection facilitator) -> put this on a site manager/admin backend view listing the proposed mappings as a html table
+  + triplestore write (for admin/site manager): Form submission showing the mappings as html table and asking for confirmation
+Before writing anything: Outline what you would add. Don't change the existing code unless necessary: I need to understand it and it mustn't change dramatically with every iteration. Ask for confirmation if bigger rewrites are needed. Focus on stripping out unneccessary code: The aim is lean, readable and maintainable. Fewer lines are better.

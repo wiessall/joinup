@@ -1,5 +1,0 @@
-annotation_types:
-  dah_annotation:
-    target_field: field_solution
-    collection_static: dah
-    ignored_fields: []

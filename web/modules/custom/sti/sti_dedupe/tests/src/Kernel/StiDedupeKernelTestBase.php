@@ -368,37 +368,3 @@ abstract class StiDedupeKernelTestBase extends KernelTestBase {
     sort($ids);
     return $ids;
   }
-
-  /**
-   * Returns an innovation's claim resolutions, keyed by property.
-   *
-   * @return array<string, \Drupal\paragraphs\ParagraphInterface>
-   *   Resolution paragraphs as stored.
-   */
-  protected function resolutions(NodeInterface $innovation): array {
-    $out = [];
-    foreach ($this->reload($innovation)->get(ContentModel::RESOLUTIONS)->referencedEntities() as $resolution) {
-      $out[(string) $resolution->get(ContentModel::RESOLUTION_PROPERTY)->value] = $resolution;
-    }
-    return $out;
-  }
-
-  /**
-   * Returns a resolution's verdicts as [label => [verdict, current]].
-   *
-   * @return array<string, array{0: string, 1: bool}>
-   *   Verdict value and current flag, keyed by value label.
-   */
-  protected function verdicts(ParagraphInterface $resolution): array {
-    $out = [];
-    foreach ($resolution->get(ContentModel::VERDICTS)->referencedEntities() as $verdict) {
-      $out[(string) $verdict->get(ContentModel::VERDICT_VALUE_LABEL)->value] = [
-        (string) $verdict->get(ContentModel::VERDICT_VALUE)->value,
-        (bool) $verdict->get(ContentModel::VERDICT_CURRENT)->value,
-      ];
-    }
-    ksort($out);
-    return $out;
-  }
-
-}

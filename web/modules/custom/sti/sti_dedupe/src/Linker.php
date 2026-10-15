@@ -9,7 +9,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\NodeInterface;
-use Drupal\sti_dedupe\Claims\ResolutionReconciler;
 use Drupal\sti_dedupe\Exception\InvariantViolationException;
 use Drupal\sti_dedupe\Exception\SurvivorRequiredException;
 
@@ -48,8 +47,6 @@ final class Linker {
     private readonly ReplacementStore $replacements,
     private readonly InnovationLookup $innovations,
     private readonly SameAsClaims $sameAs,
-    private readonly ResolutionReconciler $reconciler,
-    private readonly ConflictQueue $conflictQueue,
     private readonly AccountProxyInterface $currentUser,
     private readonly LoggerChannelInterface $logger,
   ) {}
@@ -121,10 +118,6 @@ final class Linker {
       $this->entityTypeManager->getStorage('node')->resetCache(array_merge($plan->cluster, $plan->innovations));
       throw $e;
     }
-    // Commit before refreshing conflicts: the link must not depend on it.
-    unset($transaction);
-
-    $refreshed = $this->refreshConflicts($survivorId);
     return new LinkResult($plan->cluster, $survivorId, $added, $losers, $refreshed);
   }
 
@@ -236,25 +229,6 @@ final class Linker {
       $message = 'Duplicate link failed its own check: ' . implode('; ', $problems) . '.';
       $this->logger->error($message);
       throw new InvariantViolationException($message);
-    }
-  }
-
-  /**
-   * Refreshes claim conflicts on the survivor; queues a retry on failure.
-   */
-  private function refreshConflicts(int $innovationId): bool {
-    try {
-      $innovation = $this->loadInnovation($innovationId);
-      $this->reconciler->refresh($innovation);
-      return TRUE;
-    }
-    catch (\Throwable $e) {
-      $this->logger->error('Claim conflict refresh failed for innovation @nid after a duplicate link; queued for retry: @message', [
-        '@nid' => $innovationId,
-        '@message' => $e->getMessage(),
-      ]);
-      $this->conflictQueue->queue([$innovationId]);
-      return FALSE;
     }
   }
 

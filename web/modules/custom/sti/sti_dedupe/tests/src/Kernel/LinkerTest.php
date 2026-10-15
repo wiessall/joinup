@@ -175,12 +175,8 @@ final class LinkerTest extends StiDedupeKernelTestBase {
     $a = $this->solution('A', [$this->claim($one, $this->property('readiness', self::READINESS), 'TRL 5')]);
     $b = $this->solution('B', [$this->claim($two, $this->property('maturity', self::READINESS), 'TRL 7')]);
     $innovation = $this->innovation('Innovation', [$a]);
-    $this->assertSame([], $this->resolutions($innovation));
 
     $result = $this->linker()->linkSame($a, $b);
-
-    $this->assertTrue($result->conflictsRefreshed);
-    $this->assertArrayHasKey(self::READINESS, $this->resolutions($innovation));
   }
 
   /**

@@ -51,8 +51,6 @@ final class StiUri {
     'collection' => 'Collection / data source',
     'agent' => 'Agent (owner organisation)',
     'claim' => 'Field claim',
-    'claim-resolution' => 'Claim resolution',
-    'claim-verdict' => 'Claim verdict',
     'property' => 'Collection-scoped claim property',
     'concept' => 'Vocabulary concept',
   ];

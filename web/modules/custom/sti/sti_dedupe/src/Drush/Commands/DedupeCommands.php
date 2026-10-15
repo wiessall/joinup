@@ -7,7 +7,6 @@ namespace Drupal\sti_dedupe\Drush\Commands;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
 use Drupal\sti_dedupe\CandidateStore;
-use Drupal\sti_dedupe\Claims\ResolutionReconciler;
 use Drupal\sti_dedupe\ContentModel;
 use Drupal\sti_dedupe\DuplicateFinder;
 use Drupal\sti_dedupe\ReplacementStore;
@@ -29,8 +28,6 @@ final class DedupeCommands extends DrushCommands {
     private readonly DuplicateFinder $finder,
     #[Autowire(service: 'sti_dedupe.candidates')]
     private readonly CandidateStore $candidates,
-    #[Autowire(service: 'sti_dedupe.resolution_reconciler')]
-    private readonly ResolutionReconciler $reconciler,
     #[Autowire(service: 'sti_dedupe.replacements')]
     private readonly ReplacementStore $replacements,
   ) {
@@ -95,63 +92,6 @@ final class DedupeCommands extends DrushCommands {
       '!total' => $total,
     ]));
     return self::EXIT_SUCCESS;
-  }
-
-  /**
-   * Computes claim conflicts now, instead of waiting for cron.
-   */
-  #[CLI\Command(name: 'sti-dedupe:conflicts')]
-  #[CLI\Option(name: 'innovation', description: 'Only this innovation node id.')]
-  #[CLI\Usage(name: 'drush sti-dedupe:conflicts', description: 'Refreshes claim conflicts on every live ATIO innovation.')]
-  public function conflicts(array $options = ['innovation' => NULL]): int {
-    $storage = $this->entityTypeManager->getStorage('node');
-    if ($options['innovation'] !== NULL) {
-      $ids = [(int) $options['innovation']];
-    }
-    else {
-      $ids = array_map('intval', array_values($storage->getQuery()
-        ->accessCheck(FALSE)
-        ->condition('type', ContentModel::INNOVATION)
-        ->sort('nid')
-        ->execute()));
-    }
-    $ids = array_values(array_diff($ids, $this->replacements->replacedAmong($ids)));
-
-    $totals = ['created' => 0, 'updated' => 0, 'staled' => 0, 'removed' => 0];
-    $failed = 0;
-    foreach (array_chunk($ids, 50) as $chunk) {
-      foreach ($storage->loadMultiple($chunk) as $innovation) {
-        if (!$innovation instanceof NodeInterface || $innovation->bundle() !== ContentModel::INNOVATION) {
-          continue;
-        }
-        try {
-          $result = $this->reconciler->refresh($innovation);
-        }
-        catch (\Throwable $e) {
-          // Already logged at error level by the reconciler when it is an
-          // invariant failure; report and carry on with the next one.
-          $this->logger()->error(dt('Innovation !nid: !message', [
-            '!nid' => $innovation->id(),
-            '!message' => $e->getMessage(),
-          ]));
-          $failed++;
-          continue;
-        }
-        foreach (array_keys($totals) as $key) {
-          $totals[$key] += $result->{$key};
-        }
-      }
-      $storage->resetCache($chunk);
-    }
-
-    $this->logger()->success(dt('!count innovation(s): !created new, !updated updated, !staled stale, !removed resolved by agreement.', [
-      '!count' => count($ids),
-      '!created' => $totals['created'],
-      '!updated' => $totals['updated'],
-      '!staled' => $totals['staled'],
-      '!removed' => $totals['removed'],
-    ]));
-    return $failed ? self::EXIT_FAILURE : self::EXIT_SUCCESS;
   }
 
   /**

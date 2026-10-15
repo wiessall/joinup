@@ -21,15 +21,12 @@ final class LinkResult {
    *   Solutions newly added to that innovation's derived-from list.
    * @param int[] $replaced
    *   Innovations unpublished in favour of the survivor.
-   * @param bool $conflictsRefreshed
-   *   FALSE when the claim conflict refresh failed and was queued instead.
    */
   public function __construct(
     public readonly array $cluster,
     public readonly ?int $innovation,
     public readonly array $added = [],
     public readonly array $replaced = [],
-    public readonly bool $conflictsRefreshed = TRUE,
   ) {}
 
 }

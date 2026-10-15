@@ -26,34 +26,9 @@ services:
     arguments: ['@entity_type.manager', '@entity_field.manager', '@sti_dedupe.replacements']
   Drupal\sti_dedupe\InnovationLookup: '@sti_dedupe.innovation_lookup'
 
-  sti_dedupe.conflict_queue:
-    class: Drupal\sti_dedupe\ConflictQueue
-    arguments: ['@queue', '@state']
-  Drupal\sti_dedupe\ConflictQueue: '@sti_dedupe.conflict_queue'
-
   sti_dedupe.finder:
     class: Drupal\sti_dedupe\DuplicateFinder
     arguments: ['@entity_type.manager', '@config.factory', '@sti_dedupe.decisions', '@logger.factory']
-
-  sti_dedupe.claim_reader:
-    class: Drupal\sti_dedupe\Claims\ClaimReader
-    arguments: ['@entity_type.manager']
-
-  sti_dedupe.exclusive_properties:
-    class: Drupal\sti_dedupe\Claims\ExclusiveProperties
-    arguments: ['@sti_rdf.mapping_reader', '@entity_field.manager', '@config.factory']
-
-  sti_dedupe.conflict_detector:
-    class: Drupal\sti_dedupe\Claims\ConflictDetector
-    arguments: ['@sti_dedupe.claim_reader', '@sti_dedupe.exclusive_properties']
-
-  sti_dedupe.resolution_reconciler:
-    class: Drupal\sti_dedupe\Claims\ResolutionReconciler
-    arguments: ['@entity_type.manager', '@database', '@sti_dedupe.conflict_detector', '@logger.channel.sti_dedupe']
-
-  sti_dedupe.resolution_writer:
-    class: Drupal\sti_dedupe\Claims\ResolutionWriter
-    arguments: ['@entity_type.manager', '@database', '@sti_dedupe.resolution_reconciler', '@datetime.time', '@logger.channel.sti_dedupe']
 
   sti_dedupe.same_as_claims:
     class: Drupal\sti_dedupe\SameAsClaims
@@ -70,8 +45,6 @@ services:
       - '@sti_dedupe.replacements'
       - '@sti_dedupe.innovation_lookup'
       - '@sti_dedupe.same_as_claims'
-      - '@sti_dedupe.resolution_reconciler'
-      - '@sti_dedupe.conflict_queue'
       - '@current_user'
       - '@logger.channel.sti_dedupe'
 

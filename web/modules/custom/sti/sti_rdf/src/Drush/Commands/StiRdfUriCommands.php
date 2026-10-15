@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 /**
  * Inspects and repairs STI instance URIs.
  *
- * The update hook sti_rdf_update_11001() only switches bundle config.
+ * The update hook sti_rdf_update_11001() only switches bundle config. //? update hook wrong; this isn't even shipped yet. let's stick with delivering a solid and fully understood v0.1 at the end of the review
  * Rewriting the URIs already stored is uri-remint's job, run in a
  * maintenance window together with a graph rebuild, because rdf_sync
  * replaces triples by the URI it has stored and cannot find triples written
