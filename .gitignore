@@ -10,9 +10,12 @@
 /web/themes/contrib/
 /.editorconfig
 /.gitattributes
+/web/modules/custom/sti/import_ird_jsons/sources
+/web/modules/custom/sti/import_ird_jsons/config
 
 # Ignore dist build location
 /dist/
+
 
 # Ignore user's local files
 /local/
