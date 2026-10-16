@@ -1,9 +1,0 @@
-# Step 1b. Which of these solutions has no ATIO innovation derived from it?
-# __SOLUTIONS__ is replaced with the URIs the REST list returned.
-PREFIX atio: <https://sti-portal.fao.org/atio#>
-
-SELECT ?solution
-WHERE {
-  VALUES ?solution { __SOLUTIONS__ }
-  FILTER NOT EXISTS { ?innovation atio:derivedFromSource ?solution }
-}
