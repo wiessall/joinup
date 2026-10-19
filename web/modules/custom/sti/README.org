@@ -41,18 +41,23 @@ It will deliver:
 * Milestones after MVP
 ** Stable endpoints for REST/SPARQL
 DEADLINE: <2026-10-29 gio>
+DEADLINE <2026-10-29 gio>
 ** Minimal drupal distribution
 ** Full data input of all STI resources
   - depends on distribution
 ** User-scoped curation workflow views
 DEADLINE: <2026-10-29 gio>
+DEADLINE <2026-10-29 gio>
 ** Tested&confirmed ATIO data model in system
 DEADLINE: <2026-11-12 gio>
+DEADLINE <2026-11-12 gio>
 ** Addtional curation workflows
 ** source record -> atio innovation derivation by AI
 DEADLINE: <2026-12-31 gio>
+DEADLINE <2026-12-31 gio>
 ** Content display portal -> open social
 DEADLINE: <2026-11-12 gio>
+DEADLINE <2026-11-12 gio>
 ** role mapping open social <-> portal
 * Documentation of features
 All documentation also lives in the respective modules, a copy for context below
@@ -68,8 +73,7 @@ The relevant GET endpoint is: ~/api/collection-solutions/v1/{collection}: GET~. 
  + ~?page=P~ : page through results. Default: all pages
 ** Drupal: ~source_record~ -> ~atio_innovation~ derivation and AI-enrichment
 Improving the traceability, quality and modularity of the creation of the ~atio_innovation~ is the core reason for the creation of this MVP. While the STI namespace now handles data input of any strucuture, it results in collections that each present data in their own, unique way. The important step is standardization: The derivation of comparable innovation records requires a centralized format. This is provided by the ATIO team; the only thing changing is the input format of the data they work with to derive this standardized view.
-[[./atio_enrichment.png]]
-#+begin_src mermaid :file claims-to-atio-flow.pdf :pdf-fit t :theme neutral :exports results :eval no-export
+#+begin_src mermaid :file claims-to-atio-flow.pdf :pdf-fit t :theme neutral :exports results
     flowchart LR
     subgraph STI["STI"]
         subgraph sr1["source_record A"]
@@ -94,6 +98,32 @@ Improving the traceability, quality and modularity of the creation of the ~atio_
 #+end_src
 *** TODO Next steps :atio:
   Valeria has created a rather complex claimResolution model. Since historically all ~atio_innovation~ generation has been done by AI and the fact that a single collection easily provides hundreds of thousands of claims, I think claim to ~atio_innovation~ matching will not be done manually. That means we likely will need a more pragmatic claim resolution. Simply by exclusion of ~atio:derivedFrom~ statements, decisions of which content is used to fill an ~atio_innovation~ fields are implicitly recorded. In Drupal, this could be modeled as a paragraph ~[field_derievd_from~, ~explanation~ ] of which only the claim derivation is synced to the triplestore, while the explanation plain text is recorded Drupal-side for potential human revision.
+** Collection / group - scoped permissions handling
+#+begin_src mermaid :file roles.pdf :pdf-fit t :theme neutral :exports results
+  flowchart TD
+  subgraph global["Global roles"]
+    r1["admin"]
+    r2["site manager"]
+    r3["content manager"]
+  end
+  subgraph groups["Group roles"]
+    subgraph g1["Group 1"]
+      gr11["group owner"]
+      gr12["group manager"]
+      gr13["group member"]
+    end
+    subgraph g2["Group 2"]
+      gr21["group owner"]
+      gr22["group manager"]
+      gr23["group member"]
+    end
+    subgraph g3["Group 3"]
+      gr31["group owner"]
+      gr32["group manager"]
+      gr33["group member"]
+    end
+  end
+#+end_src
 * Documentation of custom modules
 ** atio
 This module is a port of the existing core features of the current STI portal implementation. This is mainly a list of content type entities and taxonomy vocabularies. The main difference is a clearer namespace separation to make clear which content belongs to the ATIO work, and which is simply imported to the platform ('sti').
