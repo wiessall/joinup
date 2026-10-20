@@ -47,8 +47,9 @@ sti:claimProperty
     a owl:ObjectProperty ;
     rdfs:label "claim property"@en ;
     rdfs:comment """What the claim is about: a term in the claiming
-    collection's vocabulary of properties. Mapped to ATIO fields and to other
-    collections' properties by SKOS mappings in a separate graph."""@en ;
+    collection's vocabulary of properties. Mapped to other collections'
+    properties (later: to ATIO properties) by SSSOM mappings the collection
+    holds; see mapping.ttl."""@en ;
     schema:domainIncludes sti:FieldClaim ;
     schema:rangeIncludes skos:Concept ;
     rdfs:isDefinedBy <https://sti-portal.fao.org/sti> .
