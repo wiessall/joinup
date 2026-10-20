@@ -6,7 +6,7 @@ namespace Drupal\Tests\sti_rdf\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\node\Entity\NodeType;
-use Drupal\sti_rdf\Service\MappingImporter;
+use Drupal\sti_rdf\Service\SyncImporter;
 use Drupal\sti_rdf\StiUri;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
@@ -19,9 +19,9 @@ use PHPUnit\Framework\Attributes\Group;
  * vocabulary, and a full graph rebuild wrote old class and predicate names
  * under new URIs with nothing reporting it.
  */
-#[CoversClass(MappingImporter::class)]
+#[CoversClass(SyncImporter::class)]
 #[Group('sti_rdf')]
-final class MappingImporterTest extends KernelTestBase {
+final class SyncImporterTest extends KernelTestBase {
 
   /**
    * {@inheritdoc}
@@ -98,15 +98,15 @@ final class MappingImporterTest extends KernelTestBase {
   /**
    * Apply writes the mapping only, and a second run finds nothing to do.
    */
-  public function testApplyWritesMappingsOnly(): void {
+  public function testApplyWritesSyncMappingsOnly(): void {
     $names = $this->importer()->apply();
 
     $this->assertSame(['node.type.collection', 'node.type.page', 'node.type.solution'], $names);
     $solution = $this->config('node.type.solution');
     $this->assertSame(StiUri::STI . 'SourceRecord', $solution->get('third_party_settings.rdf_sync.type'));
-    $this->assertSame('solution', $solution->get('name'), 'Nothing outside the mapping is replaced by config/sync.');
+    $this->assertSame('solution', $solution->get('name'), 'Nothing outside the rdf sync mapping is replaced by config/sync.');
     $this->assertSame([], $this->config('node.type.collection')->get('third_party_settings.rdf_sync.fields'), 'The dataset list is gone.');
-    $this->assertNull($this->config('node.type.page')->get('third_party_settings.rdf_sync'), 'A mapping removed from config/sync is removed.');
+    $this->assertNull($this->config('node.type.page')->get('third_party_settings.rdf_sync'), 'A rdf sync mapping removed from config/sync is removed.');
     $this->assertTrue($this->config('node.type.absent')->isNew(), 'Config missing on the site is not created.');
 
     $this->assertSame([], $this->importer()->diff()['changed']);
@@ -118,8 +118,8 @@ final class MappingImporterTest extends KernelTestBase {
    */
   public function testKeyOrderIsIgnored(): void {
     $this->importer()->apply();
-    $mapping = $this->config('node.type.solution')->get('third_party_settings.rdf_sync');
-    $this->setActive('node.type.solution', array_reverse($mapping, TRUE));
+    $rdf_mapping = $this->config('node.type.solution')->get('third_party_settings.rdf_sync');
+    $this->setActive('node.type.solution', array_reverse($rdf_mapping, TRUE));
 
     $this->assertArrayNotHasKey('node.type.solution', $this->importer()->diff()['changed']);
   }
@@ -127,15 +127,15 @@ final class MappingImporterTest extends KernelTestBase {
   /**
    * Writes an rdf_sync mapping into active config, bypassing entity hooks.
    */
-  private function setActive(string $name, array $mapping): void {
-    $this->config($name)->set('third_party_settings.rdf_sync', $mapping)->save();
+  private function setActive(string $name, array $rdf_mapping): void {
+    $this->config($name)->set('third_party_settings.rdf_sync', $rdf_mapping)->save();
   }
 
   /**
    * Returns the service under test.
    */
-  private function importer(): MappingImporter {
-    return $this->container->get('sti_rdf.mapping_importer');
+  private function importer(): SyncImporter {
+    return $this->container->get('sti_rdf.sync_importer');
   }
 
 }

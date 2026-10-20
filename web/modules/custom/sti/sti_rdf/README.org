@@ -2,14 +2,51 @@
 
 This module takes care of minting the URIs and providing functionality to write to the triplestore. It extends ~rdf_sync~ in the following ways:
   - skos mapping functionality. This is a basic design decision: Curators (human or machine) should be able to create semantic mappings between the various collection taxonomies. This is needed for a semantically meaninful derivation of a standardized derivation across all ~source_record~. This derivation is the ~atio_innovation~.
-  -
 
-** MappingTermSource
-Fetches the ATIO and STI taxonomies to populate the dropdown menu in ~skos_curation.html.~ It knows about which taxonomies to fetch by selecting those with child terms. It also gets the relevant triplestore uris for each of them. Controlled by ~MappingTermsController~.
-** OntologyDocumentBuilder
-The output layer of ~skos_curation.html~. Handled by ~OntologyController~. The controller ultimately returns the response (by default the ttl mappings).
-** MappingReader
-This gets the bundle rdf third-party config alongside the bundles fields' rdf third-party configs, to be used by: OntologyDocumentBuilder, MappingTermSource
+* Routes
+** IdResolverController
+Redirects calls to the uris of rdf entries to their drupal routes.
+303 redirects to entity page, 404 for anything that can't be seen or doesn't exist
+*** UriResolveEvent
+does the actual replacement of the uri with the provided replacement uri. Get takes that provided uri, those are provided to the subscribers who use ~set~ to put in the correct replacement uri. Current subscriber(s):
+  - ~sti_dedupe/ReplacedInnovationSubscriber~
+****  ~sti_dedupe/ReplacedInnovationSubscriber~
+
+** MappingExportController
+Queries the triplestore about the mappings relevant to the node at path (always a collection as specified in the routes) and returns a ttl formatted 'Response'
+
+** MappingOverviewController
+$collection->access('update') uses current user in absence of specific user input.
+Returns basically just the table as a php array
+
+*** MappingCuration
+  - what is self::FIELD: ~field_mappings~
+  - mappings gets all entity references held by ~field_mappings~ and filters for those that are paragraphs of bundle 'mapping'
+
+** OntologyController
+NOTE: tricky, I think publishing ontologies is premature (political discussions to be had first)
+just exposes the atio and sti ontology files
+- formats have to come in the request header, how is the header read?: Seems to be core functionality of Request->getAcceptableContentTypes
+- do I need to manually curate the ontology files or is this derived from the graph somehow?:
+*** OntologyDocumentBuilder
+- mappings function uses mappingReader to get the mapped bundles
+- addClass parses out the type, isDefinedBy (atio/sti) and label
+-  puts this into ttl file
+**** MappingReaderInterface
+Gets the third-party-setting (~rdf_sync~ and ~type~) fields from the bundles config (using entityTypeManager->getStorage) and thus dynamically retrieves the rdf entities related to the bundle?. Implemented in MappingReader
+***** MappingReader
+* Plugins
+** StiUriTypeDeriver
+This derives (for-loop) a StiRdfUriGenerator for each StiUri::TYPES, ensuring uri minting works for all of them directly.
+* Hooks
+** MappingRequirements
+  - uses the MappingCuration orphans method, not used anywhere else
+*** MappingCuration
+  - ~orphans~ only used in this context (storage query: just keep all ids whose ~field_mapping_target_predicate~ isn't in the current atio predicates), not needed for claims since they get removed from triplestore if the taxonomomy vocab ids generating them are deleted)
+  - ~decide~ directly writes & publishes the mapping paragraph (no plugin/actions anymore): modifier decides what decision will be made (provided by accept/reject)
+* Events
+Nothing besides the one mentioned above
+* Drush
 ** StiRdfUriCommands
 This controlls all remaining services:
 + ~MappingImporter~
@@ -17,10 +54,14 @@ This controlls all remaining services:
 + ~GraphSynchronizer~
 My suspicion is that these are useful tools for development on a live database on-the-fly, but might not be needed in final production
 
-* TODO Steps for MVP
-- html monolith not nice. This should provide a proper Drupal curation view, similarly styled to sti-dedupe.
-- added functionality: there should be three output options:
+
+
+
+* TODO Steps for MVP [100%]
+- [X] html monolith not nice. This should provide a proper Drupal curation view, similarly styled to sti-dedupe.
+  + re-factor now done
+- [X] added functionality: there should be three output options:
   + ttl files (currently the only one)
   + ask for triplestore write (e.g. a collection facilitator) -> put this on a site manager/admin backend view listing the proposed mappings as a html table
   + triplestore write (for admin/site manager): Form submission showing the mappings as html table and asking for confirmation
-Before writing anything: Outline what you would add. Don't change the existing code unless necessary: I need to understand it and it mustn't change dramatically with every iteration. Ask for confirmation if bigger rewrites are needed. Focus on stripping out unneccessary code: The aim is lean, readable and maintainable. Fewer lines are better.
+- [X] 'mappings' as used here is ambiguous: There are the ~rdf_sync~ mappings: the sync from sql to rdf and then there are the skos mappings: the semantic relationships between claims. The prior should be renamed to 'sync' for clarity

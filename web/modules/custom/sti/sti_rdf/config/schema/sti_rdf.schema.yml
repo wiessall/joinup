@@ -1,0 +1,9 @@
+# rdf_sync declares the schema of its third-party settings only for some
+# bundle types. On the site, Joinup modules (assessments, joinup_taxonomy)
+# declare these two; sti_rdf does not depend on them, so it declares what it
+# uses itself.
+paragraphs.paragraphs_type.*.third_party.rdf_sync:
+  type: rdf_sync.bundle_mapping
+
+taxonomy.vocabulary.*.third_party.rdf_sync:
+  type: rdf_sync.bundle_mapping

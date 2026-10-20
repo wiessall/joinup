@@ -43,7 +43,7 @@ final class OntologyDocumentBuilder {
   private const XSD = 'http://www.w3.org/2001/XMLSchema#';
 
   public function __construct(
-    private readonly MappingReaderInterface $mappingReader,
+    private readonly SyncReaderInterface $syncReader,
     private readonly ModuleExtensionList $moduleList,
   ) {}
 
@@ -64,10 +64,10 @@ final class OntologyDocumentBuilder {
     $graph->addResource($document, self::RDF . 'type', self::OWL . 'Ontology');
     $graph->addLiteral($document, self::RDFS . 'comment', new Literal('Generated from the rdf_sync mappings of the STI Portal. Declares every term the portal emits in this namespace.', 'en'));
 
-    foreach ($this->mappings() as $mapping) {
-      $this->addClass($graph, $namespace, $document, $mapping);
-      foreach ($mapping['fields'] as $field) {
-        $this->addProperty($graph, $namespace, $document, $mapping, $field);
+    foreach ($this->rdfSyncMappings() as $rdf_sync_mapping) {
+      $this->addClass($graph, $namespace, $document, $rdf_sync_mapping);
+      foreach ($rdf_sync_mapping['fields'] as $field) {
+        $this->addProperty($graph, $namespace, $document, $rdf_sync_mapping, $field);
       }
     }
 
@@ -82,13 +82,13 @@ final class OntologyDocumentBuilder {
   /**
    * Declares the bundle's class when it is in the namespace.
    */
-  private function addClass(Graph $graph, string $namespace, string $document, array $mapping): void {
-    if (!str_starts_with($mapping['type'], $namespace)) {
+  private function addClass(Graph $graph, string $namespace, string $document, array $rdf_sync_mapping): void {
+    if (!str_starts_with($rdf_sync_mapping['type'], $namespace)) {
       return;
     }
-    $graph->addResource($mapping['type'], self::RDF . 'type', self::OWL . 'Class');
-    $graph->addResource($mapping['type'], self::RDFS . 'isDefinedBy', $document);
-    $graph->addLiteral($mapping['type'], self::RDFS . 'label', new Literal($mapping['label'], 'en'));
+    $graph->addResource($rdf_sync_mapping['type'], self::RDF . 'type', self::OWL . 'Class');
+    $graph->addResource($rdf_sync_mapping['type'], self::RDFS . 'isDefinedBy', $document);
+    $graph->addLiteral($rdf_sync_mapping['type'], self::RDFS . 'label', new Literal($rdf_sync_mapping['label'], 'en'));
   }
 
   /**
@@ -99,7 +99,7 @@ final class OntologyDocumentBuilder {
    * of how the site uses it. rdfs:domain is never asserted, because it is an
    * inference rule, not documentation.
    */
-  private function addProperty(Graph $graph, string $namespace, string $document, array $mapping, array $field): void {
+  private function addProperty(Graph $graph, string $namespace, string $document, array $rdf_sync_mapping, array $field): void {
     $predicate = $field['predicate'];
     if (!str_starts_with($predicate, $namespace)) {
       return;
@@ -111,8 +111,8 @@ final class OntologyDocumentBuilder {
     if ($field['description'] !== '') {
       $graph->addLiteral($predicate, self::RDFS . 'comment', new Literal($field['description'], 'en'));
     }
-    if ($mapping['type'] !== '') {
-      $graph->addResource($predicate, self::SCHEMA . 'domainIncludes', $mapping['type']);
+    if ($rdf_sync_mapping['type'] !== '') {
+      $graph->addResource($predicate, self::SCHEMA . 'domainIncludes', $rdf_sync_mapping['type']);
     }
     if ($field['type'] !== NULL && $field['type'] !== 'resource' && str_starts_with((string) $field['type'], 'xsd:')) {
       $graph->addResource($predicate, self::SCHEMA . 'rangeIncludes', self::XSD . substr((string) $field['type'], 4));
@@ -125,16 +125,16 @@ final class OntologyDocumentBuilder {
    * @return list<array{type: string, label: string, fields: list<array>}>
    *   One entry per mapped bundle.
    */
-  private function mappings(): array {
-    $mappings = [];
-    foreach ($this->mappingReader->mappedBundles(self::ENTITY_TYPES) as $bundle) {
-      $mappings[] = [
+  private function rdfSyncMappings(): array {
+    $rdf_sync_mappings = [];
+    foreach ($this->syncReader->syncedBundles(self::ENTITY_TYPES) as $bundle) {
+      $rdf_sync_mappings[] = [
         'type' => $bundle['type'],
         'label' => $bundle['label'],
-        'fields' => $this->mappingReader->fieldMappings($bundle['entity_type'], $bundle['bundle']),
+        'fields' => $this->syncReader->fieldSyncs($bundle['entity_type'], $bundle['bundle']),
       ];
     }
-    return $mappings;
+    return $rdf_sync_mappings;
   }
 
 }

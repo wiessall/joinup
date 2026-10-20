@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_mapping_modifier
+    - paragraphs.paragraphs_type.mapping
+  module:
+    - options
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'https://w3id.org/sssom/predicate_modifier'
+      type: resource
+id: paragraph.mapping.field_mapping_modifier
+field_name: field_mapping_modifier
+entity_type: paragraph
+bundle: mapping
+label: Negated
+description: 'Set when a reviewer rejected the mapping: the subject and object do not stand in this relation.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,26 +1,41 @@
-sti_rdf.curate.skos:
-  path: '/admin/curate/skos'
+# SKOS mappings a collection issues: proposing, and the Turtle export.
+sti_rdf.mappings:
+  path: '/node/{node}/mappings'
   defaults:
-    _title: 'Curate Skos'
-    _controller: '\Drupal\sti_rdf\Controller\StiRdfController::curate'
+    _form: '\Drupal\sti_rdf\Form\MappingForm'
+    _title: 'Mappings'
+  options:
+    parameters:
+      node:
+        type: 'entity:node'
+        bundle: [collection]
   requirements:
-    _permission: 'access content'
+    _entity_access: 'node.update'
+    node: \d+
 
-# Term lists for the SKOS mapper above, with the URIs the graph uses.
-sti_rdf.curate.skos.sources:
-  path: '/admin/curate/skos/sources'
+# Every collection the user may edit, with proposals waiting and properties
+# still unmapped.
+sti_rdf.mappings.overview:
+  path: '/admin/content/mappings'
   defaults:
-    _controller: '\Drupal\sti_rdf\Controller\MappingTermsController::sources'
+    _controller: '\Drupal\sti_rdf\Controller\MappingOverviewController::overview'
+    _title: 'Mappings'
   requirements:
-    _permission: 'access content'
+    # Rows are filtered by update access on each collection.
+    _user_is_logged_in: 'TRUE'
 
-sti_rdf.curate.skos.terms:
-  path: '/admin/curate/skos/terms/{source}'
+sti_rdf.mappings.export:
+  path: '/node/{node}/mappings/export'
   defaults:
-    _controller: '\Drupal\sti_rdf\Controller\MappingTermsController::terms'
+    _controller: '\Drupal\sti_rdf\Controller\MappingExportController::export'
+  options:
+    parameters:
+      node:
+        type: 'entity:node'
+        bundle: [collection]
   requirements:
-    _permission: 'access content'
-    source: 'atio|\d+'
+    _entity_access: 'node.view'
+    node: \d+
 
 # P0: instance URIs https://sti-portal.fao.org/id/{type}/{uuid} dereference
 # here. The type requirement mirrors \Drupal\sti_rdf\StiUri::TYPES; keep the
@@ -33,7 +48,7 @@ sti_rdf.id:
     # Open on purpose: instance URIs must dereference for anyone. The
     # controller checks view access on the resolved entity and answers 404.
     _access: 'TRUE'
-    type: 'source-record|innovation|annotation|collection|agent|claim|property|concept'
+    type: 'source-record|innovation|annotation|collection|agent|claim|property|concept|mapping'
     uuid: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
 
 # P0: the namespace IRIs dereference to their namespace documents.
@@ -43,8 +58,8 @@ sti_rdf.ontology.sti:
     _controller: '\Drupal\sti_rdf\Controller\OntologyController::document'
     prefix: sti
   requirements:
-    # Open on purpose: a namespace document is public by definition.
-    _access: 'TRUE'
+    # TODO Agree with the team whether or not (and how) they would like to publish this
+    _permission: 'administer site configuration'
 
 sti_rdf.ontology.atio:
   path: '/atio'
@@ -52,5 +67,5 @@ sti_rdf.ontology.atio:
     _controller: '\Drupal\sti_rdf\Controller\OntologyController::document'
     prefix: atio
   requirements:
-    # Open on purpose: a namespace document is public by definition.
-    _access: 'TRUE'
+    # TODO Agree with the team whether or not (and how) they would like to publish this
+    _permission: 'administer site configuration'

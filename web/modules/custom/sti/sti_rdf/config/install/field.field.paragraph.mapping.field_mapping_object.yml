@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_mapping_object
+    - paragraphs.paragraphs_type.mapping
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://www.w3.org/2002/07/owl#annotatedTarget'
+      type: resource
+id: paragraph.mapping.field_mapping_object
+field_name: field_mapping_object
+entity_type: paragraph
+bundle: mapping
+label: Object
+description: 'The term the subject is mapped to. Either this or the target predicate is set.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+field_type: entity_reference

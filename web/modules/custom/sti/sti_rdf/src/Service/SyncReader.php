@@ -12,7 +12,7 @@ use Drupal\Core\Field\FieldConfigInterface;
 /**
  * Reads rdf_sync mappings from bundle and field config.
  */
-final class MappingReader implements MappingReaderInterface {
+final class SyncReader implements SyncReaderInterface {
 
   public function __construct(
     private readonly EntityTypeManagerInterface $entityTypeManager,
@@ -22,7 +22,7 @@ final class MappingReader implements MappingReaderInterface {
   /**
    * {@inheritdoc}
    */
-  public function mappedBundles(array $entityTypeIds): array {
+  public function syncedBundles(array $entityTypeIds): array {
     $out = [];
     foreach ($entityTypeIds as $entityTypeId) {
       $bundleEntity = $this->bundleEntityType($entityTypeId);
@@ -51,7 +51,7 @@ final class MappingReader implements MappingReaderInterface {
   /**
    * {@inheritdoc}
    */
-  public function fieldMappings(string $entityTypeId, string $bundle): array {
+  public function fieldSyncs(string $entityTypeId, string $bundle): array {
     $bundleEntityType = $this->bundleEntityType($entityTypeId);
     $bundleEntity = $bundleEntityType ? $this->entityTypeManager->getStorage($bundleEntityType)->load($bundle) : NULL;
     if (!$bundleEntity instanceof ConfigEntityInterface) {

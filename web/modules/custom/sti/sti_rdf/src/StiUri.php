@@ -53,6 +53,7 @@ final class StiUri {
     'claim' => 'Field claim',
     'property' => 'Collection-scoped claim property',
     'concept' => 'Vocabulary concept',
+    'mapping' => 'SSSOM mapping',
   ];
 
   /**
