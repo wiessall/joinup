@@ -86,6 +86,9 @@ final class OntologyDocumentBuilder {
     if (!str_starts_with($rdf_sync_mapping['type'], $namespace)) {
       return;
     }
+    $kind = $rdf_sync_mapping['entity_type'] === 'taxonomy_term'
+      ? 'http://www.w3.org/2004/02/skos/core#ConceptScheme'
+      : self::OWL . 'Class';
     $graph->addResource($rdf_sync_mapping['type'], self::RDF . 'type', self::OWL . 'Class');
     $graph->addResource($rdf_sync_mapping['type'], self::RDFS . 'isDefinedBy', $document);
     $graph->addLiteral($rdf_sync_mapping['type'], self::RDFS . 'label', new Literal($rdf_sync_mapping['label'], 'en'));
@@ -129,6 +132,7 @@ final class OntologyDocumentBuilder {
     $rdf_sync_mappings = [];
     foreach ($this->syncReader->syncedBundles(self::ENTITY_TYPES) as $bundle) {
       $rdf_sync_mappings[] = [
+        'entity_type' => bundle['entity_type'],
         'type' => $bundle['type'],
         'label' => $bundle['label'],
         'fields' => $this->syncReader->fieldSyncs($bundle['entity_type'], $bundle['bundle']),

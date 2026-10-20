@@ -1,0 +1,26 @@
+uuid: 71ce5db7-6b8f-4115-861a-c15acb021ce0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_mapping_tool
+    - paragraphs.paragraphs_type.mapping
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'https://w3id.org/sssom/mapping_tool'
+      type: null
+id: paragraph.mapping.field_mapping_tool
+field_name: field_mapping_tool
+entity_type: paragraph
+bundle: mapping
+label: Tool
+description: 'The tool that proposed the mapping, with its version (model and prompt version for an LLM).'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

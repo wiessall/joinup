@@ -1,0 +1,343 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+    - sti_rdf
+    - joinup_rdf
+    - migrate_plus
+    - import_ird_jsons
+id: ird_cg_icarda
+migration_tags:
+- IRD
+- solution
+migration_group: ird_import_group
+label: 'IRD import: CGIAR ICARDA MEL'
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+  - modules/custom/import_ird_jsons/sources/cg-icarda-mel.json
+  constants:
+    OG_AUDIENCE_NID: '10065'
+    OWNER_NID: 33
+    CONTACT_NID: 34
+    DEFAULT_LANGUAGE_TID: 31
+    DEFAULT_DOMAIN_TID: 8
+    BUNDLE: solution
+  item_selector: records
+  fields:
+  - name: id
+    label: Record ID
+    selector: core_fields/id
+  - name: title
+    label: Title
+    selector: core_fields/title
+  - name: description
+    label: Description
+    selector: core_fields/description
+  - name: date
+    label: Date
+    selector: core_fields/date
+  - name: url
+    label: Landing page
+    selector: core_fields/url
+  - name: claims
+    label: Claims
+    selector: claims
+  - name: raw_record
+    label: Original record
+    selector: _raw
+  ids:
+    id:
+      type: string
+process:
+  title:
+    plugin: skip_on_empty
+    method: row
+    message: 'Skipped: no title'
+    source: title
+  type:
+    plugin: default_value
+    default_value: solution
+  field_state:
+    plugin: default_value
+    default_value: published
+  description/value:
+    plugin: skip_on_empty
+    method: row
+    source: description
+  description/format:
+    plugin: default_value
+    default_value: full_html
+  language:
+    plugin: default_value
+    default_value: 31
+  topic:
+    plugin: default_value
+    default_value: 8
+  og_audience:
+    plugin: get
+    source: constants/OG_AUDIENCE_NID
+  owner:
+    plugin: get
+    source: constants/OWNER_NID
+  contact:
+    plugin: get
+    source: constants/CONTACT_NID
+  landing_page/uri:
+    plugin: skip_on_empty
+    method: process
+    source: url
+  field_information_resource_date:
+  - plugin: skip_on_empty
+    method: process
+    source: date
+  - plugin: callback
+    callable: strtotime
+  - plugin: skip_on_empty
+    method: process
+  - plugin: format_date
+    from_format: U
+    to_format: Y-m-d
+  field_original_internal_id: id
+  field_machine_record:
+    plugin: callback
+    callable: json_encode
+    source: raw_record
+  _time:
+    plugin: callback
+    callable: time
+    unpack_source: true
+    source: {}
+  field_last_ingestion_datetime:
+    plugin: format_date
+    source: '@_time'
+    from_format: U
+    to_format: U
+  field_claims:
+    plugin: ird_claims
+    collection_id: cg-icarda
+    source: claims
+    field_config:
+      record_source:
+        categorical: true
+      Result Type Group:
+        categorical: true
+      QA Action Status:
+        categorical: true
+      Indicator type:
+        categorical: true
+      Status:
+        categorical: true
+      Is Replicated?:
+        categorical: true
+      Investment Discontinued Option:
+        categorical: true
+      Submitter:
+        categorical: true
+      Reporting Phase:
+        categorical: true
+      Program Code:
+        categorical: true
+      Program Name:
+        categorical: true
+      Primary Initiative Budget:
+        categorical: true
+      Contributor Initiative(s) Budget:
+        categorical: true
+      KP Type:
+        categorical: true
+      Is Melia:
+        categorical: true
+      Gender Tag Level:
+        categorical: true
+      gender impact area:
+        categorical: true
+      Climate Tag Level:
+        categorical: true
+      climate impact area:
+        categorical: true
+      Nutrition Tag Level:
+        categorical: true
+      nutrition impact area:
+        categorical: true
+      Environment and/or biodiversity Tag Level:
+        categorical: true
+      environmental biodiversity impact area:
+        categorical: true
+      Poverty Tag Level:
+        categorical: true
+      poverty impact area:
+        categorical: true
+      Is Key Result Story?:
+        categorical: true
+      Primary Submitter:
+        categorical: true
+      Contributing Initiative(s):
+        categorical: true
+      Bilateral projects:
+        categorical: true
+      Project Title:
+        categorical: true
+      Non-pooled Project(s):
+        categorical: true
+        separator: ;
+      Primary Centers reporting the result:
+        categorical: true
+      Contributing Centers:
+        categorical: true
+      Is Planned?:
+        categorical: true
+      ToC Mapping / ToC Details:
+        categorical: true
+        separator: ;
+      Primary Submitter AoW:
+        categorical: true
+      Indicator used:
+        categorical: true
+        separator: ;
+      Actual Achieved:
+        categorical: true
+      Are partners applicable?:
+        categorical: true
+      Partners (with delivery type) for non-KP results:
+        categorical: false
+        separator: ;
+      Are additional partners for KP results applicable?:
+        categorical: true
+      Additional partners (with delivery type) for KP results:
+        categorical: true
+      Regions:
+        categorical: true
+      Countries:
+        categorical: true
+        separator: ;
+      Linked Results:
+        categorical: false
+        separator: ;
+      Evidence 1:
+        categorical: false
+        separator: ;
+      Evidence 2:
+        categorical: false
+        separator: ;
+      Evidence 3:
+        categorical: false
+        separator: ;
+      Evidence 4:
+        categorical: false
+        separator: ;
+      Evidence 5:
+        categorical: true
+        separator: ;
+      Evidence 6:
+        categorical: true
+        separator: ;
+      Innovation Use Level:
+        categorical: true
+      Innovation Readiness Level:
+        categorical: true
+      Readiness Level Justitication:
+        categorical: false
+      'Provide a short title for the innovation:':
+        categorical: false
+      'What would be the best way to characterize this innovation?:':
+        categorical: true
+      innovation_nature_id:
+        categorical: true
+      Which of the below typologies best fits the nature of the innovation? (Innovation typology):
+        categorical: true
+      Are you profiling a new or improved variety or breed?:
+        categorical: true
+      innovation collaborators:
+        categorical: false
+        separator: ;
+      innovation Developers:
+        categorical: false
+        separator: ;
+      CapDev Male:
+        categorical: true
+      CapDev Female:
+        categorical: true
+      CapDev Non-Binary:
+        categorical: true
+      Length of trainig:
+        categorical: true
+      Delivery Method:
+        categorical: true
+      Policy Type:
+        categorical: true
+      Policy Stage:
+        categorical: true
+      Whose policy is this?:
+        categorical: true
+      Inno Use Actors Information:
+        categorical: true
+        separator: ;
+      Unit Of Measure:
+        categorical: true
+      Quantity Of Measure:
+        categorical: true
+      Actors Dev/Use Step 1:
+        categorical: true
+      Organizations Dev/Use Step 1:
+        categorical: true
+      Other Quantity Dev/Use Step 1:
+        categorical: true
+      IPSR Evidence - Gender:
+        categorical: true
+        separator: ;
+      IPSR Evidence - Climate:
+        categorical: true
+        separator: ;
+      IPSR Evidence - Nutrition:
+        categorical: true
+        separator: ;
+      IPSR Evidence - Environment and/or Biodiversity:
+        categorical: true
+        separator: ;
+      IPSR Evidence - Poverty:
+        categorical: true
+        separator: ;
+      IPSR Core Innovation Package Assess Information:
+        categorical: true
+      IPSR Complementary Innovation Package Assess Information:
+        categorical: true
+        separator: ;
+      IPSR Actors:
+        categorical: true
+        separator: '|'
+      IPSR Organizations:
+        categorical: true
+        separator: ;
+      IPSR Measures:
+        categorical: true
+      Initiatives investment:
+        categorical: true
+        separator: ;
+      Bilateral project investment:
+        categorical: true
+      Partner investment:
+        categorical: false
+        separator: ;
+      Intellectual property rights information:
+        categorical: true
+        separator: ;
+      Partners IDs (non-KP):
+        categorical: false
+        separator: ;
+      Partners IDs (KP):
+        categorical: true
+destination:
+  plugin: entity:node
+  default_bundle: solution
+  overwrite_properties:
+  - field_machine_record
+  - field_last_ingestion_datetime
+  - field_original_internal_id
+  - field_claims
+migration_dependencies:
+  required: []
+  optional: []

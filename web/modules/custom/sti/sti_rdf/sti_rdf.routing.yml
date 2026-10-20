@@ -48,7 +48,7 @@ sti_rdf.id:
     # Open on purpose: instance URIs must dereference for anyone. The
     # controller checks view access on the resolved entity and answers 404.
     _access: 'TRUE'
-    type: 'source-record|innovation|annotation|collection|agent|claim|property|concept|mapping'
+    type: 'source-record|innovation|annotation|collection|agent|claim|property|concept|mapping|contact|licence'
     uuid: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
 
 # P0: the namespace IRIs dereference to their namespace documents.
