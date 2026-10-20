@@ -14,7 +14,7 @@ use Drupal\sti_dedupe\ContentModel;
 use Drupal\sti_dedupe\Exception\SurvivorRequiredException;
 use Drupal\sti_dedupe\Linker;
 use Drupal\sti_dedupe\Prefixes;
-use Drupal\sti_rdf\Service\MappingReaderInterface;
+use Drupal\sti_rdf\Service\SyncReaderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -55,7 +55,7 @@ final class ResolveForm extends FormBase {
     private readonly EntityTypeManagerInterface $entityTypeManager,
     private readonly Linker $linker,
     private readonly CandidateStore $candidates,
-    private readonly MappingReaderInterface $mappingReader,
+    private readonly SyncReaderInterface $rdfSyncReader,
   ) {}
 
   /**
@@ -66,7 +66,7 @@ final class ResolveForm extends FormBase {
       $container->get('entity_type.manager'),
       $container->get('sti_dedupe.linker'),
       $container->get('sti_dedupe.candidates'),
-      $container->get('sti_rdf.mapping_reader'),
+      $container->get('sti_rdf.sync_reader'),
     );
   }
 
@@ -201,8 +201,8 @@ final class ResolveForm extends FormBase {
   private function buildDiff(NodeInterface $new, NodeInterface $existing): array {
     $fields = (array) ($this->config('sti_dedupe.settings')->get('compare_fields') ?? []);
     $predicates = [];
-    foreach ($this->mappingReader->fieldMappings('node', ContentModel::SOLUTION) as $mapping) {
-      $predicates[$mapping['field']] ??= Prefixes::compact($mapping['predicate']);
+    foreach ($this->rdfSyncReader->fieldSyncs('node', ContentModel::SOLUTION) as $rdf_sync_mapping) {
+      $predicates[$rdf_sync_mapping['field']] ??= Prefixes::compact($rdf_sync_mapping['predicate']);
     }
 
     $rows = [];

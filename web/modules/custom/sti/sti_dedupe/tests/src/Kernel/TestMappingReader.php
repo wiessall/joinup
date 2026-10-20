@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\sti_dedupe\Kernel;
 
-use Drupal\sti_rdf\Service\MappingReaderInterface;
+use Drupal\sti_rdf\Service\SyncReaderInterface;
 
 /**
  * Stands in for rdf_sync mappings in kernel tests.
@@ -13,7 +13,7 @@ use Drupal\sti_rdf\Service\MappingReaderInterface;
  * place every node save would try to reach a triplestore. Tests declare the
  * field-to-predicate map here instead.
  */
-final class TestMappingReader implements MappingReaderInterface {
+final class TestSyncReader implements SyncReaderInterface {
 
   /**
    * Predicates per entity type, bundle and field.
@@ -25,7 +25,7 @@ final class TestMappingReader implements MappingReaderInterface {
   /**
    * {@inheritdoc}
    */
-  public function mappedBundles(array $entityTypeIds): array {
+  public function syncedBundles(array $entityTypeIds): array {
     $out = [];
     foreach ($entityTypeIds as $entityTypeId) {
       foreach (array_keys(self::$predicates[$entityTypeId] ?? []) as $bundle) {
@@ -43,7 +43,7 @@ final class TestMappingReader implements MappingReaderInterface {
   /**
    * {@inheritdoc}
    */
-  public function fieldMappings(string $entityTypeId, string $bundle): array {
+  public function fieldSyncs(string $entityTypeId, string $bundle): array {
     $out = [];
     foreach (self::$predicates[$entityTypeId][$bundle] ?? [] as $field => $predicate) {
       $out[] = [
