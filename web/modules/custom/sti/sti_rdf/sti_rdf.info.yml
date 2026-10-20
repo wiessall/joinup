@@ -6,4 +6,9 @@ core_version_requirement: "^10.4 || ^11"
 
 dependencies:
   - 'drupal:node'
+  - 'drupal:options'
+  - 'drupal:taxonomy'
+  - 'drupal:user'
+  - 'entity_reference_revisions:entity_reference_revisions'
+  - 'paragraphs:paragraphs'
   - 'rdf_sync:rdf_sync'

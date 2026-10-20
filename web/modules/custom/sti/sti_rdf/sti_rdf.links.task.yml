@@ -1,0 +1,5 @@
+sti_rdf.mappings:
+  title: 'Mappings'
+  route_name: sti_rdf.mappings
+  base_route: entity.node.canonical
+  weight: 20

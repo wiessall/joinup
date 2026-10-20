@@ -14,7 +14,7 @@ namespace Drupal\sti_rdf\Service;
  * that the two locations are read the same way everywhere and tests can
  * substitute a mapping without enabling triplestore writes.
  */
-interface MappingReaderInterface {
+interface SyncReaderInterface {
 
   /**
    * Returns every mapped bundle of the given content entity types.
@@ -25,7 +25,7 @@ interface MappingReaderInterface {
    * @return list<array{entity_type: string, bundle: string, label: string, type: string}>
    *   One entry per bundle that declares an rdf_sync class.
    */
-  public function mappedBundles(array $entityTypeIds): array;
+  public function syncedBundles(array $entityTypeIds): array;
 
   /**
    * Returns the field mappings of one bundle.
@@ -33,6 +33,6 @@ interface MappingReaderInterface {
    * @return list<array{field: string, column: string, predicate: string, type: string|null, label: string, description: string}>
    *   One entry per mapped field column, bundle-level entries first.
    */
-  public function fieldMappings(string $entityTypeId, string $bundle): array;
+  public function fieldSyncs(string $entityTypeId, string $bundle): array;
 
 }

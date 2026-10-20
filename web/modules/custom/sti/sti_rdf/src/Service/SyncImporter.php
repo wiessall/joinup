@@ -23,7 +23,7 @@ use Drupal\Core\Config\StorageInterface;
  * Config that exists in config/sync but not on the site (new fields, new
  * paragraph types) cannot be created this way and is reported instead.
  */
-final class MappingImporter {
+final class SyncImporter {
 
   private const KEY = 'third_party_settings.rdf_sync';
 
