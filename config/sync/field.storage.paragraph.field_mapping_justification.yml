@@ -1,0 +1,33 @@
+uuid: 60005199-1375-467f-9fcf-803432204f14
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+id: paragraph.field_mapping_justification
+field_name: field_mapping_justification
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: 'https://w3id.org/semapv/vocab/ManualMappingCuration'
+      label: 'Manual curation'
+    -
+      value: 'https://w3id.org/semapv/vocab/LexicalMatching'
+      label: 'Lexical matching'
+    -
+      value: 'https://w3id.org/semapv/vocab/SemanticSimilarityThresholdMatching'
+      label: 'Semantic similarity above a threshold'
+    -
+      value: 'https://w3id.org/semapv/vocab/UnspecifiedMatching'
+      label: 'Unspecified (e.g. a generative model)'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

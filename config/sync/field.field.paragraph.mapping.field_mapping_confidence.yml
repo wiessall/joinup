@@ -1,0 +1,30 @@
+uuid: 7b59b760-79d3-45d6-bc0a-83daf7a79ac4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_mapping_confidence
+    - paragraphs.paragraphs_type.mapping
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'https://w3id.org/sssom/confidence'
+      type: 'xsd:decimal'
+id: paragraph.mapping.field_mapping_confidence
+field_name: field_mapping_confidence
+entity_type: paragraph
+bundle: mapping
+label: Confidence
+description: 'How sure the proposer is that the mapping holds, from 0 to 1.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 0.0
+  max: 1.0
+  prefix: ''
+  suffix: ''
+field_type: float

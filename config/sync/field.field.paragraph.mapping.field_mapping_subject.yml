@@ -1,0 +1,33 @@
+uuid: da9acfb7-775a-4018-8f6b-d97210ca7a6a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_mapping_subject
+    - paragraphs.paragraphs_type.mapping
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://www.w3.org/2002/07/owl#annotatedSource'
+      type: resource
+id: paragraph.mapping.field_mapping_subject
+field_name: field_mapping_subject
+entity_type: paragraph
+bundle: mapping
+label: Subject
+description: 'The term the mapping is about, in the issuing collection.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+field_type: entity_reference

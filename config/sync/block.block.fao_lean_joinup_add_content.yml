@@ -1,6 +1,6 @@
 uuid: 7f145d26-14a6-4f37-9821-6ac592acd1ca
 langcode: en
-status: false
+status: true
 dependencies:
   module:
     - joinup_core

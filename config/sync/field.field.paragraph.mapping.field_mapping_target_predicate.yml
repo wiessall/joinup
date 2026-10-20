@@ -1,0 +1,27 @@
+uuid: ea161f0d-a479-47c7-8c50-59efb7c14652
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_mapping_target_predicate
+    - paragraphs.paragraphs_type.mapping
+  module:
+    - options
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://www.w3.org/2002/07/owl#annotatedTarget'
+      type: resource
+id: paragraph.mapping.field_mapping_target_predicate
+field_name: field_mapping_target_predicate
+entity_type: paragraph
+bundle: mapping
+label: 'Target ATIO property'
+description: 'The ATIO property (an atio: predicate) the subject is mapped to. Either this or the target term is set.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string
