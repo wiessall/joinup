@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    type: 'http://www.w3.org/2002/07/owl#Axiom'
+    uri_plugin: 'sti_namespace:mapping'
+    fields:
+      created:
+        value:
+          predicate: 'http://purl.org/dc/terms/created'
+          type: 'xsd:dateTime'
+id: mapping
+label: Mapping
+icon_uuid: null
+icon_default: null
+description: 'An SSSOM mapping between two vocabulary terms, held by the collection that issued it. Unpublished: proposed. Published: accepted, or rejected when negated.'
+behavior_plugins: {  }

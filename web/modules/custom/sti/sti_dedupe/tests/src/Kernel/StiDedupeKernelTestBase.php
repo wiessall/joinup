@@ -82,7 +82,7 @@ abstract class StiDedupeKernelTestBase extends KernelTestBase {
    */
   public function register(ContainerBuilder $container): void {
     parent::register($container);
-    $container->register('sti_rdf.mapping_reader', TestMappingReader::class);
+    $container->register('sti_rdf.sync_reader', TestSyncReader::class);
   }
 
   /**
@@ -131,7 +131,7 @@ abstract class StiDedupeKernelTestBase extends KernelTestBase {
 
     $this->installShippedConfig();
 
-    TestMappingReader::$predicates = [
+    TestSyncReader::$predicates = [
       'node' => [
         ContentModel::INNOVATION => [
           'title' => 'http://purl.org/dc/terms/title',
@@ -368,3 +368,5 @@ abstract class StiDedupeKernelTestBase extends KernelTestBase {
     sort($ids);
     return $ids;
   }
+
+}

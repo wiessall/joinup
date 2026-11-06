@@ -10,7 +10,7 @@ third_party_settings:
     locked: true
   rdf_sync:
     type: 'http://publications.europa.eu/resource/authority/country'
-    uri_plugin: null
+    uri_plugin: 'sti_namespace:concept'
     fields:
       vid:
         target_id:

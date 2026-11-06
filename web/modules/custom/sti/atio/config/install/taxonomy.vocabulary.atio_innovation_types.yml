@@ -8,7 +8,7 @@ dependencies:
     - atio
 third_party_settings:
   rdf_sync:
-    type: http://www.w3.org/2004/02/skos/core#Concept
+    type: 'https://sti-portal.fao.org/atio#InnovationTypes'
     uri_plugin: 'sti_namespace:concept'
     uri_field_name: term_uri
     fields:
@@ -22,7 +22,7 @@ third_party_settings:
           type: null
       parent:
         target_id:
-          predicate: http://www.w3.org/2004/02/skos/core#broaderTransitive
+          predicate: http://www.w3.org/2004/02/skos/core#broader
           type: resource
 name: Types of innovation
 vid: atio_innovation_types

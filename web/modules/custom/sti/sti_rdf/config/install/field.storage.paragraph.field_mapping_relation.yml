@@ -1,0 +1,35 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+id: paragraph.field_mapping_relation
+field_name: field_mapping_relation
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: 'http://www.w3.org/2004/02/skos/core#exactMatch'
+      label: 'exact match'
+    -
+      value: 'http://www.w3.org/2004/02/skos/core#closeMatch'
+      label: 'close match'
+    -
+      value: 'http://www.w3.org/2004/02/skos/core#broadMatch'
+      label: 'broad match'
+    -
+      value: 'http://www.w3.org/2004/02/skos/core#narrowMatch'
+      label: 'narrow match'
+    -
+      value: 'http://www.w3.org/2004/02/skos/core#relatedMatch'
+      label: 'related match'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

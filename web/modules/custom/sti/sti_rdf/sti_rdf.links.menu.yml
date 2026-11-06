@@ -1,0 +1,5 @@
+sti_rdf.mappings.overview:
+  title: 'Mappings'
+  description: 'Mappings between collection vocabularies: proposals waiting and properties still unmapped.'
+  route_name: sti_rdf.mappings.overview
+  parent: system.admin_content
