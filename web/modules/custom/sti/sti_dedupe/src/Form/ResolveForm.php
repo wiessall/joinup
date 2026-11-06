@@ -330,9 +330,6 @@ final class ResolveForm extends FormBase {
           '@added' => count($result->added),
           '@replaced' => count($result->replaced),
         ]));
-        if (!$result->conflictsRefreshed) {
-          $this->messenger()->addWarning($this->t('Claim conflicts could not be refreshed right away and were queued for the next cron run.'));
-        }
       }
     }
     elseif ($trigger === 'different') {
