@@ -19,6 +19,25 @@ sti_dedupe.review:
     _permission: 'review sti duplicates'
     collection: \d+
 
+sti_dedupe.resolve:
+  path: '/admin/content/dedupe/{collection}/resolve/{solution}/{candidate}'
+  defaults:
+    _form: '\Drupal\sti_dedupe\Form\ResolveForm'
+    _title: 'Review possible duplicate'
+  options:
+    parameters:
+      collection:
+        type: 'entity:node'
+      solution:
+        type: 'entity:node'
+      candidate:
+        type: 'entity:node'
+  requirements:
+    _permission: 'review sti duplicates'
+    collection: \d+
+    solution: \d+
+    candidate: \d+
+
 sti_dedupe.settings:
   path: '/admin/config/sti/dedupe'
   defaults:

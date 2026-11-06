@@ -4,37 +4,15 @@ declare(strict_types=1);
 
 namespace Drupal\sti_dedupe\Form;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Settings for duplicate detection and claim conflicts.
+ * Settings for duplicate detection.
  */
 final class SettingsForm extends ConfigFormBase {
 
   private const SETTINGS = 'sti_dedupe.settings';
-
-  public function __construct(
-    ConfigFactoryInterface $config_factory,
-    TypedConfigManagerInterface $typed_config_manager,
-  ) {
-    parent::__construct($config_factory, $typed_config_manager);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): static {
-    return new static(
-      $container->get('config.factory'),
-      $container->get('config.typed'),
-      $container->get('sti_dedupe.exclusive_properties'),
-      $container->get('sti_dedupe.conflict_queue'),
-    );
-  }
 
   /**
    * {@inheritdoc}
@@ -96,41 +74,15 @@ final class SettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state): void {
-    foreach (['exclusive_add', 'exclusive_remove'] as $name) {
-      foreach ($this->lines($form_state->getValue($name)) as $line) {
-        if (filter_var($line, FILTER_VALIDATE_URL) === FALSE) {
-          $form_state->setErrorByName($name, $this->t('"@line" is not a URI.', ['@line' => $line]));
-        }
-      }
-    }
-    parent::validateForm($form, $form_state);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $config = $this->config(self::SETTINGS);
-    $add = $this->lines($form_state->getValue('exclusive_add'));
-    $remove = $this->lines($form_state->getValue('exclusive_remove'));
-    $rulesChanged = $add !== (array) $config->get('exclusive_properties.add')
-      || $remove !== (array) $config->get('exclusive_properties.remove');
-
     $config
       ->set('threshold', (float) $form_state->getValue('threshold'))
       ->set('max_candidates', (int) $form_state->getValue('max_candidates'))
       ->set('indexes', $this->lines($form_state->getValue('indexes')))
       ->set('compare_fields', $this->lines($form_state->getValue('compare_fields')))
-      ->set('exclusive_properties.add', $add)
-      ->set('exclusive_properties.remove', $remove)
       ->save();
 
-    if ($rulesChanged) {
-      $this->exclusive->reset();
-      $this->conflictQueue->queueAll();
-      $this->messenger()->addStatus($this->t('Claim conflicts will be recomputed for every innovation on the next cron runs.'));
-    }
     parent::submitForm($form, $form_state);
   }
 

@@ -129,7 +129,7 @@ final class DedupeController extends ControllerBase {
             '#url' => Url::fromRoute('sti_dedupe.resolve', [
               'collection' => $collectionId,
               'solution' => $sourceNid,
-              'candidate' => $best->id(),
+              'candidate' => $entry['best_nid'],
             ]),
             '#attributes' => ['class' => ['btn', 'btn-outline-primary', 'btn-sm']],
           ],
