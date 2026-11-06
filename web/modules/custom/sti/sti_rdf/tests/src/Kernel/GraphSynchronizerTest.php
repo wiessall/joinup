@@ -59,17 +59,19 @@ final class GraphSynchronizerTest extends KernelTestBase {
     foreach (['solution', 'page'] as $type) {
       NodeType::create(['type' => $type, 'name' => $type])->save();
     }
-    // Five solutions (ids 1-5) and one page (id 6), created before the
-    // mapping exists so that saving them syncs nothing.
-    foreach (['solution', 'solution', 'solution', 'solution', 'solution', 'page'] as $type) {
-      Node::create(['type' => $type, 'title' => $type])->save();
-    }
     $this->config('node.type.solution')->set('third_party_settings.rdf_sync', [
       'type' => 'https://sti-portal.fao.org/sti#SourceRecord',
       'uri_plugin' => 'sti_namespace:source-record',
       'fields' => [],
     ])->save();
     $this->container->get('entity_type.manager')->getStorage('node_type')->resetCache();
+    // Five solutions (ids 1-5) and one page (id 6). Created after the mapping,
+    // so that rdf_sync's mapper never caches solution as unmapped; their own
+    // writes are recorded and discarded below.
+    foreach (['solution', 'solution', 'solution', 'solution', 'solution', 'page'] as $type) {
+      Node::create(['type' => $type, 'title' => $type])->save();
+    }
+    $this->container->get('rdf_sync.synchronizer')->destruct();
     RecordingSynchronizer::$writes = [];
   }
 

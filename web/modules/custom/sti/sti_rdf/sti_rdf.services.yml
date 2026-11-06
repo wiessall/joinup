@@ -12,12 +12,12 @@ services:
       - '@config.factory'
       - '@sti_rdf.logger'
 
-  sti_rdf.mapping_reader:
-    class: Drupal\sti_rdf\Service\MappingReader
+  sti_rdf.sync_reader:
+    class: Drupal\sti_rdf\Service\SyncReader
     arguments:
       - '@entity_type.manager'
       - '@entity_field.manager'
-  Drupal\sti_rdf\Service\MappingReaderInterface: '@sti_rdf.mapping_reader'
+  Drupal\sti_rdf\Service\SyncReaderInterface: '@sti_rdf.sync_reader'
 
   sti_rdf.graph_synchronizer:
     class: Drupal\sti_rdf\Service\GraphSynchronizer #? one-off artifact to quickly re-sync to the triplestore, shouldn't be needed if migrate works as expected?
@@ -27,21 +27,23 @@ services:
       - '@rdf_sync.mapper'
       - '@entity.memory_cache'
 
-  sti_rdf.mapping_importer:
-    class: Drupal\sti_rdf\Service\MappingImporter
+  sti_rdf.sync_importer:
+    class: Drupal\sti_rdf\Service\SyncImporter
     arguments:
       - '@config.factory'
       - '@config.storage.sync'
 
-  sti_rdf.mapping_term_source:
-    class: Drupal\sti_rdf\Service\MappingTermSource
-    arguments:
-      - '@entity_type.manager'
-      - '@sti_rdf.mapping_reader'
-      - '@database'
-
   sti_rdf.ontology_document_builder:
     class: Drupal\sti_rdf\Service\OntologyDocumentBuilder #? WHY?
     arguments:
-      - '@sti_rdf.mapping_reader'
+      - '@sti_rdf.sync_reader'
       - '@extension.list.module'
+
+  sti_rdf.mapping_curation:
+    class: Drupal\sti_rdf\Service\MappingCuration
+    arguments:
+      - '@entity_type.manager'
+      - '@rdf_sync.mapper'
+      - '@current_user'
+      - '@sti_rdf.sync_reader'
+  Drupal\sti_rdf\Service\MappingCuration: '@sti_rdf.mapping_curation'

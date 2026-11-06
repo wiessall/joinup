@@ -1,0 +1,52 @@
+@prefix sti:     <https://sti-portal.fao.org/sti#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix sssom:   <https://w3id.org/sssom/> .
+@prefix semapv:  <https://w3id.org/semapv/vocab/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+# Mappings: SSSOM mappings between vocabulary terms, held by the collection
+# that issued them. Nothing here is ours: a mapping is SSSOM's own RDF form,
+# an owl:Axiom, so this file only documents how the portal uses it.
+#
+# Drupal: paragraph type 'mapping' in the collection's field_mappings.
+# Unpublished = proposed, not in the graph. Published = accepted, or rejected
+# when negated. Instance URIs: https://sti-portal.fao.org/id/mapping/{uuid}.
+#
+# The collection doubles as the SSSOM mapping set: it points to its mappings
+# with sssom:mappings (see collection.ttl) but is typed dcat:Catalog only.
+# The Turtle export adds "a sssom:MappingSet" for SSSOM tools.
+#
+# Not to be used for similarity tables (every term scored against every
+# other): those are not mappings. Only threshold-passing candidates become
+# proposals.
+#
+#-----------The statement---------------------------
+# owl:annotatedSource   => skos:Concept   the issuing collection's term
+# owl:annotatedProperty => one of skos:exactMatch, skos:closeMatch,
+#                          skos:broadMatch, skos:narrowMatch,
+#                          skos:relatedMatch
+# owl:annotatedTarget   => skos:Concept   another collection's term
+#                          (later: an ATIO property or concept)
+#-----------About the statement---------------------
+# sssom:mapping_justification => semapv:ManualMappingCuration
+#                                | semapv:LexicalMatching
+#                                | semapv:SemanticSimilarityThresholdMatching
+#                                | semapv:UnspecifiedMatching
+# sssom:predicate_modifier    => sssom:NegatedPredicate  (rejected: the two
+#                                terms do NOT stand in this relation)
+# sssom:confidence            => xsd:decimal, 0..1  (SSSOM says xsd:double;
+#                                rdf_sync only emits xsd:decimal)
+# sssom:mapping_tool          => literal: tool, model and prompt version
+# dcterms:created             => xsd:dateTime, when it was proposed
+#
+# Author and reviewer stay in Drupal: users have no URI.
+#
+# The plain triple (<source> skos:exactMatch <target>) is deliberately not
+# written; derive it when needed:
+#   CONSTRUCT { ?s ?rel ?t } WHERE {
+#     ?m a owl:Axiom ; owl:annotatedSource ?s ;
+#        owl:annotatedProperty ?rel ; owl:annotatedTarget ?t .
+#     FILTER NOT EXISTS { ?m sssom:predicate_modifier sssom:NegatedPredicate }
+#   }

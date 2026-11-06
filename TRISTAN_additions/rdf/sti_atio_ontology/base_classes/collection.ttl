@@ -1,6 +1,7 @@
 # A collection is a dcat:Catalog (not redeclared here). It holds source
 # records (sti:inCollection points to it), states their claims
-# (sti:claimedBy points to it), and owns the vocabulary those claims use.
+# (sti:claimedBy points to it), owns the vocabulary those claims use, and
+# holds the SSSOM mappings it issued for that vocabulary (mapping.ttl).
 # Standard terms it uses: 
 #------------Literal fields-----------------------
 # dcterms:title
@@ -15,3 +16,4 @@
 # dcat:contactPoint => vCard:Kind
 # dcterms:spatial => dct:Location
 # dcterms:license => <dcterms:LicenseDocument>
+# sssom:mappings => owl:Axiom (an SSSOM mapping; accepted or rejected only)

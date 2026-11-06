@@ -1,0 +1,194 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+    - sti_rdf
+    - joinup_rdf
+    - migrate_plus
+    - import_ird_jsons
+id: ird_giz
+migration_tags:
+- IRD
+- solution
+migration_group: ird_import_group
+label: 'IRD import: GIZ Innovations'
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+  - modules/custom/import_ird_jsons/sources/giz-rev.json
+  constants:
+    OG_AUDIENCE_NID: '10069'
+    OWNER_NID: 33
+    CONTACT_NID: 34
+    DEFAULT_LANGUAGE_TID: 31
+    DEFAULT_DOMAIN_TID: 8
+    BUNDLE: solution
+  item_selector: records
+  fields:
+  - name: id
+    label: Record ID
+    selector: core_fields/id
+  - name: title
+    label: Title
+    selector: core_fields/title
+  - name: description
+    label: Description
+    selector: core_fields/description
+  - name: date
+    label: Date
+    selector: core_fields/date
+  - name: url
+    label: Landing page
+    selector: core_fields/url
+  - name: claims
+    label: Claims
+    selector: claims
+  - name: raw_record
+    label: Original record
+    selector: _raw
+  ids:
+    id:
+      type: string
+process:
+  title:
+    plugin: skip_on_empty
+    method: row
+    message: 'Skipped: no title'
+    source: title
+  type:
+    plugin: default_value
+    default_value: solution
+  field_state:
+    plugin: default_value
+    default_value: published
+  description/value:
+    plugin: skip_on_empty
+    method: row
+    source: description
+  description/format:
+    plugin: default_value
+    default_value: full_html
+  language:
+    plugin: default_value
+    default_value: 31
+  topic:
+    plugin: default_value
+    default_value: 8
+  og_audience:
+    plugin: get
+    source: constants/OG_AUDIENCE_NID
+  owner:
+    plugin: get
+    source: constants/OWNER_NID
+  contact:
+    plugin: get
+    source: constants/CONTACT_NID
+  landing_page/uri:
+    plugin: skip_on_empty
+    method: process
+    source: url
+  field_information_resource_date:
+  - plugin: skip_on_empty
+    method: process
+    source: date
+  - plugin: callback
+    callable: strtotime
+  - plugin: skip_on_empty
+    method: process
+  - plugin: format_date
+    from_format: U
+    to_format: Y-m-d
+  field_original_internal_id: id
+  field_machine_record:
+    plugin: callback
+    callable: json_encode
+    source: raw_record
+  _time:
+    plugin: callback
+    callable: time
+    unpack_source: true
+    source: {}
+  field_last_ingestion_datetime:
+    plugin: format_date
+    source: '@_time'
+    from_format: U
+    to_format: U
+  field_claims:
+    plugin: ird_claims
+    collection_id: giz
+    source: claims
+    field_config:
+      Innovation Type:
+        categorical: false
+        separator: '|'
+      (GIZ) Scaling Ambition:
+        categorical: false
+      Scaling Strategy:
+        categorical: false
+        separator: '|'
+      Market Analysis:
+        categorical: false
+        separator: '|'
+      Economic Feasibility:
+        categorical: false
+        separator: '|'
+      Cost/Benefit Analysis:
+        categorical: false
+        separator: '|'
+      Social Return on Investment:
+        categorical: false
+      Innovative dimensions narrative:
+        categorical: true
+      Administrative region:
+        categorical: false
+      Country (adoption):
+        categorical: false
+      Subregion/Macro region:
+        categorical: false
+      Challenges addressed:
+        categorical: false
+        separator: '|'
+      SDG´s:
+        categorical: false
+        separator: '|'
+      Human impact:
+        categorical: false
+        separator: '|'
+      Environmental impact:
+        categorical: false
+        separator: '|'
+      Theory of Change:
+        categorical: false
+      Use cases:
+        categorical: false
+        separator: '|'
+      Thematic area:
+        categorical: false
+      Innovation stage:
+        categorical: false
+      Readiness level:
+        categorical: false
+      Target Innovation User:
+        categorical: false
+      Value Chain:
+        categorical: false
+      Sponsor:
+        categorical: false
+        separator: '|'
+      Partners:
+        categorical: false
+        separator: '|'
+destination:
+  plugin: entity:node
+  default_bundle: solution
+  overwrite_properties:
+  - field_machine_record
+  - field_last_ingestion_datetime
+  - field_original_internal_id
+  - field_claims
+migration_dependencies:
+  required: []
+  optional: []

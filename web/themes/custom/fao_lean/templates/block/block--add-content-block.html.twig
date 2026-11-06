@@ -1,0 +1,17 @@
+{#
+/**
+ * @file
+ * "Add content" for a group: a round "+" button opening a dropdown of the
+ * links built by AddContentBlock (one per AddGroupContentEvent subscriber).
+ * Contextual links are left out on purpose.
+ */
+#}
+<div{{ attributes.addClass('dropdown', 'fao-actions') }}>
+  <button type="button" class="btn btn-primary rounded-circle fao-actions__btn" data-bs-toggle="dropdown" aria-expanded="false" title="{{ 'Add content'|t }}">
+    <span class="bi bi-plus-lg" aria-hidden="true"></span>
+    <span class="visually-hidden">{{ 'Add content'|t }}</span>
+  </button>
+  <nav class="dropdown-menu dropdown-menu-end" aria-label="{{ 'Add content'|t }}">
+    {{ content }}
+  </nav>
+</div>

@@ -9,6 +9,8 @@ use Drupal\Tests\UnitTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Yaml\Yaml;
+use function PHPUnit\Framework\assertFalse;
+use function PHPUnit\Framework\assertNotEmpty;
 
 /**
  * Tests the instance URI rules.
@@ -95,3 +97,4 @@ final class StiUriTest extends UnitTestCase {
   }
 
 }
+

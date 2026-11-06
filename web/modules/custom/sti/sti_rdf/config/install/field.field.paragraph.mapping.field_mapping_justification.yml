@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_mapping_justification
+    - paragraphs.paragraphs_type.mapping
+  module:
+    - options
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'https://w3id.org/sssom/mapping_justification'
+      type: resource
+id: paragraph.mapping.field_mapping_justification
+field_name: field_mapping_justification
+entity_type: paragraph
+bundle: mapping
+label: Justification
+description: 'How the mapping was found (SEMAPV).'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string
