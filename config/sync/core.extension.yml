@@ -103,7 +103,6 @@ module:
   inline_entity_form: 0
   inline_form_errors: 0
   isa2_analytics: 0
-  joinup_acceptance: 0
   joinup_api: 0
   joinup_assessment: 0
   joinup_bookmark: 0
@@ -155,7 +154,6 @@ module:
   joinup_stats: 0
   joinup_subscription: 0
   joinup_taxonomy: 0
-  joinup_test_content: 0
   joinup_tiles: 0
   joinup_tour: 0
   joinup_user: 0

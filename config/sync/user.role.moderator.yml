@@ -34,7 +34,6 @@ dependencies:
     - field_permissions
     - file
     - flag
-    - joinup_acceptance
     - joinup_community_content
     - joinup_core
     - joinup_featured
@@ -217,7 +216,6 @@ permissions:
   - 'manage newsroom newsletter subscriptions'
   - 'manage oauth clients'
   - 'manage solutions'
-  - 'perform acceptance tasks'
   - 'perform announcement workflow approve transition on any entity'
   - 'perform announcement workflow reject transition on any entity'
   - 'perform announcement workflow send transition on any entity'
