@@ -12,8 +12,8 @@ _core:
   default_config_hash: lNcx1eTcO-2duy3JjKHExr2AxeKuGkf60Vc6V35A_dI
 id: fao_lean_joinup_add_content
 theme: fao_lean
-region: header
-weight: -25
+region: content
+weight: -27
 provider: null
 plugin: add_content_block
 settings:

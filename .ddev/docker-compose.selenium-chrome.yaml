@@ -20,8 +20,8 @@ services:
       - 7900
     environment:
       - VIRTUAL_HOST=$DDEV_HOSTNAME
-      - HTTPS_EXPOSE=7900:7900
-      - HTTP_EXPOSE=7910:7900
+      - HTTPS_EXPOSE=7901:7900
+      - HTTP_EXPOSE=7911:7900
       - SE_VNC_NO_PASSWORD=1
       - SCREEN_WIDTH=1600
       - SCREEN_HEIGHT=1200

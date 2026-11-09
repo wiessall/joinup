@@ -1,6 +1,6 @@
 uuid: f02ee590-4495-4322-94e5-34245613e999
 langcode: en
-status: false
+status: true
 dependencies:
   theme:
     - fao_lean

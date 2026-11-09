@@ -67,6 +67,8 @@
 .fao-actions {
   float: right;
   margin-left: .5rem;
+  position: relative;
+  z-index: 3;
 }
 
 .fao-actions__btn {
@@ -93,3 +95,4 @@
   color: var(--bs-dropdown-link-active-color);
   background-color: var(--bs-dropdown-link-active-bg);
 }
+
