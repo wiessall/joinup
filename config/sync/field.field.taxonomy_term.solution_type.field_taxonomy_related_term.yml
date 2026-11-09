@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.storage.taxonomy_term.field_taxonomy_related_term
-    - taxonomy.vocabulary.eira
     - taxonomy.vocabulary.solution_type
   module:
     - rdf_sync
@@ -30,11 +29,10 @@ settings:
   handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
-      eira: eira
       solution_type: solution_type
     sort:
       field: name
       direction: asc
     auto_create: false
-    auto_create_bundle: eira
+    auto_create_bundle: null
 field_type: entity_reference

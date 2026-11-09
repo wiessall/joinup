@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.storage.taxonomy_term.field_taxonomy_related_term
     - taxonomy.vocabulary.egovera
-    - taxonomy.vocabulary.eira
   module:
     - tmgmt_content
 third_party_settings:
@@ -24,8 +23,7 @@ default_value_callback: ''
 settings:
   handler: 'default:taxonomy_term'
   handler_settings:
-    target_bundles:
-      eira: eira
+    target_bundles: {  }
     sort:
       field: name
       direction: asc
