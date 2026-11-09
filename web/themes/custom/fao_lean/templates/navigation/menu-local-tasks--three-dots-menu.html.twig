@@ -1,0 +1,23 @@
+{#
+/**
+ * @file
+ * Local tasks (Edit, Delete, Settings, Members…) as a three-dots dropdown.
+ *
+ * joinup_core_theme_suggestions_alter() picks this template instead of the
+ * horizontal tabs whenever the block named in fao_lean.info.yml
+ * (joinup.menu_local_tasks.horizontal_tabs_block) is not visible on the page.
+ * Items are rendered by menu-local-task.html.twig; their "nav-link" class is
+ * styled as a dropdown item by .fao-actions in css/layout/layout.css.
+ */
+#}
+{% for level, items in {primary: primary, secondary: secondary} %}
+  {% if items %}
+    <div class="dropdown fao-actions">
+      <button type="button" class="btn btn-outline-primary rounded-circle fao-actions__btn" data-bs-toggle="dropdown" aria-expanded="false" title="{{ level == 'primary' ? 'Show primary options'|t : 'Show secondary options'|t }}">
+        <span class="bi bi-three-dots" aria-hidden="true"></span>
+        <span class="visually-hidden">{{ level == 'primary' ? 'Primary tabs'|t : 'Secondary tabs'|t }}</span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end">{{ items }}</ul>
+    </div>
+  {% endif %}
+{% endfor %}

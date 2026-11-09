@@ -20,9 +20,11 @@ regions:
 libraries:
   - fao_lean/global
 
-# Joinup's LocalTaskLinksHelper reads this key to decide between horizontal
-# tabs and the "three dots" menu. Point it at the machine name of the "Tabs"
-# block you place in this theme, then uncomment:
-# joinup:
-#   menu_local_tasks:
-#     horizontal_tabs_block: fao_tabs
+# Joinup's LocalTaskLinksHelper reads this key: on pages where this block is
+# visible, local tasks render as horizontal tabs; everywhere else as the
+# three-dots dropdown (templates/navigation/menu-local-tasks--three-dots-menu).
+# The block must exist: the helper loads it without a NULL check, so a missing
+# block is a fatal error on every front-end page.
+joinup:
+  menu_local_tasks:
+    horizontal_tabs_block: fao_lean_horizontal_tabs

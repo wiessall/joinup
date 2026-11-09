@@ -57,3 +57,39 @@
     gap: 2rem;
   }
 }
+
+/**
+ * Joinup action buttons: "Add content" (+) and the three-dots local tasks.
+ * Both blocks sit in the Content region above the page title and float to
+ * its right. Joinup renders their links as .nav-link; inside the dropdown
+ * they get Bootstrap's .dropdown-item look without a preprocess.
+ */
+.fao-actions {
+  float: right;
+  margin-left: .5rem;
+}
+
+.fao-actions__btn {
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  font-size: 1.25rem;
+}
+
+.fao-actions .dropdown-menu :is(.nav-link, a) {
+  display: block;
+  padding: var(--bs-dropdown-item-padding-y) var(--bs-dropdown-item-padding-x);
+  color: var(--bs-dropdown-link-color);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.fao-actions .dropdown-menu :is(.nav-link, a):is(:hover, :focus) {
+  color: var(--bs-dropdown-link-hover-color);
+  background-color: var(--bs-dropdown-link-hover-bg);
+}
+
+.fao-actions .dropdown-menu .active {
+  color: var(--bs-dropdown-link-active-color);
+  background-color: var(--bs-dropdown-link-active-bg);
+}
