@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\import_ird_jsons\Plugin\search_api\processor;
 
 use Drupal\Core\TypedData\DataDefinition;
@@ -24,11 +26,18 @@ class ClaimListProperty extends ListDataDefinition implements ProcessorPropertyI
     }
   }
 
+  /**
+   *
+   */
   public function getProcessorId(): string {
     return $this->processorId;
   }
 
+  /**
+   *
+   */
   public function isHidden(): bool {
     return FALSE;
   }
+
 }

@@ -1,10 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\ai_output_checks\Service;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use GuzzleHttp\ClientInterface;
 
+/**
+ *
+ */
 final class UrlChecker {
 
   public function __construct(
@@ -13,6 +18,9 @@ final class UrlChecker {
     private readonly string $configName = 'ai_output_checks.settings',
   ) {}
 
+  /**
+   *
+   */
   public function check(string $url): UrlCheckResult {
     $url = trim($url);
     if ($url === '') {

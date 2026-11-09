@@ -7,10 +7,11 @@ namespace Drupal\Tests\sti_dedupe\Kernel;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
+use Drupal\KernelTests\KernelTestBase;
+use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\import_ird_jsons\Plugin\migrate\process\IrdClaims;
-use Drupal\KernelTests\KernelTestBase;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
@@ -22,7 +23,6 @@ use Drupal\sti_rdf\StiUri;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\taxonomy\TermInterface;
-use Drupal\Tests\user\Traits\UserCreationTrait;
 
 /**
  * Builds the slice of the content model that sti_dedupe works on.

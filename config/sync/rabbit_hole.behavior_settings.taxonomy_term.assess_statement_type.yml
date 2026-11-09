@@ -1,0 +1,13 @@
+uuid: 63237005-f15c-4bd5-ae41-9fd78cbb2a5e
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assess_statement_type
+id: taxonomy_term.assess_statement_type
+targetEntityType: taxonomy_term
+bundle: assess_statement_type
+action: access_denied
+no_bypass: false
+bypass_message: true
+configuration: {  }

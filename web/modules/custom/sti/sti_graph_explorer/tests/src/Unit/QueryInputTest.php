@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\sti_graph_explorer\Unit;
 
+use Drupal\Tests\UnitTestCase;
 use Drupal\sti_graph_explorer\Sparql\Iri;
 use Drupal\sti_graph_explorer\Sparql\QueryFactory;
-use Drupal\Tests\UnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**

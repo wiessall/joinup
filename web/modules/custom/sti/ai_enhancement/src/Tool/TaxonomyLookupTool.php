@@ -20,10 +20,16 @@ class TaxonomyLookupTool implements ToolInterface {
     private readonly EntityTypeManagerInterface $entityTypeManager,
   ) {}
 
+  /**
+   *
+   */
   public function getName(): string {
     return 'taxonomy_lookup';
   }
 
+  /**
+   *
+   */
   public function getSchema(): array {
     return [
       'type' => 'function',
@@ -52,6 +58,9 @@ class TaxonomyLookupTool implements ToolInterface {
     ];
   }
 
+  /**
+   *
+   */
   public function execute(array $arguments): array {
     $vocabulary = (string) ($arguments['vocabulary'] ?? '');
     $query = trim((string) ($arguments['query'] ?? ''));

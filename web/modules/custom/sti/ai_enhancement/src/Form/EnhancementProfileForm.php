@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\ai_enhancement\Form;
 
 use Drupal\Core\Entity\EntityForm;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -16,6 +17,9 @@ use Drupal\Core\Form\FormStateInterface;
  */
 class EnhancementProfileForm extends EntityForm {
 
+  /**
+   *
+   */
   public function form(array $form, FormStateInterface $form_state): array {
     $form = parent::form($form, $form_state);
     /** @var \Drupal\ai_enhancement\Entity\EnhancementProfileInterface $profile */
@@ -142,7 +146,7 @@ class EnhancementProfileForm extends EntityForm {
    * throws a TypeError when ConfigEntityBase::set() assigns a string to
    * a property declared as array.
    */
-  protected function copyFormValuesToEntity(\Drupal\Core\Entity\EntityInterface $entity, array $form, FormStateInterface $form_state): void {
+  protected function copyFormValuesToEntity(EntityInterface $entity, array $form, FormStateInterface $form_state): void {
     foreach (['source_fields', 'enabled_tools'] as $key) {
       $value = $form_state->getValue($key, '');
       $lines = is_array($value)
@@ -153,6 +157,9 @@ class EnhancementProfileForm extends EntityForm {
     parent::copyFormValuesToEntity($entity, $form, $form_state);
   }
 
+  /**
+   *
+   */
   public function save(array $form, FormStateInterface $form_state): int {
     $status = $this->entity->save();
     $this->messenger()->addStatus($this->t('Saved profile %label.', ['%label' => $this->entity->label()]));

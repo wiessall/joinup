@@ -1,6 +1,16 @@
 <?php
 
 /**
+ * @file
+ */
+
+declare(strict_types=1);
+
+/**
+ * @file
+ */
+
+/**
  * Implements hook_theme().
  */
 function import_ird_jsons_theme(): array {

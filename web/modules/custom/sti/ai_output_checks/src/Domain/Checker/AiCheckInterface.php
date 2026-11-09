@@ -1,10 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\ai_output_checks\Domain\Checker;
 
 use Drupal\ai_output_checks\Domain\ValueObject\CheckReport;
 
+/**
+ *
+ */
 interface AiCheckInterface {
+
+  /**
+   *
+   */
   public function id(): string;
 
   /**
@@ -17,4 +26,5 @@ interface AiCheckInterface {
    * @param string[] $values
    */
   public function check(string $fieldName, array $values): CheckReport;
+
 }

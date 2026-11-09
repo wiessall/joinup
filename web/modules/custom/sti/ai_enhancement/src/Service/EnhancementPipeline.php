@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\ai_enhancement\Service;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\ai_enhancement\EnhancementResult;
 use Drupal\ai_enhancement\Entity\EnhancementProfileInterface;
 use Drupal\ai_enhancement\Exception\OllamaException;
@@ -11,8 +13,6 @@ use Drupal\ai_output_checks\Application\Runner\CheckRunner;
 use Drupal\ai_output_checks\Domain\ValueObject\CheckReport;
 use Drupal\ai_output_checks\Domain\ValueObject\Finding;
 use Drupal\ai_output_checks\Infrastructure\Drupal\NodeAudit;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\node\NodeInterface;
 use Psr\Log\LoggerInterface;
 
@@ -46,6 +46,9 @@ class EnhancementPipeline {
     private readonly LoggerInterface $logger,
   ) {}
 
+  /**
+   *
+   */
   public function run(FieldableEntityInterface $entity, EnhancementProfileInterface $profile): EnhancementResult {
     $history = [];
     $draftContent = '';
@@ -148,6 +151,9 @@ class EnhancementPipeline {
     return 'text_long';
   }
 
+  /**
+   *
+   */
   private function buildInitialUserPrompt(FieldableEntityInterface $entity, EnhancementProfileInterface $profile): string {
     $sections = [];
     foreach ($profile->getSourceFields() as $fieldName) {
@@ -170,11 +176,14 @@ class EnhancementPipeline {
   private function callJudge(EnhancementProfileInterface $profile, string $draft, CheckReport $report): array {
     $messages = [
       ['role' => 'system', 'content' => $profile->getJudgeSystemPrompt()],
-      ['role' => 'user', 'content' => sprintf(
+      [
+        'role' => 'user',
+        'content' => sprintf(
         "DRAFT TO REVIEW:%s%s%s%sDETERMINISTIC CHECK REPORT:%s%s",
         PHP_EOL, $draft, PHP_EOL, PHP_EOL,
         PHP_EOL, $this->renderReportForPrompt($report)
-      )],
+        ),
+      ],
     ];
 
     $verdictSchema = [
@@ -259,6 +268,9 @@ class EnhancementPipeline {
     ]);
   }
 
+  /**
+   *
+   */
   private function renderReportForPrompt(CheckReport $report): string {
     if ($report->isOk()) {
       return '(no issues found)';
@@ -270,6 +282,9 @@ class EnhancementPipeline {
     return implode(PHP_EOL, $lines);
   }
 
+  /**
+   *
+   */
   private function renderFindingsAsBullets(CheckReport $report): string {
     if ($report->isOk()) {
       return '(none)';
@@ -281,6 +296,9 @@ class EnhancementPipeline {
     return implode(PHP_EOL, $lines);
   }
 
+  /**
+   *
+   */
   private function renderFinding(Finding $f): string {
     $parts = [sprintf('[%s/%s] %s', $f->checkId, $f->severity, $f->message)];
     if ($f->evidence !== '') {
@@ -289,6 +307,9 @@ class EnhancementPipeline {
     return implode(' — ', $parts);
   }
 
+  /**
+   *
+   */
   private function recordIteration(int $iteration, string $draft, CheckReport $report, ?array $verdict, string $outcome, int $toolCalls): array {
     return [
       'iteration' => $iteration,
@@ -301,6 +322,9 @@ class EnhancementPipeline {
     ];
   }
 
+  /**
+   *
+   */
   private function serializeReport(CheckReport $report): array {
     $out = ['field' => $report->fieldName, 'ok' => $report->isOk(), 'findings' => []];
     foreach ($report->findings() as $f) {

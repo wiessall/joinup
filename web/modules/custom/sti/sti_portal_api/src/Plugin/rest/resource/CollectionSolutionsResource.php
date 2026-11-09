@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\sti_portal_api\Plugin\rest\resource;
 
 use Drupal\Core\Cache\CacheableMetadata;
@@ -125,6 +127,9 @@ class CollectionSolutionsResource extends ResourceBase {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
   }
 
+  /**
+   *
+   */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
     return new static(
       $configuration,
@@ -432,7 +437,9 @@ class CollectionSolutionsResource extends ResourceBase {
     return NULL;
   }
 
-  //? shouldn't these xyOf functions be able to know what fields exist? field:info node <> e.g. returns a list
+  /**
+   * ? shouldn't these xyOf functions be able to know what fields exist? field:info node <> e.g. returns a list.
+   */
   private function abstractOf($node): ?string {
     foreach (['abstract', 'description', 'body'] as $field) {
       if (!$node->hasField($field) || $node->get($field)->isEmpty()) {
@@ -449,6 +456,9 @@ class CollectionSolutionsResource extends ResourceBase {
     return NULL;
   }
 
+  /**
+   *
+   */
   private function logoOf($node): array {
     $field = self::LOGO_FIELD;
     if (!$field || !$node->hasField($field) || $node->get($field)->isEmpty()) {
@@ -472,7 +482,8 @@ class CollectionSolutionsResource extends ResourceBase {
 
     return [[
       'url' => $this->fileUrlGenerator->generateAbsoluteString($target->getFileUri()),
-    ]];
+    ],
+    ];
   }
 
 }

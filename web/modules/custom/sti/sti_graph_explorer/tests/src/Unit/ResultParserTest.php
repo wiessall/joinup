@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\sti_graph_explorer\Unit;
 
+use Drupal\Tests\UnitTestCase;
 use Drupal\sti_graph_explorer\Sparql\ResultParser;
 use Drupal\sti_graph_explorer\Sparql\SparqlQueryException;
 use Drupal\sti_graph_explorer\Sparql\Term;
-use Drupal\Tests\UnitTestCase;
 use GuzzleHttp\Psr7\Response;
 
 /**

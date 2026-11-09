@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\ai_enhancement\Commands;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\ai_enhancement\Entity\EnhancementProfileInterface;
 use Drupal\ai_enhancement\Service\EnhancementPipeline;
 use Drupal\ai_output_checks\Infrastructure\Drupal\QaParagraphManager;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\node\NodeInterface;
 use Drush\Attributes\Argument;
 use Drush\Attributes\Command;
@@ -33,6 +33,9 @@ class EnhancementCommands extends DrushCommands {
     parent::__construct();
   }
 
+  /**
+ *
+ */
   #[Command(name: 'ai-enhancement:run', aliases: ['aier'])]
   #[Argument(name: 'profile_id', description: 'Enhancement profile machine name.')]
   #[Argument(name: 'entity_id', description: 'Entity ID to enhance.')]

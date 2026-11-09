@@ -54,12 +54,14 @@ final class AtioRequirements {
     if ($noPredicate) {
       $description[] = $this->t('No atio: predicate: @list.', ['@list' => implode(', ', $noPredicate)]);
     }
-    return ['atio_facets' => [
-      'title' => $this->t('ATIO facets'),
-      'value' => $value,
-      'description' => implode(' ', $description),
-      'severity' => $noFacet || $noPredicate ? RequirementSeverity::Info : RequirementSeverity::OK,
-    ]];
+    return [
+      'atio_facets' => [
+        'title' => $this->t('ATIO facets'),
+        'value' => $value,
+        'description' => implode(' ', $description),
+        'severity' => $noFacet || $noPredicate ? RequirementSeverity::Info : RequirementSeverity::OK,
+      ],
+    ];
   }
 
   /**

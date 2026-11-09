@@ -1,21 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\ai_output_checks\Domain\Checker;
 
 use Drupal\ai_output_checks\Domain\ValueObject\CheckReport;
 use Drupal\ai_output_checks\Domain\ValueObject\Finding;
 use Drupal\ai_output_checks\Service\RegexpChecker;
 
+/**
+ *
+ */
 final class RegexpGuardCheck implements AiCheckInterface {
 
   public function __construct(
     private readonly RegexpChecker $regexpChecker,
   ) {}
 
+  /**
+   *
+   */
   public function id(): string {
     return 'regexp_guard';
   }
 
+  /**
+   *
+   */
   public function supports(string $fieldName, string $fieldType): bool {
     // Apply to text-ish fields (and title).
     if ($fieldName === 'title') {
@@ -26,6 +37,9 @@ final class RegexpGuardCheck implements AiCheckInterface {
     ], TRUE);
   }
 
+  /**
+   *
+   */
   public function check(string $fieldName, array $values): CheckReport {
     $report = new CheckReport($fieldName);
 

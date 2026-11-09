@@ -7,10 +7,7 @@ namespace Drupal\sti_dedupe\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
-use Drupal\paragraphs\ParagraphInterface;
 use Drupal\sti_dedupe\CandidateStore;
-use Drupal\sti_dedupe\ContentModel;
-use Drupal\sti_dedupe\Prefixes;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 

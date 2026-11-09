@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\ai_output_checks\Plugin\Action;
 
-use Drupal\eca\Plugin\Action\ActionBase;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Access\AccessResult;
-use Drupal\node\NodeInterface;
-use Drupal\ai_output_checks\Infrastructure\Drupal\QaParagraphManager;
 use Drupal\Core\Utility\Token;
+use Drupal\ai_output_checks\Infrastructure\Drupal\QaParagraphManager;
+use Drupal\eca\Plugin\Action\ActionBase;
+use Drupal\node\NodeInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -51,6 +53,9 @@ final class MarkFieldAiGeneratedEca extends ActionBase implements ContainerFacto
     );
   }
 
+  /**
+   *
+   */
   public function defaultConfiguration(): array {
     return [
       'field_machine_name' => '',
@@ -59,8 +64,11 @@ final class MarkFieldAiGeneratedEca extends ActionBase implements ContainerFacto
     ] + parent::defaultConfiguration();
   }
 
+  /**
+   *
+   */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
-    // Let ECA add its own stuff first (token hints, etc.). :contentReference[oaicite:1]{index=1}
+    // Let ECA add its own stuff first (token hints, etc.). :contentReference[oaicite:1]{index=1}.
     $form = parent::buildConfigurationForm($form, $form_state);
 
     $form['field_machine_name'] = [
@@ -70,7 +78,7 @@ final class MarkFieldAiGeneratedEca extends ActionBase implements ContainerFacto
       '#default_value' => (string) ($this->configuration['field_machine_name'] ?? ''),
       '#required' => TRUE,
       // Optional if you want ECA to flag token-capable fields:
-      // '#eca_token_replacement' => TRUE,
+      // '#eca_token_replacement' => TRUE,.
     ];
 
     $form['ai_generated'] = [
@@ -89,6 +97,9 @@ final class MarkFieldAiGeneratedEca extends ActionBase implements ContainerFacto
     return $form;
   }
 
+  /**
+   *
+   */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {
     $this->configuration['field_machine_name'] = (string) $form_state->getValue('field_machine_name');
     $this->configuration['ai_generated'] = (bool) $form_state->getValue('ai_generated');
@@ -97,6 +108,9 @@ final class MarkFieldAiGeneratedEca extends ActionBase implements ContainerFacto
     parent::submitConfigurationForm($form, $form_state);
   }
 
+  /**
+   *
+   */
   public function execute($entity = NULL): void {
     if (!$entity instanceof NodeInterface) {
       $this->logger->warning('MarkFieldAiGeneratedEca: called without a node entity.');
@@ -124,7 +138,10 @@ final class MarkFieldAiGeneratedEca extends ActionBase implements ContainerFacto
     );
   }
 
-  public function access($object, AccountInterface $account = NULL, $return_as_object = FALSE) {
+  /**
+   *
+   */
+  public function access($object, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
     $result = ($object instanceof NodeInterface)
       ? $object->access('update', $account, TRUE)
       : AccessResult::forbidden();

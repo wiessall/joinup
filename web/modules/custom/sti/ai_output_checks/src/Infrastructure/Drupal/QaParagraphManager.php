@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\ai_output_checks\Infrastructure\Drupal;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -7,25 +9,34 @@ use Drupal\node\NodeInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Psr\Log\LoggerInterface;
 
+/**
+ *
+ */
 final class QaParagraphManager {
 
-  // Keep these here (Phase 1). Later move to config.
+  /**
+   * Keep these here (Phase 1). Later move to config.
+   */
   private string $qaParagraphsField = 'quality_assessment';
   private string $qaParagraphBundle = 'quality_check';
   private string $qaFieldMachineNameField = 'field_content_type_machine_name';
-  // STI (Valeria): changed field to check (proposal: split into 2 fields: ai_generated for fields actually AI generated [to be used also todisplay AI-generated fields better; ai_check_allowed for fields on which we want to run the check, even for instance the first time)
+  /**
+   * STI (Valeria): changed field to check (proposal: split into 2 fields: ai_generated for fields actually AI generated [to be used also todisplay AI-generated fields better; ai_check_allowed for fields on which we want to run the check, even for instance the first time)
+   */
   private string $qaAiGeneratedField_flag = 'field_ai_generated';
   private string $qaAiGeneratedField = 'field_ai_check_allowed';
   private string $qaStatusTermField = 'field_quality_assessment';
   private string $qaStatusVocab = 'quality_assessment';
 
-  // Valeria: better to use term iDs? so that we can change the names in tback-end without consequences? IDs: 3360, 3361, 3362, 3363, 3256
+  /**
+   * Valeria: better to use term iDs? so that we can change the names in tback-end without consequences? IDs: 3360, 3361, 3362, 3363, 3256.
+   */
   private array $positiveStatuses = [
     'Good',
     'Acceptable',
     'Pre-vetted',
     'Originally good > validated',
-    'Originally bad > fixed'
+    'Originally bad > fixed',
   ];
 
   public function __construct(
@@ -33,6 +44,9 @@ final class QaParagraphManager {
     private readonly LoggerInterface $logger,
   ) {}
 
+  /**
+   *
+   */
   private function syncParagraphRevisionOnNode(NodeInterface $node, Paragraph $p): void {
     if (!$node->hasField($this->qaParagraphsField)) {
       return;
@@ -49,6 +63,9 @@ final class QaParagraphManager {
     }
   }
 
+  /**
+   *
+   */
   public function getStatusTermName(NodeInterface $node, string $fieldMachineName): ?string {
     $p = $this->getOrCreate($node, $fieldMachineName);
     if (!$p || !$p->hasField($this->qaStatusTermField)) {
@@ -58,13 +75,19 @@ final class QaParagraphManager {
     return $term ? (string) $term->label() : NULL;
   }
 
+  /**
+   *
+   */
   public function hasPositiveStatus(NodeInterface $node, string $fieldMachineName): bool {
     $name = $this->getStatusTermName($node, $fieldMachineName);
     // Valeria: the first time the value is null but not positive: in the Action, if this is True, the field is not checked
-    // removed the $name !== NULL clause
+    // removed the $name !== NULL clause.
     return in_array($name, $this->positiveStatuses, TRUE);
   }
 
+  /**
+   *
+   */
   public function setStatusTerm(NodeInterface $node, string $fieldMachineName, string $termName): void {
     $p = $this->getOrCreate($node, $fieldMachineName);
     if (!$p || !$p->hasField($this->qaStatusTermField)) {
@@ -87,7 +110,6 @@ final class QaParagraphManager {
     $p->save();
     $this->syncParagraphRevisionOnNode($node, $p);
   }
-
 
   /**
    * Returns machine names of fields marked ai_generated=TRUE.
@@ -175,6 +197,9 @@ final class QaParagraphManager {
     return $p;
   }
 
+  /**
+   *
+   */
   public function isAiGenerated(NodeInterface $node, string $fieldMachineName): bool {
     $p = $this->getOrCreate($node, $fieldMachineName);
     if (!$p instanceof Paragraph) {

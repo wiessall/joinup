@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\ai_output_checks\Plugin\Action;
 
-use Drupal\Core\Action\ActionBase;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Action\ActionBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\node\NodeInterface;
-use Drupal\ai_output_checks\Infrastructure\Drupal\QaParagraphManager;
 use Drupal\Core\Utility\Token;
+use Drupal\ai_output_checks\Infrastructure\Drupal\QaParagraphManager;
+use Drupal\node\NodeInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -36,6 +38,9 @@ final class MarkFieldAiGenerated extends ActionBase implements ContainerFactoryP
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
+  /**
+   *
+   */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new self(
       $configuration,
@@ -47,6 +52,9 @@ final class MarkFieldAiGenerated extends ActionBase implements ContainerFactoryP
     );
   }
 
+  /**
+   *
+   */
   public function defaultConfiguration(): array {
     return [
       'field_machine_name' => '',
@@ -55,6 +63,9 @@ final class MarkFieldAiGenerated extends ActionBase implements ContainerFactoryP
     ] + parent::defaultConfiguration();
   }
 
+  /**
+   *
+   */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
     $form['field_machine_name'] = [
       '#type' => 'textfield',
@@ -80,6 +91,9 @@ final class MarkFieldAiGenerated extends ActionBase implements ContainerFactoryP
     return parent::buildConfigurationForm($form, $form_state);
   }
 
+  /**
+   *
+   */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {
     $this->configuration['field_machine_name'] = (string) $form_state->getValue('field_machine_name');
     $this->configuration['ai_generated'] = (bool) $form_state->getValue('ai_generated');
@@ -87,6 +101,9 @@ final class MarkFieldAiGenerated extends ActionBase implements ContainerFactoryP
     parent::submitConfigurationForm($form, $form_state);
   }
 
+  /**
+   *
+   */
   public function execute($entity = NULL): void {
     if (!$entity instanceof NodeInterface) {
       $this->logger->warning('MarkFieldAiGenerated: called without a node entity.');
@@ -116,7 +133,10 @@ final class MarkFieldAiGenerated extends ActionBase implements ContainerFactoryP
     );
   }
 
-  public function access($object, AccountInterface $account = NULL, $return_as_object = FALSE) {
+  /**
+   *
+   */
+  public function access($object, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
     $result = ($object instanceof NodeInterface)
       ? $object->access('update', $account, TRUE)
       : AccessResult::forbidden();

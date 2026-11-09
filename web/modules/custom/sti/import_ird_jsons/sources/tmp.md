@@ -27,4 +27,3 @@ Again, my testing has shown that I can register a private github account on FAO 
 3.  Create a whitelist of WHH accounts
     -   on the STI portal I can create accounts for pre-determined emails & make sure that only existing accounts can successfully log on using keycloak SSO
     -   This is not optimal, since WHH might have trouble procuring a complete list of candidates and I would have to create thousands of accounts semi-manually
-

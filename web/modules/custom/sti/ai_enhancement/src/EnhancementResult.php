@@ -10,7 +10,7 @@ namespace Drupal\ai_enhancement;
  * Status values:
  *   - 'approved'        : judge signed off
  *   - 'max_iterations'  : loop exhausted without approval
- *   - 'error'           : pipeline failed mid-run
+ *   - 'error'           : pipeline failed mid-run.
  */
 final class EnhancementResult {
 
@@ -22,10 +22,16 @@ final class EnhancementResult {
     public readonly ?string $errorMessage = NULL,
   ) {}
 
+  /**
+   *
+   */
   public function isApproved(): bool {
     return $this->status === 'approved';
   }
 
+  /**
+   *
+   */
   public function toArray(): array {
     return [
       'status' => $this->status,

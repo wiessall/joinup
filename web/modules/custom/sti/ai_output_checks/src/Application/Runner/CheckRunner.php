@@ -1,10 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\ai_output_checks\Application\Runner;
 
-use Drupal\ai_output_checks\Domain\Checker\AiCheckInterface;
 use Drupal\ai_output_checks\Domain\ValueObject\CheckReport;
 
+/**
+ *
+ */
 final class CheckRunner {
 
   /**

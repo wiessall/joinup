@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Drupal\import_ird_jsons\Plugin\migrate\process;
 
 use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\import_ird_jsons\IntakeFile;
 use Drupal\migrate\MigrateExecutableInterface;
@@ -71,14 +71,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInterface {
 
-  private const VOCAB_PROPERTIES  = 'claim_properties';
-  private const VOCAB_VALUES      = 'claim_values';
-  private const PARAGRAPH_BUNDLE  = 'claims';
-  private const SOLUTION_BUNDLE   = 'solution'; //! might change once joinup naming is replaced
+  private const VOCAB_PROPERTIES = 'claim_properties';
+  private const VOCAB_VALUES     = 'claim_values';
+  private const PARAGRAPH_BUNDLE = 'claims';
+  // ! might change once joinup naming is replaced
+  private const SOLUTION_BUNDLE   = 'solution';
   private const COLLECTION_BUNDLE = 'collection';
   private const MAX_TERM_NAME     = 255;
 
-  /** Per-process static caches (one migrate run reuses them). */
+  /**
+   * Per-process static caches (one migrate run reuses them). */
   private array $termCache = [];
   private static array $collectionNidCache = [];
 
@@ -94,6 +96,9 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
+  /**
+   *
+   */
   public static function create(
     ContainerInterface $container,
     array $configuration,
@@ -189,7 +194,9 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
         $key = (string) $key;
         if (mb_strlen($key) > self::MAX_TERM_NAME) {
           $logger->warning('ird_claims: over-long claim key (@n chars) id=@id: @k…', [
-            '@n' => mb_strlen($key), '@id' => $source_id, '@k' => mb_substr($key, 0, 60),
+            '@n' => mb_strlen($key),
+            '@id' => $source_id,
+            '@k' => mb_substr($key, 0, 60),
           ]);
           continue;
         }
@@ -205,7 +212,9 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
             // longer is almost certainly misclassified free text — skip it.
             if ($is_categorical && mb_strlen($single) > self::MAX_TERM_NAME) {
               $logger->warning('ird_claims: over-long categorical value (@n chars) key=@k id=@id: @v…', [
-                '@n' => mb_strlen($single), '@k' => $key, '@id' => $source_id,
+                '@n' => mb_strlen($single),
+                '@k' => $key,
+                '@id' => $source_id,
                 '@v' => mb_substr($single, 0, 60),
               ]);
               continue;
@@ -291,8 +300,10 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
 
   // ---------------------------------------------------------------------------
   // Claim construction
-  // ---------------------------------------------------------------------------
 
+  /**
+   * ---------------------------------------------------------------------------
+   */
   private function buildLiteralClaim(string $value, TermInterface $property, int $collection_nid): ParagraphInterface {
     return $this->createClaim([
       'field_claim_property'      => ['target_id' => $property->id()],
@@ -300,6 +311,9 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
     ], $collection_nid);
   }
 
+  /**
+   *
+   */
   private function buildRefClaim(
     string $key,
     string $value,
@@ -315,6 +329,9 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
     ], $collection_nid);
   }
 
+  /**
+   *
+   */
   private function createClaim(array $fields, int $collection_nid): ParagraphInterface {
     /** @var \Drupal\paragraphs\ParagraphInterface $paragraph */
     $paragraph = $this->paragraphStorage()->create([
@@ -328,12 +345,17 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
 
   // ---------------------------------------------------------------------------
   // Taxonomy helpers (idempotent, cached)
-  // ---------------------------------------------------------------------------
 
+  /**
+   * ---------------------------------------------------------------------------
+   */
   private function ensureKeyTerm(string $vid, string|int $key, TermInterface $parent): TermInterface {
     return $this->ensureTerm($vid, (string) $key, (int) $parent->id());
   }
 
+  /**
+   *
+   */
   private function ensureTerm(string $vid, string $name, ?int $parent_tid = NULL): TermInterface {
     if ($existing = $this->findTerm($vid, $name, $parent_tid)) {
       return $existing;
@@ -349,6 +371,9 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
     return $term;
   }
 
+  /**
+   *
+   */
   private function findTerm(string $vid, string $name, ?int $parent_tid = NULL): ?TermInterface {
     $ck = "$vid|$name|" . ($parent_tid ?? 'root');
     if (array_key_exists($ck, $this->termCache)) {
@@ -388,6 +413,9 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
     return array_values(array_filter($flat, static fn(string $v): bool => trim($v) !== ''));
   }
 
+  /**
+   *
+   */
   private function loadCollectionNid(string $collection_id): int {
     if (isset(self::$collectionNidCache[$collection_id])) {
       return self::$collectionNidCache[$collection_id];
@@ -404,16 +432,24 @@ class IrdClaims extends ProcessPluginBase implements ContainerFactoryPluginInter
 
   // ---------------------------------------------------------------------------
   // Storage accessors
-  // ---------------------------------------------------------------------------
 
+  /**
+   * ---------------------------------------------------------------------------
+   */
   private function nodeStorage(): EntityStorageInterface {
     return $this->entityTypeManager->getStorage('node');
   }
 
+  /**
+   *
+   */
   private function termStorage(): EntityStorageInterface {
     return $this->entityTypeManager->getStorage('taxonomy_term');
   }
 
+  /**
+   *
+   */
   private function paragraphStorage(): EntityStorageInterface {
     return $this->entityTypeManager->getStorage('paragraph');
   }

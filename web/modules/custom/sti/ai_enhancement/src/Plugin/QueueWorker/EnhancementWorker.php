@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\ai_enhancement\Plugin\QueueWorker;
 
-use Drupal\ai_enhancement\Entity\EnhancementProfileInterface;
-use Drupal\ai_enhancement\Service\EnhancementPipeline;
-use Drupal\ai_output_checks\Infrastructure\Drupal\QaParagraphManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
+use Drupal\ai_enhancement\Entity\EnhancementProfileInterface;
+use Drupal\ai_enhancement\Service\EnhancementPipeline;
+use Drupal\ai_output_checks\Infrastructure\Drupal\QaParagraphManager;
 use Drupal\node\NodeInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -47,6 +47,9 @@ class EnhancementWorker extends QueueWorkerBase implements ContainerFactoryPlugi
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
+  /**
+   *
+   */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new self(
       $configuration,
@@ -59,6 +62,9 @@ class EnhancementWorker extends QueueWorkerBase implements ContainerFactoryPlugi
     );
   }
 
+  /**
+   *
+   */
   public function processItem($data): void {
     $entityType = $data['entity_type'] ?? '';
     $entityId = $data['entity_id'] ?? NULL;
@@ -98,6 +104,9 @@ class EnhancementWorker extends QueueWorkerBase implements ContainerFactoryPlugi
     }
   }
 
+  /**
+   *
+   */
   private function writeBack(FieldableEntityInterface $entity, EnhancementProfileInterface $profile, string $content): void {
     $targetField = $profile->getTargetField();
     if ($targetField && $entity->hasField($targetField)) {

@@ -76,16 +76,81 @@ class EnhancementProfile extends ConfigEntityBase implements EnhancementProfileI
   protected int $max_iterations = 3;
   protected array $enabled_tools = ['taxonomy_lookup'];
 
-  public function getEntityTypeTarget(): string { return $this->entity_type; }
-  public function getBundle(): string { return $this->bundle; }
-  public function getSourceFields(): array { return $this->source_fields; }
-  public function getTargetField(): string { return $this->target_field; }
-  public function getGeneratorModel(): string { return $this->generator_model; }
-  public function getJudgeModel(): string { return $this->judge_model; }
-  public function getGeneratorSystemPrompt(): string { return $this->generator_system_prompt; }
-  public function getJudgeSystemPrompt(): string { return $this->judge_system_prompt; }
-  public function getRefinementPromptTemplate(): string { return $this->refinement_prompt_template; }
-  public function getMaxIterations(): int { return $this->max_iterations; }
-  public function getEnabledTools(): array { return $this->enabled_tools; }
+  /**
+   *
+   */
+  public function getEntityTypeTarget(): string {
+    return $this->entity_type;
+  }
+
+  /**
+   *
+   */
+  public function getBundle(): string {
+    return $this->bundle;
+  }
+
+  /**
+   *
+   */
+  public function getSourceFields(): array {
+    return $this->source_fields;
+  }
+
+  /**
+   *
+   */
+  public function getTargetField(): string {
+    return $this->target_field;
+  }
+
+  /**
+   *
+   */
+  public function getGeneratorModel(): string {
+    return $this->generator_model;
+  }
+
+  /**
+   *
+   */
+  public function getJudgeModel(): string {
+    return $this->judge_model;
+  }
+
+  /**
+   *
+   */
+  public function getGeneratorSystemPrompt(): string {
+    return $this->generator_system_prompt;
+  }
+
+  /**
+   *
+   */
+  public function getJudgeSystemPrompt(): string {
+    return $this->judge_system_prompt;
+  }
+
+  /**
+   *
+   */
+  public function getRefinementPromptTemplate(): string {
+    return $this->refinement_prompt_template;
+  }
+
+  /**
+   *
+   */
+  public function getMaxIterations(): int {
+    return $this->max_iterations;
+  }
+
+  /**
+   *
+   */
+  public function getEnabledTools(): array {
+    return $this->enabled_tools;
+  }
 
 }

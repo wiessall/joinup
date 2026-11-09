@@ -25,8 +25,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * ATIO innovation; "not the same" stops the pair being offered again.
  *
  * The comparison shows core fields only. Claims are summarised, not diffed:
- * collections disagreeing is normal. 
- * TODO add claim conflict resolution 
+ * collections disagreeing is normal.
+ *
+ * @todo add claim conflict resolution
  *  */
 final class ResolveForm extends FormBase {
 

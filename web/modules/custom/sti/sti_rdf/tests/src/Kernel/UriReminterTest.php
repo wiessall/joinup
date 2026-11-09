@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Drupal\Tests\sti_rdf\Kernel;
 
 use Drupal\Core\Database\Connection;
+use Drupal\KernelTests\KernelTestBase;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\KernelTests\KernelTestBase;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;

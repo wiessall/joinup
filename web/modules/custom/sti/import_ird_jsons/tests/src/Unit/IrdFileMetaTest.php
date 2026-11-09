@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\import_ird_jsons\Unit;
 
-use Drupal\import_ird_jsons\IrdFileMeta;
 use Drupal\Tests\UnitTestCase;
+use Drupal\import_ird_jsons\IrdFileMeta;
 
 /**
- * meta.field_config decides how every claim of a file is stored.
+ * Meta.field_config decides how every claim of a file is stored.
  *
  * A wrong answer is silent: categorical values would be stored as plain text
  * (no terms, no facets). Hence the tests.
@@ -18,15 +18,20 @@ use Drupal\Tests\UnitTestCase;
  */
 final class IrdFileMetaTest extends UnitTestCase {
 
+  /**
+   *
+   */
   public function testReadsFieldConfig(): void {
-    $meta = IrdFileMeta::fromDocument(['meta' => [
-      'collection_id' => 'test002',
-      'field_config' => [
-        'Country' => ['categorical' => TRUE],
-        'Domain' => ['categorical' => TRUE, 'separator' => '|'],
-        'Latitude' => ['categorical' => FALSE],
+    $meta = IrdFileMeta::fromDocument([
+      'meta' => [
+        'collection_id' => 'test002',
+        'field_config' => [
+          'Country' => ['categorical' => TRUE],
+          'Domain' => ['categorical' => TRUE, 'separator' => '|'],
+          'Latitude' => ['categorical' => FALSE],
+        ],
       ],
-    ]]);
+    ]);
     $this->assertSame('test002', $meta->collectionId);
     $this->assertTrue($meta->isCategorical('Country'));
     $this->assertFalse($meta->isCategorical('Latitude'));
@@ -43,6 +48,9 @@ final class IrdFileMetaTest extends UnitTestCase {
     IrdFileMeta::fromDocument($document);
   }
 
+  /**
+   *
+   */
   public static function invalidDocuments(): array {
     return [
       'not an object' => [NULL],

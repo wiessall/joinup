@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\ai_enhancement\EventSubscriber;
 
-use Drupal\ai_enhancement\Entity\EnhancementProfileInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Queue\QueueFactory;
+use Drupal\ai_enhancement\Entity\EnhancementProfileInterface;
 
 /**
  * Triggers enhancement jobs on entity insert/update.

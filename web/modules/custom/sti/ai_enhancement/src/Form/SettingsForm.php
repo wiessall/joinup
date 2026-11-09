@@ -7,16 +7,28 @@ namespace Drupal\ai_enhancement\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
+/**
+ *
+ */
 class SettingsForm extends ConfigFormBase {
 
+  /**
+   *
+   */
   public function getFormId(): string {
     return 'ai_enhancement_settings';
   }
 
+  /**
+   *
+   */
   protected function getEditableConfigNames(): array {
     return ['ai_enhancement.settings'];
   }
 
+  /**
+   *
+   */
   public function buildForm(array $form, FormStateInterface $form_state): array {
     $config = $this->config('ai_enhancement.settings');
 
@@ -45,6 +57,9 @@ class SettingsForm extends ConfigFormBase {
     return parent::buildForm($form, $form_state);
   }
 
+  /**
+   *
+   */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $this->config('ai_enhancement.settings')
       ->set('ollama_base_url', rtrim((string) $form_state->getValue('ollama_base_url'), '/'))

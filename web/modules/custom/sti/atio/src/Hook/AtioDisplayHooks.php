@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\atio\Hook;
 
-use Drupal\atio\AtioDisplaySwitch;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\atio\AtioDisplaySwitch;
 
 /**
  * Switches and composes the renderings of an atio_innovation page.

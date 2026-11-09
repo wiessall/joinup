@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\atio\Kernel;
 
-use Drupal\atio\AtioDisplaySwitch;
 use Drupal\Core\Routing\RouteObjectInterface;
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\atio\AtioDisplaySwitch;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;

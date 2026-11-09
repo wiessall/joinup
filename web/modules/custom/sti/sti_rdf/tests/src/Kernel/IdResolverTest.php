@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Drupal\Tests\sti_rdf\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
 use Drupal\sti_rdf\Controller\IdResolverController;
 use Drupal\sti_rdf\Event\UriResolveEvent;
 use Drupal\sti_rdf\StiUri;
-use Drupal\Tests\user\Traits\UserCreationTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpFoundation\Request;

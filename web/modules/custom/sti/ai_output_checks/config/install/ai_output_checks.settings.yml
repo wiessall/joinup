@@ -12,4 +12,3 @@ forbidden_pattern_map:
     - 'No response'
 url_check_timeout: 30
 url_check_method: 'HEAD'
-

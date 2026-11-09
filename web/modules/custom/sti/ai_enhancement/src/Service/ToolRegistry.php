@@ -15,13 +15,17 @@ use Psr\Log\LoggerInterface;
  */
 class ToolRegistry {
 
-  /** @var array<string, ToolInterface> */
+  /**
+   * @var array<string, ToolInterface> */
   private array $tools = [];
 
   public function __construct(
     private readonly LoggerInterface $logger,
   ) {}
 
+  /**
+   *
+   */
   public function addTool(ToolInterface $tool): void {
     $name = $tool->getName();
     if (isset($this->tools[$name])) {
@@ -64,11 +68,15 @@ class ToolRegistry {
     return $this->tools[$name]->execute($arguments);
   }
 
+  /**
+   *
+   */
   public function has(string $name): bool {
     return isset($this->tools[$name]);
   }
 
-  /** @return string[] */
+  /**
+   * @return string[] */
   public function getAvailableToolNames(): array {
     return array_keys($this->tools);
   }

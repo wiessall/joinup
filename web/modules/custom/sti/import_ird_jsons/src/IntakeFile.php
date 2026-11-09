@@ -16,7 +16,8 @@ use Drupal\migrate\Plugin\MigrationInterface;
  */
 final class IntakeFile {
 
-  /** @var array<string, \Drupal\import_ird_jsons\IrdFileMeta> */
+  /**
+   * @var array<string, \Drupal\import_ird_jsons\IrdFileMeta> */
   private array $meta = [];
 
   public function __construct(

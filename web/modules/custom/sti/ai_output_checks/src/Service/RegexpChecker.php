@@ -1,9 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\ai_output_checks\Service;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 
+/**
+ *
+ */
 final class RegexpChecker {
 
   private ?array $compiled = NULL;
@@ -60,7 +65,7 @@ final class RegexpChecker {
       $alt = implode('|', $escaped);
 
       // Your Python boundary idea: not a letter before/after.
-      // Use Unicode letters: \p{L}
+      // Use Unicode letters: \p{L}.
       $regex = '/(^|[^\p{L}])(?:' . $alt . ')([^\p{L}]|$)/iu';
 
       $out[$reason] = $regex;

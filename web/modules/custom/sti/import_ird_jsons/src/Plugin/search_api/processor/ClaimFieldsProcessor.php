@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\import_ird_jsons\Plugin\search_api\processor;
 
 use Drupal\node\NodeInterface;
@@ -109,9 +111,9 @@ class ClaimFieldsProcessor extends ProcessorPluginBase {
       if ($ref = $paragraph->get('field_claim_ref_value')->entity) {
         $facet_values[] = $coll_slug . '::' . $prop_slug . '::' . $ref->label();
       }
-      // if ($literal = $paragraph->get('field_claim_literal_value')->value ?? NULL) {
-        // $facet_values[] = $coll_slug . '::' . $prop_slug . '::' . $literal;
-      // }
+      // If ($literal = $paragraph->get('field_claim_literal_value')->value ?? NULL) {
+      // $facet_values[] = $coll_slug . '::' . $prop_slug . '::' . $literal;
+      // }.
     }
 
     foreach ($item->getFields() as $field) {
@@ -124,6 +126,9 @@ class ClaimFieldsProcessor extends ProcessorPluginBase {
     }
   }
 
+  /**
+   *
+   */
   private function slug(string $value): string {
     $s = strtolower($value);
     $s = preg_replace('/[^a-z0-9]+/', '_', $s);

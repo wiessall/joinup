@@ -1,19 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\ai_output_checks\Plugin\Action;
 
-use Drupal\Core\Action\ActionBase;
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Action\ActionBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\node\NodeInterface;
-use Drupal\ai_output_checks\Service\DuplicateDetector;
-use Drupal\paragraphs\Entity\Paragraph;
-use Drupal\taxonomy\Entity\Term;
-use Drupal\ai_output_checks\Infrastructure\Drupal\QaParagraphManager;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\ai_output_checks\Infrastructure\Drupal\NodeAudit;
+use Drupal\ai_output_checks\Infrastructure\Drupal\QaParagraphManager;
+use Drupal\ai_output_checks\Service\DuplicateDetector;
+use Drupal\node\NodeInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -43,6 +43,9 @@ final class FuzzyOrgMatch extends ActionBase implements ContainerFactoryPluginIn
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
+  /**
+   *
+   */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new self(
       $configuration,
@@ -207,8 +210,7 @@ final class FuzzyOrgMatch extends ActionBase implements ContainerFactoryPluginIn
           $log_parts[] = sprintf('"%s" -> %s', $input, implode('; ', $targets));
         }
 
-
-        // Set relevant *field* to possible duplicate
+        // Set relevant *field* to possible duplicate.
         $this->qaManager->setStatusTerm($entity, $org_field, 'Possible duplicate');
 
         if ($entity->hasField('field_state')) {
@@ -216,8 +218,6 @@ final class FuzzyOrgMatch extends ActionBase implements ContainerFactoryPluginIn
         }
         $this->audit->appendLog($entity, 'eca/fuzzy_org_match', "Possible duplicate(s) in $org_field: " . implode(' | ', $log_parts));
         // $entity->save();
-
-        
         $this->logger->notice(
           'FuzzyOrgMatch (innovation): duplicates for field @field on node @nid: @details',
           [
@@ -244,7 +244,7 @@ final class FuzzyOrgMatch extends ActionBase implements ContainerFactoryPluginIn
    *
    * Allow users who can view the node to run this action.
    */
-  public function access($object, AccountInterface $account = NULL, $return_as_object = FALSE) {
+  public function access($object, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
     if ($object instanceof NodeInterface) {
       $result = $object->access('view', $account, TRUE);
     }

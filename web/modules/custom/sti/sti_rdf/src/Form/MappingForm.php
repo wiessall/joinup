@@ -31,8 +31,11 @@ final class MappingForm extends FormBase {
   private const ATIO = 'atio';
 
   // Protected and not readonly: a rebuilt form is serialized, and
-  // DependencySerializationTrait, running in FormBase's scope, can neither
-  // see private properties of this class nor restore readonly ones.
+  // DependencySerializationTrait, running in FormBase's scope, can neither.
+
+  /**
+   * See private properties of this class nor restore readonly ones.
+   */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected EntityFieldManagerInterface $entityFieldManager,

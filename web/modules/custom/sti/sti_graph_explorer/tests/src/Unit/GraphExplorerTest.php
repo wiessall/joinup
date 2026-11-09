@@ -8,12 +8,12 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Tests\UnitTestCase;
 use Drupal\sti_graph_explorer\GraphExplorer;
 use Drupal\sti_graph_explorer\Sparql\QueryFactory;
 use Drupal\sti_graph_explorer\Sparql\SelectResult;
 use Drupal\sti_graph_explorer\Sparql\SparqlClientInterface;
 use Drupal\sti_graph_explorer\Sparql\Term;
-use Drupal\Tests\UnitTestCase;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -61,6 +61,9 @@ final class GraphExplorerTest extends UnitTestCase {
     return ['class' => new Term(Term::IRI, $class), 'n' => new Term(Term::LITERAL, (string) $n)];
   }
 
+  /**
+   *
+   */
   public function testCompleteSchemaIsCached(): void {
     $cache = $this->createMock(CacheBackendInterface::class);
     $cache->method('get')->willReturn(FALSE);
@@ -76,6 +79,9 @@ final class GraphExplorerTest extends UnitTestCase {
     $this->assertFalse($schema['partial']);
   }
 
+  /**
+   *
+   */
   public function testTruncatedSchemaIsFlaggedLoggedAndNotCached(): void {
     $cache = $this->createMock(CacheBackendInterface::class);
     $cache->method('get')->willReturn(FALSE);
@@ -93,6 +99,9 @@ final class GraphExplorerTest extends UnitTestCase {
     $this->assertSame('S1TAT timeout', $schema['partialReason']);
   }
 
+  /**
+   *
+   */
   public function testResourceRowsCollapseToDistinctTriples(): void {
     $iri = 'http://x/innovation';
     $claim = 'http://x/claim';

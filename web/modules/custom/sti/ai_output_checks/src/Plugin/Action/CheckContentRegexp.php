@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\ai_output_checks\Plugin\Action;
 
-use Drupal\Core\Action\ActionBase;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Action\ActionBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\node\NodeInterface;
-use Drupal\ai_output_checks\Infrastructure\Drupal\QaParagraphManager;
 use Drupal\ai_output_checks\Application\Runner\CheckRunner;
 use Drupal\ai_output_checks\Infrastructure\Drupal\NodeAudit;
+use Drupal\ai_output_checks\Infrastructure\Drupal\QaParagraphManager;
+use Drupal\node\NodeInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -38,6 +40,9 @@ final class CheckContentRegexp extends ActionBase implements ContainerFactoryPlu
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
+  /**
+   *
+   */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new self(
       $configuration,
@@ -50,7 +55,6 @@ final class CheckContentRegexp extends ActionBase implements ContainerFactoryPlu
     );
   }
 
-  
   /**
    * Behavior toggles (easy to change later).
    * - validate_only_ai_marked: If TRUE, validate only fields that already have QA with ai_generated=TRUE.
@@ -78,7 +82,8 @@ final class CheckContentRegexp extends ActionBase implements ContainerFactoryPlu
     }
 
     // Otherwise: discover eligible text/link fields.
-    $fields = ['title']; //! why does this only contain title
+    // ! why does this only contain title.
+    $fields = ['title'];
 
     foreach ($node->getFieldDefinitions() as $name => $def) {
       if ($def->isComputed()) {
@@ -90,8 +95,7 @@ final class CheckContentRegexp extends ActionBase implements ContainerFactoryPlu
       }
       // Only configurable fields (skip base fields except body).
       // If you want base fields too, remove this check.
-      // if (!$def instanceof \Drupal\field\Entity\FieldConfig && $name !== 'body') continue;
-
+      // if (!$def instanceof \Drupal\field\Entity\FieldConfig && $name !== 'body') continue;.
       if (!$node->hasField($name)) {
         continue;
       }
@@ -114,6 +118,9 @@ final class CheckContentRegexp extends ActionBase implements ContainerFactoryPlu
     return array_values(array_unique($fields));
   }
 
+  /**
+   *
+   */
   private function extractValues(NodeInterface $node, string $fieldName): array {
     if ($fieldName === 'title') {
       $t = trim((string) $node->label());
@@ -130,12 +137,12 @@ final class CheckContentRegexp extends ActionBase implements ContainerFactoryPlu
     $values = [];
 
     foreach ($list as $item) {
-      // Link: uri
+      // Link: uri.
       if (isset($item->uri) && is_string($item->uri) && $item->uri !== '') {
         $values[] = trim($item->uri);
         continue;
       }
-      // Text: value
+      // Text: value.
       if (isset($item->value) && is_string($item->value) && $item->value !== '') {
         $values[] = trim($item->value);
         continue;
@@ -145,6 +152,9 @@ final class CheckContentRegexp extends ActionBase implements ContainerFactoryPlu
     return array_values(array_filter($values, fn($v) => $v !== ''));
   }
 
+  /**
+   *
+   */
   private function clearField(NodeInterface $node, string $fieldName): void {
     if ($fieldName === 'title') {
       $node->setTitle('');
@@ -155,6 +165,9 @@ final class CheckContentRegexp extends ActionBase implements ContainerFactoryPlu
     }
   }
 
+  /**
+   *
+   */
   public function execute($entity = NULL): void {
     if (!$entity instanceof NodeInterface) {
       $this->logger->warning('RegexpGuard: called without a node entity.');
@@ -171,8 +184,6 @@ final class CheckContentRegexp extends ActionBase implements ContainerFactoryPlu
       ['@f' => json_encode($fields)]
     );
 
-    
-
     $changed = FALSE;
 
     foreach ($fields as $fieldName) {
@@ -180,11 +191,10 @@ final class CheckContentRegexp extends ActionBase implements ContainerFactoryPlu
       if ($fieldName !== 'title' && !$entity->hasField($fieldName)) {
         continue;
       }
-      // Avoid fields that have already been set to 'reviewed'
+      // Avoid fields that have already been set to 'reviewed'.
       if ($this->qaManager->hasPositiveStatus($entity, $fieldName)) {
         continue;
       }
-
 
       $values = $this->extractValues($entity, $fieldName);
       if (!$values) {
@@ -198,10 +208,10 @@ final class CheckContentRegexp extends ActionBase implements ContainerFactoryPlu
       $report = $this->checkRunner->run($fieldName, $fieldType, $values);
 
       if ($report->isOk()) {
-	 $this->qaManager->setAiGenerated($entity, $fieldName, TRUE);
-	 // Valeria: Set a positive QA status and save?
-         $this->qaManager->setStatusTerm($entity, $fieldName, 'Good');
-         $changed = TRUE;
+        $this->qaManager->setAiGenerated($entity, $fieldName, TRUE);
+        // Valeria: Set a positive QA status and save?
+        $this->qaManager->setStatusTerm($entity, $fieldName, 'Good');
+        $changed = TRUE;
       }
       else {
         // $this->clearField($entity, $fieldName);
@@ -221,7 +231,7 @@ final class CheckContentRegexp extends ActionBase implements ContainerFactoryPlu
             'data' => $f->data,
           ], $report->findings()))
         );
-        $this->nodeAudit->appendLog($entity, 'Regexp or URL Check', $message); 
+        $this->nodeAudit->appendLog($entity, 'Regexp or URL Check', $message);
         $this->logger->notice(
           $message
         );
@@ -232,7 +242,10 @@ final class CheckContentRegexp extends ActionBase implements ContainerFactoryPlu
     }
   }
 
-  public function access($object, AccountInterface $account = NULL, $return_as_object = FALSE) {
+  /**
+   *
+   */
+  public function access($object, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
     $result = ($object instanceof NodeInterface)
       ? $object->access('update', $account, TRUE)
       : AccessResult::forbidden();

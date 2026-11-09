@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\ai_enhancement\Service;
 
-use Drupal\ai_enhancement\Exception\OllamaException;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\ai_enhancement\Exception\OllamaException;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Log\LoggerInterface;
@@ -50,7 +50,7 @@ class OllamaClient {
    * @return array
    *   ['content' => string|array, 'raw_messages' => array, 'tool_calls_made' => int]
    *
-   * @throws OllamaException
+   * @throws \Drupal\ai_enhancement\Exception\OllamaException
    */
   public function chat(
     string $model,
