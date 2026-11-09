@@ -5,9 +5,9 @@ dependencies:
   config:
     - field.storage.meta_entity.eif_recommendation
     - meta_entity.type.eif_perspective
-    - taxonomy.vocabulary.eif_recommendation
   module:
     - eif
+    - rdf_sync
 third_party_settings:
   rdf_sync:
     target_id:
@@ -29,8 +29,7 @@ default_value_callback: ''
 settings:
   handler: 'default:taxonomy_term'
   handler_settings:
-    target_bundles:
-      eif_recommendation: eif_recommendation
+    target_bundles: {  }
     sort:
       field: name
       direction: asc

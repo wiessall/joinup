@@ -5,8 +5,8 @@ dependencies:
   config:
     - assessments.type.participation
     - field.storage.assessment.participant_type
-    - taxonomy.vocabulary.assess_participant_type
   module:
+    - rdf_sync
     - tmgmt_content
 third_party_settings:
   rdf_sync:
@@ -28,8 +28,7 @@ default_value_callback: ''
 settings:
   handler: 'default:taxonomy_term'
   handler_settings:
-    target_bundles:
-      assess_participant_type: assess_participant_type
+    target_bundles: {  }
     sort:
       field: name
       direction: asc
