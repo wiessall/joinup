@@ -3,30 +3,23 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.solution.abstract
-    - field.field.node.solution.classification
+    - field.field.node.solution.atio_country_origin
     - field.field.node.solution.contact
     - field.field.node.solution.description
     - field.field.node.solution.domain
     - field.field.node.solution.field_claims
-    - field.field.node.solution.field_machine_record
     - field.field.node.solution.field_original_internal_id
     - field.field.node.solution.field_state
-    - field.field.node.solution.field_topic
     - field.field.node.solution.keywords
-    - field.field.node.solution.landing_page
     - field.field.node.solution.language
     - field.field.node.solution.logo
-    - field.field.node.solution.metrics_page
     - field.field.node.solution.og_audience
     - field.field.node.solution.owner
-    - field.field.node.solution.process_status
     - field.field.node.solution.related_solutions
-    - field.field.node.solution.release_number
     - field.field.node.solution.resources
     - field.field.node.solution.short_id
-    - field.field.node.solution.site_featured
     - field.field.node.solution.translation
+    - field.field.node.solution.webpage
     - node.type.solution
     - og_menu.ogmenu.quick_links
   module:
@@ -51,43 +44,6 @@ third_party_settings:
           label: 'Heading section'
           context_mapping: {  }
         components:
-          bfd2860a-fd1e-4c2e-a040-a48d4a81dcc5:
-            uuid: bfd2860a-fd1e-4c2e-a040-a48d4a81dcc5
-            region: main
-            configuration:
-              id: 'field_block:node:solution:abstract'
-              label: Abstract
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: string
-                label: hidden
-                settings:
-                  link_to_entity: false
-                third_party_settings:
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 0
-            additional:
-              component_attributes:
-                block_attributes:
-                  id: ''
-                  class: fs-4
-                  style: ''
-                  data: ''
-                block_title_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
-                block_content_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
           2a16abf9-c3ab-45a0-8af1-cf721ed2bdb7:
             uuid: 2a16abf9-c3ab-45a0-8af1-cf721ed2bdb7
             region: aside
@@ -753,6 +709,42 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 48
             additional: {  }
+          1a2cd27c-a7b4-4723-80e2-351100f6754e:
+            uuid: 1a2cd27c-a7b4-4723-80e2-351100f6754e
+            region: content
+            configuration:
+              id: 'field_block:node:solution:webpage'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: link
+                label: above
+                settings:
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
+                  rel: ''
+                  target: ''
+                third_party_settings: {  }
+            weight: 49
+            additional: {  }
+          06592e4d-ac87-47fc-ba00-a2eb99f46282:
+            uuid: 06592e4d-ac87-47fc-ba00-a2eb99f46282
+            region: main
+            configuration:
+              id: 'field_block:node:solution:atio_country_origin'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: true
+                third_party_settings: {  }
+            weight: 0
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
@@ -1005,43 +997,6 @@ third_party_settings:
                   class: ''
                   style: ''
                   data: ''
-          00d18cd8-0da0-4740-a65a-49768e43ac4f:
-            uuid: 00d18cd8-0da0-4740-a65a-49768e43ac4f
-            region: content
-            configuration:
-              id: 'field_block:node:solution:process_status'
-              label: Status
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: entity_reference_label
-                label: above
-                settings:
-                  link: false
-                third_party_settings:
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 4
-            additional:
-              component_attributes:
-                block_attributes:
-                  id: ''
-                  class: 'pe-5 pb-4'
-                  style: ''
-                  data: ''
-                block_title_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
-                block_content_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
           564968b5-69a6-4fc4-af9d-6a2e2eceee95:
             uuid: 564968b5-69a6-4fc4-af9d-6a2e2eceee95
             region: content
@@ -1249,6 +1204,14 @@ targetEntityType: node
 bundle: solution
 mode: default
 content:
+  atio_country_origin:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 102
+    region: main
   distributions:
     type: entity_reference_entity_view
     label: hidden
@@ -1310,9 +1273,19 @@ content:
     third_party_settings: {  }
     weight: 9
     region: content
+  webpage:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
 hidden:
-  abstract: true
-  classification: true
   collections: true
   contact: true
   description: true
@@ -1321,37 +1294,30 @@ hidden:
   eif_perspective: true
   featured: true
   field_is_description: true
-  field_machine_record: true
   field_original_internal_id: true
   field_shared_in: true
   field_state: true
-  field_topic: true
   group_moderation: true
   keywords: true
-  landing_page: true
   langcode: true
   language: true
   logo: true
   members: true
-  metrics_page: true
   node_solution_listing_content_inline_facets: true
   node_solution_listing_content_top: true
   og_audience: true
   owner: true
   pinned_in: true
   private_message_link: true
-  process_status: true
   published_at: true
   read_more: true
   related_solution: true
   related_solutions: true
-  release_number: true
   releases_overview: true
   search_api_excerpt: true
   share_link: true
   shared_in: true
   short_id: true
-  site_featured: true
   solution_settings: true
   solution_subscribe: true
   translation: true

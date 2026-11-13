@@ -67,3 +67,5 @@
 # Automatically created by DDEV but not used.
 /recipes/
 .ddev/config.local.yaml
+# personal content
+TRISTAN_additions

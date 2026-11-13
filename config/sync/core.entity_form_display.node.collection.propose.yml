@@ -5,13 +5,16 @@ dependencies:
   config:
     - core.entity_form_mode.node.inline
     - core.entity_form_mode.node.propose
-    - field.field.node.collection.abstract
     - field.field.node.collection.closed_group
+    - field.field.node.collection.collection_banner
     - field.field.node.collection.contact
     - field.field.node.collection.description
+    - field.field.node.collection.field_impact_sdgs
     - field.field.node.collection.field_licence
+    - field.field.node.collection.field_mappings
     - field.field.node.collection.field_state
     - field.field.node.collection.field_topic
+    - field.field.node.collection.field_use_cases
     - field.field.node.collection.keywords
     - field.field.node.collection.last_content_deletion
     - field.field.node.collection.logo
@@ -20,7 +23,7 @@ dependencies:
     - field.field.node.collection.short_id
     - field.field.node.collection.site_featured
     - field.field.node.collection.spatial_coverage
-    - field.field.node.collection.website_url
+    - field.field.node.collection.webpage
     - image.style.thumbnail
     - media.type.collection_logo
     - node.type.collection
@@ -28,9 +31,7 @@ dependencies:
     - field_group
     - image_library_widget
     - inline_entity_form
-    - joinup_core
     - joinup_workflow
-    - link
     - oe_bootstrap_theme_helper
     - tagify
     - text
@@ -94,14 +95,6 @@ targetEntityType: node
 bundle: collection
 mode: propose
 content:
-  abstract:
-    type: string_textfield_legacy_multicardinality
-    weight: 3
-    region: content
-    settings:
-      size: 200
-      placeholder: ''
-    third_party_settings: {  }
   closed_group:
     type: boolean_checkbox
     weight: 9
@@ -240,18 +233,14 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  website_url:
-    type: link_default
-    weight: 3
-    region: content
-    settings:
-      placeholder_url: ''
-      placeholder_title: ''
-    third_party_settings: {  }
 hidden:
+  collection_banner: true
   created: true
   current_workflow_state: true
+  field_impact_sdgs: true
   field_licence: true
+  field_mappings: true
+  field_use_cases: true
   langcode: true
   last_content_deletion: true
   newsletter: true
@@ -265,3 +254,4 @@ hidden:
   uri: true
   url_redirects: true
   uuid: true
+  webpage: true

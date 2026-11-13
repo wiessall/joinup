@@ -9,7 +9,6 @@ database:
     type: mysql
     version: "8.0"
 performance_mode: global
-bind_all_interfaces: true
 hooks:
     pre-start:
         - exec-host: rm -f .ddev/solr-standalone/conf

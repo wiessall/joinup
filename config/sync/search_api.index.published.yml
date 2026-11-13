@@ -19,7 +19,6 @@ dependencies:
     - field.storage.node.atio_thematic_area
     - field.storage.node.atio_use_cases
     - field.storage.node.body
-    - field.storage.node.classification
     - field.storage.node.contact
     - field.storage.node.description
     - field.storage.node.domain
@@ -267,14 +266,6 @@ field_settings:
     label: 'Claim key'
     property_path: claim_key
     type: string
-  classification:
-    label: 'Solution classification'
-    datasource_id: 'entity:node'
-    property_path: classification
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.classification
   contact_title:
     label: 'Related Contact » Title'
     datasource_id: 'entity:node'

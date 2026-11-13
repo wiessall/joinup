@@ -4,30 +4,23 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.view_mode_search_list_item
-    - field.field.node.solution.abstract
-    - field.field.node.solution.classification
+    - field.field.node.solution.atio_country_origin
     - field.field.node.solution.contact
     - field.field.node.solution.description
     - field.field.node.solution.domain
     - field.field.node.solution.field_claims
-    - field.field.node.solution.field_machine_record
     - field.field.node.solution.field_original_internal_id
     - field.field.node.solution.field_state
-    - field.field.node.solution.field_topic
     - field.field.node.solution.keywords
-    - field.field.node.solution.landing_page
     - field.field.node.solution.language
     - field.field.node.solution.logo
-    - field.field.node.solution.metrics_page
     - field.field.node.solution.og_audience
     - field.field.node.solution.owner
-    - field.field.node.solution.process_status
     - field.field.node.solution.related_solutions
-    - field.field.node.solution.release_number
     - field.field.node.solution.resources
     - field.field.node.solution.short_id
-    - field.field.node.solution.site_featured
     - field.field.node.solution.translation
+    - field.field.node.solution.webpage
     - node.type.solution
     - responsive_image.styles.teaser
   module:
@@ -40,14 +33,6 @@ targetEntityType: node
 bundle: solution
 mode: view_mode_search_list_item
 content:
-  abstract:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 4
-    region: content
   description:
     type: joinup_html_stripper_stripped
     label: hidden
@@ -57,14 +42,6 @@ content:
       template_suggestion:
         template_suggestion: p_wrapper
     weight: 2
-    region: content
-  field_topic:
-    type: entity_reference_label
-    label: hidden
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 1
     region: content
   logo:
     type: responsive_image
@@ -88,7 +65,7 @@ content:
     weight: 3
     region: content
 hidden:
-  classification: true
+  atio_country_origin: true
   collections: true
   contact: true
   distributions: true
@@ -97,31 +74,26 @@ hidden:
   eif_perspective: true
   featured: true
   field_claims: true
-  field_machine_record: true
   field_original_internal_id: true
   field_shared_in: true
   field_state: true
   flag_interoperability: true
   flag_like: true
   keywords: true
-  landing_page: true
   langcode: true
   language: true
   links: true
   members: true
-  metrics_page: true
   node_solution_listing_content_inline_facets: true
   node_solution_listing_content_top: true
   og_audience: true
   og_group: true
   pinned_in: true
   private_message_link: true
-  process_status: true
   published_at: true
   read_more: true
   related_solution: true
   related_solutions: true
-  release_number: true
   releases_overview: true
   report: true
   resources: true
@@ -129,9 +101,9 @@ hidden:
   share_link: true
   shared_in: true
   short_id: true
-  site_featured: true
   solution_settings: true
   solution_subscribe: true
   translation: true
   uri: true
   uuid: true
+  webpage: true

@@ -4,18 +4,21 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.confirmation
-    - field.field.node.owner.acronym
-    - field.field.node.owner.country
+    - field.field.node.owner.atio_country_origin
+    - field.field.node.owner.description
+    - field.field.node.owner.field_acronym
+    - field.field.node.owner.field_organization_type
     - field.field.node.owner.field_state
-    - field.field.node.owner.link
     - field.field.node.owner.owner_type
     - field.field.node.owner.related_content
+    - field.field.node.owner.webpage
     - node.type.owner
   module:
     - field_delimiter
     - field_formatter_range
     - joinup_slick
     - layout_builder
+    - link
     - template_suggestion
     - user
 third_party_settings:
@@ -27,16 +30,6 @@ targetEntityType: node
 bundle: owner
 mode: confirmation
 content:
-  country:
-    type: entity_reference_label
-    label: inline
-    settings:
-      link: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 3
-    region: content
   owner_type:
     type: entity_reference_label
     label: inline
@@ -56,11 +49,27 @@ content:
         template_suggestion: inline
     weight: 1
     region: content
+  webpage:
+    type: link
+    label: inline
+    settings:
+      trim_length: 80
+      url_only: true
+      url_plain: true
+      rel: '0'
+      target: '0'
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
 hidden:
-  acronym: true
+  atio_country_origin: true
+  description: true
+  field_acronym: true
+  field_organization_type: true
   field_state: true
   langcode: true
-  link: true
   links: true
   private_message_link: true
   published_at: true

@@ -3,37 +3,58 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.owner.acronym
-    - field.field.node.owner.country
+    - field.field.node.owner.atio_country_origin
+    - field.field.node.owner.description
+    - field.field.node.owner.field_acronym
+    - field.field.node.owner.field_organization_type
     - field.field.node.owner.field_state
-    - field.field.node.owner.link
     - field.field.node.owner.owner_type
     - field.field.node.owner.related_content
+    - field.field.node.owner.webpage
     - node.type.owner
   module:
     - link
     - options
+    - template_suggestion
+    - text
     - user
 id: node.owner.default
 targetEntityType: node
 bundle: owner
 mode: default
 content:
-  acronym:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 5
-    region: content
-  country:
+  atio_country_origin:
     type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    weight: 3
+    weight: 10
+    region: content
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: description__see__more
+    weight: 11
+    region: content
+  field_acronym:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  field_organization_type:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 12
     region: content
   field_state:
     type: list_default
@@ -41,18 +62,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 7
-    region: content
-  link:
-    type: link
-    label: above
-    settings:
-      trim_length: 80
-      url_only: false
-      url_plain: false
-      rel: ''
-      target: ''
-    third_party_settings: {  }
-    weight: 4
     region: content
   owner_type:
     type: entity_reference_label
@@ -80,6 +89,18 @@ content:
       link: true
     third_party_settings: {  }
     weight: 6
+    region: content
+  webpage:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 1
     region: content
 hidden:
   langcode: true

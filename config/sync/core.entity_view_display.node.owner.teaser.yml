@@ -4,12 +4,14 @@ status: false
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
-    - field.field.node.owner.acronym
-    - field.field.node.owner.country
+    - field.field.node.owner.atio_country_origin
+    - field.field.node.owner.description
+    - field.field.node.owner.field_acronym
+    - field.field.node.owner.field_organization_type
     - field.field.node.owner.field_state
-    - field.field.node.owner.link
     - field.field.node.owner.owner_type
     - field.field.node.owner.related_content
+    - field.field.node.owner.webpage
     - node.type.owner
   module:
     - link
@@ -37,11 +39,12 @@ content:
     weight: 50
     region: content
 hidden:
-  acronym: true
-  country: true
+  atio_country_origin: true
+  description: true
+  field_acronym: true
+  field_organization_type: true
   field_state: true
   langcode: true
-  link: true
   owner_type: true
   private_message_link: true
   published_at: true
@@ -49,3 +52,4 @@ hidden:
   search_api_excerpt: true
   uri: true
   uuid: true
+  webpage: true

@@ -5,8 +5,13 @@ dependencies:
   config:
     - field.storage.node.spatial_coverage
     - node.type.collection
-    - taxonomy.vocabulary.spatial
+    - taxonomy.vocabulary.fao_spatial
+  module:
+    - rdf_sync
+    - tmgmt_content
 third_party_settings:
+  tmgmt_content:
+    excluded: false
   rdf_sync:
     target_id:
       predicate: 'http://purl.org/dc/terms/spatial'
@@ -25,9 +30,10 @@ settings:
   handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
-      spatial: spatial
+      fao_spatial: fao_spatial
     sort:
       field: _none
+      direction: asc
     auto_create: false
-    auto_create_bundle: ''
+    auto_create_bundle: fao_spatial
 field_type: entity_reference

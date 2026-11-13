@@ -4,30 +4,23 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.confirmation
-    - field.field.node.solution.abstract
-    - field.field.node.solution.classification
+    - field.field.node.solution.atio_country_origin
     - field.field.node.solution.contact
     - field.field.node.solution.description
     - field.field.node.solution.domain
     - field.field.node.solution.field_claims
-    - field.field.node.solution.field_machine_record
     - field.field.node.solution.field_original_internal_id
     - field.field.node.solution.field_state
-    - field.field.node.solution.field_topic
     - field.field.node.solution.keywords
-    - field.field.node.solution.landing_page
     - field.field.node.solution.language
     - field.field.node.solution.logo
-    - field.field.node.solution.metrics_page
     - field.field.node.solution.og_audience
     - field.field.node.solution.owner
-    - field.field.node.solution.process_status
     - field.field.node.solution.related_solutions
-    - field.field.node.solution.release_number
     - field.field.node.solution.resources
     - field.field.node.solution.short_id
-    - field.field.node.solution.site_featured
     - field.field.node.solution.translation
+    - field.field.node.solution.webpage
     - image.style.thumbnail
     - node.type.solution
   module:
@@ -105,24 +98,6 @@ targetEntityType: node
 bundle: solution
 mode: confirmation
 content:
-  abstract:
-    type: string
-    label: inline
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 1
-    region: content
-  classification:
-    type: entity_reference_label
-    label: inline
-    settings:
-      link: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 3
-    region: content
   contact:
     type: entity_reference_entity_view
     label: above
@@ -180,39 +155,6 @@ content:
         template_suggestion: ''
     weight: 3
     region: content
-  field_topic:
-    type: entity_reference_label
-    label: inline
-    settings:
-      link: false
-    third_party_settings:
-      field_delimiter:
-        delimiter: ','
-      field_formatter_range:
-        order: 0
-        limit: 0
-        offset: 0
-      joinup_slick:
-        preset: ''
-        field_label: true
-      template_suggestion:
-        template_suggestion: inline
-    weight: 5
-    region: content
-  landing_page:
-    type: link
-    label: inline
-    settings:
-      trim_length: 80
-      url_only: true
-      url_plain: true
-      rel: '0'
-      target: '0'
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 6
-    region: content
   language:
     type: entity_reference_label
     label: inline
@@ -260,16 +202,6 @@ content:
         template_suggestion: ''
     weight: 6
     region: content
-  process_status:
-    type: entity_reference_label
-    label: inline
-    settings:
-      link: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 5
-    region: content
   related_solutions:
     type: entity_reference_label
     label: above
@@ -295,7 +227,22 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
+  webpage:
+    type: link
+    label: inline
+    settings:
+      trim_length: 80
+      url_only: true
+      url_plain: true
+      rel: '0'
+      target: '0'
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
 hidden:
+  atio_country_origin: true
   collections: true
   distributions: true
   download_total: true
@@ -303,7 +250,6 @@ hidden:
   featured: true
   field_claims: true
   field_is_description: true
-  field_machine_record: true
   field_original_internal_id: true
   field_shared_in: true
   flag_interoperability: true
@@ -312,7 +258,6 @@ hidden:
   langcode: true
   links: true
   members: true
-  metrics_page: true
   node_solution_listing_content_inline_facets: true
   node_solution_listing_content_top: true
   og_audience: true
@@ -322,13 +267,11 @@ hidden:
   published_at: true
   read_more: true
   related_solution: true
-  release_number: true
   releases_overview: true
   report: true
   search_api_excerpt: true
   share_link: true
   shared_in: true
-  site_featured: true
   solution_settings: true
   solution_subscribe: true
   translation: true

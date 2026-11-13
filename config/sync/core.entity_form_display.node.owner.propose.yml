@@ -4,17 +4,20 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.node.propose
-    - field.field.node.owner.acronym
-    - field.field.node.owner.country
+    - field.field.node.owner.atio_country_origin
+    - field.field.node.owner.description
+    - field.field.node.owner.field_acronym
+    - field.field.node.owner.field_organization_type
     - field.field.node.owner.field_state
-    - field.field.node.owner.link
     - field.field.node.owner.owner_type
     - field.field.node.owner.related_content
+    - field.field.node.owner.webpage
     - node.type.owner
   module:
     - joinup_workflow
     - path
     - publication_date
+    - text
 id: node.owner.propose
 targetEntityType: node
 bundle: owner
@@ -25,6 +28,14 @@ content:
     weight: 10
     region: content
     settings: {  }
+    third_party_settings: {  }
+  description:
+    type: text_textarea
+    weight: 4
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
     third_party_settings: {  }
   field_state:
     type: state_machine_buttons
@@ -88,13 +99,14 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
-  acronym: true
-  country: true
+  atio_country_origin: true
   current_workflow_state: true
-  link: true
+  field_acronym: true
+  field_organization_type: true
   owner_type: true
   promote: true
   related_content: true
   sticky: true
   uri: true
   uuid: true
+  webpage: true

@@ -3,12 +3,28 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.solution.field_claims
-    - node.type.solution
     - core.entity_view_mode.node.claims
-    - core.entity_view_mode.paragraph.claim_row
+    - field.field.node.solution.atio_country_origin
+    - field.field.node.solution.contact
+    - field.field.node.solution.description
+    - field.field.node.solution.domain
+    - field.field.node.solution.field_claims
+    - field.field.node.solution.field_original_internal_id
+    - field.field.node.solution.field_state
+    - field.field.node.solution.keywords
+    - field.field.node.solution.language
+    - field.field.node.solution.logo
+    - field.field.node.solution.og_audience
+    - field.field.node.solution.owner
+    - field.field.node.solution.related_solutions
+    - field.field.node.solution.resources
+    - field.field.node.solution.short_id
+    - field.field.node.solution.translation
+    - field.field.node.solution.webpage
+    - node.type.solution
   module:
     - entity_reference_revisions
+    - user
   enforced:
     module:
       - atio
@@ -17,6 +33,14 @@ targetEntityType: node
 bundle: solution
 mode: claims
 content:
+  atio_country_origin:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
   field_claims:
     type: entity_reference_revisions_entity_view
     label: hidden
@@ -42,7 +66,6 @@ hidden:
   field_original_internal_id: true
   field_shared_in: true
   field_state: true
-  field_topic: true
   flag_interoperability: true
   flag_like: true
   group_moderation: true
@@ -61,7 +84,6 @@ hidden:
   owner: true
   pinned_in: true
   private_message_link: true
-  process_status: true
   published_at: true
   read_more: true
   related_solution: true
@@ -81,3 +103,4 @@ hidden:
   translation: true
   uri: true
   uuid: true
+  webpage: true

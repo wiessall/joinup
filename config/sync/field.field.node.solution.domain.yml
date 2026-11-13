@@ -5,7 +5,7 @@ dependencies:
   config:
     - field.storage.node.domain
     - node.type.solution
-    - taxonomy.vocabulary.domain
+    - taxonomy.vocabulary.atio_themes
   module:
     - tmgmt_content
 third_party_settings:
@@ -25,10 +25,10 @@ settings:
   handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
-      domain: domain
+      atio_themes: atio_themes
     sort:
       field: name
       direction: asc
     auto_create: false
-    auto_create_bundle: ''
+    auto_create_bundle: atio_themes
 field_type: entity_reference

@@ -3,13 +3,16 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.collection.abstract
     - field.field.node.collection.closed_group
+    - field.field.node.collection.collection_banner
     - field.field.node.collection.contact
     - field.field.node.collection.description
+    - field.field.node.collection.field_impact_sdgs
     - field.field.node.collection.field_licence
+    - field.field.node.collection.field_mappings
     - field.field.node.collection.field_state
     - field.field.node.collection.field_topic
+    - field.field.node.collection.field_use_cases
     - field.field.node.collection.keywords
     - field.field.node.collection.last_content_deletion
     - field.field.node.collection.logo
@@ -18,7 +21,7 @@ dependencies:
     - field.field.node.collection.short_id
     - field.field.node.collection.site_featured
     - field.field.node.collection.spatial_coverage
-    - field.field.node.collection.website_url
+    - field.field.node.collection.webpage
     - node.type.collection
     - og_menu.ogmenu.quick_links
   module:
@@ -64,42 +67,6 @@ third_party_settings:
                 block_title_attributes:
                   id: ''
                   class: mb-3
-                  style: ''
-                  data: ''
-                block_content_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
-          2b802edf-b466-46ff-ad26-2ac3021f8145:
-            uuid: 2b802edf-b466-46ff-ad26-2ac3021f8145
-            region: main
-            configuration:
-              id: 'field_block:node:collection:abstract'
-              label: Abstract
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: collection_plain_glossary
-                label: hidden
-                settings: {  }
-                third_party_settings:
-                  template_suggestion:
-                    template_suggestion: p_wrapper
-            weight: 1
-            additional:
-              component_attributes:
-                block_attributes:
-                  id: ''
-                  class: fs-4
-                  style: ''
-                  data: ''
-                block_title_attributes:
-                  id: ''
-                  class: ''
                   style: ''
                   data: ''
                 block_content_attributes:
@@ -220,6 +187,75 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: fieldset
             weight: 0
+            additional: {  }
+          5238a36e-f754-4554-a633-728f6c2abf7e:
+            uuid: 5238a36e-f754-4554-a633-728f6c2abf7e
+            region: main
+            configuration:
+              id: 'field_block:node:collection:collection_banner'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: default
+                  link: false
+                third_party_settings: {  }
+            weight: 6
+            additional: {  }
+          01252688-4849-43e7-9ac3-e7cb4d839370:
+            uuid: 01252688-4849-43e7-9ac3-e7cb4d839370
+            region: main
+            configuration:
+              id: 'field_block:node:collection:field_impact_sdgs'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: true
+                third_party_settings: {  }
+            weight: 7
+            additional: {  }
+          9b81ec3b-1ff8-4437-b5b9-e19d8c0783bd:
+            uuid: 9b81ec3b-1ff8-4437-b5b9-e19d8c0783bd
+            region: main
+            configuration:
+              id: 'field_block:node:collection:field_use_cases'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: true
+                third_party_settings: {  }
+            weight: 9
+            additional: {  }
+          739030fa-84c8-40fe-bfd4-aab5411e4ffa:
+            uuid: 739030fa-84c8-40fe-bfd4-aab5411e4ffa
+            region: content
+            configuration:
+              id: 'field_block:node:collection:webpage'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: link
+                label: above
+                settings:
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
+                  rel: ''
+                  target: ''
+                third_party_settings: {  }
+            weight: 1
             additional: {  }
         third_party_settings: {  }
       -
@@ -630,6 +666,23 @@ targetEntityType: node
 bundle: collection
 mode: default
 content:
+  collection_banner:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 102
+    region: main
+  field_impact_sdgs:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 103
+    region: main
   field_licence:
     type: entity_reference_label
     label: hidden
@@ -640,6 +693,14 @@ content:
         template_suggestion: fieldset
     weight: 1
     region: content
+  field_use_cases:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 105
+    region: main
   keywords:
     type: entity_reference_label
     label: above
@@ -672,13 +733,25 @@ content:
     third_party_settings: {  }
     weight: 50
     region: main
+  webpage:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
 hidden:
-  abstract: true
   closed_group: true
   collection_settings: true
   contact: true
   description: true
   featured: true
+  field_mappings: true
   field_state: true
   field_topic: true
   join_collection: true
@@ -701,4 +774,3 @@ hidden:
   spatial_coverage: true
   uri: true
   uuid: true
-  website_url: true

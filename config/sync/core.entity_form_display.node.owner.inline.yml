@@ -4,29 +4,23 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.node.inline
-    - field.field.node.owner.acronym
-    - field.field.node.owner.country
+    - field.field.node.owner.atio_country_origin
+    - field.field.node.owner.description
+    - field.field.node.owner.field_acronym
+    - field.field.node.owner.field_organization_type
     - field.field.node.owner.field_state
-    - field.field.node.owner.link
     - field.field.node.owner.owner_type
     - field.field.node.owner.related_content
+    - field.field.node.owner.webpage
     - node.type.owner
   module:
+    - joinup_core
     - tagify
 id: node.owner.inline
 targetEntityType: node
 bundle: owner
 mode: inline
 content:
-  country:
-    type: tagify_select_widget
-    weight: 2
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 0
-      placeholder: ''
-    third_party_settings: {  }
   owner_type:
     type: tagify_entity_reference_autocomplete_widget
     weight: 1
@@ -49,13 +43,23 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  webpage:
+    type: link_legacy_multicardinality
+    weight: 2
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
 hidden:
-  acronym: true
+  atio_country_origin: true
   created: true
   current_workflow_state: true
+  description: true
+  field_acronym: true
+  field_organization_type: true
   field_state: true
   langcode: true
-  link: true
   path: true
   promote: true
   published_at: true

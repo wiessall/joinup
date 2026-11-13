@@ -4,13 +4,16 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.group_header
-    - field.field.node.collection.abstract
     - field.field.node.collection.closed_group
+    - field.field.node.collection.collection_banner
     - field.field.node.collection.contact
     - field.field.node.collection.description
+    - field.field.node.collection.field_impact_sdgs
     - field.field.node.collection.field_licence
+    - field.field.node.collection.field_mappings
     - field.field.node.collection.field_state
     - field.field.node.collection.field_topic
+    - field.field.node.collection.field_use_cases
     - field.field.node.collection.keywords
     - field.field.node.collection.last_content_deletion
     - field.field.node.collection.logo
@@ -19,7 +22,7 @@ dependencies:
     - field.field.node.collection.short_id
     - field.field.node.collection.site_featured
     - field.field.node.collection.spatial_coverage
-    - field.field.node.collection.website_url
+    - field.field.node.collection.webpage
     - node.type.collection
   module:
     - field_delimiter
@@ -72,14 +75,17 @@ content:
     weight: 2
     region: content
 hidden:
-  abstract: true
   closed_group: true
+  collection_banner: true
   collection_settings: true
   contact: true
   description: true
   featured: true
+  field_impact_sdgs: true
   field_licence: true
+  field_mappings: true
   field_state: true
+  field_use_cases: true
   keywords: true
   langcode: true
   last_content_deletion: true
@@ -101,4 +107,4 @@ hidden:
   spatial_coverage: true
   uri: true
   uuid: true
-  website_url: true
+  webpage: true

@@ -4,13 +4,16 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.node.inline
-    - field.field.node.collection.abstract
     - field.field.node.collection.closed_group
+    - field.field.node.collection.collection_banner
     - field.field.node.collection.contact
     - field.field.node.collection.description
+    - field.field.node.collection.field_impact_sdgs
     - field.field.node.collection.field_licence
+    - field.field.node.collection.field_mappings
     - field.field.node.collection.field_state
     - field.field.node.collection.field_topic
+    - field.field.node.collection.field_use_cases
     - field.field.node.collection.keywords
     - field.field.node.collection.last_content_deletion
     - field.field.node.collection.logo
@@ -19,7 +22,7 @@ dependencies:
     - field.field.node.collection.short_id
     - field.field.node.collection.site_featured
     - field.field.node.collection.spatial_coverage
-    - field.field.node.collection.website_url
+    - field.field.node.collection.webpage
     - image.style.thumbnail
     - media.type.collection_logo
     - node.type.collection
@@ -29,7 +32,7 @@ dependencies:
     - inline_entity_form
     - joinup_core
     - joinup_workflow
-    - link
+    - media_library
     - oe_bootstrap_theme_helper
     - oe_newsroom_newsletter
     - tagify
@@ -96,14 +99,6 @@ targetEntityType: node
 bundle: collection
 mode: default
 content:
-  abstract:
-    type: string_textfield_legacy_multicardinality
-    weight: 3
-    region: content
-    settings:
-      size: 200
-      placeholder: ''
-    third_party_settings: {  }
   closed_group:
     type: boolean_checkbox
     weight: 9
@@ -113,6 +108,13 @@ content:
     third_party_settings:
       oe_bootstrap_theme_helper:
         switch: false
+  collection_banner:
+    type: media_library_widget
+    weight: 26
+    region: content
+    settings:
+      media_types: {  }
+    third_party_settings: {  }
   contact:
     type: inline_entity_form_complex
     weight: 8
@@ -148,6 +150,16 @@ content:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
+  field_impact_sdgs:
+    type: entity_reference_autocomplete
+    weight: 27
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   field_licence:
     type: options_select
     weight: 3
@@ -174,6 +186,16 @@ content:
       show_info_label: 0
       info_label: '[term:tid]'
       parent_selection: 0
+    third_party_settings: {  }
+  field_use_cases:
+    type: entity_reference_autocomplete
+    weight: 29
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   keywords:
     type: tagify_entity_reference_autocomplete_widget
@@ -263,9 +285,9 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  website_url:
-    type: link_default
-    weight: 3
+  webpage:
+    type: link_legacy_multicardinality
+    weight: 2
     region: content
     settings:
       placeholder_url: ''
@@ -273,6 +295,7 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
+  field_mappings: true
   langcode: true
   last_content_deletion: true
   path: true
