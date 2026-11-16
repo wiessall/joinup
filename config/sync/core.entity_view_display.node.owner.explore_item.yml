@@ -1,0 +1,66 @@
+uuid: 6ed6c991-25f4-4ab7-9dbd-35fc5cce9d3d
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.explore_item
+    - field.field.node.owner.description
+    - field.field.node.owner.field_acronym
+    - field.field.node.owner.field_country_origin
+    - field.field.node.owner.field_organization_type
+    - field.field.node.owner.field_state
+    - field.field.node.owner.owner_type
+    - field.field.node.owner.related_content
+    - field.field.node.owner.webpage
+    - node.type.owner
+  module:
+    - joinup_html_stripper
+    - link
+    - template_suggestion
+    - user
+id: node.owner.explore_item
+targetEntityType: node
+bundle: owner
+mode: explore_item
+content:
+  description:
+    type: joinup_html_stripper_stripped
+    label: hidden
+    settings:
+      trim_length: 220
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  report:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 50
+    region: content
+hidden:
+  field_acronym: true
+  field_country_origin: true
+  field_organization_type: true
+  field_state: true
+  langcode: true
+  owner_type: true
+  private_message_link: true
+  published_at: true
+  related_content: true
+  search_api_excerpt: true
+  uri: true
+  uuid: true
+  webpage: true

@@ -1,0 +1,34 @@
+uuid: 3601df96-6728-4714-b52e-a634215c7866
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_organization_type
+    - node.type.owner
+    - taxonomy.vocabulary.owner_type
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: node.owner.field_organization_type
+field_name: field_organization_type
+entity_type: node
+bundle: owner
+label: 'Organization type'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      owner_type: owner_type
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

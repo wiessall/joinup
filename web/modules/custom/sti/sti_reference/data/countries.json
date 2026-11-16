@@ -66,7 +66,10 @@
  {
   "tid": "272",
   "name": "Antarctica",
-  "parent": 0
+  "parent": 0,
+  "iso_code": "ATA",
+  "iso_code_2": "AQ",
+  "m49_code": "010"
  },
  {
   "tid": "273",
@@ -495,7 +498,10 @@
  {
   "tid": "326",
   "name": "Democratic People's Republic of Korea",
-  "parent": 0
+  "parent": 0,
+  "iso_code": "PRK",
+  "iso_code_2": "KP",
+  "m49_code": "408"
  },
  {
   "tid": "327",
@@ -773,9 +779,9 @@
   "tid": "361",
   "name": "Guinea",
   "parent": 0,
-  "iso_code": "GNQ",
-  "iso_code_2": "GQ",
-  "m49_code": "226"
+  "iso_code": "GIN",
+  "iso_code_2": "GN",
+  "m49_code": "324"
  },
  {
   "tid": "362",
@@ -1533,9 +1539,9 @@
   "tid": "456",
   "name": "Samoa",
   "parent": 0,
-  "iso_code": "ASM",
-  "iso_code_2": "AS",
-  "m49_code": "016"
+  "iso_code": "WSM",
+  "iso_code_2": "WS",
+  "m49_code": "882"
  },
  {
   "tid": "457",
@@ -1693,9 +1699,9 @@
   "tid": "476",
   "name": "Sudan",
   "parent": 0,
-  "iso_code": "SSD",
-  "iso_code_2": "SS",
-  "m49_code": "728"
+  "iso_code": "SDN",
+  "iso_code_2": "SD",
+  "m49_code": "729"
  },
  {
   "tid": "477",

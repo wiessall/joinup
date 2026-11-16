@@ -1,0 +1,55 @@
+uuid: adffc700-3642-48ff-9d75-52d2cca158b6
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.claims
+    - field.field.node.owner.description
+    - field.field.node.owner.field_acronym
+    - field.field.node.owner.field_country_origin
+    - field.field.node.owner.field_organization_type
+    - field.field.node.owner.field_state
+    - field.field.node.owner.owner_type
+    - field.field.node.owner.related_content
+    - field.field.node.owner.webpage
+    - node.type.owner
+  module:
+    - link
+    - user
+id: node.owner.claims
+targetEntityType: node
+bundle: owner
+mode: claims
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  report:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 50
+    region: content
+hidden:
+  description: true
+  field_acronym: true
+  field_country_origin: true
+  field_organization_type: true
+  field_state: true
+  langcode: true
+  owner_type: true
+  private_message_link: true
+  published_at: true
+  related_content: true
+  search_api_excerpt: true
+  uri: true
+  uuid: true
+  webpage: true

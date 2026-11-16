@@ -1,0 +1,24 @@
+uuid: 675c90d0-5114-40bb-a012-313fda25bcf6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_acronym
+    - node.type.owner
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: node.owner.field_acronym
+field_name: field_acronym
+entity_type: node
+bundle: owner
+label: Acronym
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

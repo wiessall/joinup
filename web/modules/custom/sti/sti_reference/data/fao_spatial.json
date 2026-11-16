@@ -1,0 +1,4427 @@
+[
+ {
+  "m49": "001",
+  "parent": null,
+  "name": "World",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_24920",
+  "legacy_tids": []
+ },
+ {
+  "m49": "002",
+  "parent": "001",
+  "name": "Africa",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_165",
+  "legacy_tids": [
+   "r102"
+  ]
+ },
+ {
+  "m49": "009",
+  "parent": "001",
+  "name": "Oceania",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5296",
+  "legacy_tids": [
+   "r1505"
+  ]
+ },
+ {
+  "m49": "010",
+  "parent": "001",
+  "name": "Antarctica",
+  "name_es": "Antártida",
+  "name_fr": "Antarctique",
+  "name_ar": "أنتارتيكا",
+  "name_zh": "南极洲",
+  "name_ru": "Антарктика",
+  "iso_code": "ATA",
+  "iso_code_2": "AQ",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_471",
+  "legacy_tids": [
+   "272"
+  ]
+ },
+ {
+  "m49": "019",
+  "parent": "001",
+  "name": "Americas",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_335",
+  "legacy_tids": [
+   "r1463"
+  ]
+ },
+ {
+  "m49": "142",
+  "parent": "001",
+  "name": "Asia",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_666",
+  "legacy_tids": [
+   "r103"
+  ]
+ },
+ {
+  "m49": "150",
+  "parent": "001",
+  "name": "Europe",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_2724",
+  "legacy_tids": [
+   "r104",
+   "r1465"
+  ]
+ },
+ {
+  "m49": "015",
+  "parent": "002",
+  "name": "Northern Africa",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5218",
+  "legacy_tids": [
+   "r2587"
+  ]
+ },
+ {
+  "m49": "021",
+  "parent": "019",
+  "name": "Northern America",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5219",
+  "legacy_tids": [
+   "r107"
+  ]
+ },
+ {
+  "m49": "030",
+  "parent": "142",
+  "name": "Eastern Asia",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_29171",
+  "legacy_tids": [
+   "r2580"
+  ]
+ },
+ {
+  "m49": "034",
+  "parent": "142",
+  "name": "Southern Asia",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_29172",
+  "legacy_tids": [
+   "r2579"
+  ]
+ },
+ {
+  "m49": "035",
+  "parent": "142",
+  "name": "South-eastern Asia",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7260",
+  "legacy_tids": [
+   "r2578"
+  ]
+ },
+ {
+  "m49": "039",
+  "parent": "150",
+  "name": "Southern Europe",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_29176",
+  "legacy_tids": [
+   "r2584"
+  ]
+ },
+ {
+  "m49": "053",
+  "parent": "009",
+  "name": "Australia and New Zealand",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_54974fee",
+  "legacy_tids": []
+ },
+ {
+  "m49": "054",
+  "parent": "009",
+  "name": "Melanesia",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_874d1719",
+  "legacy_tids": []
+ },
+ {
+  "m49": "057",
+  "parent": "009",
+  "name": "Micronesia",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_681201d6",
+  "legacy_tids": []
+ },
+ {
+  "m49": "061",
+  "parent": "009",
+  "name": "Polynesia",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_06ebfdec",
+  "legacy_tids": []
+ },
+ {
+  "m49": "143",
+  "parent": "142",
+  "name": "Central Asia",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_37864",
+  "legacy_tids": [
+   "r2581"
+  ]
+ },
+ {
+  "m49": "145",
+  "parent": "142",
+  "name": "Western Asia",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_29174",
+  "legacy_tids": [
+   "r1469"
+  ]
+ },
+ {
+  "m49": "151",
+  "parent": "150",
+  "name": "Eastern Europe",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_2448",
+  "legacy_tids": [
+   "r2582"
+  ]
+ },
+ {
+  "m49": "154",
+  "parent": "150",
+  "name": "Northern Europe",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1385366309787",
+  "legacy_tids": [
+   "r2585"
+  ]
+ },
+ {
+  "m49": "155",
+  "parent": "150",
+  "name": "Western Europe",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8364",
+  "legacy_tids": [
+   "r2583"
+  ]
+ },
+ {
+  "m49": "202",
+  "parent": "002",
+  "name": "Sub-Saharan Africa",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_166",
+  "legacy_tids": [
+   "r2586"
+  ]
+ },
+ {
+  "m49": "419",
+  "parent": "019",
+  "name": "Latin America and the Caribbean",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4221",
+  "legacy_tids": [
+   "r105"
+  ]
+ },
+ {
+  "m49": "004",
+  "parent": "034",
+  "name": "Afghanistan",
+  "name_es": "Afganistán",
+  "name_fr": "Afghanistan",
+  "name_ar": "أفغانستان",
+  "name_zh": "阿富汗",
+  "name_ru": "Афганистан",
+  "iso_code": "AFG",
+  "iso_code_2": "AF",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_163",
+  "legacy_tids": [
+   "264"
+  ]
+ },
+ {
+  "m49": "005",
+  "parent": "419",
+  "name": "South America",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7253",
+  "legacy_tids": []
+ },
+ {
+  "m49": "008",
+  "parent": "039",
+  "name": "Albania",
+  "name_es": "Albania",
+  "name_fr": "Albanie",
+  "name_ar": "ألبانيا",
+  "name_zh": "阿尔巴尼亚",
+  "name_ru": "Албания",
+  "iso_code": "ALB",
+  "iso_code_2": "AL",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_241",
+  "legacy_tids": [
+   "266"
+  ]
+ },
+ {
+  "m49": "011",
+  "parent": "202",
+  "name": "Western Africa",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8355",
+  "legacy_tids": []
+ },
+ {
+  "m49": "012",
+  "parent": "015",
+  "name": "Algeria",
+  "name_es": "Argelia",
+  "name_fr": "Algérie",
+  "name_ar": "الجزائر",
+  "name_zh": "阿尔及利亚",
+  "name_ru": "Алжир",
+  "iso_code": "DZA",
+  "iso_code_2": "DZ",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_259",
+  "legacy_tids": [
+   "267"
+  ]
+ },
+ {
+  "m49": "013",
+  "parent": "419",
+  "name": "Central America",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1434",
+  "legacy_tids": []
+ },
+ {
+  "m49": "014",
+  "parent": "202",
+  "name": "Eastern Africa",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_2442",
+  "legacy_tids": []
+ },
+ {
+  "m49": "016",
+  "parent": "061",
+  "name": "American Samoa",
+  "name_es": "Samoa Americana",
+  "name_fr": "Samoa américaines",
+  "name_ar": "ساموا الأمريكيّة",
+  "name_zh": "美属萨摩亚",
+  "name_ru": "Американское Самоа",
+  "iso_code": "ASM",
+  "iso_code_2": "AS",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_336",
+  "legacy_tids": [
+   "268"
+  ]
+ },
+ {
+  "m49": "017",
+  "parent": "202",
+  "name": "Middle Africa",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_f89fbff4",
+  "legacy_tids": []
+ },
+ {
+  "m49": "018",
+  "parent": "202",
+  "name": "Southern Africa",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7265",
+  "legacy_tids": []
+ },
+ {
+  "m49": "020",
+  "parent": "039",
+  "name": "Andorra",
+  "name_es": "Andorra",
+  "name_fr": "Andorre",
+  "name_ar": "أندورا",
+  "name_zh": "安道尔",
+  "name_ru": "Андорра",
+  "iso_code": "AND",
+  "iso_code_2": "AD",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_403",
+  "legacy_tids": [
+   "269"
+  ]
+ },
+ {
+  "m49": "029",
+  "parent": "419",
+  "name": "Caribbean",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": null,
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": null,
+  "iso_code_2": null,
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1320",
+  "legacy_tids": []
+ },
+ {
+  "m49": "031",
+  "parent": "145",
+  "name": "Azerbaijan",
+  "name_es": "Azerbaiyán",
+  "name_fr": "Azerbaïdjan",
+  "name_ar": "أذربيجان",
+  "name_zh": "阿塞拜疆",
+  "name_ru": "Азербайджан",
+  "iso_code": "AZE",
+  "iso_code_2": "AZ",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_9026",
+  "legacy_tids": [
+   "279"
+  ]
+ },
+ {
+  "m49": "036",
+  "parent": "053",
+  "name": "Australia",
+  "name_es": "Australia",
+  "name_fr": "Australie",
+  "name_ar": "أستراليا",
+  "name_zh": "澳大利亚",
+  "name_ru": "Австралия",
+  "iso_code": "AUS",
+  "iso_code_2": "AU",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_714",
+  "legacy_tids": [
+   "277"
+  ]
+ },
+ {
+  "m49": "040",
+  "parent": "155",
+  "name": "Austria",
+  "name_es": "Austria",
+  "name_fr": "Autriche",
+  "name_ar": "النمسا",
+  "name_zh": "奥地利",
+  "name_ru": "Австрия",
+  "iso_code": "AUT",
+  "iso_code_2": "AT",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_718",
+  "legacy_tids": [
+   "278"
+  ]
+ },
+ {
+  "m49": "048",
+  "parent": "145",
+  "name": "Bahrain",
+  "name_es": "Bahrein",
+  "name_fr": "Bahreïn",
+  "name_ar": "البحرين",
+  "name_zh": "巴林",
+  "name_ru": "Бахрейн",
+  "iso_code": "BHR",
+  "iso_code_2": "BH",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_780",
+  "legacy_tids": [
+   "281"
+  ]
+ },
+ {
+  "m49": "050",
+  "parent": "034",
+  "name": "Bangladesh",
+  "name_es": "Bangladesh",
+  "name_fr": "Bangladesh",
+  "name_ar": "بنغلاديش",
+  "name_zh": "孟加拉国",
+  "name_ru": "Бангладеш",
+  "iso_code": "BGD",
+  "iso_code_2": "BD",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_810",
+  "legacy_tids": [
+   "1821"
+  ]
+ },
+ {
+  "m49": "051",
+  "parent": "145",
+  "name": "Armenia",
+  "name_es": "Armenia",
+  "name_fr": "Arménie",
+  "name_ar": "أرمينيا",
+  "name_zh": "亚美尼亚",
+  "name_ru": "Армения",
+  "iso_code": "ARM",
+  "iso_code_2": "AM",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8926",
+  "legacy_tids": [
+   "275"
+  ]
+ },
+ {
+  "m49": "056",
+  "parent": "155",
+  "name": "Belgium",
+  "name_es": "Bélgica",
+  "name_fr": "Belgique",
+  "name_ar": "بلجيكا",
+  "name_zh": "比利时",
+  "name_ru": "Бельгия",
+  "iso_code": "BEL",
+  "iso_code_2": "BE",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_870",
+  "legacy_tids": [
+   "285"
+  ]
+ },
+ {
+  "m49": "060",
+  "parent": "021",
+  "name": "Bermuda",
+  "name_es": "Bermudas",
+  "name_fr": "Bermudes",
+  "name_ar": "برمودا",
+  "name_zh": "百慕大",
+  "name_ru": "Бермудские острова",
+  "iso_code": "BMU",
+  "iso_code_2": "BM",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_884",
+  "legacy_tids": [
+   "288"
+  ]
+ },
+ {
+  "m49": "064",
+  "parent": "034",
+  "name": "Bhutan",
+  "name_es": "Bhután",
+  "name_fr": "Bhoutan",
+  "name_ar": "بوتان",
+  "name_zh": "不丹",
+  "name_ru": "Бутан",
+  "iso_code": "BTN",
+  "iso_code_2": "BT",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_897",
+  "legacy_tids": [
+   "289"
+  ]
+ },
+ {
+  "m49": "070",
+  "parent": "039",
+  "name": "Bosnia and Herzegovina",
+  "name_es": "Bosnia y Herzegovina",
+  "name_fr": "Bosnie-Herzégovine",
+  "name_ar": "البوسنة والهرسك",
+  "name_zh": "波斯尼亚和黑塞哥维那",
+  "name_ru": "Босния и Герцеговина",
+  "iso_code": "BIH",
+  "iso_code_2": "BA",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_33958",
+  "legacy_tids": [
+   "292"
+  ]
+ },
+ {
+  "m49": "090",
+  "parent": "054",
+  "name": "Solomon Islands",
+  "name_es": "Islas Salomón",
+  "name_fr": "Îles Salomon",
+  "name_ar": "جزر سليمان",
+  "name_zh": "所罗门群岛",
+  "name_ru": "Соломоновы Острова",
+  "iso_code": "SLB",
+  "iso_code_2": "SB",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7230",
+  "legacy_tids": [
+   "468"
+  ]
+ },
+ {
+  "m49": "096",
+  "parent": "035",
+  "name": "Brunei Darussalam",
+  "name_es": "Brunei Darussalam",
+  "name_fr": "Brunéi Darussalam",
+  "name_ar": "بروني دار السلام",
+  "name_zh": "文莱达鲁萨兰国",
+  "name_ru": "Бруней-Даруссалам",
+  "iso_code": "BRN",
+  "iso_code_2": "BN",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1125",
+  "legacy_tids": [
+   "298"
+  ]
+ },
+ {
+  "m49": "100",
+  "parent": "151",
+  "name": "Bulgaria",
+  "name_es": "Bulgaria",
+  "name_fr": "Bulgarie",
+  "name_ar": "بلغاريا",
+  "name_zh": "保加利亚",
+  "name_ru": "Болгария",
+  "iso_code": "BGR",
+  "iso_code_2": "BG",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1145",
+  "legacy_tids": [
+   "299"
+  ]
+ },
+ {
+  "m49": "104",
+  "parent": "035",
+  "name": "Myanmar",
+  "name_es": "Myanmar",
+  "name_fr": "Myanmar",
+  "name_ar": "ميانمار",
+  "name_zh": "缅甸",
+  "name_ru": "Мьянма",
+  "iso_code": "MMR",
+  "iso_code_2": "MM",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1155",
+  "legacy_tids": [
+   "415"
+  ]
+ },
+ {
+  "m49": "112",
+  "parent": "151",
+  "name": "Belarus",
+  "name_es": "Belarús",
+  "name_fr": "Bélarus",
+  "name_ar": "بيلاروس",
+  "name_zh": "白俄罗斯",
+  "name_ru": "Беларусь",
+  "iso_code": "BLR",
+  "iso_code_2": "BY",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_33237",
+  "legacy_tids": [
+   "284"
+  ]
+ },
+ {
+  "m49": "116",
+  "parent": "035",
+  "name": "Cambodia",
+  "name_es": "Camboya",
+  "name_fr": "Cambodge",
+  "name_ar": "كمبوديا",
+  "name_zh": "柬埔寨",
+  "name_ru": "Камбоджа",
+  "iso_code": "KHM",
+  "iso_code_2": "KH",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4073",
+  "legacy_tids": [
+   "303"
+  ]
+ },
+ {
+  "m49": "124",
+  "parent": "021",
+  "name": "Canada",
+  "name_es": "Canadá",
+  "name_fr": "Canada",
+  "name_ar": "كندا",
+  "name_zh": "加拿大",
+  "name_ru": "Канада",
+  "iso_code": "CAN",
+  "iso_code_2": "CA",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1236",
+  "legacy_tids": [
+   "305"
+  ]
+ },
+ {
+  "m49": "144",
+  "parent": "034",
+  "name": "Sri Lanka",
+  "name_es": "Sri Lanka",
+  "name_fr": "Sri Lanka",
+  "name_ar": "سري لانكا",
+  "name_zh": "斯里兰卡",
+  "name_ru": "Шри-Ланка",
+  "iso_code": "LKA",
+  "iso_code_2": "LK",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7345",
+  "legacy_tids": [
+   "474"
+  ]
+ },
+ {
+  "m49": "156",
+  "parent": "030",
+  "name": "China",
+  "name_es": "China",
+  "name_fr": "Chine",
+  "name_ar": "الصين",
+  "name_zh": "中国",
+  "name_ru": "Китай",
+  "iso_code": "CHN",
+  "iso_code_2": "CN",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1556",
+  "legacy_tids": [
+   "310"
+  ]
+ },
+ {
+  "m49": "162",
+  "parent": "053",
+  "name": "Christmas Island",
+  "name_es": "Isla de Navidad",
+  "name_fr": "Île Christmas",
+  "name_ar": "جزر كريسماس",
+  "name_zh": "圣诞岛",
+  "name_ru": "остров Рождества",
+  "iso_code": "CXR",
+  "iso_code_2": "CX",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1590",
+  "legacy_tids": [
+   "313"
+  ]
+ },
+ {
+  "m49": "166",
+  "parent": "053",
+  "name": "Cocos (Keeling) Islands",
+  "name_es": "Islas Cocos (Keeling)",
+  "name_fr": "Îles des Cocos (Keeling)",
+  "name_ar": "جزر كوكوس - كيلنغ",
+  "name_zh": "可可群岛",
+  "name_ru": "Кокосовые острова (Килинг)",
+  "iso_code": "CCK",
+  "iso_code_2": "CC",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1715",
+  "legacy_tids": [
+   "314"
+  ]
+ },
+ {
+  "m49": "184",
+  "parent": "061",
+  "name": "Cook Islands",
+  "name_es": "Islas Cook",
+  "name_fr": "Îles Cook",
+  "name_ar": "جزر كوك",
+  "name_zh": "库克群岛",
+  "name_ru": "Острова Кука",
+  "iso_code": "COK",
+  "iso_code_2": "CK",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1850",
+  "legacy_tids": [
+   "318"
+  ]
+ },
+ {
+  "m49": "191",
+  "parent": "039",
+  "name": "Croatia",
+  "name_es": "Croacia",
+  "name_fr": "Croatie",
+  "name_ar": "كرواتيا",
+  "name_zh": "克罗地亚",
+  "name_ru": "Хорватия",
+  "iso_code": "HRV",
+  "iso_code_2": "HR",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_33969",
+  "legacy_tids": [
+   "321"
+  ]
+ },
+ {
+  "m49": "196",
+  "parent": "145",
+  "name": "Cyprus",
+  "name_es": "Chipre",
+  "name_fr": "Chypre",
+  "name_ar": "قبرص",
+  "name_zh": "塞浦路斯",
+  "name_ru": "Кипр",
+  "iso_code": "CYP",
+  "iso_code_2": "CY",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_2080",
+  "legacy_tids": [
+   "324"
+  ]
+ },
+ {
+  "m49": "203",
+  "parent": "151",
+  "name": "Czechia",
+  "name_es": "Chequia",
+  "name_fr": "Tchéquie (la)",
+  "name_ar": "تشيكيا",
+  "name_zh": "捷克",
+  "name_ru": "Чехия",
+  "iso_code": "CZE",
+  "iso_code_2": "CZ",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_33095",
+  "legacy_tids": [
+   "325"
+  ]
+ },
+ {
+  "m49": "208",
+  "parent": "154",
+  "name": "Denmark",
+  "name_es": "Dinamarca",
+  "name_fr": "Danemark",
+  "name_ar": "الدانمرك",
+  "name_zh": "丹麦",
+  "name_ru": "Дания",
+  "iso_code": "DNK",
+  "iso_code_2": "DK",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_2185",
+  "legacy_tids": [
+   "328"
+  ]
+ },
+ {
+  "m49": "233",
+  "parent": "154",
+  "name": "Estonia",
+  "name_es": "Estonia",
+  "name_fr": "Estonie",
+  "name_ar": "إستونيا",
+  "name_zh": "爱沙尼亚",
+  "name_ru": "Эстония",
+  "iso_code": "EST",
+  "iso_code_2": "EE",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_10672",
+  "legacy_tids": [
+   "337"
+  ]
+ },
+ {
+  "m49": "234",
+  "parent": "154",
+  "name": "Faroe Islands",
+  "name_es": "Islas Feroe (Miembro Asociado)",
+  "name_fr": "Îles Féroé (Membre associé)",
+  "name_ar": "جزر فيرويه - عضو منتسب",
+  "name_zh": "法罗群岛(准成员)",
+  "name_ru": "Фарерские Острова (ассоциированный член)",
+  "iso_code": "FRO",
+  "iso_code_2": "FO",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_2811",
+  "legacy_tids": [
+   "341"
+  ]
+ },
+ {
+  "m49": "242",
+  "parent": "054",
+  "name": "Fiji",
+  "name_es": "Fiji",
+  "name_fr": "Fidji",
+  "name_ar": "فيجي",
+  "name_zh": "斐济",
+  "name_ru": "Фиджи",
+  "iso_code": "FJI",
+  "iso_code_2": "FJ",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_2895",
+  "legacy_tids": [
+   "342"
+  ]
+ },
+ {
+  "m49": "246",
+  "parent": "154",
+  "name": "Finland",
+  "name_es": "Finlandia",
+  "name_fr": "Finlande",
+  "name_ar": "فنلندا",
+  "name_zh": "芬兰",
+  "name_ru": "Финляндия",
+  "iso_code": "FIN",
+  "iso_code_2": "FI",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_2905",
+  "legacy_tids": [
+   "343"
+  ]
+ },
+ {
+  "m49": "248",
+  "parent": "154",
+  "name": "Åland Islands",
+  "name_es": "Islas Åland",
+  "name_fr": "Îles d'Åland",
+  "name_ar": "جزر ألاند",
+  "name_zh": "奥兰群岛",
+  "name_ru": "Аландские острова",
+  "iso_code": "ALA",
+  "iso_code_2": "AX",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_e5336d8d",
+  "legacy_tids": [
+   "265"
+  ]
+ },
+ {
+  "m49": "250",
+  "parent": "155",
+  "name": "France",
+  "name_es": "Francia",
+  "name_fr": "France",
+  "name_ar": "فرنسا",
+  "name_zh": "法国",
+  "name_ru": "Франция",
+  "iso_code": "FRA",
+  "iso_code_2": "FR",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3081",
+  "legacy_tids": [
+   "344"
+  ]
+ },
+ {
+  "m49": "258",
+  "parent": "061",
+  "name": "French Polynesia",
+  "name_es": "Polinesia Francesa",
+  "name_fr": "Polynésie française",
+  "name_ar": "بولينيزيا الفرنسية",
+  "name_zh": "法属波利尼西亚",
+  "name_ru": "Французская Полинезия",
+  "iso_code": "PYF",
+  "iso_code_2": "PF",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3094",
+  "legacy_tids": [
+   "346"
+  ]
+ },
+ {
+  "m49": "268",
+  "parent": "145",
+  "name": "Georgia",
+  "name_es": "Georgia",
+  "name_fr": "Géorgie",
+  "name_ar": "جورجيا",
+  "name_zh": "格鲁吉亚",
+  "name_ru": "Грузия",
+  "iso_code": "GEO",
+  "iso_code_2": "GE",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_33250",
+  "legacy_tids": [
+   "350"
+  ]
+ },
+ {
+  "m49": "275",
+  "parent": "145",
+  "name": "Palestine",
+  "name_es": "Territorio Palestino Ocupado",
+  "name_fr": "Territoire palestinien occupé",
+  "name_ar": "فلسطين",
+  "name_zh": "巴勒斯坦被占领土",
+  "name_ru": "Палестина",
+  "iso_code": "PSE",
+  "iso_code_2": "PS",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_37924",
+  "legacy_tids": [
+   "475"
+  ]
+ },
+ {
+  "m49": "276",
+  "parent": "155",
+  "name": "Germany",
+  "name_es": "Alemania",
+  "name_fr": "Allemagne",
+  "name_ar": "ألمانيا",
+  "name_zh": "德国",
+  "name_ru": "Германия",
+  "iso_code": "DEU",
+  "iso_code_2": "DE",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3245",
+  "legacy_tids": [
+   "351"
+  ]
+ },
+ {
+  "m49": "292",
+  "parent": "039",
+  "name": "Gibraltar",
+  "name_es": "Gibraltar",
+  "name_fr": "Gibraltar",
+  "name_ar": "جبل طارق",
+  "name_zh": "直布罗陀",
+  "name_ru": "Гибралтар",
+  "iso_code": "GIB",
+  "iso_code_2": "GI",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3257",
+  "legacy_tids": [
+   "353"
+  ]
+ },
+ {
+  "m49": "296",
+  "parent": "057",
+  "name": "Kiribati",
+  "name_es": "Kiribati",
+  "name_fr": "Kiribati",
+  "name_ar": "كيريباس",
+  "name_zh": "基里巴斯",
+  "name_ru": "Кирибати",
+  "iso_code": "KIR",
+  "iso_code_2": "KI",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3261",
+  "legacy_tids": [
+   "384"
+  ]
+ },
+ {
+  "m49": "300",
+  "parent": "039",
+  "name": "Greece",
+  "name_es": "Grecia",
+  "name_fr": "Grèce",
+  "name_ar": "اليونان",
+  "name_zh": "希腊",
+  "name_ru": "Греция",
+  "iso_code": "GRC",
+  "iso_code_2": "GR",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3373",
+  "legacy_tids": [
+   "354"
+  ]
+ },
+ {
+  "m49": "304",
+  "parent": "021",
+  "name": "Greenland",
+  "name_es": "Groenlandia",
+  "name_fr": "Groenland",
+  "name_ar": "غرينلاند",
+  "name_zh": "格陵兰",
+  "name_ru": "Гренландия",
+  "iso_code": "GRL",
+  "iso_code_2": "GL",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3380",
+  "legacy_tids": [
+   "355"
+  ]
+ },
+ {
+  "m49": "316",
+  "parent": "057",
+  "name": "Guam",
+  "name_es": "Guam",
+  "name_fr": "Guam",
+  "name_ar": "غوام",
+  "name_zh": "关岛",
+  "name_ru": "Гуам",
+  "iso_code": "GUM",
+  "iso_code_2": "GU",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3408",
+  "legacy_tids": [
+   "358"
+  ]
+ },
+ {
+  "m49": "334",
+  "parent": "053",
+  "name": "Heard and McDonald Islands",
+  "name_es": "Islas Heard y McDonald",
+  "name_fr": "Îles Heard et McDonald",
+  "name_ar": "جزيرة هيرد وجزر ماكدونالد",
+  "name_zh": "赫德和麦克唐纳群岛",
+  "name_ru": "острова Херд и Макдональд",
+  "iso_code": "HMD",
+  "iso_code_2": "HM",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_29184",
+  "legacy_tids": [
+   "365"
+  ]
+ },
+ {
+  "m49": "336",
+  "parent": "039",
+  "name": "Holy See",
+  "name_es": "Santa Sede",
+  "name_fr": "Saint-Siège",
+  "name_ar": "الكرسي الرسولي",
+  "name_zh": "教廷",
+  "name_ru": "Святой Престол",
+  "iso_code": "VAT",
+  "iso_code_2": "VA",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3645",
+  "legacy_tids": [
+   "366"
+  ]
+ },
+ {
+  "m49": "344",
+  "parent": "030",
+  "name": "China, Hong Kong SAR",
+  "name_es": "China, RAE de Hong Kong",
+  "name_fr": "Chine - RAS de Hong-Kong",
+  "name_ar": "الصين - هونغ كونغ منطقة إداريّة خاصة",
+  "name_zh": "中国香港特区",
+  "name_ru": "Китай, Специальный административный район Гонконг",
+  "iso_code": "HKG",
+  "iso_code_2": "HK",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_37745",
+  "legacy_tids": [
+   "311"
+  ]
+ },
+ {
+  "m49": "348",
+  "parent": "151",
+  "name": "Hungary",
+  "name_es": "Hungría",
+  "name_fr": "Hongrie",
+  "name_ar": "هنغاريا",
+  "name_zh": "匈牙利",
+  "name_ru": "Венгрия",
+  "iso_code": "HUN",
+  "iso_code_2": "HU",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3695",
+  "legacy_tids": [
+   "368"
+  ]
+ },
+ {
+  "m49": "352",
+  "parent": "154",
+  "name": "Iceland",
+  "name_es": "Islandia",
+  "name_fr": "Islande",
+  "name_ar": "آيسلندا",
+  "name_zh": "冰岛",
+  "name_ru": "Исландия",
+  "iso_code": "ISL",
+  "iso_code_2": "IS",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3785",
+  "legacy_tids": [
+   "369"
+  ]
+ },
+ {
+  "m49": "356",
+  "parent": "034",
+  "name": "India",
+  "name_es": "India",
+  "name_fr": "Inde",
+  "name_ar": "الهند",
+  "name_zh": "印度",
+  "name_ru": "Индия",
+  "iso_code": "IND",
+  "iso_code_2": "IN",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3825",
+  "legacy_tids": [
+   "370"
+  ]
+ },
+ {
+  "m49": "360",
+  "parent": "035",
+  "name": "Indonesia",
+  "name_es": "Indonesia",
+  "name_fr": "Indonésie",
+  "name_ar": "إندونيسيا",
+  "name_zh": "印度尼西亚",
+  "name_ru": "Индонезия",
+  "iso_code": "IDN",
+  "iso_code_2": "ID",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3840",
+  "legacy_tids": [
+   "371"
+  ]
+ },
+ {
+  "m49": "364",
+  "parent": "034",
+  "name": "Iran (Islamic Republic of)",
+  "name_es": "Irán (República Islámica del)",
+  "name_fr": "Iran (République islamique d')",
+  "name_ar": "إيران جمهوريّة) - (الإسلامية",
+  "name_zh": "伊朗(伊斯兰共和国)",
+  "name_ru": "Иран (Исламская Республика)",
+  "iso_code": "IRN",
+  "iso_code_2": "IR",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3940",
+  "legacy_tids": [
+   "372"
+  ]
+ },
+ {
+  "m49": "368",
+  "parent": "145",
+  "name": "Iraq",
+  "name_es": "Iraq",
+  "name_fr": "Iraq",
+  "name_ar": "العراق",
+  "name_zh": "伊拉克",
+  "name_ru": "Ирак",
+  "iso_code": "IRQ",
+  "iso_code_2": "IQ",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3941",
+  "legacy_tids": [
+   "373"
+  ]
+ },
+ {
+  "m49": "372",
+  "parent": "154",
+  "name": "Ireland",
+  "name_es": "Irlanda",
+  "name_fr": "Irlande",
+  "name_ar": "آيرلندا",
+  "name_zh": "爱尔兰",
+  "name_ru": "Ирландия",
+  "iso_code": "IRL",
+  "iso_code_2": "IE",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3948",
+  "legacy_tids": [
+   "374"
+  ]
+ },
+ {
+  "m49": "376",
+  "parent": "145",
+  "name": "Israel",
+  "name_es": "Israel",
+  "name_fr": "Israël",
+  "name_ar": "إسرائيل",
+  "name_zh": "以色列",
+  "name_ru": "Израиль",
+  "iso_code": "ISR",
+  "iso_code_2": "IL",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3972",
+  "legacy_tids": [
+   "376"
+  ]
+ },
+ {
+  "m49": "380",
+  "parent": "039",
+  "name": "Italy",
+  "name_es": "Italia",
+  "name_fr": "Italie",
+  "name_ar": "إيطاليا",
+  "name_zh": "意大利",
+  "name_ru": "Италия",
+  "iso_code": "ITA",
+  "iso_code_2": "IT",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4026",
+  "legacy_tids": [
+   "377"
+  ]
+ },
+ {
+  "m49": "392",
+  "parent": "030",
+  "name": "Japan",
+  "name_es": "Japón",
+  "name_fr": "Japon",
+  "name_ar": "اليابان",
+  "name_zh": "日本",
+  "name_ru": "Япония",
+  "iso_code": "JPN",
+  "iso_code_2": "JP",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4039",
+  "legacy_tids": [
+   "379"
+  ]
+ },
+ {
+  "m49": "398",
+  "parent": "143",
+  "name": "Kazakhstan",
+  "name_es": "Kazajstán",
+  "name_fr": "Kazakhstan",
+  "name_ar": "كازاخستان",
+  "name_zh": "哈萨克斯坦",
+  "name_ru": "Казахстан",
+  "iso_code": "KAZ",
+  "iso_code_2": "KZ",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_11952",
+  "legacy_tids": [
+   "382"
+  ]
+ },
+ {
+  "m49": "400",
+  "parent": "145",
+  "name": "Jordan",
+  "name_es": "Jordania",
+  "name_fr": "Jordanie",
+  "name_ar": "الأردن",
+  "name_zh": "约旦",
+  "name_ru": "Иордания",
+  "iso_code": "JOR",
+  "iso_code_2": "JO",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4053",
+  "legacy_tids": [
+   "381"
+  ]
+ },
+ {
+  "m49": "408",
+  "parent": "030",
+  "name": "Democratic People's Republic of Korea",
+  "name_es": "República Popular Democrática de Corea",
+  "name_fr": "République populaire démocratique de Corée",
+  "name_ar": "جمهوريّة كوريا الشعبيّة الديمقراطية",
+  "name_zh": "朝鲜民主主义人民共和国",
+  "name_ru": "Корейская Народно-Демократическая Республика",
+  "iso_code": "PRK",
+  "iso_code_2": "KP",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4115",
+  "legacy_tids": [
+   "326"
+  ]
+ },
+ {
+  "m49": "410",
+  "parent": "030",
+  "name": "Republic of Korea",
+  "name_es": "República de Corea",
+  "name_fr": "République de Corée",
+  "name_ar": "جمهوريّة كوريا",
+  "name_zh": "大韩民国",
+  "name_ru": "Республика Корея",
+  "iso_code": "KOR",
+  "iso_code_2": "KR",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4116",
+  "legacy_tids": [
+   "443"
+  ]
+ },
+ {
+  "m49": "414",
+  "parent": "145",
+  "name": "Kuwait",
+  "name_es": "Kuwait",
+  "name_fr": "Koweït",
+  "name_ar": "الكويت",
+  "name_zh": "科威特",
+  "name_ru": "Кувейт",
+  "iso_code": "KWT",
+  "iso_code_2": "KW",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4119",
+  "legacy_tids": [
+   "385"
+  ]
+ },
+ {
+  "m49": "417",
+  "parent": "143",
+  "name": "Kyrgyzstan",
+  "name_es": "Kirguistán",
+  "name_fr": "Kirghizistan",
+  "name_ar": "قيرغيزستان",
+  "name_zh": "吉尔吉斯斯坦",
+  "name_ru": "Кыргызстан",
+  "iso_code": "KGZ",
+  "iso_code_2": "KG",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_33243",
+  "legacy_tids": [
+   "386"
+  ]
+ },
+ {
+  "m49": "418",
+  "parent": "035",
+  "name": "Lao People's Democratic Republic",
+  "name_es": "República Democrática Popular Lao",
+  "name_fr": "République démocratique populaire lao",
+  "name_ar": "جمهوريّة لاو الديمقراطية الشعبيّة",
+  "name_zh": "老挝人民民主共和国",
+  "name_ru": "Лаосская Народно-Демократическая Республика",
+  "iso_code": "LAO",
+  "iso_code_2": "LA",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_12076",
+  "legacy_tids": [
+   "387"
+  ]
+ },
+ {
+  "m49": "422",
+  "parent": "145",
+  "name": "Lebanon",
+  "name_es": "Líbano",
+  "name_fr": "Liban",
+  "name_ar": "لبنان",
+  "name_zh": "黎巴嫩",
+  "name_ru": "Ливан",
+  "iso_code": "LBN",
+  "iso_code_2": "LB",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4244",
+  "legacy_tids": [
+   "389"
+  ]
+ },
+ {
+  "m49": "428",
+  "parent": "154",
+  "name": "Latvia",
+  "name_es": "Letonia",
+  "name_fr": "Lettonie",
+  "name_ar": "لاتفيا",
+  "name_zh": "拉脱维亚",
+  "name_ru": "Латвия",
+  "iso_code": "LVA",
+  "iso_code_2": "LV",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_12103",
+  "legacy_tids": [
+   "388"
+  ]
+ },
+ {
+  "m49": "434",
+  "parent": "015",
+  "name": "Libya",
+  "name_es": "Libia",
+  "name_fr": "Libye",
+  "name_ar": "ليبيا",
+  "name_zh": "利比亚",
+  "name_ru": "Ливия",
+  "iso_code": "LBY",
+  "iso_code_2": "LY",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4312",
+  "legacy_tids": [
+   "392"
+  ]
+ },
+ {
+  "m49": "438",
+  "parent": "155",
+  "name": "Liechtenstein",
+  "name_es": "Liechtenstein",
+  "name_fr": "Liechtenstein",
+  "name_ar": "ليختنشتاين",
+  "name_zh": "列支敦士登",
+  "name_ru": "Лихтенштейн",
+  "iso_code": "LIE",
+  "iso_code_2": "LI",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4315",
+  "legacy_tids": [
+   "393"
+  ]
+ },
+ {
+  "m49": "440",
+  "parent": "154",
+  "name": "Lithuania",
+  "name_es": "Lituania",
+  "name_fr": "Lituanie",
+  "name_ar": "ليتوانيا",
+  "name_zh": "立陶宛",
+  "name_ru": "Литва",
+  "iso_code": "LTU",
+  "iso_code_2": "LT",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_12204",
+  "legacy_tids": [
+   "394"
+  ]
+ },
+ {
+  "m49": "442",
+  "parent": "155",
+  "name": "Luxembourg",
+  "name_es": "Luxemburgo",
+  "name_fr": "Luxembourg",
+  "name_ar": "لكسمبرغ",
+  "name_zh": "卢森堡",
+  "name_ru": "Люксембург",
+  "iso_code": "LUX",
+  "iso_code_2": "LU",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4471",
+  "legacy_tids": [
+   "395"
+  ]
+ },
+ {
+  "m49": "446",
+  "parent": "030",
+  "name": "China, Macao SAR",
+  "name_es": "China, RAE de Macao",
+  "name_fr": "Chine - RAS de Macao",
+  "name_ar": "الصين - مكاو منطقة إداريّة خاصّة",
+  "name_zh": "中国澳门特区",
+  "name_ru": "Китай, Специальный административный район Макао",
+  "iso_code": "MAC",
+  "iso_code_2": "MO",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1329915929073",
+  "legacy_tids": [
+   "312"
+  ]
+ },
+ {
+  "m49": "458",
+  "parent": "035",
+  "name": "Malaysia",
+  "name_es": "Malasia",
+  "name_fr": "Malaisie",
+  "name_ar": "ماليزيا",
+  "name_zh": "马来西亚",
+  "name_ru": "Малайзия",
+  "iso_code": "MYS",
+  "iso_code_2": "MY",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4533",
+  "legacy_tids": [
+   "398"
+  ]
+ },
+ {
+  "m49": "462",
+  "parent": "034",
+  "name": "Maldives",
+  "name_es": "Maldivas",
+  "name_fr": "Maldives",
+  "name_ar": "ملديف",
+  "name_zh": "马尔代夫",
+  "name_ru": "Мальдивы",
+  "iso_code": "MDV",
+  "iso_code_2": "MV",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4534",
+  "legacy_tids": [
+   "399"
+  ]
+ },
+ {
+  "m49": "470",
+  "parent": "039",
+  "name": "Malta",
+  "name_es": "Malta",
+  "name_fr": "Malte",
+  "name_ar": "مالطة",
+  "name_zh": "马耳他",
+  "name_ru": "Мальта",
+  "iso_code": "MLT",
+  "iso_code_2": "MT",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4548",
+  "legacy_tids": [
+   "401"
+  ]
+ },
+ {
+  "m49": "492",
+  "parent": "155",
+  "name": "Monaco",
+  "name_es": "Mónaco",
+  "name_fr": "Monaco",
+  "name_ar": "موناكو",
+  "name_zh": "摩纳哥",
+  "name_ru": "Монако",
+  "iso_code": "MCO",
+  "iso_code_2": "MC",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4904",
+  "legacy_tids": [
+   "409"
+  ]
+ },
+ {
+  "m49": "496",
+  "parent": "030",
+  "name": "Mongolia",
+  "name_es": "Mongolia",
+  "name_fr": "Mongolie",
+  "name_ar": "منغوليا",
+  "name_zh": "蒙古",
+  "name_ru": "Монголия",
+  "iso_code": "MNG",
+  "iso_code_2": "MN",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4908",
+  "legacy_tids": [
+   "410"
+  ]
+ },
+ {
+  "m49": "498",
+  "parent": "151",
+  "name": "Republic of Moldova",
+  "name_es": "República de Moldova",
+  "name_fr": "République de Moldova",
+  "name_ar": "جمهوريّة مولدوفا",
+  "name_zh": "摩尔多瓦共和国",
+  "name_ru": "Республика Молдова",
+  "iso_code": "MDA",
+  "iso_code_2": "MD",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_33245",
+  "legacy_tids": [
+   "444"
+  ]
+ },
+ {
+  "m49": "499",
+  "parent": "039",
+  "name": "Montenegro",
+  "name_es": "Montenegro",
+  "name_fr": "Monténégro",
+  "name_ar": "الجبل الأسود",
+  "name_zh": "黑山",
+  "name_ru": "Черногория",
+  "iso_code": "MNE",
+  "iso_code_2": "ME",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_49907",
+  "legacy_tids": [
+   "411"
+  ]
+ },
+ {
+  "m49": "504",
+  "parent": "015",
+  "name": "Morocco",
+  "name_es": "Marruecos",
+  "name_fr": "Maroc",
+  "name_ar": "المغرب",
+  "name_zh": "摩洛哥",
+  "name_ru": "Марокко",
+  "iso_code": "MAR",
+  "iso_code_2": "MA",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4940",
+  "legacy_tids": [
+   "413"
+  ]
+ },
+ {
+  "m49": "512",
+  "parent": "145",
+  "name": "Oman",
+  "name_es": "Omán",
+  "name_fr": "Oman",
+  "name_ar": "عمان",
+  "name_zh": "阿曼",
+  "name_ru": "Оман",
+  "iso_code": "OMN",
+  "iso_code_2": "OM",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5345",
+  "legacy_tids": [
+   "430"
+  ]
+ },
+ {
+  "m49": "520",
+  "parent": "057",
+  "name": "Nauru",
+  "name_es": "Nauru",
+  "name_fr": "Nauru",
+  "name_ar": "ناورو",
+  "name_zh": "瑙鲁",
+  "name_ru": "Науру",
+  "iso_code": "NRU",
+  "iso_code_2": "NR",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5093",
+  "legacy_tids": [
+   "417"
+  ]
+ },
+ {
+  "m49": "524",
+  "parent": "034",
+  "name": "Nepal",
+  "name_es": "Nepal",
+  "name_fr": "Népal",
+  "name_ar": "نيبال",
+  "name_zh": "尼泊尔",
+  "name_ru": "Непал",
+  "iso_code": "NPL",
+  "iso_code_2": "NP",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5124",
+  "legacy_tids": [
+   "418"
+  ]
+ },
+ {
+  "m49": "528",
+  "parent": "155",
+  "name": "Netherlands",
+  "name_es": "Países Bajos",
+  "name_fr": "Pays-Bas",
+  "name_ar": "هولندا",
+  "name_zh": "荷兰",
+  "name_ru": "Нидерланды",
+  "iso_code": "NLD",
+  "iso_code_2": "NL",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5142",
+  "legacy_tids": [
+   "419"
+  ]
+ },
+ {
+  "m49": "540",
+  "parent": "054",
+  "name": "New Caledonia",
+  "name_es": "Nueva Caledonia",
+  "name_fr": "Nouvelle-Calédonie",
+  "name_ar": "كاليدونيا الجديدة",
+  "name_zh": "新喀里多尼亚",
+  "name_ru": "Новая Каледония",
+  "iso_code": "NCL",
+  "iso_code_2": "NC",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5155",
+  "legacy_tids": [
+   "420"
+  ]
+ },
+ {
+  "m49": "548",
+  "parent": "054",
+  "name": "Vanuatu",
+  "name_es": "Vanuatu",
+  "name_fr": "Vanuatu",
+  "name_ar": "فانواتو",
+  "name_zh": "瓦努阿图",
+  "name_ru": "Вануату",
+  "iso_code": "VUT",
+  "iso_code_2": "VU",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5159",
+  "legacy_tids": [
+   "504"
+  ]
+ },
+ {
+  "m49": "554",
+  "parent": "053",
+  "name": "New Zealand",
+  "name_es": "Nueva Zelandia",
+  "name_fr": "Nouvelle-Zélande",
+  "name_ar": "نيوزيلندا",
+  "name_zh": "新西兰",
+  "name_ru": "Новая Зеландия",
+  "iso_code": "NZL",
+  "iso_code_2": "NZ",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5164",
+  "legacy_tids": [
+   "421"
+  ]
+ },
+ {
+  "m49": "570",
+  "parent": "061",
+  "name": "Niue",
+  "name_es": "Niue",
+  "name_fr": "Nioué",
+  "name_ar": "نيوي",
+  "name_zh": "纽埃",
+  "name_ru": "Ниуэ",
+  "iso_code": "NIU",
+  "iso_code_2": "NU",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5202",
+  "legacy_tids": [
+   "425"
+  ]
+ },
+ {
+  "m49": "574",
+  "parent": "053",
+  "name": "Norfolk Island",
+  "name_es": "Isla Norfolk",
+  "name_fr": "Île Norfolk",
+  "name_ar": "جزيرة نورفولك",
+  "name_zh": "诺福克岛",
+  "name_ru": "остров Норфолк",
+  "iso_code": "NFK",
+  "iso_code_2": "NF",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5217",
+  "legacy_tids": [
+   "426"
+  ]
+ },
+ {
+  "m49": "578",
+  "parent": "154",
+  "name": "Norway",
+  "name_es": "Noruega",
+  "name_fr": "Norvège",
+  "name_ar": "النرويج",
+  "name_zh": "挪威",
+  "name_ru": "Норвегия",
+  "iso_code": "NOR",
+  "iso_code_2": "NO",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5234",
+  "legacy_tids": [
+   "429"
+  ]
+ },
+ {
+  "m49": "580",
+  "parent": "057",
+  "name": "Northern Mariana Islands",
+  "name_es": "Islas Marianas septentrionales",
+  "name_fr": "Îles Mariannes du Nord",
+  "name_ar": "جزر ماريانا الشمالية",
+  "name_zh": "北马里亚纳群岛",
+  "name_ru": "Северные Марианские острова",
+  "iso_code": "MNP",
+  "iso_code_2": "MP",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4604",
+  "legacy_tids": [
+   "428"
+  ]
+ },
+ {
+  "m49": "581",
+  "parent": "057",
+  "name": "US Minor Is.",
+  "name_es": "Islas Menores Periféricas de los Estados Unidos",
+  "name_fr": "Îles mineures éloignées des États-Unis",
+  "name_ar": "جزر الولايات المتحدة الصغرى",
+  "name_zh": "美国小离岛",
+  "name_ru": "малые отдаленные острова Соединенных Штатов Америки",
+  "iso_code": "UMI",
+  "iso_code_2": "UM",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_cabd7286",
+  "legacy_tids": [
+   "499"
+  ]
+ },
+ {
+  "m49": "583",
+  "parent": "057",
+  "name": "Micronesia (Federated States of)",
+  "name_es": "Micronesia (Estados Federados de)",
+  "name_fr": "Micronésie (États fédérés de)",
+  "name_ar": "ميكرونيزيا",
+  "name_zh": "密克罗尼西亚(联邦)",
+  "name_ru": "Микронезия (Федеративные Штаты)",
+  "iso_code": "FSM",
+  "iso_code_2": "FM",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4805",
+  "legacy_tids": [
+   "408"
+  ]
+ },
+ {
+  "m49": "584",
+  "parent": "057",
+  "name": "Marshall Islands",
+  "name_es": "Islas Marshall",
+  "name_fr": "Îles Marshall",
+  "name_ar": "جزر مارشال",
+  "name_zh": "马绍尔群岛",
+  "name_ru": "Маршалловы Острова",
+  "iso_code": "MHL",
+  "iso_code_2": "MH",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4630",
+  "legacy_tids": [
+   "402"
+  ]
+ },
+ {
+  "m49": "585",
+  "parent": "057",
+  "name": "Palau",
+  "name_es": "Palau",
+  "name_fr": "Palaos",
+  "name_ar": "بالاو",
+  "name_zh": "帕劳",
+  "name_ru": "Палау",
+  "iso_code": "PLW",
+  "iso_code_2": "PW",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_33221",
+  "legacy_tids": [
+   "432"
+  ]
+ },
+ {
+  "m49": "586",
+  "parent": "034",
+  "name": "Pakistan",
+  "name_es": "Pakistán",
+  "name_fr": "Pakistan",
+  "name_ar": "باكستان",
+  "name_zh": "巴基斯坦",
+  "name_ru": "Пакистан",
+  "iso_code": "PAK",
+  "iso_code_2": "PK",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5504",
+  "legacy_tids": [
+   "431"
+  ]
+ },
+ {
+  "m49": "598",
+  "parent": "054",
+  "name": "Papua New Guinea",
+  "name_es": "Papua Nueva Guinea",
+  "name_fr": "Papouasie-Nouvelle-Guinée",
+  "name_ar": "بابوا غينيا الجديدة",
+  "name_zh": "巴布亚新几内亚",
+  "name_ru": "Папуа-Новая Гвинея",
+  "iso_code": "PNG",
+  "iso_code_2": "PG",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5555",
+  "legacy_tids": [
+   "434"
+  ]
+ },
+ {
+  "m49": "608",
+  "parent": "035",
+  "name": "Philippines",
+  "name_es": "Filipinas",
+  "name_fr": "Philippines",
+  "name_ar": "الفلبين",
+  "name_zh": "菲律宾",
+  "name_ru": "Филиппины",
+  "iso_code": "PHL",
+  "iso_code_2": "PH",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5783",
+  "legacy_tids": [
+   "437"
+  ]
+ },
+ {
+  "m49": "612",
+  "parent": "061",
+  "name": "Pitcairn Islands",
+  "name_es": "Islas Pitcairn",
+  "name_fr": "Îles Pitcairn",
+  "name_ar": "جزر بيتكيرن",
+  "name_zh": "皮特克恩岛",
+  "name_ru": "Питкэрн",
+  "iso_code": "PCN",
+  "iso_code_2": "PN",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5934",
+  "legacy_tids": [
+   "438"
+  ]
+ },
+ {
+  "m49": "616",
+  "parent": "151",
+  "name": "Poland",
+  "name_es": "Polonia",
+  "name_fr": "Pologne",
+  "name_ar": "بولندا",
+  "name_zh": "波兰",
+  "name_ru": "Польша",
+  "iso_code": "POL",
+  "iso_code_2": "PL",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_6055",
+  "legacy_tids": [
+   "439"
+  ]
+ },
+ {
+  "m49": "620",
+  "parent": "039",
+  "name": "Portugal",
+  "name_es": "Portugal",
+  "name_fr": "Portugal",
+  "name_ar": "البرتغال",
+  "name_zh": "葡萄牙",
+  "name_ru": "Португалия",
+  "iso_code": "PRT",
+  "iso_code_2": "PT",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_6124",
+  "legacy_tids": [
+   "440"
+  ]
+ },
+ {
+  "m49": "626",
+  "parent": "035",
+  "name": "Timor-Leste",
+  "name_es": "Timor-Leste",
+  "name_fr": "Timor-Leste",
+  "name_ar": "تيمور - ليشتي",
+  "name_zh": "东帝汶",
+  "name_ru": "Тимор-Лешти",
+  "iso_code": "TLS",
+  "iso_code_2": "TL",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_37893",
+  "legacy_tids": [
+   "484"
+  ]
+ },
+ {
+  "m49": "634",
+  "parent": "145",
+  "name": "Qatar",
+  "name_es": "Qatar",
+  "name_fr": "Qatar",
+  "name_ar": "قطر",
+  "name_zh": "卡塔尔",
+  "name_ru": "Катар",
+  "iso_code": "QAT",
+  "iso_code_2": "QA",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_6395",
+  "legacy_tids": [
+   "442"
+  ]
+ },
+ {
+  "m49": "642",
+  "parent": "151",
+  "name": "Romania",
+  "name_es": "Rumania",
+  "name_fr": "Roumanie",
+  "name_ar": "رومانيا",
+  "name_zh": "罗马尼亚",
+  "name_ru": "Румыния",
+  "iso_code": "ROU",
+  "iso_code_2": "RO",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_6637",
+  "legacy_tids": [
+   "446"
+  ]
+ },
+ {
+  "m49": "643",
+  "parent": "151",
+  "name": "Russian Federation",
+  "name_es": "Federación de Rusia",
+  "name_fr": "Fédération de Russie",
+  "name_ar": "الاتحاد الروسي",
+  "name_zh": "俄罗斯联邦",
+  "name_ru": "Российская Федерация",
+  "iso_code": "RUS",
+  "iso_code_2": "RU",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_33240",
+  "legacy_tids": [
+   "447"
+  ]
+ },
+ {
+  "m49": "666",
+  "parent": "021",
+  "name": "Saint Pierre and Miquelon",
+  "name_es": "Saint-Pierre y Miquelon",
+  "name_fr": "Saint-Pierre-et-Miquelon",
+  "name_ar": "سان بيير وميكلون",
+  "name_zh": "圣皮埃尔和密克隆",
+  "name_ru": "Сен-Пьер и Микелон",
+  "iso_code": "SPM",
+  "iso_code_2": "PM",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7351",
+  "legacy_tids": [
+   "454"
+  ]
+ },
+ {
+  "m49": "674",
+  "parent": "039",
+  "name": "San Marino",
+  "name_es": "San Marino",
+  "name_fr": "Saint-Marin",
+  "name_ar": "سان مارينو",
+  "name_zh": "圣马力诺",
+  "name_ru": "Сан-Марино",
+  "iso_code": "SMR",
+  "iso_code_2": "SM",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_6778",
+  "legacy_tids": [
+   "457"
+  ]
+ },
+ {
+  "m49": "682",
+  "parent": "145",
+  "name": "Saudi Arabia",
+  "name_es": "Arabia Saudita",
+  "name_fr": "Arabie saoudite",
+  "name_ar": "المملكة العربيّة السعوديّة",
+  "name_zh": "沙特阿拉伯",
+  "name_ru": "Саудовская Аравия",
+  "iso_code": "SAU",
+  "iso_code_2": "SA",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_6822",
+  "legacy_tids": [
+   "459"
+  ]
+ },
+ {
+  "m49": "688",
+  "parent": "039",
+  "name": "Serbia",
+  "name_es": "Serbia",
+  "name_fr": "Serbie",
+  "name_ar": "صربيا",
+  "name_zh": "塞尔维亚",
+  "name_ru": "Сербия",
+  "iso_code": "SRB",
+  "iso_code_2": "RS",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_49909",
+  "legacy_tids": [
+   "461"
+  ]
+ },
+ {
+  "m49": "702",
+  "parent": "035",
+  "name": "Singapore",
+  "name_es": "Singapur",
+  "name_fr": "Singapour",
+  "name_ar": "سنغافورة",
+  "name_zh": "新加坡",
+  "name_ru": "Сингапур",
+  "iso_code": "SGP",
+  "iso_code_2": "SG",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7077",
+  "legacy_tids": [
+   "464"
+  ]
+ },
+ {
+  "m49": "703",
+  "parent": "151",
+  "name": "Slovakia",
+  "name_es": "Eslovaquia",
+  "name_fr": "Slovaquie",
+  "name_ar": "سلوفاكيا",
+  "name_zh": "斯洛伐克",
+  "name_ru": "Словакия",
+  "iso_code": "SVK",
+  "iso_code_2": "SK",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_33096",
+  "legacy_tids": [
+   "466"
+  ]
+ },
+ {
+  "m49": "704",
+  "parent": "035",
+  "name": "Viet Nam",
+  "name_es": "Viet Nam",
+  "name_fr": "Viet Nam",
+  "name_ar": "فييت نام",
+  "name_zh": "越南",
+  "name_ru": "Вьетнам",
+  "iso_code": "VNM",
+  "iso_code_2": "VN",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8227",
+  "legacy_tids": [
+   "506"
+  ]
+ },
+ {
+  "m49": "705",
+  "parent": "039",
+  "name": "Slovenia",
+  "name_es": "Eslovenia",
+  "name_fr": "Slovénie",
+  "name_ar": "سلوفينيا",
+  "name_zh": "斯洛文尼亚",
+  "name_ru": "Словения",
+  "iso_code": "SVN",
+  "iso_code_2": "SI",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_34123",
+  "legacy_tids": [
+   "467"
+  ]
+ },
+ {
+  "m49": "724",
+  "parent": "039",
+  "name": "Spain",
+  "name_es": "España",
+  "name_fr": "Espagne",
+  "name_ar": "إسبانيا",
+  "name_zh": "西班牙",
+  "name_ru": "Испания",
+  "iso_code": "ESP",
+  "iso_code_2": "ES",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7273",
+  "legacy_tids": [
+   "473"
+  ]
+ },
+ {
+  "m49": "729",
+  "parent": "015",
+  "name": "Sudan",
+  "name_es": "Sudán",
+  "name_fr": "Soudan",
+  "name_ar": "السودان",
+  "name_zh": "苏丹",
+  "name_ru": "Судан",
+  "iso_code": "SDN",
+  "iso_code_2": "SD",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7497",
+  "legacy_tids": [
+   "476"
+  ]
+ },
+ {
+  "m49": "732",
+  "parent": "015",
+  "name": "Western Sahara",
+  "name_es": "Sáhara occidental",
+  "name_fr": "Sahara occidental",
+  "name_ar": "الصحراء الغربيّة",
+  "name_zh": "西撒哈拉",
+  "name_ru": "Западная Сахара",
+  "iso_code": "ESH",
+  "iso_code_2": "EH",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8366",
+  "legacy_tids": [
+   "508"
+  ]
+ },
+ {
+  "m49": "744",
+  "parent": "154",
+  "name": "Svalbard and Jan Mayen Islands",
+  "name_es": "Islas Svalbard y Jan Mayen",
+  "name_fr": "Îles Svalbard et Jan Mayen",
+  "name_ar": "جزر سفالبارد وجان مايين",
+  "name_zh": "斯瓦尔巴和扬马延群岛",
+  "name_ru": "острова Свальбард и Ян-Майен",
+  "iso_code": "SJM",
+  "iso_code_2": "SJ",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_74642b33",
+  "legacy_tids": [
+   "478"
+  ]
+ },
+ {
+  "m49": "752",
+  "parent": "154",
+  "name": "Sweden",
+  "name_es": "Suecia",
+  "name_fr": "Suède",
+  "name_ar": "السويد",
+  "name_zh": "瑞典",
+  "name_ru": "Швеция",
+  "iso_code": "SWE",
+  "iso_code_2": "SE",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7549",
+  "legacy_tids": [
+   "479"
+  ]
+ },
+ {
+  "m49": "756",
+  "parent": "155",
+  "name": "Switzerland",
+  "name_es": "Suiza",
+  "name_fr": "Suisse",
+  "name_ar": "سويسرا",
+  "name_zh": "瑞士",
+  "name_ru": "Швейцария",
+  "iso_code": "CHE",
+  "iso_code_2": "CH",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7558",
+  "legacy_tids": [
+   "480"
+  ]
+ },
+ {
+  "m49": "760",
+  "parent": "145",
+  "name": "Syrian Arab Republic",
+  "name_es": "República Árabe Siria",
+  "name_fr": "République arabe syrienne",
+  "name_ar": "الجمهوريّة العربيّة السوريّة",
+  "name_zh": "阿拉伯叙利亚共和国",
+  "name_ru": "Сирийская Арабская Республика",
+  "iso_code": "SYR",
+  "iso_code_2": "SY",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7576",
+  "legacy_tids": [
+   "481"
+  ]
+ },
+ {
+  "m49": "762",
+  "parent": "143",
+  "name": "Tajikistan",
+  "name_es": "Tayikistán",
+  "name_fr": "Tadjikistan",
+  "name_ar": "طاجيكستان",
+  "name_zh": "塔吉克斯坦",
+  "name_ru": "Таджикистан",
+  "iso_code": "TJK",
+  "iso_code_2": "TJ",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_33246",
+  "legacy_tids": [
+   "482"
+  ]
+ },
+ {
+  "m49": "764",
+  "parent": "035",
+  "name": "Thailand",
+  "name_es": "Tailandia",
+  "name_fr": "Thaïlande",
+  "name_ar": "تايلند",
+  "name_zh": "泰国",
+  "name_ru": "Таиланд",
+  "iso_code": "THA",
+  "iso_code_2": "TH",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7701",
+  "legacy_tids": [
+   "483"
+  ]
+ },
+ {
+  "m49": "772",
+  "parent": "061",
+  "name": "Tokelau",
+  "name_es": "Tokelau (Miembro Asociado)",
+  "name_fr": "Tokélaou (Membre associé)",
+  "name_ar": "توكيلاو - عضو منتسب",
+  "name_zh": "托克劳（准成员）",
+  "name_ru": "Токелау (ассоциированный член)",
+  "iso_code": "TKL",
+  "iso_code_2": "TK",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7802",
+  "legacy_tids": [
+   "486"
+  ]
+ },
+ {
+  "m49": "776",
+  "parent": "061",
+  "name": "Tonga",
+  "name_es": "Tonga",
+  "name_fr": "Tonga",
+  "name_ar": "تونغا",
+  "name_zh": "汤加",
+  "name_ru": "Тонга",
+  "iso_code": "TON",
+  "iso_code_2": "TO",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7808",
+  "legacy_tids": [
+   "487"
+  ]
+ },
+ {
+  "m49": "784",
+  "parent": "145",
+  "name": "United Arab Emirates",
+  "name_es": "Emiratos Árabes Unidos",
+  "name_fr": "Émirats arabes unis",
+  "name_ar": "الإمارات العربيّة المتحدة",
+  "name_zh": "阿拉伯联合酋长国",
+  "name_ru": "Объединенные Арабские Эмираты",
+  "iso_code": "ARE",
+  "iso_code_2": "AE",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8067",
+  "legacy_tids": [
+   "496"
+  ]
+ },
+ {
+  "m49": "788",
+  "parent": "015",
+  "name": "Tunisia",
+  "name_es": "Túnez",
+  "name_fr": "Tunisie",
+  "name_ar": "تونس",
+  "name_zh": "突尼斯",
+  "name_ru": "Тунис",
+  "iso_code": "TUN",
+  "iso_code_2": "TN",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8007",
+  "legacy_tids": [
+   "489"
+  ]
+ },
+ {
+  "m49": "792",
+  "parent": "145",
+  "name": "Türkiye",
+  "name_es": "Türkiye",
+  "name_fr": "Türkiye",
+  "name_ar": "تركيا",
+  "name_zh": "土耳其",
+  "name_ru": "Турция",
+  "iso_code": "TUR",
+  "iso_code_2": "TR",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8013",
+  "legacy_tids": [
+   "490"
+  ]
+ },
+ {
+  "m49": "795",
+  "parent": "143",
+  "name": "Turkmenistan",
+  "name_es": "Turkmenistán",
+  "name_fr": "Turkménistan",
+  "name_ar": "تركمانستان",
+  "name_zh": "土库曼斯坦",
+  "name_ru": "Туркменистан",
+  "iso_code": "TKM",
+  "iso_code_2": "TM",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_15047",
+  "legacy_tids": [
+   "491"
+  ]
+ },
+ {
+  "m49": "798",
+  "parent": "061",
+  "name": "Tuvalu",
+  "name_es": "Tuvalu",
+  "name_fr": "Tuvalu",
+  "name_ar": "توفالو",
+  "name_zh": "图瓦卢",
+  "name_ru": "Тувалу",
+  "iso_code": "TUV",
+  "iso_code_2": "TV",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8025",
+  "legacy_tids": [
+   "493"
+  ]
+ },
+ {
+  "m49": "804",
+  "parent": "151",
+  "name": "Ukraine",
+  "name_es": "Ucrania",
+  "name_fr": "Ukraine",
+  "name_ar": "أوكرانيا",
+  "name_zh": "乌克兰",
+  "name_ru": "Украина",
+  "iso_code": "UKR",
+  "iso_code_2": "UA",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_15070",
+  "legacy_tids": [
+   "495"
+  ]
+ },
+ {
+  "m49": "807",
+  "parent": "039",
+  "name": "North Macedonia",
+  "name_es": "Macedonia del Norte",
+  "name_fr": "Macédoine du Nord",
+  "name_ar": "مقدونيا الشمالية",
+  "name_zh": "北马其顿",
+  "name_ru": "Северная Македония",
+  "iso_code": "MKD",
+  "iso_code_2": "MK",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_35697",
+  "legacy_tids": [
+   "427"
+  ]
+ },
+ {
+  "m49": "818",
+  "parent": "015",
+  "name": "Egypt",
+  "name_es": "Egipto",
+  "name_fr": "Égypte",
+  "name_ar": "مصر",
+  "name_zh": "埃及",
+  "name_ru": "Египет",
+  "iso_code": "EGY",
+  "iso_code_2": "EG",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_2503",
+  "legacy_tids": [
+   "333"
+  ]
+ },
+ {
+  "m49": "826",
+  "parent": "154",
+  "name": "United Kingdom",
+  "name_es": "Reino Unido",
+  "name_fr": "Royaume-Uni",
+  "name_ar": "المملكة المتحدة",
+  "name_zh": "联合王国",
+  "name_ru": "Соединенное Королевство",
+  "iso_code": "GBR",
+  "iso_code_2": "GB",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8068",
+  "legacy_tids": [
+   "497"
+  ]
+ },
+ {
+  "m49": "831",
+  "parent": "154",
+  "name": "Guernsey",
+  "name_es": "Isla de Guernesey",
+  "name_fr": "Guernesey",
+  "name_ar": "بيلويك التابعة لغويرنسي",
+  "name_zh": "根西",
+  "name_ru": "Гернси",
+  "iso_code": "GGY",
+  "iso_code_2": "GG",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_e142b668",
+  "legacy_tids": [
+   "360"
+  ]
+ },
+ {
+  "m49": "832",
+  "parent": "154",
+  "name": "Jersey",
+  "name_es": "Jersey",
+  "name_fr": "Jersey",
+  "name_ar": "جيرسي",
+  "name_zh": "泽西",
+  "name_ru": "Джерси",
+  "iso_code": "JEY",
+  "iso_code_2": "JE",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_42fba995",
+  "legacy_tids": [
+   "380"
+  ]
+ },
+ {
+  "m49": "833",
+  "parent": "154",
+  "name": "Isle of Man",
+  "name_es": "Isla de Man",
+  "name_fr": "Île de Man",
+  "name_ar": "جزيرة مان",
+  "name_zh": "马恩岛",
+  "name_ru": "остров Мэн",
+  "iso_code": "IMN",
+  "iso_code_2": "IM",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3963",
+  "legacy_tids": [
+   "375"
+  ]
+ },
+ {
+  "m49": "840",
+  "parent": "021",
+  "name": "United States of America",
+  "name_es": "Estados Unidos de América",
+  "name_fr": "États-Unis d'Amérique",
+  "name_ar": "الولايات المتحدة الأمريكيّة",
+  "name_zh": "美国",
+  "name_ru": "Соединенные Штаты Америки",
+  "iso_code": "USA",
+  "iso_code_2": "US",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8114",
+  "legacy_tids": [
+   "500"
+  ]
+ },
+ {
+  "m49": "860",
+  "parent": "143",
+  "name": "Uzbekistan",
+  "name_es": "Uzbekistán",
+  "name_fr": "Ouzbékistan",
+  "name_ar": "أوزبكستان",
+  "name_zh": "乌兹别克斯坦",
+  "name_ru": "Узбекистан",
+  "iso_code": "UZB",
+  "iso_code_2": "UZ",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_15121",
+  "legacy_tids": [
+   "503"
+  ]
+ },
+ {
+  "m49": "876",
+  "parent": "061",
+  "name": "Wallis and Futuna Islands",
+  "name_es": "Islas Wallis y Futuna",
+  "name_fr": "Îles Wallis et Futuna",
+  "name_ar": "جزر واليس وفوتونا",
+  "name_zh": "瓦利斯和富图纳群岛",
+  "name_ru": "острова Уоллис и Футуна",
+  "iso_code": "WLF",
+  "iso_code_2": "WF",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8296",
+  "legacy_tids": [
+   "507"
+  ]
+ },
+ {
+  "m49": "882",
+  "parent": "061",
+  "name": "Samoa",
+  "name_es": "Samoa",
+  "name_fr": "Samoa",
+  "name_ar": "ساموا",
+  "name_zh": "萨摩亚",
+  "name_ru": "Самоа",
+  "iso_code": "WSM",
+  "iso_code_2": "WS",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_6772",
+  "legacy_tids": [
+   "456"
+  ]
+ },
+ {
+  "m49": "887",
+  "parent": "145",
+  "name": "Yemen",
+  "name_es": "Yemen",
+  "name_fr": "Yémen",
+  "name_ar": "اليمن",
+  "name_zh": "也门",
+  "name_ru": "Йемен",
+  "iso_code": "YEM",
+  "iso_code_2": "YE",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8483",
+  "legacy_tids": [
+   "509"
+  ]
+ },
+ {
+  "m49": "024",
+  "parent": "017",
+  "name": "Angola",
+  "name_es": "Angola",
+  "name_fr": "Angola",
+  "name_ar": "أنغولا",
+  "name_zh": "安哥拉",
+  "name_ru": "Ангола",
+  "iso_code": "AGO",
+  "iso_code_2": "AO",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_417",
+  "legacy_tids": [
+   "270"
+  ]
+ },
+ {
+  "m49": "028",
+  "parent": "029",
+  "name": "Antigua and Barbuda",
+  "name_es": "Antigua y Barbuda",
+  "name_fr": "Antigua-et-Barbuda",
+  "name_ar": "أنتيغوا وبربودا",
+  "name_zh": "安提瓜和巴布达",
+  "name_ru": "Антигуа и Барбуда",
+  "iso_code": "ATG",
+  "iso_code_2": "AG",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_505",
+  "legacy_tids": [
+   "273"
+  ]
+ },
+ {
+  "m49": "032",
+  "parent": "005",
+  "name": "Argentina",
+  "name_es": "Argentina",
+  "name_fr": "Argentine",
+  "name_ar": "الأرجنتين",
+  "name_zh": "阿根廷",
+  "name_ru": "Аргентина",
+  "iso_code": "ARG",
+  "iso_code_2": "AR",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_603",
+  "legacy_tids": [
+   "1820"
+  ]
+ },
+ {
+  "m49": "044",
+  "parent": "029",
+  "name": "Bahamas",
+  "name_es": "Bahamas",
+  "name_fr": "Bahamas",
+  "name_ar": "جزر البهاما",
+  "name_zh": "巴哈马",
+  "name_ru": "Багамские Острова",
+  "iso_code": "BHS",
+  "iso_code_2": "BS",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_778",
+  "legacy_tids": [
+   "280"
+  ]
+ },
+ {
+  "m49": "052",
+  "parent": "029",
+  "name": "Barbados",
+  "name_es": "Barbados",
+  "name_fr": "Barbade",
+  "name_ar": "بربادوس",
+  "name_zh": "巴巴多斯",
+  "name_ru": "Барбадос",
+  "iso_code": "BRB",
+  "iso_code_2": "BB",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_814",
+  "legacy_tids": [
+   "283"
+  ]
+ },
+ {
+  "m49": "068",
+  "parent": "005",
+  "name": "Bolivia (Plurinational State of)",
+  "name_es": "Bolivia (Estado Plurinacional de)",
+  "name_fr": "Bolivie (État plurinational de)",
+  "name_ar": "بوليفيا دولة) المتعددة (القوميات",
+  "name_zh": "玻利维亚（多民族国）",
+  "name_ru": "Боливия (Многонациональное Государство)",
+  "iso_code": "BOL",
+  "iso_code_2": "BO",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_331403",
+  "legacy_tids": [
+   "290"
+  ]
+ },
+ {
+  "m49": "072",
+  "parent": "018",
+  "name": "Botswana",
+  "name_es": "Botswana",
+  "name_fr": "Botswana",
+  "name_ar": "بوتسوانا",
+  "name_zh": "博茨瓦纳",
+  "name_ru": "Ботсвана",
+  "iso_code": "BWA",
+  "iso_code_2": "BW",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1030",
+  "legacy_tids": [
+   "293"
+  ]
+ },
+ {
+  "m49": "074",
+  "parent": "005",
+  "name": "Bouvet Island",
+  "name_es": "Isla Bouvet",
+  "name_fr": "Île Bouvet",
+  "name_ar": "جزر بوفيه",
+  "name_zh": "博维特岛",
+  "name_ru": "остров Буве",
+  "iso_code": "BVT",
+  "iso_code_2": "BV",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4ff93599",
+  "legacy_tids": [
+   "294"
+  ]
+ },
+ {
+  "m49": "076",
+  "parent": "005",
+  "name": "Brazil",
+  "name_es": "Brasil",
+  "name_fr": "Brésil",
+  "name_ar": "البرازيل",
+  "name_zh": "巴西",
+  "name_ru": "Бразилия",
+  "iso_code": "BRA",
+  "iso_code_2": "BR",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1070",
+  "legacy_tids": [
+   "295"
+  ]
+ },
+ {
+  "m49": "084",
+  "parent": "013",
+  "name": "Belize",
+  "name_es": "Belice",
+  "name_fr": "Belize",
+  "name_ar": "بليز",
+  "name_zh": "伯利兹",
+  "name_ru": "Белиз",
+  "iso_code": "BLZ",
+  "iso_code_2": "BZ",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_871",
+  "legacy_tids": [
+   "286"
+  ]
+ },
+ {
+  "m49": "086",
+  "parent": "014",
+  "name": "British Indian Ocean Territory",
+  "name_es": "Territorio Británico del Océano Índico",
+  "name_fr": "Territoire britannique de l'océan Indien",
+  "name_ar": "المناطق البريطانيّة في المحيط الهندي",
+  "name_zh": "英属印度洋领地",
+  "name_ru": "Британская территория в Индийском океане",
+  "iso_code": "IOT",
+  "iso_code_2": "IO",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1095",
+  "legacy_tids": [
+   "296"
+  ]
+ },
+ {
+  "m49": "092",
+  "parent": "029",
+  "name": "British Virgin Islands",
+  "name_es": "Islas Vírgenes Británicas",
+  "name_fr": "Îles Vierges britanniques",
+  "name_ar": "جزر فيرجين البريطانيّة",
+  "name_zh": "英属维尔京群岛",
+  "name_ru": "Британские Виргинские острова",
+  "iso_code": "VGB",
+  "iso_code_2": "VG",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1097",
+  "legacy_tids": [
+   "297"
+  ]
+ },
+ {
+  "m49": "108",
+  "parent": "014",
+  "name": "Burundi",
+  "name_es": "Burundi",
+  "name_fr": "Burundi",
+  "name_ar": "بوروندي",
+  "name_zh": "布隆迪",
+  "name_ru": "Бурунди",
+  "iso_code": "BDI",
+  "iso_code_2": "BI",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1159",
+  "legacy_tids": [
+   "301"
+  ]
+ },
+ {
+  "m49": "120",
+  "parent": "017",
+  "name": "Cameroon",
+  "name_es": "Camerún",
+  "name_fr": "Cameroun",
+  "name_ar": "الكاميرون",
+  "name_zh": "喀麦隆",
+  "name_ru": "Камерун",
+  "iso_code": "CMR",
+  "iso_code_2": "CM",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1229",
+  "legacy_tids": [
+   "304"
+  ]
+ },
+ {
+  "m49": "132",
+  "parent": "011",
+  "name": "Cabo Verde",
+  "name_es": "Cabo Verde",
+  "name_fr": "Cabo Verde",
+  "name_ar": "كابو فيردي",
+  "name_zh": "佛得角",
+  "name_ru": "Кабо-Верде",
+  "iso_code": "CPV",
+  "iso_code_2": "CV",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1267",
+  "legacy_tids": [
+   "302"
+  ]
+ },
+ {
+  "m49": "136",
+  "parent": "029",
+  "name": "Cayman Islands",
+  "name_es": "Islas Caimán",
+  "name_fr": "Îles Caïmanes",
+  "name_ar": "جزر كايمان",
+  "name_zh": "开曼群岛",
+  "name_ru": "Каймановы острова",
+  "iso_code": "CYM",
+  "iso_code_2": "KY",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1400",
+  "legacy_tids": [
+   "306"
+  ]
+ },
+ {
+  "m49": "140",
+  "parent": "017",
+  "name": "Central African Republic",
+  "name_es": "República Centroafricana",
+  "name_fr": "République centrafricaine",
+  "name_ar": "جمهوريّة أفريقيا الوسطى",
+  "name_zh": "中非共和国",
+  "name_ru": "Центральноафриканская Республика",
+  "iso_code": "CAF",
+  "iso_code_2": "CF",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1433",
+  "legacy_tids": [
+   "307"
+  ]
+ },
+ {
+  "m49": "148",
+  "parent": "017",
+  "name": "Chad",
+  "name_es": "Chad",
+  "name_fr": "Tchad",
+  "name_ar": "تشاد",
+  "name_zh": "乍得",
+  "name_ru": "Чад",
+  "iso_code": "TCD",
+  "iso_code_2": "TD",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1487",
+  "legacy_tids": [
+   "308"
+  ]
+ },
+ {
+  "m49": "152",
+  "parent": "005",
+  "name": "Chile",
+  "name_es": "Chile",
+  "name_fr": "Chili",
+  "name_ar": "شيلي",
+  "name_zh": "智利",
+  "name_ru": "Чили",
+  "iso_code": "CHL",
+  "iso_code_2": "CL",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1548",
+  "legacy_tids": [
+   "309"
+  ]
+ },
+ {
+  "m49": "170",
+  "parent": "005",
+  "name": "Colombia",
+  "name_es": "Colombia",
+  "name_fr": "Colombie",
+  "name_ar": "كولومبيا",
+  "name_zh": "哥伦比亚",
+  "name_ru": "Колумбия",
+  "iso_code": "COL",
+  "iso_code_2": "CO",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1767",
+  "legacy_tids": [
+   "315"
+  ]
+ },
+ {
+  "m49": "174",
+  "parent": "014",
+  "name": "Comoros",
+  "name_es": "Comoras",
+  "name_fr": "Comores",
+  "name_ar": "جزر القمر",
+  "name_zh": "科摩罗",
+  "name_ru": "Коморские Острова",
+  "iso_code": "COM",
+  "iso_code_2": "KM",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1790",
+  "legacy_tids": [
+   "316"
+  ]
+ },
+ {
+  "m49": "175",
+  "parent": "014",
+  "name": "Mayotte",
+  "name_es": "Mayotte",
+  "name_fr": "Mayotte",
+  "name_ar": "مايوت",
+  "name_zh": "马约特",
+  "name_ru": "Майотта",
+  "iso_code": "MYT",
+  "iso_code_2": "YT",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4665",
+  "legacy_tids": [
+   "406"
+  ]
+ },
+ {
+  "m49": "178",
+  "parent": "017",
+  "name": "Congo",
+  "name_es": "Congo",
+  "name_fr": "Congo",
+  "name_ar": "الكونغو",
+  "name_zh": "刚果",
+  "name_ru": "Конго",
+  "iso_code": "COG",
+  "iso_code_2": "CG",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1811",
+  "legacy_tids": [
+   "317"
+  ]
+ },
+ {
+  "m49": "180",
+  "parent": "017",
+  "name": "Democratic Republic of the Congo",
+  "name_es": "República Democrática del Congo",
+  "name_fr": "République démocratique du Congo",
+  "name_ar": "جمهوريّة الكونغو الديمقراطية",
+  "name_zh": "刚果民主共和国",
+  "name_ru": "Демократическая Республика Конго",
+  "iso_code": "COD",
+  "iso_code_2": "CD",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8500",
+  "legacy_tids": [
+   "327"
+  ]
+ },
+ {
+  "m49": "188",
+  "parent": "013",
+  "name": "Costa Rica",
+  "name_es": "Costa Rica",
+  "name_fr": "Costa Rica",
+  "name_ar": "كوستاريكا",
+  "name_zh": "哥斯达黎加",
+  "name_ru": "Коста-Рика",
+  "iso_code": "CRI",
+  "iso_code_2": "CR",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1920",
+  "legacy_tids": [
+   "319"
+  ]
+ },
+ {
+  "m49": "192",
+  "parent": "029",
+  "name": "Cuba",
+  "name_es": "Cuba",
+  "name_fr": "Cuba",
+  "name_ar": "كوبا",
+  "name_zh": "古巴",
+  "name_ru": "Куба",
+  "iso_code": "CUB",
+  "iso_code_2": "CU",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1997",
+  "legacy_tids": [
+   "322"
+  ]
+ },
+ {
+  "m49": "204",
+  "parent": "011",
+  "name": "Benin",
+  "name_es": "Benin",
+  "name_fr": "Bénin",
+  "name_ar": "بنن",
+  "name_zh": "贝宁",
+  "name_ru": "Бенин",
+  "iso_code": "BEN",
+  "iso_code_2": "BJ",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_875",
+  "legacy_tids": [
+   "287"
+  ]
+ },
+ {
+  "m49": "212",
+  "parent": "029",
+  "name": "Dominica",
+  "name_es": "Dominica",
+  "name_fr": "Dominique",
+  "name_ar": "دومينيكا",
+  "name_zh": "多米尼克",
+  "name_ru": "Доминика",
+  "iso_code": "DMA",
+  "iso_code_2": "DM",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_2363",
+  "legacy_tids": [
+   "330"
+  ]
+ },
+ {
+  "m49": "214",
+  "parent": "029",
+  "name": "Dominican Republic",
+  "name_es": "República Dominicana",
+  "name_fr": "République dominicaine",
+  "name_ar": "الجمهوريّة الدومينيكيّة",
+  "name_zh": "多米尼加共和国",
+  "name_ru": "Доминиканская Республика",
+  "iso_code": "DOM",
+  "iso_code_2": "DO",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_2364",
+  "legacy_tids": [
+   "331"
+  ]
+ },
+ {
+  "m49": "218",
+  "parent": "005",
+  "name": "Ecuador",
+  "name_es": "Ecuador",
+  "name_fr": "Équateur",
+  "name_ar": "إكوادور",
+  "name_zh": "厄瓜多尔",
+  "name_ru": "Эквадор",
+  "iso_code": "ECU",
+  "iso_code_2": "EC",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_2485",
+  "legacy_tids": [
+   "332"
+  ]
+ },
+ {
+  "m49": "222",
+  "parent": "013",
+  "name": "El Salvador",
+  "name_es": "El Salvador",
+  "name_fr": "El Salvador",
+  "name_ar": "السلفادور",
+  "name_zh": "萨尔瓦多",
+  "name_ru": "Сальвадор",
+  "iso_code": "SLV",
+  "iso_code_2": "SV",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_2508",
+  "legacy_tids": [
+   "334"
+  ]
+ },
+ {
+  "m49": "226",
+  "parent": "017",
+  "name": "Equatorial Guinea",
+  "name_es": "Guinea Ecuatorial",
+  "name_fr": "Guinée équatoriale",
+  "name_ar": "غينيا الاستوائيّة",
+  "name_zh": "赤道几内亚",
+  "name_ru": "Экваториальная Гвинея",
+  "iso_code": "GNQ",
+  "iso_code_2": "GQ",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_2627",
+  "legacy_tids": [
+   "335"
+  ]
+ },
+ {
+  "m49": "231",
+  "parent": "014",
+  "name": "Ethiopia",
+  "name_es": "Etiopía",
+  "name_fr": "Éthiopie",
+  "name_ar": "إثيوبيا",
+  "name_zh": "埃塞俄比亚",
+  "name_ru": "Эфиопия",
+  "iso_code": "ETH",
+  "iso_code_2": "ET",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_2676",
+  "legacy_tids": [
+   "339"
+  ]
+ },
+ {
+  "m49": "232",
+  "parent": "014",
+  "name": "Eritrea",
+  "name_es": "Eritrea",
+  "name_fr": "Érythrée",
+  "name_ar": "إريتريا",
+  "name_zh": "厄立特里亚",
+  "name_ru": "Эритрея",
+  "iso_code": "ERI",
+  "iso_code_2": "ER",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_34927",
+  "legacy_tids": [
+   "336"
+  ]
+ },
+ {
+  "m49": "238",
+  "parent": "005",
+  "name": "Falkland Islands (Malvinas)",
+  "name_es": "Islas Malvinas (Falkland Islands)",
+  "name_fr": "Îles Falkland (Malvinas)",
+  "name_ar": "جزر فوكلاند - مالفيناس",
+  "name_zh": "福克兰群岛",
+  "name_ru": "Фолклендские (Мальвинские) острова",
+  "iso_code": "FLK",
+  "iso_code_2": "FK",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_2783",
+  "legacy_tids": [
+   "340"
+  ]
+ },
+ {
+  "m49": "239",
+  "parent": "005",
+  "name": "South Georgia and the South Sandwich Islands",
+  "name_es": "Islas Georgias del Sur y Sandwich del Sur",
+  "name_fr": "Îles Géorgie du Sud et Sandwich du Sud",
+  "name_ar": "جزر جنوب جورجيا وساندويتش",
+  "name_zh": "南乔治亚岛和南桑威奇群岛",
+  "name_ru": "остров Южная Георгия и Южные Сандвичевы острова",
+  "iso_code": "SGS",
+  "iso_code_2": "GS",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7eafe779",
+  "legacy_tids": [
+   "471"
+  ]
+ },
+ {
+  "m49": "254",
+  "parent": "005",
+  "name": "French Guiana",
+  "name_es": "Guayana Francesa",
+  "name_fr": "Guyane française",
+  "name_ar": "الفرنسيّة غيانا",
+  "name_zh": "法属圭亚那",
+  "name_ru": "Французская Гвиана",
+  "iso_code": "GUF",
+  "iso_code_2": "GF",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3093",
+  "legacy_tids": [
+   "345"
+  ]
+ },
+ {
+  "m49": "260",
+  "parent": "014",
+  "name": "French Southern and Antarctic Territories",
+  "name_es": "Tierras Australes y Antárticas Francesas",
+  "name_fr": "Terres australes et antarctiques françaises",
+  "name_ar": "الأقاليم الفرنسيّة الجنوبيّة والواقعة في أنتارتيكا",
+  "name_zh": "法属南部和南极区领土",
+  "name_ru": "Французские южные и антарктические территории",
+  "iso_code": "ATF",
+  "iso_code_2": "TF",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_2a49612b",
+  "legacy_tids": [
+   "347"
+  ]
+ },
+ {
+  "m49": "262",
+  "parent": "014",
+  "name": "Djibouti",
+  "name_es": "Djibouti",
+  "name_fr": "Djibouti",
+  "name_ar": "جيبوتي",
+  "name_zh": "吉布提",
+  "name_ru": "Джибути",
+  "iso_code": "DJI",
+  "iso_code_2": "DJ",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_2346",
+  "legacy_tids": [
+   "329"
+  ]
+ },
+ {
+  "m49": "266",
+  "parent": "017",
+  "name": "Gabon",
+  "name_es": "Gabón",
+  "name_fr": "Gabon",
+  "name_ar": "غابون",
+  "name_zh": "加蓬",
+  "name_ru": "Габон",
+  "iso_code": "GAB",
+  "iso_code_2": "GA",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3161",
+  "legacy_tids": [
+   "348"
+  ]
+ },
+ {
+  "m49": "270",
+  "parent": "011",
+  "name": "Gambia",
+  "name_es": "Gambia",
+  "name_fr": "Gambie",
+  "name_ar": "غامبيا",
+  "name_zh": "冈比亚",
+  "name_ru": "Гамбия",
+  "iso_code": "GMB",
+  "iso_code_2": "GM",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3177",
+  "legacy_tids": [
+   "349"
+  ]
+ },
+ {
+  "m49": "288",
+  "parent": "011",
+  "name": "Ghana",
+  "name_es": "Ghana",
+  "name_fr": "Ghana",
+  "name_ar": "غانا",
+  "name_zh": "加纳",
+  "name_ru": "Гана",
+  "iso_code": "GHA",
+  "iso_code_2": "GH",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3253",
+  "legacy_tids": [
+   "352"
+  ]
+ },
+ {
+  "m49": "308",
+  "parent": "029",
+  "name": "Grenada",
+  "name_es": "Granada",
+  "name_fr": "Grenade",
+  "name_ar": "غرينادا",
+  "name_zh": "格林纳达",
+  "name_ru": "Гренада",
+  "iso_code": "GRD",
+  "iso_code_2": "GD",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3384",
+  "legacy_tids": [
+   "356"
+  ]
+ },
+ {
+  "m49": "312",
+  "parent": "029",
+  "name": "Guadeloupe",
+  "name_es": "Guadalupe",
+  "name_fr": "Guadeloupe",
+  "name_ar": "غوادلوب",
+  "name_zh": "瓜德罗普",
+  "name_ru": "Гваделупа",
+  "iso_code": "GLP",
+  "iso_code_2": "GP",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3406",
+  "legacy_tids": [
+   "357"
+  ]
+ },
+ {
+  "m49": "320",
+  "parent": "013",
+  "name": "Guatemala",
+  "name_es": "Guatemala",
+  "name_fr": "Guatemala",
+  "name_ar": "غواتيمالا",
+  "name_zh": "危地马拉",
+  "name_ru": "Гватемала",
+  "iso_code": "GTM",
+  "iso_code_2": "GT",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3418",
+  "legacy_tids": [
+   "359"
+  ]
+ },
+ {
+  "m49": "324",
+  "parent": "011",
+  "name": "Guinea",
+  "name_es": "Guinea",
+  "name_fr": "Guinée",
+  "name_ar": "غينيا",
+  "name_zh": "几内亚",
+  "name_ru": "Гвинея",
+  "iso_code": "GIN",
+  "iso_code_2": "GN",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3423",
+  "legacy_tids": [
+   "361"
+  ]
+ },
+ {
+  "m49": "328",
+  "parent": "005",
+  "name": "Guyana",
+  "name_es": "Guyana",
+  "name_fr": "Guyana",
+  "name_ar": "غيانا",
+  "name_zh": "圭亚那",
+  "name_ru": "Гайана",
+  "iso_code": "GUY",
+  "iso_code_2": "GY",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3445",
+  "legacy_tids": [
+   "363"
+  ]
+ },
+ {
+  "m49": "332",
+  "parent": "029",
+  "name": "Haiti",
+  "name_es": "Haití",
+  "name_fr": "Haïti",
+  "name_ar": "هايتي",
+  "name_zh": "海地",
+  "name_ru": "Гаити",
+  "iso_code": "HTI",
+  "iso_code_2": "HT",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3472",
+  "legacy_tids": [
+   "364"
+  ]
+ },
+ {
+  "m49": "340",
+  "parent": "013",
+  "name": "Honduras",
+  "name_es": "Honduras",
+  "name_fr": "Honduras",
+  "name_ar": "هندوراس",
+  "name_zh": "洪都拉斯",
+  "name_ru": "Гондурас",
+  "iso_code": "HND",
+  "iso_code_2": "HN",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3651",
+  "legacy_tids": [
+   "367"
+  ]
+ },
+ {
+  "m49": "384",
+  "parent": "011",
+  "name": "Côte d'Ivoire",
+  "name_es": "Côte d'Ivoire",
+  "name_fr": "Côte d'Ivoire",
+  "name_ar": "كوت ديفوار",
+  "name_zh": "科特迪瓦",
+  "name_ru": "Кот-д`Ивуар",
+  "iso_code": "CIV",
+  "iso_code_2": "CI",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4027",
+  "legacy_tids": [
+   "320"
+  ]
+ },
+ {
+  "m49": "388",
+  "parent": "029",
+  "name": "Jamaica",
+  "name_es": "Jamaica",
+  "name_fr": "Jamaïque",
+  "name_ar": "جامايكا",
+  "name_zh": "牙买加",
+  "name_ru": "Ямайка",
+  "iso_code": "JAM",
+  "iso_code_2": "JM",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4035",
+  "legacy_tids": [
+   "378"
+  ]
+ },
+ {
+  "m49": "404",
+  "parent": "014",
+  "name": "Kenya",
+  "name_es": "Kenya",
+  "name_fr": "Kenya",
+  "name_ar": "كينيا",
+  "name_zh": "肯尼亚",
+  "name_ru": "Кения",
+  "iso_code": "KEN",
+  "iso_code_2": "KE",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4086",
+  "legacy_tids": [
+   "1822"
+  ]
+ },
+ {
+  "m49": "426",
+  "parent": "018",
+  "name": "Lesotho",
+  "name_es": "Lesotho",
+  "name_fr": "Lesotho",
+  "name_ar": "ليسوتو",
+  "name_zh": "莱索托",
+  "name_ru": "Лесото",
+  "iso_code": "LSO",
+  "iso_code_2": "LS",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4284",
+  "legacy_tids": [
+   "390"
+  ]
+ },
+ {
+  "m49": "430",
+  "parent": "011",
+  "name": "Liberia",
+  "name_es": "Liberia",
+  "name_fr": "Libéria",
+  "name_ar": "ليبريا",
+  "name_zh": "利比里亚",
+  "name_ru": "Либерия",
+  "iso_code": "LBR",
+  "iso_code_2": "LR",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4307",
+  "legacy_tids": [
+   "391"
+  ]
+ },
+ {
+  "m49": "450",
+  "parent": "014",
+  "name": "Madagascar",
+  "name_es": "Madagascar",
+  "name_fr": "Madagascar",
+  "name_ar": "مدغشقر",
+  "name_zh": "马达加斯加",
+  "name_ru": "Мадагаскар",
+  "iso_code": "MDG",
+  "iso_code_2": "MG",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4510",
+  "legacy_tids": [
+   "396"
+  ]
+ },
+ {
+  "m49": "454",
+  "parent": "014",
+  "name": "Malawi",
+  "name_es": "Malawi",
+  "name_fr": "Malawi",
+  "name_ar": "ملاوي",
+  "name_zh": "马拉维",
+  "name_ru": "Малави",
+  "iso_code": "MWI",
+  "iso_code_2": "MW",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4532",
+  "legacy_tids": [
+   "397"
+  ]
+ },
+ {
+  "m49": "466",
+  "parent": "011",
+  "name": "Mali",
+  "name_es": "Malí",
+  "name_fr": "Mali",
+  "name_ar": "مالي",
+  "name_zh": "马里",
+  "name_ru": "Мали",
+  "iso_code": "MLI",
+  "iso_code_2": "ML",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4540",
+  "legacy_tids": [
+   "400"
+  ]
+ },
+ {
+  "m49": "474",
+  "parent": "029",
+  "name": "Martinique",
+  "name_es": "Martinica",
+  "name_fr": "Martinique",
+  "name_ar": "مارتينيك",
+  "name_zh": "马提尼克",
+  "name_ru": "Мартиника",
+  "iso_code": "MTQ",
+  "iso_code_2": "MQ",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4635",
+  "legacy_tids": [
+   "403"
+  ]
+ },
+ {
+  "m49": "478",
+  "parent": "011",
+  "name": "Mauritania",
+  "name_es": "Mauritania",
+  "name_fr": "Mauritanie",
+  "name_ar": "موريتانيا",
+  "name_zh": "毛里塔尼亚",
+  "name_ru": "Мавритания",
+  "iso_code": "MRT",
+  "iso_code_2": "MR",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4660",
+  "legacy_tids": [
+   "404"
+  ]
+ },
+ {
+  "m49": "480",
+  "parent": "014",
+  "name": "Mauritius",
+  "name_es": "Mauricio",
+  "name_fr": "Maurice",
+  "name_ar": "موريشيوس",
+  "name_zh": "毛里求斯",
+  "name_ru": "Маврикий",
+  "iso_code": "MUS",
+  "iso_code_2": "MU",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4662",
+  "legacy_tids": [
+   "405"
+  ]
+ },
+ {
+  "m49": "484",
+  "parent": "013",
+  "name": "Mexico",
+  "name_es": "México",
+  "name_fr": "Mexique",
+  "name_ar": "المكسيك",
+  "name_zh": "墨西哥",
+  "name_ru": "Мексика",
+  "iso_code": "MEX",
+  "iso_code_2": "MX",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4792",
+  "legacy_tids": [
+   "407"
+  ]
+ },
+ {
+  "m49": "500",
+  "parent": "029",
+  "name": "Montserrat",
+  "name_es": "Montserrat",
+  "name_fr": "Montserrat",
+  "name_ar": "مونتيسيرات",
+  "name_zh": "蒙特塞拉特",
+  "name_ru": "Монтсеррат",
+  "iso_code": "MSR",
+  "iso_code_2": "MS",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4927",
+  "legacy_tids": [
+   "412"
+  ]
+ },
+ {
+  "m49": "508",
+  "parent": "014",
+  "name": "Mozambique",
+  "name_es": "Mozambique",
+  "name_fr": "Mozambique",
+  "name_ar": "موزامبيق",
+  "name_zh": "莫桑比克",
+  "name_ru": "Мозамбик",
+  "iso_code": "MOZ",
+  "iso_code_2": "MZ",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_4964",
+  "legacy_tids": [
+   "414"
+  ]
+ },
+ {
+  "m49": "516",
+  "parent": "018",
+  "name": "Namibia",
+  "name_es": "Namibia",
+  "name_fr": "Namibie",
+  "name_ar": "ناميبيا",
+  "name_zh": "纳米比亚",
+  "name_ru": "Намибия",
+  "iso_code": "NAM",
+  "iso_code_2": "NA",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5063",
+  "legacy_tids": [
+   "416"
+  ]
+ },
+ {
+  "m49": "531",
+  "parent": "029",
+  "name": "Curaçao",
+  "name_es": "Curaçao",
+  "name_fr": "Curaçao",
+  "name_ar": "كوراساو",
+  "name_zh": "库拉索",
+  "name_ru": "Кюрасао",
+  "iso_code": "CUW",
+  "iso_code_2": "CW",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_2027",
+  "legacy_tids": [
+   "323"
+  ]
+ },
+ {
+  "m49": "533",
+  "parent": "029",
+  "name": "Aruba",
+  "name_es": "Aruba",
+  "name_fr": "Aruba",
+  "name_ar": "أَروبا",
+  "name_zh": "阿鲁巴岛",
+  "name_ru": "Аруба",
+  "iso_code": "ABW",
+  "iso_code_2": "AW",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_650",
+  "legacy_tids": [
+   "276"
+  ]
+ },
+ {
+  "m49": "534",
+  "parent": "029",
+  "name": "Sint Maarten (Dutch Part)",
+  "name_es": null,
+  "name_fr": null,
+  "name_ar": "سينت مارتن",
+  "name_zh": null,
+  "name_ru": null,
+  "iso_code": "SXM",
+  "iso_code_2": "SX",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7350",
+  "legacy_tids": [
+   "465"
+  ]
+ },
+ {
+  "m49": "535",
+  "parent": "029",
+  "name": "Bonaire, Sint Eustatius and Saba",
+  "name_es": "Bonaire, Sint Eustatius y Saba",
+  "name_fr": "Bonaire, Sint Eustatius et Saba",
+  "name_ar": "بونير وسان يوستاتيوس وسابا",
+  "name_zh": "博纳尔、圣俄斯塔休斯和萨巴",
+  "name_ru": "Бонайре, Синт-Эстатиус и Саба",
+  "iso_code": "BES",
+  "iso_code_2": "BQ",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_995",
+  "legacy_tids": [
+   "291"
+  ]
+ },
+ {
+  "m49": "558",
+  "parent": "013",
+  "name": "Nicaragua",
+  "name_es": "Nicaragua",
+  "name_fr": "Nicaragua",
+  "name_ar": "نيكاراغوا",
+  "name_zh": "尼加拉瓜",
+  "name_ru": "Никарагуа",
+  "iso_code": "NIC",
+  "iso_code_2": "NI",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5171",
+  "legacy_tids": [
+   "422"
+  ]
+ },
+ {
+  "m49": "562",
+  "parent": "011",
+  "name": "Niger",
+  "name_es": "Níger",
+  "name_fr": "Niger",
+  "name_ar": "النيجر",
+  "name_zh": "尼日尔",
+  "name_ru": "Нигер",
+  "iso_code": "NER",
+  "iso_code_2": "NE",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5181",
+  "legacy_tids": [
+   "423"
+  ]
+ },
+ {
+  "m49": "566",
+  "parent": "011",
+  "name": "Nigeria",
+  "name_es": "Nigeria",
+  "name_fr": "Nigéria",
+  "name_ar": "نيجيريا",
+  "name_zh": "尼日利亚",
+  "name_ru": "Нигерия",
+  "iso_code": "NGA",
+  "iso_code_2": "NG",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5182",
+  "legacy_tids": [
+   "424"
+  ]
+ },
+ {
+  "m49": "591",
+  "parent": "013",
+  "name": "Panama",
+  "name_es": "Panamá",
+  "name_fr": "Panama",
+  "name_ar": "بنما",
+  "name_zh": "巴拿马",
+  "name_ru": "Панама",
+  "iso_code": "PAN",
+  "iso_code_2": "PA",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5524",
+  "legacy_tids": [
+   "433"
+  ]
+ },
+ {
+  "m49": "600",
+  "parent": "005",
+  "name": "Paraguay",
+  "name_es": "Paraguay",
+  "name_fr": "Paraguay",
+  "name_ar": "باراغواي",
+  "name_zh": "巴拉圭",
+  "name_ru": "Парагвай",
+  "iso_code": "PRY",
+  "iso_code_2": "PY",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5560",
+  "legacy_tids": [
+   "435"
+  ]
+ },
+ {
+  "m49": "604",
+  "parent": "005",
+  "name": "Peru",
+  "name_es": "Perú",
+  "name_fr": "Pérou",
+  "name_ar": "بيرو",
+  "name_zh": "秘鲁",
+  "name_ru": "Перу",
+  "iso_code": "PER",
+  "iso_code_2": "PE",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_5725",
+  "legacy_tids": [
+   "436"
+  ]
+ },
+ {
+  "m49": "624",
+  "parent": "011",
+  "name": "Guinea-Bissau",
+  "name_es": "Guinea-Bissau",
+  "name_fr": "Guinée-Bissau",
+  "name_ar": "غينيا - بيساو",
+  "name_zh": "几内亚比绍",
+  "name_ru": "Гвинея-Бисау",
+  "iso_code": "GNB",
+  "iso_code_2": "GW",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_3427",
+  "legacy_tids": [
+   "362"
+  ]
+ },
+ {
+  "m49": "630",
+  "parent": "029",
+  "name": "Puerto Rico",
+  "name_es": "Puerto Rico",
+  "name_fr": "Porto Rico",
+  "name_ar": "بورتوريكو",
+  "name_zh": "波多黎各",
+  "name_ru": "Пуэрто-Рико",
+  "iso_code": "PRI",
+  "iso_code_2": "PR",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_6362",
+  "legacy_tids": [
+   "441"
+  ]
+ },
+ {
+  "m49": "638",
+  "parent": "014",
+  "name": "Réunion",
+  "name_es": "Reunión",
+  "name_fr": "Réunion",
+  "name_ar": "رييونيون",
+  "name_zh": "留尼汪",
+  "name_ru": "Реюньон",
+  "iso_code": "REU",
+  "iso_code_2": "RE",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_6543",
+  "legacy_tids": [
+   "445"
+  ]
+ },
+ {
+  "m49": "646",
+  "parent": "014",
+  "name": "Rwanda",
+  "name_es": "Rwanda",
+  "name_fr": "Rwanda",
+  "name_ar": "رواندا",
+  "name_zh": "卢旺达",
+  "name_ru": "Руанда",
+  "iso_code": "RWA",
+  "iso_code_2": "RW",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_6717",
+  "legacy_tids": [
+   "448"
+  ]
+ },
+ {
+  "m49": "652",
+  "parent": "029",
+  "name": "Saint Barthélemy",
+  "name_es": "San Bartolomé",
+  "name_fr": "Saint-Barthélemy",
+  "name_ar": "سان بارتليمي",
+  "name_zh": "圣巴泰勒米",
+  "name_ru": "Сен-Бартельми",
+  "iso_code": "BLM",
+  "iso_code_2": "BL",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_d1a777eb",
+  "legacy_tids": [
+   "449"
+  ]
+ },
+ {
+  "m49": "654",
+  "parent": "011",
+  "name": "Saint Helena, Ascension and Tristan da Cunha",
+  "name_es": "Santa Elena, Ascensión y Tristán de Acuña",
+  "name_fr": "Sainte-Hélène, Ascension et Tristan da Cunha",
+  "name_ar": "سانت هيلانة وأسنسيون وتريستان دا كونا",
+  "name_zh": "圣赫勒拿、阿森松和特里斯坦-达库尼亚",
+  "name_ru": "острова Святой Елены, Вознесения и Тристан-да-Кунья",
+  "iso_code": "SHN",
+  "iso_code_2": "SH",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_331479",
+  "legacy_tids": [
+   "450"
+  ]
+ },
+ {
+  "m49": "659",
+  "parent": "029",
+  "name": "Saint Kitts and Nevis",
+  "name_es": "Saint Kitts y Nevis",
+  "name_fr": "Saint-Kitts-et-Nevis",
+  "name_ar": "سانت كيتس ونيفيس",
+  "name_zh": "圣基茨和尼维斯",
+  "name_ru": "Сент-Китс и Невис",
+  "iso_code": "KNA",
+  "iso_code_2": "KN",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8808",
+  "legacy_tids": [
+   "451"
+  ]
+ },
+ {
+  "m49": "660",
+  "parent": "029",
+  "name": "Anguilla",
+  "name_es": "Anguila",
+  "name_fr": "Anguilla",
+  "name_ar": "أنغويلا",
+  "name_zh": "安圭拉",
+  "name_ru": "Ангилья",
+  "iso_code": "AIA",
+  "iso_code_2": "AI",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_29189",
+  "legacy_tids": [
+   "271"
+  ]
+ },
+ {
+  "m49": "662",
+  "parent": "029",
+  "name": "Saint Lucia",
+  "name_es": "Santa Lucía",
+  "name_fr": "Sainte-Lucie",
+  "name_ar": "سانت لوسيا",
+  "name_zh": "圣卢西亚",
+  "name_ru": "Сент-Люсия",
+  "iso_code": "LCA",
+  "iso_code_2": "LC",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7349",
+  "legacy_tids": [
+   "452"
+  ]
+ },
+ {
+  "m49": "663",
+  "parent": "029",
+  "name": "Saint-Martin (French Part)",
+  "name_es": "Saint-Martin (parte francesa)",
+  "name_fr": "Saint-Martin (partie française)",
+  "name_ar": "سان مارتن - الجزء الفرنسي",
+  "name_zh": "圣马丁（法属部分）",
+  "name_ru": "Сен-Мартен (французская часть)",
+  "iso_code": "MAF",
+  "iso_code_2": "MF",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8f5de615",
+  "legacy_tids": [
+   "453"
+  ]
+ },
+ {
+  "m49": "670",
+  "parent": "029",
+  "name": "Saint Vincent and the Grenadines",
+  "name_es": "San Vicente y las Granadinas",
+  "name_fr": "Saint-Vincent-et-les Grenadines",
+  "name_ar": "سانت فنسنت وجزر غرينادين",
+  "name_zh": "圣文森特和格林纳丁斯",
+  "name_ru": "Сент-Винсент и Гренадины",
+  "iso_code": "VCT",
+  "iso_code_2": "VC",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7352",
+  "legacy_tids": [
+   "455"
+  ]
+ },
+ {
+  "m49": "678",
+  "parent": "017",
+  "name": "Sao Tome and Principe",
+  "name_es": "Santo Tomé y Príncipe",
+  "name_fr": "Sao Tomé-et-Principe",
+  "name_ar": "سان تومي وبرنسيبي",
+  "name_zh": "圣多美和普林西比",
+  "name_ru": "Сан-Томе и Принсипи",
+  "iso_code": "STP",
+  "iso_code_2": "ST",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_6790",
+  "legacy_tids": [
+   "458"
+  ]
+ },
+ {
+  "m49": "686",
+  "parent": "011",
+  "name": "Senegal",
+  "name_es": "Senegal",
+  "name_fr": "Sénégal",
+  "name_ar": "السنغال",
+  "name_zh": "塞内加尔",
+  "name_ru": "Сенегал",
+  "iso_code": "SEN",
+  "iso_code_2": "SN",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_6970",
+  "legacy_tids": [
+   "460"
+  ]
+ },
+ {
+  "m49": "690",
+  "parent": "014",
+  "name": "Seychelles",
+  "name_es": "Seychelles",
+  "name_fr": "Seychelles",
+  "name_ar": "سيشيل",
+  "name_zh": "塞舌尔",
+  "name_ru": "Сейшельские Острова",
+  "iso_code": "SYC",
+  "iso_code_2": "SC",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7017",
+  "legacy_tids": [
+   "462"
+  ]
+ },
+ {
+  "m49": "694",
+  "parent": "011",
+  "name": "Sierra Leone",
+  "name_es": "Sierra Leona",
+  "name_fr": "Sierra Leone",
+  "name_ar": "سيراليون",
+  "name_zh": "塞拉利昂",
+  "name_ru": "Сьерра-Леоне",
+  "iso_code": "SLE",
+  "iso_code_2": "SL",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7057",
+  "legacy_tids": [
+   "463"
+  ]
+ },
+ {
+  "m49": "706",
+  "parent": "014",
+  "name": "Somalia",
+  "name_es": "Somalia",
+  "name_fr": "Somalie",
+  "name_ar": "الصومال",
+  "name_zh": "索马里",
+  "name_ru": "Сомали",
+  "iso_code": "SOM",
+  "iso_code_2": "SO",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7237",
+  "legacy_tids": [
+   "469"
+  ]
+ },
+ {
+  "m49": "710",
+  "parent": "018",
+  "name": "South Africa",
+  "name_es": "Sudáfrica",
+  "name_fr": "Afrique du Sud",
+  "name_ar": "جنوب أفريقيا",
+  "name_zh": "南非",
+  "name_ru": "Южная Африка",
+  "iso_code": "ZAF",
+  "iso_code_2": "ZA",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7252",
+  "legacy_tids": [
+   "470"
+  ]
+ },
+ {
+  "m49": "716",
+  "parent": "014",
+  "name": "Zimbabwe",
+  "name_es": "Zimbabwe",
+  "name_fr": "Zimbabwe",
+  "name_ar": "زمبابوي",
+  "name_zh": "津巴布韦",
+  "name_ru": "Зимбабве",
+  "iso_code": "ZWE",
+  "iso_code_2": "ZW",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8516",
+  "legacy_tids": [
+   "511"
+  ]
+ },
+ {
+  "m49": "728",
+  "parent": "014",
+  "name": "South Sudan",
+  "name_es": "Sudán del Sur",
+  "name_fr": "Soudan du Sud",
+  "name_ar": "جنوب السودان",
+  "name_zh": "南苏丹",
+  "name_ru": "Южный Судан",
+  "iso_code": "SSD",
+  "iso_code_2": "SS",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_1312791058052",
+  "legacy_tids": [
+   "472"
+  ]
+ },
+ {
+  "m49": "740",
+  "parent": "005",
+  "name": "Suriname",
+  "name_es": "Suriname",
+  "name_fr": "Suriname",
+  "name_ar": "سورينام",
+  "name_zh": "苏里南",
+  "name_ru": "Суринам",
+  "iso_code": "SUR",
+  "iso_code_2": "SR",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7534",
+  "legacy_tids": [
+   "477"
+  ]
+ },
+ {
+  "m49": "748",
+  "parent": "018",
+  "name": "Eswatini",
+  "name_es": "Eswatini",
+  "name_fr": "Eswatini",
+  "name_ar": "إسواتيني",
+  "name_zh": "斯威士兰",
+  "name_ru": "Эсватини",
+  "iso_code": "SWZ",
+  "iso_code_2": "SZ",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7547",
+  "legacy_tids": [
+   "338"
+  ]
+ },
+ {
+  "m49": "768",
+  "parent": "011",
+  "name": "Togo",
+  "name_es": "Togo",
+  "name_fr": "Togo",
+  "name_ar": "توغو",
+  "name_zh": "多哥",
+  "name_ru": "Того",
+  "iso_code": "TGO",
+  "iso_code_2": "TG",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7801",
+  "legacy_tids": [
+   "485"
+  ]
+ },
+ {
+  "m49": "780",
+  "parent": "029",
+  "name": "Trinidad and Tobago",
+  "name_es": "Trinidad y Tabago",
+  "name_fr": "Trinité-et-Tobago",
+  "name_ar": "ترينيداد وتوباغو",
+  "name_zh": "特立尼达和多巴哥",
+  "name_ru": "Тринидад и Тобаго",
+  "iso_code": "TTO",
+  "iso_code_2": "TT",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7933",
+  "legacy_tids": [
+   "488"
+  ]
+ },
+ {
+  "m49": "796",
+  "parent": "029",
+  "name": "Turks and Caicos Islands",
+  "name_es": "Islas Turcas y Caicos",
+  "name_fr": "Îles Turques et Caïques",
+  "name_ar": "جزر تركس وكايكوس",
+  "name_zh": "特克斯和凯科斯群岛",
+  "name_ru": "острова Тёркс и Кайкос",
+  "iso_code": "TCA",
+  "iso_code_2": "TC",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8018",
+  "legacy_tids": [
+   "492"
+  ]
+ },
+ {
+  "m49": "800",
+  "parent": "014",
+  "name": "Uganda",
+  "name_es": "Uganda",
+  "name_fr": "Ouganda",
+  "name_ar": "أوغندا",
+  "name_zh": "乌干达",
+  "name_ru": "Уганда",
+  "iso_code": "UGA",
+  "iso_code_2": "UG",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8038",
+  "legacy_tids": [
+   "494"
+  ]
+ },
+ {
+  "m49": "834",
+  "parent": "014",
+  "name": "United Republic of Tanzania",
+  "name_es": "República Unida de Tanzanía",
+  "name_fr": "République-Unie de Tanzanie",
+  "name_ar": "جمهوريّة تنزانيا المتحدة",
+  "name_zh": "坦桑尼亚联合共和国",
+  "name_ru": "Объединенная Республика Танзания",
+  "iso_code": "TZA",
+  "iso_code_2": "TZ",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_7608",
+  "legacy_tids": [
+   "498"
+  ]
+ },
+ {
+  "m49": "850",
+  "parent": "029",
+  "name": "United States Virgin Islands",
+  "name_es": "Islas Vírgenes (EE.UU.)",
+  "name_fr": "Îles Vierges américaines",
+  "name_ar": "جزر فيرجين التابعة للولايات المتحدة",
+  "name_zh": "美属维尔京群岛",
+  "name_ru": "Виргинские острова США",
+  "iso_code": "VIR",
+  "iso_code_2": "VI",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8256",
+  "legacy_tids": [
+   "501"
+  ]
+ },
+ {
+  "m49": "854",
+  "parent": "011",
+  "name": "Burkina Faso",
+  "name_es": "Burkina Faso",
+  "name_fr": "Burkina Faso",
+  "name_ar": "بوركينا فاسو",
+  "name_zh": "布基纳法索",
+  "name_ru": "Буркина-Фасо",
+  "iso_code": "BFA",
+  "iso_code_2": "BF",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8081",
+  "legacy_tids": [
+   "300"
+  ]
+ },
+ {
+  "m49": "858",
+  "parent": "005",
+  "name": "Uruguay",
+  "name_es": "Uruguay",
+  "name_fr": "Uruguay",
+  "name_ar": "أوروغواي",
+  "name_zh": "乌拉圭",
+  "name_ru": "Уругвай",
+  "iso_code": "URY",
+  "iso_code_2": "UY",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8113",
+  "legacy_tids": [
+   "502"
+  ]
+ },
+ {
+  "m49": "862",
+  "parent": "005",
+  "name": "Venezuela (Bolivarian Republic of)",
+  "name_es": "Venezuela (República Bolivariana de)",
+  "name_fr": "Venezuela (République bolivarienne du)",
+  "name_ar": "فنزويلا الجمهوريّة) - (البوليفاريّة",
+  "name_zh": "委内瑞拉(玻利瓦尔共和国)",
+  "name_ru": "Венесуэла (Боливарианская Республика)",
+  "iso_code": "VEN",
+  "iso_code_2": "VE",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8186",
+  "legacy_tids": [
+   "505"
+  ]
+ },
+ {
+  "m49": "894",
+  "parent": "014",
+  "name": "Zambia",
+  "name_es": "Zambia",
+  "name_fr": "Zambie",
+  "name_ar": "زامبيا",
+  "name_zh": "赞比亚",
+  "name_ru": "Замбия",
+  "iso_code": "ZMB",
+  "iso_code_2": "ZM",
+  "term_uri": "http://aims.fao.org/aos/agrovoc/c_8501",
+  "legacy_tids": [
+   "510"
+  ]
+ }
+]

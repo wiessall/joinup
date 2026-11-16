@@ -1,0 +1,132 @@
+uuid: 093a87cf-0bfc-444a-aa3b-565dea77b80c
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.node.inline
+    - field.field.node.collection.closed_group
+    - field.field.node.collection.collection_banner
+    - field.field.node.collection.contact
+    - field.field.node.collection.description
+    - field.field.node.collection.field_impact_sdgs
+    - field.field.node.collection.field_licence
+    - field.field.node.collection.field_mappings
+    - field.field.node.collection.field_state
+    - field.field.node.collection.field_topic
+    - field.field.node.collection.field_use_cases
+    - field.field.node.collection.keywords
+    - field.field.node.collection.last_content_deletion
+    - field.field.node.collection.logo
+    - field.field.node.collection.newsletter
+    - field.field.node.collection.owner
+    - field.field.node.collection.short_id
+    - field.field.node.collection.site_featured
+    - field.field.node.collection.spatial_coverage
+    - field.field.node.collection.webpage
+    - node.type.collection
+  module:
+    - joinup_core
+    - path
+    - publication_date
+id: node.collection.inline
+targetEntityType: node
+bundle: collection
+mode: inline
+content:
+  created:
+    type: datetime_timestamp
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 30
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  published_at:
+    type: publication_date_timestamp
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 120
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  transition_motivation:
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 5
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  url_redirects:
+    weight: 50
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  webpage:
+    type: link_legacy_multicardinality
+    weight: 2
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+hidden:
+  closed_group: true
+  collection_banner: true
+  contact: true
+  current_workflow_state: true
+  description: true
+  field_impact_sdgs: true
+  field_licence: true
+  field_mappings: true
+  field_state: true
+  field_topic: true
+  field_use_cases: true
+  keywords: true
+  last_content_deletion: true
+  logo: true
+  newsletter: true
+  owner: true
+  promote: true
+  short_id: true
+  site_featured: true
+  spatial_coverage: true
+  sticky: true
+  uri: true
+  uuid: true

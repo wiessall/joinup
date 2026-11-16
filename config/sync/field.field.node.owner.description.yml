@@ -1,0 +1,28 @@
+uuid: 7a0329aa-7b6c-4f78-82ac-27d666003581
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.description
+    - filter.format.content_editor
+    - node.type.owner
+  module:
+    - text
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: node.owner.description
+field_name: description
+entity_type: node
+bundle: owner
+label: Description
+description: 'Description of the collection (compulsory in English, other languages are optionals)'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - content_editor
+field_type: text_long

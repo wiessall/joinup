@@ -1,0 +1,130 @@
+uuid: 922e5393-e82c-4d5b-8e94-12e24fc0e472
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.node.inline
+    - field.field.node.solution.atio_country_origin
+    - field.field.node.solution.contact
+    - field.field.node.solution.description
+    - field.field.node.solution.domain
+    - field.field.node.solution.field_claims
+    - field.field.node.solution.field_original_internal_id
+    - field.field.node.solution.field_state
+    - field.field.node.solution.keywords
+    - field.field.node.solution.language
+    - field.field.node.solution.logo
+    - field.field.node.solution.og_audience
+    - field.field.node.solution.owner
+    - field.field.node.solution.related_solutions
+    - field.field.node.solution.resources
+    - field.field.node.solution.short_id
+    - field.field.node.solution.translation
+    - field.field.node.solution.webpage
+    - node.type.solution
+  module:
+    - joinup_core
+    - path
+    - publication_date
+id: node.solution.inline
+targetEntityType: node
+bundle: solution
+mode: inline
+content:
+  created:
+    type: datetime_timestamp
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 30
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  published_at:
+    type: publication_date_timestamp
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 120
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  transition_motivation:
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 5
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  url_redirects:
+    weight: 50
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  webpage:
+    type: link_legacy_multicardinality
+    weight: 2
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+hidden:
+  atio_country_origin: true
+  contact: true
+  current_workflow_state: true
+  description: true
+  domain: true
+  field_claims: true
+  field_original_internal_id: true
+  field_state: true
+  keywords: true
+  language: true
+  logo: true
+  node_preview: true
+  og_audience: true
+  owner: true
+  promote: true
+  related_solutions: true
+  resources: true
+  short_id: true
+  sticky: true
+  tca: true
+  translation: true
+  uri: true
+  uuid: true

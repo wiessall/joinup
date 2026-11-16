@@ -1,0 +1,241 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\import_ird_jsons\Plugin\migrate\process;
+
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\import_ird_jsons\Resolver\CandidateIndex;
+use Drupal\import_ird_jsons\Resolver\LlmJudge;
+use Drupal\import_ird_jsons\Resolver\MatchResult;
+use Drupal\import_ird_jsons\Resolver\ResolutionStore;
+use Drupal\migrate\Attribute\MigrateProcess;
+use Drupal\migrate\MigrateExecutableInterface;
+use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\migrate\ProcessPluginBase;
+use Drupal\migrate\Row;
+use GuzzleHttp\ClientInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+/**
+ * Finds an entity by name, tolerating typos, case, accents, acronyms, codes and qualifiers; optionally asks an LLM.
+ *
+ * A drop-in for entity_lookup / entity_generate where names are messy. It returns an entity id or NULL.
+ * Only entity_type and bundle are required:
+ *
+ * @code
+ * country:
+ *   plugin: entity_fuzzy_lookup
+ *   source: country
+ *   entity_type: taxonomy_term
+ *   bundle: spatial
+ * @endcode
+ *
+ * Everything else has a default, shown here; fields an entity lacks are skipped:
+ *
+ * @code
+ *   name_fields: [<label>, variant, alt_labels, synonyms, aliases]   # also with a field_ prefix
+ *   acronym_fields: [acronym, field_acronym]
+ *   code_fields: [code, iso_code, iso_code_2, m49_code]   # matched exactly, as typed in capitals ("KE", "KEN")
+ *   kind: country         # for the LLM's questions; "country" when the entities have codes, else "organisation"
+ *   threshold: 0.9        # fuzzy: minimum similarity
+ *   margin: 0.05          # fuzzy: lead over the second best
+ *   llm_model: 'qwen2.5:7b'               # optional: every name not matched exactly goes to Ollama, which gives
+ *                                         # other names (English, own language, acronym, former) to look up and
+ *                                         # then chooses among the candidates found, or none
+ *   llm_url: 'http://ollama:11434'
+ *   on_miss: null         # or 'generate': create an entity with this name (and default_values)
+ *   default_values:
+ *     field_state: published
+ * @endcode
+ *
+ * Every non-exact outcome is logged as a migrate message (drush migrate:messages) and remembered in
+ * Drupal's key-value store (see ResolutionStore), so re-imports resolve each name the same way.
+ */
+#[MigrateProcess(id: 'entity_fuzzy_lookup')]
+final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFactoryPluginInterface {
+
+  private ?CandidateIndex $index = NULL;
+
+  /** @var array<string, string> */
+  private array $labels = [];
+
+  private bool $hasCodes = FALSE;
+
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    private readonly EntityTypeManagerInterface $entityTypeManager,
+    private readonly ResolutionStore $store,
+    private readonly ClientInterface $http,
+  ) {
+    foreach (['entity_type', 'bundle'] as $key) {
+      if (empty($configuration[$key])) {
+        throw new \InvalidArgumentException("entity_fuzzy_lookup: '$key' is required.");
+      }
+    }
+    $definition = $entityTypeManager->getDefinition($configuration['entity_type']);
+    $aliases = ['variant', 'alt_labels', 'alt_label', 'synonyms', 'aliases'];
+    $configuration += [
+      'bundle_key' => $definition->getKey('bundle'),
+      'name_fields' => [$definition->getKey('label'), ...$aliases, ...array_map(fn($f) => "field_$f", $aliases)],
+      'acronym_fields' => ['acronym', 'field_acronym'],
+      'code_fields' => ['code', 'iso_code', 'iso_code_2', 'm49_code', 'field_code', 'field_iso_code', 'field_iso_code_2'],
+      'kind' => NULL,
+      'threshold' => 0.9,
+      'margin' => 0.05,
+      'llm_model' => NULL,
+      'llm_url' => 'http://ollama:11434',
+      'on_miss' => NULL,
+      'default_values' => [],
+    ];
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+  }
+
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
+    return new self(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('entity_type.manager'),
+      new ResolutionStore($container->get('keyvalue')),
+      $container->get('http_client'),
+    );
+  }
+
+  public function transform($value, MigrateExecutableInterface $migrate_executable, Row $row, $destination_property): ?string {
+    $input = trim((string) $value);
+    if ($input === '') {
+      return NULL;
+    }
+    $scope = $this->configuration['entity_type'] . ':' . $this->configuration['bundle'];
+    $log = fn(string $message) => $migrate_executable->saveMessage(
+      "$destination_property: \"$input\" $message", MigrationInterface::MESSAGE_INFORMATIONAL);
+
+    // 1. A remembered match wins, as long as its target still exists. A remembered "none" only saves asking the
+    //    LLM again: an exact match to an entity added since still counts.
+    $stored = $this->store->get($scope, $input);
+    if ($stored && $stored['target'] !== NULL) {
+      if ($this->storage()->load($stored['target'])) {
+        return $stored['target'];
+      }
+      $this->store->delete($scope, $input);
+      $stored = NULL;
+    }
+
+    // 2. Deterministic tiers.
+    $result = $this->index()->resolve($input);
+    if ($result->id !== NULL) {
+      if ($result->tier !== MatchResult::KEY) {
+        $this->store->set($scope, $input, $result->id, $result->tier, $result->score);
+        $log(sprintf('matched by %s (%.2f) to %s "%s"', $result->tier, $result->score, $result->id, $this->labels[$result->id] ?? ''));
+      }
+      return $result->id;
+    }
+
+    // 3. Everything not matched goes to the LLM, close candidates or not. It first gives the other names it knows
+    //    (English, original language, acronym, former name), each looked up like the input: that is how a
+    //    translation or a renamed organisation finds its candidates. It then chooses among all candidates, or
+    //    says none. The answer is remembered either way, so each name is asked about once.
+    if ($this->configuration['llm_model'] && $stored === NULL) {
+      $judge = new LlmJudge($this->http, $this->configuration['llm_url'], $this->configuration['llm_model'],
+        $this->configuration['kind'] ?? ($this->hasCodes ? 'country' : 'organisation'));
+      $scores = $result->candidates;
+      $otherNames = $judge->otherNames($input);
+      foreach ($otherNames as $name) {
+        $more = $this->index()->resolve($name);
+        foreach ($more->id !== NULL ? [$more->id => 1.0] : $more->candidates as $id => $score) {
+          $scores[$id] = max($scores[$id] ?? 0.0, $score);
+        }
+      }
+      arsort($scores);
+      $candidates = array_intersect_key($this->labels, array_slice($scores, 0, 10, TRUE));
+      $choice = $judge->choose($input, $candidates, $otherNames);
+      $this->store->set($scope, $input, $choice, 'llm', $choice === NULL ? 0.0 : $scores[$choice]);
+      if ($choice !== NULL) {
+        $log(sprintf('matched by LLM to %s "%s" (also known as: %s; candidates: %s)', $choice, $this->labels[$choice],
+          implode('; ', $otherNames) ?: '-', implode(', ', array_keys($candidates))));
+        return $choice;
+      }
+    }
+    return $this->miss($input, $scope, $log, remembered: $stored !== NULL, candidates: array_keys($result->candidates));
+  }
+
+  /**
+   * Nothing matched: generate an entity, or leave the value empty.
+   */
+  private function miss(string $input, string $scope, \Closure $log, bool $remembered = FALSE, array $candidates = []): ?string {
+    if ($this->configuration['on_miss'] !== 'generate') {
+      $log('not found' . ($candidates ? ' (close: ' . implode(', ', $candidates) . ')' : '') . ($remembered ? ' (remembered)' : ''));
+      return NULL;
+    }
+    $label_key = $this->entityTypeManager->getDefinition($this->configuration['entity_type'])->getKey('label');
+    $entity = $this->storage()->create([
+      $this->configuration['bundle_key'] => $this->configuration['bundle'],
+      $label_key => $input,
+    ] + $this->configuration['default_values']);
+    $entity->save();
+    $id = (string) $entity->id();
+    $this->index()->add($id, [$input]);
+    $this->labels[$id] = $input;
+    $this->store->set($scope, $input, $id, 'generated', 0.0);
+    $log("created as $id" . ($candidates ? ' (close: ' . implode(', ', $candidates) . ')' : ''));
+    return $id;
+  }
+
+  /**
+   * Builds the index once per migration run from the existing entities.
+   */
+  private function index(): CandidateIndex {
+    if ($this->index !== NULL) {
+      return $this->index;
+    }
+    $this->index = new CandidateIndex((float) $this->configuration['threshold'], (float) $this->configuration['margin']);
+    $ids = $this->storage()->getQuery()->accessCheck(FALSE)
+      ->condition($this->configuration['bundle_key'], $this->configuration['bundle'])
+      ->execute();
+    foreach (array_chunk($ids, 200) as $chunk) {
+      foreach ($this->storage()->loadMultiple($chunk) as $entity) {
+        $names = $this->values($entity, (array) $this->configuration['name_fields']);
+        $acronyms = $this->values($entity, (array) $this->configuration['acronym_fields']);
+        $codes = $this->values($entity, (array) $this->configuration['code_fields']);
+        $this->hasCodes = $this->hasCodes || $codes;
+        $id = (string) $entity->id();
+        $this->index->add($id, $names, $acronyms, $codes);
+        $this->labels[$id] = (string) $entity->label() . ($acronyms ? ' (' . implode(', ', $acronyms) . ')' : '');
+      }
+      $this->storage()->resetCache($chunk);
+    }
+    return $this->index;
+  }
+
+  /**
+   * String values of the given fields; fields the entity lacks are skipped.
+   *
+   * @return string[]
+   */
+  private function values(ContentEntityInterface $entity, array $fields): array {
+    $out = [];
+    foreach ($fields as $field) {
+      if (!$entity->hasField($field)) {
+        continue;
+      }
+      foreach ($entity->get($field) as $item) {
+        $v = trim((string) $item->value);
+        if ($v !== '') {
+          $out[] = $v;
+        }
+      }
+    }
+    return $out;
+  }
+
+  private function storage(): EntityStorageInterface {
+    return $this->entityTypeManager->getStorage($this->configuration['entity_type']);
+  }
+
+}

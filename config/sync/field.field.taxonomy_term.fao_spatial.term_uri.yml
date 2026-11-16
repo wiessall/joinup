@@ -1,0 +1,22 @@
+uuid: 5ac26ba3-823d-4a65-b2a6-50f65cb45be1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.term_uri
+    - taxonomy.vocabulary.fao_spatial
+  enforced:
+    module:
+      - sti_reference
+id: taxonomy_term.fao_spatial.term_uri
+field_name: term_uri
+entity_type: taxonomy_term
+bundle: fao_spatial
+label: 'Term URI'
+description: 'AGROVOC concept URI. Fill before the first graph sync; empty mints an STI URI that cannot be changed once published.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

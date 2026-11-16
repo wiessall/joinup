@@ -1,0 +1,51 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - sti_reference
+id: fao_spatial_terms
+migration_tags:
+  - vocabulary
+  - sti_reference
+  - hierarchical
+migration_group: sti_vocabularies
+label: 'FAO spatial terms'
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+    - modules/custom/sti/sti_reference/data/fao_spatial.json
+  item_selector: ''
+  ids:
+    m49:
+      type: string
+  fields:
+    - { name: m49, label: m49, selector: m49 }
+    - { name: parent, label: parent, selector: parent }
+    - { name: name, label: name, selector: name }
+    - { name: iso_code, label: iso_code, selector: iso_code }
+    - { name: iso_code_2, label: iso_code_2, selector: iso_code_2 }
+    - { name: term_uri, label: term_uri, selector: term_uri }
+process:
+  name: name
+  vid:
+    plugin: default_value
+    default_value: fao_spatial
+  # Rows are ordered parents-first, so the lookup never needs a stub.
+  parent:
+    - plugin: skip_on_empty
+      method: process
+      source: parent
+    - plugin: migration_lookup
+      migration: fao_spatial_terms
+      no_stub: true
+  m49_code: m49
+  iso_code: iso_code
+  iso_code_2: iso_code_2
+  term_uri: term_uri
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: fao_spatial
+migration_dependencies: {  }

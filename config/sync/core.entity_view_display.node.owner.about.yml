@@ -4,9 +4,9 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.about
-    - field.field.node.owner.atio_country_origin
     - field.field.node.owner.description
     - field.field.node.owner.field_acronym
+    - field.field.node.owner.field_country_origin
     - field.field.node.owner.field_organization_type
     - field.field.node.owner.field_state
     - field.field.node.owner.owner_type
@@ -49,9 +49,9 @@ content:
     weight: 1
     region: content
 hidden:
-  atio_country_origin: true
   description: true
   field_acronym: true
+  field_country_origin: true
   field_organization_type: true
   field_state: true
   langcode: true

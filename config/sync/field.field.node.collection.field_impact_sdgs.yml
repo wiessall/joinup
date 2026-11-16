@@ -1,0 +1,34 @@
+uuid: b806bca9-7c66-4de0-ab0a-73b50fdda32e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_impact_sdgs
+    - node.type.collection
+    - taxonomy.vocabulary.sdg_targets
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: node.collection.field_impact_sdgs
+field_name: field_impact_sdgs
+entity_type: node
+bundle: collection
+label: 'Impact SDGs'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      sdg_targets: sdg_targets
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

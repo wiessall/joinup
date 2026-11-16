@@ -1,0 +1,27 @@
+uuid: 4a523769-e64f-49a2-a5a6-29199a8c9680
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.webpage
+    - node.type.collection
+  module:
+    - link
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: node.collection.webpage
+field_name: webpage
+entity_type: node
+bundle: collection
+label: 'Website URL'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 0
+  link_type: 16
+field_type: link

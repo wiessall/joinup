@@ -3,9 +3,9 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.owner.atio_country_origin
     - field.field.node.owner.description
     - field.field.node.owner.field_acronym
+    - field.field.node.owner.field_country_origin
     - field.field.node.owner.field_organization_type
     - field.field.node.owner.field_state
     - field.field.node.owner.owner_type
@@ -21,16 +21,6 @@ targetEntityType: node
 bundle: owner
 mode: default
 content:
-  atio_country_origin:
-    type: entity_reference_autocomplete_tags
-    weight: 1
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: 'start typing and select'
-    third_party_settings: {  }
   current_workflow_state:
     type: current_workflow_state_widget
     weight: 3
@@ -53,6 +43,16 @@ content:
     weight: 29
     region: content
     settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_country_origin:
+    type: entity_reference_autocomplete
+    weight: 31
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }

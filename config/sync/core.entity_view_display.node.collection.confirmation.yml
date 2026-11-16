@@ -1,0 +1,106 @@
+uuid: cd4c5273-63f2-4288-b74b-7816260cfa57
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.confirmation
+    - field.field.node.collection.closed_group
+    - field.field.node.collection.collection_banner
+    - field.field.node.collection.contact
+    - field.field.node.collection.description
+    - field.field.node.collection.field_impact_sdgs
+    - field.field.node.collection.field_licence
+    - field.field.node.collection.field_mappings
+    - field.field.node.collection.field_state
+    - field.field.node.collection.field_topic
+    - field.field.node.collection.field_use_cases
+    - field.field.node.collection.keywords
+    - field.field.node.collection.last_content_deletion
+    - field.field.node.collection.logo
+    - field.field.node.collection.newsletter
+    - field.field.node.collection.owner
+    - field.field.node.collection.short_id
+    - field.field.node.collection.site_featured
+    - field.field.node.collection.spatial_coverage
+    - field.field.node.collection.webpage
+    - node.type.collection
+  module:
+    - link
+    - og
+    - template_suggestion
+    - user
+id: node.collection.confirmation
+targetEntityType: node
+bundle: collection
+mode: confirmation
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  og_group:
+    type: og_group_subscribe
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  report:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 50
+    region: content
+  webpage:
+    type: link
+    label: inline
+    settings:
+      trim_length: 80
+      url_only: true
+      url_plain: true
+      rel: '0'
+      target: '0'
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
+hidden:
+  closed_group: true
+  collection_banner: true
+  collection_settings: true
+  contact: true
+  description: true
+  featured: true
+  field_impact_sdgs: true
+  field_licence: true
+  field_mappings: true
+  field_state: true
+  field_topic: true
+  field_use_cases: true
+  join_collection: true
+  keywords: true
+  langcode: true
+  last_content_deletion: true
+  last_update: true
+  logo: true
+  members: true
+  newsletter: true
+  owner: true
+  private_message_link: true
+  published_at: true
+  read_more: true
+  search_api_excerpt: true
+  short_id: true
+  site_featured: true
+  solutions: true
+  spatial_coverage: true
+  uri: true
+  uuid: true

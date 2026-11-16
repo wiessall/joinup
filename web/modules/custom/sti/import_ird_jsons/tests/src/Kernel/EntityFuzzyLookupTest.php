@@ -1,0 +1,137 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\Tests\import_ird_jsons\Kernel;
+
+use Drupal\KernelTests\KernelTestBase;
+use Drupal\migrate\MigrateExecutableInterface;
+use Drupal\migrate\Row;
+use Drupal\node\Entity\Node;
+use Drupal\node\Entity\NodeType;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
+
+/**
+ * The failures here are silent: content linked to the wrong organisation, a re-import that links differently,
+ * a duplicate organisation created next to an existing one.
+ *
+ * @coversDefaultClass \Drupal\import_ird_jsons\Plugin\migrate\process\EntityFuzzyLookup
+ * @group import_ird_jsons
+ */
+final class EntityFuzzyLookupTest extends KernelTestBase {
+
+  protected static $modules = ['system', 'user', 'node', 'field', 'filter', 'text', 'migrate', 'migrate_plus', 'import_ird_jsons'];
+
+  protected function setUp(): void {
+    parent::setUp();
+    $this->installEntitySchema('user');
+    $this->installEntitySchema('node');
+    $this->installSchema('node', ['node_access']);
+    $this->installConfig(['node']);
+    NodeType::create(['type' => 'org', 'name' => 'Org'])->save();
+  }
+
+  private function org(string $title): string {
+    $node = Node::create(['type' => 'org', 'title' => $title]);
+    $node->save();
+    return (string) $node->id();
+  }
+
+  private function resolve(string $input, array $config = []): ?string {
+    $plugin = $this->container->get('plugin.manager.migrate.process')->createInstance('entity_fuzzy_lookup', $config + [
+      'entity_type' => 'node',
+      'bundle' => 'org',
+    ]);
+    return $plugin->transform($input, $this->createMock(MigrateExecutableInterface::class), new Row(), 'owner');
+  }
+
+  private function orgCount(): int {
+    return (int) \Drupal::entityQuery('node')->accessCheck(FALSE)->condition('type', 'org')->count()->execute();
+  }
+
+  /**
+   * A typo matches once, and keeps matching the same entity after a closer-looking one appears.
+   */
+  public function testFuzzyMatchIsRemembered(): void {
+    $potato = $this->org('International Potato Center');
+    $this->assertSame($potato, $this->resolve('Intenational Potato Centre'));
+
+    $this->org('Intenational Potato Centre');
+    $this->assertSame($potato, $this->resolve('Intenational Potato Centre'), 'A re-import links the way it did before.');
+  }
+
+  /**
+   * Generate creates an entity only when nothing is close, and only once per name.
+   */
+  public function testGenerateOnlyOnRealMiss(): void {
+    $potato = $this->org('International Potato Center');
+    $generate = ['on_miss' => 'generate'];
+
+    $this->assertSame($potato, $this->resolve('INTERNATIONAL POTATO CENTER (CIP)', $generate));
+    $this->assertSame(1, $this->orgCount());
+
+    $new = $this->resolve('Brand New Seed Cooperative', $generate);
+    $this->assertNotNull($new);
+    $this->assertSame(2, $this->orgCount());
+    $this->assertSame($new, $this->resolve('Brand New Seed Cooperative', $generate));
+    $this->assertSame(2, $this->orgCount());
+  }
+
+  /**
+   * The LLM can only pick one of the candidates it was shown; its answer, also "none", is asked once.
+   */
+  public function testLlmCannotPickOutsideCandidates(): void {
+    $this->org('Department of Agriculture (Thailand)');
+    $this->org('Department of Agriculture (Philippines)');
+    $llm = ['llm_model' => 'test', 'llm_url' => 'http://llm'];
+
+    // Two answers queued: no other names, then an id that was not among the candidates. A further request would
+    // find the queue empty and throw, so the second resolve() also proves the answer was remembered.
+    $this->mockLlm(['{"names":[]}', '{"id":"999"}']);
+    $this->assertNull($this->resolve('Department of Agriculture', $llm));
+    $this->assertNull($this->resolve('Department of Agriculture', $llm));
+    $this->assertSame(2, $this->orgCount());
+  }
+
+  /**
+   * A valid LLM choice is used.
+   */
+  public function testLlmChoiceIsUsed(): void {
+    $this->org('Department of Agriculture (Thailand)');
+    $philippines = $this->org('Department of Agriculture (Philippines)');
+    $this->mockLlm(['{"names":[]}', '{"id":"' . $philippines . '"}']);
+    $this->assertSame($philippines, $this->resolve('Department of Agriculture', ['llm_model' => 'test', 'llm_url' => 'http://llm']));
+  }
+
+  /**
+   * A translated name finds no candidate by itself; the model's other names bring one, and it then chooses it.
+   */
+  public function testTranslationFindsCandidateThroughOtherNames(): void {
+    $wfp = $this->org('World Food Programme');
+    $this->org('World Health Organization');
+    $this->mockLlm(['{"names":["World Food Programme","WFP"]}', '{"id":"' . $wfp . '"}']);
+    $this->assertSame($wfp, $this->resolve('Programme Alimentaire Mondial', ['llm_model' => 'test', 'llm_url' => 'http://llm']));
+  }
+
+  /**
+   * A made-up other name does not link anything by itself: the choice step still has to pick it.
+   */
+  public function testOtherNamesAloneDoNotLink(): void {
+    $this->org('World Food Programme');
+    $this->mockLlm(['{"names":["World Food Programme"]}', '{"id":"none"}']);
+    $this->assertNull($this->resolve('Biochar', ['llm_model' => 'test', 'llm_url' => 'http://llm']));
+  }
+
+  /**
+   * @param string[] $answers
+   *   The model's JSON answers, in order.
+   */
+  private function mockLlm(array $answers): void {
+    $responses = array_map(fn($a) => new Response(200, [], json_encode(['message' => ['content' => $a]])), $answers);
+    $this->container->set('http_client', new Client(['handler' => HandlerStack::create(new MockHandler($responses))]));
+  }
+
+}

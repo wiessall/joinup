@@ -1,0 +1,34 @@
+uuid: ce966219-b11a-415b-bc71-6accda7aa158
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_country_origin
+    - node.type.owner
+    - taxonomy.vocabulary.fao_spatial
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: node.owner.field_country_origin
+field_name: field_country_origin
+entity_type: node
+bundle: owner
+label: 'Country (origin)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      fao_spatial: fao_spatial
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

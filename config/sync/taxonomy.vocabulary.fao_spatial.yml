@@ -1,0 +1,36 @@
+uuid: 21d2ab35-08fb-456d-8787-044cb5ec48a7
+langcode: en
+status: true
+dependencies:
+  module:
+    - rdf_sync
+  enforced:
+    module:
+      - sti_reference
+third_party_settings:
+  rdf_sync:
+    type: 'http://www.w3.org/2004/02/skos/core#Concept'
+    uri_field_name: term_uri
+    uri_plugin: 'sti_namespace:concept'
+    fields:
+      vid:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#inScheme'
+          type: resource
+      name:
+        value:
+          predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
+          type: null
+      parent:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#broader'
+          type: resource
+      m49_code:
+        value:
+          predicate: 'http://www.w3.org/2004/02/skos/core#notation'
+          type: null
+name: 'FAO spatial'
+vid: fao_spatial
+description: 'UN M49 geography (world, regions, sub-regions, countries and areas) with FAO short names. Hierarchy follows M49.'
+weight: 0
+new_revision: false

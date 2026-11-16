@@ -1,0 +1,34 @@
+uuid: aa1c0912-48b1-40f4-a958-0ac7a91dec70
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.atio_country_origin
+    - node.type.solution
+    - taxonomy.vocabulary.fao_spatial
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: node.solution.atio_country_origin
+field_name: atio_country_origin
+entity_type: node
+bundle: solution
+label: 'Country (origin)'
+description: 'The country where the innovation was designed / created'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      fao_spatial: fao_spatial
+    sort:
+      field: name
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: countries
+field_type: entity_reference

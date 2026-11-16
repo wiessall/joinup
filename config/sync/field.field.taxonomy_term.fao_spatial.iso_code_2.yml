@@ -1,0 +1,22 @@
+uuid: cd264537-a65c-4f26-9690-84e85c2466c5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.iso_code_2
+    - taxonomy.vocabulary.fao_spatial
+  enforced:
+    module:
+      - sti_reference
+id: taxonomy_term.fao_spatial.iso_code_2
+field_name: iso_code_2
+entity_type: taxonomy_term
+bundle: fao_spatial
+label: 'Iso code 2'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

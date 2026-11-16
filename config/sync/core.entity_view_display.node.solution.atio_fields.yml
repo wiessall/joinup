@@ -1,0 +1,120 @@
+uuid: 7d604d21-e009-483d-88f2-0c66a4bc9f07
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.atio_fields
+    - field.field.node.solution.atio_country_origin
+    - field.field.node.solution.contact
+    - field.field.node.solution.description
+    - field.field.node.solution.domain
+    - field.field.node.solution.field_claims
+    - field.field.node.solution.field_original_internal_id
+    - field.field.node.solution.field_state
+    - field.field.node.solution.keywords
+    - field.field.node.solution.language
+    - field.field.node.solution.logo
+    - field.field.node.solution.og_audience
+    - field.field.node.solution.owner
+    - field.field.node.solution.related_solutions
+    - field.field.node.solution.resources
+    - field.field.node.solution.short_id
+    - field.field.node.solution.translation
+    - field.field.node.solution.webpage
+    - node.type.solution
+  module:
+    - link
+    - og
+    - user
+id: node.solution.atio_fields
+targetEntityType: node
+bundle: solution
+mode: atio_fields
+content:
+  atio_country_origin:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  distributions:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  flag_interoperability:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  flag_like:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  og_group:
+    type: og_group_subscribe
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  report:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 50
+    region: content
+hidden:
+  collections: true
+  contact: true
+  description: true
+  domain: true
+  download_total: true
+  eif_perspective: true
+  featured: true
+  field_claims: true
+  field_original_internal_id: true
+  field_shared_in: true
+  field_state: true
+  keywords: true
+  langcode: true
+  language: true
+  logo: true
+  members: true
+  og_audience: true
+  owner: true
+  pinned_in: true
+  private_message_link: true
+  published_at: true
+  read_more: true
+  related_solutions: true
+  releases_overview: true
+  resources: true
+  search_api_excerpt: true
+  share_link: true
+  shared_in: true
+  short_id: true
+  solution_settings: true
+  solution_subscribe: true
+  translation: true
+  uri: true
+  uuid: true
+  webpage: true
