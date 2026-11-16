@@ -121,14 +121,22 @@ final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFact
       "$destination_property: \"$input\" $message", MigrationInterface::MESSAGE_INFORMATIONAL);
 
     // 1. A remembered match wins, as long as its target still exists. A remembered "none" only saves asking the
-    //    LLM again: an exact match to an entity added since still counts.
+    //    LLM again: an exact match to an entity added since still counts. A deleted match is resolved again, but
+    //    a deleted stub this plugin generated was rejected by a curator: that is remembered, so it is not
+    //    generated again on the next import.
     $stored = $this->store->get($scope, $input);
     if ($stored && $stored['target'] !== NULL) {
       if ($this->storage()->load($stored['target'])) {
         return $stored['target'];
       }
-      $this->store->delete($scope, $input);
-      $stored = NULL;
+      if ($stored['tier'] === 'generated') {
+        $this->store->set($scope, $input, NULL, 'deleted', 0.0);
+        $stored = ['target' => NULL, 'tier' => 'deleted'];
+      }
+      else {
+        $this->store->delete($scope, $input);
+        $stored = NULL;
+      }
     }
 
     // 2. Deterministic tiers.
@@ -139,6 +147,10 @@ final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFact
         $log(sprintf('matched by %s (%.2f) to %s "%s"', $result->tier, $result->score, $result->id, $this->labels[$result->id] ?? ''));
       }
       return $result->id;
+    }
+    if (($stored['tier'] ?? NULL) === 'deleted') {
+      $log('not found; its generated entity was deleted, so it is not created again');
+      return NULL;
     }
 
     // 3. Everything not matched goes to the LLM, close candidates or not. It first gives the other names it knows

@@ -81,6 +81,24 @@ final class EntityFuzzyLookupTest extends KernelTestBase {
   }
 
   /**
+   * A deleted stub was rejected: it is not generated again. A deleted match is resolved again.
+   */
+  public function testDeletedStubIsNotRegenerated(): void {
+    $generate = ['on_miss' => 'generate'];
+    $junk = $this->resolve('Industry investors', $generate);
+    Node::load($junk)->delete();
+    $this->assertNull($this->resolve('Industry investors', $generate));
+    $this->assertSame(0, $this->orgCount());
+
+    $old = $this->org('International Potato Center');
+    $this->assertSame($old, $this->resolve('Intenational Potato Centre', $generate));
+    Node::load($old)->delete();
+    $new = $this->org('International Potato Center');
+    $this->assertSame($new, $this->resolve('Intenational Potato Centre', $generate));
+    $this->assertSame(1, $this->orgCount());
+  }
+
+  /**
    * The LLM can only pick one of the candidates it was shown; its answer, also "none", is asked once.
    */
   public function testLlmCannotPickOutsideCandidates(): void {
