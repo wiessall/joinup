@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Drupal\Tests\import_ird_jsons\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\migrate\Event\MigrateEvents;
+use Drupal\migrate\Event\MigrateRollbackEvent;
 use Drupal\migrate\MigrateExecutableInterface;
+use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Row;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
@@ -40,11 +43,11 @@ final class EntityFuzzyLookupTest extends KernelTestBase {
     return (string) $node->id();
   }
 
-  private function resolve(string $input, array $config = []): ?string {
+  private function resolve(string $input, array $config = [], ?MigrationInterface $migration = NULL): ?string {
     $plugin = $this->container->get('plugin.manager.migrate.process')->createInstance('entity_fuzzy_lookup', $config + [
       'entity_type' => 'node',
       'bundle' => 'org',
-    ]);
+    ], $migration);
     return $plugin->transform($input, $this->createMock(MigrateExecutableInterface::class), new Row(), 'owner');
   }
 
@@ -95,6 +98,29 @@ final class EntityFuzzyLookupTest extends KernelTestBase {
     Node::load($old)->delete();
     $new = $this->org('International Potato Center');
     $this->assertSame($new, $this->resolve('Intenational Potato Centre', $generate));
+    $this->assertSame(1, $this->orgCount());
+  }
+
+  /**
+   * Rolling back the migration that generated a stub forgets it, so a deleted stub can be generated again.
+   * Another migration's rollback does not.
+   */
+  public function testRollbackForgetsGeneratedStubs(): void {
+    $generate = ['on_miss' => 'generate'];
+    $migration = $this->createMock(MigrationInterface::class);
+    $migration->method('id')->willReturn('test003');
+    $other = $this->createMock(MigrationInterface::class);
+    $other->method('id')->willReturn('other');
+
+    Node::load($this->resolve('Soil Doctors', $generate, $migration))->delete();
+    $this->assertNull($this->resolve('Soil Doctors', $generate, $migration));
+
+    $dispatcher = $this->container->get('event_dispatcher');
+    $dispatcher->dispatch(new MigrateRollbackEvent($other), MigrateEvents::POST_ROLLBACK);
+    $this->assertNull($this->resolve('Soil Doctors', $generate, $migration));
+
+    $dispatcher->dispatch(new MigrateRollbackEvent($migration), MigrateEvents::POST_ROLLBACK);
+    $this->assertNotNull($this->resolve('Soil Doctors', $generate, $migration));
     $this->assertSame(1, $this->orgCount());
   }
 

@@ -7,3 +7,17 @@ services:
   import_ird_jsons.entity_candidates:
     class: Drupal\import_ird_jsons\Resolver\EntityCandidates
     arguments: ['@entity_type.manager']
+
+  import_ird_jsons.resolution_store:
+    class: Drupal\import_ird_jsons\Resolver\ResolutionStore
+    arguments: ['@keyvalue']
+
+  logger.channel.import_ird_jsons:
+    parent: logger.channel_base
+    arguments: ['import_ird_jsons']
+
+  import_ird_jsons.rollback_subscriber:
+    class: Drupal\import_ird_jsons\EventSubscriber\RollbackSubscriber
+    arguments: ['@import_ird_jsons.resolution_store', '@logger.channel.import_ird_jsons']
+    tags:
+      - { name: event_subscriber }

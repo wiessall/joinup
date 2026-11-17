@@ -55,7 +55,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @endcode
  *
  * Every non-exact outcome is logged as a migrate message (drush migrate:messages) and remembered in
- * Drupal's key-value store (see ResolutionStore), so re-imports resolve each name the same way.
+ * Drupal's key-value store (see ResolutionStore), so re-imports resolve each name the same way. A deleted
+ * generated entity is remembered as rejected and not generated again, until the migration that generated it is
+ * rolled back: a rollback forgets which entities that migration generated (matches and LLM answers are kept).
  */
 #[MigrateProcess(id: 'entity_fuzzy_lookup')]
 final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFactoryPluginInterface {
@@ -75,6 +77,7 @@ final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFact
     private readonly ResolutionStore $store,
     private readonly ClientInterface $http,
     private readonly EntityCandidates $candidates,
+    private readonly ?string $migrationId = NULL,
   ) {
     foreach (['entity_type', 'bundle'] as $key) {
       if (empty($configuration[$key])) {
@@ -93,15 +96,16 @@ final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFact
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition, ?MigrationInterface $migration = NULL): self {
     return new self(
       $configuration,
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      new ResolutionStore($container->get('keyvalue')),
+      $container->get('import_ird_jsons.resolution_store'),
       $container->get('http_client'),
       $container->get('import_ird_jsons.entity_candidates'),
+      $migration?->id(),
     );
   }
 
@@ -124,7 +128,7 @@ final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFact
         return $stored['target'];
       }
       if ($stored['tier'] === 'generated') {
-        $this->store->set($scope, $input, NULL, 'deleted', 0.0);
+        $this->store->set($scope, $input, NULL, 'deleted', 0.0, $stored['migration'] ?? $this->migrationId);
         $stored = ['target' => NULL, 'tier' => 'deleted'];
       }
       else {
@@ -137,7 +141,7 @@ final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFact
     $result = $this->index()->resolve($input);
     if ($result->id !== NULL) {
       if ($result->tier !== MatchResult::KEY) {
-        $this->store->set($scope, $input, $result->id, $result->tier, $result->score);
+        $this->store->set($scope, $input, $result->id, $result->tier, $result->score, $this->migrationId);
         $log(sprintf('matched by %s (%.2f) to %s "%s"', $result->tier, $result->score, $result->id, $this->labels[$result->id] ?? ''));
       }
       return $result->id;
@@ -169,7 +173,7 @@ final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFact
         arsort($scores);
         $candidates = array_intersect_key($this->labels, array_slice($scores, 0, 10, TRUE));
         $choice = $judge->choose($input, $candidates, $otherNames);
-        $this->store->set($scope, $input, $choice, 'llm', $choice === NULL ? 0.0 : $scores[$choice]);
+        $this->store->set($scope, $input, $choice, 'llm', $choice === NULL ? 0.0 : $scores[$choice], $this->migrationId);
         if ($choice !== NULL) {
           $log(sprintf('matched by LLM to %s "%s" (also known as: %s; candidates: %s)', $choice, $this->labels[$choice],
             implode('; ', $otherNames) ?: '-', implode(', ', array_keys($candidates))));
@@ -204,7 +208,7 @@ final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFact
     $id = (string) $entity->id();
     $this->index()->add($id, [$input]);
     $this->labels[$id] = $input;
-    $this->store->set($scope, $input, $id, 'generated', 0.0);
+    $this->store->set($scope, $input, $id, 'generated', 0.0, $this->migrationId);
     $log("created as $id" . ($candidates ? ' (close: ' . implode(', ', $candidates) . ')' : ''));
     return $id;
   }
