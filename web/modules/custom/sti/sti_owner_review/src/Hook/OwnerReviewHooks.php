@@ -11,12 +11,24 @@ use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\node\NodeInterface;
 use Drupal\sti_owner_review\ProposalApplier;
+use Drupal\sti_owner_review\QualityChecks;
 
 /**
- * Guards the parent field against cycles, and keeps the proposal field to reviewers and the enrichment account.
+ * Guards the parent field against cycles, keeps the proposal field to reviewers and the enrichment account, and
+ * marks AI-generated fields a curator changes as edited.
  */
 final class OwnerReviewHooks {
+
+  public function __construct(private readonly QualityChecks $qualityChecks) {}
+
+  #[Hook('node_presave')]
+  public function nodePresave(NodeInterface $node): void {
+    if ($node->bundle() === 'owner') {
+      $this->qualityChecks->markEdited($node);
+    }
+  }
 
   #[Hook('entity_bundle_field_info_alter')]
   public function bundleFieldInfoAlter(array &$fields, EntityTypeInterface $entity_type, string $bundle): void {

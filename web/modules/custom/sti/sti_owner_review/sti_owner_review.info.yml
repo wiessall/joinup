@@ -5,6 +5,9 @@ package: 'ATIO KB'
 core_version_requirement: ^11.2
 dependencies:
   - drupal:link
+  - drupal:taxonomy
+  - entity_reference_revisions:entity_reference_revisions
+  - paragraphs:paragraphs
   - drupal:node
   - drupal:text
   - import_ird_jsons:import_ird_jsons

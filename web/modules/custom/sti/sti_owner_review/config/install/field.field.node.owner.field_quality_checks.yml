@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_quality_checks
+    - node.type.owner
+    - paragraphs.paragraphs_type.quality_check
+  module:
+    - entity_reference_revisions
+id: node.owner.field_quality_checks
+field_name: field_quality_checks
+entity_type: node
+bundle: owner
+label: 'Quality checks'
+description: 'Per-field QA: which fields were AI-generated, and whether a curator accepted or edited them.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      quality_check: quality_check
+    negate: 0
+field_type: entity_reference_revisions

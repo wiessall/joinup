@@ -10,7 +10,11 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
+use Drupal\paragraphs\Entity\ParagraphsType;
 use Drupal\sti_owner_review\ProposalApplier;
+use Drupal\sti_owner_review\QualityChecks;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\taxonomy\Entity\Vocabulary;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
@@ -24,7 +28,8 @@ use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 #[RunTestsInSeparateProcesses]
 final class ProposalApplierTest extends KernelTestBase {
 
-  protected static $modules = ['system', 'user', 'node', 'field', 'filter', 'text', 'link', 'sti_owner_review'];
+  protected static $modules = ['system', 'user', 'node', 'field', 'filter', 'text', 'link', 'file', 'taxonomy',
+    'entity_reference_revisions', 'paragraphs', 'sti_owner_review'];
 
   private ProposalApplier $applier;
 
@@ -43,6 +48,21 @@ final class ProposalApplierTest extends KernelTestBase {
     ] as $name => [$type, $settings]) {
       FieldStorageConfig::create(['field_name' => $name, 'entity_type' => 'node', 'type' => $type, 'settings' => $settings])->save();
       FieldConfig::create(['field_name' => $name, 'entity_type' => 'node', 'bundle' => 'owner', 'label' => $name])->save();
+    }
+    $this->installEntitySchema('paragraph');
+    $this->installEntitySchema('taxonomy_term');
+    ParagraphsType::create(['id' => 'quality_check', 'label' => 'Quality check'])->save();
+    foreach ([
+      'field_ai_generated' => ['boolean', []],
+      'field_content_type_machine_name' => ['string', []],
+      'field_quality_assessment' => ['entity_reference', ['target_type' => 'taxonomy_term']],
+    ] as $name => [$type, $settings]) {
+      FieldStorageConfig::create(['field_name' => $name, 'entity_type' => 'paragraph', 'type' => $type, 'settings' => $settings])->save();
+      FieldConfig::create(['field_name' => $name, 'entity_type' => 'paragraph', 'bundle' => 'quality_check', 'label' => $name])->save();
+    }
+    Vocabulary::create(['vid' => 'quality_assessment', 'name' => 'Quality assessment'])->save();
+    foreach ([QualityChecks::ACCEPTED, QualityChecks::EDITED] as $name) {
+      Term::create(['vid' => 'quality_assessment', 'name' => $name])->save();
     }
     $this->installConfig(['sti_owner_review']);
     $this->applier = $this->container->get('sti_owner_review.applier');
@@ -129,6 +149,56 @@ final class ProposalApplierTest extends KernelTestBase {
     $this->assertCount(1, $fao->get(ProposalApplier::PARENT_FIELD)->validate());
     $fao->set(ProposalApplier::PARENT_FIELD, $fao->id());
     $this->assertCount(1, $fao->get(ProposalApplier::PARENT_FIELD)->validate());
+  }
+
+  /**
+   * @return array<string, array{ai: bool, assessment: string}>
+   *   The owner's quality checks by field.
+   */
+  private function checks(NodeInterface $owner): array {
+    $out = [];
+    foreach ($this->reload($owner)->get(QualityChecks::HOST) as $item) {
+      $out[$item->entity->get('field_content_type_machine_name')->value] = [
+        'ai' => (bool) $item->entity->get('field_ai_generated')->value,
+        'assessment' => (string) $item->entity->get('field_quality_assessment')->entity?->label(),
+      ];
+    }
+    return $out;
+  }
+
+  /**
+   * Accepted fields are flagged as AI-generated, once each; rejected ones are not flagged.
+   */
+  public function testAcceptedFieldsAreFlaggedAsAi(): void {
+    $owner = $this->owner('Plan Conservation', ['webpage' => 'https://plan.example', 'description' => 'AI text']);
+    $this->applier->accept($owner, ['webpage']);
+    $this->assertSame(['webpage' => ['ai' => TRUE, 'assessment' => QualityChecks::ACCEPTED]], $this->checks($owner));
+
+    $rejected = $this->owner('Soil Doctors', ['webpage' => 'https://wrong.example']);
+    $this->applier->reject($rejected);
+    $this->assertSame([], $this->checks($rejected));
+  }
+
+  /**
+   * A curator's later change keeps the AI flag and marks it edited; a migration's change does not.
+   */
+  public function testCuratorEditKeepsFlagAndMarksEdited(): void {
+    $owner = $this->owner('Plan Conservation', ['webpage' => 'https://plan.example', 'description' => 'AI text']);
+    $this->applier->accept($owner, ['webpage', 'description']);
+
+    $synced = $this->reload($owner);
+    $synced->set('description', ['value' => 'Re-imported', 'format' => 'plain_text']);
+    $synced->setSyncing(TRUE);
+    $synced->save();
+    $this->assertSame(QualityChecks::ACCEPTED, $this->checks($owner)['description']['assessment']);
+
+    $edited = $this->reload($owner);
+    $edited->set('webpage', ['uri' => 'https://plan.example/about']);
+    $edited->save();
+    $this->assertSame([
+      'webpage' => ['ai' => TRUE, 'assessment' => QualityChecks::EDITED],
+      'description' => ['ai' => TRUE, 'assessment' => QualityChecks::ACCEPTED],
+    ], $this->checks($owner));
   }
 
 }
