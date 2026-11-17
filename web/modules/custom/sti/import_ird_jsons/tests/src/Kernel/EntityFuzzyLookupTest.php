@@ -126,11 +126,27 @@ final class EntityFuzzyLookupTest extends KernelTestBase {
   }
 
   /**
-   * @param string[] $answers
-   *   The model's JSON answers, in order.
+   * A failed call is not an answer: nothing is remembered, and the next run asks again.
+   */
+  public function testFailedLlmCallIsNotRemembered(): void {
+    $this->org('Department of Agriculture (Thailand)');
+    $philippines = $this->org('Department of Agriculture (Philippines)');
+    $llm = ['llm_model' => 'test', 'llm_url' => 'http://llm'];
+
+    $this->mockLlm([new Response(500)]);
+    $this->assertNull($this->resolve('Department of Agriculture', $llm));
+
+    $this->mockLlm(['{"names":[]}', '{"id":"' . $philippines . '"}']);
+    $this->assertSame($philippines, $this->resolve('Department of Agriculture', $llm));
+  }
+
+  /**
+   * @param array<string|\Psr\Http\Message\ResponseInterface> $answers
+   *   The model's JSON answers, in order, or ready-made responses (e.g. a server error).
    */
   private function mockLlm(array $answers): void {
-    $responses = array_map(fn($a) => new Response(200, [], json_encode(['message' => ['content' => $a]])), $answers);
+    $responses = array_map(fn($a) => $a instanceof Response ? $a
+      : new Response(200, [], json_encode(['message' => ['content' => $a]])), $answers);
     $this->container->set('http_client', new Client(['handler' => HandlerStack::create(new MockHandler($responses))]));
   }
 

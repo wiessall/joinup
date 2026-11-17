@@ -47,6 +47,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *                                         # other names (English, own language, acronym, former) to look up and
  *                                         # then chooses among the candidates found, or none
  *   llm_url: 'http://ollama:11434'
+ *   llm_think: false      # optional: Ollama's think setting; false makes thinking models (qwen3) answer directly
+ *   llm_timeout: 120      # seconds per call
  *   on_miss: null         # or 'generate': create an entity with this name (and default_values)
  *   default_values:
  *     field_state: published
@@ -90,6 +92,8 @@ final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFact
       'margin' => 0.05,
       'llm_model' => NULL,
       'llm_url' => 'http://ollama:11434',
+      'llm_think' => NULL,
+      'llm_timeout' => 120,
       'on_miss' => NULL,
       'default_values' => [],
     ];
@@ -140,37 +144,49 @@ final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFact
     // 3. Everything not matched goes to the LLM, close candidates or not. It first gives the other names it knows
     //    (English, original language, acronym, former name), each looked up like the input: that is how a
     //    translation or a renamed organisation finds its candidates. It then chooses among all candidates, or
-    //    says none. The answer is remembered either way, so each name is asked about once.
+    //    says none. Its answer, "none" too, is remembered, so each name is asked about once. A failed call is not
+    //    an answer: it is logged and not remembered, so the next run asks again.
+    $note = $stored !== NULL ? 'LLM said none in an earlier run' : '';
     if ($this->configuration['llm_model'] && $stored === NULL) {
       $judge = new LlmJudge($this->http, $this->configuration['llm_url'], $this->configuration['llm_model'],
-        $this->configuration['kind'] ?? ($this->hasCodes ? 'country' : 'organisation'));
-      $scores = $result->candidates;
-      $otherNames = $judge->otherNames($input);
-      foreach ($otherNames as $name) {
-        $more = $this->index()->resolve($name);
-        foreach ($more->id !== NULL ? [$more->id => 1.0] : $more->candidates as $id => $score) {
-          $scores[$id] = max($scores[$id] ?? 0.0, $score);
+        $this->configuration['kind'] ?? ($this->hasCodes ? 'country' : 'organisation'),
+        (int) $this->configuration['llm_timeout'], $this->configuration['llm_think']);
+      try {
+        $scores = $result->candidates;
+        $otherNames = $judge->otherNames($input);
+        foreach ($otherNames as $name) {
+          $more = $this->index()->resolve($name);
+          foreach ($more->id !== NULL ? [$more->id => 1.0] : $more->candidates as $id => $score) {
+            $scores[$id] = max($scores[$id] ?? 0.0, $score);
+          }
         }
+        arsort($scores);
+        $candidates = array_intersect_key($this->labels, array_slice($scores, 0, 10, TRUE));
+        $choice = $judge->choose($input, $candidates, $otherNames);
+        $this->store->set($scope, $input, $choice, 'llm', $choice === NULL ? 0.0 : $scores[$choice]);
+        if ($choice !== NULL) {
+          $log(sprintf('matched by LLM to %s "%s" (also known as: %s; candidates: %s)', $choice, $this->labels[$choice],
+            implode('; ', $otherNames) ?: '-', implode(', ', array_keys($candidates))));
+          return $choice;
+        }
+        $note = $candidates
+          ? sprintf('LLM said none (also known as: %s; candidates: %s)', implode('; ', $otherNames) ?: '-',
+            implode(', ', array_keys($candidates)))
+          : sprintf('no candidates, not even through the names the LLM knows it by (%s)', implode('; ', $otherNames) ?: 'none given');
       }
-      arsort($scores);
-      $candidates = array_intersect_key($this->labels, array_slice($scores, 0, 10, TRUE));
-      $choice = $judge->choose($input, $candidates, $otherNames);
-      $this->store->set($scope, $input, $choice, 'llm', $choice === NULL ? 0.0 : $scores[$choice]);
-      if ($choice !== NULL) {
-        $log(sprintf('matched by LLM to %s "%s" (also known as: %s; candidates: %s)', $choice, $this->labels[$choice],
-          implode('; ', $otherNames) ?: '-', implode(', ', array_keys($candidates))));
-        return $choice;
+      catch (\RuntimeException $e) {
+        $note = 'LLM call failed, will ask again next run: ' . $e->getMessage();
       }
     }
-    return $this->miss($input, $scope, $log, remembered: $stored !== NULL, candidates: array_keys($result->candidates));
+    return $this->miss($input, $scope, $log, note: $note, candidates: array_keys($result->candidates));
   }
 
   /**
    * Nothing matched: generate an entity, or leave the value empty.
    */
-  private function miss(string $input, string $scope, \Closure $log, bool $remembered = FALSE, array $candidates = []): ?string {
+  private function miss(string $input, string $scope, \Closure $log, string $note = '', array $candidates = []): ?string {
     if ($this->configuration['on_miss'] !== 'generate') {
-      $log('not found' . ($candidates ? ' (close: ' . implode(', ', $candidates) . ')' : '') . ($remembered ? ' (remembered)' : ''));
+      $log('not found' . ($candidates ? ' (close: ' . implode(', ', $candidates) . ')' : '') . ($note !== '' ? "; $note" : ''));
       return NULL;
     }
     $label_key = $this->entityTypeManager->getDefinition($this->configuration['entity_type'])->getKey('label');
