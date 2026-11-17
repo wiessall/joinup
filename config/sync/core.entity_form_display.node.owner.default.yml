@@ -7,6 +7,7 @@ dependencies:
     - field.field.node.owner.field_acronym
     - field.field.node.owner.field_country_origin
     - field.field.node.owner.field_organization_type
+    - field.field.node.owner.field_parent_organization
     - field.field.node.owner.field_state
     - field.field.node.owner.owner_type
     - field.field.node.owner.related_content
@@ -59,6 +60,16 @@ content:
   field_organization_type:
     type: entity_reference_autocomplete
     weight: 30
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_parent_organization:
+    type: entity_reference_autocomplete
+    weight: 32
     region: content
     settings:
       match_operator: CONTAINS

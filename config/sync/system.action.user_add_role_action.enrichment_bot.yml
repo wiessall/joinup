@@ -1,0 +1,14 @@
+uuid: fc58d2df-a0fb-4853-82de-b111392fd182
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.enrichment_bot
+  module:
+    - user
+id: user_add_role_action.enrichment_bot
+label: 'Add the Enrichment bot role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: enrichment_bot

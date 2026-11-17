@@ -1,0 +1,17 @@
+uuid: 94d012f8-0a5a-4334-b63b-de14fbd517ac
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.owner
+  module:
+    - node
+    - view_unpublished
+id: enrichment_bot
+label: 'Enrichment bot'
+weight: 2
+is_admin: false
+permissions:
+  - 'bypass node access'
+  - 'edit any owner content'
+  - 'view any unpublished content'

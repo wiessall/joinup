@@ -1,0 +1,14 @@
+uuid: f73ee385-424f-4e95-bc8f-0ba3337cf55c
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.enrichment_bot
+  module:
+    - user
+id: user_remove_role_action.enrichment_bot
+label: 'Remove the Enrichment bot role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: enrichment_bot

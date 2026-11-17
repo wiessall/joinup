@@ -1,0 +1,137 @@
+uuid: e258edbc-7c18-4d28-988a-4742c0ef7e9b
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - sti_rdf
+      - joinup_rdf
+      - migrate_plus
+id: test003
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - IRD
+  - solution
+migration_group: ird_import_group
+label: 'IRD universal solution importer'
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+    - modules/custom/sti/import_ird_jsons/sources/stf_2.json
+  constants:
+    OG_AUDIENCE_NID: '23903'
+    OWNER_NID: 33
+    CONTACT_NID: 34
+    DEFAULT_CLASSIFICATION_TID: 5
+    DEFAULT_DOMAIN_TID: 8
+    DEFAULT_LANGUAGE_TID: 31
+    DEFAULT_STATE: draft
+    BUNDLE: solution
+  item_selector: records
+  fields:
+    -
+      name: id
+      label: 'Record ID'
+      selector: core_fields/id
+    -
+      name: title
+      label: Title
+      selector: core_fields/title
+    -
+      name: description
+      label: Description
+      selector: core_fields/description
+    -
+      name: date
+      label: Date
+      selector: core_fields/date
+    -
+      name: url
+      label: 'Landing page URL'
+      selector: core_fields/url
+    -
+      name: owner_name
+      label: 'owner name'
+      selector: core_fields/owner_name
+    -
+      name: country
+      label: 'Country of origin'
+      selector: claims/Country/value
+  ids:
+    id:
+      type: string
+process:
+  title:
+    plugin: skip_on_empty
+    method: row
+    message: 'Skipped: no title'
+    source: title
+  type:
+    plugin: default_value
+    default_value: solution
+  field_state:
+    plugin: default_value
+    default_value: published
+  description/value:
+    plugin: skip_on_empty
+    method: row
+    message: 'Skipped: no description'
+    source: description
+  description/format:
+    plugin: default_value
+    default_value: full_html
+  og_audience:
+    plugin: get
+    source: constants/OG_AUDIENCE_NID
+  owner:
+    -
+      plugin: entity_fuzzy_lookup
+      source: owner_name
+      entity_type: node
+      llm_model: 'qwen3:8b'
+      on_miss: generate
+      bundle: owner
+  atio_country_origin:
+    -
+      plugin: entity_fuzzy_lookup
+      source: country
+      entity_type: taxonomy_term
+      bundle: fao_spatial
+      llm_model: 'qwen2.5:3b'
+  contact:
+    plugin: get
+    source: constants/CONTACT_NID
+  landing_page/uri:
+    plugin: skip_on_empty
+    method: process
+    source: url
+  field_information_resource_date:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: date
+    -
+      plugin: format_date
+      from_format: Y-m-d
+      to_format: Y-m-d
+  field_original_internal_id: id
+  field_last_ingestion_datetime:
+    plugin: format_date
+    source: '@_time'
+    from_format: U
+    to_format: U
+destination:
+  plugin: 'entity:node'
+  default_bundle: solution
+  overwrite_properties:
+    - field_machine_record
+    - field_last_ingestion_datetime
+    - field_original_internal_id
+idMap: {  }
+migration_dependencies:
+  optional:
+    - ird_annotation_import

@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.owner.field_acronym
     - field.field.node.owner.field_country_origin
     - field.field.node.owner.field_organization_type
+    - field.field.node.owner.field_parent_organization
     - field.field.node.owner.field_state
     - field.field.node.owner.owner_type
     - field.field.node.owner.related_content
@@ -43,6 +44,7 @@ hidden:
   field_acronym: true
   field_country_origin: true
   field_organization_type: true
+  field_parent_organization: true
   field_state: true
   langcode: true
   owner_type: true

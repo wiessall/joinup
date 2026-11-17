@@ -7,6 +7,7 @@ dependencies:
     - field.field.node.owner.field_acronym
     - field.field.node.owner.field_country_origin
     - field.field.node.owner.field_organization_type
+    - field.field.node.owner.field_parent_organization
     - field.field.node.owner.field_state
     - field.field.node.owner.owner_type
     - field.field.node.owner.related_content
@@ -55,6 +56,14 @@ content:
       link: true
     third_party_settings: {  }
     weight: 12
+    region: content
+  field_parent_organization:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 14
     region: content
   field_state:
     type: list_default
