@@ -1,17 +1,18 @@
+uuid: d77d26d3-5b79-46da-804e-071c03aa5685
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_quality_checks
+    - field.storage.node.field_quality_assessment
     - node.type.owner
     - paragraphs.paragraphs_type.quality_check
   module:
     - entity_reference_revisions
-id: node.owner.field_quality_checks
-field_name: field_quality_checks
+id: node.owner.field_quality_assessment
+field_name: field_quality_assessment
 entity_type: node
 bundle: owner
-label: 'Quality checks'
+label: 'Quality assessment'
 description: 'Per-field QA: which fields were AI-generated, and whether a curator accepted or edited them.'
 required: false
 translatable: false

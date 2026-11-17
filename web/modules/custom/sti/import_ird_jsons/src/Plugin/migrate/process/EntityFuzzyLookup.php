@@ -161,6 +161,8 @@ final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFact
       $judge = new LlmJudge($this->http, $this->configuration['llm_url'], $this->configuration['llm_model'],
         $this->configuration['kind'] ?? ($this->hasCodes ? 'country' : 'organisation'),
         (int) $this->configuration['llm_timeout'], $this->configuration['llm_think']);
+      $started = microtime(TRUE);
+      $took = fn() => sprintf('LLM %.1fs', microtime(TRUE) - $started);
       try {
         $scores = $result->candidates;
         $otherNames = $judge->otherNames($input);
@@ -175,17 +177,17 @@ final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFact
         $choice = $judge->choose($input, $candidates, $otherNames);
         $this->store->set($scope, $input, $choice, 'llm', $choice === NULL ? 0.0 : $scores[$choice], $this->migrationId);
         if ($choice !== NULL) {
-          $log(sprintf('matched by LLM to %s "%s" (also known as: %s; candidates: %s)', $choice, $this->labels[$choice],
-            implode('; ', $otherNames) ?: '-', implode(', ', array_keys($candidates))));
+          $log(sprintf('matched by LLM to %s "%s" (also known as: %s; candidates: %s; %s)', $choice, $this->labels[$choice],
+            implode('; ', $otherNames) ?: '-', implode(', ', array_keys($candidates)), $took()));
           return $choice;
         }
         $note = $candidates
-          ? sprintf('LLM said none (also known as: %s; candidates: %s)', implode('; ', $otherNames) ?: '-',
-            implode(', ', array_keys($candidates)))
-          : sprintf('no candidates, not even through the names the LLM knows it by (%s)', implode('; ', $otherNames) ?: 'none given');
+          ? sprintf('LLM said none (also known as: %s; candidates: %s; %s)', implode('; ', $otherNames) ?: '-',
+            implode(', ', array_keys($candidates)), $took())
+          : sprintf('no candidates, not even through the names the LLM knows it by (%s; %s)', implode('; ', $otherNames) ?: 'none given', $took());
       }
       catch (\RuntimeException $e) {
-        $note = 'LLM call failed, will ask again next run: ' . $e->getMessage();
+        $note = sprintf('LLM call failed after %s, will ask again next run: %s', $took(), $e->getMessage());
       }
     }
     return $this->miss($input, $scope, $log, note: $note, candidates: array_keys($result->candidates));
@@ -209,7 +211,7 @@ final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFact
     $this->index()->add($id, [$input]);
     $this->labels[$id] = $input;
     $this->store->set($scope, $input, $id, 'generated', 0.0, $this->migrationId);
-    $log("created as $id" . ($candidates ? ' (close: ' . implode(', ', $candidates) . ')' : ''));
+    $log("created as $id" . ($candidates ? ' (close: ' . implode(', ', $candidates) . ')' : '') . ($note !== '' ? "; $note" : ''));
     return $id;
   }
 

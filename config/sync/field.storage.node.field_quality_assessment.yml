@@ -1,3 +1,4 @@
+uuid: beb01549-a2dd-4d94-ac91-972ef063985e
 langcode: en
 status: true
 dependencies:
@@ -5,8 +6,8 @@ dependencies:
     - entity_reference_revisions
     - node
     - paragraphs
-id: node.field_quality_checks
-field_name: field_quality_checks
+id: node.field_quality_assessment
+field_name: field_quality_assessment
 entity_type: node
 type: entity_reference_revisions
 settings:

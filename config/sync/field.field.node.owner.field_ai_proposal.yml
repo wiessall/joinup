@@ -1,0 +1,21 @@
+uuid: 68e2cee7-8688-4fa3-8fb0-53f69095e08b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_ai_proposal
+    - node.type.owner
+_core:
+  default_config_hash: 5DmqhDoyuLEKEdAWIHO1F22AG48InCPUWHIcO0cxejk
+id: node.owner.field_ai_proposal
+field_name: field_ai_proposal
+entity_type: node
+bundle: owner
+label: 'AI proposal'
+description: 'AI-proposed values awaiting review (JSON, written by the enrichment script). Reviewed at Content » Owner review; not shown on the site.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

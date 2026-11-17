@@ -6,9 +6,11 @@ dependencies:
     - core.entity_view_mode.node.confirmation
     - field.field.node.owner.description
     - field.field.node.owner.field_acronym
+    - field.field.node.owner.field_ai_proposal
     - field.field.node.owner.field_country_origin
     - field.field.node.owner.field_organization_type
     - field.field.node.owner.field_parent_organization
+    - field.field.node.owner.field_quality_assessment
     - field.field.node.owner.field_state
     - field.field.node.owner.owner_type
     - field.field.node.owner.related_content
@@ -67,9 +69,11 @@ content:
 hidden:
   description: true
   field_acronym: true
+  field_ai_proposal: true
   field_country_origin: true
   field_organization_type: true
   field_parent_organization: true
+  field_quality_assessment: true
   field_state: true
   langcode: true
   links: true

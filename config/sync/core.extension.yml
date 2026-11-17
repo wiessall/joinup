@@ -264,6 +264,7 @@ module:
   state_machine_revisions: 0
   sti_dedupe: 0
   sti_graph_explorer: 0
+  sti_owner_review: 0
   sti_portal_api: 0
   sti_qa: 0
   sti_rdf: 0

@@ -11,6 +11,7 @@ use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
 use Drupal\paragraphs\Entity\ParagraphsType;
+use Drupal\sti_owner_review\Plugin\Validation\Constraint\NoParentCycleConstraint;
 use Drupal\sti_owner_review\ProposalApplier;
 use Drupal\sti_owner_review\QualityChecks;
 use Drupal\taxonomy\Entity\Term;
@@ -145,10 +146,13 @@ final class ProposalApplierTest extends KernelTestBase {
     $this->assertTrue(ProposalApplier::isPending($this->reload($fao)));
     $this->assertTrue($this->reload($fao)->get(ProposalApplier::PARENT_FIELD)->isEmpty());
 
+    // Counts only cycle violations: core's reference check also objects to the unpublished test owners.
+    $cycles = fn() => count(array_filter(iterator_to_array($fao->get(ProposalApplier::PARENT_FIELD)->validate()),
+      fn($v) => $v->getConstraint() instanceof NoParentCycleConstraint));
     $fao->set(ProposalApplier::PARENT_FIELD, $soil->id());
-    $this->assertCount(1, $fao->get(ProposalApplier::PARENT_FIELD)->validate());
+    $this->assertSame(1, $cycles());
     $fao->set(ProposalApplier::PARENT_FIELD, $fao->id());
-    $this->assertCount(1, $fao->get(ProposalApplier::PARENT_FIELD)->validate());
+    $this->assertSame(1, $cycles());
   }
 
   /**
@@ -180,9 +184,9 @@ final class ProposalApplierTest extends KernelTestBase {
   }
 
   /**
-   * A curator's later change keeps the AI flag and marks it edited; a migration's change does not.
+   * A curator's later change clears the AI flag and marks it edited; a migration's change does neither.
    */
-  public function testCuratorEditKeepsFlagAndMarksEdited(): void {
+  public function testCuratorEditClearsFlagAndMarksEdited(): void {
     $owner = $this->owner('Plan Conservation', ['webpage' => 'https://plan.example', 'description' => 'AI text']);
     $this->applier->accept($owner, ['webpage', 'description']);
 
@@ -196,7 +200,7 @@ final class ProposalApplierTest extends KernelTestBase {
     $edited->set('webpage', ['uri' => 'https://plan.example/about']);
     $edited->save();
     $this->assertSame([
-      'webpage' => ['ai' => TRUE, 'assessment' => QualityChecks::EDITED],
+      'webpage' => ['ai' => FALSE, 'assessment' => QualityChecks::EDITED],
       'description' => ['ai' => TRUE, 'assessment' => QualityChecks::ACCEPTED],
     ], $this->checks($owner));
   }

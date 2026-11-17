@@ -1,0 +1,21 @@
+uuid: 9bed66b1-5eee-40a8-a20d-5ef6e96b2cb8
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+_core:
+  default_config_hash: kdIiY-5j1qMt6u6KynGgcdsglgZGOojsqLsNLy7-dvM
+id: node.field_ai_proposal
+field_name: field_ai_proposal
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

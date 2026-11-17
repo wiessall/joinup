@@ -13,18 +13,33 @@ use Psr\Log\LoggerInterface;
  * Per-field QA as in the production portal: one quality_check paragraph per AI-generated field.
  *
  * A field accepted from an AI proposal gets a paragraph with field_ai_generated on and the assessment
- * ACCEPTED. When a curator later changes that field, the flag stays on and the assessment becomes EDITED: the
- * value started as AI output and a person has since worked on it.
+ * ACCEPTED. When a curator later changes that field, the value is no longer AI output: the flag goes off, and
+ * the assessment EDITED keeps the history (it started as AI output, a person corrected it).
  */
 final class QualityChecks {
 
-  public const HOST = 'field_quality_checks';
-  public const ACCEPTED = 'Good';
-  public const EDITED = 'Reviewed';
+  /**
+   * Same field name as on the production portal's content types, so its QA paragraphs migrate as they are.
+   */
+  public const HOST = 'field_quality_assessment';
+
+  /**
+   * Terms of the production quality_assessment vocabulary (sti_qa ships them), set automatically: curators only
+   * accept or reject in the review form, and edit as usual.
+   */
+  public const ACCEPTED = 'Originally good > validated';
+  public const EDITED = 'Originally bad > fixed';
   private const VOCABULARY = 'quality_assessment';
 
   /** @var array<string, int|null> */
   private array $terms = [];
+
+  /**
+   * Fields markAccepted() flagged, per owner object, until that owner's save reaches markEdited().
+   *
+   * @var array<int, string[]>
+   */
+  private array $accepting = [];
 
   public function __construct(
     private readonly EntityTypeManagerInterface $entityTypeManager,
@@ -47,26 +62,34 @@ final class QualityChecks {
       $check->set('field_quality_assessment', $this->term(self::ACCEPTED));
       $check->setNeedsSave(TRUE);
     }
+    $this->accepting[spl_object_id($owner)] = $fields;
   }
 
   /**
-   * On a save that changes an AI-generated field, marks it EDITED. Checks touched in this save by
-   * markAccepted() are left alone, and so are migrations (syncing saves).
+   * On a save that changes an AI-generated field, clears the AI flag and marks it EDITED. The fields
+   * markAccepted() just flagged for this save are left alone, and so are migrations (syncing saves).
    */
   public function markEdited(NodeInterface $owner): void {
+    $accepted = $this->accepting[spl_object_id($owner)] ?? [];
+    unset($this->accepting[spl_object_id($owner)]);
     $original = $owner->isNew() ? NULL : $owner->getOriginal();
     if ($original === NULL || $owner->isSyncing() || !$owner->hasField(self::HOST)) {
       return;
     }
     foreach ($owner->get(self::HOST) as $item) {
       $check = $item->entity;
-      if (!$check instanceof ParagraphInterface || $check->isNew() || $check->needsSave() || !$check->get('field_ai_generated')->value) {
+      if (!$check instanceof ParagraphInterface || !$check->get('field_ai_generated')->value) {
         continue;
       }
       $field = (string) $check->get('field_content_type_machine_name')->value;
-      if ($owner->hasField($field) && !$owner->get($field)->equals($original->get($field))) {
+      if (!in_array($field, $accepted, TRUE) && $owner->hasField($field) && !$owner->get($field)->equals($original->get($field))) {
+        // The host's field items, paragraphs included, are saved before presave hooks run, so a change made here
+        // is not saved with the owner. Save the paragraph as a new revision and point the owner at it.
+        $check->set('field_ai_generated', FALSE);
         $check->set('field_quality_assessment', $this->term(self::EDITED));
-        $check->setNeedsSave(TRUE);
+        $check->setNewRevision(TRUE);
+        $check->save();
+        $item->target_revision_id = $check->getRevisionId();
       }
     }
   }

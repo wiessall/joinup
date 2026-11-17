@@ -5,9 +5,11 @@ dependencies:
   config:
     - field.field.node.owner.description
     - field.field.node.owner.field_acronym
+    - field.field.node.owner.field_ai_proposal
     - field.field.node.owner.field_country_origin
     - field.field.node.owner.field_organization_type
     - field.field.node.owner.field_parent_organization
+    - field.field.node.owner.field_quality_assessment
     - field.field.node.owner.field_state
     - field.field.node.owner.owner_type
     - field.field.node.owner.related_content
@@ -112,6 +114,8 @@ content:
     weight: 1
     region: content
 hidden:
+  field_ai_proposal: true
+  field_quality_assessment: true
   langcode: true
   links: true
   private_message_link: true

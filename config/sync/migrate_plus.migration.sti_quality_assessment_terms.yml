@@ -1,0 +1,52 @@
+uuid: c304d36d-c9b6-4846-aeb6-72104e652bd8
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - sti_qa
+id: sti_quality_assessment_terms
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - vocabulary
+  - sti_qa
+migration_group: sti_vocabularies
+label: 'Quality assessment terms'
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+    - modules/custom/sti/sti_qa/data/quality_assessment.json
+  item_selector: ''
+  ids:
+    tid:
+      type: integer
+  fields:
+    -
+      name: tid
+      label: tid
+      selector: tid
+    -
+      name: name
+      label: name
+      selector: name
+    -
+      name: weight
+      label: weight
+      selector: weight
+process:
+  name: name
+  weight: weight
+  vid:
+    plugin: default_value
+    default_value: quality_assessment
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: quality_assessment
+idMap: {  }
+migration_dependencies:
+  required: {  }
+  optional: {  }
