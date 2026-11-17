@@ -7,14 +7,15 @@ namespace Drupal\Tests\import_ird_jsons\Unit\Resolver;
 use Drupal\Tests\UnitTestCase;
 use Drupal\import_ird_jsons\Resolver\CandidateIndex;
 use Drupal\import_ird_jsons\Resolver\MatchResult;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * A wrong match links content to the wrong organisation and nothing errors. These cases come from a reviewed
  * deduplication of 1,161 organisations (ATIO owners, November 2026).
- *
- * @coversDefaultClass \Drupal\import_ird_jsons\Resolver\CandidateIndex
- * @group import_ird_jsons
  */
+#[CoversClass(CandidateIndex::class)]
+#[Group('import_ird_jsons')]
 final class CandidateIndexTest extends UnitTestCase {
 
   private function index(array $entities): CandidateIndex {

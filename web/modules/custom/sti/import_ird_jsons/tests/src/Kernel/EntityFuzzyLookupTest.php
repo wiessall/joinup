@@ -16,14 +16,18 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use Drupal\import_ird_jsons\Plugin\migrate\process\EntityFuzzyLookup;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * The failures here are silent: content linked to the wrong organisation, a re-import that links differently,
  * a duplicate organisation created next to an existing one.
- *
- * @coversDefaultClass \Drupal\import_ird_jsons\Plugin\migrate\process\EntityFuzzyLookup
- * @group import_ird_jsons
  */
+#[CoversClass(EntityFuzzyLookup::class)]
+#[Group('import_ird_jsons')]
+#[RunTestsInSeparateProcesses]
 final class EntityFuzzyLookupTest extends KernelTestBase {
 
   protected static $modules = ['system', 'user', 'node', 'field', 'filter', 'text', 'migrate', 'migrate_plus', 'import_ird_jsons'];

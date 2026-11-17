@@ -11,14 +11,17 @@ use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
 use Drupal\sti_owner_review\ProposalApplier;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * The failures here are silent: a rejected AI value written anyway, a curated value overwritten, a proposal
  * offered again after rejection, a parent cycle saved.
- *
- * @coversDefaultClass \Drupal\sti_owner_review\ProposalApplier
- * @group sti_owner_review
  */
+#[CoversClass(ProposalApplier::class)]
+#[Group('sti_owner_review')]
+#[RunTestsInSeparateProcesses]
 final class ProposalApplierTest extends KernelTestBase {
 
   protected static $modules = ['system', 'user', 'node', 'field', 'filter', 'text', 'link', 'sti_owner_review'];
