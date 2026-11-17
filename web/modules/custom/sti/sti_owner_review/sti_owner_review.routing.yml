@@ -1,0 +1,36 @@
+sti_owner_review.collections:
+  path: '/admin/content/owner-review'
+  defaults:
+    _controller: '\Drupal\sti_owner_review\Controller\OwnerReviewController::collections'
+    _title: 'Owner review'
+  requirements:
+    _permission: 'review owner proposals'
+
+sti_owner_review.collection:
+  path: '/admin/content/owner-review/{collection}'
+  defaults:
+    _controller: '\Drupal\sti_owner_review\Controller\OwnerReviewController::collection'
+    _title_callback: '\Drupal\sti_owner_review\Controller\OwnerReviewController::collectionTitle'
+  options:
+    parameters:
+      collection:
+        type: 'entity:node'
+  requirements:
+    _permission: 'review owner proposals'
+    collection: \d+
+
+sti_owner_review.review:
+  path: '/admin/content/owner-review/{collection}/{owner}'
+  defaults:
+    _form: '\Drupal\sti_owner_review\Form\OwnerReviewForm'
+    _title: 'Review AI proposal'
+  options:
+    parameters:
+      collection:
+        type: 'entity:node'
+      owner:
+        type: 'entity:node'
+  requirements:
+    _permission: 'review owner proposals'
+    collection: \d+
+    owner: \d+

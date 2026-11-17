@@ -1,0 +1,17 @@
+services:
+  _defaults:
+    autowire: false
+
+  logger.channel.sti_owner_review:
+    parent: logger.channel_base
+    arguments: ['sti_owner_review']
+
+  sti_owner_review.applier:
+    class: Drupal\sti_owner_review\ProposalApplier
+    arguments: ['@entity_type.manager', '@current_user', '@datetime.time', '@logger.channel.sti_owner_review']
+  Drupal\sti_owner_review\ProposalApplier: '@sti_owner_review.applier'
+
+  sti_owner_review.queue:
+    class: Drupal\sti_owner_review\OwnerQueue
+    arguments: ['@entity_type.manager', '@entity_field.manager']
+  Drupal\sti_owner_review\OwnerQueue: '@sti_owner_review.queue'

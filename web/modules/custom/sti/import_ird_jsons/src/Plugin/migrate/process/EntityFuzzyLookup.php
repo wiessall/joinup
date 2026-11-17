@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\import_ird_jsons\Plugin\migrate\process;
 
-use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\import_ird_jsons\Resolver\CandidateIndex;
+use Drupal\import_ird_jsons\Resolver\EntityCandidates;
 use Drupal\import_ird_jsons\Resolver\LlmJudge;
 use Drupal\import_ird_jsons\Resolver\MatchResult;
 use Drupal\import_ird_jsons\Resolver\ResolutionStore;
@@ -74,22 +74,15 @@ final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFact
     private readonly EntityTypeManagerInterface $entityTypeManager,
     private readonly ResolutionStore $store,
     private readonly ClientInterface $http,
+    private readonly EntityCandidates $candidates,
   ) {
     foreach (['entity_type', 'bundle'] as $key) {
       if (empty($configuration[$key])) {
         throw new \InvalidArgumentException("entity_fuzzy_lookup: '$key' is required.");
       }
     }
-    $definition = $entityTypeManager->getDefinition($configuration['entity_type']);
-    $aliases = ['variant', 'alt_labels', 'alt_label', 'synonyms', 'aliases'];
-    $configuration += [
-      'bundle_key' => $definition->getKey('bundle'),
-      'name_fields' => [$definition->getKey('label'), ...$aliases, ...array_map(fn($f) => "field_$f", $aliases)],
-      'acronym_fields' => ['acronym', 'field_acronym'],
-      'code_fields' => ['code', 'iso_code', 'iso_code_2', 'm49_code', 'field_code', 'field_iso_code', 'field_iso_code_2'],
+    $configuration += EntityCandidates::defaults($entityTypeManager->getDefinition($configuration['entity_type'])) + [
       'kind' => NULL,
-      'threshold' => 0.9,
-      'margin' => 0.05,
       'llm_model' => NULL,
       'llm_url' => 'http://ollama:11434',
       'llm_think' => NULL,
@@ -108,6 +101,7 @@ final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFact
       $container->get('entity_type.manager'),
       new ResolutionStore($container->get('keyvalue')),
       $container->get('http_client'),
+      $container->get('import_ird_jsons.entity_candidates'),
     );
   }
 
@@ -219,47 +213,11 @@ final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFact
    * Builds the index once per migration run from the existing entities.
    */
   private function index(): CandidateIndex {
-    if ($this->index !== NULL) {
-      return $this->index;
-    }
-    $this->index = new CandidateIndex((float) $this->configuration['threshold'], (float) $this->configuration['margin']);
-    $ids = $this->storage()->getQuery()->accessCheck(FALSE)
-      ->condition($this->configuration['bundle_key'], $this->configuration['bundle'])
-      ->execute();
-    foreach (array_chunk($ids, 200) as $chunk) {
-      foreach ($this->storage()->loadMultiple($chunk) as $entity) {
-        $names = $this->values($entity, (array) $this->configuration['name_fields']);
-        $acronyms = $this->values($entity, (array) $this->configuration['acronym_fields']);
-        $codes = $this->values($entity, (array) $this->configuration['code_fields']);
-        $this->hasCodes = $this->hasCodes || $codes;
-        $id = (string) $entity->id();
-        $this->index->add($id, $names, $acronyms, $codes);
-        $this->labels[$id] = (string) $entity->label() . ($acronyms ? ' (' . implode(', ', $acronyms) . ')' : '');
-      }
-      $this->storage()->resetCache($chunk);
+    if ($this->index === NULL) {
+      ['index' => $this->index, 'labels' => $this->labels, 'hasCodes' => $this->hasCodes] = $this->candidates->build(
+        $this->configuration['entity_type'], $this->configuration['bundle'], $this->configuration);
     }
     return $this->index;
-  }
-
-  /**
-   * String values of the given fields; fields the entity lacks are skipped.
-   *
-   * @return string[]
-   */
-  private function values(ContentEntityInterface $entity, array $fields): array {
-    $out = [];
-    foreach ($fields as $field) {
-      if (!$entity->hasField($field)) {
-        continue;
-      }
-      foreach ($entity->get($field) as $item) {
-        $v = trim((string) $item->value);
-        if ($v !== '') {
-          $out[] = $v;
-        }
-      }
-    }
-    return $out;
   }
 
   private function storage(): EntityStorageInterface {

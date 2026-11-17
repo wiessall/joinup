@@ -3,3 +3,7 @@ services:
     class: Drupal\import_ird_jsons\IntakeFile
     arguments:
       - '@plugin.manager.migrate_plus.data_fetcher'
+
+  import_ird_jsons.entity_candidates:
+    class: Drupal\import_ird_jsons\Resolver\EntityCandidates
+    arguments: ['@entity_type.manager']

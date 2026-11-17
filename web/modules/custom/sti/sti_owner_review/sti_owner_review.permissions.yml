@@ -1,0 +1,8 @@
+review owner proposals:
+  title: 'Review AI proposals for owners'
+  description: 'Accept or reject AI-proposed values for owners. Accepting publishes the owner.'
+  restrict access: true
+submit owner proposals:
+  title: 'Submit AI proposals for owners'
+  description: 'For the enrichment script account: write the AI proposal field on owners through JSON:API.'
+  restrict access: true
