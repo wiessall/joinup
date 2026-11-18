@@ -9,11 +9,12 @@ use Drupal\node\NodeInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Which owners lack basic information, and putting them in the review queue.
+ * Which owners lack basic information, and marking them for enrichment.
  *
  * An owner is incomplete without a webpage, without a description, or with a description shorter than
- * MIN_DESCRIPTION characters. Requesting an update moves it to needs_update and leaves it published: solutions keep
- * showing it and the graph keeps its triples, while the queue, the enrichment pull and the review pick it up.
+ * MIN_DESCRIPTION characters. Requesting an update sets the record status INCOMPLETE and changes nothing else.
+ * The workflow state is not used: for a published owner, Joinup saves a change to needs_update as a draft behind
+ * the published revision, which the review list, the pull and the applier would not see.
  */
 final class Completeness {
 
@@ -21,6 +22,7 @@ final class Completeness {
 
   public function __construct(
     private readonly EntityTypeManagerInterface $entityTypeManager,
+    private readonly RecordStatus $recordStatus,
     private readonly LoggerInterface $logger,
   ) {}
 
@@ -47,20 +49,30 @@ final class Completeness {
   }
 
   /**
-   * Ids of incomplete owners not yet in needs_update.
+   * Why the owner is not marked: already in the review queue, mid-review, or complete. NULL when it should be.
+   */
+  public function skipReason(NodeInterface $owner): ?string {
+    if ($owner->get('field_state')->value === 'needs_update') {
+      return 'already in needs_update';
+    }
+    if ($this->recordStatus->is($owner, RecordStatus::INCOMPLETE, RecordStatus::AI, RecordStatus::AI_ONLY_EMPTY, RecordStatus::REJECTED)) {
+      return 'already marked, or an AI proposal is in review';
+    }
+    return self::gaps($owner) ? NULL : 'complete';
+  }
+
+  /**
+   * Ids of owners that requestUpdate() would mark.
    *
    * @return int[]
    */
   public function incompleteIds(): array {
     $storage = $this->entityTypeManager->getStorage('node');
-    $ids = $storage->getQuery()->accessCheck(FALSE)
-      ->condition('type', 'owner')
-      ->condition('field_state', 'needs_update', '<>')
-      ->execute();
+    $ids = $storage->getQuery()->accessCheck(FALSE)->condition('type', 'owner')->execute();
     $out = [];
     foreach (array_chunk($ids, 200) as $chunk) {
       foreach ($storage->loadMultiple($chunk) as $owner) {
-        if (self::gaps($owner)) {
+        if ($this->skipReason($owner) === NULL) {
           $out[] = (int) $owner->id();
         }
       }
@@ -70,34 +82,30 @@ final class Completeness {
   }
 
   /**
-   * Moves an incomplete owner to needs_update, publication unchanged.
+   * Marks an incomplete owner for enrichment; its state and publication stay as they are.
    *
    * @return string|null
    *   NULL when done, else why it was skipped.
    */
   public function requestUpdate(NodeInterface $owner): ?string {
-    if ($owner->get('field_state')->value === 'needs_update') {
-      return 'already in needs_update';
+    if (($reason = $this->skipReason($owner)) !== NULL) {
+      return $reason;
     }
-    $gaps = self::gaps($owner);
-    if (!$gaps) {
-      return 'complete';
-    }
-    $published = $owner->isPublished();
-    $owner->set('field_state', 'needs_update');
+    [$state, $published] = [$owner->get('field_state')->value, $owner->isPublished()];
+    $this->recordStatus->set($owner, RecordStatus::INCOMPLETE);
     $owner->setNewRevision(TRUE);
-    $owner->setRevisionLogMessage('Update requested: ' . implode(', ', $gaps) . '.');
+    $owner->setRevisionLogMessage('Marked for enrichment: ' . implode(', ', self::gaps($owner)) . '.');
     $owner->save();
 
-    // A workflow hook could change the state or the publication on save; the save reports success either way.
+    // A workflow hook could make this a draft or change the state; the save reports success either way.
     $saved = $this->entityTypeManager->getStorage('node')->loadUnchanged($owner->id());
-    if ($saved->get('field_state')->value !== 'needs_update' || $saved->isPublished() !== $published) {
-      $this->logger->error('Owner @id: update requested, but it saved as @state, published=@published.', [
+    if (!$this->recordStatus->is($saved, RecordStatus::INCOMPLETE) || $saved->get('field_state')->value !== $state || $saved->isPublished() !== $published) {
+      $this->logger->error('Owner @id: marked for enrichment, but the current revision has state @state, published=@published and not the record status.', [
         '@id' => $owner->id(),
         '@state' => $saved->get('field_state')->value,
         '@published' => (int) $saved->isPublished(),
       ]);
-      throw new \RuntimeException("Owner {$owner->id()}: the update request did not save as requested.");
+      throw new \RuntimeException("Owner {$owner->id()}: the mark did not save on the current revision.");
     }
     return NULL;
   }

@@ -22,10 +22,16 @@ final class RollbackSubscriber implements EventSubscriberInterface {
     private readonly LoggerInterface $logger,
   ) {}
 
+  /**
+   *
+   */
   public static function getSubscribedEvents(): array {
     return [MigrateEvents::POST_ROLLBACK => 'forget'];
   }
 
+  /**
+   *
+   */
   public function forget(MigrateRollbackEvent $event): void {
     $id = (string) $event->getMigration()->id();
     if ($count = $this->store->forgetGenerated($id)) {

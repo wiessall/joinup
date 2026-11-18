@@ -67,7 +67,7 @@ final class ProposalApplierTest extends KernelTestBase {
       Term::create(['vid' => 'quality_assessment', 'name' => $name])->save();
     }
     Vocabulary::create(['vid' => 'sti_record_status', 'name' => 'Record status'])->save();
-    foreach ([RecordStatus::AI_ONLY_EMPTY, RecordStatus::AI, RecordStatus::APPROVED, RecordStatus::REJECTED, RecordStatus::CURATED] as $name) {
+    foreach ([RecordStatus::AI_ONLY_EMPTY, RecordStatus::AI, RecordStatus::APPROVED, RecordStatus::REJECTED, RecordStatus::CURATED, RecordStatus::INCOMPLETE] as $name) {
       Term::create(['vid' => 'sti_record_status', 'name' => $name])->save();
     }
     $this->installConfig(['sti_owner_review']);
@@ -258,26 +258,32 @@ final class ProposalApplierTest extends KernelTestBase {
   }
 
   /**
-   * Only incomplete owners are queued, and they stay published: solutions and the graph keep them.
+   * Only incomplete owners are marked, and only by record status: state and publication stay, so Joinup's
+   * workflow does not turn the change into a draft. Owners mid-review are left alone.
    */
-  public function testRequestUpdateQueuesOnlyIncompleteKeepingThemPublished(): void {
+  public function testRequestUpdateMarksOnlyIncompleteAndLeavesStateAlone(): void {
     $description = ['value' => str_repeat('A real description of what this organisation does. ', 3), 'format' => 'plain_text'];
     $complete = $this->publishedOwner('Complete', ['webpage' => ['uri' => 'https://ok.example'], 'description' => $description]);
     $noWebpage = $this->publishedOwner('No webpage', ['description' => $description]);
     $short = $this->publishedOwner('Short', ['webpage' => ['uri' => 'https://short.example'], 'description' => ['value' => 'Farmers.', 'format' => 'plain_text']]);
+    $inReview = $this->publishedOwner('In review', []);
+    $inReview->set(ProposalApplier::FIELD, json_encode(['status' => 'pending', 'fields' => ['webpage' => 'https://x.example']]))->save();
     $queued = $this->owner('Already queued');
 
     $completeness = $this->container->get('sti_owner_review.completeness');
     $this->assertEqualsCanonicalizing([(int) $noWebpage->id(), (int) $short->id()], $completeness->incompleteIds());
 
-    foreach ([$complete, $noWebpage, $short, $queued] as $owner) {
+    foreach ([$complete, $noWebpage, $short, $inReview, $queued] as $owner) {
       $completeness->requestUpdate($owner);
     }
     foreach ([$noWebpage, $short] as $owner) {
-      $this->assertSame('needs_update', $this->reload($owner)->get('field_state')->value);
+      $this->assertSame(RecordStatus::INCOMPLETE, $this->recordStatus($owner));
+      $this->assertSame('published', $this->reload($owner)->get('field_state')->value);
       $this->assertTrue($this->reload($owner)->isPublished());
     }
-    $this->assertSame('published', $this->reload($complete)->get('field_state')->value);
+    $this->assertSame('', $this->recordStatus($complete));
+    $this->assertSame(RecordStatus::AI_ONLY_EMPTY, $this->recordStatus($inReview));
+    $this->assertSame('', $this->recordStatus($queued));
   }
 
 }

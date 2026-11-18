@@ -1,0 +1,11 @@
+uuid: b2ac91d5-0bd9-486a-941f-37a16df8d640
+langcode: en
+status: true
+dependencies:
+  module:
+    - sti_owner_review
+id: sti_owner_review_accept
+label: 'Accept AI proposal'
+type: node
+plugin: sti_owner_review_accept
+configuration: {  }

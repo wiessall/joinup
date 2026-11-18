@@ -2,7 +2,8 @@
 """Read stub owners from Drupal for enrichment, and write enrichment results back.
 
   python3 owner_api.py pull https://sti.ddev.site stubs.json
-      every owner in state needs_update, with the titles of the solutions that reference it (search context)
+      every owner in needs_update or marked "Incomplete - to be enriched", with the titles of the solutions that
+      reference it (search context)
 
   python3 owner_api.py push https://sti.ddev.site proposals.json
       proposals.json from enrich_stubs.py. Each record becomes a pending proposal in the owner's
@@ -24,6 +25,21 @@ from pathlib import Path
 import requests
 
 STATE = "needs_update"
+# Record status set by `drush sti-owner:request-update` on incomplete published owners (sti_owner_review).
+INCOMPLETE = "Incomplete - to be enriched"
+
+
+def owner_filter() -> dict:
+    """Owners to enrich: in needs_update (stubs from imports) OR marked incomplete (published, missing information)."""
+    return {
+        "filter[q][group][conjunction]": "OR",
+        "filter[s][condition][path]": "field_state",
+        "filter[s][condition][value]": STATE,
+        "filter[s][condition][memberOf]": "q",
+        "filter[i][condition][path]": "field_record_status.name",
+        "filter[i][condition][value]": INCOMPLETE,
+        "filter[i][condition][memberOf]": "q",
+    }
 
 
 def session(base: str) -> requests.Session:
@@ -63,8 +79,7 @@ def related(item: dict, field: str) -> list[str]:
 def pull(base: str, out: Path) -> None:
     s = session(base)
     owners, terms = {}, {}
-    for o in pages(s, f"{base}/jsonapi/node/owner",
-                   {"filter[field_state]": STATE, "include": "field_country_origin"}, terms):
+    for o in pages(s, f"{base}/jsonapi/node/owner", owner_filter() | {"include": "field_country_origin"}, terms):
         a = o["attributes"]
         owners[o["id"]] = {
             "uuid": o["id"],
@@ -77,13 +92,19 @@ def pull(base: str, out: Path) -> None:
             "proposal_status": proposal_status(a.get("field_ai_proposal")),
             "solutions": [],
         }
-    for sol in pages(s, f"{base}/jsonapi/node/solution",
-                     {"filter[owner.field_state]": STATE, "fields[node--solution]": "title,owner"}):
-        for ref in related(sol, "owner"):
-            if ref in owners:
-                owners[ref]["solutions"].append(sol["attributes"]["title"])
+    uuids = list(owners)
+    for start in range(0, len(uuids), 50):
+        for sol in pages(s, f"{base}/jsonapi/node/solution", {
+            "filter[o][condition][path]": "owner.id",
+            "filter[o][condition][operator]": "IN",
+            "filter[o][condition][value][]": uuids[start:start + 50],
+            "fields[node--solution]": "title,owner",
+        }):
+            for ref in related(sol, "owner"):
+                if ref in owners:
+                    owners[ref]["solutions"].append(sol["attributes"]["title"])
     out.write_text(json.dumps({"records": list(owners.values())}, indent=1, ensure_ascii=False))
-    print(f"{len(owners)} owners in {STATE} -> {out}", file=sys.stderr)
+    print(f"{len(owners)} owners in {STATE} or marked '{INCOMPLETE}' -> {out}", file=sys.stderr)
 
 
 def proposal_status(raw: str | None) -> str | None:

@@ -1,0 +1,11 @@
+uuid: 25046d92-e5eb-4902-8a40-4d079cd1312a
+langcode: en
+status: true
+dependencies:
+  module:
+    - sti_owner_review
+id: sti_owner_review_reject
+label: 'Reject AI proposal'
+type: node
+plugin: sti_owner_review_reject
+configuration: {  }

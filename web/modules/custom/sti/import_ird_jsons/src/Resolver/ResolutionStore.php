@@ -35,6 +35,9 @@ final class ResolutionStore {
     return $this->store->get(self::key($scope, $input));
   }
 
+  /**
+   *
+   */
   public function set(string $scope, string $input, ?string $target, string $tier, float $score, ?string $migration = NULL): void {
     $this->store->set(self::key($scope, $input), [
       'target' => $target,
@@ -61,6 +64,9 @@ final class ResolutionStore {
     return count($keys);
   }
 
+  /**
+   *
+   */
   public function delete(string $scope, string $input): void {
     $this->store->delete(self::key($scope, $input));
   }

@@ -64,7 +64,8 @@ final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFact
 
   private ?CandidateIndex $index = NULL;
 
-  /** @var array<string, string> */
+  /**
+   * @var array<string, string> */
   private array $labels = [];
 
   private bool $hasCodes = FALSE;
@@ -96,6 +97,9 @@ final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFact
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
+  /**
+   *
+   */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition, ?MigrationInterface $migration = NULL): self {
     return new self(
       $configuration,
@@ -109,6 +113,9 @@ final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFact
     );
   }
 
+  /**
+   *
+   */
   public function transform($value, MigrateExecutableInterface $migrate_executable, Row $row, $destination_property): ?string {
     $input = trim((string) $value);
     if ($input === '') {
@@ -226,6 +233,9 @@ final class EntityFuzzyLookup extends ProcessPluginBase implements ContainerFact
     return $this->index;
   }
 
+  /**
+   *
+   */
   private function storage(): EntityStorageInterface {
     return $this->entityTypeManager->getStorage($this->configuration['entity_type']);
   }

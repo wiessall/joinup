@@ -23,5 +23,5 @@ services:
 
   sti_owner_review.completeness:
     class: Drupal\sti_owner_review\Completeness
-    arguments: ['@entity_type.manager', '@logger.channel.sti_owner_review']
+    arguments: ['@entity_type.manager', '@sti_owner_review.record_status', '@logger.channel.sti_owner_review']
   Drupal\sti_owner_review\Completeness: '@sti_owner_review.completeness'

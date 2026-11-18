@@ -25,3 +25,12 @@ def test_pending_is_replaced_and_draft_description_proposed():
 
 def test_nothing_to_propose():
     assert build_proposal(None, {"uuid": "u", "rejected_websites": []}) is None
+
+
+def test_owner_filter_is_an_or_of_state_and_incomplete_mark():
+    from owner_api import owner_filter, INCOMPLETE
+    f = owner_filter()
+    assert f["filter[q][group][conjunction]"] == "OR"
+    assert (f["filter[s][condition][value]"], f["filter[s][condition][memberOf]"]) == ("needs_update", "q")
+    assert (f["filter[i][condition][path]"], f["filter[i][condition][value]"], f["filter[i][condition][memberOf]"]) == \
+        ("field_record_status.name", INCOMPLETE, "q")

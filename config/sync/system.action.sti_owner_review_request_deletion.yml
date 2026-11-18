@@ -1,0 +1,11 @@
+uuid: 6e0b3b5d-8eb4-48fe-8e58-fb4d845ed4f2
+langcode: en
+status: true
+dependencies:
+  module:
+    - sti_owner_review
+id: sti_owner_review_request_deletion
+label: 'Request deletion'
+type: node
+plugin: sti_owner_review_request_deletion
+configuration: {  }

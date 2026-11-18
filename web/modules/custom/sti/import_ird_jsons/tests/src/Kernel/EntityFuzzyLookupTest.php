@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\Tests\import_ird_jsons\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\import_ird_jsons\Plugin\migrate\process\EntityFuzzyLookup;
 use Drupal\migrate\Event\MigrateEvents;
 use Drupal\migrate\Event\MigrateRollbackEvent;
 use Drupal\migrate\MigrateExecutableInterface;
@@ -16,7 +17,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use Drupal\import_ird_jsons\Plugin\migrate\process\EntityFuzzyLookup;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
@@ -32,6 +32,9 @@ final class EntityFuzzyLookupTest extends KernelTestBase {
 
   protected static $modules = ['system', 'user', 'node', 'field', 'filter', 'text', 'migrate', 'migrate_plus', 'import_ird_jsons'];
 
+  /**
+   *
+   */
   protected function setUp(): void {
     parent::setUp();
     $this->installEntitySchema('user');
@@ -41,12 +44,18 @@ final class EntityFuzzyLookupTest extends KernelTestBase {
     NodeType::create(['type' => 'org', 'name' => 'Org'])->save();
   }
 
+  /**
+   *
+   */
   private function org(string $title): string {
     $node = Node::create(['type' => 'org', 'title' => $title]);
     $node->save();
     return (string) $node->id();
   }
 
+  /**
+   *
+   */
   private function resolve(string $input, array $config = [], ?MigrationInterface $migration = NULL): ?string {
     $plugin = $this->container->get('plugin.manager.migrate.process')->createInstance('entity_fuzzy_lookup', $config + [
       'entity_type' => 'node',
@@ -55,6 +64,9 @@ final class EntityFuzzyLookupTest extends KernelTestBase {
     return $plugin->transform($input, $this->createMock(MigrateExecutableInterface::class), new Row(), 'owner');
   }
 
+  /**
+   *
+   */
   private function orgCount(): int {
     return (int) \Drupal::entityQuery('node')->accessCheck(FALSE)->condition('type', 'org')->count()->execute();
   }

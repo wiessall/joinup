@@ -1,0 +1,270 @@
+uuid: 8116d1eb-e4d3-472a-9fba-e2b048cd194d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_record_status
+    - node.type.owner
+    - taxonomy.vocabulary.sti_record_status
+  module:
+    - node
+    - state_machine
+    - taxonomy
+    - user
+id: owner_review
+label: 'Owner review'
+module: views
+description: 'Owners to review: in needs_update (stubs, update requests), or published and marked incomplete or with an AI proposal in review.'
+tag: sti
+base_table: node_field_data
+base_field: nid
+display:
+  default:
+    id: default
+    display_title: Default
+    display_plugin: default
+    position: 0
+    display_options:
+      title: 'Owner review'
+      fields:
+        node_bulk_form:
+          id: node_bulk_form
+          table: node
+          field: node_bulk_form
+          entity_type: node
+          plugin_id: node_bulk_form
+          label: ''
+          include_exclude: include
+          selected_actions:
+            - sti_owner_review_accept
+            - sti_owner_review_reject
+            - sti_owner_review_publish
+            - sti_owner_review_request_deletion
+          actions_order: {  }
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          entity_type: node
+          entity_field: title
+          plugin_id: field
+          label: Owner
+          type: string
+          settings:
+            link_to_entity: true
+        field_record_status:
+          id: field_record_status
+          table: node__field_record_status
+          field: field_record_status
+          plugin_id: field
+          label: 'Record status'
+          type: entity_reference_label
+          settings:
+            link: false
+        changed:
+          id: changed
+          table: node_field_data
+          field: changed
+          entity_type: node
+          entity_field: changed
+          plugin_id: field
+          label: Updated
+          type: timestamp_ago
+        operations:
+          id: operations
+          table: node
+          field: operations
+          plugin_id: entity_operations
+          label: Operations
+          destination: true
+      pager:
+        type: full
+        options:
+          items_per_page: 50
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Filter
+          reset_button: true
+          reset_button_label: Reset
+      access:
+        type: perm
+        options:
+          perm: 'review owner proposals'
+      cache:
+        type: none
+      empty:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          plugin_id: text_custom
+          empty: true
+          content: 'No owners need an update.'
+      sorts:
+        changed:
+          id: changed
+          table: node_field_data
+          field: changed
+          entity_type: node
+          entity_field: changed
+          plugin_id: date
+          order: DESC
+      arguments:
+        og_audience_target_id:
+          id: og_audience_target_id
+          table: node__og_audience
+          field: og_audience_target_id
+          relationship: reverse__node__owner
+          plugin_id: numeric
+          default_action: ignore
+          title_enable: false
+          specify_validation: false
+      filters:
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          value:
+            owner: owner
+          group: 1
+        field_state_value:
+          id: field_state_value
+          table: node__field_state
+          field: field_state_value
+          plugin_id: state_machine_state
+          operator: in
+          value:
+            needs_update: needs_update
+          group: 2
+        status_incomplete:
+          id: status_incomplete
+          table: taxonomy_term_field_data
+          field: name
+          relationship: field_record_status
+          admin_label: 'Marked incomplete (published owners)'
+          entity_type: taxonomy_term
+          entity_field: name
+          plugin_id: string
+          operator: '='
+          value: 'Incomplete - to be enriched'
+          group: 2
+        status_ai:
+          id: status_ai
+          table: taxonomy_term_field_data
+          field: name
+          relationship: field_record_status
+          admin_label: 'AI proposal in review (published owners)'
+          entity_type: taxonomy_term
+          entity_field: name
+          plugin_id: string
+          operator: starts
+          value: AI-enriched
+          group: 2
+        field_record_status_target_id:
+          id: field_record_status_target_id
+          table: node__field_record_status
+          field: field_record_status_target_id
+          plugin_id: taxonomy_index_tid
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_record_status_target_id_op
+            label: 'Record status'
+            identifier: record_status
+            remember: false
+            multiple: false
+            reduce: false
+          vid: sti_record_status
+          type: select
+          hierarchy: false
+          limit: true
+          error_message: true
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          entity_type: node
+          entity_field: title
+          plugin_id: string
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: title_op
+            label: Name
+            identifier: title
+            remember: false
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+          2: OR
+      style:
+        type: table
+      row:
+        type: fields
+      query:
+        type: views_query
+        options:
+          distinct: true
+      relationships:
+        field_record_status:
+          id: field_record_status
+          table: node__field_record_status
+          field: field_record_status
+          admin_label: 'Record status term'
+          plugin_id: standard
+          required: false
+        reverse__node__owner:
+          id: reverse__node__owner
+          table: node_field_data
+          field: reverse__node__owner
+          admin_label: 'Solutions using the owner'
+          entity_type: node
+          plugin_id: entity_reverse
+          required: false
+      display_extenders: {  }
+    cache_metadata:
+      max-age: 0
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:field.storage.node.field_record_status'
+  page_1:
+    id: page_1
+    display_title: Page
+    display_plugin: page
+    position: 1
+    display_options:
+      display_description: 'All owners in needs_update; add a collection id to the path to see only the owners its source records use.'
+      display_extenders: {  }
+      path: admin/content/owner-review
+      menu:
+        type: tab
+        title: 'Owner review'
+        description: 'Owners that need an update, AI proposals among them'
+        weight: 21
+        menu_name: admin
+    cache_metadata:
+      max-age: 0
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:field.storage.node.field_record_status'

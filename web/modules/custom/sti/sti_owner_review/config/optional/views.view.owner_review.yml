@@ -21,7 +21,7 @@ dependencies:
 id: owner_review
 label: 'Owner review'
 module: views
-description: 'Owners that need an update: stubs from imports, AI proposals, update requests. Filter by record status to see AI proposals.'
+description: 'Owners to review: in needs_update (stubs, update requests), or published and marked incomplete or with an AI proposal in review.'
 tag: sti
 base_table: node_field_data
 base_field: nid
@@ -93,6 +93,7 @@ display:
           plugin_id: bundle
           value:
             owner: owner
+          group: 1
         field_state_value:
           id: field_state_value
           table: node__field_state
@@ -101,6 +102,31 @@ display:
           operator: in
           value:
             needs_update: needs_update
+          group: 2
+        status_incomplete:
+          id: status_incomplete
+          table: taxonomy_term_field_data
+          field: name
+          relationship: field_record_status
+          entity_type: taxonomy_term
+          entity_field: name
+          plugin_id: string
+          admin_label: 'Marked incomplete (published owners)'
+          operator: '='
+          value: 'Incomplete - to be enriched'
+          group: 2
+        status_ai:
+          id: status_ai
+          table: taxonomy_term_field_data
+          field: name
+          relationship: field_record_status
+          entity_type: taxonomy_term
+          entity_field: name
+          plugin_id: string
+          admin_label: 'AI proposal in review (published owners)'
+          operator: starts
+          value: AI-enriched
+          group: 2
         field_record_status_target_id:
           id: field_record_status_target_id
           table: node__field_record_status
@@ -121,6 +147,7 @@ display:
           hierarchy: false
           limit: true
           error_message: true
+          group: 1
         title:
           id: title
           table: node_field_data
@@ -136,6 +163,12 @@ display:
             label: Name
             identifier: title
             remember: false
+          group: 1
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+          2: OR
       sorts:
         changed:
           id: changed
@@ -146,6 +179,13 @@ display:
           plugin_id: date
           order: DESC
       relationships:
+        field_record_status:
+          id: field_record_status
+          table: node__field_record_status
+          field: field_record_status
+          plugin_id: standard
+          admin_label: 'Record status term'
+          required: false
         reverse__node__owner:
           id: reverse__node__owner
           table: node_field_data

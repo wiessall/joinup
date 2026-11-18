@@ -18,6 +18,9 @@ use PHPUnit\Framework\Attributes\Group;
 #[Group('import_ird_jsons')]
 final class CandidateIndexTest extends UnitTestCase {
 
+  /**
+   *
+   */
   private function index(array $entities): CandidateIndex {
     $index = new CandidateIndex();
     foreach ($entities as $id => $names) {
@@ -100,9 +103,16 @@ final class CandidateIndexTest extends UnitTestCase {
   public function testCountries(): void {
     $index = new CandidateIndex();
     foreach ([
-      'KEN' => ['Kenya', 'KE'], 'IRN' => ['Iran (Islamic Republic of)', 'IR'], 'NER' => ['Niger', 'NE'],
-      'NGA' => ['Nigeria', 'NG'], 'SDN' => ['Sudan', 'SD'], 'SSD' => ['South Sudan', 'SS'], 'ISL' => ['Iceland', 'IS'],
-      'IRL' => ['Ireland', 'IE'], 'IND' => ['India', 'IN'], 'COD' => ['Democratic Republic of the Congo', 'CD'],
+      'KEN' => ['Kenya', 'KE'],
+      'IRN' => ['Iran (Islamic Republic of)', 'IR'],
+      'NER' => ['Niger', 'NE'],
+      'NGA' => ['Nigeria', 'NG'],
+      'SDN' => ['Sudan', 'SD'],
+      'SSD' => ['South Sudan', 'SS'],
+      'ISL' => ['Iceland', 'IS'],
+      'IRL' => ['Ireland', 'IE'],
+      'IND' => ['India', 'IN'],
+      'COD' => ['Democratic Republic of the Congo', 'CD'],
       'COG' => ['Congo', 'CG'],
     ] as $iso3 => [$name, $iso2]) {
       $index->add($iso3, [$name], [], [$iso3, $iso2]);

@@ -11,7 +11,7 @@ use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
 
 /**
- * Puts incomplete owners in the review queue.
+ * Marks incomplete owners for enrichment.
  */
 final class OwnerReviewCommands extends DrushCommands {
 
@@ -25,9 +25,10 @@ final class OwnerReviewCommands extends DrushCommands {
   }
 
   /**
-   * Moves every incomplete owner to needs_update, keeping it published.
+   * Sets the record status "Incomplete - to be enriched" on every incomplete owner; nothing else changes.
    *
    * Incomplete: no webpage, no description, or a description under Completeness::MIN_DESCRIPTION characters.
+   * Owners in needs_update, already marked, or with an AI proposal in review are left alone.
    */
   #[CLI\Command(name: 'sti-owner:request-update')]
   #[CLI\Option(name: 'dry-run', description: 'Only list the owners and what they lack.')]
@@ -57,7 +58,7 @@ final class OwnerReviewCommands extends DrushCommands {
       $this->logger()->notice('Dry run: nothing changed.');
       return;
     }
-    $this->logger()->success(sprintf('%d owners moved to needs_update, %d failed.', $done, $failed));
+    $this->logger()->success(sprintf('%d owners marked for enrichment, %d failed.', $done, $failed));
   }
 
 }

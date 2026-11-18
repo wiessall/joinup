@@ -91,3 +91,9 @@ def test_parent_is_proposed(monkeypatch):
     fake(monkeypatch, [], {})
     monkeypatch.setattr(E, "find_websites", lambda ctx: ([], "WEBSITE: none\nPARENT: FAO"))
     assert E.enrich(STUB)["parent"] == "FAO"
+
+
+def test_short_description_counts_as_incomplete():
+    assert not E.complete({"webpage": "https://x.org", "description": "<p>Farmers.</p>"})
+    assert not E.complete({"description": "A" * 100})
+    assert E.complete({"webpage": "https://x.org", "description": "A" * 80})

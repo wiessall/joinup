@@ -22,6 +22,7 @@ final class RecordStatus {
   public const APPROVED = 'Approved';
   public const REJECTED = 'Rejected - Bad AI-generated content';
   public const CURATED = 'Manually curated';
+  public const INCOMPLETE = 'Incomplete - to be enriched';
   private const VOCABULARY = 'sti_record_status';
 
   /** @var array<string, int|null> */
@@ -36,9 +37,28 @@ final class RecordStatus {
    * Sets the status; the owner is saved by the caller. A missing term leaves it unchanged, with a warning.
    */
   public function set(NodeInterface $owner, string $name): void {
-    if (!$owner->hasField(self::FIELD)) {
-      return;
+    if ($owner->hasField(self::FIELD) && ($tid = $this->termId($name)) !== NULL) {
+      $owner->set(self::FIELD, $tid);
     }
+  }
+
+  /**
+   * Whether the owner has one of these statuses.
+   */
+  public function is(NodeInterface $owner, string ...$names): bool {
+    if (!$owner->hasField(self::FIELD) || $owner->get(self::FIELD)->isEmpty()) {
+      return FALSE;
+    }
+    $current = (int) $owner->get(self::FIELD)->target_id;
+    foreach ($names as $name) {
+      if ($this->termId($name) === $current) {
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
+  private function termId(string $name): ?int {
     if (!array_key_exists($name, $this->terms)) {
       $ids = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery()->accessCheck(FALSE)
         ->condition('vid', self::VOCABULARY)->condition('name', $name)->range(0, 1)->execute();
@@ -47,9 +67,7 @@ final class RecordStatus {
         $this->logger->warning('No "@name" term in @vid: record status not set.', ['@name' => $name, '@vid' => self::VOCABULARY]);
       }
     }
-    if ($this->terms[$name] !== NULL) {
-      $owner->set(self::FIELD, $this->terms[$name]);
-    }
+    return $this->terms[$name];
   }
 
   /**

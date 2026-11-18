@@ -30,6 +30,7 @@ import requests
 import generate_org_descriptions as G
 
 MAX_CANDIDATES = 6     # pages fetched per owner
+MIN_DESCRIPTION = 80   # as Completeness::MIN_DESCRIPTION in sti_owner_review: a shorter description is incomplete
 MAX_JUDGED = 3         # pages sent to Gemini per owner
 LEGAL_SUFFIX = re.compile(r"[\s,]+(llc|ltd\.?|inc\.?|gmbh|plc|s\.a\.?|pvt\.? ltd\.?|co\.? ltd\.?)$", re.I)
 
@@ -147,12 +148,17 @@ def enrich(stub: dict) -> dict | None:
     return out
 
 
+def complete(stub: dict) -> bool:
+    """The same rule as Completeness::gaps() in sti_owner_review: a webpage and a description of MIN_DESCRIPTION+."""
+    description = re.sub(r"<[^>]+>", "", stub.get("description") or "").strip()
+    return bool(stub.get("webpage")) and len(description) >= MIN_DESCRIPTION
+
+
 def main(src: Path, dst: Path) -> None:
     done = json.loads(dst.read_text())["records"] if dst.exists() else []
     seen = {r["uuid"] for r in done}
     todo = [s for s in json.loads(src.read_text())["records"]
-            if s["uuid"] not in seen and not s.get("proposal_status")
-            and not (s.get("webpage") and s.get("description"))]
+            if s["uuid"] not in seen and not s.get("proposal_status") and not complete(s)]
     failed = 0
     for start in range(0, len(todo), G.BATCH_SIZE):
         with ThreadPoolExecutor(max_workers=G.MAX_CONCURRENT_WORKERS) as pool:

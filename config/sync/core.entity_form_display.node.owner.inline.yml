@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.owner.field_organization_type
     - field.field.node.owner.field_parent_organization
     - field.field.node.owner.field_quality_assessment
+    - field.field.node.owner.field_record_status
     - field.field.node.owner.field_state
     - field.field.node.owner.owner_type
     - field.field.node.owner.related_content
@@ -64,6 +65,7 @@ hidden:
   field_organization_type: true
   field_parent_organization: true
   field_quality_assessment: true
+  field_record_status: true
   field_state: true
   langcode: true
   path: true
