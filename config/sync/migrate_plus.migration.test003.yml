@@ -92,9 +92,14 @@ process:
       plugin: entity_fuzzy_lookup
       source: owner_name
       entity_type: node
-      llm_model: 'qwen3:8b'
+      llm_model: 'qwen2.5:3b'
+      llm_think: false
+      llm_timeout: 30
       on_miss: generate
       bundle: owner
+      default_values:
+        field_state: needs_update
+        status: 0
   atio_country_origin:
     -
       plugin: entity_fuzzy_lookup
