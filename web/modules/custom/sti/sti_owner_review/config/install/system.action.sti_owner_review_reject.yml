@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - sti_owner_review
+id: sti_owner_review_reject
+label: 'Reject AI proposal'
+type: node
+plugin: sti_owner_review_reject
+configuration: {  }

@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - sti_owner_review
+id: sti_owner_review_request_update
+label: 'Request update if incomplete'
+type: node
+plugin: sti_owner_review_request_update
+configuration: {  }

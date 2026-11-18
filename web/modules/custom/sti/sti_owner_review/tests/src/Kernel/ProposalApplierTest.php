@@ -14,6 +14,7 @@ use Drupal\paragraphs\Entity\ParagraphsType;
 use Drupal\sti_owner_review\Plugin\Validation\Constraint\NoParentCycleConstraint;
 use Drupal\sti_owner_review\ProposalApplier;
 use Drupal\sti_owner_review\QualityChecks;
+use Drupal\sti_owner_review\RecordStatus;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -64,6 +65,10 @@ final class ProposalApplierTest extends KernelTestBase {
     Vocabulary::create(['vid' => 'quality_assessment', 'name' => 'Quality assessment'])->save();
     foreach ([QualityChecks::ACCEPTED, QualityChecks::EDITED] as $name) {
       Term::create(['vid' => 'quality_assessment', 'name' => $name])->save();
+    }
+    Vocabulary::create(['vid' => 'sti_record_status', 'name' => 'Record status'])->save();
+    foreach ([RecordStatus::AI_ONLY_EMPTY, RecordStatus::AI, RecordStatus::APPROVED, RecordStatus::REJECTED, RecordStatus::CURATED] as $name) {
+      Term::create(['vid' => 'sti_record_status', 'name' => $name])->save();
     }
     $this->installConfig(['sti_owner_review']);
     $this->applier = $this->container->get('sti_owner_review.applier');
@@ -203,6 +208,76 @@ final class ProposalApplierTest extends KernelTestBase {
       'webpage' => ['ai' => FALSE, 'assessment' => QualityChecks::EDITED],
       'description' => ['ai' => TRUE, 'assessment' => QualityChecks::ACCEPTED],
     ], $this->checks($owner));
+  }
+
+  private function recordStatus(NodeInterface $owner): string {
+    return (string) $this->reload($owner)->get(RecordStatus::FIELD)->entity?->label();
+  }
+
+  /**
+   * The record status follows the owner through review: what the review list filters on.
+   */
+  public function testRecordStatusFollowsReview(): void {
+    $empty = $this->owner('Plan Conservation', ['webpage' => 'https://plan.example']);
+    $this->assertSame(RecordStatus::AI_ONLY_EMPTY, $this->recordStatus($empty));
+    $replacing = $this->owner('Soil Doctors', ['description' => 'AI text'],
+      ['description' => ['value' => 'Curated', 'format' => 'plain_text']]);
+    $this->assertSame(RecordStatus::AI, $this->recordStatus($replacing));
+
+    $this->applier->accept($empty, ['webpage']);
+    $this->assertSame(RecordStatus::APPROVED, $this->recordStatus($empty));
+    $this->applier->reject($replacing);
+    $this->assertSame(RecordStatus::REJECTED, $this->recordStatus($replacing));
+
+    $edited = $this->reload($empty);
+    $edited->set('webpage', ['uri' => 'https://plan.example/about'])->save();
+    $this->assertSame(RecordStatus::CURATED, $this->recordStatus($empty));
+  }
+
+  /**
+   * Bulk accept takes only what needs no judgement: no proposal and a proposed parent are skipped, untouched.
+   */
+  public function testBulkAcceptSkipsWhatNeedsJudgement(): void {
+    $plain = $this->owner('Plan Conservation', ['webpage' => 'https://plan.example']);
+    $withParent = $this->owner('Soil Doctors', ['webpage' => 'https://soil.example', 'parent' => 'FAO']);
+    $without = $this->owner('Industry investors');
+
+    $this->container->get('plugin.manager.action')->createInstance('sti_owner_review_accept')
+      ->executeMultiple([$plain, $withParent, $without]);
+
+    $this->assertTrue($this->reload($plain)->isPublished());
+    $this->assertTrue(ProposalApplier::isPending($this->reload($withParent)));
+    $this->assertTrue($this->reload($withParent)->get('webpage')->isEmpty());
+    $this->assertFalse($this->reload($without)->isPublished());
+  }
+
+  private function publishedOwner(string $title, array $values): NodeInterface {
+    $owner = Node::create(['type' => 'owner', 'title' => $title, 'status' => 1, 'field_state' => 'published'] + $values);
+    $owner->save();
+    return $owner;
+  }
+
+  /**
+   * Only incomplete owners are queued, and they stay published: solutions and the graph keep them.
+   */
+  public function testRequestUpdateQueuesOnlyIncompleteKeepingThemPublished(): void {
+    $description = ['value' => str_repeat('A real description of what this organisation does. ', 3), 'format' => 'plain_text'];
+    $complete = $this->publishedOwner('Complete', ['webpage' => ['uri' => 'https://ok.example'], 'description' => $description]);
+    $noWebpage = $this->publishedOwner('No webpage', ['description' => $description]);
+    $short = $this->publishedOwner('Short', ['webpage' => ['uri' => 'https://short.example'], 'description' => ['value' => 'Farmers.', 'format' => 'plain_text']]);
+    $queued = $this->owner('Already queued');
+
+    $completeness = $this->container->get('sti_owner_review.completeness');
+    $this->assertEqualsCanonicalizing([(int) $noWebpage->id(), (int) $short->id()], $completeness->incompleteIds());
+
+    foreach ([$complete, $noWebpage, $short, $queued] as $owner) {
+      $completeness->requestUpdate($owner);
+    }
+    foreach ([$noWebpage, $short] as $owner) {
+      $this->assertSame('needs_update', $this->reload($owner)->get('field_state')->value);
+      $this->assertTrue($this->reload($owner)->isPublished());
+    }
+    $this->assertSame('published', $this->reload($complete)->get('field_state')->value);
   }
 
 }

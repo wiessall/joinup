@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - sti_owner_review
+id: sti_owner_review_publish
+label: 'Publish as reviewed'
+type: node
+plugin: sti_owner_review_publish
+configuration: {  }

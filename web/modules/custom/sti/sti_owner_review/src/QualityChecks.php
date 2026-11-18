@@ -68,14 +68,18 @@ final class QualityChecks {
   /**
    * On a save that changes an AI-generated field, clears the AI flag and marks it EDITED. The fields
    * markAccepted() just flagged for this save are left alone, and so are migrations (syncing saves).
+   *
+   * @return bool
+   *   Whether a curator changed an AI-generated field.
    */
-  public function markEdited(NodeInterface $owner): void {
+  public function markEdited(NodeInterface $owner): bool {
     $accepted = $this->accepting[spl_object_id($owner)] ?? [];
     unset($this->accepting[spl_object_id($owner)]);
     $original = $owner->isNew() ? NULL : $owner->getOriginal();
     if ($original === NULL || $owner->isSyncing() || !$owner->hasField(self::HOST)) {
-      return;
+      return FALSE;
     }
+    $edited = FALSE;
     foreach ($owner->get(self::HOST) as $item) {
       $check = $item->entity;
       if (!$check instanceof ParagraphInterface || !$check->get('field_ai_generated')->value) {
@@ -90,8 +94,10 @@ final class QualityChecks {
         $check->setNewRevision(TRUE);
         $check->save();
         $item->target_revision_id = $check->getRevisionId();
+        $edited = TRUE;
       }
     }
+    return $edited;
   }
 
   private function check(NodeInterface $owner, string $field): ?ParagraphInterface {

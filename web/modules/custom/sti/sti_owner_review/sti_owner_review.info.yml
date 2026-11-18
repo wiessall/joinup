@@ -1,6 +1,6 @@
 name: 'STI Owner Review'
 type: module
-description: 'Curators accept or reject AI-proposed values for owners, field by field, before the owner is published.'
+description: 'Review of owners that need an update: a list with bulk actions, and field-by-field acceptance of AI proposals.'
 package: 'ATIO KB'
 core_version_requirement: ^11.2
 dependencies:
@@ -11,3 +11,4 @@ dependencies:
   - drupal:node
   - drupal:text
   - import_ird_jsons:import_ird_jsons
+  - sti_qa:sti_qa

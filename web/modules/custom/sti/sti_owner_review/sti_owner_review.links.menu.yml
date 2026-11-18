@@ -1,6 +1,0 @@
-sti_owner_review.collections:
-  title: 'Owner review'
-  description: 'Accept or reject AI-proposed websites, descriptions and parent organisations for owners.'
-  route_name: sti_owner_review.collections
-  parent: system.admin_content
-  weight: 21

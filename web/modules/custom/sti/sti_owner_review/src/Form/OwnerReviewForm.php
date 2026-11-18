@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\sti_owner_review\Form;
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
@@ -32,8 +34,16 @@ final class OwnerReviewForm extends FormBase {
     return 'sti_owner_review_form';
   }
 
-  public function buildForm(array $form, FormStateInterface $form_state, ?NodeInterface $collection = NULL, ?NodeInterface $owner = NULL): array {
-    $form_state->set('owner', $owner)->set('collection', $collection);
+  /**
+   * The tab is there only for owners with a pending proposal.
+   */
+  public static function access(NodeInterface $node): AccessResultInterface {
+    return AccessResult::allowedIf($node->bundle() === 'owner' && ProposalApplier::isPending($node))->addCacheableDependency($node);
+  }
+
+  public function buildForm(array $form, FormStateInterface $form_state, ?NodeInterface $node = NULL): array {
+    $owner = $node;
+    $form_state->set('owner', $owner);
     $proposal = ProposalApplier::proposal($owner);
     if (!ProposalApplier::isPending($owner)) {
       $form['none']['#markup'] = $this->t('@owner has no pending AI proposal.', ['@owner' => $owner->label()]);
@@ -158,7 +168,8 @@ final class OwnerReviewForm extends FormBase {
       $this->messenger()->addError($e->getMessage());
       return;
     }
-    $form_state->setRedirect('sti_owner_review.collection', ['collection' => $form_state->get('collection')->id()]);
+    // Back to the list the curator came from (?destination, set by the operations link), else to the owner.
+    $form_state->setRedirect('entity.node.canonical', ['node' => $owner->id()]);
   }
 
 }
