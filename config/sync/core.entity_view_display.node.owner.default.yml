@@ -12,7 +12,6 @@ dependencies:
     - field.field.node.owner.field_quality_assessment
     - field.field.node.owner.field_record_status
     - field.field.node.owner.field_state
-    - field.field.node.owner.owner_type
     - field.field.node.owner.related_content
     - field.field.node.owner.webpage
     - node.type.owner
@@ -74,25 +73,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 7
-    region: content
-  owner_type:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: false
-    third_party_settings:
-      field_delimiter:
-        delimiter: ''
-      field_formatter_range:
-        order: 0
-        limit: 0
-        offset: 0
-      joinup_slick:
-        preset: ''
-        field_label: true
-      template_suggestion:
-        template_suggestion: ''
-    weight: 1
     region: content
   related_content:
     type: entity_reference_label

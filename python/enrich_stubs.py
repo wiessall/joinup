@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import datetime
 import json
+import os
 import re
 import sys
 from concurrent.futures import ThreadPoolExecutor
@@ -29,8 +30,11 @@ import requests
 
 import generate_org_descriptions as G
 
+# Grounded search ("Search as tool") exists only on the v1beta API; some google-genai versions default to v1.
+G.client = G.genai.Client(api_key=os.environ.get("GEMINI_API_KEY"),
+                          http_options=G.genai.types.HttpOptions(api_version="v1beta"))
+
 MAX_CANDIDATES = 6     # pages fetched per owner
-MIN_DESCRIPTION = 80   # as Completeness::MIN_DESCRIPTION in sti_owner_review: a shorter description is incomplete
 MAX_JUDGED = 3         # pages sent to Gemini per owner
 LEGAL_SUFFIX = re.compile(r"[\s,]+(llc|ltd\.?|inc\.?|gmbh|plc|s\.a\.?|pvt\.? ltd\.?|co\.? ltd\.?)$", re.I)
 
@@ -149,9 +153,9 @@ def enrich(stub: dict) -> dict | None:
 
 
 def complete(stub: dict) -> bool:
-    """The same rule as Completeness::gaps() in sti_owner_review: a webpage and a description of MIN_DESCRIPTION+."""
-    description = re.sub(r"<[^>]+>", "", stub.get("description") or "").strip()
-    return bool(stub.get("webpage")) and len(description) >= MIN_DESCRIPTION
+    """Nothing for enrichment to add: it proposes a webpage and a description, and both are filled. Which owners are
+    incomplete at all is Drupal's call (the record status `pull` filters on)."""
+    return bool(stub.get("webpage")) and bool(re.sub(r"<[^>]+>", "", stub.get("description") or "").strip())
 
 
 def main(src: Path, dst: Path) -> None:

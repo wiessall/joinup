@@ -9,20 +9,25 @@ use Drupal\node\NodeInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Why an owner needs review, as production records it: field_record_status, terms of sti_record_status (sti_qa).
+ * The owner's record status (field_record_status, terms of sti_record_status in sti_qa), derived from its data.
  *
- * Workflow state says whether an owner is visible and needs attention (needs_update); the record status says what
- * happened to its content. The review list filters on it to tell AI proposals from other owners needing an update.
+ * It is recalculated on every save, so nothing has to remember to set it. The first rule that applies wins:
+ *   AI             an AI proposal is pending, and with it every required field would be filled
+ *   AI_INCOMPLETE  an AI proposal is pending, but even with it a required field stays empty
+ *   REJECTED       the last proposal was rejected and a required field is still empty
+ *   INCOMPLETE     a required field is empty (Completeness)
+ *   APPROVED       all required fields filled, at least one with an accepted AI value
+ *   CURATED        all required fields filled by people (imports count as people's work)
  */
 final class RecordStatus {
 
   public const FIELD = 'field_record_status';
-  public const AI_ONLY_EMPTY = 'AI-enriched (only empty)';
   public const AI = 'AI-enriched';
-  public const APPROVED = 'Approved';
+  public const AI_INCOMPLETE = 'AI-enriched - still incomplete';
   public const REJECTED = 'Rejected - Bad AI-generated content';
-  public const CURATED = 'Manually curated';
   public const INCOMPLETE = 'Incomplete - to be enriched';
+  public const APPROVED = 'Approved';
+  public const CURATED = 'Manually curated';
   private const VOCABULARY = 'sti_record_status';
 
   /** @var array<string, int|null> */
@@ -30,32 +35,31 @@ final class RecordStatus {
 
   public function __construct(
     private readonly EntityTypeManagerInterface $entityTypeManager,
+    private readonly QualityChecks $qualityChecks,
     private readonly LoggerInterface $logger,
   ) {}
 
-  /**
-   * Sets the status; the owner is saved by the caller. A missing term leaves it unchanged, with a warning.
-   */
-  public function set(NodeInterface $owner, string $name): void {
-    if ($owner->hasField(self::FIELD) && ($tid = $this->termId($name)) !== NULL) {
-      $owner->set(self::FIELD, $tid);
+  public function derive(NodeInterface $owner): string {
+    $gaps = Completeness::gaps($owner);
+    $proposal = ProposalApplier::proposal($owner);
+    $decision = $proposal['status'] ?? NULL;
+    if ($decision === 'pending') {
+      $covered = array_filter(array_map(fn($key) => ProposalApplier::TARGETS[$key] ?? NULL, array_keys($proposal['fields'])));
+      return array_diff($gaps, $covered) ? self::AI_INCOMPLETE : self::AI;
     }
+    if ($gaps) {
+      return $decision === 'rejected' ? self::REJECTED : self::INCOMPLETE;
+    }
+    return array_intersect(Completeness::requiredFields($owner), $this->qualityChecks->aiFields($owner)) ? self::APPROVED : self::CURATED;
   }
 
   /**
-   * Whether the owner has one of these statuses.
+   * Sets the derived status; the owner is saved by the caller. A missing term leaves it unchanged, with a warning.
    */
-  public function is(NodeInterface $owner, string ...$names): bool {
-    if (!$owner->hasField(self::FIELD) || $owner->get(self::FIELD)->isEmpty()) {
-      return FALSE;
+  public function update(NodeInterface $owner): void {
+    if ($owner->hasField(self::FIELD) && ($tid = $this->termId($this->derive($owner))) !== NULL) {
+      $owner->set(self::FIELD, $tid);
     }
-    $current = (int) $owner->get(self::FIELD)->target_id;
-    foreach ($names as $name) {
-      if ($this->termId($name) === $current) {
-        return TRUE;
-      }
-    }
-    return FALSE;
   }
 
   private function termId(string $name): ?int {
@@ -68,25 +72,6 @@ final class RecordStatus {
       }
     }
     return $this->terms[$name];
-  }
-
-  /**
-   * On a save that makes a proposal pending (owner_api.py push): AI-enriched, "only empty" if every proposed field
-   * is still empty on the owner.
-   */
-  public function onProposal(NodeInterface $owner): void {
-    $original = $owner->isNew() ? NULL : $owner->getOriginal();
-    if (!ProposalApplier::isPending($owner) || ($original && ProposalApplier::isPending($original))) {
-      return;
-    }
-    foreach (array_keys(ProposalApplier::proposal($owner)['fields']) as $key) {
-      $field = ProposalApplier::TARGETS[$key] ?? NULL;
-      if ($field !== NULL && $owner->hasField($field) && !$owner->get($field)->isEmpty()) {
-        $this->set($owner, self::AI);
-        return;
-      }
-    }
-    $this->set($owner, self::AI_ONLY_EMPTY);
   }
 
 }

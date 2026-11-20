@@ -93,7 +93,7 @@ def test_parent_is_proposed(monkeypatch):
     assert E.enrich(STUB)["parent"] == "FAO"
 
 
-def test_short_description_counts_as_incomplete():
-    assert not E.complete({"webpage": "https://x.org", "description": "<p>Farmers.</p>"})
-    assert not E.complete({"description": "A" * 100})
-    assert E.complete({"webpage": "https://x.org", "description": "A" * 80})
+def test_complete_means_webpage_and_description_filled():
+    assert not E.complete({"webpage": "https://x.org", "description": "<p> </p>"})
+    assert not E.complete({"description": "Farmers."})
+    assert E.complete({"webpage": "https://x.org", "description": "Farmers."})

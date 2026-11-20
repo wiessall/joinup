@@ -13,32 +13,16 @@ dependencies:
     - field.field.node.owner.field_quality_assessment
     - field.field.node.owner.field_record_status
     - field.field.node.owner.field_state
-    - field.field.node.owner.owner_type
     - field.field.node.owner.related_content
     - field.field.node.owner.webpage
     - node.type.owner
   module:
     - joinup_core
-    - tagify
 id: node.owner.inline
 targetEntityType: node
 bundle: owner
 mode: inline
 content:
-  owner_type:
-    type: tagify_entity_reference_autocomplete_widget
-    weight: 1
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      placeholder: ''
-      suggestions_dropdown: 0
-      show_entity_id: 0
-      show_info_label: 0
-      info_label: ''
-      parent_selection: 1
-    third_party_settings: {  }
   title:
     type: string_textfield
     weight: 0

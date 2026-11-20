@@ -13,8 +13,8 @@ use Psr\Log\LoggerInterface;
  * Per-field QA as in the production portal: one quality_check paragraph per AI-generated field.
  *
  * A field accepted from an AI proposal gets a paragraph with field_ai_generated on and the assessment
- * ACCEPTED. When a curator later changes that field, the value is no longer AI output: the flag goes off, and
- * the assessment EDITED keeps the history (it started as AI output, a person corrected it).
+ * ACCEPTED. When the field later changes, by a curator or an import, the value is no longer AI output: the flag
+ * goes off, and the assessment EDITED keeps the history (it started as AI output, people replaced it).
  */
 final class QualityChecks {
 
@@ -67,19 +67,16 @@ final class QualityChecks {
 
   /**
    * On a save that changes an AI-generated field, clears the AI flag and marks it EDITED. The fields
-   * markAccepted() just flagged for this save are left alone, and so are migrations (syncing saves).
-   *
-   * @return bool
-   *   Whether a curator changed an AI-generated field.
+   * markAccepted() just flagged for this save are left alone. Imports count as people's work: a migration that
+   * replaces an AI-generated value clears the flag too.
    */
-  public function markEdited(NodeInterface $owner): bool {
+  public function markEdited(NodeInterface $owner): void {
     $accepted = $this->accepting[spl_object_id($owner)] ?? [];
     unset($this->accepting[spl_object_id($owner)]);
     $original = $owner->isNew() ? NULL : $owner->getOriginal();
-    if ($original === NULL || $owner->isSyncing() || !$owner->hasField(self::HOST)) {
-      return FALSE;
+    if ($original === NULL || !$owner->hasField(self::HOST)) {
+      return;
     }
-    $edited = FALSE;
     foreach ($owner->get(self::HOST) as $item) {
       $check = $item->entity;
       if (!$check instanceof ParagraphInterface || !$check->get('field_ai_generated')->value) {
@@ -94,10 +91,26 @@ final class QualityChecks {
         $check->setNewRevision(TRUE);
         $check->save();
         $item->target_revision_id = $check->getRevisionId();
-        $edited = TRUE;
       }
     }
-    return $edited;
+  }
+
+  /**
+   * Fields whose current value is AI-generated, including those flagged in this save.
+   *
+   * @return string[]
+   */
+  public function aiFields(NodeInterface $owner): array {
+    if (!$owner->hasField(self::HOST)) {
+      return [];
+    }
+    $fields = [];
+    foreach ($owner->get(self::HOST) as $item) {
+      if ($item->entity instanceof ParagraphInterface && $item->entity->get('field_ai_generated')->value) {
+        $fields[] = (string) $item->entity->get('field_content_type_machine_name')->value;
+      }
+    }
+    return $fields;
   }
 
   private function check(NodeInterface $owner, string $field): ?ParagraphInterface {

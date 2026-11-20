@@ -49,7 +49,8 @@ final class ProposalApplierTest extends KernelTestBase {
       ProposalApplier::PARENT_FIELD => ['entity_reference', ['target_type' => 'node']],
     ] as $name => [$type, $settings]) {
       FieldStorageConfig::create(['field_name' => $name, 'entity_type' => 'node', 'type' => $type, 'settings' => $settings])->save();
-      FieldConfig::create(['field_name' => $name, 'entity_type' => 'node', 'bundle' => 'owner', 'label' => $name])->save();
+      FieldConfig::create(['field_name' => $name, 'entity_type' => 'node', 'bundle' => 'owner', 'label' => $name,
+        'required' => in_array($name, ['webpage', 'description'], TRUE)])->save();
     }
     $this->installEntitySchema('paragraph');
     $this->installEntitySchema('taxonomy_term');
@@ -67,7 +68,7 @@ final class ProposalApplierTest extends KernelTestBase {
       Term::create(['vid' => 'quality_assessment', 'name' => $name])->save();
     }
     Vocabulary::create(['vid' => 'sti_record_status', 'name' => 'Record status'])->save();
-    foreach ([RecordStatus::AI_ONLY_EMPTY, RecordStatus::AI, RecordStatus::APPROVED, RecordStatus::REJECTED, RecordStatus::CURATED, RecordStatus::INCOMPLETE] as $name) {
+    foreach ([RecordStatus::AI, RecordStatus::AI_INCOMPLETE, RecordStatus::REJECTED, RecordStatus::INCOMPLETE, RecordStatus::APPROVED, RecordStatus::CURATED] as $name) {
       Term::create(['vid' => 'sti_record_status', 'name' => $name])->save();
     }
     $this->installConfig(['sti_owner_review']);
@@ -189,9 +190,10 @@ final class ProposalApplierTest extends KernelTestBase {
   }
 
   /**
-   * A curator's later change clears the AI flag and marks it edited; a migration's change does neither.
+   * A later change clears the AI flag and marks it edited, whether a curator or an import makes it: imported
+   * content counts as people's work.
    */
-  public function testCuratorEditClearsFlagAndMarksEdited(): void {
+  public function testChangesClearFlagAndMarkEdited(): void {
     $owner = $this->owner('Plan Conservation', ['webpage' => 'https://plan.example', 'description' => 'AI text']);
     $this->applier->accept($owner, ['webpage', 'description']);
 
@@ -199,15 +201,13 @@ final class ProposalApplierTest extends KernelTestBase {
     $synced->set('description', ['value' => 'Re-imported', 'format' => 'plain_text']);
     $synced->setSyncing(TRUE);
     $synced->save();
-    $this->assertSame(QualityChecks::ACCEPTED, $this->checks($owner)['description']['assessment']);
+    $this->assertSame(['ai' => FALSE, 'assessment' => QualityChecks::EDITED], $this->checks($owner)['description']);
+    $this->assertSame(['ai' => TRUE, 'assessment' => QualityChecks::ACCEPTED], $this->checks($owner)['webpage']);
 
     $edited = $this->reload($owner);
     $edited->set('webpage', ['uri' => 'https://plan.example/about']);
     $edited->save();
-    $this->assertSame([
-      'webpage' => ['ai' => FALSE, 'assessment' => QualityChecks::EDITED],
-      'description' => ['ai' => TRUE, 'assessment' => QualityChecks::ACCEPTED],
-    ], $this->checks($owner));
+    $this->assertSame(['ai' => FALSE, 'assessment' => QualityChecks::EDITED], $this->checks($owner)['webpage']);
   }
 
   private function recordStatus(NodeInterface $owner): string {
@@ -215,23 +215,37 @@ final class ProposalApplierTest extends KernelTestBase {
   }
 
   /**
-   * The record status follows the owner through review: what the review list filters on.
+   * Each rule of RecordStatus::derive(), in the order they apply: what the review list and the pull rely on.
    */
-  public function testRecordStatusFollowsReview(): void {
-    $empty = $this->owner('Plan Conservation', ['webpage' => 'https://plan.example']);
-    $this->assertSame(RecordStatus::AI_ONLY_EMPTY, $this->recordStatus($empty));
-    $replacing = $this->owner('Soil Doctors', ['description' => 'AI text'],
-      ['description' => ['value' => 'Curated', 'format' => 'plain_text']]);
-    $this->assertSame(RecordStatus::AI, $this->recordStatus($replacing));
+  public function testRecordStatusIsDerivedFromTheData(): void {
+    // A pending proposal: AI-enriched if it would fill every required field, else still incomplete.
+    $full = $this->owner('Full', ['webpage' => 'https://full.example', 'description' => 'AI text']);
+    $partial = $this->owner('Partial', ['webpage' => 'https://partial.example']);
+    $this->assertSame(RecordStatus::AI, $this->recordStatus($full));
+    $this->assertSame(RecordStatus::AI_INCOMPLETE, $this->recordStatus($partial));
 
-    $this->applier->accept($empty, ['webpage']);
-    $this->assertSame(RecordStatus::APPROVED, $this->recordStatus($empty));
-    $this->applier->reject($replacing);
-    $this->assertSame(RecordStatus::REJECTED, $this->recordStatus($replacing));
+    // Accepted: approved when complete, incomplete while a required field is still empty.
+    $this->applier->accept($full, ['webpage', 'description']);
+    $this->applier->accept($partial, ['webpage']);
+    $this->assertSame(RecordStatus::APPROVED, $this->recordStatus($full));
+    $this->assertSame(RecordStatus::INCOMPLETE, $this->recordStatus($partial));
 
-    $edited = $this->reload($empty);
-    $edited->set('webpage', ['uri' => 'https://plan.example/about'])->save();
-    $this->assertSame(RecordStatus::CURATED, $this->recordStatus($empty));
+    // Rejected while incomplete.
+    $rejected = $this->owner('Rejected', ['webpage' => 'https://wrong.example']);
+    $this->applier->reject($rejected);
+    $this->assertSame(RecordStatus::REJECTED, $this->recordStatus($rejected));
+
+    // People replace the AI values: approved while one is left, manually curated when none is.
+    $this->reload($full)->set('webpage', ['uri' => 'https://full.example/about'])->save();
+    $this->assertSame(RecordStatus::APPROVED, $this->recordStatus($full));
+    $this->reload($full)->set('description', ['value' => 'Written by a curator.', 'format' => 'plain_text'])->save();
+    $this->assertSame(RecordStatus::CURATED, $this->recordStatus($full));
+
+    // Without any AI: complete is manually curated, a missing required field is incomplete.
+    $human = $this->publishedOwner('Human', ['webpage' => ['uri' => 'https://h.example'], 'description' => ['value' => 'Text.', 'format' => 'plain_text']]);
+    $missing = $this->publishedOwner('Missing', ['webpage' => ['uri' => 'https://m.example']]);
+    $this->assertSame(RecordStatus::CURATED, $this->recordStatus($human));
+    $this->assertSame(RecordStatus::INCOMPLETE, $this->recordStatus($missing));
   }
 
   /**
@@ -255,35 +269,6 @@ final class ProposalApplierTest extends KernelTestBase {
     $owner = Node::create(['type' => 'owner', 'title' => $title, 'status' => 1, 'field_state' => 'published'] + $values);
     $owner->save();
     return $owner;
-  }
-
-  /**
-   * Only incomplete owners are marked, and only by record status: state and publication stay, so Joinup's
-   * workflow does not turn the change into a draft. Owners mid-review are left alone.
-   */
-  public function testRequestUpdateMarksOnlyIncompleteAndLeavesStateAlone(): void {
-    $description = ['value' => str_repeat('A real description of what this organisation does. ', 3), 'format' => 'plain_text'];
-    $complete = $this->publishedOwner('Complete', ['webpage' => ['uri' => 'https://ok.example'], 'description' => $description]);
-    $noWebpage = $this->publishedOwner('No webpage', ['description' => $description]);
-    $short = $this->publishedOwner('Short', ['webpage' => ['uri' => 'https://short.example'], 'description' => ['value' => 'Farmers.', 'format' => 'plain_text']]);
-    $inReview = $this->publishedOwner('In review', []);
-    $inReview->set(ProposalApplier::FIELD, json_encode(['status' => 'pending', 'fields' => ['webpage' => 'https://x.example']]))->save();
-    $queued = $this->owner('Already queued');
-
-    $completeness = $this->container->get('sti_owner_review.completeness');
-    $this->assertEqualsCanonicalizing([(int) $noWebpage->id(), (int) $short->id()], $completeness->incompleteIds());
-
-    foreach ([$complete, $noWebpage, $short, $inReview, $queued] as $owner) {
-      $completeness->requestUpdate($owner);
-    }
-    foreach ([$noWebpage, $short] as $owner) {
-      $this->assertSame(RecordStatus::INCOMPLETE, $this->recordStatus($owner));
-      $this->assertSame('published', $this->reload($owner)->get('field_state')->value);
-      $this->assertTrue($this->reload($owner)->isPublished());
-    }
-    $this->assertSame('', $this->recordStatus($complete));
-    $this->assertSame(RecordStatus::AI_ONLY_EMPTY, $this->recordStatus($inReview));
-    $this->assertSame('', $this->recordStatus($queued));
   }
 
 }

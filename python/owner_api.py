@@ -25,7 +25,7 @@ from pathlib import Path
 import requests
 
 STATE = "needs_update"
-# Record status set by `drush sti-owner:request-update` on incomplete published owners (sti_owner_review).
+# Record status sti_owner_review derives on every save when a required field is empty.
 INCOMPLETE = "Incomplete - to be enriched"
 
 

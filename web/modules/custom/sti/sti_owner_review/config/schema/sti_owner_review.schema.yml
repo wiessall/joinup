@@ -13,7 +13,3 @@ action.configuration.sti_owner_review_publish:
 action.configuration.sti_owner_review_request_deletion:
   type: action_configuration_default
   label: 'Request deletion configuration'
-
-action.configuration.sti_owner_review_request_update:
-  type: action_configuration_default
-  label: 'Request update if incomplete configuration'

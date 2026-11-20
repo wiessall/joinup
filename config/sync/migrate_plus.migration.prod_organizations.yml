@@ -59,9 +59,6 @@ process:
     default_value: owner
   uuid: uuid
   title: title
-  field_state:
-    plugin: default_value
-    default_value: published
   field_acronym: acronym
   webpage/uri: link
   description/value: description
@@ -88,6 +85,29 @@ process:
       plugin: entity_lookup
       value_key: name
       ignore_case: true
+  _filled:
+    -
+      plugin: callback
+      callable: array_filter
+      source:
+        - link
+        - description
+        - '@field_country_origin'
+    -
+      plugin: callback
+      callable: count
+  field_state:
+    plugin: static_map
+    source: '@_filled'
+    map:
+      3: published
+    default_value: needs_update
+  status:
+    plugin: static_map
+    source: '@_filled'
+    map:
+      3: 1
+    default_value: 0
 destination:
   plugin: 'entity:node'
   default_bundle: owner

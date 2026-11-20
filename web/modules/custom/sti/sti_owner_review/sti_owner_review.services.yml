@@ -13,15 +13,10 @@ services:
 
   sti_owner_review.record_status:
     class: Drupal\sti_owner_review\RecordStatus
-    arguments: ['@entity_type.manager', '@logger.channel.sti_owner_review']
+    arguments: ['@entity_type.manager', '@sti_owner_review.quality_checks', '@logger.channel.sti_owner_review']
   Drupal\sti_owner_review\RecordStatus: '@sti_owner_review.record_status'
 
   sti_owner_review.applier:
     class: Drupal\sti_owner_review\ProposalApplier
-    arguments: ['@entity_type.manager', '@current_user', '@datetime.time', '@logger.channel.sti_owner_review', '@sti_owner_review.quality_checks', '@sti_owner_review.record_status']
+    arguments: ['@entity_type.manager', '@current_user', '@datetime.time', '@logger.channel.sti_owner_review', '@sti_owner_review.quality_checks']
   Drupal\sti_owner_review\ProposalApplier: '@sti_owner_review.applier'
-
-  sti_owner_review.completeness:
-    class: Drupal\sti_owner_review\Completeness
-    arguments: ['@entity_type.manager', '@sti_owner_review.record_status', '@logger.channel.sti_owner_review']
-  Drupal\sti_owner_review\Completeness: '@sti_owner_review.completeness'

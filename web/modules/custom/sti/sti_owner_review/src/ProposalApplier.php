@@ -24,8 +24,8 @@ use Psr\Log\LoggerInterface;
  * Nothing in it reaches the owner's own fields until accepted here. Accepting copies the accepted fields and
  * publishes the owner; rejecting changes nothing but the proposal's status, so it is not proposed again. Either
  * way the proposal stays, with the decision, and a revision log message records it. Accepted fields are also
- * flagged as AI-generated in the owner's quality_check paragraphs (QualityChecks), and the record status says
- * whether the proposal was approved or rejected (RecordStatus).
+ * flagged as AI-generated in the owner's quality_check paragraphs (QualityChecks); the record status follows on
+ * save (RecordStatus).
  */
 final class ProposalApplier {
 
@@ -43,7 +43,6 @@ final class ProposalApplier {
     private readonly TimeInterface $time,
     private readonly LoggerInterface $logger,
     private readonly QualityChecks $qualityChecks,
-    private readonly RecordStatus $recordStatus,
   ) {}
 
   /**
@@ -118,7 +117,6 @@ final class ProposalApplier {
       $owner->set($field, $value);
     }
     $this->qualityChecks->markAccepted($owner, array_keys($values));
-    $this->recordStatus->set($owner, RecordStatus::APPROVED);
     $owner->set('field_state', 'published');
     $owner->setPublished();
     $this->finish($owner, $proposal, 'reviewed', $keys);
@@ -133,7 +131,6 @@ final class ProposalApplier {
     if ($delete) {
       $owner->set('field_state', 'deletion_request');
     }
-    $this->recordStatus->set($owner, RecordStatus::REJECTED);
     $this->finish($owner, $proposal, 'rejected', []);
   }
 

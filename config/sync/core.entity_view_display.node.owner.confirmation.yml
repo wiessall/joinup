@@ -13,14 +13,10 @@ dependencies:
     - field.field.node.owner.field_quality_assessment
     - field.field.node.owner.field_record_status
     - field.field.node.owner.field_state
-    - field.field.node.owner.owner_type
     - field.field.node.owner.related_content
     - field.field.node.owner.webpage
     - node.type.owner
   module:
-    - field_delimiter
-    - field_formatter_range
-    - joinup_slick
     - layout_builder
     - link
     - template_suggestion
@@ -34,25 +30,6 @@ targetEntityType: node
 bundle: owner
 mode: confirmation
 content:
-  owner_type:
-    type: entity_reference_label
-    label: inline
-    settings:
-      link: false
-    third_party_settings:
-      field_delimiter:
-        delimiter: ','
-      field_formatter_range:
-        order: 0
-        limit: 0
-        offset: 0
-      joinup_slick:
-        preset: ''
-        field_label: true
-      template_suggestion:
-        template_suggestion: inline
-    weight: 1
-    region: content
   webpage:
     type: link
     label: inline

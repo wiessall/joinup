@@ -37,10 +37,9 @@ final class OwnerReviewHooks {
     if ($node->bundle() !== 'owner') {
       return;
     }
-    $this->recordStatus->onProposal($node);
-    if ($this->qualityChecks->markEdited($node)) {
-      $this->recordStatus->set($node, RecordStatus::CURATED);
-    }
+    // First the AI flags (a changed AI value is no longer AI output), then the status that depends on them.
+    $this->qualityChecks->markEdited($node);
+    $this->recordStatus->update($node);
   }
 
   /**

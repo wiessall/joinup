@@ -1,17 +1,7 @@
 [
  {
-  "tid": "598",
-  "name": "Newly extracted from original record - Not checked, not enriched",
-  "parent": 0
- },
- {
-  "tid": "3767",
-  "name": "Generated / updated from extracted record",
-  "parent": 0
- },
- {
-  "tid": "3768",
-  "name": "AI-enriched (only empty)",
+  "tid": "900001",
+  "name": "Incomplete - to be enriched",
   "parent": 0
  },
  {
@@ -20,18 +10,8 @@
   "parent": 0
  },
  {
-  "tid": "3770",
-  "name": "Rejected - Bad AI-generated content",
-  "parent": 0
- },
- {
-  "tid": "3771",
-  "name": "To be reviewed after new / modified original record imported",
-  "parent": 0
- },
- {
-  "tid": "3772",
-  "name": "Manually curated",
+  "tid": "900002",
+  "name": "AI-enriched - still incomplete",
   "parent": 0
  },
  {
@@ -40,13 +20,13 @@
   "parent": 0
  },
  {
-  "tid": "3774",
-  "name": "Used in document - edit with caution",
+  "tid": "3772",
+  "name": "Manually curated",
   "parent": 0
  },
  {
-  "tid": "900001",
-  "name": "Incomplete - to be enriched",
+  "tid": "3770",
+  "name": "Rejected - Bad AI-generated content",
   "parent": 0
  }
 ]

@@ -10,9 +10,7 @@ use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
-use Drupal\sti_owner_review\Completeness;
 use Drupal\sti_owner_review\ProposalApplier;
-use Drupal\sti_owner_review\RecordStatus;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -25,9 +23,7 @@ abstract class OwnerReviewActionBase extends ActionBase implements ContainerFact
     $plugin_id,
     $plugin_definition,
     protected readonly ProposalApplier $applier,
-    protected readonly RecordStatus $recordStatus,
     MessengerInterface $messenger,
-    protected readonly Completeness $completeness,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     // PluginBase already has a messenger property (MessengerTrait); set it rather than redeclare it.
@@ -36,8 +32,7 @@ abstract class OwnerReviewActionBase extends ActionBase implements ContainerFact
 
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
     return new static($configuration, $plugin_id, $plugin_definition,
-      $container->get('sti_owner_review.applier'), $container->get('sti_owner_review.record_status'), $container->get('messenger'),
-      $container->get('sti_owner_review.completeness'));
+      $container->get('sti_owner_review.applier'), $container->get('messenger'));
   }
 
   /**

@@ -13,7 +13,6 @@ dependencies:
     - field.field.node.owner.field_quality_assessment
     - field.field.node.owner.field_record_status
     - field.field.node.owner.field_state
-    - field.field.node.owner.owner_type
     - field.field.node.owner.related_content
     - field.field.node.owner.webpage
     - node.type.owner
@@ -111,7 +110,6 @@ hidden:
   field_parent_organization: true
   field_quality_assessment: true
   field_record_status: true
-  owner_type: true
   promote: true
   related_content: true
   sticky: true
