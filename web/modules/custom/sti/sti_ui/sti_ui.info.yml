@@ -1,0 +1,8 @@
+name: 'STI UI'
+type: module
+description: 'Joinup-side interface glue for the STI Portal: groups collection management pages as tabs under "Moderate content".'
+package: STI
+core_version_requirement: ^11
+dependencies:
+  - joinup_group:joinup_group
+  - moderation:moderation

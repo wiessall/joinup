@@ -1,7 +1,7 @@
 sti_dedupe.collections:
   title: 'Duplicates'
   route_name: sti_dedupe.collections
-  base_route: sti_dedupe.collections
+  parent_id: joinup.moderate_content
 
 # On collection pages. Hidden on other nodes: the route only converts
 # collections, so its access check fails there.

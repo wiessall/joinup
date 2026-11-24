@@ -1,0 +1,17 @@
+# Collection management hub: secondary tabs under Joinup's "Moderate content"
+# (joinup.moderate_content, a primary task on the collection page, so in the
+# three-dots menu). Other modules add their own tab with
+# parent_id: joinup.moderate_content (sti_dedupe's Duplicates does).
+
+# The default secondary tab: same route as its parent.
+sti_ui.moderate_content:
+  title: 'Content'
+  route_name: moderation.content_moderation_overview
+  parent_id: joinup.moderate_content
+  weight: 0
+
+sti_ui.members:
+  title: 'Members'
+  route_name: entity.node.member_overview
+  parent_id: joinup.moderate_content
+  weight: 10
