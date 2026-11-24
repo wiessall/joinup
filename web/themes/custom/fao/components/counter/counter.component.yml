@@ -1,0 +1,54 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+name: Counter
+status: stable
+description: "Displays a counter with number, description, and optional background."
+props:
+  type: object
+  properties:
+    number:
+      type: string
+      title: Number
+      description: "The counter value to display"
+      examples:
+        - "1,234"
+        - "50+"
+    text:
+      type: string
+      title: Text
+      description: "The counter text"
+      examples:
+        - "Active Projects"
+    suffix:
+      type: string
+      title: Suffix
+      description: "Optional suffix to append to the counter (e.g., +, K, M, %)"
+      examples:
+        - "+"
+        - "K"
+        - "M"
+        - "%"
+    background:
+      type: string
+      title: Background
+      description: "Background color class or image markup"
+      examples:
+        - "primary"
+        - "primary-light"
+        - "gray-dark"
+        - "gray-medium"
+        - "gray-light"
+        - "white-fao"
+        - "orange"
+        - "caption"
+        - "emergency"
+        - "un-blue"
+    description:
+      type: string
+      title: Text
+      description: "Additional text content"
+  required:
+    - number
+slots:
+  card_extra:
+    title: Card Extra
+    description: "Optional slot for additional content in the card"

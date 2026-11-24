@@ -1,0 +1,95 @@
+/**
+ * @file
+ * FAO adjustments for Layout Builder output on solution pages.
+ *
+ * Deliberately small. The FAO design system already styles field labels via
+ * templates/fields/field.html.twig (an h5 label above the values), so this
+ * only handles spacing between sections and offers an opt-in bordered-row
+ * treatment for pages that want the table look from the STI Portal
+ * digital-asset page without a bespoke node template.
+ *
+ * Register in fao.libraries.yml:
+ *
+ *   layout-builder:
+ *     version: 1.x
+ *     css:
+ *       theme:
+ *         css/fao-layout-builder.css: {}
+ *
+ * and add `fao/layout-builder` to the theme's `libraries:` list, or attach it
+ * from a preprocess hook scoped to the solution bundle.
+ */
+
+/* Layout Builder emits consecutive sections with no vertical rhythm of their
+   own. Match the spacing the FAO detail pages use between blocks. */
+.layout--onecol {
+  margin-bottom: 1.5rem;
+}
+
+.layout--onecol:last-child {
+  margin-bottom: 3rem;
+}
+
+/* Field blocks placed in a layout each carry their own wrapper, so their
+   bottom margins double up with the field template's own .mb-4. */
+.layout__region--content > .block:last-child .field {
+  margin-bottom: 0;
+}
+
+/* The group heading's aside uses Bootstrap's .bg-light. Nudge it to the FAO
+   grey so it reads as part of the design system rather than stock Bootstrap. */
+.l-group-heading__aside {
+  background-color: #f2f4f5;
+}
+
+/**
+ * Opt-in bordered-row treatment.
+ *
+ * Add the class `fao-lb-rows` to a layout section (Layout Builder's section
+ * settings expose a CSS class field when layout_builder_component_attributes
+ * is enabled, which it is in this codebase) to render the field blocks inside
+ * it as stacked bordered rows. Adjacent rows collapse their borders, so a run
+ * of field blocks reads as one continuous table.
+ */
+.fao-lb-rows .block {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid #dee2e6;
+  border-bottom: 0;
+}
+
+.fao-lb-rows .block:last-child {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.fao-lb-rows .block > .field {
+  display: contents;
+  margin-bottom: 0;
+}
+
+.fao-lb-rows .block .field > h5 {
+  flex: 0 0 auto;
+  width: 100%;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  background-color: #f2f4f5;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.fao-lb-rows .block .field > div {
+  flex: 0 0 auto;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .fao-lb-rows .block .field > h5 {
+    width: 25%;
+    border-right: 1px solid #dee2e6;
+  }
+
+  .fao-lb-rows .block .field > div {
+    width: 75%;
+  }
+}

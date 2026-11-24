@@ -1,0 +1,20 @@
+{#
+  Custom override for exposed filters form.
+#}
+
+
+<form{{ attributes }}>
+
+
+
+  {# Render the rest of the form elements #}
+  {{ form|without('actions') }}
+
+    {# Move the actions to the top #}
+  {% if form.actions %}
+    <div class="form-actions form-actions--bottom">
+      {{ form.actions }}
+    </div>
+  {% endif %}
+
+</form>

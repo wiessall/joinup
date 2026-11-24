@@ -1,0 +1,202 @@
+{
+  "fao-menu": {
+    "en": {
+      "button": "Discover",
+      "items": [
+        {
+          "label": "About FAO",
+          "url": "https://www.fao.org/about/en/"
+        },
+        {
+          "label": "News",
+          "url": "https://www.fao.org/news/en/"
+        },
+        {
+          "label": "Multimedia",
+          "url": "https://www.fao.org/news/video-at-fao/en/"
+        },
+        {
+          "label": "Main topics",
+          "url": "https://www.fao.org/themes/en/"
+        },
+        {
+          "label": "Statistics",
+          "url": "https://www.fao.org/statistics/en/"
+        },
+        {
+          "label": "Members",
+          "url": "https://www.fao.org/countryprofiles/en/"
+        },
+        {
+          "label": "Publications",
+          "url": "https://www.fao.org/publications/en/"
+        }
+      ]
+    },
+    "fr": {
+      "button": "Découvrir",
+      "items": [
+        {
+          "label": "À propos de la FAO",
+          "url": "https://www.fao.org/about/fr/"
+        },
+        {
+          "label": "Actualités",
+          "url": "https://www.fao.org/news/fr/"
+        },
+        {
+          "label": "Multimédia",
+          "url": "https://www.fao.org/news/video-at-fao/fr/"
+        },
+        {
+          "label": "Principaux sujets",
+          "url": "https://www.fao.org/themes/fr/"
+        },
+        {
+          "label": "Statistiques",
+          "url": "https://www.fao.org/statistics/fr/"
+        },
+        {
+          "label": "Membres",
+          "url": "https://www.fao.org/countryprofiles/fr/"
+        },
+        {
+          "label": "Publications",
+          "url": "https://www.fao.org/publications/fr/"
+        }
+      ]
+    },
+    "es": {
+      "button": "Descubrir",
+      "items": [
+        {
+          "label": "Acerca de la FAO",
+          "url": "https://www.fao.org/about/es/"
+        },
+        {
+          "label": "Noticias",
+          "url": "https://www.fao.org/news/es/"
+        },
+        {
+          "label": "Multimedia",
+          "url": "https://www.fao.org/news/video-at-fao/es/"
+        },
+        {
+          "label": "Temas principales",
+          "url": "https://www.fao.org/themes/es/"
+        },
+        {
+          "label": "Estadísticas",
+          "url": "https://www.fao.org/statistics/es/"
+        },
+        {
+          "label": "Miembros",
+          "url": "https://www.fao.org/countryprofiles/es/"
+        },
+        {
+          "label": "Publicaciones",
+          "url": "https://www.fao.org/publications/es/"
+        }
+      ]
+    },
+    "ru": {
+      "button": "Главное меню",
+      "items": [
+        {
+          "label": "О ФАО",
+          "url": "https://www.fao.org/about/ru/"
+        },
+        {
+          "label": "Новости",
+          "url": "https://www.fao.org/news/ru/"
+        },
+        {
+          "label": "Мультимедиа",
+          "url": "https://www.fao.org/news/video-at-fao/ru/"
+        },
+        {
+          "label": "Основные темы",
+          "url": "https://www.fao.org/themes/ru/"
+        },
+        {
+          "label": "Статистика",
+          "url": "https://www.fao.org/statistics/ru/"
+        },
+        {
+          "label": "Члены",
+          "url": "https://www.fao.org/countryprofiles/ru/"
+        },
+        {
+          "label": "Публикации",
+          "url": "https://www.fao.org/publications/ru/"
+        }
+      ]
+    },
+    "zh-hans": {
+      "button": "发现",
+      "items": [
+        {
+          "label": "关于粮农组织",
+          "url": "https://www.fao.org/about/zh/"
+        },
+        {
+          "label": "新闻",
+          "url": "https://www.fao.org/news/zh/"
+        },
+        {
+          "label": "媒体",
+          "url": "https://www.fao.org/news/video-at-fao/zh/"
+        },
+        {
+          "label": "主要议题",
+          "url": "https://www.fao.org/themes/zh/"
+        },
+        {
+          "label": "统计资料",
+          "url": "https://www.fao.org/statistics/zh/"
+        },
+        {
+          "label": "成员",
+          "url": "https://www.fao.org/countryprofiles/zh/"
+        },
+        {
+          "label": "出版物",
+          "url": "https://www.fao.org/publications/zh/"
+        }
+      ]
+    },
+    "ar": {
+      "button": "يكتشف",
+      "items": [
+        {
+          "label": "عن المنظمة",
+          "url": "https://www.fao.org/about/ar/"
+        },
+        {
+          "label": "الأخبار",
+          "url": "https://www.fao.org/news/ar/"
+        },
+        {
+          "label": "الوسائط الإعلامية المتعددة",
+          "url": "https://www.fao.org/news/video-at-fao/ar/"
+        },
+        {
+          "label": "الموضوعات الرئيسية",
+          "url": "https://www.fao.org/themes/ar/"
+        },
+        {
+          "label": "الإحصائيات",
+          "url": "https://www.fao.org/statistics/ar/"
+        },
+        {
+          "label": "الأعضاء",
+          "url": "https://www.fao.org/countryprofiles/ar/"
+        },
+        {
+          "label": "المطبوعات",
+          "url": "https://www.fao.org/publications/ar/"
+        }
+      ]
+    }
+  }
+}

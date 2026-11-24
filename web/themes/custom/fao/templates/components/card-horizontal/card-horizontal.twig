@@ -1,0 +1,46 @@
+{#
+/**
+ * @file
+ * Card Horizontal component template.
+ *
+ * Available variables:
+ * - image: Object with src and alt properties
+ * - category: Category text
+ * - title: Card title text
+ * - text: Card body text
+ * - link: Object with url, text, title, and target properties
+ * - card_extra: Optional slot for additional content
+ */
+#}
+<div class="card card-horizontal bg-caption" style="margin-bottom: 0;">
+  <div class="row g-0 align-items-center">
+    <div class="col-md-6">
+      {% if image %}
+      <div class="card-image ratio ratio-3x2">
+        <img src="{{ image.src }}" alt="{{ image.alt }}">
+      </div>
+      {% endif %}
+    </div>
+    <div class="col-md-6">
+      <div class="card-body">
+        {% if category %}
+        <h6 class="title-category text-white">{{ category }}</h6>
+        {% endif %}
+        {% if title %}
+        <h5 class="card-title text-white">{{ title }}</h5>
+        {% endif %}
+        {% if text %}
+        <p class="card-text text-white">{{ text }}</p>
+        {% endif %}
+        {% if link %}
+        <a href="{{ link.url }}" title="{{ link.title }}" class="link-icon" target="{{ link.target }}">
+          {{ link.text }}<i class="bi bi-chevron-right"></i>
+        </a>
+        {% endif %}
+        {% if card_extra %}
+          {{ card_extra }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

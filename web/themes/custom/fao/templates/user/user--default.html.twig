@@ -1,0 +1,52 @@
+{% set fullname = user.field_first_name.value ~ ' ' ~  user.field_last_name.value %}
+
+<article{{ attributes }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  <h2 class="sub-title h3">
+    <i class="fs-3 d-inline-flex bi bi-person-circle pe-1 align-middle"></i>
+    {{ fullname }}
+  </h2>
+  <table class="table table-bordered m-0 small">
+    <tbody>
+    {% if user.field_organization.value %}
+      <tr>
+        <th scope="row" class="bg-gray-light">{{ 'Organization'|trans }}</th>
+        <td>{{ user.field_organization.value }}</td>
+      </tr>
+    {% endif %}
+    {% if user.field_organization_type_ref.value %}
+      <tr>
+        <th scope="row" class="bg-gray-light">{{ 'Organization type'|trans }}</th>
+        <td>{{ user.field_organization_type_ref.entity.name.0.value }}</td>
+      </tr>
+    {% endif %}
+    {% if content.field_organization_role|render|striptags|trim %}
+      <tr>
+        <th scope="row" class="bg-gray-light">{{ 'Organization role'|trans }}</th>
+        <td>{{ content.field_organization_role }}</td>
+      </tr>
+    {% endif %}
+
+    {% if user.field_user_country_ref.value %}
+      <tr>
+        <th scope="row" class="bg-gray-light">{{ 'Country'|trans }}</th>
+        <td>{{ user.field_user_country_ref.entity.name.0.value }}</td>
+      </tr>
+    {% endif %}
+    {% if content.field_expertise|render|striptags|trim %}
+      <tr>
+        <th scope="row" class="bg-gray-light">{{ 'Area of Expertise'|trans }}</th>
+        <td>{{ content.field_expertise }}</td>
+      </tr>
+    {% endif %}
+    </tbody>
+  </table>
+  {% if content.field_bio|render|striptags|trim %}
+  <div class="detail__body mt-4 mb-4">
+    {{ content.field_bio }}
+  </div>
+  {% endif %}
+
+</article>

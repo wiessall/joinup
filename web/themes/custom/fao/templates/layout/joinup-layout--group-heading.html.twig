@@ -1,0 +1,56 @@
+{#
+/**
+ * @file
+ * FAO override of Joinup's group heading layout.
+ *
+ * Byte-for-byte the module's template except for the .container wrapper. The
+ * module template opens with a bare .row, which needs a container ancestor;
+ * Layout Builder sections render outside node--full.html.twig's container.
+ *
+ * Every class here is plain Bootstrap 5 (row, col-md-7, bg-light, rounded-3,
+ * me-auto, align-items-start), and the FAO theme vendors Bootstrap 5.0.2, so
+ * the layout works unchanged under fao. The joinup_layout module declares no
+ * CSS library for this layout, so there is nothing else to carry over.
+ *
+ * Place at: web/themes/custom/fao/templates/layout/joinup-layout--group-heading.html.twig
+ *
+ * @see web/modules/custom/joinup_layout/layouts/group/joinup-layout--group-heading.html.twig
+ */
+#}
+{% if content %}
+  <div class="container">
+    <div {{ attributes.addClass('layout', 'l-group-heading', 'row', 'align-items-start', 'w-lg-100', 'mt-lg-5', 'pt-3') }}>
+      <div class="l-group-heading__content col-12 col-md-7 col-lg-6 py-3 py-lg-5 me-auto">
+        {% if content.main %}
+          <div class="row mb-4">
+            <div {{ region_attributes.main.addClass('l-group-heading__main') }}>
+              {{ content.main }}
+            </div>
+          </div>
+        {% endif %}
+
+        {% if content.left or content.right %}
+          <div class="row d-flex flex-wrap">
+            {% if content.left %}
+              <div {{ region_attributes.left.addClass('l-group-heading__left', 'col-12', 'col-md-6', 'mb-2') }}>
+                {{ content.left }}
+              </div>
+            {% endif %}
+
+            {% if content.right %}
+              <div {{ region_attributes.right.addClass('l-group-heading--right', 'col-12 col-md-6', 'mb-2') }}>
+                {{ content.right }}
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+
+      {% if content.aside|render|striptags|trim %}
+        <div {{ region_attributes.aside.addClass('l-group-heading__aside', 'bg-light', 'col-12', 'col-md-5', 'col-lg-4', 'rounded-3', 'p-4', 'p-lg-5', 'mb-5') }}>
+          {{ content.aside }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}

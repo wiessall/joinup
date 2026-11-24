@@ -1,0 +1,334 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: (optional) The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: (optional) Themed creation date field.
+ * - author_name: (optional) Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ *
+ * @see template_preprocess_node()
+ *
+ * @ingroup themeable
+ */
+#}
+{{ attach_library('fao/expandable') }}
+
+{% set classes = [
+  'container',
+  'detail-article',
+  'detail-page'
+] %}
+
+
+{% macro collapsibleRow(label, summary, content) %}
+
+  {% set sanitizedLabel = label|capitalize|replace({' ': ''}) %}
+  <tr>
+    <th scope="row" class="bg-gray-light">{{ label|t }}</th>
+    <td>
+
+      <div class="summary">
+        {{ summary|length > 300 ? summary|slice(0, 300)|raw ~ '...' : summary|render }}
+      </div>
+
+      {% if summary|length > 300 %}
+        <div class="accordion mb-3 dynamic-search" id="{{ sanitizedLabel }}">
+          <div id="{{ sanitizedLabel }}Body" class="accordion-collapse collapse" aria-labelledby="{{ sanitizedLabel }}" data-bs-parent="#{{ sanitizedLabel }}Collapse">
+            {{ content }}
+          </div>
+
+          <div id="{{ sanitizedLabel }}Collapse">
+            <button class="btn btn-secondary btn-icon btn-adv-search collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{ sanitizedLabel }}Body" aria-expanded="true" aria-controls="{{ sanitizedLabel }}Body">
+              <span class="align-left">
+                <span class="d-block">
+                  <span class="d-inline-block fs-6 align-left label">{{ 'expand to read more'|t }}</span>
+                  <i class="bi bi-chevron-down"></i>
+                </span>
+              </span>
+            </button>
+          </div>
+
+        </div>
+      {% endif %}
+
+    </td>
+  </tr>
+{% endmacro %}
+
+{% macro commaSeparatedTaxonomyLinksRow(label, items) %}
+  <tr>
+    <th scope="row" class="bg-gray-light">{{ label }}</th>
+    <td>
+      {% for item in items %}
+        <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': item.entity.id}) }}">
+          {{ item.entity.name.value }}</a>
+        {% if not loop.last %},
+        {% endif %}
+      {% endfor %}
+    </td>
+  </tr>
+{% endmacro %}
+
+{% macro commaSeparatedNodeLinksRow(label, items) %}
+  <tr>
+    <th scope="row" class="bg-gray-light">{{ label }}</th>
+    <td>
+      {% for item in items %}
+        <a href="{{ path('entity.node.canonical', {'node': item.entity.id}) }}">
+          {{ item.entity.title.value }}</a>
+        {% if not loop.last %},
+        {% endif %}
+      {% endfor %}
+    </td>
+  </tr>
+{% endmacro %}
+
+{% macro singleTaxonomyLinksRow(label, link, value) %}
+  <tr>
+    <th scope="row" class="bg-gray-light">{{ label  }}</th>
+    <td>
+      <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': link }) }}">
+        {{ value }}
+      </a>
+    </td>
+  </tr>
+{% endmacro %}
+
+{% macro iconSDG(sdgs) %}
+
+  {% for item in sdgs %}
+
+    {% if item.entity.name.value == 'Goal 1: No poverty' %}
+      {% set sdg = '1' %}
+    {% elseif item.entity.name.value == 'Goal 2: Zero hunger' %}
+      {% set sdg = '2' %}
+    {% elseif item.entity.name.value == 'Goal 3: Good health and well-being' %}
+      {% set sdg = '3' %}
+    {% elseif item.entity.name.value == 'Goal 4: Quality education' %}
+      {% set sdg = '4' %}
+    {% elseif item.entity.name.value == 'Goal 5: Gender equality' %}
+      {% set sdg = '5' %}
+    {% elseif item.entity.name.value == 'Goal 6: Clean water and sanitation' %}
+      {% set sdg = '6' %}
+    {% elseif item.entity.name.value == 'Goal 7: Affordable and clean energy' %}
+      {% set sdg = '7' %}
+    {% elseif item.entity.name.value == 'Goal 8: Decent work and economic growth' %}
+      {% set sdg = '8' %}
+    {% elseif item.entity.name.value == 'Goal 9: Industry, innovation and infrastructure' %}
+      {% set sdg = '9' %}
+    {% elseif item.entity.name.value == 'Goal 10: Reduced inequalities' %}
+      {% set sdg = '10' %}
+    {% elseif item.entity.name.value == 'Goal 11: Sustainable cities and communities' %}
+      {% set sdg = '11' %}
+    {% elseif item.entity.name.value == 'Goal 12: Responsible consumption and production' %}
+      {% set sdg = '12' %}
+    {% elseif item.entity.name.value == 'Goal 13: Climate action' %}
+      {% set sdg = '13' %}
+    {% elseif item.entity.name.value == 'Goal 14: Life below water' %}
+      {% set sdg = '14' %}
+    {% elseif item.entity.name.value == 'Goal 15: Life on Land' %}
+      {% set sdg = '15' %}
+    {% elseif item.entity.name.value == 'Goal 16: Peace, justice and strong institutions' %}
+      {% set sdg = '16' %}
+    {% elseif item.entity.name.value == 'Goal 17: Partnerships for the goals' %}
+      {% set sdg = '17' %}
+    {% endif %}
+
+    <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': item.entity.id }) }}" class="sdg-small text-white text-decoration-none sdg-{{ sdg }}"></a>
+  {% endfor %}
+
+{% endmacro %}
+
+<div{{attributes.addClass(classes)}}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  {% if content.field_digital_asset_type %}
+    <h6 class="title-category">
+      {{ content.field_digital_asset_type.entity.name.value }}
+    </h6>
+  {% endif %}
+  <h1 {{title_attributes.addClass("detail-title mt-2 mb-3") }}>
+    {{ node.title.value }}
+  </h1>
+
+  <h6 class="date-location d-list-date-location mb-3">
+    {% if node.field_region %}
+      <span class="location">
+        <i class="bi bi-geo-alt-fill"></i>
+        <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': node.field_region.entity.id }) }}" class="text-muted">{{ node.field_region.entity.name.value }}</a>
+      </span>
+    {% endif %}
+    <span class="date">{{ node.getCreatedTime()|date('d/m/Y') }}</span>
+  </h6>
+
+  {% if not node.field_image_banner.isEmpty() or not node.field_image.isEmpty() %}
+    {% set hero_image = not node.field_image_banner.isEmpty() ? node.field_image_banner|file_url : node.field_image|file_url %}
+    {% set hero_text = content.body|render|striptags %}
+
+    {% include 'fao:hero-banner' with {
+      title: node.title.value,
+        background_image: hero_image,
+        text: hero_text|length > 300 ? hero_text|slice(0, 300)|raw ~ '...' : hero_text
+      } %}
+    <div class="row">
+        <p class="small text-color-gray-medium text-right">{{ image.credits }}</p>
+    </div>
+  {% endif %}
+
+</div>
+
+
+<div class="container">
+  <div class="row mb-3">
+    <div class="col-12">
+
+      {% if node.field_type_of_information_manage|length %}
+        <div class="classifications detail-article-classifications flex-row flex-wrap align-items-center">
+          <div class="tags-list">
+            <span class="class-list__title text-uppercase">{{ node.field_type_of_information_manage.fielddefinition.label }}:</span>
+            {% for item in node.field_type_of_information_manage %}
+              {% if loop.index < 5 %}
+                <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': item.entity.id }) }}" class="badge text-bg-secondary bg-secondary">{{ item.entity.name.value }}</a>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="project-list-item">
+        <table class="table table-bordered">
+          <tbody>
+
+            {% if node.field_owner|length %}
+              {{ _self.commaSeparatedNodeLinksRow(node.field_owner.fielddefinition.label, node.field_owner) }}
+            {% endif %}
+
+            {% if node.field_data_source|length %}
+              {{ _self.commaSeparatedNodeLinksRow(node.field_data_source.fielddefinition.label, node.field_data_source) }}
+            {% endif %}
+
+            {% if node.field_link %}
+
+              <tr>
+                <th scope="row" class="bg-gray-light">{{ node.field_link.fielddefinition.label }}</th>
+                <td>
+                  <a href="{{ node.field_link.uri }}" target="_blank">
+                    {% if node.field_link.title %}
+                      {{ node.field_link.title }}
+                    {% else %}
+                      {{ node.field_link.uri }}
+                    {% endif %}
+                  </a>
+                </td>
+              </tr>
+
+            {% endif %}
+
+            {% if node.body %}
+              {{ _self.collapsibleRow('Full description', content.body|render|striptags, content.body) }}
+            {% endif %}
+
+            {% if node.field_prospective_audience|length %}
+              {{ _self.commaSeparatedTaxonomyLinksRow(node.field_prospective_audience.fielddefinition.label, node.field_prospective_audience) }}
+            {% endif %}
+
+            {% if node.field_region|length %}
+              {{ _self.singleTaxonomyLinksRow(node.field_region.fielddefinition.label, node.field_region.entity.id, node.field_region.entity.name.value) }}
+            {% endif %}
+
+            {% if node.field_country_origin|length %}
+              {{ _self.singleTaxonomyLinksRow(node.field_country_origin.fielddefinition.label, node.field_country_origin.entity.id, node.field_country_origin.entity.name.value) }}
+            {% endif %}
+
+
+          </tbody>
+        </table>
+        {% if node.field_use_cases|length or node.field_use_cases_description.value or node.field_thematic_area|length %}
+          <h3>{{ 'Use cases'|t }}</h3>
+
+          <table class="table table-bordered">
+            <tbody>
+
+              {% if node.field_use_cases|length %}
+                {{ _self.commaSeparatedTaxonomyLinksRow(node.field_use_cases.fielddefinition.label, node.field_use_cases)  }}
+              {% endif %}
+
+              {% if node.field_use_cases_description.value %}
+                {{ _self.collapsibleRow('Use cases narrative', node.field_use_cases_description.value, node.field_use_cases_description.value) }}
+              {% endif %}
+
+              {% if node.field_thematic_area|length %}
+                {{ _self.commaSeparatedTaxonomyLinksRow(node.field_thematic_area.fielddefinition.label, node.field_thematic_area)  }}
+              {% endif %}
+
+            </tbody>
+          </table>
+        {% endif %}
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% if (node.field_sti_portal_source.value is not empty and node.field_sti_portal_source.value == 1) or (node.field_atio_kb_source.value is not empty and node.field_atio_kb_source.value == 1) %}
+  {% set view = drupal_view_result('atio_kb_sti_faceted_search', 'page_3', node.id()) %}
+  {% if view|length > 0 %}
+    <div class="container">
+      {{ drupal_view('atio_kb_sti_faceted_search', 'page_3', node.id()) }}
+    </div>
+  {% endif %}
+{% endif %}

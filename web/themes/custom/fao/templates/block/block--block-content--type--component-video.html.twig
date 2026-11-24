@@ -1,0 +1,121 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a block.
+ *
+ * Available variables:
+ * - plugin_id: The ID of the block implementation.
+ * - label: The configured label of the block if visible.
+ * - configuration: A list of the block's configuration values.
+ *   - label: The configured label for the block.
+ *   - label_display: The display settings for the label.
+ *   - provider: The module or other provider that provided this block plugin.
+ *   - Block plugin specific settings will also be stored here.
+ * - in_preview: Whether the plugin is being rendered in preview mode.
+ * - content: The content of this block.
+ * - attributes: array of HTML attributes populated by modules, intended to
+ *   be added to the main container tag of this template.
+ *   - id: A valid HTML ID and guaranteed unique.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ *
+ * @see template_preprocess_block()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% set block_content = content['#block_content'] %}
+
+{% set title_variant = block_content.field_title_variant.value|default('subtitle') %}
+{% set card_variant = block_content.field_card_style.value %}
+{% set ref_items = block_content.field_video %}
+{% set items_count = ref_items|length %}
+{% set carousel_active = block_content.field_carousel_active.value %}
+
+<div {{attributes}}>
+
+  {{ title_prefix }}
+  {% embed 'fao:block-title' with {
+            variant: title_variant,
+            title: label,
+            title_attributes: title_attributes ? title_attributes.toArray() : {},
+          } %}{% endembed %}
+  {{ title_suffix }}
+
+
+  {% if items_count > 1 %}
+    <div class="video-swiper-container" style="width: 100%; max-width: 100%;">
+      <div class="swiper video-swiper" data-mobile-carousel="{{ carousel_active ? 'enabled' : 'disabled' }}">
+        <div class="swiper-wrapper">
+        {% endif %}
+
+        {% for ref_item in ref_items %}
+          {% set ref_content = ref_item.entity %}
+
+          {# Get YouTube URL from field_video #}
+          {% set youtube_url = ref_content.field_video_url.0.uri %}
+
+
+          {# Extract YouTube video ID from URL #}
+          {% set youtube_id = '' %}
+          {% if youtube_url %}
+            {% if 'youtu.be/' in youtube_url %}
+              {% set youtube_id = youtube_url|split('youtu.be/')|last|split('?')|first %}
+            {% elseif 'youtube.com/watch?v=' in youtube_url %}
+              {% set youtube_id = youtube_url|split('v=')|last|split('&')|first %}
+            {% elseif 'youtube.com/embed/' in youtube_url %}
+              {% set youtube_id = youtube_url|split('embed/')|last|split('?')|first %}
+            {% endif %}
+          {% endif %}
+
+          {# Get thumbnail - use custom thumbnail if available, otherwise YouTube thumbnail #}
+          {% set custom_thumbnail = ref_content.field_video_thumbnail.entity.field_media_image.entity.uri.value ? file_url(ref_content.field_video_thumbnail.entity.field_media_image.entity.uri.value) : '' %}
+
+          {% set youtube_thumbnail = youtube_id ? 'https://img.youtube.com/vi/' ~ youtube_id ~ '/hqdefault.jpg' : '' %}
+          {% set thumbnail_url = custom_thumbnail ? custom_thumbnail : youtube_thumbnail %}
+
+          {# Create link to YouTube video #}
+          {% set link_html = youtube_url ? '<a href="' ~ youtube_url ~ '" target="_blank" rel="noopener" class="link-icon d-block ' ~ (card_variant == 'overlay' ? 'text-white' : '') ~ '"><i class="bi bi-play-circle"></i> Watch video</a>' : '' %}
+
+          {% if items_count > 1 %}
+            <div class="swiper-slide">
+            {% endif %}
+            {% if card_variant == 'horizontal' %}
+              {% embed 'fao:card-horizontal' with {
+                title: ref_content.label,
+                image: {src: thumbnail_url, alt: ref_content.label},
+                link: link_html,
+              } %}{% endembed %}
+            {% elseif card_variant == 'overlay' %}
+              {% embed 'fao:card-overlay' with {
+                  title: ref_content.label,
+                  image: {src: thumbnail_url, alt: ref_content.label},
+                  link: link_html,
+                } %}{% endembed %}
+            {% else %}
+              {% embed 'fao:card' with {
+                variant: card_variant,
+                title: ref_content.label,
+                image: {src: thumbnail_url, alt: ref_content.label},
+                link: link_html,
+              } %}{% endembed %}
+            {% endif %}
+            {% if items_count > 1 %}
+            </div>
+          {% endif %}
+        {% endfor %}
+
+        {% if items_count > 1 %}
+        </div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+    </div>
+  {% endif %}
+
+</div>

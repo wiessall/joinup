@@ -1,0 +1,11 @@
+{{ attach_library('fao_lean/group-hero') }}
+{{ include('fao_lean:group-hero', {
+  title: node.label,
+  url: url,
+  media: content.collection_banner,
+  logo: content.logo,
+  meta: [content.solutions, content.members],
+  tags: content.field_topic,
+  actions: content.join_collection
+  }, with_context =false)
+}}

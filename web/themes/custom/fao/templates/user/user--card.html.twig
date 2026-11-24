@@ -1,0 +1,30 @@
+{% set fullname = user.field_first_name.value ~ ' ' ~  user.field_last_name.value %}
+{% set expertise =  user.field_area_of_expertise.value == 'other' ? content.field_area_of_expertise_other : content.field_area_of_expertise %}
+{% set classes = [
+  'card'
+] %}
+{% set url = path('entity.user.canonical', {'user': user.id}) %}
+
+<article{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+
+  <div class="card-body">
+    <h5 class="card-title">
+      <i class="fs-3 d-inline-flex bi bi-person-circle pe-1 align-middle"></i>
+      <a href="{{ url }}" class="title-link">{{ fullname }}</a>
+    </h5>
+    <ul class="list-unstyled">
+      {% if content.field_organization|render|striptags|trim %}
+        <li class="mb-1"><strong>{{ 'Organization'|trans }}</strong>: {{ content.field_organization|render|striptags|trim }}</li>
+       {% endif %}
+      {% if content.field_user_country_ref|render|striptags|trim %}
+        <li class="mb-1"><strong>{{ 'Country'|trans }}</strong>: {{ content.field_user_country_ref|render|striptags|trim }}</li>
+      {% endif %}
+      {% if expertise %}
+        <li class="mb-1"><strong>{{ 'Area of Expertise'|trans }}</strong>: {{ expertise|render|striptags }}</li>
+      {% endif %}
+    </ul>
+  </div>
+</article>

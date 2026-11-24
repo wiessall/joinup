@@ -1,0 +1,242 @@
+{#
+/**
+ * @file
+ * Theme override for a main view template.
+ *
+ * Available variables:
+ * - attributes: Remaining HTML attributes for the element.
+ * - css_name: A css-safe version of the view name.
+ * - css_class: The user-specified classes names, if any.
+ * - header: The optional header.
+ * - footer: The optional footer.
+ * - rows: The results of the view query, if any.
+ * - empty: The content to display if there are no rows.
+ * - pager: The optional pager next/prev links to display.
+ * - exposed: Exposed widget form/info to display.
+ * - feed_icons: Optional feed icons to display.
+ * - more: An optional link to the next page of results.
+ * - title: Title of the view, only used when displaying in the admin preview.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the view title.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the view title.
+ * - attachment_before: An optional attachment view to be displayed before the
+ *   view content.
+ * - attachment_after: An optional attachment view to be displayed after the
+ *   view content.
+ * - dom_id: Unique id for every view being printed to give unique class for
+ *   Javascript.
+ * - content_type
+ * - vocabulary
+ *
+ * @see template_preprocess_views_view()
+ */
+#}
+{%
+  set classes = [
+  'view',
+  'view-' ~ id|clean_class,
+  'view-id-' ~ id,
+  'view-display-id-' ~ display_id,
+  dom_id ? 'js-view-dom-id-' ~ dom_id,
+  'mb-4'
+]
+%}
+<div{{attributes.addClass(classes)}}>
+
+
+  {# Valeria: get title from contextual argument (not working in views UI)  #}
+  {# title_prefix #}
+
+  {% set tid = view.args[0] %}
+
+    {% if tid and vocabulary not in ['unccd_land_degradation_guidance'] %}
+    {# set term = drupal_entity('taxonomy_term', tid) #}
+
+  {{ drupal_entity('taxonomy_term', tid, 'one_liner') }}
+
+  {% endif %}
+
+
+  {# Valeria:conditional displays depending on taxonomy #}
+
+    {% if  vocabulary == 'unccd_land_degradation_guidance' %}
+      <style>
+.js-form-item-field-innovation-type {
+  display: none !important;
+}
+.js-form-item-field-use {
+  display: none !important;
+}
+.js-form-item-type {
+  display: none !important;
+}
+.js-form-item-field-unccd-land-degrad-guidance {
+  display: none !important;
+}
+.js-form-item-field-country-origin {
+  display: none !important;
+}
+.js-form-item-field-region {
+  display: none !important;
+}
+.js-form-item-field-prospective-users {
+  display: none !important;
+}
+.js-form-item-field-prospective-audience {
+  display: none !important;
+}
+.js-form-item-field-type-of-information-manage {
+  display: none !important;
+}
+.js-form-item-field-use-cases {
+  display: none !important;
+}
+    </style>
+
+
+  {% else %}
+
+    <style>
+      .js-form-item-field-unccd-land-degrad-guidance {
+        display: none !important;
+      }
+      .js-form-item-field-geo-scale {
+        display: none !important;
+      }
+    </style>
+
+  {% endif %}
+
+
+  {# Valeria:conditional displays depending on conten type #}
+
+
+  {{ content_type }}
+
+  {% if content_type == 'innovation' %}
+
+    <style>
+      .js-form-item-field-type-of-information-manage {
+        display: none !important;
+      }
+    </style>
+
+  {% elseif content_type == 'digital_asset' or content_type == 'organization' or content_type == 'initiative'  %}
+
+    <style>
+      .js-form-item-field-use-cases {
+        display: none !important;
+      }
+
+      .js-form-item-field-innovation-type {
+        display: none !important;
+      }
+    </style>
+
+    {% else %}
+    {# default #}
+  {% endif %}
+
+
+  {% if header and (rows or has_filters_applied) %}
+
+    <header>
+      {{ header }}
+    </header>
+  {% endif %}
+
+  {% if attachment_before %}
+    <div class="attachment attachment-before">
+      {{ attachment_before }}
+    </div>
+  {% endif %}
+
+  <div class="row">
+    {% set has_multiple_filters = exposed['#info']|length > 1 %}
+
+    <div
+      class="col-sm-12 {% if has_multiple_filters %}col-lg-8 order-2{% else %}col-lg-12{% endif %}">
+      {# Mobile filter button - only show if multiple filters exist #}
+      {% if has_multiple_filters and (rows or has_filters_applied) %}
+        <div class="d-lg-none mb-3 sticky-top z-index-999 bg-white">
+
+          <button class="btn btn-secondary w-100" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas" aria-controls="filterOffcanvas">
+            <i class="bi bi-funnel me-2"></i>
+            {{ 'Filter by'|t }}
+          </button>
+        </div>
+      {% endif %}
+
+      {# Display single filter inline #}
+      {% if exposed and not has_multiple_filters and (rows or has_filters_applied) %}
+        <div class="view-filters mb-4 mt-3">
+          {{ exposed }}
+        </div>
+      {% endif %}
+
+      {% if rows %}
+        <div class="row">
+          {{ rows }}
+        </div>
+      {% elseif empty %}
+        <div class="view-empty my-5">
+          {{ empty }}
+        </div>
+      {% endif %}
+
+      {% if pager %}
+        {{ pager }}
+      {% endif %}
+    </div>
+
+    {% if has_multiple_filters and (rows or has_filters_applied) %}
+      <div
+        class="col-sm-12 col-lg-4">
+        {# Desktop filters - hidden on mobile #}
+        <div class="d-none d-lg-block sticky-top z-index-999 overflow-auto pr-5" style="max-height: calc(100vh - 2rem); overflow-y: auto;">
+
+          <div class="view-filters mt-4">
+            {{ exposed }}
+          </div>
+        </div>
+
+        {# Mobile offcanvas filters #}
+        <div class="offcanvas offcanvas-end d-lg-none" tabindex="-1" id="filterOffcanvas" aria-labelledby="filterOffcanvasLabel">
+          <div class="offcanvas-header">
+            <button type="button" class="btn btn-primary btn-icon btn-round" data-bs-dismiss="offcanvas" aria-label="Close">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+          <div class="offcanvas-body pe-5">
+            <div class="view-filters">
+              {{ exposed }}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  {% if attachment_after %}
+    <div class="attachment attachment-after">
+      {{ attachment_after }}
+    </div>
+  {% endif %}
+
+  {% if footer %}
+    <div class="view-footer mb-4 fw-bold">
+      {{ footer }}
+    </div>
+  {% endif %}
+
+  {% if more %}
+    {{ more }}
+  {% endif %}
+
+  {% if feed_icons %}
+    <div class="feed-icons">
+      {{ feed_icons }}
+    </div>
+  {% endif %}
+</div>

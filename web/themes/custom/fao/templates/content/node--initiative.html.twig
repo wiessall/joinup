@@ -1,0 +1,223 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: (optional) The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: (optional) Themed creation date field.
+ * - author_name: (optional) Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ *
+ * @see template_preprocess_node()
+ *
+ * @ingroup themeable
+ */
+#}
+{{ attach_library('fao/expandable') }}
+
+{% set classes = [
+  'container',
+  'detail-article',
+  'detail-page'
+] %}
+
+
+{% macro collapsibleRow(label, summary, content) %}
+
+  {% set sanitizedLabel = label|capitalize|replace({' ': ''}) %}
+  <tr>
+    <th scope="row" class="bg-gray-light">{{ label|trans }}</th>
+    <td>
+
+      <div class="summary">
+        {{ summary|length > 300 ? summary|slice(0, 300)|raw ~ '...' : summary|raw }}
+      </div>
+
+      {% if summary|length > 300 %}
+      <div class="accordion mb-3 dynamic-search" id="{{ sanitizedLabel }}">
+        <div id="{{ sanitizedLabel }}Body" class="accordion-collapse collapse" aria-labelledby="{{ sanitizedLabel }}" data-bs-parent="#{{ sanitizedLabel }}Collapse">
+          {{ content }}
+        </div>
+
+        <div id="{{ sanitizedLabel }}Collapse">
+          <button class="btn btn-secondary btn-icon btn-adv-search collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{ sanitizedLabel }}Body" aria-expanded="true" aria-controls="{{ sanitizedLabel }}Body">
+                  <span class="align-left">
+                    <span class="d-block">
+                      <span class="d-inline-block fs-6 align-left label">{{ 'expand to read more'|trans }}</span>
+                      <i class="bi bi-chevron-down"></i>
+                    </span>
+                  </span>
+          </button>
+        </div>
+
+      </div>
+      {% endif %}
+
+    </td>
+  </tr>
+{% endmacro %}
+
+{% macro commaSeparatedTaxonomyLinksRow(label, items) %}
+  <tr>
+    <th scope="row" class="bg-gray-light">{{ label }}</th>
+    <td>
+      {% for item in items %}
+      <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term':  item.entity.id}) }}">
+        {{ item.entity.name.value }}</a>{% if not loop.last %},{% endif %}
+      {% endfor %}
+    </td>
+  </tr>
+{% endmacro %}
+
+{% macro commaSeparatedNodeLinksRow(label, items) %}
+  <tr>
+    <th scope="row" class="bg-gray-light">{{ label }}</th>
+    <td>
+      {% for item in items %}
+      <a href="{{ path('entity.node.canonical', {'node':  item.entity.id}) }}">
+        {{ item.entity.title.value }}</a>{% if not loop.last %},{% endif %}
+      {% endfor %}
+    </td>
+  </tr>
+{% endmacro %}
+
+{% macro singleTaxonomyLinksRow(label, link, value) %}
+  <tr>
+    <th scope="row" class="bg-gray-light">{{ label  }}</th>
+    <td>
+      <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term':  link }) }}">
+        {{ value }}
+      </a>
+    </td>
+  </tr>
+{% endmacro %}
+
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  {% if node.field_type_of_initiative %}
+  <h6 class="title-category">
+    {{ node.field_type_of_initiative.0.entity.name.value }}
+  </h6>
+  {% endif %}
+  <h1{{ title_attributes.addClass('detail-title mt-2 mb-3') }}>
+    {{ node.title.value }}
+  </h1>
+
+  <h6 class="date-location d-list-date-location mb-3">
+    <span class="date">{{ node.getCreatedTime()|date('d/m/Y') }}</span>
+  </h6>
+
+  {% if image %}
+    <div>
+      <img class="image-widget img-responsive img-hero mb-3" src="{{ image.url }}" />
+
+      {% if image.credits or image.caption %}
+        <div class="row">
+
+          {% if image.caption %}
+            <div class="col-lg-9">
+              <p class="small text-color-gray-medium">{{ image.caption }}</p>
+            </div>
+          {% endif %}
+
+          {% if image.credits %}
+            <div class="col-lg-3 text-right">
+              <p class="small text-color-gray-medium">{{ image.credits }}</p>
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+<div class="project-list-item mb-3 mt-3">
+  <table class="table table-bordered">
+    <tbody>
+
+      {% if node.field_country_origin|length %}
+        {{ _self.singleTaxonomyLinksRow(node.field_country_origin.fielddefinition.label, node.field_country_origin.entity.id, node.field_country_origin.entity.name.value) }}
+      {% endif %}
+
+      {% if node.field_owner|length %}
+        {{ _self.commaSeparatedNodeLinksRow(node.field_owner.fielddefinition.label, node.field_owner) }}
+      {% endif %}
+
+      {% if node.body %}
+        {{ _self.collapsibleRow('Full description', content.body|render|striptags, content.body) }}
+      {% endif %}
+
+      {% if node.field_collection|length %}
+        {{ _self.commaSeparatedTaxonomyLinksRow(node.field_collection.fielddefinition.label, node.field_collection) }}
+      {% endif %}
+
+
+    </tbody>
+  </table>
+
+  <h3>{{ 'Provenance'|trans }}</h3>
+
+  <table class="table table-bordered">
+    <tbody>
+
+    {% if node.field_data_source %}
+      {{ _self.commaSeparatedNodeLinksRow(node.field_data_source.fielddefinition.label, node.field_data_source) }}
+    {% endif %}
+
+    </tbody>
+  </table>
+
+</div>
+
+
+

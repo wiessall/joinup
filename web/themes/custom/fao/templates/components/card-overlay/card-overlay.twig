@@ -1,0 +1,37 @@
+{#
+/**
+ * @file
+ * Card Overlay component template.
+ *
+ * Available variables:
+ * - image: Object with src and alt properties
+ * - category: Category text
+ * - title: Card title text
+ * - title_url: URL for the title link
+ * - date: Date string
+ * - card_extra: Optional slot for additional content
+ */
+#}
+<div class="card">
+  {% if image %}
+  <div class="card-image ratio ratio-3x2">
+    <img src="{{ image.src }}" alt="{{ image.alt }}">
+  </div>
+  {% endif %}
+  <div class="card-img-overlay d-flex flex-column justify-content-center">
+    {% if category %}
+    <h6 class="title-category">{{ category }}</h6>
+    {% endif %}
+    {% if title %}
+    <h5 class="card-title">
+      <a href="{{ title_url }}" class="title-link stretched-link">{{ title }}</a>
+    </h5>
+    {% endif %}
+    {% if date %}
+    <h6 class="date">{{ date }}</h6>
+    {% endif %}
+    {% if card_extra %}
+      {{ card_extra }}
+    {% endif %}
+  </div>
+</div>

@@ -1,0 +1,76 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a taxonomy term.
+ *
+ * Available variables:
+ * - url: URL of the current term.
+ * - name: (optional) Name of the current term.
+ * - content: Items for the content of the term (fields and description).
+ *   Use 'content' to print them all, or print a subset such as
+ *   'content.description'. Use the following code to exclude the
+ *   printing of a given child element:
+ *   @code
+ *   {{ content|without('description') }}
+ *   @endcode
+ * - attributes: HTML attributes for the wrapper.
+ * - page: Flag for the full page state.
+ * - term: The taxonomy term entity, including:
+ *   - id: The ID of the taxonomy term.
+ *   - bundle: Machine name of the current vocabulary.
+ * - view_mode: View mode, e.g. 'full', 'teaser', etc.
+ *
+ * @see template_preprocess_taxonomy_term()
+ *
+ * @ingroup themeable
+ */
+#}
+<div{{ attributes.addClass('mt-3') }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+   <div{{ attributes.addClass('news-detail__body card bg-primary-light mb-0') }}>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-8 col-md-12">
+              <h2 class="mb-3">{{ term.name.value }}</h2>
+            </div>
+            <div class="col-lg-4 col-md-12">
+              <div class="text-md-start text-lg-end mb-md-3">
+                <a href="#" class="btn btn-primary btn-icon">Follow<i class="bi bi-bookmark"></i> </a> <a href="#" class="btn btn-outline btn-icon">Brief<i class="bi bi-book"></i> </a> <a href="#" class="btn btn-primary btn-icon">Share<i class="bi bi-share"></i> </a></div>
+            </div>
+          </div>
+          {% if image %}
+            <div>
+              <img class="image-widget img-responsive img-hero mb-3" src="{{ image.url }}" />
+
+              {% if image.credits or image.caption %}
+                <div class="row">
+
+                  {% if image.caption %}
+                    <div class="col-lg-9">
+                      <p class="small text-color-gray-medium">{{ image.caption }}</p>
+                    </div>
+                  {% endif %}
+
+                  {% if image.credits %}
+                    <div class="col-lg-3 text-right">
+                      <p class="small text-color-gray-medium">{{ image.credits }}</p>
+                    </div>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+          {% endif %}
+          {{ content|without('name', 'field_image') }}
+          {% if content|without('name', 'field_image')|render|trim %}
+            <br/>
+          {% endif %}
+          <i>{{ 'This page lists all the content tagged with the selected taxonomy term.'|trans }}</i>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

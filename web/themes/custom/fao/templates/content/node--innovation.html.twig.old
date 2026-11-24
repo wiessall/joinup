@@ -1,0 +1,486 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: (optional) The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: (optional) Themed creation date field.
+ * - author_name: (optional) Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ *
+ * @see template_preprocess_node()
+ *
+ * @ingroup themeable
+ */
+#}
+{{ attach_library('fao/expandable') }}
+
+{% set classes = [
+  'container',
+  'detail-article',
+  'detail-page'
+] %}
+
+
+{% macro collapsibleRow(label, summary, content) %}
+
+  {% set sanitizedLabel = label|capitalize|replace({' ': ''}) %}
+  <tr>
+    <th scope="row" class="bg-gray-light">{{ label|trans }}</th>
+    <td>
+
+      <div class="summary">
+        {{ summary|length > 300 ? summary|slice(0, 300)|raw ~ '...' : summary|raw }}
+      </div>
+
+      {% if summary|length > 300 %}
+      <div class="accordion mb-3 dynamic-search" id="{{ sanitizedLabel }}">
+        <div id="{{ sanitizedLabel }}Body" class="accordion-collapse collapse" aria-labelledby="{{ sanitizedLabel }}" data-bs-parent="#{{ sanitizedLabel }}Collapse">
+          {{ content }}
+        </div>
+
+        <div id="{{ sanitizedLabel }}Collapse">
+          <button class="btn btn-secondary btn-icon btn-adv-search collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{ sanitizedLabel }}Body" aria-expanded="true" aria-controls="{{ sanitizedLabel }}Body">
+                  <span class="align-left">
+                    <span class="d-block">
+                      <span class="d-inline-block fs-6 align-left label">{{ 'expand to read more'|trans }}</span>
+                      <i class="bi bi-chevron-down"></i>
+                    </span>
+                  </span>
+          </button>
+        </div>
+
+      </div>
+      {% endif %}
+
+    </td>
+  </tr>
+{% endmacro %}
+
+{% macro commaSeparatedTaxonomyLinksRow(label, items) %}
+  <tr>
+    <th scope="row" class="bg-gray-light">{{ label }}</th>
+    <td>
+      {% for item in items %}
+      <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term':  item.entity.id}) }}">
+        {{ item.entity.name.value }}</a>{% if not loop.last %},{% endif %}
+      {% endfor %}
+    </td>
+  </tr>
+{% endmacro %}
+
+{% macro commaSeparatedNodeLinksRow(label, items) %}
+  <tr>
+    <th scope="row" class="bg-gray-light">{{ label }}</th>
+    <td>
+      {% for item in items %}
+      <a href="{{ path('entity.node.canonical', {'node':  item.entity.id}) }}">
+        {{ item.entity.title.value }}</a>{% if not loop.last %},{% endif %}
+      {% endfor %}
+    </td>
+  </tr>
+{% endmacro %}
+
+{% macro singleTaxonomyLinksRow(label, link, value) %}
+  <tr>
+    <th scope="row" class="bg-gray-light">{{ label  }}</th>
+    <td>
+      <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term':  link }) }}">
+        {{ value }}
+      </a>
+    </td>
+  </tr>
+{% endmacro %}
+
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  {% if node.field_innovation_type|length %}
+  <h6 class="title-category">
+    {{ node.field_innovation_type.0.entity.name.value }}
+  </h6>
+  {% endif %}
+  <h1{{ title_attributes.addClass('detail-title mt-2 mb-3') }}>
+    {{ node.title.value }}
+  </h1>
+
+  <h6 class="date-location d-list-date-location mb-3">
+    <span class="date">{{ node.getCreatedTime()|date('d/m/Y') }}</span>
+  </h6>
+
+  {% if image %}
+    <div>
+      <img class="image-widget img-responsive img-hero mb-3" src="{{ image.url }}" />
+
+      {% if image.credits or image.caption %}
+        <div class="row">
+
+          {% if image.caption %}
+            <div class="col-lg-9">
+              <p class="small text-color-gray-medium">{{ image.caption }}</p>
+            </div>
+          {% endif %}
+
+          {% if image.credits %}
+            <div class="col-lg-3 text-right">
+              <p class="small text-color-gray-medium">{{ image.credits }}</p>
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+<div class="row mb-3 mt-3">
+  <div class="col-12">
+    <div class="classifications detail-article-classifications flex-row flex-wrap align-items-center">
+      {% if node.field_innovation_type|length %}
+        <div class="tags-list">
+          <span class="class-list__title text-uppercase">{{ node.field_innovation_type.fielddefinition.label }}:</span>
+          {% for item in node.field_innovation_type %}
+            {% if loop.index < 5 %}
+              <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term':  item.entity.id }) }}" class="badge text-bg-secondary bg-secondary">{{ item.entity.name.value }}</a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if sdgs|length %}
+        <div class="sdg-list">
+          <span class="sdg-list__title">{{ 'SDGs'|trans }}:</span>
+          {% for sdg in sdgs %}
+            <a href="{{ sdg.url }}" class="sdg-small text-white text-decoration-none {{ sdg.class }}"></a>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+<div class="project-list-item">
+  <table class="table table-bordered">
+    <tbody>
+
+      {% if node.field_country_origin|length %}
+        {{ _self.singleTaxonomyLinksRow(node.field_country_origin.fielddefinition.label, node.field_country_origin.entity.id, node.field_country_origin.entity.name.value) }}
+      {% endif %}
+
+      {% if node.field_region|length %}
+        {{ _self.singleTaxonomyLinksRow(node.field_region.fielddefinition.label, node.field_region.entity.id, node.field_region.entity.name.value) }}
+      {% endif %}
+
+      {% if node.field_owner|length %}
+        {{ _self.commaSeparatedNodeLinksRow(node.field_owner.fielddefinition.label, node.field_owner) }}
+      {% endif %}
+
+      {% if node.field_url_s|length %}
+        <tr>
+          <th scope="row" class="bg-gray-light">{{ node.field_url_s.fielddefinition.label }}</th>
+          <td>
+            {% for item in node.field_url_s %}
+              <a href="{{ item.uri }}" target="_blank">
+                {% if item.title %}
+                  {{ item.title }}
+                {% else %}
+                  {{ item.uri }}
+                {% endif %}
+              </a>{% if not loop.last %},{% endif %}
+            {% endfor %}
+          </td>
+        </tr>
+      {% endif %}
+
+      {% if node.field_shorter_description %}
+        {{ _self.collapsibleRow(node.field_shorter_description.fielddefinition.label, content.field_shorter_description|render|striptags, content.field_shorter_description) }}
+      {% endif %}
+
+      {% if node.body %}
+        {{ _self.collapsibleRow('Full description', content.body|render|striptags, content.body) }}
+      {% endif %}
+
+    </tbody>
+  </table>
+
+  {% if node.field_use_cases|length or node.field_use_cases_description.value or node.field_thematic_area|length %}
+    <h3>{{ 'Use cases'|trans }}</h3>
+
+    <table class="table table-bordered">
+      <tbody>
+
+      {% if node.field_use_cases|length %}
+        {{ _self.commaSeparatedTaxonomyLinksRow(node.field_use_cases.fielddefinition.label, node.field_use_cases)  }}
+      {% endif %}
+
+      {% if node.field_use_cases_description.value %}
+        {{ _self.collapsibleRow('Use cases narrative', node.field_use_cases_description.value, node.field_use_cases_description.value) }}
+      {% endif %}
+
+      {% if node.field_thematic_area|length %}
+        {{ _self.commaSeparatedTaxonomyLinksRow(node.field_thematic_area.fielddefinition.label, node.field_thematic_area)  }}
+      {% endif %}
+
+      </tbody>
+    </table>
+  {% endif %}
+
+
+  {% if node.field_innovative_features|length or node.field_innovative_elements_narrat.value %}
+    <h3>{{ 'Innovative dimensions'|trans }}</h3>
+
+    <table class="table table-bordered">
+      <tbody>
+        {% if node.field_innovative_features|length %}
+          {{ _self.commaSeparatedTaxonomyLinksRow(node.field_innovative_features.fielddefinition.label, node.field_innovative_features)  }}
+        {% endif %}
+
+        {% if node.field_innovative_elements_narrat.value %}
+          {{ _self.collapsibleRow('Innovative dimensions narrative', node.field_innovative_elements_narrat.value, node.field_innovative_elements_narrat.value) }}
+        {% endif %}
+      </tbody>
+    </table>
+  {% endif %}
+
+  {% if node.field_innovation_stage|length or node.field_readiness_level|length or node.field_readiness_description.value or node.field_languages|length or
+        node.field_prospective_users|length or node.field_adoption_level|length or node.field_adoption_description.value or node.field_countries_adoption|length or
+        node.field_adoptability_dimensions|length or node.field_if_grassroots or node.field_grassroots_innovation_narr|length
+  %}
+    <h3>{{ 'Readiness and adoption'|trans }}</h3>
+
+    <table class="table table-bordered">
+      <tbody>
+
+      {% if node.field_innovation_stage|length %}
+        {{ _self.singleTaxonomyLinksRow(node.field_innovation_stage.fielddefinition.label, node.field_innovation_stage.entity.id, node.field_innovation_stage.entity.name.value) }}
+      {% endif %}
+
+
+      {% if node.field_readiness_level|length %}
+        {{ _self.singleTaxonomyLinksRow(node.field_readiness_level.fielddefinition.label, node.field_readiness_level.entity.id, node.field_readiness_level.entity.name.value) }}
+      {% endif %}
+
+      {% if node.field_readiness_description.value %}
+        {{ _self.collapsibleRow('Readiness narrative', node.field_readiness_description.value, node.field_readiness_description.value) }}
+      {% endif %}
+
+      {% if node.field_languages|length %}
+        {{ _self.commaSeparatedTaxonomyLinksRow(node.field_languages.fielddefinition.label, node.field_languages) }}
+      {% endif %}
+
+      {% if node.field_prospective_users|length %}
+        {{ _self.commaSeparatedTaxonomyLinksRow(node.field_prospective_users.fielddefinition.label, node.field_prospective_users) }}
+      {% endif %}
+
+      {% if node.field_adoption_level|length %}
+        {{ _self.singleTaxonomyLinksRow(node.field_adoption_level.fielddefinition.label, node.field_adoption_level.entity.id, node.field_adoption_level.entity.name.value) }}
+      {% endif %}
+
+      {% if node.field_adoption_description.value %}
+        {{ _self.collapsibleRow('Adoption narrative', node.field_adoption_description.value, node.field_adoption_description.value) }}
+      {% endif %}
+
+      {% if node.field_countries_adoption|length %}
+        {{ _self.commaSeparatedTaxonomyLinksRow(node.field_countries_adoption.fielddefinition.label, node.field_countries_adoption) }}
+      {% endif %}
+
+      {% if node.field_adoptability_dimensions|length %}
+        {{ _self.collapsibleRow(node.field_adoptability_dimensions.fielddefinition.label, node.field_adoptability_dimensions.value, node.field_adoptability_dimensions.value) }}
+      {% endif %}
+
+      {% if node.field_if_grassroots.value %}
+        <tr>
+          <th scope="row" class="bg-gray-light">{{ node.field_if_grassroots.fielddefinition.label }}</th>
+          <td>
+            {{ 'Yes'|trans }}
+          </td>
+        </tr>
+      {% endif %}
+
+      {% if node.field_grassroots_innovation_narr|length %}
+        {{ _self.collapsibleRow('Grassroots innovation narrative', node.field_grassroots_innovation_narr.value, node.field_grassroots_innovation_narr.value) }}
+      {% endif %}
+
+      </tbody>
+    </table>
+  {% endif %}
+
+
+  {% if node.field_investment_type|length or node.field_sponsors|length or node.field_partners|length %}
+    <h3>{{ 'Investments and partners'|trans }}</h3>
+
+    <table class="table table-bordered">
+      <tbody>
+
+      {% if node.field_investment_type|length %}
+        {{ _self.commaSeparatedTaxonomyLinksRow(node.field_investment_type.fielddefinition.label, node.field_investment_type) }}
+      {% endif %}
+
+      {% if node.field_sponsors|length %}
+        {{ _self.commaSeparatedNodeLinksRow(node.field_sponsors.fielddefinition.label, node.field_sponsors) }}
+      {% endif %}
+
+      {% if node.field_partners|length %}
+        {{ _self.commaSeparatedNodeLinksRow(node.field_partners.fielddefinition.label, node.field_partners) }}
+      {% endif %}
+
+      </tbody>
+    </table>
+  {% endif %}
+
+
+  {% if node.field_challenges_addressed|length or sdgs|length or node.field_long_term_beneficiaries|length %}
+    <h3>{{ 'Impact'|trans }}</h3>
+
+    <table class="table table-bordered">
+      <tbody>
+
+      {% if node.field_challenges_addressed|length %}
+        {{ _self.commaSeparatedTaxonomyLinksRow(node.field_challenges_addressed.fielddefinition.label, node.field_challenges_addressed) }}
+      {% endif %}
+
+      {% if sdgs|length %}
+        <tr>
+          <th scope="row" class="bg-gray-light">{{ node.field_impact_sdgs.fielddefinition.label }}</th>
+          <td>
+            {% for sdg in sdgs %}
+              <a href="{{ sdg.url }}" class="sdg-small text-white text-decoration-none {{ sdg.class }}"></a>
+            {% endfor %}
+          </td>
+        </tr>
+      {% endif %}
+
+      {% if node.field_long_term_beneficiaries|length %}
+        {{ _self.commaSeparatedTaxonomyLinksRow(node.field_long_term_beneficiaries.fielddefinition.label, node.field_long_term_beneficiaries) }}
+      {% endif %}
+
+      </tbody>
+    </table>
+  {% endif %}
+
+  {% if node.field_data_source|length or node.field_entity_creation_mode|length or node.field_record_status|length or node.field_allow_ai_update.value %}
+    <h3>{{ 'Provenance'|trans }}</h3>
+
+    <table class="table table-bordered">
+      <tbody>
+
+      {% if node.field_data_source|length %}
+        {{ _self.commaSeparatedNodeLinksRow(node.field_data_source.fielddefinition.label, node.field_data_source) }}
+      {% endif %}
+
+      {% if node.field_entity_creation_mode|length %}
+        {{ _self.commaSeparatedTaxonomyLinksRow(node.field_entity_creation_mode.fielddefinition.label, node.field_entity_creation_mode) }}
+      {% endif %}
+
+      {% if node.field_record_status|length %}
+        {{ _self.commaSeparatedTaxonomyLinksRow(node.field_record_status.fielddefinition.label, node.field_record_status) }}
+      {% endif %}
+
+      {% if node.field_allow_ai_update.value %}
+        <tr>
+          <th scope="row" class="bg-gray-light">{{ node.field_allow_ai_update.fielddefinition.label }}</th>
+          <td>
+            {{ 'Yes'|trans }}
+          </td>
+        </tr>
+      {% endif %}
+      </tbody>
+    </table>
+  {% endif %}
+
+  {% if node.field_areas_of_expertise|length or node.field_afs_stf_areas|length or node.field_areas_of_need|length or node.field_stf_development_status|length
+     or node.field_innovation_domain|length or node.field_stf_level_of_recognition|length or node.field_stf_organization_type|length
+  %}
+    <h3>{{ 'STF'|trans }}</h3>
+    <table class="table table-bordered">
+      <tbody>
+      <!-- STF fields -->
+      {% if node.field_areas_of_expertise|length %}
+        {{ _self.commaSeparatedTaxonomyLinksRow(node.field_areas_of_expertise.fielddefinition.label, node.field_areas_of_expertise) }}
+      {% endif %}
+
+      {% if node.field_afs_stf_areas|length %}
+        {{ _self.commaSeparatedTaxonomyLinksRow(node.field_afs_stf_areas.fielddefinition.label, node.field_afs_stf_areas) }}
+      {% endif %}
+
+      {% if node.field_areas_of_need|length %}
+        {{ _self.commaSeparatedTaxonomyLinksRow(node.field_areas_of_need.fielddefinition.label, node.field_areas_of_need) }}
+      {% endif %}
+
+      {% if node.field_stf_development_status|length %}
+        {{ _self.commaSeparatedTaxonomyLinksRow(node.field_stf_development_status.fielddefinition.label, node.field_stf_development_status) }}
+      {% endif %}
+
+      {% if node.field_innovation_domain|length %}
+        {{ _self.commaSeparatedTaxonomyLinksRow(node.field_innovation_domain.fielddefinition.label, node.field_innovation_domain) }}
+      {% endif %}
+
+      {% if node.field_stf_level_of_recognition|length %}
+        {{ _self.commaSeparatedTaxonomyLinksRow(node.field_stf_level_of_recognition.fielddefinition.label, node.field_stf_level_of_recognition) }}
+      {% endif %}
+
+      {% if node.field_stf_organization_type|length %}
+        {{ _self.commaSeparatedTaxonomyLinksRow(node.field_stf_organization_type.fielddefinition.label, node.field_stf_organization_type) }}
+      {% endif %}
+
+      </tbody>
+    </table>
+  {% endif %}
+
+  {% if node.field_ai_stamp.value %}
+    <h5 class="mb-1 mt-3">{{ node.field_ai_stamp.fielddefinition.label }}</h5>
+    <p>{{ node.field_ai_stamp.value }}</p>
+  {% endif %}
+
+</div>
+
+
+

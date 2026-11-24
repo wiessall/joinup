@@ -1,0 +1,47 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Group hero
+description: 'Header for a group, collection or community: image, logo, title, meta, tags and actions.'
+status: experimental
+props:
+  type: object
+  required:
+    - title
+  properties:
+    variant:
+      type: string
+      title: Variant
+      enum: [band, cover]
+      meta:enum:
+        band: 'Image strip above a light band'
+        cover: 'Image behind the title, with overlay'
+      default: band
+    title:
+      type: string
+      title: Title
+    url:
+      type: string
+      title: Title link
+      format: iri-reference
+    title_tag:
+      type: string
+      title: Title element
+      enum: [h1, h2, p]
+      default: h1
+    eyebrow:
+      type: string
+      title: Eyebrow
+      description: 'Short label above the title, e.g. "Open group" or "Collection".'
+slots:
+  media:
+    title: Image
+    description: 'Banner or cover image, already rendered with an image style.'
+  logo:
+    title: Logo
+  meta:
+    title: Meta
+    description: 'Anything under the title: counts, owner, visibility.'
+  tags:
+    title: Tags
+  actions:
+    title: Actions
+    description: 'Join, edit, settings.'

@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Block Title component template.
+ *
+ * Available variables:
+ * - variant: Title variant (default, highlight, subtitle, section)
+ * - title: Title text
+ * - title_attributes: HTML attributes for the title element
+ */
+#}
+{% if title %}
+  {% set variant_config = {
+    'default': { 'class': 'primary-heading', 'tag': 'h2' },
+    'highlight': { 'class': 'title-highlight', 'tag': 'h4' },
+    'subtitle': { 'class': 'sub-title', 'tag': 'h5' },
+    'subtitle-small': { 'class': 'sub-title small', 'tag': 'h5' }
+  } %}
+
+  {% set config = variant_config[variant]|default(variant_config.default) %}
+  {% set heading_tag = config.tag %}
+  {% set variant_class = config.class %}
+
+  {% set title_attrs = create_attribute(title_attributes) %}
+  <{{ heading_tag }}{{ title_attrs.addClass(variant_class) }}>{{ title }}</{{ heading_tag }}>
+{% endif %}

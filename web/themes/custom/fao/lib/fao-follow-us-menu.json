@@ -1,0 +1,40 @@
+{
+  "fao-footer-logo": {
+    "en": {
+      "url": "https://www.fao.org/home/en/",
+      "image":"https://www.fao.org/images/corporatelibraries/fao-logo/fao-sdg/fao-logo-sdg.svg",
+      "alt": "Food and Agriculture Organization of the United Nations",
+      "title": "Food and Agriculture Organization of the United Nations"
+    },
+    "fr": {
+      "url": "https://www.fao.org/home/fr",
+      "image":"https://www.fao.org/images/corporatelibraries/fao-logo/fao-sdg/fao-logo-sdg-fr.svg",
+      "alt": "Organisation des Nations Unies pour l'alimentation et l'agriculture",
+      "title": "Organisation des Nations Unies pour l'alimentation et l'agriculture"
+    },
+    "es": {
+      "url": "https://www.fao.org/home/es",
+      "image":"https://www.fao.org/images/corporatelibraries/fao-logo/fao-sdg/fao-logo-sdg-es.svg",
+      "alt": "Organización de las Naciones Unidas para la Alimentación y la Agricultura",
+      "title": "Organización de las Naciones Unidas para la Alimentación y la Agricultura"
+    },
+    "ru": {
+      "url": "https://www.fao.org/home/ru",
+      "image":"https://www.fao.org/images/corporatelibraries/fao-logo/fao-sdg/fao-logo-sdg-ru.svg",
+      "alt": "Продовольственная и сельскохозяйственная организация Объединенных Наций",
+      "title": "Продовольственная и сельскохозяйственная организация Объединенных Наций"
+    },
+    "zh-hans": {
+      "url": "https://www.fao.org/home/zh",
+      "image":"https://www.fao.org/images/corporatelibraries/fao-logo/fao-sdg/fao-logo-sdg-zh.svg",
+      "alt": "联合国粮食及 农业组织",
+      "title": "联合国粮食及 农业组织"
+    },
+    "ar": {
+      "url": "https://www.fao.org/home/ar",
+      "image":"https://www.fao.org/images/corporatelibraries/fao-logo/fao-sdg/fao-logo-sdg-ar.svg",
+      "alt": "منظمة الأغذية والزراعة للأمم الم",
+      "title": "منظمة الأغذية والزراعة للأمم الم"
+    }
+  }
+}

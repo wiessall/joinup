@@ -20,3 +20,9 @@ global:
     # Needed for Bootstrap dropdowns/collapse in the main menu and FAO DS
     # components. No jQuery.
     vendor/bootstrap/bootstrap.bundle.min.js: { minified: true, attributes: { defer: true } }
+
+# Collection header band + tab row; attached by node--collection--group-header.
+group-hero:
+  css:
+    component:
+      css/components/collection-header.css: {}

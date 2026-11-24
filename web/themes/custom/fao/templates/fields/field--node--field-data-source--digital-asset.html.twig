@@ -1,0 +1,4 @@
+{%- for item in items -%}
+  {% set target = item.content['#url'].options.attributes.target ? ' target="_blank"' %}
+  <span class="text-muted fw-bold">{{ 'Source'|trans }}: </span><a class="link-icon" href="{{ item.content['#url'] }}"{{ target }}>{{ item.content['#title'] }}<i class="bi bi-chevron-right"></i></a>
+{%- endfor -%}

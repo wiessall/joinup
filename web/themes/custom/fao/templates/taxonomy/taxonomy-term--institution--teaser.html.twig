@@ -1,0 +1,59 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a taxonomy term.
+ *
+ * Available variables:
+ * - url: URL of the current term.
+ * - name: (optional) Name of the current term.
+ * - content: Items for the content of the term (fields and description).
+ *   Use 'content' to print them all, or print a subset such as
+ *   'content.description'. Use the following code to exclude the
+ *   printing of a given child element:
+ *   @code
+ *   {{ content|without('description') }}
+ *   @endcode
+ * - attributes: HTML attributes for the wrapper.
+ * - page: Flag for the full page state.
+ * - term: The taxonomy term entity, including:
+ *   - id: The ID of the taxonomy term.
+ *   - bundle: Machine name of the current vocabulary.
+ * - view_mode: View mode, e.g. 'full', 'teaser', etc.
+ *
+ * @see template_preprocess_taxonomy_term()
+ *
+ * @ingroup themeable
+ */
+#}
+{% set classes = [
+  'd-list',
+  'd-list-partners'
+]
+%}
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+  <div class="d-list-visual ratio ratio-3x2">
+    <img src="{{ image }}" alt="Logo" />
+  </div>
+  <div class="d-list-content">
+    <h6 class="title-category">{{ content.field_institution_type_ref }}</h6>
+    <h5 class="title-link">
+      <a href="{{ url }}">
+        {{ name }}
+        {% if content.field_acronym|render|trim %}
+          ({{ content.field_acronym }})
+        {% endif %}
+      </a>
+    </h5>
+    {{ content.description }}
+    {{ content.field_institution_topics_ref }}
+    <div>
+      {{ content.field_start_year }}
+      {% if country %}
+        <p class="me-3 mb-2 d-inline-block"><b>{{ 'Country'|trans|upper }}: </b>{{ country }}</p>
+      {% endif %}
+    </div>
+    {{ content.field_languages_ref }}
+  </div>
+</div>

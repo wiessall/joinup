@@ -1,0 +1,23 @@
+{#
+/**
+ * @file
+ * FAO override of core's one-column Layout Builder layout.
+ *
+ * Identical to core's template except for the .container wrapper. Layout
+ * Builder sections render outside node--full.html.twig's .container div, so
+ * without this the section content runs full-bleed to the viewport edges.
+ *
+ * Place at: web/themes/custom/fao/templates/layout/layout--onecol.html.twig
+ *
+ * @see core/modules/layout_builder/layouts/onecol/layout--onecol.html.twig
+ */
+#}
+{% if content %}
+  <div class="container">
+    <div{{ attributes.addClass('layout', 'layout--onecol') }}>
+      <div{{ region_attributes.content.addClass('layout__region', 'layout__region--content') }}>
+        {{ content.content }}
+      </div>
+    </div>
+  </div>
+{% endif %}

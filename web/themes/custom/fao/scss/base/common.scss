@@ -1,0 +1,22 @@
+.list-inline,
+.list-unstyled {
+  &.comma-separated,
+  &.dash-separated {
+    li {
+      display: inline-block;
+
+      &:only-child:after,
+      &:last-child:after {
+        display: none;
+      }
+    }
+  }
+
+  &.dash-separated li:after {
+    content: "|";
+  }
+  &.comma-separated li:after {
+    content: ",";
+  }
+}
+

@@ -1,0 +1,40 @@
+/* Depth-agnostic indentation: driven by a CSS var from JS */
+.chosen-container .chosen-results li {
+  --depth: 0;
+  padding-inline-start: calc(.5rem + var(--depth) * 0.75rem);
+  line-height: 1.25rem;
+  padding-block: 2px;
+  white-space: normal;
+}
+
+/* Hide collapsed nodes */
+.chosen-container .chosen-results li.is-hidden { display: none !important; }
+
+/* Caret & label behavior */
+.chosen-container .chosen-results li .facet-caret {
+  display: inline-block;
+  width: 1rem;
+  margin-inline-end: .25rem;
+  user-select: none;
+}
+.chosen-container .chosen-results li.has-children > .facet-caret { cursor: pointer; }
+.chosen-container .chosen-results li .facet-label { cursor: default; }
+
+/* Icons (no depth hard-coding):
+  - Parents: ▸ / ▾
+  - Leaves at deepest level: •
+*/
+.chosen-container .chosen-results li.has-children > .facet-caret::before { content: '▸'; opacity: .7; }
+.chosen-container .chosen-results li.has-children:not(.is-collapsed) > .facet-caret::before { content: '▾'; }
+
+/* Show a bullet ONLY on deepest leaves (non-interactive) */
+.chosen-container .chosen-results li.is-max-depth > .facet-caret.facet-caret--leaf::before { content: '•'; opacity: .6; }
+
+/* Counts (unchanged) */
+.chosen-container .chosen-results .facet-count { opacity: .7; font-variant-numeric: tabular-nums; }
+.chosen-container .chosen-results li.count-zero .facet-count { opacity: .35; }
+
+
+.chosen-container-multi .chosen-choices {
+    border: none !important;
+}

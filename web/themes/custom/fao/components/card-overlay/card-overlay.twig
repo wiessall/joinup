@@ -1,0 +1,54 @@
+{#
+/**
+ * @file
+ * Card Overlay component template.
+ *
+ * Available variables:
+ * - image: Object with src and alt properties
+ * - category: Category text
+ * - title: Card title text
+ * - title_url: URL for the title link
+ * - date: Date string
+ * - card_extra: Optional slot for additional content
+ */
+#}
+<div class="card card-overlay">
+  {% if media or image %}
+  <div class="card-image ratio ratio-3x2">
+    {% if video_url %}
+      <video class="hero-banner-video" loop autoplay muted playsinline preload="auto" {% if poster_image %} poster="{{ poster_image }}" {% endif %}>
+        <source src="{{ video_url }}" type="video/mp4">
+      </video>
+    {% endif %}
+    {% if image and image.src %}
+      <img src="{{ image.src }}" alt="{{ image.alt }}" class="card-img-top" />
+    {% elseif media %}
+      {{ drupal_entity('media', media, 'card') }}
+    {% endif %}
+  </div>
+  {% endif %}
+  <div class="card-img-overlay d-flex flex-column justify-content-center">
+    {% if category %}
+    <h6 class="title-category">{{ category }}</h6>
+    {% endif %}
+    {% if title %}
+    <h5 class="card-title text-white">
+      {{ title }}
+    </h5>
+    {% endif %}
+    {% if text %}
+    <div class="card-text">{{ text|raw }}</div>
+    {% endif %}
+    {% if date %}
+    <h6 class="date">{{ date }}</h6>
+    {% endif %}
+    {% if link %}
+      {{link|raw}}
+    {% endif %}
+
+
+    {% if card_extra %}
+      {{ card_extra }}
+    {% endif %}
+  </div>
+</div>

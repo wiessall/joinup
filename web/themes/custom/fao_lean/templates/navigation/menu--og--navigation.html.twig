@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Collection navigation (Overview + custom pages) as underlined tabs that
+ * continue the group header band. Overflow scrolls; no "See more" dropdown.
+ */
+#}
+{% if items %}
+  <nav class="fao-group-nav bg-light px-3 mb-4" aria-label="{{ 'Collection navigation'|t }}">
+    <ul{{ attributes.addClass('nav', 'nav-underline', 'flex-nowrap', 'overflow-x-auto') }}>
+      {% for item in items %}
+        <li class="nav-item">
+          {{ link(item.title, item.url, {'class': ['nav-link', 'text-nowrap']|merge(item.in_active_trail ? ['active'] : [])}) }}
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
+{% endif %}

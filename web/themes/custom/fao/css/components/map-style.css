@@ -1,0 +1,69 @@
+.gm-style-iw .card.card-events {
+  margin: 0 !important;
+}
+
+.gm-style-iw .gm-style-iw-d {
+  overflow: auto !important;
+}
+
+.gm-style-iw .gm-style-iw-d > div {
+  padding: 0 !important;
+}
+
+.gm-style-iw .card.card-events .card-image {
+  display: none !important;
+}
+
+.gm-style-iw {
+  width: 400px !important;
+  padding: 0 !important;
+}
+
+.gm-style-iw .gm-style-iw-chr .gm-style-iw-ch {
+  display: none !important;
+}
+
+.gm-style-iw .gm-style-iw-chr {
+  position: relative !important;
+  padding: 0 !important;
+}
+
+.gm-style-iw .gm-style-iw-chr button {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  z-index: 9999;
+}
+
+.view-atio-kb-sti-faceted-search .chosen-container-multi .chosen-choices {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  border: 0;
+  z-index: 100;
+}
+
+.view-atio-kb-sti-faceted-search .form-floating >.form-control, .view-atio-kb-sti-faceted-search .form-floating>.form-select {
+  height: auto !important;
+}
+
+.view-atio-kb-sti-faceted-search .form-floating, .view-atio-kb-sti-faceted-search .form-floating {
+  opacity: 1;
+  color: #212529;
+}
+
+.view-atio-kb-sti-faceted-search .form-floating > .form-select ~ label {
+  opacity: .85;
+  transform: scale(.85) translateY(-.5rem) translateX(.15rem);
+}
+
+.view-atio-kb-sti-faceted-search .chosen-container-multi .chosen-choices li.search-field input[type=text]::placeholder {
+  opacity: .65;
+  transform: scale(.85) translateX(-1.9rem);
+  text-align: left;
+  white-space: normal;
+  word-break: break-word;
+  padding-top: 3rem;
+  padding-left: 1rem;
+  box-sizing: border-box;
+}

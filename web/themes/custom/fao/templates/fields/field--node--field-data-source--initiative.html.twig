@@ -1,0 +1,12 @@
+{%- for item in items -%}
+  {% if loop.first %}
+    {% set target = item.content['#url'].options.attributes.target ? ' target="_blank"' %}
+
+    {% if item.content['#title']|length > 25 %}
+      {% set label = item.content['#title']|slice(0, 25) ~ '...' %}
+    {% else %}
+      {% set label = item.content['#title'] %}
+    {% endif %}
+    <span class="text-muted fw-bold">{{ 'Source'|trans }}: </span><a class="link-icon" href="{{ item.content['#url'] }}"{{ target }}>{{ label }}<i class="bi bi-chevron-right"></i></a>
+  {% endif %}
+{%- endfor -%}

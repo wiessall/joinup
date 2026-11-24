@@ -1,0 +1,25 @@
+type: theme
+base theme: false
+core: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+
+name: "FAO Design System"
+description: "A Drupal version of the FAO Design System 2.6.6"
+package: "FAO"
+
+regions:
+  breadcrumb: "Breadcrumb"
+  header: "header"
+  primary_nav: "Primary Navigation"
+  full_width: "Full Width Content"
+  messages: "Messages"
+  content: "Content"
+  sidebar: "Sidebar"
+  footer: "Footer"
+
+libraries:
+  - "fao/theme"
+
+libraries-extend:
+  user/drupal.user:
+    - fao/form.password-confirm

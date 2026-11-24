@@ -1,0 +1,12 @@
+{%
+  set classes = [
+  'mt-3'
+]
+%}
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  {{ content }}
+
+</div>

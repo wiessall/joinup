@@ -1,0 +1,48 @@
+{#
+/**
+ * @file
+ * Card component template.
+ *
+ * Available variables:
+ * - variant: Card variant (default, no-border, compact, background, background-dark)
+ * - image: Object with src and alt properties
+ * - category: Category text
+ * - title: Card title text
+ * - title_url: URL for the title link
+ * - text: Card body text
+ * - link: Object with url, text, title, and target properties
+ * - card_extra: Optional slot for additional content
+ */
+#}
+{% set variant_class = variant ? 'card--' ~ variant : 'card--default' %}
+{% set border_class = variant == 'no-border' ? 'border-0' : '' %}
+{% set background_class = variant == 'background' ? 'bg-gray-light' : '' %}
+
+<div class="card {{ variant_class }} {{ border_class }} {{ background_class }} {{ background_dark_class }}">
+  {% if image %}
+  <div class="card-image ratio ratio-3x2">
+    <img src="{{ image.src }}" alt="{{ image.alt }}">
+  </div>
+  {% endif %}
+  <div class="card-body">
+    {% if category %}
+    <h6 class="title-category">{{ category }}</h6>
+    {% endif %}
+    {% if title %}
+    <h5 class="card-title">
+      <a href="{{ title_url }}" class="title-link">{{ title }}</a>
+    </h5>
+    {% endif %}
+    {% if text %}
+    <p class="card-text">{{ text }}</p>
+    {% endif %}
+    {% if link %}
+    <a href="{{ link.url }}" title="{{ link.title }}" class="link-icon" target="{{ link.target }}">
+      {{ link.text }}<i class="bi bi-chevron-right"></i>
+    </a>
+    {% endif %}
+    {% if card_extra %}
+      {{ card_extra }}
+    {% endif %}
+  </div>
+</div>

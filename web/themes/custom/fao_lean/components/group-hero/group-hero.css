@@ -1,0 +1,91 @@
+/* Tunable per site without touching the component. */
+.fao-group-hero {
+  --fao-group-hero-media-height: clamp(96px, 18vw, 220px);
+  --fao-group-hero-overlay: rgba(0, 0, 0, .45);
+  overflow: hidden;
+  background: var(--bs-light);
+  border-radius: var(--bs-border-radius);
+}
+
+/* Shared parts */
+.fao-group-hero__media img {
+  display: block;
+  width: 100%;
+  height: var(--fao-group-hero-media-height);
+  object-fit: cover;
+}
+.fao-group-hero__body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem;
+  padding: 1rem;
+}
+.fao-group-hero__text { flex: 1 1 16rem; }
+.fao-group-hero__eyebrow {
+  margin: 0 0 .25rem;
+  font-size: .75rem;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--bs-secondary-color);
+}
+.fao-group-hero__title { margin: 0; font-size: 1.75rem; }
+.fao-group-hero__title a { text-decoration: none; }
+.fao-group-hero__meta { font-size: .875rem; color: var(--bs-secondary-color); }
+.fao-group-hero__meta a { color: inherit; }
+.fao-group-hero__tags { margin-top: .5rem; }
+.fao-group-hero__tags a {
+  display: inline-block;
+  margin: 0 .25rem .25rem 0;
+  padding: .125rem .625rem;
+  border-radius: 999px;
+  background: var(--bs-primary-bg-subtle);
+  color: var(--bs-primary-text-emphasis);
+  font-size: .8125rem;
+  text-decoration: none;
+}
+.fao-group-hero__actions { margin-inline-start: auto; }
+.fao-group-hero__logo {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  padding: .5rem;
+  background: #fff; /* white on purpose: transparent logos stay readable on any image */
+  border: 1px solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius-lg);
+}
+.fao-group-hero__logo img { width: auto; height: auto; max-width: 100%; max-height: 100%; }
+
+/* Variant: band (image strip on top, logo overlapping it) */
+.fao-group-hero--band.fao-group-hero--has-media .fao-group-hero__logo {
+  position: relative;
+  margin-top: -3rem;
+}
+
+/* Variant: cover (image behind the text, with overlay) */
+.fao-group-hero--cover.fao-group-hero--has-media { display: grid; }
+.fao-group-hero--cover.fao-group-hero--has-media > * { grid-area: 1 / 1; }
+.fao-group-hero--cover .fao-group-hero__media { position: relative; }
+.fao-group-hero--cover .fao-group-hero__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--fao-group-hero-overlay);
+}
+.fao-group-hero--cover .fao-group-hero__media img { height: 100%; min-height: 240px; }
+.fao-group-hero--cover.fao-group-hero--has-media .fao-group-hero__body {
+  position: relative;
+  align-self: end;
+  color: #fff;
+}
+.fao-group-hero--cover.fao-group-hero--has-media :is(.fao-group-hero__title a, .fao-group-hero__eyebrow, .fao-group-hero__meta) {
+  color: inherit;
+}
+
+@media (max-width: 767.98px) {
+  .fao-group-hero__logo { width: 64px; height: 64px; }
+  .fao-group-hero--band.fao-group-hero--has-media .fao-group-hero__logo { margin-top: -2rem; }
+}

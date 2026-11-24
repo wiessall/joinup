@@ -1,0 +1,17 @@
+{#
+/**
+ * @file
+ * Collection owner as an FAO DS metadata line (.category-list).
+ *
+ * Also included by field--node--contact--collection.html.twig. Expects the
+ * "Label" formatter; with "Rendered entity" the whole entity lands in the line.
+ */
+#}
+<div{{ attributes.addClass('category-list') }}>
+  {% if not label_hidden %}
+    <span class="category-list-title">{{ label }}:</span>
+  {% endif %}
+  {% for item in items %}
+    {{- item.content -}}{{ loop.last ? '' : ', ' }}
+  {% endfor %}
+</div>

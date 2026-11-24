@@ -1,0 +1,53 @@
+"$schema": "https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json"
+name: Hero Banner
+status: stable
+description: "A hero banner component with background image, category, title, link and description text"
+props:
+  type: object
+  properties:
+    variant:
+      type: string
+      title: Variant
+      description: "Hero banner variant (default or interactive)"
+      enum:
+        - default
+        - interactive
+      default: "default"
+    background_image:
+      type: string
+      title: Background Image
+      description: "URL for the background image"
+      default: "/images/placeholders/banner-1.jpg"
+    video_url:
+      type: string
+      title: Video URL
+      description: "URL for the background video (if present, will be used instead of image)"
+    poster_image:
+      type: string
+      title: Poster Image
+      description: "Poster image for the video background"
+    category:
+      type: string
+      title: Category
+      default: "Category"
+    title:
+      type: string
+      title: Banner Title
+      default: "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+    link:
+      type: string
+      title: Link URL
+      default: "#!"
+    link_text:
+      type: string
+      title: Link Text
+      description: "Text for the link button (used in interactive variant)"
+      default: "Find out more"
+    text:
+      type: string
+      title: Description Text
+      default: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus eum delectus ratione alias, at qui autem deleniti aut odio dolorum corrupti maxime dolorem, iure porro possimus deserunt praesentium eaque velit."
+    full_width:
+      type: boolean
+      title: Full Width
+      default: false

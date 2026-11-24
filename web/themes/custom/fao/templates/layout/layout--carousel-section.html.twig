@@ -1,0 +1,32 @@
+{#
+  Available variables:
+  - content.carousel_slides: The rendered blocks (slides)
+  - attributes: HTML attributes for the section
+#}
+{# <section{{attributes.addClass('swiper','my-custom-swiper')}}>
+  <div class="swiper-wrapper">
+    {% for key, item in content.carousel_slides %}
+      {% if key|first != '#' %}
+        {#
+                                       By checking if the key starts with #, we skip 'attributes'
+                                       and other metadata. To specifically target the "Add Block"
+                                       UI and contextual links, we wrap only the renderable content.
+                                    #}
+        <div class="swiper-slide">
+          {{ item }}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  {# Move the Add Block button outside the wrapper if needed #}
+  {% if content.slides['layout_builder_add_block'] %}
+    <div class="admin-only-actions">
+      {{ content.slides['layout_builder_add_block'] }}
+    </div>
+  {% endif %}
+
+  <div class="swiper-pagination"></div>
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+</section> #}

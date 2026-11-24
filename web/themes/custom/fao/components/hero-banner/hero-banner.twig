@@ -1,0 +1,49 @@
+{% set hero_classes = [] %}
+{% set hero_classes = hero_classes|merge([full_width == 1 ? 'hero-banner hero-interactive' : 'hero-banner']) %}
+{% if video_url %}
+  {% set hero_classes = hero_classes|merge(['has-video']) %}
+{% endif %}
+<div>
+  {% if full_width == 1 %}
+    <div class="row row-fao-homepage-hero py-0">
+    {% endif %}
+    <div class="{{ hero_classes|join(' ') }}" {% if not video_url %} style="background-image: url('{{ background_image }}');" {% endif %}>
+      {% if video_url %}
+        <video class="hero-banner-video" loop autoplay muted playsinline preload="auto" fetchpriority="high" {% if poster_image %} poster="{{ poster_image }}" {% endif %}>
+
+          <source src="{{ video_url }}" type="video/mp4">
+        </video>
+      {% endif %}
+
+      {% if title or text %}
+        <div class="hero-caption">
+          <div class="hero-text">
+            {% if category %}
+              <h6 class="title-category">{{ category }}</h6>
+            {% endif %}
+            {% if full_width == 1 %}
+              <h1>{{ title }}</h1>
+            {% else %}
+              <h5 class="title-link">
+                <a href="{{ link }}">{{ title }}</a>
+              </h5>
+            {% endif %}
+
+            {% if text %}
+              <p>{{ text }}</p>
+            {% endif %}
+
+            {% if full_width == 1 and link and link_text %}
+              <a href="{{ link }}" class="link-icon" style="cursor: pointer;">
+                <i class="bi bi-eye-fill bi-bgico pulse"></i>
+                <span>{{ link_text }}</span>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+    {% if full_width == 1 %}
+    </div>
+  {% endif %}
+</div>

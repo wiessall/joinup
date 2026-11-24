@@ -1,0 +1,13 @@
+{#
+/**
+ * @file
+ * Collection quick links as an FAO DS simple list.
+ */
+#}
+{% if items %}
+  <ul{{ attributes.addClass('simple-list', 'list-unstyled', 'small', 'mb-0') }}>
+    {% for item in items %}
+      <li><i class="bi bi-chevron-right" aria-hidden="true"></i> {{ link(item.title, item.url) }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}

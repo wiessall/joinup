@@ -1,0 +1,160 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: (optional) The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: (optional) Themed creation date field.
+ * - author_name: (optional) Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ *
+ * @see template_preprocess_node()
+ *
+ * @ingroup themeable
+ */
+#}
+{{ attach_library('fao/expandable') }}
+
+{% set classes = [
+  'container',
+  'detail-article',
+  'detail-page'
+] %}
+
+{% macro commaSeparatedNodeLinksRow(label, items) %}
+  <tr>
+    <th scope="row" class="bg-gray-light">{{ label }}</th>
+    <td>
+      {% for item in items %}
+      <a href="{{ path('entity.node.canonical', {'node':  item.entity.id}) }}">
+        {{ item.entity.title.value }}</a>{% if not loop.last %},{% endif %}
+      {% endfor %}
+    </td>
+  </tr>
+{% endmacro %}
+
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  {% if node.field_organization_type %}
+    <h6 class="title-category">
+      {{ node.field_organization_type.entity.name.value }}
+    </h6>
+  {% endif %}
+  <h1{{ title_attributes.addClass('detail-title mt-2 mb-3') }}>
+    {{ node.title.value }}
+    {% if node.field_acronym.value %}
+      ({{ node.field_acronym.value }})
+    {% endif %}
+  </h1>
+
+  {% if node.field_country|length %}
+  <h6 class="date-location d-list-date-location mb-3">
+      <span class="location"> <i class="bi bi-geo-alt-fill"></i> <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term':  node.field_country.entity.id }) }}" class="text-muted">{{ node.field_country.entity.name.value }}</a> </span>
+  </h6>
+  {% endif %}
+
+</div>
+<div class="container">
+  <div class="row mb-3">
+    <div class="col-12">
+
+      {% if node.body %}
+        {{ content.body }}
+      {% endif %}
+
+      <div class="project-list-item">
+        <table class="table table-bordered">
+          <tbody>
+
+          {% if node.region %}
+            {{ _self.commaSeparatedNodeLinksRow(node.field_owner.fielddefinition.label, node.field_owner) }}
+          {% endif %}
+
+          {% if node.field_link.uri %}
+
+            <tr>
+              <th scope="row" class="bg-gray-light">{{ node.field_link.fielddefinition.label }}</th>
+              <td>
+                <a href="{{ node.field_link.uri }}" target="_blank">
+                  {% if node.field_link.title %}
+                    {{ node.field_link.title }}
+                  {% else %}
+                    {{ node.field_link.uri }}
+                  {% endif %}
+                </a>
+              </td>
+            </tr>
+
+          {% endif %}
+
+
+          {% if node.field_data_source|length %}
+            {{ _self.commaSeparatedNodeLinksRow(node.field_data_source.fielddefinition.label, node.field_data_source) }}
+          {% endif %}
+
+          {% if node.field_related_innovations|length %}
+            {{ _self.commaSeparatedNodeLinksRow(node.field_related_innovations.fielddefinition.label, node.field_related_innovations) }}
+          {% endif %}
+
+
+
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+

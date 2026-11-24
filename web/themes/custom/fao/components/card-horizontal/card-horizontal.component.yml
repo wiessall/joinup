@@ -1,0 +1,29 @@
+'$schema': 'https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json'
+name: Card Horizontal
+status: stable
+description: 'A horizontal card component with image on the side and content with background'
+props:
+  type: object
+  properties:
+    media:
+      type: string
+      title: Image
+    category:
+      type: string
+      title: Category
+      default: 'Category'
+    title:
+      type: string
+      title: Card title
+      default: 'Card title'
+    text:
+      type: string
+      title: Card text
+      default: 'Some quick example text to build on the card title and make up the bulk of the card''s content.'
+    link:
+      type: string
+      title: Link
+slots:
+  card_extra:
+    title: Card Extra Content
+    description: 'Optional slot for additional content in the card body'

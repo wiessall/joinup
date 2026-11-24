@@ -1,0 +1,62 @@
+<?php
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Url;
+use Symfony\Component\Routing\Loader;
+
+
+// Include all files from the includes directory.
+$includes_path = dirname(__FILE__) . '/includes/*.inc';
+foreach (glob($includes_path) as $filename) {
+  require_once dirname(__FILE__) . '/includes/' . basename($filename);
+}
+
+
+/**
+ * Implements hook_theme().
+ *
+ * Define theme function for UI Content RAW view mode
+
+function fao_theme() {
+  return [
+    'block__block_content__ui_content__raw' => [
+      'template'  => 'block/block--block-content--ui-content--raw',
+    ],
+  ];
+}
+ */
+
+function _fao_get_config($name) {
+
+  $file = __DIR__ . '/lib/fao-'.$name.'.json';
+  $response = file_get_contents($file);
+
+  return Json::decode($response);
+}
+
+
+function fao_preprocess_page(&$variables) {
+
+  $language = \Drupal::languageManager()->getCurrentLanguage();
+  $variables['current_language'] = $language->getId();
+
+  $variables['fao_header'] = _fao_get_config('header');
+  $variables['fao_footer'] = _fao_get_config('footer');
+
+  $variables['site_name'] = \Drupal::config('system.site')->get('name');
+
+  //load language switcher
+  $block_manager = \Drupal::service('plugin.manager.block');
+  $plugin_block = $block_manager->createInstance('language_block:language_interface', []);
+
+  $variables['current_language_name'] = $language->getName();
+  $variables['language_switcher'] = $plugin_block->build();
+
+  if(\Drupal::service('path.matcher')->isFrontPage()) {
+    $variables['#attached']['library'][] = 'fao/home';
+  }
+
+  //$variables['search_url'] = Url::fromRoute('page_manager.page_view_search_site_search_site-panels_variant-0')->toString();
+  $variables['page_title']  = \Drupal::routeMatch()->getRouteObject()->getDefault('_title');
+
+}
+

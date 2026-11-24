@@ -1,0 +1,28 @@
+'$schema': 'https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json'
+name: Card Overlay
+status: stable
+description: 'A card component with image and overlay content'
+props:
+  type: object
+  properties:
+    media:
+      type: string
+      title: Image
+    category:
+      type: string
+      title: Category
+      default: 'Category'
+    title:
+      type: string
+      title: Card title
+      default: 'Card title'
+    text:
+      type: string
+      title: Card text
+    link:
+      type: string
+      title: Internal Link
+slots:
+  card_extra:
+    title: Card Extra Content
+    description: 'Optional slot for additional content in the overlay'

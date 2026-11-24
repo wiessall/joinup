@@ -1,0 +1,68 @@
+carousel_section:
+  label: Carousel Section
+  template: templates/layout/layout--carousel-section
+  library: your_theme/carousel
+  regions:
+    carousel_slides:
+      label: "Carousel Slides"
+homepage:
+  label: Homepage
+  category: Fao
+  template: templates/panels/homepage
+  regions:
+    top:
+      label: Top
+    middle:
+      label: Middle
+    top_left:
+      label: Top Left
+    top_right:
+      label: Top Right
+    bottom:
+      label: Bottom
+    last:
+      label: Last
+    sidebar:
+      label: Sidebar
+node_page:
+  label: Node Page
+  category: Fao
+  template: templates/panels/node-page
+  regions:
+    header:
+      label: Header
+    content:
+      label: Content
+    sidebar:
+      label: Sidebar
+node_full:
+  label: Node Full
+  category: Fao
+  template: templates/panels/node-full
+  regions:
+    content:
+      label: Content
+publication_page:
+  label: Publication Page
+  category: Fao
+  template: templates/panels/publication-page
+  regions:
+    header:
+      label: Header
+    content_left:
+      label: Content Left
+    content_center:
+      label: Content Center
+normal-page:
+  label: Normal Page
+  category: Fao
+  template: templates/panels/normal-page
+  regions:
+    header:
+      label: Header
+    content:
+      label: Main Content
+    sidebar:
+      label: Sidebar
+    bottom:
+      label: Bottom

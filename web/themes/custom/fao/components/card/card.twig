@@ -1,0 +1,58 @@
+{#
+/**
+ * @file
+ * Card component template.
+ *
+ * Available variables:
+ * - variant: Card variant (default, no-border, overlay, background, background-dark)
+ * - image: Object with src and alt properties
+ * - category: Category text
+ * - title: Card title text
+ * - text: Card body text
+ * - link: Link rendered
+ * - card_extra: Optional slot for additional content
+ */
+#}
+
+
+{% set border_class = variant == 'no-border' ? 'border-0' : '' %}
+{% set background_class = variant == 'background' ? 'bg-gray-light' : '' %}
+
+
+<div class="card {{ variant_class }} {{ border_class }} {{ background_class }}">
+  {% if media or image %}
+    <div class="card-image ratio ratio-3x2">
+      {% if video_url %}
+        <video class="" loop autoplay muted playsinline preload="auto" {% if poster_image %} poster="{{ poster_image }}" {% endif %}>
+          <source src="{{ video_url }}" type="video/mp4">
+        </video>
+      {% endif %}
+      {% if image and image.src %}
+        <img src="{{ image.src }}" alt="{{ image.alt }}" class="card-img-top"/>
+      {% elseif media %}
+        {{ drupal_entity('media', media, 'card') }}
+      {% endif %}
+    </div>
+  {% endif %}
+  <div class="card-body">
+    {% if category %}
+      <h6 class="title-category">{{ category }}</h6>
+    {% endif %}
+    {% if title %}
+      <h5 class="card-title">
+        {% if link_url %}
+          <a href="{{ link_url }}">{{ title }}</a>
+        {% else %}
+          {{ title }}
+        {% endif %}
+      </h5>
+    {% endif %}
+    {% if text %}
+      <div class="card-text">{{ text|raw }}</div>
+    {% endif %}
+    {% if link %}
+      {{link|raw}}
+    {% endif %}
+    {% block card_extra %}{% endblock %}
+  </div>
+</div>

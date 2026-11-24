@@ -1,0 +1,42 @@
+"$schema": "https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json"
+name: Card
+status: stable
+description: "A card component with image, category, title, text and link"
+props:
+  type: object
+  properties:
+    variant:
+      type: string
+      title: Card variant
+      description: "Visual style variant for the card"
+      enum:
+        - default
+        - no-border
+        - background
+      default: default
+    media:
+      type: string
+      title: Card Media
+    category:
+      type: string
+      title: Category
+      default: "Category"
+    title:
+      type: string
+      title: Card title
+      default: "Card title"
+    text:
+      type: string
+      title: Card text
+      default: "Some quick example text to build on the card title and make up the bulk of the card's content."
+    link:
+      type: string
+      title: Internal Link
+      description: "Internal link for the card title in html"
+    link_url:
+      type: string
+      title: Link URL
+slots:
+  card_extra:
+    title: Card Extra Content
+    description: "Optional slot for additional content in the card body"

@@ -1,0 +1,38 @@
+
+
+{% set media_markup = media|render %}
+{% set logo_markup = logo|render %}
+{% set meta_markup = meta|render %}
+{% set tags_markup = tags|render %}
+{% set actions_markup = actions|render %}
+{% set has_media = media_markup|trim is not empty %}
+{% set tag = title_tag|default('h1') %}
+{% set classes = [
+    'fao-group-hero',
+    'fao-group-hero--' ~ variant|default('band'),
+    has_media ? 'fao-group-hero--has-media',
+] %}
+
+<div{{ attributes.addClass(classes) }}>
+  {% if has_media %}
+    <div class="fao-group-hero__media">{{ media_markup }}</div>
+  {% endif %}
+  <div class="fao-group-hero__body">
+    {% if logo_markup|trim %}
+        <div class="fao-group-hero__logo">{{ logo_markup }}</div>
+    {% endif %}
+    <{{ tag }} class="fao-group-hero__title">
+        {%- if url %}<a href=""{{ url }}>{{ title }}</a>{% else %}{{ title }}{% endif -%}
+    </{{ tag }}>
+    {% if meta_markup|trim %}
+      <div class="fao-group-hero__meta">{{ meta_markup }}</div>
+    {% endif %}
+    {% if tags_markup|trim %}
+        <div class="fao-group-hero__tags">{{ tags_markup }}</div>
+    {% endif %}
+  </div>
+  {% if actions_markup|trim %}
+    <div class="fao-group-hero__actions">{{ actions_markup }}</div>
+  {% endif %}
+  </div>
+</div>

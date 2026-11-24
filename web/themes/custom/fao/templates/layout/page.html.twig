@@ -1,0 +1,141 @@
+<header class="fao-header subsite-header">
+  <div class="container">
+    <div class="row">
+      <div class="header-wrapper col-12">
+        <div class="fao-header-left">
+          <a href="{{ fao_header.logo[current_language].url }}">
+            <img src="{{ fao_header.logo[current_language].image }}" alt="{{ fao_header.logo[current_language].alt }}" title="{{ fao_header.logo[current_language].title }}" class="header-fao-logo">
+          </a>
+        </div>
+        <div class="fao-header-right">
+          <div class="dropdown discover-dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownDiscoverMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ fao_header.menu[current_language].button }}</button>
+            <div class="dropdown-menu" aria-labelledby="dropdownDiscoverMenu">
+              {% for item in  fao_header.menu[current_language].items %}
+                <a class="dropdown-item" href="{{ item.url }}">{{ item.label }}</a>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="dropdown language-switch">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownLanguageMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ current_language_name }}</button>
+            {{ language_switcher }}
+          </div>
+
+          <div class="header-icons">
+            <a href="#!" type="button" data-bs-toggle="modal" data-bs-target="#shareModal" aria-label="Share">
+              <i class="bi bi-share-fill"></i>
+            </a>
+            <a data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" aria-label="Search">
+              <i class="bi bi-search"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <form class="collapse" id="collapseExample" action="{{ search_url }}">
+          <div class="input-group my-3">
+            <input type="text" class="form-control" placeholder="Search" aria-label="Search" name="search">
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-primary btn-icon">
+                <i class="bi bi-search"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="subheader">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        {{ page.breadcrumb }}
+        <h1 class="page-title">{{ site_name }}</h1>
+        {{ page.primary_nav }}
+      </div>
+    </div>
+  </div>
+</div>
+<main>
+  <div class="container-full-width">
+    {{ page.full_width }}
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        {{ page.messages }}
+      </div>
+      {{ page.content }}
+      {#<div class="col-md-9"></div>
+                                                                  <div class="col-md-3"></div>#}
+    </div>
+  </div>
+</main>
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div class="footer-logo col-md-7">
+        <a href="{{ fao_footer.logo[current_language].url }}">
+          <img src="{{ fao_footer.logo[current_language].image }}" alt="{{ fao_footer.logo[current_language].alt }}" title="{{ fao_footer.logo[current_language].title }}">
+        </a>
+      </div>
+      <div class="footer-social col-md-5">
+        <h6 class="title-category">{{ 'Follow us on' | trans }}</h6>
+        <ul class="list-inline social-icons">
+          {% for item in  fao_footer.social_icons[current_language].items %}
+            <li class="list-inline-item">
+              <a href="{{ item.url }}" title="{{ item.title }}" target="_blank">
+                <img src="{{ item.image }}" alt="icon-{{ item.alt }}" title="social-icon-{{ item.title }}">
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="footer-links col-md-7">
+        <div class="footer-links-top">
+          <div class="">
+            <a href="{{ fao_footer.top_menu_left[current_language].url }}">{{ fao_footer.top_menu_left[current_language].label }}</a>
+          </div>
+          <div class="btn-group dropup">
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ fao_footer.top_menu_right[current_language].button }}</button>
+            <div class="dropdown-menu">
+              {% for item in  fao_footer.top_menu_right[current_language].items %}
+                <a class="dropdown-item" href="{{ item.url }}">{{ item.label }}</a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="footer-links-bottom">
+          <ul class="list-inline">
+            {% for item in  fao_footer.bottom_menu[current_language].items %}
+              <li class="list-inline-item">
+                <a href="{{ item.url }}" target="_top">{{ item.label }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      <div class="footer-download col-md-5">
+        {%  if fao_footer.app.items|length %}
+          <h6 class="title-category">{{ 'Download our app' | trans }}</h6>
+          <ul class="list-inline">
+            {% for item in  fao_footer.app.items %}
+              <li class="list-inline-item">
+                <a href="{{ item.url }}" target="_blank">
+                  <img src="{{ item.image }}" alt="{{ item.alt }}" title="{{ item.title }}">
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        <a class="copyright" href="/contact-us/terms/en/">© FAO&nbsp;{{ 'now' | date('Y') }}</a>
+      </div>
+    </div>
+  </div>
+</footer>

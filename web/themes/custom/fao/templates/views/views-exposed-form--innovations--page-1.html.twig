@@ -1,0 +1,81 @@
+{#
+/**
+ * @file
+ * Default theme implementation of a views exposed form.
+ *
+ * Available variables:
+ * - form: A render element representing the form.
+ *
+ * @see template_preprocess_views_exposed_form()
+ *
+ * @ingroup themeable
+ */
+#}
+{% if q is not empty %}
+  {#
+  This ensures that, if clean URLs are off, the 'q' is added first,
+  as a hidden form element, so that it shows up first in the POST URL.
+  #}
+  {{ q }}
+{% endif %}
+<div class="row g-3">
+  <div class="col-12">
+    {{ form.combine }}
+  </div>
+</div>
+<div class="row g-3">
+  <div class="col-md-6 col-sm-12">
+    {{ form.field_innovation_type_target_id }}
+  </div>
+  <div class="col-md-2 col-sm-4">
+    {{ form.field_if_grassroots_value }}
+  </div>
+  <div class="col-md-4 col-sm-8">
+    {{ form.field_countries_adoption_target_id }}
+  </div>
+</div>
+<div class="row g-3">
+  <div class="col-md-6 col-sm-12">
+    {{ form.field_region_target_id }}
+  </div>
+  <div class="col-md-6 col-sm-12">
+    {{ form.field_use_cases_target_id }}
+  </div>
+</div>
+<div class="row g-3">
+  <div class="col-md-6 col-sm-12">
+    {{ form.field_readiness_level_target_id }}
+  </div>
+  <div class="col-md-6 col-sm-12">
+    {{ form.field_adoption_level_target_id }}
+  </div>
+</div>
+{{ form.secondary.label }}
+<div class="row g-3">
+  <div class="col-12">
+    <div class="card mb-3 bg-gray-light">
+      <div class="card-body">
+        <h3 class="card-title h6 fw-bold text-uppercase">{{ 'Advanced filters'|trans }}</h3>
+        <div class="row">
+          <div class="col-md-4 col-sm-12">
+            {{ form.field_owner_target_id_verf }}
+          </div>
+          <div class="col-md-4 col-sm-12">
+            {{ form.field_thematic_area_target_id }}
+          </div>
+          <div class="col-md-4 col-sm-12">
+            {{ form.field_investment_type_target_id }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row g-3">
+  <div class="col-lg-10 col-md-12 col-sm-12 align-content-center">
+    {{ form.sort_by }}
+  </div>
+  <div class="col-lg-2 col-md-12 col-sm-12 align-content-center align-items-center d-flex justify-content-end">
+    {{ form.actions }}
+  </div>
+</div>

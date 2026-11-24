@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * Default theme implementation for an 'input' #type form element.
+ *
+ * Available variables:
+ * - attributes: A list of HTML attributes for the input element.
+ * - children: Optional additional rendered elements.
+ *
+ * @see\Drupal\Core\Form\FormPreprocess::preprocessInput()
+ *
+ * @ingroup themeable
+ */
+#}
+
+<div class="input-group">
+  <input{{attributes.addClass('form-control-lg')}}/>
+  <div class="input-group-append">
+    <button type="submit" class="btn btn-primary btn-icon py-2">
+      <i class="bi bi-search py-1 ms-0"></i>
+    </button>
+  </div>
+  {{ children }}
+</div>
+<div class="pb-4"></div>

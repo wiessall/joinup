@@ -1,0 +1,130 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a block.
+ *
+ * Available variables:
+ * - plugin_id: The ID of the block implementation.
+ * - label: The configured label of the block if visible.
+ * - configuration: A list of the block's configuration values.
+ *   - label: The configured label for the block.
+ *   - label_display: The display settings for the label.
+ *   - provider: The module or other provider that provided this block plugin.
+ *   - Block plugin specific settings will also be stored here.
+ * - in_preview: Whether the plugin is being rendered in preview mode.
+ * - content: The content of this block.
+ * - attributes: array of HTML attributes populated by modules, intended to
+ *   be added to the main container tag of this template.
+ *   - id: A valid HTML ID and guaranteed unique.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ *
+ * @see template_preprocess_block()
+ *
+ * @ingroup themeable
+ */
+#}
+
+<div {{attributes}}>
+
+  {{ title_prefix }}
+  {{ title }}
+  {{ title_suffix }}
+
+  {% set card_variant = content['#block_content'].field_card_style.value %}
+  {% set ref_items = content['#block_content'].field_referenced_content %}
+  {% set items_count = ref_items|length %}
+  {% set carousel_active = content['#block_content'].field_carousel_active.value %}
+
+  {% if items_count > 1 %}
+    <div class="swiper carousel-swiper" data-mobile-carousel="{{ carousel_active ? 'enabled' : 'disabled' }}">
+      <div class="swiper-wrapper">
+      {% endif %}
+
+      {% for ref_item in ref_items %}
+        {% set ref_content = ref_item.entity %}
+        {% if current_language is defined and current_language and ref_content.hasTranslation(current_language) %}
+          {% set ref_content = ref_content.getTranslation(current_language) %}
+        {% endif %}
+
+        {% set media_entity = ref_content.field_video.entity ? ref_content.field_video.entity : ref_content.field_image.entity %}
+
+        {% if media_entity and media_entity.bundle() == 'video' %}
+          {% set video_url = file_url(media_entity.field_media_video_file.entity.uri.value) %}
+          {% set poster_image = '' %}
+          {% set media_content = ref_content.field_video %}
+        {% else %}
+          {% set video_url = '' %}
+          {% set poster_image = '' %}
+          {% set media_content = ref_content.field_image %}
+        {% endif %}
+
+        {% set link_html = '' %}
+        {% set link_url = '' %}
+        {% if ref_content.field_internal_link %}
+
+          {# A Card can contain multiple links. We need to get the first link for the title #}
+          {% set first_link = ref_content.field_internal_link.0 %}
+
+          {% for link_item in ref_content.field_internal_link %}
+            {% set link_url = link_item.url %}
+            {% set link_title = link_item.title ?: 'Read more'|t %}
+            {% set link_html %}
+            {{ link_html }}
+            <a href="{{ link_url }}" class="link-icon d-block {{ card_variant == 'overlay' ? 'text-white' : '' }}">{{ link_title }}<i class="bi bi-chevron-right"></i>
+            </a>
+            {% endset %}
+          {% endfor %}
+        {% endif %}
+
+        {% if items_count > 1 %}
+          <div class="swiper-slide">
+          {% endif %}
+          {% if card_variant == 'horizontal' %}
+            {% embed 'fao:card-horizontal' with {
+          title: ref_content.label,
+          text: ref_content.field_shorter_description.value,
+          media: media_content.entity.id,
+          video_url: video_url,
+          poster_image: poster_image,
+          link: link_html,
+        } %}{% endembed %}
+          {% elseif card_variant == 'overlay' %}
+            {% embed 'fao:card-overlay' with {
+          title: ref_content.label,
+          text: ref_content.field_shorter_description.value,
+          category: ref_content.field_category.value,
+          media: media_content.entity.id,
+          video_url: video_url,
+          poster_image: poster_image,
+          link: link_html,
+        } %}{% endembed %}
+          {% else %}
+            {% embed 'fao:card' with {
+          variant: card_variant,
+          title: ref_content.label,
+          text: ref_content.field_shorter_description.value,
+          media: media_content.entity.id,
+          video_url: video_url,
+          poster_image: poster_image,
+          link: link_html,
+          link_url: first_link.url,
+        } %}{% endembed %}
+          {% endif %}
+          {% if items_count > 1 %}
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      {% if items_count > 1 %}
+      </div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+  {% endif %}
+
+</div>

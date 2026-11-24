@@ -1,0 +1,42 @@
+{#
+  Counter Component
+  Displays an animated counter with number and description and optional background
+
+  Parameters:
+  - number: The counter value (required)
+  - description: The counter description (required)
+  - background: The background color class or image (default: bg-primary)
+
+#}
+
+
+{#
+/**
+ * @file
+ * Card Overlay component template.
+ *
+ * Available variables:
+ * - image: Object with src and alt properties
+ * - category: Category text
+ * - title: Card title text
+ * - title_url: URL for the title link
+ * - date: Date string
+ * - card_extra: Optional slot for additional content
+ */
+#}
+<div class="card {{background}}">
+  <div class="card-body">
+    {% if number %}
+      <p class="card-title fs-2" data-counter{% if suffix %} data-suffix="{{ suffix }}"{% endif %}>
+        {{ number }}{% if suffix %}{{ suffix }}{% endif %}
+      </p>
+    {% endif %}
+    {% if description %}
+      <div class="card-text">{{ description|raw }}</div>
+    {% endif %}
+
+    {% if card_extra %}
+      {{ card_extra }}
+    {% endif %}
+  </div>
+</div>

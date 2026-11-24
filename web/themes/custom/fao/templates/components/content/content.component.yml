@@ -1,0 +1,16 @@
+'$schema': 'https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json'
+name: Content
+status: stable
+description: 'A simple content card component with optional background'
+props:
+  type: object
+  properties:
+    background_class:
+      type: string
+      title: Background Style
+      description: 'CSS class for background styling'
+      default: ''
+slots:
+  slot_content:
+    title: Content
+    description: 'Main content slot for the card body'

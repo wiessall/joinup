@@ -1,0 +1,282 @@
+{#
+/**
+ * @file
+ * FAO Design System full view for Joinup's `solution` node bundle.
+ *
+ * Structural port of themes/custom/fao/templates/content/node--digital-asset.html.twig
+ * from the STI Portal. Macros are carried over verbatim so that any later fix to
+ * one template can be applied to the other.
+ *
+ * Place at: web/themes/custom/fao/templates/content/node--solution--full.html.twig
+ *
+ * Field mapping (STI digital_asset -> Joinup solution):
+ *   field_digital_asset_type          -> solution_type      (multi taxonomy)
+ *   field_image_banner / field_image  -> logo               (image)
+ *   field_type_of_information_manage  -> field_topic        (multi taxonomy, badges)
+ *   field_owner                       -> owner              (node ref)
+ *   field_data_source                 -> (no equivalent)
+ *   field_link                        -> landing_page       (link)
+ *   body                              -> description        (text_long)
+ *   field_prospective_audience        -> domain             (multi taxonomy)
+ *   field_region / field_country_origin -> classification    (single taxonomy)
+ *   field_use_cases                   -> keywords           (multi taxonomy)
+ *   field_thematic_area               -> field_topic
+ *
+ * Not in the STI original, added here because solution carries them:
+ *   abstract, short_id, release_number, contact, related_solutions, resources
+ *
+ * @see template_preprocess_node()
+ */
+#}
+{{ attach_library('fao/expandable') }}
+
+{% set classes = [
+  'container',
+  'detail-article',
+  'detail-page'
+] %}
+
+{% macro plainRow(label, value) %}
+  <tr>
+    <th scope="row" class="bg-gray-light">{{ label|t }}</th>
+    <td>{{ value }}</td>
+  </tr>
+{% endmacro %}
+
+{% macro collapsibleRow(label, summary, content) %}
+
+  {% set sanitizedLabel = label|capitalize|replace({' ': ''}) %}
+  <tr>
+    <th scope="row" class="bg-gray-light">{{ label|t }}</th>
+    <td>
+
+      <div class="summary">
+        {{ summary|length > 300 ? summary|slice(0, 300)|raw ~ '...' : summary|render }}
+      </div>
+
+      {% if summary|length > 300 %}
+        <div class="accordion mb-3 dynamic-search" id="{{ sanitizedLabel }}">
+          <div id="{{ sanitizedLabel }}Body" class="accordion-collapse collapse" aria-labelledby="{{ sanitizedLabel }}" data-bs-parent="#{{ sanitizedLabel }}Collapse">
+            {{ content }}
+          </div>
+
+          <div id="{{ sanitizedLabel }}Collapse">
+            <button class="btn btn-secondary btn-icon btn-adv-search collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{ sanitizedLabel }}Body" aria-expanded="true" aria-controls="{{ sanitizedLabel }}Body">
+              <span class="align-left">
+                <span class="d-block">
+                  <span class="d-inline-block fs-6 align-left label">{{ 'expand to read more'|t }}</span>
+                  <i class="bi bi-chevron-down"></i>
+                </span>
+              </span>
+            </button>
+          </div>
+
+        </div>
+      {% endif %}
+
+    </td>
+  </tr>
+{% endmacro %}
+
+{% macro commaSeparatedTaxonomyLinksRow(label, items) %}
+  <tr>
+    <th scope="row" class="bg-gray-light">{{ label }}</th>
+    <td>
+      {% for item in items %}
+        <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': item.entity.id}) }}">
+          {{ item.entity.name.value }}</a>
+        {% if not loop.last %},
+        {% endif %}
+      {% endfor %}
+    </td>
+  </tr>
+{% endmacro %}
+
+{% macro commaSeparatedNodeLinksRow(label, items) %}
+  <tr>
+    <th scope="row" class="bg-gray-light">{{ label }}</th>
+    <td>
+      {% for item in items %}
+        <a href="{{ path('entity.node.canonical', {'node': item.entity.id}) }}">
+          {{ item.entity.title.value }}</a>
+        {% if not loop.last %},
+        {% endif %}
+      {% endfor %}
+    </td>
+  </tr>
+{% endmacro %}
+
+{% macro singleTaxonomyLinksRow(label, link, value) %}
+  <tr>
+    <th scope="row" class="bg-gray-light">{{ label }}</th>
+    <td>
+      <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': link }) }}">
+        {{ value }}
+      </a>
+    </td>
+  </tr>
+{% endmacro %}
+
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  {% if node.solution_type|length %}
+    <h6 class="title-category">
+      {{ node.solution_type.entity.name.value }}
+    </h6>
+  {% endif %}
+
+  <h1 {{ title_attributes.addClass("detail-title mt-2 mb-3") }}>
+    {{ node.title.value }}
+  </h1>
+
+  <h6 class="date-location d-list-date-location mb-3">
+    {% if node.classification|length %}
+      <span class="location">
+        <i class="bi bi-diagram-3-fill"></i>
+        <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': node.classification.entity.id }) }}" class="text-muted">{{ node.classification.entity.name.value }}</a>
+      </span>
+    {% endif %}
+    <span class="date">{{ node.getCreatedTime()|date('d/m/Y') }}</span>
+  </h6>
+
+  {% if not node.logo.isEmpty() %}
+    {% set hero_text = content.description|render|striptags %}
+
+    {% include 'fao:hero-banner' with {
+      title: node.title.value,
+      background_image: node.logo|file_url,
+      text: hero_text|length > 300 ? hero_text|slice(0, 300)|raw ~ '...' : hero_text
+    } %}
+  {% endif %}
+
+</div>
+
+
+<div class="container">
+  <div class="row mb-3">
+    <div class="col-12">
+
+      {% if node.field_topic|length %}
+        <div class="classifications detail-article-classifications flex-row flex-wrap align-items-center">
+          <div class="tags-list">
+            <span class="class-list__title text-uppercase">{{ node.field_topic.fielddefinition.label }}:</span>
+            {% for item in node.field_topic %}
+              {% if loop.index < 5 %}
+                <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': item.entity.id }) }}" class="badge text-bg-secondary bg-secondary">{{ item.entity.name.value }}</a>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="project-list-item">
+        <table class="table table-bordered">
+          <tbody>
+
+            {% if node.owner|length %}
+              {{ _self.commaSeparatedNodeLinksRow(node.owner.fielddefinition.label, node.owner) }}
+            {% endif %}
+
+            {% if node.landing_page.uri %}
+              <tr>
+                <th scope="row" class="bg-gray-light">{{ node.landing_page.fielddefinition.label }}</th>
+                <td>
+                  <a href="{{ node.landing_page.uri }}" target="_blank">
+                    {% if node.landing_page.title %}
+                      {{ node.landing_page.title }}
+                    {% else %}
+                      {{ node.landing_page.uri }}
+                    {% endif %}
+                  </a>
+                </td>
+              </tr>
+            {% endif %}
+
+            {% if node.abstract.value %}
+              {{ _self.plainRow(node.abstract.fielddefinition.label, node.abstract.value) }}
+            {% endif %}
+
+            {% if node.description.value %}
+              {{ _self.collapsibleRow('Full description', content.description|render|striptags, content.description) }}
+            {% endif %}
+
+            {% if node.domain|length %}
+              {{ _self.commaSeparatedTaxonomyLinksRow(node.domain.fielddefinition.label, node.domain) }}
+            {% endif %}
+
+            {% if node.classification|length %}
+              {{ _self.singleTaxonomyLinksRow(node.classification.fielddefinition.label, node.classification.entity.id, node.classification.entity.name.value) }}
+            {% endif %}
+
+            {% if node.release_number.value %}
+              {{ _self.plainRow(node.release_number.fielddefinition.label, node.release_number.value) }}
+            {% endif %}
+
+            {% if node.contact|length %}
+              {{ _self.commaSeparatedNodeLinksRow(node.contact.fielddefinition.label, node.contact) }}
+            {% endif %}
+
+          </tbody>
+        </table>
+
+        {% if node.keywords|length or node.field_topic|length %}
+          <h3>{{ 'Classification'|t }}</h3>
+
+          <table class="table table-bordered">
+            <tbody>
+
+              {% if node.keywords|length %}
+                {{ _self.commaSeparatedTaxonomyLinksRow(node.keywords.fielddefinition.label, node.keywords) }}
+              {% endif %}
+
+              {% if node.field_topic|length %}
+                {{ _self.commaSeparatedTaxonomyLinksRow(node.field_topic.fielddefinition.label, node.field_topic) }}
+              {% endif %}
+
+              {% if node.solution_type|length %}
+                {{ _self.commaSeparatedTaxonomyLinksRow(node.solution_type.fielddefinition.label, node.solution_type) }}
+              {% endif %}
+
+            </tbody>
+          </table>
+        {% endif %}
+
+        {% if node.related_solutions|length %}
+          <h3>{{ 'Related solutions'|t }}</h3>
+
+          <table class="table table-bordered">
+            <tbody>
+              {{ _self.commaSeparatedNodeLinksRow(node.related_solutions.fielddefinition.label, node.related_solutions) }}
+            </tbody>
+          </table>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{# Paragraph-based fields rendered through the view display rather than by hand,
+   so that field formatter config stays authoritative. #}
+{% if content.resources|render|trim is not empty %}
+  <div class="container">
+    <div class="row mb-3">
+      <div class="col-12">
+        <h3>{{ 'Resources'|t }}</h3>
+        {{ content.resources }}
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% if content.field_claims|render|trim is not empty %}
+  <div class="container">
+    <div class="row mb-3">
+      <div class="col-12">
+        {{ content.field_claims }}
+      </div>
+    </div>
+  </div>
+{% endif %}

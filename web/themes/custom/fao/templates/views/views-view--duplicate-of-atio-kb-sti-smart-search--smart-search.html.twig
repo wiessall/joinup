@@ -1,0 +1,193 @@
+{#
+/**
+* @file
+* Theme override for a main view template.
+*
+* Available variables:
+* - attributes: Remaining HTML attributes for the element.
+* - css_name: A css-safe version of the view name.
+* - css_class: The user-specified classes names, if any.
+* - header: The optional header.
+* - footer: The optional footer.
+* - rows: The results of the view query, if any.
+* - empty: The content to display if there are no rows.
+* - pager: The optional pager next/prev links to display.
+* - exposed: Exposed widget form/info to display.
+* - feed_icons: Optional feed icons to display.
+* - more: An optional link to the next page of results.
+* - title: Title of the view, only used when displaying in the admin preview.
+* - title_prefix: Additional output populated by modules, intended to be
+*   displayed in front of the view title.
+* - title_suffix: Additional output populated by modules, intended to be
+*   displayed after the view title.
+* - attachment_before: An optional attachment view to be displayed before the
+*   view content.
+* - attachment_after: An optional attachment view to be displayed after the
+*   view content.
+* - dom_id: Unique id for every view being printed to give unique class for
+*   Javascript.
+*
+* @see template_preprocess_views_view()
+*/
+#}
+{%
+set classes = [
+'view',
+'view-' ~ id|clean_class,
+'view-id-' ~ id,
+'view-display-id-' ~ display_id,
+dom_id ? 'js-view-dom-id-' ~ dom_id
+]
+%}
+
+{% set smart_search_facets_block = drupal_entity('block', 'fao_exposedformatio_kb_sti_smart_searchsmart_search_2', check_access=false) %}
+{% set smart_search_free_text_block = drupal_entity('block', 'fao_exposedformduplicate_of_atio_kb_sti_smart_searchsmart_search', check_access=false) %}
+
+
+<div{{attributes.addClass(classes)}}>
+  {{ title_prefix }}
+  <h2>{{ view.title }}</h2>
+  {{ title_suffix }}
+
+  {% if header %}
+    <header>
+      {{ header }}
+    </header>
+  {% endif %}
+
+  {{ exposed }}
+
+  {{ attachment_before }}
+
+
+  <div class="row">
+    <div class="col-12 my-3">
+      {{ smart_search_free_text_block }}
+    </div>
+    <div class="col-sm-12 col-lg-12">
+      <div class="tabbed-content tabbed-content-search attachment attachment-after">
+        <ul class="nav nav-tabs" id="tabs-1" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active fw-bold " id="tab-all-tab" data-bs-toggle="tab" data-bs-target="#tab-all" type="button" role="tab" aria-controls="tab-all" aria-selected="true">
+              {{ 'Innovations'|t }}
+              {{ '(' ~ (view.total_rows) ~ ')' }}
+            </button>
+          </li>
+
+          {% if attachment_after %}
+            {% for key, attachment in attachment_after %}
+              {% set attachment_count = drupal_view_result(attachment['#name'], attachment['#display_id'])|length %}
+
+              {% if(attachment_count > 0  ) %}
+
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link fst-italic" id="tab-{{ key }}-tab" data-bs-toggle="tab" data-bs-target="#tab-{{ key }}" type="button" role="tab" aria-controls="tab-{{ key }}" aria-selected="false">
+                    {{ attachment['#view'].getTitle() }}
+                    {{ '(' ~ attachment_count ~ ')' }}
+                  </button>
+                </li>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        </ul>
+        <div class="tab-content my-3" id="tab-content-1">
+          <div class="tab-pane fade active show" id="tab-all" role="tabpanel" aria-labelledby="tab-all-tab">
+            <div class="row">
+              <div
+                class="col-sm-12 col-lg-8 order-2">
+                {# Mobile filter button #}
+                <div class="d-lg-none mb-3 sticky-top py-3 bg-white">
+                  <button class="btn btn-secondary w-100" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas" aria-controls="filterOffcanvas">
+                    <i class="bi bi-funnel me-2"></i>
+                    {{ 'Filter by'|t }}
+                  </button>
+                </div>
+
+                {% if rows -%}
+                  {{ rows }}
+                {% elseif empty -%}
+                  {{ empty }}
+                {% endif %}
+                {{ pager }}
+              </div>
+              <div
+                class="col-sm-12 col-lg-4">
+                {# Desktop filters - hidden on mobile #}
+                <div class="d-none d-lg-block sticky-top pr-5" style="max-height: calc(100vh - 2rem); overflow-y: auto;" id="facets-desktop">
+                  {{ smart_search_facets_block }}
+                </div>
+
+                {# Mobile offcanvas filters #}
+                <div class="offcanvas offcanvas-end d-lg-none" tabindex="-1" id="filterOffcanvas" aria-labelledby="filterOffcanvasLabel">
+                  <div class="offcanvas-header">
+                    <button type="button" class="btn btn-primary btn-icon btn-round" data-bs-dismiss="offcanvas" aria-label="Close">
+                      <i class="bi bi-x-lg"></i>
+                    </button>
+                  </div>
+                  <div class="offcanvas-body pe-5" id="facets-mobile"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {% if attachment_after %}
+            {% for key, attachment in attachment_after %}
+              {% set attachment_count = drupal_view_result(attachment['#name'], attachment['#display_id'])|length %}
+
+              {% if(attachment_count > 0) %}
+                <div class="tab-pane fade" id="tab-{{ key }}" role="tabpanel" aria-labelledby="tab-{{ key }}-tab">
+                  {{drupal_view(attachment['#name'], attachment['#display_id'])}}
+                </div>
+              {% endif %}
+            {% endfor %}
+
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  {{ more }}
+
+
+  {{ feed_icons }}
+</div>
+
+<script>
+  (function () {
+    'use strict';
+
+    // Move facets to mobile offcanvas to avoid duplicate rendering
+    function initFacetsResponsive() {
+      const desktopFacets = document.getElementById('facets-desktop');
+      const mobileFacets = document.getElementById('facets-mobile');
+
+      if (! desktopFacets || ! mobileFacets) 
+        return;
+      
+
+
+      function moveFacets() {
+        const isMobile = window.innerWidth < 992;
+        const facetsContent = desktopFacets.querySelector('.block') || desktopFacets.firstElementChild;
+
+        if (isMobile && facetsContent && desktopFacets.contains(facetsContent)) {
+          mobileFacets.appendChild(facetsContent);
+        } else if (! isMobile && facetsContent && mobileFacets.contains(facetsContent)) {
+          desktopFacets.appendChild(facetsContent);
+        }
+      }
+
+      moveFacets();
+      window.addEventListener('resize', moveFacets);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initFacetsResponsive);
+    } else {
+      initFacetsResponsive();
+    }
+  })();
+</script>

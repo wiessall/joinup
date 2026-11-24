@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 use Drupal\Core\Render\Element;
 use Drupal\Core\Template\Attribute;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_preprocess_HOOK() for html.html.twig.
@@ -67,6 +68,11 @@ function fao_lean_preprocess_page(array &$variables): void {
   ];
   $variables['site_name'] = \Drupal::config('system.site')->get('name');
 
+  // On a collection's own page the group header carries the title.
+  if (_fao_lean_title_in_group_header(\Drupal::routeMatch()->getParameter('node'))) {
+    unset($variables['page']['content']['fao_lean_pagetitle']);
+  }
+
   // Tell the render cache what this output depends on.
   $variables['#cache']['contexts'][] = 'languages:language_interface';
   $variables['#cache']['tags'][] = 'config:system.site';
@@ -80,6 +86,11 @@ function fao_lean_preprocess_page(array &$variables): void {
  * view mode stays the single place where you choose image and text.
  */
 function fao_lean_preprocess_node(array &$variables): void {
+  if ($variables['view_mode'] === 'group_header') {
+    $variables['title_in_header'] = _fao_lean_title_in_group_header(\Drupal::routeMatch()->getParameter('node'));
+    $variables['#cache']['contexts'][] = 'route';
+    return;
+  }
   if (!in_array($variables['view_mode'], ['view_mode_tile', 'card'], TRUE)) {
     return;
   }
@@ -93,6 +104,21 @@ function fao_lean_preprocess_node(array &$variables): void {
     'media' => _fao_lean_first_rendered($content, ['logo', 'field_image', 'field_logo', 'field_media']),
     'text' => _fao_lean_first_rendered($content, ['abstract', 'description', 'field_description', 'body']),
   ];
+}
+
+/**
+ * Whether the group header shows the page title (h1) for this route's node.
+ *
+ * TRUE on the canonical page of a collection or solution without a landing
+ * page, mirroring ventuno_preprocess_page(). getSetting() comes from
+ * Joinup's group bundle classes; without it we keep the normal page title.
+ */
+function _fao_lean_title_in_group_header(mixed $node): bool {
+  return \Drupal::routeMatch()->getRouteName() === 'entity.node.canonical'
+    && $node instanceof NodeInterface
+    && in_array($node->bundle(), ['collection', 'solution'], TRUE)
+    && method_exists($node, 'getSetting')
+    && $node->getSetting('landing_page')->isEmpty();
 }
 
 /**

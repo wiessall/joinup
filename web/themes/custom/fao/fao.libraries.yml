@@ -1,0 +1,48 @@
+theme:
+  css:
+    theme:
+      bootstrap/5.0.2/css/bootstrap.min.css: { preprocess: false }
+      css/fao-theme.min-optimized.css: { preprocess: false }
+      css/fao-fonts.css: { preprocess: false }
+      # css/international-year.css: { preprocess: false }
+      # css/stories.min.css: { preprocess: false }
+      # css/wfd.min.css: { preprocess: false }
+      css/swiper-bundle.min.css: { preprocess: false }
+      css/style.css: { preprocess: false }
+      css/ajax-overlay.css: { preprocess: false }
+      # Below: for the mooment, we want the tree widget in the select to be enabled
+      css/faceted-search-dropdown.css: { preprocess: false }
+  js:
+    bootstrap/5.0.2/js/bootstrap.bundle.min.js: { attributes: { defer: true } }
+    js/fao.js: { attributes: { defer: true } }
+    # Below: for the mooment, we want the tree widget in the select to be enabled
+    js/faceted-search-dropdown.js: { attributes: { defer: true } }
+    js/swiper-bundle.min.js: { attributes: { defer: true } }
+    js/throbber.js: { attributes: { defer: true } }
+  dependencies:
+    - core/drupal
+    - core/jquery
+    # - core/jquery.once
+    - sti_leaflet/custom_cluster_icons
+
+expandable:
+  js:
+    js/expandable.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+
+maps:
+  css:
+    component:
+      css/components/map-style.css: {}
+
+form.password-confirm:
+  css:
+    component:
+      css/components/form--password-confirm.css: {}
+  js:
+    js/user.theme.js: {}
+  dependencies:
+    - core/drupal.object.assign
+    - core/drupal

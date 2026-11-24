@@ -1,0 +1,24 @@
+{% set fullname = user.field_first_name.value ~ ' ' ~  user.field_last_name.value %}
+{% set classes = [
+  'mb-3'
+] %}
+{% set url = path('entity.user.canonical', {'user': user.id}) %}
+
+<article{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  <h5 class="card-title">
+    <i class="fs-4 d-inline-flex bi bi-person-circle pe-1 align-middle"></i>
+    <a href="{{ url }}" class="title-link">{{ fullname }}</a>
+  </h5>
+  <ul class="list-unstyled">
+    {% if content.field_organization|render|striptags|trim %}
+      <li class="mb-1"><strong>{{ 'Organization'|trans }}</strong>: {{ content.field_organization|render|striptags|trim }}</li>
+    {% endif %}
+    {% if content.field_user_country_ref|render|striptags|trim %}
+      <li class="mb-1"><strong>{{ 'Country'|trans }}</strong>: {{ content.field_user_country_ref }}</li>
+    {% endif %}
+  </ul>
+
+</article>

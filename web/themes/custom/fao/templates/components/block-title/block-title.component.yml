@@ -1,0 +1,26 @@
+'$schema': 'https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json'
+name: Block Title
+status: stable
+description: 'A block title component with multiple style variants'
+props:
+  type: object
+  properties:
+    variant:
+      type: string
+      title: Title variant
+      description: 'Visual style variant for the block title'
+      enum:
+        - default
+        - highlight
+        - subtitle
+        - subtitle-small
+      default: default
+    title:
+      type: string
+      title: Title text
+      description: 'The title text to display'
+      default: ''
+    title_attributes:
+      type: object
+      title: Title attributes
+      description: 'HTML attributes for the title element'

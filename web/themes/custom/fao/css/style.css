@@ -1,0 +1,545 @@
+.list-inline.comma-separated li, .list-inline.dash-separated li,
+.list-unstyled.comma-separated li,
+.list-unstyled.dash-separated li {
+  display: inline-block;
+}
+.list-inline.comma-separated li:only-child:after, .list-inline.comma-separated li:last-child:after, .list-inline.dash-separated li:only-child:after, .list-inline.dash-separated li:last-child:after,
+.list-unstyled.comma-separated li:only-child:after,
+.list-unstyled.comma-separated li:last-child:after,
+.list-unstyled.dash-separated li:only-child:after,
+.list-unstyled.dash-separated li:last-child:after {
+  display: none;
+}
+.list-inline.dash-separated li:after,
+.list-unstyled.dash-separated li:after {
+  content: "|";
+}
+.list-inline.comma-separated li:after,
+.list-unstyled.comma-separated li:after {
+  content: ",";
+}
+
+.accordion-item .accordion-header strong {
+  flex-basis: 400px;
+}
+.accordion-item .accordion-header ul {
+  flex-basis: 100%;
+}
+.leaflet-container a.badge,
+.leaflet-container .badge {
+  color: #fff !important;
+}
+.view-filters {
+  max-height: 85vh;
+  overflow-y: auto;
+  position: sticky;
+  top: 0;
+  padding-right: 10px;
+  overflow-x: hidden;
+}
+
+.layout__region {
+  padding: 0 .8rem;
+  min-width: 0;
+}
+
+.form-floating>.form-select~label {
+  opacity: 1;
+  transform: scale(.85) translateY(-.5rem) translateX(.15rem);
+}
+
+.chosen-container{
+  height: auto !important;
+}
+
+/* Fix Swiper width in flex containers - Issue with Layout Builder */
+.video-swiper-container {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.video-swiper,
+.carousel-swiper {
+  width: 100% !important;
+  max-width: 100%;
+}
+
+.video-swiper .swiper-slide,
+.carousel-swiper .swiper-slide {
+  height: auto;
+  box-sizing: border-box;
+  width: auto;
+  min-width: 250px;
+  max-width: 400px;
+}
+
+
+/* Custom swiper navigation buttons with chevron icons and white circular background */
+.swiper-button-next,
+.swiper-button-prev,
+.video-swiper .swiper-button-next,
+.video-swiper .swiper-button-prev,
+.carousel-swiper .swiper-button-next,
+.carousel-swiper .swiper-button-prev {
+  background-color: #fff !important;
+  border-radius: 50% !important;
+  width: 40px !important;
+  height: 40px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after,
+.video-swiper .swiper-button-next::after,
+.video-swiper .swiper-button-prev::after,
+.carousel-swiper .swiper-button-next::after,
+.carousel-swiper .swiper-button-prev::after {
+  display: none !important;
+}
+
+/* Chevron right icon for next button */
+.swiper-button-next,
+.video-swiper .swiper-button-next,
+.carousel-swiper .swiper-button-next {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23116bac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>') !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 16px 16px !important;
+}
+
+/* Chevron left icon for prev button */
+.swiper-button-prev,
+.video-swiper .swiper-button-prev,
+.carousel-swiper .swiper-button-prev {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23116bac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>') !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 16px 16px !important;
+}
+
+/* Disabled state */
+.swiper-button-disabled {
+  opacity: 0.35 !important;
+}
+
+/* Hide Swiper navigation and fix layout on mobile when carousel is disabled */
+@media (max-width: 767px) {
+  [data-mobile-carousel="disabled"] .swiper-button-next,
+  [data-mobile-carousel="disabled"] .swiper-button-prev {
+    display: none !important;
+  }
+
+  [data-mobile-carousel="disabled"] .swiper-wrapper {
+    display: block !important;
+    transform: none !important;
+  }
+
+  [data-mobile-carousel="disabled"] .swiper-slide {
+    width: 100% !important;
+    margin-bottom: 1rem;
+  }
+}
+
+
+/** Overrides DS Bug on file: fao-theme.min.css v.3.6.6
+.classifications .sdg-list a {
+    line-height: 1px;
+    text-decoration: none
+}
+**/
+
+.classifications .sdg-list a {
+  line-height: 18px !important;
+}
+
+/** TODO: Move to scss__variables.scss in future releases **/
+
+/** ATIO Color Palette **/
+
+:root {
+  --atio-blue: #025275;
+  --atio-light-blue: #66D4E7;
+  --atio-green: #82D47A;
+  --atio-orange: #FD8C30;
+  --atio-yellow: #FFE163;
+}
+
+/** ATIO Utility Classes **/
+
+/* Text Color Utilities */
+.text-atio-blue {
+  color: var(--atio-blue) !important;
+}
+
+.text-atio-light-blue {
+  color: var(--atio-light-blue) !important;
+}
+
+.text-atio-green {
+  color: var(--atio-green) !important;
+}
+
+.text-atio-orange {
+  color: var(--atio-orange) !important;
+}
+
+.text-atio-yellow {
+  color: var(--atio-yellow) !important;
+}
+
+/* Background Color Utilities */
+.bg-atio-blue {
+  background-color: var(--atio-blue) !important;
+}
+
+.bg-atio-blue body,
+.bg-atio-blue h1,
+.bg-atio-blue h2,
+.bg-atio-blue h3,
+.bg-atio-blue h4,
+.bg-atio-blue h5,
+.bg-atio-blue h6,
+.bg-atio-blue p {
+  color: var(--atio-light-blue) !important;
+}
+
+.bg-atio-light-blue {
+  background-color: var(--atio-light-blue) !important;
+}
+
+.bg-atio-light-blue body,
+.bg-atio-light-blue h1,
+.bg-atio-light-blue h2,
+.bg-atio-light-blue h3,
+.bg-atio-light-blue h4,
+.bg-atio-light-blue h5,
+.bg-atio-light-blue h6,
+.bg-atio-light-blue p {
+  color: var(--atio-blue) !important;
+}
+
+.bg-atio-green {
+  background-color: var(--atio-green) !important;
+}
+
+.bg-atio-green body,
+.bg-atio-green h1,
+.bg-atio-green h2,
+.bg-atio-green h3,
+.bg-atio-green h4,
+.bg-atio-green h5,
+.bg-atio-green h6,
+.bg-atio-green p {
+  color: var(--atio-blue) !important;
+}
+
+.bg-atio-orange {
+  background-color: var(--atio-orange) !important;
+}
+
+.bg-atio-orange body,
+.bg-atio-orange h1,
+.bg-atio-orange h2,
+.bg-atio-orange h3,
+.bg-atio-orange h4,
+.bg-atio-orange h5,
+.bg-atio-orange h6,
+.bg-atio-orange p {
+  color: var(--atio-blue) !important;
+}
+
+.bg-atio-yellow {
+  background-color: var(--atio-yellow) !important;
+}
+
+.bg-atio-yellow body,
+.bg-atio-yellow h1,
+.bg-atio-yellow h2,
+.bg-atio-yellow h3,
+.bg-atio-yellow h4,
+.bg-atio-yellow h5,
+.bg-atio-yellow h6,
+.bg-atio-yellow p {
+  color: var(--atio-blue) !important;
+}
+
+/* Z-index Utilities */
+.z-index-999 {
+  z-index: 999 !important;
+}
+
+
+
+.ajax-progress.ajax-progress-fullscreen {
+  display: none !important;
+}
+
+.card {
+  height: calc(100% - 1rem);
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.card-body {
+  flex: 1;
+}
+
+.views-view-responsive-grid__item {
+  display: flex;
+}
+
+.views-view-responsive-grid__item-inner {
+  display: block;
+}
+
+.news-teaser {
+  container-type: inline-size;
+}
+
+.news-teaser__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.news-teaser__image img {
+  width: 100%;
+  height: auto;
+}
+
+@container (min-width: 480px) {
+  .news-teaser__inner {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .news-teaser__image {
+    flex: 0 0 20%;
+    max-width: 20%;
+  }
+  .news-teaser__content {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   Hierarchical Taxonomy Menu — Gateway (Progressive Disclosure)
+   ═══════════════════════════════════════════════════════ */
+
+/* --- Gateway card description: CSS line-clamp (no Twig filter needed) --- */
+.block-taxonomymenu__gateway .card-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* --- Gateway → Full component transition --- */
+.block-taxonomymenu__gateway {
+  transition: opacity 0.25s ease;
+}
+.block-taxonomymenu__full {
+  transition: opacity 0.25s ease;
+}
+.block-taxonomymenu__full:not(.d-none) {
+  animation: taxonomymenu-fade-in 0.3s ease forwards;
+}
+@keyframes taxonomymenu-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Cluster description line-clamp --- */
+.block-taxonomymenu__description--cluster {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.block-taxonomymenu__description--cluster.is-expanded {
+  -webkit-line-clamp: unset;
+}
+
+/* Hierarchical taxonomy menu — truncated descriptions */
+.block-taxonomymenu__description--activity.is-truncated {
+  max-height: 3.6em;
+  overflow: hidden;
+  position: relative;
+}
+.block-taxonomymenu__description--activity.is-truncated::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 1.2em;
+  background: linear-gradient(transparent, #fff);
+}
+.block-taxonomymenu__description--activity.is-expanded {
+  max-height: none;
+  overflow: visible;
+}
+.block-taxonomymenu__description--activity.is-expanded::after {
+  display: none;
+}
+/* Hierarchical taxonomy menu — hidden list items */
+.block-taxonomymenu__list .list-group-item.is-hidden {
+  display: none;
+}
+
+.block-taxonomymenu__accordion .accordion-item.is-hidden {
+  display: none;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Hierarchical Taxonomy Menu — UI Refinements
+   ═══════════════════════════════════════════════════════ */
+
+/* --- Level 1: Nav-Tabs (DS tabbed-content) ---------------------------- */
+.block-taxonomymenu__nav.nav-tabs .nav-link {
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+/* --- Level 2: Sidebar Clusters ---------------------------------------- */
+
+.block-taxonomymenu__levels .block-taxonomymenu__nav {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.75rem;
+  overflow-x: auto;
+  scrollbar-width: thin; /* Firefox */
+}
+
+.block-taxonomymenu__levels {
+  position: relative;
+}
+
+.block-taxonomymenu__levels::after,
+.block-taxonomymenu__levels::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2.5rem;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  opacity: 0;
+}
+
+.block-taxonomymenu__levels.has-overflow::after {
+  right: 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, var(--bs-body-bg, #fff) 80%);
+  opacity: 1;
+}
+
+.block-taxonomymenu__levels.is-scrolled::before {
+  left: 0;
+  background: linear-gradient(270deg, rgba(255, 255, 255, 0) 0%, var(--bs-body-bg, #fff) 80%);
+  opacity: 1;
+}
+
+.block-taxonomymenu__levels.is-end::after {
+  opacity: 0;
+}
+
+.block-taxonomymenu__levels .block-taxonomymenu__nav .nav-item {
+  flex: 0 0 auto;
+}
+
+.block-taxonomymenu__levels .block-taxonomymenu__nav .nav-link {
+  min-width: 220px;
+  white-space: normal;
+}
+
+.block-taxonomymenu__levels .block-taxonomymenu__nav::-webkit-scrollbar {
+  height: 20px;
+}
+
+.block-taxonomymenu__clusters-wrapper.sticky-top {
+  top: var(--taxonomymenu-sidebar-top, 5rem);
+  max-height: calc(100vh - var(--taxonomymenu-sidebar-top, 5rem) - 1rem);
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.block-taxonomymenu__nav--clusters .btn {
+  border-left: 4px solid transparent;
+  transition: background-color 0.25s ease,
+              color 0.25s ease,
+              border-color 0.25s ease;
+}
+
+.block-taxonomymenu__nav--clusters .btn:hover:not(.active) {
+  border-left-color: rgba(var(--bs-primary-rgb, 13, 110, 253), 0.3);
+  background-color: rgba(var(--bs-primary-rgb, 13, 110, 253), 0.08);
+  text-decoration: none;
+}
+
+.block-taxonomymenu__nav--clusters .btn:hover:not(.active) .badge {
+  background-color: rgba(var(--bs-primary-rgb, 13, 110, 253), 0.15) !important;
+  color: var(--bs-primary) !important;
+}
+
+.block-taxonomymenu__nav--clusters .btn.active {
+  background-color: var(--bs-primary);
+  color: #fff;
+  border-color: var(--bs-primary);
+  text-decoration: none;
+}
+
+.block-taxonomymenu__nav--clusters .btn.active .badge {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+}
+
+/* --- Level 3: Activities Accordion ------------------------------------ */
+.block-taxonomymenu__accordion .accordion-button:not(.collapsed) {
+  color: var(--bs-primary, #0d6efd);
+}
+
+.block-taxonomymenu__accordion .accordion-button::after {
+  opacity: 0.4;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.block-taxonomymenu__accordion .accordion-button:hover::after {
+  opacity: 0.7;
+}
+
+
+/* --- Responsiveness: below md — sidebar → horizontal scroll ---------- */
+@media (max-width: 767.98px) {
+  .block-taxonomymenu__clusters-wrapper {
+    position: static !important;
+  }
+
+  .block-taxonomymenu__nav--clusters {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .block-taxonomymenu__nav--clusters .btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    border-left-width: 0 !important;
+    border-bottom: 3px solid transparent;
+    border-radius: 0;
+  }
+
+  .block-taxonomymenu__nav--clusters .btn:hover:not(.active) {
+    background-color: rgba(var(--bs-primary-rgb, 13, 110, 253), 0.08);
+  }
+
+  .block-taxonomymenu__nav--clusters .btn.active {
+    border-bottom-color: var(--bs-primary, #0d6efd);
+    border-radius: 0;
+  }
+}

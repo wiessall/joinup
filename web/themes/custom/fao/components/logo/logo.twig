@@ -1,0 +1,22 @@
+{#
+/**
+ * @file
+ * Logo component template.
+ *
+ * Available variables:
+ * - media: Rendered media element (e.g. logo image).
+ * - link_url: Optional URL string wrapping the logo.
+ */
+#}
+
+{% if media %}
+  <div class="logo">
+    {% if link_url %}
+      <a href="{{ link_url }}">
+        {{ media }}
+      </a>
+    {% else %}
+      {{ media }}
+    {% endif %}
+  </div>
+{% endif %}
