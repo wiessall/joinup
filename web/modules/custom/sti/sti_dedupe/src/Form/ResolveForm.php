@@ -99,10 +99,12 @@ final class ResolveForm extends FormBase {
       return $form;
     }
     if ((int) $solution->get(ContentModel::AUDIENCE)->target_id !== (int) $collection->id()) {
-      $form['error'] = ['#markup' => $this->t('%title is not a record of %collection.', [
-        '%title' => $solution->label(),
-        '%collection' => $collection->label(),
-      ])];
+      $form['error'] = [
+        '#markup' => $this->t('%title is not a record of %collection.', [
+          '%title' => $solution->label(),
+          '%collection' => $collection->label(),
+        ]),
+      ];
       return $form;
     }
 

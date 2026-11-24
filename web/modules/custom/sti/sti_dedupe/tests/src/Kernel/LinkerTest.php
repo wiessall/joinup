@@ -30,7 +30,7 @@ use PHPUnit\Framework\Attributes\Group;
 final class LinkerTest extends StiDedupeKernelTestBase {
 
   /**
-   * "Same" is one claim on the subject; the object is untouched.
+   * Deciding "same" writes one claim on the subject; the object is untouched.
    */
   public function testSameWritesOneClaimOnTheSubjectOnly(): void {
     $one = $this->collection('One');
@@ -117,7 +117,7 @@ final class LinkerTest extends StiDedupeKernelTestBase {
   }
 
   /**
-   * "Same" pairs on different innovations are listed for curators.
+   * Pairs decided "same" on different innovations are listed for curators.
    */
   public function testPairsToReconcile(): void {
     $one = $this->collection('One');

@@ -32,11 +32,13 @@ final class OgPermissionSubscriber implements EventSubscriberInterface {
     if ($event->getGroupEntityTypeId() !== 'node' || $event->getGroupBundleId() !== 'collection') {
       return;
     }
-    $event->setPermissions([new GroupPermission([
-      'name' => self::PERMISSION,
-      'title' => $this->t('Review possible duplicates of this collection\'s records'),
-      'description' => $this->t('Record that one of this collection\'s records is, or is not, the same innovation as another record. Writes a sameInnovationAs claim on this collection\'s record only.'),
-    ])]);
+    $event->setPermissions([
+      new GroupPermission([
+        'name' => self::PERMISSION,
+        'title' => $this->t("Review possible duplicates of this collection's records"),
+        'description' => $this->t("Record that one of this collection's records is, or is not, the same innovation as another record. Writes a sameInnovationAs claim on this collection's record only."),
+      ]),
+    ]);
   }
 
 }
