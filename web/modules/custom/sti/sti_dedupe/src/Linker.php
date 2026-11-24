@@ -10,32 +10,25 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\NodeInterface;
 use Drupal\sti_dedupe\Exception\InvariantViolationException;
-use Drupal\sti_dedupe\Exception\SurvivorRequiredException;
 
 /**
- * Applies reviewer decisions about pairs of solutions.
+ * Applies duplicate review decisions.
  *
- * Solutions are source records: one collection's account of an innovation.
- * They are never merged or deleted here. "Same" is written in two places:
+ * Two roles, kept apart:
  *
- * - on the solutions: every member of the cluster gets a sameInnovationAs
- *   claim naming every other member (SameAsClaims), always;
- * - on the ATIO innovation, which lists every solution it derives from:
+ * - A collection decides about its own records (decideSame(),
+ *   decideDifferent()). "Same" writes the decision and one sameInnovationAs
+ *   claim on the collection's record. No other record and no ATIO
+ *   innovation is written: atio_derived_from says what an innovation was
+ *   derived from, and that has not changed. The claim is read when the
+ *   innovation is next updated (SameAsClaims::linkedTo()).
+ * - An ATIO curator reconciles innovations when "same" records sit on
+ *   different ones (pairsToReconcile(), mergeInnovations()).
  *
- * - neither side (nor anything already linked to either) is on an
- *   innovation yet: only the decision and the claims are written. When
- *   an innovation later picks up any member of the cluster, the next "same"
- *   decision touching it brings the whole cluster along.
- * - one innovation: every solution in the cluster is added to it.
- * - several innovations: the reviewer picks a survivor; it receives the
- *   others' derived-from entries and every cluster member, and the others
- *   are unpublished and recorded as replaced. Nothing is deleted, so a
- *   curator can reverse it by hand.
- *
- * Every write happens in one transaction and is checked before commit. Note
- * that the transaction covers SQL only: rdf_sync pushes saved entities to
- * the triplestore as they are saved, and a rollback does not retract that.
- * A failed link therefore wants a re-sync of the entities involved.
+ * Writes happen in one transaction and are checked before commit. The
+ * transaction covers SQL only: rdf_sync pushes saved entities to the
+ * triplestore as they are saved, and a rollback does not retract that. A
+ * failed write therefore wants a re-sync of the entities involved.
  */
 final class Linker {
 
@@ -52,106 +45,118 @@ final class Linker {
   ) {}
 
   /**
-   * Computes what "same" would do for a pair, without writing anything.
+   * Records that a collection's record is the same innovation as another.
    *
-   * The cluster includes the pair itself even though "same" has not been
-   * recorded yet, which is what the decision would add.
-   */
-  public function plan(NodeInterface $a, NodeInterface $b): LinkPlan {
-    $this->assertPair($a, $b);
-    $cluster = $this->existingSolutions($this->decisions->cluster((int) $a->id(), (int) $b->id()));
-    return new LinkPlan($cluster, $this->innovations->derivedFrom($cluster));
-  }
-
-  /**
-   * Records that two solutions describe the same innovation, and links them.
-   *
-   * @param \Drupal\node\NodeInterface $a
-   *   One solution.
-   * @param \Drupal\node\NodeInterface $b
-   *   The other solution.
-   * @param int|null $survivorNid
-   *   The innovation that survives when the cluster spans several. Ignored
-   *   when it spans one or none.
-   *
-   * @throws \Drupal\sti_dedupe\Exception\SurvivorRequiredException
-   *   When the cluster spans several innovations and no valid survivor was
-   *   given. Nothing is written.
+   * @throws \InvalidArgumentException
+   *   When the subject is not in the collection, or the pair is invalid.
    * @throws \Drupal\sti_dedupe\Exception\InvariantViolationException
-   *   When the link was written but does not check out. Rolled back.
+   *   When the claim was written but does not check out. Rolled back.
    */
-  public function linkSame(NodeInterface $a, NodeInterface $b, ?int $survivorNid = NULL): LinkResult {
-    $this->assertPair($a, $b);
-
-    // Refused before anything is written, the claims on the solutions
-    // included: a rollback covers SQL but not a non-SQL entity cache.
-    $plan = $this->plan($a, $b);
-    if ($plan->needsSurvivor() && !in_array($survivorNid, $plan->innovations, TRUE)) {
-      throw new SurvivorRequiredException($plan->innovations);
-    }
-
+  public function decideSame(NodeInterface $collection, NodeInterface $subject, NodeInterface $object): void {
+    $this->assertDecidable($collection, $subject, $object);
     $transaction = $this->database->startTransaction();
     try {
-      $this->decisions->record((int) $a->id(), (int) $b->id(), DecisionStore::SAME);
-      $this->candidates->deletePairsWithin($plan->cluster);
-      $this->sameAs->linkCluster($plan->cluster);
-      $this->sameAs->verify($plan->cluster);
-
-      if (!$plan->innovations) {
-        return new LinkResult($plan->cluster, NULL);
-      }
-
-      $survivorId = $plan->needsSurvivor() ? (int) $survivorNid : $plan->innovations[0];
-      $losers = array_values(array_diff($plan->innovations, [$survivorId]));
-
-      $added = $this->linkOnto($survivorId, $plan->cluster, $losers);
-      foreach ($losers as $loserId) {
-        $this->retire($loserId, $survivorId);
-      }
-
-      $this->verify($survivorId, $plan->cluster, $losers);
+      $this->decisions->record((int) $collection->id(), (int) $subject->id(), (int) $object->id(), DecisionStore::SAME);
+      $this->candidates->deletePair((int) $subject->id(), (int) $object->id());
+      $this->sameAs->claim($subject, $object);
     }
     catch (\Throwable $e) {
       $transaction->rollBack();
       // Saved entities may have reached a persistent cache (memcache) that
       // the rollback does not touch.
-      $this->entityTypeManager->getStorage('node')->resetCache(array_merge($plan->cluster, $plan->innovations));
+      $this->entityTypeManager->getStorage('node')->resetCache([$subject->id()]);
       throw $e;
     }
-    return new LinkResult($plan->cluster, $survivorId, $added, $losers, $refreshed);
   }
 
   /**
-   * Records that two solutions are different innovations.
+   * Records that a collection's record is not the same as another.
    *
    * @throws \LogicException
-   *   When the pair was already decided "same": undoing a link touches
-   *   innovations and is a curator's job, not a button's.
+   *   When the collection already decided "same": its claim stands until
+   *   someone removes it deliberately.
    */
-  public function markDifferent(NodeInterface $a, NodeInterface $b): void {
-    $this->assertPair($a, $b);
-    if ($this->decisions->get((int) $a->id(), (int) $b->id()) === DecisionStore::SAME) {
-      throw new \LogicException(sprintf('Solutions %d and %d were already decided to be the same innovation.', $a->id(), $b->id()));
+  public function decideDifferent(NodeInterface $collection, NodeInterface $subject, NodeInterface $object): void {
+    $this->assertDecidable($collection, $subject, $object);
+    $collectionId = (int) $collection->id();
+    if ($this->decisions->get($collectionId, (int) $subject->id(), (int) $object->id()) === DecisionStore::SAME) {
+      throw new \LogicException(sprintf('%s already decided that solutions %d and %d are the same innovation.', $collection->label(), $subject->id(), $object->id()));
     }
-    $this->decisions->record((int) $a->id(), (int) $b->id(), DecisionStore::DIFFERENT);
-    $this->candidates->deletePair((int) $a->id(), (int) $b->id());
+    $this->decisions->record($collectionId, (int) $subject->id(), (int) $object->id(), DecisionStore::DIFFERENT);
+    $this->candidates->deletePair((int) $subject->id(), (int) $object->id());
   }
 
   /**
-   * Adds the cluster and the losers' sources to the survivor.
+   * Lists "same" pairs whose records sit on different ATIO innovations.
    *
-   * Entries taken over from a loser keep the solution revision the loser
-   * pinned. New cluster members are pinned at their current revision.
+   * Computed from the decisions on every call; nothing is stored.
    *
-   * @return int[]
-   *   Solution ids newly added.
+   * @return list<array{solutions: array{0: int, 1: int}, innovations: int[]}>
+   *   Each pair with the live innovations of both sides, ascending.
    */
-  private function linkOnto(int $survivorId, array $cluster, array $losers): array {
+  public function pairsToReconcile(): array {
+    $out = [];
+    foreach ($this->decisions->samePairs() as [$low, $high]) {
+      $lowSide = $this->innovations->derivedFrom([$low]);
+      $highSide = $this->innovations->derivedFrom([$high]);
+      // Nothing to reconcile when a side is on no innovation, or both are on
+      // the same ones.
+      if (!$lowSide || !$highSide || (!array_diff($lowSide, $highSide) && !array_diff($highSide, $lowSide))) {
+        continue;
+      }
+      $all = array_values(array_unique(array_merge($lowSide, $highSide)));
+      sort($all);
+      $out[] = ['solutions' => [$low, $high], 'innovations' => $all];
+    }
+    return $out;
+  }
+
+  /**
+   * Folds innovations into a survivor. ATIO curators only.
+   *
+   * The survivor takes over the losers' derived-from entries, pinned at the
+   * revisions the losers used; nothing else is added. The losers are
+   * unpublished, not deleted, and recorded as replaced, so their URIs answer
+   * 301 to the survivor.
+   *
+   * @param int $survivorId
+   *   The innovation that remains.
+   * @param int[] $loserIds
+   *   The innovations folded into it.
+   *
+   * @throws \Drupal\sti_dedupe\Exception\InvariantViolationException
+   *   When the merge was written but does not check out. Rolled back.
+   */
+  public function mergeInnovations(int $survivorId, array $loserIds): void {
+    $loserIds = array_values(array_diff(array_map('intval', $loserIds), [$survivorId]));
+    if (!$loserIds) {
+      return;
+    }
+    $transaction = $this->database->startTransaction();
+    try {
+      $this->takeOverSources($survivorId, $loserIds);
+      foreach ($loserIds as $loserId) {
+        $this->retire($loserId, $survivorId);
+      }
+      $this->verifyMerge($survivorId, $loserIds);
+    }
+    catch (\Throwable $e) {
+      $transaction->rollBack();
+      $this->entityTypeManager->getStorage('node')->resetCache(array_merge([$survivorId], $loserIds));
+      throw $e;
+    }
+  }
+
+  /**
+   * Adds the losers' derived-from entries the survivor lacks.
+   */
+  private function takeOverSources(int $survivorId, array $loserIds): void {
     $survivor = $this->loadInnovation($survivorId);
     $items = $survivor->get(ContentModel::DERIVED_FROM)->getValue();
     $present = array_map(static fn(array $item): int => (int) $item['target_id'], $items);
+    $before = count($items);
 
-    foreach ($losers as $loserId) {
+    foreach ($loserIds as $loserId) {
       foreach ($this->loadInnovation($loserId)->get(ContentModel::DERIVED_FROM)->getValue() as $item) {
         if (!in_array((int) $item['target_id'], $present, TRUE)) {
           $items[] = ['target_id' => $item['target_id'], 'target_revision_id' => $item['target_revision_id']];
@@ -160,25 +165,13 @@ final class Linker {
       }
     }
 
-    $added = [];
-    $solutions = $this->entityTypeManager->getStorage('node')->loadMultiple($cluster);
-    foreach ($cluster as $nid) {
-      if (in_array($nid, $present, TRUE) || !isset($solutions[$nid])) {
-        continue;
-      }
-      $items[] = ['target_id' => $nid, 'target_revision_id' => $solutions[$nid]->getRevisionId()];
-      $present[] = $nid;
-      $added[] = $nid;
-    }
-
-    if (count($items) !== $survivor->get(ContentModel::DERIVED_FROM)->count()) {
+    if (count($items) !== $before) {
       $survivor->set(ContentModel::DERIVED_FROM, $items);
       $survivor->setNewRevision(TRUE);
       $survivor->setRevisionUserId((int) $this->currentUser->id());
-      $survivor->setRevisionLogMessage(sprintf('Duplicate review: derived-from now covers solutions %s.', implode(', ', $cluster)));
+      $survivor->setRevisionLogMessage(sprintf('Duplicate review: took over the sources of innovation(s) %s.', implode(', ', $loserIds)));
       $survivor->save();
     }
-    return $added;
   }
 
   /**
@@ -195,30 +188,31 @@ final class Linker {
   }
 
   /**
-   * Checks the outcome against storage, not against the objects just saved.
+   * Checks a merge against storage, not against the objects just saved.
    *
    * @throws \Drupal\sti_dedupe\Exception\InvariantViolationException
    */
-  private function verify(int $survivorId, array $cluster, array $losers): void {
+  private function verifyMerge(int $survivorId, array $loserIds): void {
     $storage = $this->entityTypeManager->getStorage('node');
-    $storage->resetCache(array_merge([$survivorId], $losers, $cluster));
+    $storage->resetCache(array_merge([$survivorId], $loserIds));
+    $sourcesOf = static fn(?NodeInterface $node): array => $node
+      ? array_map(static fn(array $item): int => (int) $item['target_id'], $node->get(ContentModel::DERIVED_FROM)->getValue())
+      : [];
 
     $problems = [];
     $survivor = $storage->load($survivorId);
-    $linked = $survivor instanceof NodeInterface
-      ? array_map(static fn(array $item): int => (int) $item['target_id'], $survivor->get(ContentModel::DERIVED_FROM)->getValue())
-      : [];
-    $existing = array_keys($storage->loadMultiple($cluster));
-    if ($missing = array_diff($existing, $linked)) {
-      $problems[] = sprintf('solutions %s are not on survivor %d', implode(', ', $missing), $survivorId);
-    }
-    foreach ($losers as $loserId) {
+    $kept = $sourcesOf($survivor instanceof NodeInterface ? $survivor : NULL);
+    foreach ($loserIds as $loserId) {
       $loser = $storage->load($loserId);
       if (!$loser instanceof NodeInterface) {
         $problems[] = "replaced innovation $loserId no longer exists";
+        continue;
       }
-      elseif ($loser->isPublished()) {
+      if ($loser->isPublished()) {
         $problems[] = "replaced innovation $loserId is still published";
+      }
+      if ($missing = array_diff($sourcesOf($loser), $kept)) {
+        $problems[] = sprintf('sources %s of %d are not on survivor %d', implode(', ', $missing), $loserId, $survivorId);
       }
       if ($this->replacements->survivorOf($loserId) !== $survivorId) {
         $problems[] = "replacement of $loserId by $survivorId was not recorded";
@@ -226,28 +220,10 @@ final class Linker {
     }
 
     if ($problems) {
-      $message = 'Duplicate link failed its own check: ' . implode('; ', $problems) . '.';
+      $message = 'Innovation merge failed its own check: ' . implode('; ', $problems) . '.';
       $this->logger->error($message);
       throw new InvariantViolationException($message);
     }
-  }
-
-  /**
-   * Keeps only the ids of solutions that still exist.
-   *
-   * @return int[]
-   *   Existing solution ids, ascending.
-   */
-  private function existingSolutions(array $nids): array {
-    $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($nids);
-    $ids = [];
-    foreach ($nodes as $nid => $node) {
-      if ($node instanceof NodeInterface && $node->bundle() === ContentModel::SOLUTION) {
-        $ids[] = (int) $nid;
-      }
-    }
-    sort($ids);
-    return $ids;
   }
 
   /**
@@ -262,14 +238,21 @@ final class Linker {
   }
 
   /**
-   * Validates that a and b are two distinct solutions.
+   * Validates a pair of distinct solutions, the subject in the collection.
+   *
+   * The access check stops other collections' facilitators at the route;
+   * this stops a hand-edited URL from writing on another collection's
+   * record, which would otherwise succeed and look valid.
    */
-  private function assertPair(NodeInterface $a, NodeInterface $b): void {
-    if ($a->bundle() !== ContentModel::SOLUTION || $b->bundle() !== ContentModel::SOLUTION) {
+  private function assertDecidable(NodeInterface $collection, NodeInterface $subject, NodeInterface $object): void {
+    if ($subject->bundle() !== ContentModel::SOLUTION || $object->bundle() !== ContentModel::SOLUTION) {
       throw new \InvalidArgumentException('Only solutions can be paired.');
     }
-    if ((int) $a->id() === (int) $b->id()) {
+    if ((int) $subject->id() === (int) $object->id()) {
       throw new \InvalidArgumentException('A solution cannot be paired with itself.');
+    }
+    if (!$subject->hasField(ContentModel::AUDIENCE) || (int) $subject->get(ContentModel::AUDIENCE)->target_id !== (int) $collection->id()) {
+      throw new \InvalidArgumentException(sprintf('Solution %d is not in collection %d.', $subject->id(), $collection->id()));
     }
   }
 

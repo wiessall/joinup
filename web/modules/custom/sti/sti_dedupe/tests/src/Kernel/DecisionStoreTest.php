@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\sti_dedupe\Kernel;
 
+use Drupal\node\NodeInterface;
 use Drupal\sti_dedupe\DecisionStore;
 use Drupal\sti_dedupe\ReplacementStore;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -21,19 +22,24 @@ use PHPUnit\Framework\Attributes\Group;
 final class DecisionStoreTest extends StiDedupeKernelTestBase {
 
   /**
-   * Decisions are symmetric, replaceable, and validated.
+   * Decisions are symmetric within a collection, separate across them.
    */
-  public function testDecisionsAreSymmetricAndValidated(): void {
+  public function testDecisionsArePerCollectionSymmetricAndValidated(): void {
     $store = $this->store();
-    $store->record(9, 4, DecisionStore::DIFFERENT);
-    $this->assertSame(DecisionStore::DIFFERENT, $store->get(4, 9));
-    $store->record(4, 9, DecisionStore::SAME);
-    $this->assertSame(DecisionStore::SAME, $store->get(9, 4));
-    $this->assertSame([9], $store->decidedWith(4));
+    $store->record(100, 9, 4, DecisionStore::DIFFERENT);
+    $this->assertSame(DecisionStore::DIFFERENT, $store->get(100, 4, 9));
+    $store->record(100, 4, 9, DecisionStore::SAME);
+    $this->assertSame(DecisionStore::SAME, $store->get(100, 9, 4));
+    $this->assertSame([9], $store->decidedWith(100, 4));
+
+    $this->assertNull($store->get(200, 4, 9));
+    $this->assertSame([], $store->decidedWith(200, 4));
+    $store->record(200, 4, 9, DecisionStore::SAME);
+    $this->assertSame([[4, 9]], $store->samePairs(), 'Listed once, whoever decided.');
 
     foreach ([[1, 1, DecisionStore::SAME], [1, 2, 'same_separate']] as [$a, $b, $decision]) {
       try {
-        $store->record($a, $b, $decision);
+        $store->record(100, $a, $b, $decision);
         $this->fail("record($a, $b, $decision) must be refused.");
       }
       catch (\InvalidArgumentException) {
@@ -43,23 +49,39 @@ final class DecisionStoreTest extends StiDedupeKernelTestBase {
   }
 
   /**
-   * The cluster follows "same" (and legacy "merged") links, never "different".
+   * Update 11003 copies each old decision to both records' collections.
    */
-  public function testClusterIsTheTransitiveClosureOfSame(): void {
-    $store = $this->store();
-    $store->record(1, 2, DecisionStore::SAME);
-    $store->record(2, 3, DecisionStore::SAME);
-    $store->record(3, 4, DecisionStore::DIFFERENT);
-    $store->record(5, 6, DecisionStore::SAME);
-    $this->container->get('database')->insert('sti_dedupe_decision')
-      ->fields(['nid_low' => 6, 'nid_high' => 7, 'decision' => DecisionStore::LEGACY_MERGED, 'uid' => 0, 'created' => 0])
-      ->execute();
+  public function testUpdateAssignsOldDecisionsToBothCollections(): void {
+    $one = $this->collection('One');
+    $two = $this->collection('Two');
+    $a = $this->solution('A', [], $one);
+    $b = $this->solution('B', [], $two);
+    $c = $this->solution('C', [], $one);
+    $orphan = $this->solution('Orphan', [], $one);
+    $orphan->set('og_audience', NULL)->save();
+    $orphan2 = $this->solution('Orphan 2', [], $one);
+    $orphan2->set('og_audience', NULL)->save();
+    $old = static fn(NodeInterface $x, NodeInterface $y, string $decision): array => [
+      'collection_nid' => 0,
+      'nid_low' => min((int) $x->id(), (int) $y->id()),
+      'nid_high' => max((int) $x->id(), (int) $y->id()),
+      'decision' => $decision,
+      'uid' => 0,
+      'created' => 0,
+    ];
+    $insert = $this->container->get('database')->insert('sti_dedupe_decision')->fields(array_keys($old($a, $b, 'same')));
+    $insert->values($old($a, $b, DecisionStore::SAME))->values($old($a, $c, DecisionStore::DIFFERENT))->values($old($orphan, $orphan2, DecisionStore::SAME))->execute();
 
-    $this->assertSame([1, 2, 3], $store->cluster(3));
-    $this->assertSame([1, 2, 3], $store->cluster(1));
-    $this->assertSame([4], $store->cluster(4));
-    $this->assertSame([5, 6, 7], $store->cluster(5));
-    $this->assertSame([1, 2, 3, 5, 6, 7], $store->cluster(2, 7));
+    \Drupal::moduleHandler()->loadInclude('sti_dedupe', 'install');
+    $message = sti_dedupe_update_11003();
+
+    $store = $this->store();
+    $this->assertSame(DecisionStore::SAME, $store->get((int) $one->id(), (int) $a->id(), (int) $b->id()));
+    $this->assertSame(DecisionStore::SAME, $store->get((int) $two->id(), (int) $a->id(), (int) $b->id()));
+    $this->assertSame(DecisionStore::DIFFERENT, $store->get((int) $one->id(), (int) $a->id(), (int) $c->id()));
+    $this->assertNull($store->get((int) $two->id(), (int) $a->id(), (int) $c->id()), 'Same-collection pairs are not copied.');
+    $this->assertSame(DecisionStore::SAME, $store->get(0, (int) $orphan->id(), (int) $orphan2->id()));
+    $this->assertStringContainsString('1 pair(s) have no collection', $message);
   }
 
   /**

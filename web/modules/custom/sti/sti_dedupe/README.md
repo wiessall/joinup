@@ -1,39 +1,50 @@
 # STI Duplicate Resolution (`sti_dedupe`)
 
-Post-import review of possible duplicate solutions, and curator rulings on
-claims that cannot all be true.
+Post-import review of possible duplicate solutions, decided per collection,
+and reconciliation of ATIO innovations by curators.
 
 ## Model
 
 - A **solution** is a source record: one collection's account of an
   innovation. It is never merged or deleted by this module.
-- "These two solutions are the same innovation" **lives on the solutions**:
-  each one gets a `sameInnovationAs` claim naming the other, attributed to
-  its own collection like every other claim on it, and mirrored into
-  `related_solutions`. In the graph:
-  `?s sti:hasFieldClaim ?c . ?c sti:claimProperty <sameInnovationAs term> ; sti:claimRefValue ?other`.
-- An **ATIO innovation** (`atio_innovation`) is the curated thing. It lists
-  every solution it was derived from in `atio_derived_from`
-  (`atio:derivedFromSource`), each pinned at a revision.
-- When an ATIO innovation exists, the link is also reflected there: the
-  innovation lists every solution of the cluster in `atio_derived_from`.
-- **Claims** stay on the solutions, attributed to their collections. Where
-  the sources of one innovation disagree on a *single-valued* ATIO property,
-  a curator rules which value is authoritative.
+- "This record is the same innovation as that one" is **a collection's
+  claim about its own record**: one `sameInnovationAs` claim on the
+  collection's solution, attributed to that collection and mirrored into its
+  `related_solutions`. The other record is never written. Claims are
+  therefore one-way; readers follow both directions. In the graph:
+  `?s sti:hasFieldClaim ?c . ?c sti:claimProperty <sameInnovationAs term> ; sti:claimRefValue ?other ; sti:claimedBy ?collection`.
+- Decisions are **per collection**: collection B can decide the same pair for
+  its own record, and A's "not the same" does not hide the pair from B.
+- An **ATIO innovation** (`atio_innovation`) is the curated thing. Its
+  `atio_derived_from` (`atio:derivedFromSource`) says what it was actually
+  derived from, each source pinned at a revision. **A decision does not
+  change it.** Claimed duplicates are an input for the innovation's next
+  update: the "Possibly the same" pseudo-field (place it in any
+  `atio_innovation` display) lists them via `SameAsClaims::linkedTo()`, one
+  hop. A record joins `atio_derived_from` when an update actually uses it.
+- Only **ATIO curators** change innovations: when records decided "same" sit
+  on different innovations, a curator may merge them.
 
 ## Duplicate review
 
 ```
-drush sti-dedupe:scan <collection>    → candidates, precomputed into a table
-/admin/content/dedupe                 → collections with pending reviews
-/admin/content/dedupe/{collection}    → queue, best score first
-  → resolve/{solution}/{candidate}    → side by side, two outcomes
+drush sti-dedupe:scan <collection>          → candidates, precomputed into a table
+/node/{collection}/duplicates               → the collection's queue ("Duplicates" tab)
+  → /{solution}/{candidate}                 → side by side, two outcomes
+/admin/content/dedupe                       → curators: every queue, innovations to reconcile
+  → /reconcile/{a}/{b}                      → pick a survivor, or leave them apart
 ```
+
+Access to a collection's queue: the OG permission **review collection
+duplicates** (grant it to the collection facilitator role), or the site
+permission **review sti duplicates** (ATIO curators). Reconciling needs the
+site permission.
 
 | Button | What happens |
 |---|---|
-| Same innovation | The decision is recorded, and every solution in the *cluster* (the pair plus everything already decided "same" with either) gets a `sameInnovationAs` claim naming every other member. The cluster also goes onto the innovation(s) derived from any of them. No innovation yet → decision and claims only. One → every cluster member is added. Several → the reviewer picks a survivor; it gains every source, the others are unpublished, recorded as replaced, and their URIs redirect to the survivor. |
-| Not the same | The decision is recorded and the pair is never offered again. Refused if the pair was already decided "same": undoing a link is a curator's job. |
+| Same innovation | The collection's decision is recorded and its own record gets one `sameInnovationAs` claim naming the other. Nothing else is written. |
+| Not the same | The collection's decision is recorded and the pair is not offered to it again. Refused if the collection already decided "same". |
+| Merge innovations (curators) | The survivor takes over the others' `atio_derived_from` entries, nothing else; the others are unpublished, recorded as replaced, and their URIs redirect to the survivor. |
 
 Scoring uses core fields only (title, owner, country, year), never mapped
 claim values: duplicate review must not wait on vocabulary mappings.
@@ -84,10 +95,14 @@ full pass, however many terms are edited).
 
 | Failure | Guard |
 |---|---|
-| A link half-written (some sources added, loser still published, replacement not recorded) | One transaction; `Linker::verify()` reads storage back and rolls back with an error log. |
-| A solution left without its sameInnovationAs claim | Every subject is checked before any is written; `SameAsClaims::verify()` reads storage back inside the link transaction; `LinkerTest`. |
+| A claim written on another collection's record | Route access per collection; `Linker` refuses a subject outside the collection; `LinkerTest::testSubjectOutsideCollectionIsRefused()`. |
+| A decision that changes an innovation | `LinkerTest::testSameLeavesInnovationsUntouched()`. |
+| A decision recorded without its claim | One transaction; `SameAsClaims::claim()` reads storage back and throws; `LinkerTest::testFailedClaimRollsBackTheDecision()`. |
+| The lookup misses one direction, so curators see too few duplicates | `SameAsClaimsTest::testLinkedToFollowsBothDirectionsOneHop()`. |
+| A merge half-written (sources not taken over, loser still published, replacement not recorded) | One transaction; `Linker::verifyMerge()` reads storage back and rolls back with an error log. |
+| Update 11003 assigns old decisions to the wrong collection | `DecisionStoreTest::testUpdateAssignsOldDecisionsToBothCollections()`; the hook throws if rows are left unassigned. |
 | A re-import deletes the sameInnovationAs claims (they are attributed to the importing collection) | `ird_claims` keeps claims whose property term sits at the root of `claim_properties` (`IrdClaims::isSystemClaim()`); `SameAsClaimsTest::testReimportKeepsSameAsClaims()`. |
-| A refused link leaves claims in a memcache entity cache after the SQL rollback | The survivor check runs before any write; entity caches of the cluster are reset on rollback. |
+| A refused write leaves entities in a memcache entity cache after the SQL rollback | Entity caches of the nodes involved are reset on rollback. |
 | A refresh leaves resolutions out of step with claims | `ResolutionReconciler::verify()`, same pattern. |
 | A ruling saved against values the curator never saw | `StaleResolutionException` when the claimed values changed since the form loaded. |
 | A re-import silently discards a ruling | Tuple identity, `ClaimResolutionTest::testRulingSurvivesIdenticalReimport()`. |
@@ -95,16 +110,17 @@ full pass, however many terms are edited).
 | A replaced innovation's URI starts to 404 | `ReplacedInnovationSubscriber` on `sti_rdf`'s `UriResolveEvent`; `LinkerTest`. |
 
 Rollback covers SQL only. rdf_sync writes to the triplestore as entities are
-saved, so after a failed link, re-sync the innovations involved.
+saved, so after a failed write, re-sync the entities involved.
 
 ## Tests
 
 ```
-ddev exec 'vendor/bin/phpunit -c phpunit.xml web/modules/custom/sti_dedupe'
+ddev exec 'vendor/bin/phpunit -c web/core web/modules/custom/sti/sti_dedupe'
 ```
 
 Kernel tests boot core and contrib only (node, taxonomy, paragraphs,
-entity_reference_revisions, rdf_sync, sti_rdf), never the Joinup
-distribution. Fields owned by other modules are created with their site
+entity_reference_revisions, og, rdf_sync, sti_rdf), never the Joinup
+distribution. OG is enabled only for the group permission; `og_audience` is
+a plain reference. Fields owned by other modules are created with their site
 names. sti_dedupe's own fields are installed from its config/install, minus
 rdf_sync mappings, so the shipped config is what gets tested.

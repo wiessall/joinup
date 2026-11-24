@@ -27,9 +27,10 @@ use Drupal\taxonomy\TermInterface;
 /**
  * Builds the slice of the content model that sti_dedupe works on.
  *
- * Boots core and contrib only, never the Joinup distribution: OG, state
- * machine and the bundle classes are not needed to link solutions or rule on
- * claims, and needing them would be a coupling bug.
+ * Boots core and contrib only, never the Joinup distribution: state machine
+ * and the bundle classes are not needed to record decisions or claims, and
+ * needing them would be a coupling bug. OG is enabled only because
+ * sti_dedupe declares a group permission; og_audience is a plain reference.
  *
  * Fields owned by other modules (solution claims, the claims paragraph,
  * atio_derived_from) are created here with the names and types the site
@@ -71,6 +72,7 @@ abstract class StiDedupeKernelTestBase extends KernelTestBase {
     'taxonomy',
     'entity_reference_revisions',
     'paragraphs',
+    'og',
     'serialization',
     'rdf_sync',
     'sti_rdf',
@@ -101,7 +103,7 @@ abstract class StiDedupeKernelTestBase extends KernelTestBase {
     // Revision authorship needs a real account; uid 1 is burnt first so the
     // acting user is an ordinary one.
     $this->createUser();
-    $this->setUpCurrentUser([], ['review sti duplicates', 'resolve sti claim conflicts']);
+    $this->setUpCurrentUser([], ['review sti duplicates']);
 
     foreach ([ContentModel::COLLECTION, ContentModel::SOLUTION, ContentModel::INNOVATION] as $type) {
       NodeType::create(['type' => $type, 'name' => $type, 'new_revision' => TRUE])->save();

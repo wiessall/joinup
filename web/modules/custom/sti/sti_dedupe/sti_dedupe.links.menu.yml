@@ -1,6 +1,6 @@
 sti_dedupe.collections:
   title: 'Import review'
-  description: 'Resolve possible duplicates and conflicting claims created by the most recent imports.'
+  description: 'Duplicates found by the most recent imports, and ATIO innovations to reconcile.'
   route_name: sti_dedupe.collections
   parent: system.admin_content
   weight: 20

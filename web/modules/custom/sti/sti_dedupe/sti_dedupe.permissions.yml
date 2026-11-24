@@ -1,4 +1,4 @@
 review sti duplicates:
-  title: 'Review possible duplicate solutions'
-  description: 'Decide whether two source records describe the same innovation. A "same" decision can unpublish an ATIO innovation in favour of another; nothing is deleted.'
+  title: 'Review duplicates for every collection and reconcile ATIO innovations'
+  description: 'For ATIO curators. Reconciling folds ATIO innovations into one: the others are unpublished, not deleted. Collection facilitators get the group permission "review collection duplicates" instead.'
   restrict access: true

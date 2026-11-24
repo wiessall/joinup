@@ -59,11 +59,11 @@ final class DuplicateFinder {
       return [];
     }
 
-    // Skip every pair already decided either way, and every solution already
-    // linked to this one through other "same" decisions: within a cluster
-    // the answer follows by transitivity.
+    // Skip every pair this solution's collection has already decided. Other
+    // collections' decisions do not count: each decides for its own records.
     $self = (int) $solution->id();
-    $excluded = array_flip(array_merge($this->decisions->decidedWith($self), $this->decisions->cluster($self)));
+    $collection = $solution->hasField(ContentModel::AUDIENCE) ? (int) $solution->get(ContentModel::AUDIENCE)->target_id : 0;
+    $excluded = array_flip($this->decisions->decidedWith($collection, $self));
     $seen = [];
     $matches = [];
 

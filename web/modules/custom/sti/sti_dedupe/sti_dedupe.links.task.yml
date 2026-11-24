@@ -2,8 +2,11 @@ sti_dedupe.collections:
   title: 'Duplicates'
   route_name: sti_dedupe.collections
   base_route: sti_dedupe.collections
-# sti_dedupe.conflicts:
-#   title: 'Claim conflicts'
-#   route_name: sti_dedupe.conflicts
-#   base_route: sti_dedupe.collections
-#   weight: 10
+
+# On collection pages. Hidden on other nodes: the route only converts
+# collections, so its access check fails there.
+sti_dedupe.review:
+  title: 'Duplicates'
+  route_name: sti_dedupe.review
+  base_route: entity.node.canonical
+  weight: 30

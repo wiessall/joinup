@@ -17,14 +17,17 @@ use Drupal\sti_rdf\StiUri;
 use Drupal\taxonomy\TermInterface;
 
 /**
- * Writes "same innovation" onto the solutions themselves.
+ * Writes and reads sameInnovationAs claims on solutions.
  *
- * Each solution in a "same" cluster carries one sameInnovationAs claim per
- * other member: a claims paragraph whose property is the system term
- * sameInnovationAs, whose object (field_claim_ref_node) is the other
- * solution, and which is attributed to the subject's own collection, like
- * every other claim on it. The claim is mirrored into Joinup's
- * related_solutions so the stock displays show the link.
+ * A claim is one collection's statement about its own record: the subject
+ * is a solution in the deciding collection, the object
+ * (field_claim_ref_node) is the solution it is the same as, and the claim is
+ * attributed to that collection, like every other claim on the subject. The
+ * object's record is never written. So claims are one-way, and code reading
+ * them follows both directions (linkedTo()).
+ *
+ * The claim is mirrored into the subject's related_solutions so the stock
+ * Joinup displays show the link.
  *
  * In the graph:
  *   <solution> sti:hasFieldClaim ?c .
@@ -65,107 +68,94 @@ final class SameAsClaims {
   ) {}
 
   /**
-   * Makes every solution in the cluster name every other one.
+   * Writes "subject is the same innovation as object" on the subject.
    *
-   * Idempotent: a claim that already exists is not written again. Solutions
-   * that no longer exist are skipped.
+   * Attributed to the subject's collection. Idempotent: an existing claim is
+   * not written again. Checked against storage after saving.
    *
-   * @param int[] $cluster
-   *   Solution node ids.
-   *
-   * @return int
-   *   The number of claims added.
+   * @return bool
+   *   TRUE when a claim was added, FALSE when it already existed.
    *
    * @throws \LogicException
-   *   When the claim fields are missing, or a solution has no collection to
-   *   attribute its claim to. Nothing about the link would be recorded on
-   *   the solutions, so this is loud.
-   */
-  public function linkCluster(array $cluster): int {
-    $solutions = $this->solutions($cluster);
-    if (count($solutions) < 2) {
-      return 0;
-    }
-    $property = $this->property();
-
-    // Check every subject before writing to any, so that a solution without
-    // a collection does not leave half the cluster linked.
-    $plan = [];
-    foreach ($solutions as $subjectId => $subject) {
-      $missing = array_values(array_diff(array_keys($solutions), [$subjectId], $this->objectsOf($subject, (int) $property->id())));
-      if ($missing) {
-        $this->assertWritable($subject);
-        $plan[$subjectId] = $missing;
-      }
-    }
-
-    $added = 0;
-    foreach ($plan as $subjectId => $missing) {
-      $subject = $solutions[$subjectId];
-      $collectionId = (int) $subject->get(ContentModel::AUDIENCE)->target_id;
-
-      foreach ($missing as $objectId) {
-        $claim = $this->entityTypeManager->getStorage('paragraph')->create([
-          'type' => ContentModel::CLAIM,
-          ContentModel::CLAIMED_BY => $collectionId,
-          ContentModel::CLAIM_PROPERTY => $property->id(),
-          ContentModel::CLAIM_REF_NODE => $objectId,
-          ContentModel::CLAIMED_AT => $this->time->getRequestTime(),
-        ]);
-        $subject->get(ContentModel::CLAIMS)->appendItem($claim);
-        $this->mirror($subject, (int) $objectId);
-        $added++;
-      }
-
-      $subject->setNewRevision(TRUE);
-      $subject->setRevisionUserId((int) $this->currentUser->id());
-      $subject->setRevisionLogMessage(sprintf('Duplicate review: same innovation as solution(s) %s.', implode(', ', $missing)));
-      $subject->save();
-    }
-    return $added;
-  }
-
-  /**
-   * Lists the ordered pairs in a cluster that lack a claim, read from storage.
-   *
-   * @param int[] $cluster
-   *   Solution node ids; ids that no longer exist are ignored.
-   *
-   * @return list<array{0: int, 1: int}>
-   *   [subject, object] pairs with no sameInnovationAs claim.
-   */
-  public function missingPairs(array $cluster): array {
-    $storage = $this->entityTypeManager->getStorage('node');
-    $storage->resetCache($cluster);
-    $solutions = $this->solutions($cluster);
-    $propertyId = $this->findProperty()?->id();
-
-    $missing = [];
-    foreach ($solutions as $subjectId => $subject) {
-      $objects = $propertyId === NULL ? [] : $this->objectsOf($subject, (int) $propertyId);
-      foreach (array_keys($solutions) as $objectId) {
-        if ($objectId !== $subjectId && !in_array($objectId, $objects, TRUE)) {
-          $missing[] = [(int) $subjectId, (int) $objectId];
-        }
-      }
-    }
-    return $missing;
-  }
-
-  /**
-   * Throws, and logs an error, when any pair in the cluster lacks a claim.
-   *
+   *   When the claim fields are missing or the subject has no collection.
    * @throws \Drupal\sti_dedupe\Exception\InvariantViolationException
+   *   When the saved subject does not carry the claim.
    */
-  public function verify(array $cluster): void {
-    $missing = $this->missingPairs($cluster);
-    if (!$missing) {
-      return;
+  public function claim(NodeInterface $subject, NodeInterface $object): bool {
+    $this->assertWritable($subject);
+    $property = $this->property();
+    $objectId = (int) $object->id();
+    if (in_array($objectId, $this->objectsOf($subject, (int) $property->id()), TRUE)) {
+      return FALSE;
     }
-    $pairs = array_map(static fn(array $pair): string => $pair[0] . '→' . $pair[1], $missing);
-    $message = sprintf('sameInnovationAs claims missing after writing them: %s.', implode(', ', $pairs));
-    $this->logger->error($message);
-    throw new InvariantViolationException($message);
+
+    $subject->get(ContentModel::CLAIMS)->appendItem($this->entityTypeManager->getStorage('paragraph')->create([
+      'type' => ContentModel::CLAIM,
+      ContentModel::CLAIMED_BY => (int) $subject->get(ContentModel::AUDIENCE)->target_id,
+      ContentModel::CLAIM_PROPERTY => $property->id(),
+      ContentModel::CLAIM_REF_NODE => $objectId,
+      ContentModel::CLAIMED_AT => $this->time->getRequestTime(),
+    ]));
+    $this->mirror($subject, $objectId);
+    $subject->setNewRevision(TRUE);
+    $subject->setRevisionUserId((int) $this->currentUser->id());
+    $subject->setRevisionLogMessage(sprintf('Duplicate review: same innovation as solution %d.', $objectId));
+    $subject->save();
+
+    $storage = $this->entityTypeManager->getStorage('node');
+    $storage->resetCache([$subject->id()]);
+    $stored = $storage->load($subject->id());
+    if (!$stored instanceof NodeInterface || !in_array($objectId, $this->objectsOf($stored, (int) $property->id()), TRUE)) {
+      $message = sprintf('sameInnovationAs claim %d→%d missing after writing it.', $subject->id(), $objectId);
+      $this->logger->error($message);
+      throw new InvariantViolationException($message);
+    }
+    return TRUE;
+  }
+
+  /**
+   * Returns the solutions linked to any of the given ones by a claim.
+   *
+   * Both directions: solutions the given ones claim, and solutions claiming
+   * the given ones. One hop only; the given ids are left out.
+   *
+   * @param int[] $nids
+   *   Solution node ids.
+   *
+   * @return int[]
+   *   Solution node ids, ascending.
+   */
+  public function linkedTo(array $nids): array {
+    $propertyId = $this->findProperty()?->id();
+    if (!$nids || $propertyId === NULL) {
+      return [];
+    }
+    $propertyId = (int) $propertyId;
+    $storage = $this->entityTypeManager->getStorage('node');
+    $linked = [];
+
+    foreach ($storage->loadMultiple($nids) as $solution) {
+      if ($solution instanceof NodeInterface) {
+        array_push($linked, ...$this->objectsOf($solution, $propertyId));
+      }
+    }
+
+    // Incoming: the query narrows by object, objectsOf() confirms the
+    // property on the same paragraph.
+    $subjects = $storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', ContentModel::SOLUTION)
+      ->condition(ContentModel::CLAIMS . '.entity:paragraph.' . ContentModel::CLAIM_REF_NODE, array_values($nids), 'IN')
+      ->execute();
+    foreach ($storage->loadMultiple($subjects) as $subject) {
+      if ($subject instanceof NodeInterface && array_intersect($nids, $this->objectsOf($subject, $propertyId))) {
+        $linked[] = (int) $subject->id();
+      }
+    }
+
+    $linked = array_values(array_diff(array_unique($linked), array_map('intval', $nids)));
+    sort($linked);
+    return $linked;
   }
 
   /**
@@ -302,23 +292,6 @@ final class SameAsClaims {
     if (!$solution->hasField(ContentModel::AUDIENCE) || $solution->get(ContentModel::AUDIENCE)->isEmpty()) {
       throw new \LogicException(sprintf('Solution %d has no collection to attribute its sameInnovationAs claim to.', $solution->id()));
     }
-  }
-
-  /**
-   * Loads the solutions among the given ids.
-   *
-   * @return array<int, \Drupal\node\NodeInterface>
-   *   Keyed by node id, ascending.
-   */
-  private function solutions(array $nids): array {
-    $out = [];
-    foreach ($this->entityTypeManager->getStorage('node')->loadMultiple($nids) as $nid => $node) {
-      if ($node instanceof NodeInterface && $node->bundle() === ContentModel::SOLUTION) {
-        $out[(int) $nid] = $node;
-      }
-    }
-    ksort($out);
-    return $out;
   }
 
   /**

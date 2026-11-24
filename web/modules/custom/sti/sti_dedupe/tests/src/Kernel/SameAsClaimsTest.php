@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\sti_dedupe\Kernel;
 
-use Drupal\sti_dedupe\DecisionStore;
 use Drupal\sti_dedupe\SameAsClaims;
 use Drupal\taxonomy\TermInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests sameInnovationAs claims on solutions, and keeping them.
+ * Tests sameInnovationAs claims on solutions: writing, keeping, reading.
  *
  * Every failure here is silent: a claim that disappears on re-import, or a
- * cluster that the backfill skips, leaves a reviewer's decision invisible on
- * the solutions and in the graph while the site carries on.
+ * lookup that misses one direction, leaves a decision invisible on the
+ * solutions, in the graph and to ATIO curators while the site carries on.
  */
 #[CoversClass(SameAsClaims::class)]
 #[Group('sti_dedupe')]
@@ -34,12 +33,11 @@ final class SameAsClaimsTest extends StiDedupeKernelTestBase {
     $readiness = $this->property('readiness', self::READINESS);
     $a = $this->solution('A', [$this->claim($one, $readiness, 'TRL 5')], $one);
     $b = $this->solution('B', [], $two);
-    $this->sameAs()->linkCluster([(int) $a->id(), (int) $b->id()]);
+    $this->sameAs()->claim($a, $b);
 
     $a = $this->reimport($a, $one, [$this->claim($one, $readiness, 'TRL 6')]);
 
     $this->assertSame([(int) $b->id()], $this->sameAs()->objectsOf($this->reload($a)));
-    $this->assertSame([], $this->sameAs()->missingPairs([(int) $a->id(), (int) $b->id()]));
     // The imported claim itself was replaced, as before.
     $labels = [];
     foreach ($this->reload($a)->get('field_claims')->referencedEntities() as $claim) {
@@ -51,20 +49,15 @@ final class SameAsClaimsTest extends StiDedupeKernelTestBase {
   }
 
   /**
-   * Writing a cluster twice adds nothing, and one shared root term is used.
+   * Writing a claim twice adds nothing, and one shared root term is used.
    */
   public function testIdempotentWithOneRootTerm(): void {
-    $one = $this->collection('One');
-    $two = $this->collection('Two');
-    $nids = [
-      (int) $this->solution('A', [], $one)->id(),
-      (int) $this->solution('B', [], $two)->id(),
-      (int) $this->solution('C', [], $two)->id(),
-    ];
+    $a = $this->solution('A', [], $this->collection('One'));
+    $b = $this->solution('B', [], $this->collection('Two'));
 
-    $this->assertSame(6, $this->sameAs()->linkCluster($nids), 'Three solutions, two claims each.');
-    $this->assertSame(0, $this->sameAs()->linkCluster($nids));
-    $this->assertSame([], $this->sameAs()->missingPairs($nids));
+    $this->assertTrue($this->sameAs()->claim($a, $b));
+    $this->assertFalse($this->sameAs()->claim($this->reload($a), $b));
+    $this->assertSame([(int) $b->id()], $this->sameAs()->objectsOf($this->reload($a)));
 
     $property = $this->sameAs()->findProperty();
     $this->assertInstanceOf(TermInterface::class, $property);
@@ -76,79 +69,35 @@ final class SameAsClaimsTest extends StiDedupeKernelTestBase {
   }
 
   /**
+   * The lookup follows claims in both directions, one hop.
+   */
+  public function testLinkedToFollowsBothDirectionsOneHop(): void {
+    $one = $this->collection('One');
+    $source = $this->solution('Source', [], $one);
+    $claimed = $this->solution('Claimed by source', [], $one);
+    $claiming = $this->solution('Claims source', [], $this->collection('Two'));
+    $twoHops = $this->solution('Two hops away', [], $one);
+    $this->sameAs()->claim($source, $claimed);
+    $this->sameAs()->claim($claiming, $source);
+    $this->sameAs()->claim($claimed, $twoHops);
+    // A claim naming the source under another property does not count.
+    $otherClaim = $this->claim($one, $this->property('related', NULL), 'x');
+    $otherClaim->set('field_claim_ref_node', $source->id());
+    $other = $this->solution('Other property', [$otherClaim], $one);
+
+    $expected = [(int) $claimed->id(), (int) $claiming->id()];
+    sort($expected);
+    $this->assertSame($expected, $this->sameAs()->linkedTo([(int) $source->id()]));
+    $this->assertNotContains((int) $other->id(), $this->sameAs()->linkedTo([(int) $source->id()]));
+  }
+
+  /**
    * A collection column that happens to be called sameInnovationAs is not it.
    */
   public function testCollectionTermWithTheSameNameIsNotTheSystemTerm(): void {
     $imported = $this->property(SameAsClaims::PROPERTY_NAME, NULL);
     $this->assertNull($this->sameAs()->findProperty());
     $this->assertNotSame((int) $imported->id(), (int) $this->sameAs()->property()->id());
-  }
-
-  /**
-   * The deploy hook writes claims for every recorded "same" cluster.
-   *
-   * This is the restore path for sites where an earlier sti_dedupe_update_11002
-   * deleted the claims and left only the decisions.
-   */
-  public function testDeployHookRestoresFromDecisions(): void {
-    $one = $this->collection('One');
-    $a = $this->solution('A', [], $one);
-    $b = $this->solution('B', [], $one);
-    $c = $this->solution('C', [], $one);
-    $d = $this->solution('D', [], $one);
-    $e = $this->solution('E', [], $one);
-    $decisions = $this->container->get('sti_dedupe.decisions');
-    $decisions->record((int) $a->id(), (int) $b->id(), DecisionStore::SAME);
-    $decisions->record((int) $b->id(), (int) $c->id(), DecisionStore::SAME);
-    $decisions->record((int) $d->id(), (int) $e->id(), DecisionStore::DIFFERENT);
-
-    $this->runDeployHook();
-
-    $abc = [(int) $a->id(), (int) $b->id(), (int) $c->id()];
-    $this->assertSame([], $this->sameAs()->missingPairs($abc));
-    $this->assertSame([(int) $b->id(), (int) $c->id()], $this->sameAs()->objectsOf($this->reload($a)));
-    $this->assertSame([], $this->sameAs()->objectsOf($this->reload($d)), '"Different" writes nothing.');
-
-    // A second run is a no-op.
-    $revision = (int) $this->reload($a)->getRevisionId();
-    $this->runDeployHook();
-    $this->assertSame($revision, (int) $this->reload($a)->getRevisionId());
-  }
-
-  /**
-   * One broken cluster does not stop the others, and the hook then fails.
-   */
-  public function testDeployHookFailsLoudlyButCompletesTheRest(): void {
-    $one = $this->collection('One');
-    $a = $this->solution('A', [], $one);
-    $b = $this->solution('B', [], $one);
-    $orphan = $this->solution('Orphan', [], $one);
-    $orphan->set('og_audience', NULL)->save();
-    $c = $this->solution('C', [], $one);
-    $decisions = $this->container->get('sti_dedupe.decisions');
-    $decisions->record((int) $a->id(), (int) $b->id(), DecisionStore::SAME);
-    $decisions->record((int) $orphan->id(), (int) $c->id(), DecisionStore::SAME);
-
-    try {
-      $this->runDeployHook();
-      $this->fail('A cluster that could not be restored must fail the deploy hook.');
-    }
-    catch (\RuntimeException $exception) {
-      $this->assertStringContainsString($orphan->id() . ',' . $c->id(), $exception->getMessage());
-    }
-    $this->assertSame([], $this->sameAs()->missingPairs([(int) $a->id(), (int) $b->id()]));
-  }
-
-  /**
-   * Runs the batched deploy hook to completion.
-   */
-  private function runDeployHook(): void {
-    require_once $this->container->get('extension.list.module')->getPath('sti_dedupe') . '/sti_dedupe.deploy.php';
-    $sandbox = [];
-    $guard = 0;
-    do {
-      sti_dedupe_deploy_restore_same_as_claims($sandbox);
-    } while (($sandbox['#finished'] ?? 1) < 1 && $guard++ < 100);
   }
 
   /**

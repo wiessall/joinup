@@ -48,6 +48,11 @@ services:
       - '@current_user'
       - '@logger.channel.sti_dedupe'
 
+  sti_dedupe.og_permission_subscriber:
+    class: Drupal\sti_dedupe\EventSubscriber\OgPermissionSubscriber
+    tags:
+      - { name: event_subscriber }
+
   sti_dedupe.replaced_innovation_subscriber:
     class: Drupal\sti_dedupe\EventSubscriber\ReplacedInnovationSubscriber
     arguments: ['@entity.repository', '@sti_dedupe.replacements']

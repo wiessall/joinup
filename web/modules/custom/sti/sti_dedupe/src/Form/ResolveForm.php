@@ -11,24 +11,23 @@ use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\sti_dedupe\CandidateStore;
 use Drupal\sti_dedupe\ContentModel;
-use Drupal\sti_dedupe\Exception\SurvivorRequiredException;
+use Drupal\sti_dedupe\InnovationLookup;
 use Drupal\sti_dedupe\Linker;
 use Drupal\sti_dedupe\Prefixes;
 use Drupal\sti_rdf\Service\SyncReaderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Side-by-side review of one candidate pair of solutions.
+ * Side-by-side review of one candidate pair, for one collection.
  *
- * Two outcomes, neither of which edits or deletes a solution: "same
- * innovation" links both (and anything already linked to either) to one
- * ATIO innovation; "not the same" stops the pair being offered again.
+ * The solution is the collection's own record; the candidate may be in any
+ * collection. "Same innovation" writes a sameInnovationAs claim on the
+ * solution only; "not the same" stops the pair being offered to this
+ * collection again. Neither touches the candidate or an ATIO innovation.
  *
  * The comparison shows core fields only. Claims are summarised, not diffed:
  * collections disagreeing is normal.
- *
- * @todo add claim conflict resolution
- *  */
+ */
 final class ResolveForm extends FormBase {
 
   /**
@@ -56,6 +55,7 @@ final class ResolveForm extends FormBase {
     private readonly EntityTypeManagerInterface $entityTypeManager,
     private readonly Linker $linker,
     private readonly CandidateStore $candidates,
+    private readonly InnovationLookup $innovations,
     private readonly SyncReaderInterface $rdfSyncReader,
   ) {}
 
@@ -67,6 +67,7 @@ final class ResolveForm extends FormBase {
       $container->get('entity_type.manager'),
       $container->get('sti_dedupe.linker'),
       $container->get('sti_dedupe.candidates'),
+      $container->get('sti_dedupe.innovation_lookup'),
       $container->get('sti_rdf.sync_reader'),
     );
   }
@@ -84,16 +85,24 @@ final class ResolveForm extends FormBase {
   public function buildForm(
     array $form,
     FormStateInterface $form_state,
-    ?NodeInterface $collection = NULL,
+    ?NodeInterface $node = NULL,
     ?NodeInterface $solution = NULL,
     ?NodeInterface $candidate = NULL,
   ): array {
+    $collection = $node;
     $this->collection = $collection;
     $this->solution = $solution;
     $this->candidate = $candidate;
 
-    if (!$solution || !$candidate || $solution->bundle() !== ContentModel::SOLUTION || $candidate->bundle() !== ContentModel::SOLUTION) {
+    if (!$collection || !$solution || !$candidate || $solution->bundle() !== ContentModel::SOLUTION || $candidate->bundle() !== ContentModel::SOLUTION) {
       $form['error'] = ['#markup' => $this->t('This pair could not be loaded.')];
+      return $form;
+    }
+    if ((int) $solution->get(ContentModel::AUDIENCE)->target_id !== (int) $collection->id()) {
+      $form['error'] = ['#markup' => $this->t('%title is not a record of %collection.', [
+        '%title' => $solution->label(),
+        '%collection' => $collection->label(),
+      ])];
       return $form;
     }
 
@@ -135,8 +144,8 @@ final class ResolveForm extends FormBase {
     $form['legend'] = [
       '#theme' => 'item_list',
       '#items' => [
-        $this->t('<strong>Same innovation</strong>: no record is merged or deleted. Each record, and every record already linked to either, gets a sameInnovationAs claim naming the others; they are also listed as sources of one ATIO innovation when one exists.'),
-        $this->t('<strong>Not the same</strong>: the decision is recorded so this pair is not offered again.'),
+        $this->t('<strong>Same innovation</strong>: %collection records that its record is the same innovation as the other one. Nothing is merged or deleted, the other record is not changed, and ATIO innovations stay as they are; ATIO curators use the link when they next update the innovation.', ['%collection' => $collection->label()]),
+        $this->t('<strong>Not the same</strong>: the decision is recorded so this pair is not offered to %collection again.', ['%collection' => $collection->label()]),
       ],
     ];
 
@@ -144,56 +153,22 @@ final class ResolveForm extends FormBase {
   }
 
   /**
-   * Describes what "same" would do, and asks for a survivor if needed.
+   * Shows which ATIO innovations the two records are on, read-only.
    */
   private function buildInnovationSection(NodeInterface $solution, NodeInterface $candidate): array {
-    $plan = $this->linker->plan($solution, $candidate);
-    $section = [
-      '#type' => 'details',
-      '#title' => $this->t('ATIO innovation'),
-      '#open' => TRUE,
+    $storage = $this->entityTypeManager->getStorage('node');
+    $describe = function (NodeInterface $record) use ($storage): string {
+      $labels = array_map(static fn($innovation): string => (string) $innovation->label(), $storage->loadMultiple($this->innovations->derivedFrom([(int) $record->id()])));
+      return $labels ? implode(', ', $labels) : (string) $this->t('none');
+    };
+    return [
+      '#theme' => 'item_list',
+      '#title' => $this->t('ATIO innovations (not changed by this decision)'),
+      '#items' => [
+        $this->t('This record: @list', ['@list' => $describe($solution)]),
+        $this->t('Other record: @list', ['@list' => $describe($candidate)]),
+      ],
     ];
-
-    $section['cluster'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'p',
-      '#value' => $this->t('"Same" would link @count source records.', ['@count' => count($plan->cluster)]),
-    ];
-
-    $innovations = $this->entityTypeManager->getStorage('node')->loadMultiple($plan->innovations);
-    if (!$innovations) {
-      $section['none'] = [
-        '#type' => 'html_tag',
-        '#tag' => 'p',
-        '#value' => $this->t('None of them is on an ATIO innovation yet; the decision and the sameInnovationAs claims will be recorded.'),
-      ];
-      return $section;
-    }
-
-    $options = [];
-    foreach ($innovations as $nid => $innovation) {
-      $options[$nid] = $this->t('@title (@status)', [
-        '@title' => $innovation->label(),
-        '@status' => $innovation instanceof NodeInterface && $innovation->isPublished() ? $this->t('published') : $this->t('unpublished'),
-      ]);
-    }
-
-    if (!$plan->needsSurvivor()) {
-      $section['target'] = [
-        '#type' => 'html_tag',
-        '#tag' => 'p',
-        '#value' => $this->t('They will be listed as sources of %title.', ['%title' => reset($options)]),
-      ];
-      return $section;
-    }
-
-    $section['survivor'] = [
-      '#type' => 'radios',
-      '#title' => $this->t('These records are on @count innovations. Which one survives?', ['@count' => count($options)]),
-      '#description' => $this->t('The survivor gains every source. The others are unpublished, not deleted, and their URIs redirect to the survivor.'),
-      '#options' => $options,
-    ];
-    return $section;
   }
 
   /**
@@ -295,58 +270,30 @@ final class ResolveForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state): void {
-    $trigger = (string) ($form_state->getTriggeringElement()['#name'] ?? '');
-    if ($trigger === 'same' && isset($form['innovation']['survivor']) && !$form_state->getValue('survivor')) {
-      $form_state->setErrorByName('survivor', $this->t('Choose the innovation that survives.'));
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $trigger = (string) ($form_state->getTriggeringElement()['#name'] ?? '');
-    if (!$this->solution || !$this->candidate) {
+    if (!$this->collection || !$this->solution || !$this->candidate) {
       return;
     }
 
-    if ($trigger === 'same') {
-      $survivor = $form_state->getValue('survivor');
-      try {
-        $result = $this->linker->linkSame($this->solution, $this->candidate, $survivor ? (int) $survivor : NULL);
+    try {
+      if ($trigger === 'same') {
+        $this->linker->decideSame($this->collection, $this->solution, $this->candidate);
+        $this->messenger()->addStatus($this->t('Recorded as the same innovation.'));
       }
-      catch (SurvivorRequiredException) {
-        // The records joined another innovation since the form was built.
-        $this->messenger()->addError($this->t('These records are now on several innovations. Choose the one that survives.'));
-        $form_state->setRebuild();
-        return;
-      }
-
-      if ($result->innovation === NULL) {
-        $this->messenger()->addStatus($this->t('Recorded as the same innovation. No ATIO innovation exists for these records yet.'));
-      }
-      else {
-        $this->messenger()->addStatus($this->t('Recorded as the same innovation: @added source record(s) added, @replaced innovation(s) replaced.', [
-          '@added' => count($result->added),
-          '@replaced' => count($result->replaced),
-        ]));
-      }
-    }
-    elseif ($trigger === 'different') {
-      try {
-        $this->linker->markDifferent($this->solution, $this->candidate);
+      elseif ($trigger === 'different') {
+        $this->linker->decideDifferent($this->collection, $this->solution, $this->candidate);
         $this->messenger()->addStatus($this->t('Recorded as different. This pair will not be offered again.'));
       }
-      catch (\LogicException $e) {
-        $this->messenger()->addError($e->getMessage());
-        return;
-      }
+    }
+    catch (\LogicException $e) {
+      // Includes the InvalidArgumentException for a record outside the
+      // collection, which buildForm() already refuses to offer.
+      $this->messenger()->addError($e->getMessage());
+      return;
     }
 
-    if ($this->collection) {
-      $form_state->setRedirectUrl(Url::fromRoute('sti_dedupe.review', ['collection' => $this->collection->id()]));
-    }
+    $form_state->setRedirectUrl(Url::fromRoute('sti_dedupe.review', ['node' => $this->collection->id()]));
   }
 
 }

@@ -1,6 +1,6 @@
 name: 'STI Duplicate Resolution'
 type: module
-description: 'Post-import review of possible duplicate solutions, linked through the ATIO innovation instead of merged.'
+description: 'Post-import review of possible duplicate solutions: each collection claims sameness for its own records; ATIO curators reconcile innovations.'
 package: 'ATIO KB'
 core_version_requirement: ^11.2
 dependencies:
@@ -8,6 +8,7 @@ dependencies:
   - drupal:options
   - drupal:taxonomy
   - drupal:user
+  - og:og
   - entity_reference_revisions:entity_reference_revisions
   - paragraphs:paragraphs
   - search_api:search_api

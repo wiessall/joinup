@@ -4,15 +4,22 @@ declare(strict_types=1);
 
 namespace Drupal\sti_dedupe\Controller;
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\og\OgAccessInterface;
 use Drupal\sti_dedupe\CandidateStore;
+use Drupal\sti_dedupe\ContentModel;
+use Drupal\sti_dedupe\EventSubscriber\OgPermissionSubscriber;
+use Drupal\sti_dedupe\Linker;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Lists pending duplicate reviews and pending claim conflicts.
+ * Duplicate review queues: per collection, and for ATIO curators.
  */
 final class DedupeController extends ControllerBase {
 
@@ -21,6 +28,8 @@ final class DedupeController extends ControllerBase {
   public function __construct(
     private readonly CandidateStore $candidates,
     private readonly RequestStack $requestStack,
+    private readonly Linker $linker,
+    private readonly OgAccessInterface $ogAccess,
   ) {}
 
   /**
@@ -30,13 +39,36 @@ final class DedupeController extends ControllerBase {
     return new static(
       $container->get('sti_dedupe.candidates'),
       $container->get('request_stack'),
+      $container->get('sti_dedupe.linker'),
+      $container->get('og.access'),
     );
+  }
+
+  /**
+   * Access to one collection's queue: its facilitators and ATIO curators.
+   */
+  public function access(NodeInterface $node, AccountInterface $account): AccessResultInterface {
+    if ($node->bundle() !== ContentModel::COLLECTION) {
+      return AccessResult::forbidden()->addCacheableDependency($node);
+    }
+    return AccessResult::allowedIfHasPermission($account, 'review sti duplicates')
+      ->orIf($this->ogAccess->userAccess($node, OgPermissionSubscriber::PERMISSION, $account));
+  }
+
+  /**
+   * The curator overview: collections awaiting review, innovations to merge.
+   */
+  public function collections(): array {
+    return [
+      'queues' => $this->collectionQueues(),
+      'reconcile' => $this->reconcileList(),
+    ];
   }
 
   /**
    * Lists every collection that has solutions awaiting review.
    */
-  public function collections(): array {
+  private function collectionQueues(): array {
     $storage = $this->entityTypeManager()->getStorage('node');
     $ids = $storage->getQuery()
       ->accessCheck(TRUE)
@@ -57,7 +89,7 @@ final class DedupeController extends ControllerBase {
           'data' => [
             '#type' => 'link',
             '#title' => $this->t('Review'),
-            '#url' => Url::fromRoute('sti_dedupe.review', ['collection' => $collection->id()]),
+            '#url' => Url::fromRoute('sti_dedupe.review', ['node' => $collection->id()]),
             '#attributes' => ['class' => ['btn', 'btn-outline-primary', 'btn-sm']],
           ],
         ],
@@ -66,6 +98,7 @@ final class DedupeController extends ControllerBase {
 
     return [
       '#type' => 'table',
+      '#caption' => $this->t('Collections awaiting review'),
       '#header' => [
         $this->t('Collection'),
         $this->t('Need review'),
@@ -80,15 +113,15 @@ final class DedupeController extends ControllerBase {
   /**
    * Title callback for the per-collection queue.
    */
-  public function reviewTitle(NodeInterface $collection): string {
-    return $this->t('Import review — @collection', ['@collection' => $collection->label()])->render();
+  public function reviewTitle(NodeInterface $node): string {
+    return $this->t('Possible duplicates — @collection', ['@collection' => $node->label()])->render();
   }
 
   /**
    * The review queue for one collection.
    */
-  public function review(NodeInterface $collection): array {
-    $collectionId = (int) $collection->id();
+  public function review(NodeInterface $node): array {
+    $collectionId = (int) $node->id();
     $total = $this->candidates->countSourcesForCollection($collectionId);
 
     $page = (int) ($this->requestStack->getCurrentRequest()?->query->get('page') ?? 0);
@@ -124,7 +157,7 @@ final class DedupeController extends ControllerBase {
             '#type' => 'link',
             '#title' => $this->t('Review'),
             '#url' => Url::fromRoute('sti_dedupe.resolve', [
-              'collection' => $collectionId,
+              'node' => $collectionId,
               'solution' => $sourceNid,
               'candidate' => $entry['best_nid'],
             ]),
@@ -158,6 +191,51 @@ final class DedupeController extends ControllerBase {
     $build['#cache']['max-age'] = 0;
 
     return $build;
+  }
+
+  /**
+   * Lists "same" pairs whose records sit on different ATIO innovations.
+   */
+  private function reconcileList(): array {
+    $pairs = $this->linker->pairsToReconcile();
+    $ids = [];
+    foreach ($pairs as $pair) {
+      array_push($ids, ...$pair['solutions'], ...$pair['innovations']);
+    }
+    $nodes = $ids ? $this->entityTypeManager()->getStorage('node')->loadMultiple(array_unique($ids)) : [];
+    $label = static fn(int $nid): string => isset($nodes[$nid]) ? (string) $nodes[$nid]->label() : "#$nid";
+
+    $rows = [];
+    foreach ($pairs as $pair) {
+      [$a, $b] = $pair['solutions'];
+      $rows[] = [
+        'records' => $this->t('@a (@ca) · @b (@cb)', [
+          '@a' => $label($a),
+          '@ca' => isset($nodes[$a]) ? $this->collectionLabel($nodes[$a]) : '—',
+          '@b' => $label($b),
+          '@cb' => isset($nodes[$b]) ? $this->collectionLabel($nodes[$b]) : '—',
+        ]),
+        'innovations' => implode(', ', array_map($label, $pair['innovations'])),
+        'operations' => [
+          'data' => [
+            '#type' => 'link',
+            '#title' => $this->t('Reconcile'),
+            '#url' => Url::fromRoute('sti_dedupe.reconcile', ['a' => $a, 'b' => $b]),
+            '#attributes' => ['class' => ['btn', 'btn-outline-primary', 'btn-sm']],
+          ],
+        ],
+      ];
+    }
+
+    return [
+      '#type' => 'table',
+      '#caption' => $this->t('ATIO innovations to reconcile'),
+      '#header' => [$this->t('Records decided the same'), $this->t('Innovations'), $this->t('Operations')],
+      '#rows' => $rows,
+      '#attributes' => ['class' => ['table', 'table-striped']],
+      '#empty' => $this->t('No records decided the same sit on different innovations.'),
+      '#cache' => ['max-age' => 0],
+    ];
   }
 
   /**

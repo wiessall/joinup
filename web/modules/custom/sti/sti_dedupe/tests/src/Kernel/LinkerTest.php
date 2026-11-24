@@ -7,7 +7,6 @@ namespace Drupal\Tests\sti_dedupe\Kernel;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\sti_dedupe\DecisionStore;
-use Drupal\sti_dedupe\Exception\SurvivorRequiredException;
 use Drupal\sti_dedupe\Linker;
 use Drupal\sti_rdf\Event\UriResolveEvent;
 use Drupal\sti_rdf\StiUri;
@@ -15,188 +14,170 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests "same" and "different" decisions on pairs of solutions.
+ * Tests collection decisions and curator merges.
  *
- * The invariants are the ones whose failure is silent:
- * - a solution (a source record) is never merged or deleted; "same" is a
- *   sameInnovationAs claim on each solution of the cluster, naming every
- *   other one and attributed to that solution's own collection;
- * - a cluster decided "same", directly or transitively, ends up on one
- *   innovation, each source pinned at the revision carrying its claims;
- * - joining two innovations needs a survivor, and without one nothing at
- *   all is written, the decision and the claims included;
- * - the loser is unpublished, not deleted, recorded as replaced, excluded
- *   from lookups, and its URI resolves to the survivor.
+ * Every invariant here fails silently when broken:
+ * - "same" writes one claim, on the deciding collection's record, credited
+ *   to that collection; the other record is never written;
+ * - a collection cannot write on another collection's record;
+ * - a decision touches no ATIO innovation;
+ * - decisions are per collection;
+ * - a curator merge takes over the losers' sources only, and retires the
+ *   losers without deleting them.
  */
 #[CoversClass(Linker::class)]
 #[Group('sti_dedupe')]
 final class LinkerTest extends StiDedupeKernelTestBase {
 
   /**
-   * With no innovation anywhere, the decision and the claims are written.
+   * "Same" is one claim on the subject; the object is untouched.
    */
-  public function testNoInnovationWritesDecisionAndClaims(): void {
+  public function testSameWritesOneClaimOnTheSubjectOnly(): void {
     $one = $this->collection('One');
     $two = $this->collection('Two');
-    $a = $this->solution('Solar pump A', [], $one);
-    $b = $this->solution('Solar pump B', [], $two);
+    $a = $this->solution('A', [], $one);
+    $b = $this->solution('B', [], $two);
+    $revision = (int) $b->getRevisionId();
 
-    $result = $this->linker()->linkSame($a, $b);
+    $this->linker()->decideSame($one, $a, $b);
 
-    $this->assertNull($result->innovation);
-    $this->assertSame(DecisionStore::SAME, $this->decisions()->get((int) $a->id(), (int) $b->id()));
-    $this->assertSame([], $this->innovationIds());
-    $this->assertSame([(int) $b->id() => (int) $one->id()], $this->sameAsClaims($a), 'A names B, claimed by its own collection.');
-    $this->assertSame([(int) $a->id() => (int) $two->id()], $this->sameAsClaims($b), 'B names A, claimed by its own collection.');
-    $this->assertSame([(int) $b->id()], array_map('intval', array_column($this->reload($a)->get('related_solutions')->getValue(), 'target_id')));
+    $this->assertSame([(int) $b->id() => (int) $one->id()], $this->sameAsClaims($a));
+    $this->assertSame([], $this->sameAsClaims($b));
+    $this->assertSame($revision, (int) $this->reload($b)->getRevisionId(), 'The other record was not saved.');
+    $this->assertSame(DecisionStore::SAME, $this->decisions()->get((int) $one->id(), (int) $a->id(), (int) $b->id()));
+    $this->assertNull($this->decisions()->get((int) $two->id(), (int) $a->id(), (int) $b->id()));
   }
 
   /**
-   * One innovation receives the other solution, pinned at its revision.
+   * A record outside the deciding collection is refused, before any write.
    */
-  public function testOneInnovationReceivesTheCluster(): void {
-    $a = $this->solution('Solar pump A');
-    $b = $this->solution('Solar pump B');
-    $innovation = $this->innovation('Solar pump', [$a]);
-    $before = (int) $innovation->getRevisionId();
+  public function testSubjectOutsideCollectionIsRefused(): void {
+    $one = $this->collection('One');
+    $two = $this->collection('Two');
+    $a = $this->solution('A', [], $one);
+    $b = $this->solution('B', [], $two);
 
-    $result = $this->linker()->linkSame($b, $a);
-
-    $this->assertSame((int) $innovation->id(), $result->innovation);
-    $this->assertSame([(int) $b->id()], $result->added);
-    $this->assertSame([(int) $a->id(), (int) $b->id()], $this->sources($innovation));
-
-    $reloaded = $this->reload($innovation);
-    $this->assertGreaterThan($before, (int) $reloaded->getRevisionId(), 'Linking is an editorial change and gets a revision.');
-    $pinned = array_column($reloaded->get('atio_derived_from')->getValue(), 'target_revision_id', 'target_id');
-    $this->assertSame((int) $this->reload($b)->getRevisionId(), (int) $pinned[$b->id()], 'Pinned at the revision that carries the sameInnovationAs claim.');
-    $this->assertArrayHasKey((int) $a->id(), $this->sameAsClaims($b));
+    foreach (['decideSame', 'decideDifferent'] as $method) {
+      try {
+        $this->linker()->$method($one, $b, $a);
+        $this->fail("$method on another collection's record must be refused.");
+      }
+      catch (\InvalidArgumentException) {
+      }
+    }
+    $this->assertSame([], $this->sameAsClaims($b));
+    $this->assertNull($this->decisions()->get((int) $one->id(), (int) $a->id(), (int) $b->id()));
   }
 
   /**
-   * Earlier "same" decisions are followed: the whole cluster comes along.
+   * A decision does not change any innovation's sources or revision.
    */
-  public function testTransitiveClusterComesAlong(): void {
-    $a = $this->solution('A');
-    $b = $this->solution('B');
-    $c = $this->solution('C');
-    $this->linker()->linkSame($a, $b);
-    $innovation = $this->innovation('Innovation', [$c]);
+  public function testSameLeavesInnovationsUntouched(): void {
+    $one = $this->collection('One');
+    $a = $this->solution('A', [], $one);
+    $b = $this->solution('B', [], $this->collection('Two'));
+    $innovation = $this->innovation('I', [$b]);
+    $revision = (int) $innovation->getRevisionId();
 
-    $result = $this->linker()->linkSame($b, $c);
+    $this->linker()->decideSame($one, $a, $b);
 
-    $this->assertSame([(int) $a->id(), (int) $b->id(), (int) $c->id()], $result->cluster);
-    $this->assertSame([(int) $a->id(), (int) $b->id(), (int) $c->id()], $this->sources($innovation));
-    // A was never paired with C directly, but the cluster is complete.
-    $this->assertSame([(int) $b->id(), (int) $c->id()], array_keys($this->sameAsClaims($a)));
-    $this->assertSame([(int) $a->id(), (int) $b->id()], array_keys($this->sameAsClaims($c)));
+    $this->assertSame([(int) $b->id()], $this->sources($innovation));
+    $this->assertSame($revision, (int) $this->reload($innovation)->getRevisionId());
   }
 
   /**
-   * Two innovations without a survivor: refused, and nothing is written.
+   * One collection's decision does not decide the pair for the other.
    */
-  public function testTwoInnovationsWithoutSurvivorWriteNothing(): void {
-    $a = $this->solution('A');
-    $b = $this->solution('B');
+  public function testDecisionsArePerCollection(): void {
+    $one = $this->collection('One');
+    $two = $this->collection('Two');
+    $a = $this->solution('A', [], $one);
+    $b = $this->solution('B', [], $two);
+
+    $this->linker()->decideDifferent($one, $a, $b);
+    $this->assertSame([], $this->decisions()->decidedWith((int) $two->id(), (int) $b->id()), 'Still on offer to Two.');
+
+    // Two may still decide "same" for its own record.
+    $this->linker()->decideSame($two, $b, $a);
+    $this->assertSame([(int) $a->id() => (int) $two->id()], $this->sameAsClaims($b));
+    $this->assertSame([], $this->sameAsClaims($a));
+  }
+
+  /**
+   * A collection's "same" is not silently overturned by its own "different".
+   */
+  public function testDifferentCannotOverturnSame(): void {
+    $one = $this->collection('One');
+    $a = $this->solution('A', [], $one);
+    $b = $this->solution('B', [], $one);
+    $this->linker()->decideSame($one, $a, $b);
+
+    $this->expectException(\LogicException::class);
+    $this->linker()->decideDifferent($one, $b, $a);
+  }
+
+  /**
+   * "Same" pairs on different innovations are listed for curators.
+   */
+  public function testPairsToReconcile(): void {
+    $one = $this->collection('One');
+    $a = $this->solution('A', [], $one);
+    $b = $this->solution('B', [], $this->collection('Two'));
+    $c = $this->solution('C', [], $one);
     $x = $this->innovation('X', [$a]);
     $y = $this->innovation('Y', [$b]);
-    $revisions = [$x->getRevisionId(), $y->getRevisionId()];
+    $this->linker()->decideSame($one, $a, $b);
+    // On no innovation: nothing to reconcile.
+    $this->linker()->decideSame($one, $c, $b);
 
-    try {
-      $this->linker()->linkSame($a, $b);
-      $this->fail('Linking across two innovations without a survivor must be refused.');
-    }
-    catch (SurvivorRequiredException $e) {
-      $this->assertEqualsCanonicalizing([(int) $x->id(), (int) $y->id()], $e->candidates);
-    }
-
-    $this->assertNull($this->decisions()->get((int) $a->id(), (int) $b->id()), 'Nothing is written: no decision.');
-    $this->assertSame([], $this->sameAsClaims($a), 'Nothing is written: no claim.');
-    $this->assertSame([], $this->sameAsClaims($b));
-    $this->assertSame($revisions, [$this->reload($x)->getRevisionId(), $this->reload($y)->getRevisionId()]);
-    $this->assertTrue($this->reload($y)->isPublished());
+    $this->assertSame([
+      ['solutions' => [(int) $a->id(), (int) $b->id()], 'innovations' => [(int) $x->id(), (int) $y->id()]],
+    ], $this->linker()->pairsToReconcile());
   }
 
   /**
-   * The survivor takes everything; the loser is retired, never deleted.
+   * A merge takes over the losers' sources only; losers are retired.
    */
-  public function testSurvivorTakesOverAndLoserIsRetired(): void {
+  public function testMergeTakesOverSourcesAndRetiresLosers(): void {
     $a = $this->solution('A');
     $b = $this->solution('B');
     $c = $this->solution('C');
+    $unrelated = $this->solution('Unrelated');
     $x = $this->innovation('X', [$a]);
     $y = $this->innovation('Y', [$b, $c]);
 
-    $result = $this->linker()->linkSame($a, $b, (int) $x->id());
+    $this->linker()->mergeInnovations((int) $x->id(), [(int) $y->id()]);
 
-    $this->assertSame((int) $x->id(), $result->innovation);
-    $this->assertSame([(int) $y->id()], $result->replaced);
-    // The survivor gains the pair and every source the loser had.
     $this->assertSame([(int) $a->id(), (int) $b->id(), (int) $c->id()], $this->sources($x));
-
+    $this->assertNotContains((int) $unrelated->id(), $this->sources($x));
     $loser = $this->reload($y);
     $this->assertFalse($loser->isPublished());
     $this->assertSame([(int) $b->id(), (int) $c->id()], $this->sources($y), 'The loser keeps its own record of sources.');
-    $this->assertSame((int) $x->id(), $this->container->get('sti_dedupe.replacements')->survivorOf((int) $y->id()));
     $this->assertSame([(int) $x->id()], $this->container->get('sti_dedupe.innovation_lookup')->derivedFrom([(int) $c->id()]));
+    $this->assertCount(4, Node::loadMultiple([$a->id(), $b->id(), $c->id(), $unrelated->id()]), 'Nothing was deleted.');
 
-    // Nothing was deleted.
-    $this->assertCount(3, Node::loadMultiple([$a->id(), $b->id(), $c->id()]));
-
-    // The loser's URI now resolves to the survivor.
     $event = new UriResolveEvent(StiUri::forEntity('innovation', $y->uuid()));
     $this->container->get('event_dispatcher')->dispatch($event);
     $this->assertSame(StiUri::forEntity('innovation', $x->uuid()), $event->getReplacementUri());
   }
 
   /**
-   * Records "different", which can never silently overturn "same".
+   * A refused claim leaves no decision behind.
    */
-  public function testDifferentIsRecordedButCannotOverturnSame(): void {
-    $a = $this->solution('A');
-    $b = $this->solution('B');
-    $c = $this->solution('C');
-
-    $this->linker()->markDifferent($a, $b);
-    $this->assertSame(DecisionStore::DIFFERENT, $this->decisions()->get((int) $b->id(), (int) $a->id()));
-    $this->assertSame([(int) $a->id()], $this->decisions()->cluster((int) $a->id()), '"Different" never joins a cluster.');
-
-    $this->linker()->linkSame($a, $c);
-    $this->expectException(\LogicException::class);
-    $this->linker()->markDifferent($c, $a);
-  }
-
-  /**
-   * Linking refreshes claim conflicts on the innovation straight away.
-   */
-  public function testLinkingSurfacesConflicts(): void {
+  public function testFailedClaimRollsBackTheDecision(): void {
     $one = $this->collection('One');
-    $two = $this->collection('Two');
-    $a = $this->solution('A', [$this->claim($one, $this->property('readiness', self::READINESS), 'TRL 5')]);
-    $b = $this->solution('B', [$this->claim($two, $this->property('maturity', self::READINESS), 'TRL 7')]);
-    $innovation = $this->innovation('Innovation', [$a]);
-
-    $result = $this->linker()->linkSame($a, $b);
-  }
-
-  /**
-   * A failed check rolls back the decision and the claims alike.
-   */
-  public function testFailedCheckRollsBackClaims(): void {
-    $a = $this->solution('A');
-    $b = $this->solution('B');
-    // No collection to attribute B's claim to: refused before any write.
-    $b->set('og_audience', NULL)->save();
+    $a = $this->solution('A', [], $one);
+    $b = $this->solution('B', [], $one);
+    // Breaks the claim write after the decision was recorded.
+    $this->container->get('entity_type.manager')->getStorage('field_config')->load('paragraph.claims.field_claim_ref_node')->delete();
 
     try {
-      $this->linker()->linkSame($a, $b);
-      $this->fail('A solution without a collection cannot carry a claim.');
+      $this->linker()->decideSame($one, $a, $b);
+      $this->fail('A claim without its object field cannot be written.');
     }
     catch (\LogicException) {
     }
-
-    $this->assertNull($this->decisions()->get((int) $a->id(), (int) $b->id()));
-    $this->assertSame([], $this->sameAsClaims($a), 'A is not left half-linked.');
+    $this->assertNull($this->decisions()->get((int) $one->id(), (int) $a->id(), (int) $b->id()));
   }
 
   /**
@@ -215,19 +196,6 @@ final class LinkerTest extends StiDedupeKernelTestBase {
     }
     ksort($out);
     return $out;
-  }
-
-  /**
-   * Returns the ids of every innovation node.
-   *
-   * @return int[]
-   *   Node ids.
-   */
-  private function innovationIds(): array {
-    return array_map('intval', array_values($this->container->get('entity_type.manager')->getStorage('node')->getQuery()
-      ->accessCheck(FALSE)
-      ->condition('type', 'atio_innovation')
-      ->execute()));
   }
 
   /**

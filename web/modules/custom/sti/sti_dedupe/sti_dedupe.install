@@ -8,9 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\node\NodeInterface;
-use Drupal\paragraphs\ParagraphInterface;
 use Drupal\sti_dedupe\ContentModel;
-use Drupal\sti_dedupe\DecisionStore;
 
 /**
  * Implements hook_schema().
@@ -63,28 +61,7 @@ function sti_dedupe_schema(): array {
     ],
   ];
 
-  $schema['sti_dedupe_decision'] = [
-    'description' => 'Reviewer decisions about pairs of solutions, low nid first.',
-    'fields' => [
-      'id' => ['type' => 'serial', 'not null' => TRUE],
-      'nid_low' => ['type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE],
-      'nid_high' => ['type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE],
-      'decision' => [
-        'description' => "One of: same, different; 'merged' rows are history from the first version.",
-        'type' => 'varchar',
-        'length' => 32,
-        'not null' => TRUE,
-      ],
-      'uid' => ['type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0],
-      'created' => ['type' => 'int', 'not null' => TRUE, 'default' => 0],
-    ],
-    'primary key' => ['id'],
-    'unique keys' => ['pair' => ['nid_low', 'nid_high']],
-    'indexes' => [
-      'low_decision' => ['nid_low', 'decision'],
-      'high_decision' => ['nid_high', 'decision'],
-    ],
-  ];
+  $schema['sti_dedupe_decision'] = _sti_dedupe_decision_schema();
 
   $schema['sti_dedupe_replacement'] = _sti_dedupe_replacement_schema();
 
@@ -109,155 +86,113 @@ function _sti_dedupe_replacement_schema(): array {
 }
 
 /**
- * Implements hook_update_dependencies().
+ * Returns the schema of the decision table.
  */
-function sti_dedupe_update_dependencies(): array {
-  // 11002 saves solutions and deletes claim paragraphs; both bundles must be
-  // on their typed sti_namespace URI plugins before anything is synced.
+function _sti_dedupe_decision_schema(): array {
   return [
-    'sti_dedupe' => [
-      11001 => ['sti_rdf' => 11001],
+    'description' => "Each collection's decisions about pairs of solutions, low nid first.",
+    'fields' => [
+      'id' => ['type' => 'serial', 'not null' => TRUE],
+      'collection_nid' => [
+        'description' => 'The collection that decided; 0 for a decision no collection could be found for.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'nid_low' => ['type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE],
+      'nid_high' => ['type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE],
+      'decision' => [
+        'description' => "One of: same, different; 'merged' rows are history from the first version.",
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+      ],
+      'uid' => ['type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0],
+      'created' => ['type' => 'int', 'not null' => TRUE, 'default' => 0],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => ['pair' => ['collection_nid', 'nid_low', 'nid_high']],
+    'indexes' => [
+      'low_decision' => ['nid_low', 'decision'],
+      'high_decision' => ['nid_high', 'decision'],
     ],
   ];
 }
 
 /**
- * Link instead of merge: replacement table and decision vocabulary.
- *
- * Data only. The new fields, paragraph types and settings arrive through
- * config/sync (drush deploy runs cim right after updb): creating them here
- * as well would leave cim to delete or replace them, because config/sync is
- * what cim treats as the truth.
+ * Implements hook_update_last_removed().
  */
-function sti_dedupe_update_11001(): string {
-  $moduleHandler = \Drupal::moduleHandler();
-  $missing = array_filter(
-    ['options', 'entity_reference_revisions', 'paragraphs', 'rdf_sync', 'sti_rdf', 'atio'],
-    static fn(string $module): bool => !$moduleHandler->moduleExists($module),
-  );
-  if ($missing) {
-    throw new \RuntimeException(sprintf('sti_dedupe now requires: %s. Install them with drush pm:install, then run the updates again.', implode(', ', $missing)));
-  }
+function sti_dedupe_update_last_removed(): int {
+  return 11002;
+}
 
+/**
+ * Decisions belong to a collection.
+ *
+ * Earlier decisions wrote a sameInnovationAs claim on both records, each
+ * attributed to its own collection, so each is copied to both records'
+ * collections: that is what the claims already say. Rows whose records have
+ * no collection keep collection_nid 0 and are reported.
+ */
+function sti_dedupe_update_11003(): string {
   $schema = \Drupal::database()->schema();
-  if (!$schema->tableExists('sti_dedupe_replacement')) {
-    $schema->createTable('sti_dedupe_replacement', _sti_dedupe_replacement_schema());
+  $table = 'sti_dedupe_decision';
+  $spec = _sti_dedupe_decision_schema();
+  if (!$schema->fieldExists($table, 'collection_nid')) {
+    $schema->addField($table, 'collection_nid', $spec['fields']['collection_nid']);
   }
-  $decisionSpec = sti_dedupe_schema()['sti_dedupe_decision'];
-  foreach ($decisionSpec['indexes'] as $index => $columns) {
-    if (!$schema->indexExists('sti_dedupe_decision', $index)) {
-      $schema->addIndex('sti_dedupe_decision', $index, $columns, $decisionSpec);
+  $schema->dropUniqueKey($table, 'pair');
+  $schema->addUniqueKey($table, 'pair', $spec['unique keys']['pair']);
+
+  $database = \Drupal::database();
+  $rows = $database->select($table, 'd')->fields('d')->condition('collection_nid', 0)->execute()->fetchAll();
+  $nids = [];
+  foreach ($rows as $row) {
+    $nids[] = (int) $row->nid_low;
+    $nids[] = (int) $row->nid_high;
+  }
+  $audience = [];
+  foreach (\Drupal::entityTypeManager()->getStorage('node')->loadMultiple(array_unique($nids)) as $nid => $node) {
+    if ($node instanceof NodeInterface && $node->hasField(ContentModel::AUDIENCE) && !$node->get(ContentModel::AUDIENCE)->isEmpty()) {
+      $audience[(int) $nid] = (int) $node->get(ContentModel::AUDIENCE)->target_id;
     }
   }
 
-  $converted = \Drupal::database()->update('sti_dedupe_decision')
-    ->fields(['decision' => DecisionStore::SAME])
-    ->condition('decision', 'same_separate')
-    ->execute();
-
-  return (string) t('Created the replacement table and turned @count "same, keep both" decision(s) into "same". The new fields arrive with config import.', [
-    '@count' => $converted,
-  ]);
-}
-
-/**
- * Record the first version's sameInnovationAs claims as decisions.
- *
- * Non-destructive. The claims stay on the solutions: "same" lives there.
- * Each claim also becomes a "same" decision, so that clusters and the
- * duplicate queue know about it. Claims written by the URL-literal fallback
- * (used when field_claim_ref_node was missing) are the one exception: they
- * are removed, and the deploy hook restore_same_as_claims writes proper ones
- * in their place.
- *
- * An earlier revision of this update deleted every such claim, its
- * related_solutions mirror, the property term and field_claim_ref_node.
- * The pairs survived as decisions; the deploy hook writes the claims back.
- */
-function sti_dedupe_update_11002(array &$sandbox): string {
-  $paragraphs = \Drupal::entityTypeManager()->getStorage('paragraph');
-
-  if (!isset($sandbox['tid'])) {
-    $sandbox['tid'] = _sti_dedupe_same_as_term_id();
-    $sandbox['last'] = 0;
-    $sandbox['recorded'] = 0;
-    $sandbox['replaced'] = 0;
-  }
-  if ($sandbox['tid'] === NULL) {
-    $sandbox['#finished'] = 1;
-    return (string) t('No legacy sameInnovationAs claims.');
+  $assigned = 0;
+  $orphans = [];
+  foreach ($rows as $row) {
+    $collections = array_values(array_unique(array_filter([
+      $audience[(int) $row->nid_low] ?? 0,
+      $audience[(int) $row->nid_high] ?? 0,
+    ])));
+    if (!$collections) {
+      $orphans[] = $row->nid_low . '/' . $row->nid_high;
+      continue;
+    }
+    $database->update($table)->fields(['collection_nid' => $collections[0]])->condition('id', $row->id)->execute();
+    $assigned++;
+    if (isset($collections[1])) {
+      $database->insert($table)->fields([
+        'collection_nid' => $collections[1],
+        'nid_low' => $row->nid_low,
+        'nid_high' => $row->nid_high,
+        'decision' => $row->decision,
+        'uid' => $row->uid,
+        'created' => $row->created,
+      ])->execute();
+      $assigned++;
+    }
   }
 
-  $ids = $paragraphs->getQuery()
-    ->accessCheck(FALSE)
-    ->condition('type', ContentModel::CLAIM)
-    ->condition(ContentModel::CLAIM_PROPERTY, $sandbox['tid'])
-    ->condition('id', $sandbox['last'], '>')
-    ->sort('id')
-    ->range(0, 50)
-    ->execute();
-
-  foreach ($paragraphs->loadMultiple($ids) as $claim) {
-    assert($claim instanceof ParagraphInterface);
-    $sandbox['last'] = (int) $claim->id();
-    [$recorded, $replaced] = _sti_dedupe_record_same_as_claim($claim);
-    $sandbox['recorded'] += (int) $recorded;
-    $sandbox['replaced'] += (int) $replaced;
+  $left = (int) $database->select($table, 'd')->condition('collection_nid', 0)->countQuery()->execute()->fetchField();
+  if ($left !== count($orphans)) {
+    throw new \RuntimeException(sprintf('%d decision(s) still have no collection; expected %d.', $left, count($orphans)));
   }
 
-  $sandbox['#finished'] = $ids ? 0.5 : 1;
-  return (string) t('Recorded @recorded legacy sameInnovationAs claim(s) as decisions; @replaced URL-literal claim(s) left for the deploy hook to rewrite.', [
-    '@recorded' => $sandbox['recorded'],
-    '@replaced' => $sandbox['replaced'],
-  ]);
-}
-
-/**
- * Records one legacy sameInnovationAs claim as a decision.
- *
- * @return array{0: bool, 1: bool}
- *   Whether a decision was recorded, and whether the claim was a URL-literal
- *   fallback that was removed.
- */
-function _sti_dedupe_record_same_as_claim(ParagraphInterface $claim): array {
-  $subject = $claim->getParentEntity();
-  $object = NULL;
-  $literal = FALSE;
-  if ($claim->hasField(ContentModel::CLAIM_REF_NODE) && !$claim->get(ContentModel::CLAIM_REF_NODE)->isEmpty()) {
-    $object = $claim->get(ContentModel::CLAIM_REF_NODE)->entity;
+  $message = sprintf('Assigned %d decision(s) to collections.', $assigned);
+  if ($orphans) {
+    $message .= sprintf(' %d pair(s) have no collection and keep collection_nid 0: %s.', count($orphans), implode(', ', $orphans));
   }
-  elseif ($claim->hasField(ContentModel::CLAIM_LITERAL) && preg_match('#/node/(\d+)$#', (string) $claim->get(ContentModel::CLAIM_LITERAL)->value, $matches)) {
-    $object = \Drupal::entityTypeManager()->getStorage('node')->load((int) $matches[1]);
-    $literal = TRUE;
-  }
-
-  $recorded = FALSE;
-  if ($subject instanceof NodeInterface && $object instanceof NodeInterface
-    && $subject->bundle() === ContentModel::SOLUTION && $object->bundle() === ContentModel::SOLUTION
-    && (int) $subject->id() !== (int) $object->id()) {
-    \Drupal::service('sti_dedupe.decisions')->record((int) $subject->id(), (int) $object->id(), DecisionStore::SAME);
-    $recorded = TRUE;
-  }
-
-  if (!$literal || !$subject instanceof NodeInterface || !$subject->hasField(ContentModel::CLAIMS)) {
-    return [$recorded, FALSE];
-  }
-  $items = array_values(array_filter(
-    $subject->get(ContentModel::CLAIMS)->getValue(),
-    static fn(array $item): bool => (int) $item['target_id'] !== (int) $claim->id(),
-  ));
-  $subject->set(ContentModel::CLAIMS, $items);
-  $subject->setNewRevision(TRUE);
-  $subject->setRevisionLogMessage('sti_dedupe: URL-literal sameInnovationAs claim removed; rewritten with a solution reference by the deploy hook.');
-  $subject->save();
-  $claim->delete();
-  return [$recorded, TRUE];
-}
-
-/**
- * Finds the root-level sameInnovationAs claim property term.
- */
-function _sti_dedupe_same_as_term_id(): ?int {
-  $term = \Drupal::service('sti_dedupe.same_as_claims')->findProperty();
-  return $term === NULL ? NULL : (int) $term->id();
+  return $message;
 }
