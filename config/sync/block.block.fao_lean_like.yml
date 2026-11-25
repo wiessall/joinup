@@ -10,7 +10,7 @@ dependencies:
 id: fao_lean_like
 theme: fao_lean
 region: header
-weight: -27
+weight: -26
 provider: null
 plugin: joinup_flag_block
 settings:

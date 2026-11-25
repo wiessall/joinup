@@ -1,18 +1,27 @@
-uuid: 474f0b01-b1ee-48d4-ac5d-68ba521c4adf
+uuid: 8dd483bb-86bc-4fb0-b28c-2c6e4c60ca2d
 langcode: en
 status: true
 dependencies:
   module:
-    - joinup_group
-    - media
+    - file
+    - image
     - node
 id: node.collection_banner
 field_name: collection_banner
 entity_type: node
-type: joinup_group_reference_with_timestamp
+type: image
 settings:
-  target_type: media
-module: joinup_group
+  target_type: file
+  display_field: false
+  display_default: true
+  uri_scheme: private
+  default_image:
+    uuid: ''
+    alt: ''
+    title: ''
+    width: null
+    height: null
+module: image
 locked: false
 cardinality: 1
 translatable: true

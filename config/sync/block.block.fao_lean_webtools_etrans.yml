@@ -10,7 +10,7 @@ dependencies:
 id: fao_lean_webtools_etrans
 theme: fao_lean
 region: header
-weight: -26
+weight: -25
 provider: null
 plugin: oe_webtools_etrans
 settings:

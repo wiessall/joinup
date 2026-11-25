@@ -10,7 +10,7 @@ dependencies:
 id: fao_lean_unpublished_proposed
 theme: fao_lean
 region: content
-weight: 1
+weight: 5
 provider: null
 plugin: entity_unpublished
 settings:

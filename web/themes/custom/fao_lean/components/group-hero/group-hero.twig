@@ -22,7 +22,7 @@
         <div class="fao-group-hero__logo">{{ logo_markup }}</div>
     {% endif %}
     <{{ tag }} class="fao-group-hero__title">
-        {%- if url %}<a href=""{{ url }}>{{ title }}</a>{% else %}{{ title }}{% endif -%}
+        {%- if url %}<a href="{{ url }}">{{ title }}</a>{% else %}{{ title }}{% endif -%}
     </{{ tag }}>
     {% if meta_markup|trim %}
       <div class="fao-group-hero__meta">{{ meta_markup }}</div>

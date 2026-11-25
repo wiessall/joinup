@@ -9,7 +9,7 @@ dependencies:
 id: three_dots_menu
 theme: fao_lean
 region: content
-weight: -28
+weight: -24
 provider: null
 plugin: joinup_local_tasks_block
 settings:

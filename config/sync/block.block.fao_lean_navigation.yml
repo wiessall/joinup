@@ -1,6 +1,6 @@
 uuid: a1302576-880e-4923-9b51-529a55123aee
 langcode: en
-status: false
+status: true
 dependencies:
   config:
     - og_menu.ogmenu.navigation
@@ -12,7 +12,7 @@ dependencies:
     - fao_lean
 id: fao_lean_navigation
 theme: fao_lean
-region: header
+region: content
 weight: -25
 provider: null
 plugin: 'group_menu_block:navigation'

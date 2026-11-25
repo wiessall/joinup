@@ -11,7 +11,7 @@ _core:
 id: fao_lean_userheader
 theme: fao_lean
 region: header
-weight: -26
+weight: -24
 provider: null
 plugin: user_header_block
 settings:

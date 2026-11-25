@@ -23,10 +23,8 @@ dependencies:
     - field.field.node.collection.spatial_coverage
     - field.field.node.collection.webpage
     - node.type.collection
-    - og_menu.ogmenu.quick_links
   module:
     - custom_markup_block
-    - joinup_group
     - joinup_layout
     - layout_builder
     - layout_discovery
@@ -39,41 +37,30 @@ third_party_settings:
     allow_custom: false
     sections:
       -
+        layout_id: layout_onecol
+        layout_settings:
+          label: 'Content heading'
+          context_mapping: {  }
+          custom_id: null
+          custom_classes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+          regions:
+            content:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+        components: {  }
+        third_party_settings: {  }
+      -
         layout_id: joinup_layout_group_heading
         layout_settings:
           label: 'Heading section'
           context_mapping: {  }
         components:
-          936efae5-5b46-476a-bcb4-ceaaf7c44291:
-            uuid: 936efae5-5b46-476a-bcb4-ceaaf7c44291
-            region: aside
-            configuration:
-              id: 'group_menu_block:quick_links'
-              label: 'Quick links'
-              label_display: visible
-              provider: joinup_group
-              context_mapping:
-                og: layout_builder.entity
-              level: 1
-              depth: 0
-            weight: 0
-            additional:
-              component_attributes:
-                block_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
-                block_title_attributes:
-                  id: ''
-                  class: mb-3
-                  style: ''
-                  data: ''
-                block_content_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
           cceefe85-5aa2-4abc-85fb-cb41542894b0:
             uuid: cceefe85-5aa2-4abc-85fb-cb41542894b0
             region: left
@@ -86,20 +73,14 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: entity_reference_entity_view
+                type: entity_reference_label
                 label: above
                 settings:
-                  view_mode: about
+                  link: false
                 third_party_settings:
-                  field_delimiter:
-                    delimiter: ''
-                  field_formatter_range:
-                    order: 0
-                    limit: 0
-                    offset: 0
-                  joinup_slick:
-                    preset: ''
-                    field_label: true
+                  entity_form_field_label:
+                    new_label: ''
+                    rewrite_label: 0
                   template_suggestion:
                     template_suggestion: ''
             weight: 0
@@ -116,11 +97,14 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: entity_reference_entity_view
+                type: entity_reference_label
                 label: above
                 settings:
-                  view_mode: teaser
+                  link: false
                 third_party_settings:
+                  entity_form_field_label:
+                    new_label: ''
+                    rewrite_label: 0
                   field_delimiter:
                     delimiter: ''
                   field_formatter_range:
@@ -188,23 +172,6 @@ third_party_settings:
                     template_suggestion: fieldset
             weight: 0
             additional: {  }
-          5238a36e-f754-4554-a633-728f6c2abf7e:
-            uuid: 5238a36e-f754-4554-a633-728f6c2abf7e
-            region: main
-            configuration:
-              id: 'field_block:node:collection:collection_banner'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: entity_reference_entity_view
-                label: above
-                settings:
-                  view_mode: default
-                  link: false
-                third_party_settings: {  }
-            weight: 6
-            additional: {  }
           01252688-4849-43e7-9ac3-e7cb4d839370:
             uuid: 01252688-4849-43e7-9ac3-e7cb4d839370
             region: main
@@ -256,6 +223,37 @@ third_party_settings:
                   target: ''
                 third_party_settings: {  }
             weight: 1
+            additional: {  }
+          74e7f60a-9bd3-4569-8a6a-d917155e3644:
+            uuid: 74e7f60a-9bd3-4569-8a6a-d917155e3644
+            region: aside
+            configuration:
+              id: 'field_block:node:collection:logo'
+              label: Logo
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: image
+                label: hidden
+                settings:
+                  image_link: ''
+                  image_style: ''
+                  image_loading:
+                    attribute: lazy
+                  svg_attributes:
+                    width: null
+                    height: null
+                  svg_render_as_image: true
+                third_party_settings:
+                  entity_form_field_label:
+                    new_label: ''
+                    rewrite_label: 0
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
             additional: {  }
         third_party_settings: {  }
       -

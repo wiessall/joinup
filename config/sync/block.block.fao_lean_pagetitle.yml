@@ -10,7 +10,7 @@ dependencies:
 id: fao_lean_pagetitle
 theme: fao_lean
 region: content
-weight: -26
+weight: -27
 provider: null
 plugin: page_title_block
 settings:

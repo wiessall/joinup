@@ -10,7 +10,7 @@ dependencies:
 id: fao_lean_irdannotationtable
 theme: fao_lean
 region: content
-weight: 0
+weight: 4
 provider: null
 plugin: ird_annotation_table
 settings:

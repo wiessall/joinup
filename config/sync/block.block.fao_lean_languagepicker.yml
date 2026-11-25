@@ -10,7 +10,7 @@ dependencies:
 id: fao_lean_languagepicker
 theme: fao_lean
 region: header
-weight: 0
+weight: -22
 provider: null
 plugin: language_picker
 settings:

@@ -10,7 +10,7 @@ dependencies:
 id: fao_lean_overviewmessage
 theme: fao_lean
 region: content
-weight: -19
+weight: -14
 provider: null
 plugin: overview_message_block
 settings:
