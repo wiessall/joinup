@@ -13,7 +13,7 @@ _core:
 id: fao_lean_joinup_add_content
 theme: fao_lean
 region: content
-weight: -23
+weight: -22
 provider: null
 plugin: add_content_block
 settings:

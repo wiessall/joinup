@@ -1,0 +1,15 @@
+uuid: b6610b2a-cf14-4847-b4c7-27d914c4e015
+langcode: en
+status: true
+dependencies: {  }
+name: collection_banner_wide
+label: 'Collection banner (wide)'
+effects:
+  0cb6cd38-91cf-412a-9e40-976b682908e6:
+    uuid: 0cb6cd38-91cf-412a-9e40-976b682908e6
+    id: image_scale_and_crop
+    weight: 0
+    data:
+      width: 1600
+      height: 400
+      anchor: center-center

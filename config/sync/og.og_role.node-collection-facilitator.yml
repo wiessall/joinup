@@ -107,6 +107,7 @@ permissions:
   - 'replicate entities'
   - 'request collection archival'
   - 'resend email confirmation request'
+  - 'review collection duplicates'
   - 'unpin group content'
   - 'unshare discussion content'
   - 'unshare document content'

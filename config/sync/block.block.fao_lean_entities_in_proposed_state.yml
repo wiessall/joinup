@@ -11,7 +11,7 @@ dependencies:
 id: fao_lean_entities_in_proposed_state
 theme: fao_lean
 region: content
-weight: 7
+weight: 8
 provider: null
 plugin: proposed_entities
 settings:

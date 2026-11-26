@@ -1,0 +1,13 @@
+uuid: 7977720f-306e-40ea-ad46-111643a227f4
+langcode: en
+status: true
+dependencies: {  }
+id: collection_banner
+label: 'Collection banner'
+description: ''
+source: image
+queue_thumbnail_downloads: false
+new_revision: false
+source_configuration:
+  source_field: image
+field_map: {  }

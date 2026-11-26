@@ -1,0 +1,15 @@
+uuid: 6e9bc102-96f5-4741-8d9c-6a2682591b97
+langcode: en
+status: true
+dependencies: {  }
+name: collection_logo_header
+label: 'Collection logo (header)'
+effects:
+  83caf62b-29d3-4f13-83b5-7866698fab09:
+    uuid: 83caf62b-29d3-4f13-83b5-7866698fab09
+    id: image_scale
+    weight: 0
+    data:
+      width: 160
+      height: 160
+      upscale: false

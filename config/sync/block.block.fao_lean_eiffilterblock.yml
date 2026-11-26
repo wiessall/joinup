@@ -10,7 +10,7 @@ dependencies:
 id: fao_lean_eiffilterblock
 theme: fao_lean
 region: content
-weight: -4
+weight: -3
 provider: null
 plugin: eif_filter_block
 settings:

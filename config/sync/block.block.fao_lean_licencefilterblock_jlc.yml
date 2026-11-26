@@ -10,7 +10,7 @@ dependencies:
 id: fao_lean_licencefilterblock_jlc
 theme: fao_lean
 region: content
-weight: -7
+weight: -6
 provider: null
 plugin: licence_filter_block
 settings:

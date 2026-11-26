@@ -1,0 +1,28 @@
+uuid: 6d29635d-1e35-498f-be7d-4e86faef13d3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.og_audience
+    - media.type.collection_banner
+    - node.type.collection
+    - node.type.solution
+  module:
+    - og
+id: media.collection_banner.og_audience
+field_name: og_audience
+entity_type: media
+bundle: collection_banner
+label: 'Groups audience'
+description: 'OG group audience reference field.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'og:default'
+  handler_settings:
+    target_bundles:
+      collection: collection
+      solution: solution
+field_type: og_standard_reference

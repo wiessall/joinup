@@ -12,7 +12,7 @@ dependencies:
 id: fao_lean_views_block__solutions_meta_entity_solutions_meta_entity_block
 theme: fao_lean
 region: content
-weight: -3
+weight: -2
 provider: null
 plugin: 'views_block:solutions_meta_entity-solutions_meta_entity_block'
 settings:

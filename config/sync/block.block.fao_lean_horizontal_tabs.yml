@@ -9,7 +9,7 @@ dependencies:
 id: fao_lean_horizontal_tabs
 theme: fao_lean
 region: content
-weight: -22
+weight: -21
 provider: null
 plugin: local_tasks_block
 settings:

@@ -12,7 +12,7 @@ dependencies:
 id: fao_lean_table_of_contents
 theme: fao_lean
 region: content
-weight: -2
+weight: -1
 provider: null
 plugin: 'custom_page_toc:navigation'
 settings:

@@ -1,0 +1,20 @@
+uuid: 0b05993f-9847-4319-8b7d-95aa5020c7b1
+langcode: en
+status: true
+dependencies:
+  theme:
+    - fao_lean
+id: fao_lean_tabs
+theme: fao_lean
+region: content
+weight: -26
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: Tabs
+  label_display: '0'
+  provider: core
+  primary: false
+  secondary: true
+visibility: {  }

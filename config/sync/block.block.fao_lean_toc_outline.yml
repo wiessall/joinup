@@ -12,7 +12,7 @@ dependencies:
 id: fao_lean_toc_outline
 theme: fao_lean
 region: content
-weight: 0
+weight: 1
 provider: null
 plugin: toc_outline
 settings:

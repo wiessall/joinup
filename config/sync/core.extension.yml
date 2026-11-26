@@ -269,6 +269,7 @@ module:
   sti_qa: 0
   sti_rdf: 0
   sti_reference: 0
+  sti_ui: 0
   subpathauto: 0
   svg_image: 0
   svg_image_responsive: 0
@@ -319,6 +320,5 @@ theme:
   oe_bootstrap_theme: 0
   ventuno: 0
   iop: 0
-  fao: 0
   fao_lean: 0
 profile: joinup
