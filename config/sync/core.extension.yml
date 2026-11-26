@@ -320,5 +320,6 @@ theme:
   oe_bootstrap_theme: 0
   ventuno: 0
   iop: 0
+  fao: 0
   fao_lean: 0
 profile: joinup

@@ -1,0 +1,14 @@
+uuid: 62976485-96ad-40b6-87c7-ffb0dba46ba2
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.content_curator
+  module:
+    - user
+id: user_remove_role_action.content_curator
+label: 'Remove the Content curator role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: content_curator
