@@ -4,8 +4,8 @@ sti_dedupe.collections:
   base_route: system.admin_content
   weight: 20
 
-sti_dedupe.collection_tab:
+sti_dedupe.review:
   title: 'Import review'
-  route_name: sti_dedupe.collection_tab
+  route_name: sti_dedupe.review
   parent_id: joinup.moderate_content
   weight: 30

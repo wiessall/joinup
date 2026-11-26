@@ -249,11 +249,4 @@ final class DedupeController extends ControllerBase {
     return $collection instanceof NodeInterface ? (string) $collection->label() : '—';
   }
 
-  public function reviewNode(NodeInterface $node): array {
-    return $this->review($node);
-  }
-
-  public function reviewNodeTitle(NodeInterface $node): string {
-    return $this->reviewTitle($node);
-  }
 }
