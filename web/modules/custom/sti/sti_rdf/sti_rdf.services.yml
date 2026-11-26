@@ -47,3 +47,14 @@ services:
       - '@current_user'
       - '@sti_rdf.sync_reader'
   Drupal\sti_rdf\Service\MappingCuration: '@sti_rdf.mapping_curation'
+
+  sti_dedupe.og_permission_subscriber:
+    class: Drupal\sti_dedupe\EventSubscriber\OgPermissionSubscriber
+    tags:
+      - { name: event_subscriber }
+
+  sti_dedupe.review_access:
+    class: Drupal\sti_dedupe\Access\ReviewAccessCheck
+    arguments: ['@og.access']
+    tags:
+      - { name: access_check, applies_to: _sti_dedupe_review_access }

@@ -10,33 +10,22 @@ use Drupal\og\GroupPermission;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Declares the group permission to review a collection's duplicates.
+ * Lets collection roles be granted the import review of their own collection.
  */
 final class OgPermissionSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
-  public const PERMISSION = 'review collection duplicates';
-
-  /**
-   * {@inheritdoc}
-   */
   public static function getSubscribedEvents(): array {
-    return [PermissionEventInterface::EVENT_NAME => 'declare'];
+    return [PermissionEventInterface::EVENT_NAME => [['providePermissions']]];
   }
 
-  /**
-   * Adds the permission to collections.
-   */
-  public function declare(PermissionEventInterface $event): void {
-    if ($event->getGroupEntityTypeId() !== 'node' || $event->getGroupBundleId() !== 'collection') {
-      return;
-    }
+  public function providePermissions(PermissionEventInterface $event): void {
     $event->setPermissions([
       new GroupPermission([
-        'name' => self::PERMISSION,
-        'title' => $this->t("Review possible duplicates of this collection's records"),
-        'description' => $this->t("Record that one of this collection's records is, or is not, the same innovation as another record. Writes a sameInnovationAs claim on this collection's record only."),
+        'name' => 'review sti duplicates',
+        'title' => $this->t('Review the import duplicates of this collection'),
+        'restrict access' => TRUE,
       ]),
     ]);
   }

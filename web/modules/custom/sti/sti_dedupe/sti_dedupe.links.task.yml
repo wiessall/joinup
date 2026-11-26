@@ -1,12 +1,11 @@
 sti_dedupe.collections:
-  title: 'Duplicates'
+  title: 'Import review'
   route_name: sti_dedupe.collections
-  parent_id: joinup.moderate_content
+  base_route: system.admin_content
+  weight: 20
 
-# On collection pages. Hidden on other nodes: the route only converts
-# collections, so its access check fails there.
-sti_dedupe.review:
-  title: 'Duplicates'
-  route_name: sti_dedupe.review
-  base_route: entity.node.canonical
+sti_dedupe.collection_tab:
+  title: 'Import review'
+  route_name: sti_dedupe.collection_tab
+  parent_id: joinup.moderate_content
   weight: 30

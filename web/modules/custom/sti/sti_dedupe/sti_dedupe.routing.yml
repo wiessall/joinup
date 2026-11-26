@@ -67,3 +67,18 @@ sti_dedupe.settings:
     _title: 'Duplicate resolution settings'
   requirements:
     _permission: 'administer site configuration'
+
+sti_dedupe.collection_tab:
+  path: '/node/{node}/import-review'
+  defaults:
+    _controller: '\Drupal\sti_dedupe\Controller\DedupeController::reviewNode'
+    _title_callback: '\Drupal\sti_dedupe\Controller\DedupeController::reviewNodeTitle'
+  options:
+    parameters:
+      node:
+        type: 'entity:node'
+        bundle:
+          - collection
+  requirements:
+    _permission: 'review sti duplicates'
+    node: \d+
