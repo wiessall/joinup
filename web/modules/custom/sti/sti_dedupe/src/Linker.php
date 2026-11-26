@@ -18,7 +18,9 @@ use Drupal\sti_dedupe\Exception\InvariantViolationException;
  *
  * - A collection decides about its own records (decideSame(),
  *   decideDifferent()). "Same" writes the decision and one sameInnovationAs
- *   claim on the collection's record. No other record and no ATIO
+ *   claim on the collection's record. A site-level curator's "same" also
+ *   writes the reverse claim and decision, attributed to the other record's
+ *   collection, as if that collection had decided too. No ATIO
  *   innovation is written: atio_derived_from says what an innovation was
  *   derived from, and that has not changed. The claim is read when the
  *   innovation is next updated (SameAsClaims::linkedTo()).
@@ -47,24 +49,34 @@ final class Linker {
   /**
    * Records that a collection's record is the same innovation as another.
    *
+   * @param bool $bothDirections
+   *   Also record it for the object's collection, with the reverse claim on
+   *   the object. For site-level curators; the caller checks the permission.
+   *
    * @throws \InvalidArgumentException
    *   When the subject is not in the collection, or the pair is invalid.
    * @throws \Drupal\sti_dedupe\Exception\InvariantViolationException
    *   When the claim was written but does not check out. Rolled back.
    */
-  public function decideSame(NodeInterface $collection, NodeInterface $subject, NodeInterface $object): void {
+  public function decideSame(NodeInterface $collection, NodeInterface $subject, NodeInterface $object, bool $bothDirections = FALSE): void {
     $this->assertDecidable($collection, $subject, $object);
     $transaction = $this->database->startTransaction();
     try {
       $this->decisions->record((int) $collection->id(), (int) $subject->id(), (int) $object->id(), DecisionStore::SAME);
       $this->candidates->deletePair((int) $subject->id(), (int) $object->id());
       $this->sameAs->claim($subject, $object);
+      if ($bothDirections) {
+        // claim() throws when the object has no collection; the rollback
+        // then undoes the subject's side too.
+        $this->sameAs->claim($object, $subject);
+        $this->decisions->record((int) $object->get(ContentModel::AUDIENCE)->target_id, (int) $object->id(), (int) $subject->id(), DecisionStore::SAME);
+      }
     }
     catch (\Throwable $e) {
       $transaction->rollBack();
       // Saved entities may have reached a persistent cache (memcache) that
       // the rollback does not touch.
-      $this->entityTypeManager->getStorage('node')->resetCache([$subject->id()]);
+      $this->entityTypeManager->getStorage('node')->resetCache([$subject->id(), $object->id()]);
       throw $e;
     }
   }

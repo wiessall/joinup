@@ -20,6 +20,8 @@ use PHPUnit\Framework\Attributes\Group;
  * - "same" writes one claim, on the deciding collection's record, credited
  *   to that collection; the other record is never written;
  * - a collection cannot write on another collection's record;
+ * - a site-level "same" writes both claims, each credited to its own
+ *   record's collection, and decides the pair for both collections;
  * - a decision touches no ATIO innovation;
  * - decisions are per collection;
  * - a curator merge takes over the losers' sources only, and retires the
@@ -46,6 +48,41 @@ final class LinkerTest extends StiDedupeKernelTestBase {
     $this->assertSame($revision, (int) $this->reload($b)->getRevisionId(), 'The other record was not saved.');
     $this->assertSame(DecisionStore::SAME, $this->decisions()->get((int) $one->id(), (int) $a->id(), (int) $b->id()));
     $this->assertNull($this->decisions()->get((int) $two->id(), (int) $a->id(), (int) $b->id()));
+  }
+
+  /**
+   * A site-level "same" writes the claim and the decision in both directions.
+   */
+  public function testBothDirectionsWritesBothClaims(): void {
+    $one = $this->collection('One');
+    $two = $this->collection('Two');
+    $a = $this->solution('A', [], $one);
+    $b = $this->solution('B', [], $two);
+
+    $this->linker()->decideSame($one, $a, $b, TRUE);
+
+    $this->assertSame([(int) $b->id() => (int) $one->id()], $this->sameAsClaims($a));
+    $this->assertSame([(int) $a->id() => (int) $two->id()], $this->sameAsClaims($b));
+    $this->assertSame(DecisionStore::SAME, $this->decisions()->get((int) $two->id(), (int) $b->id(), (int) $a->id()));
+  }
+
+  /**
+   * A reverse claim that cannot be written rolls back the subject's side too.
+   */
+  public function testBothDirectionsIsAllOrNothing(): void {
+    $one = $this->collection('One');
+    $a = $this->solution('A', [], $one);
+    $b = $this->solution('B', [], $this->collection('Two'));
+    $b->set('og_audience', NULL)->save();
+
+    try {
+      $this->linker()->decideSame($one, $a, $b, TRUE);
+      $this->fail('A reverse claim without a collection must be refused.');
+    }
+    catch (\LogicException) {
+    }
+    $this->assertSame([], $this->sameAsClaims($a));
+    $this->assertNull($this->decisions()->get((int) $one->id(), (int) $a->id(), (int) $b->id()));
   }
 
   /**

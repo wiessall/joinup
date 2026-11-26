@@ -143,10 +143,13 @@ final class ResolveForm extends FormBase {
       '#submit' => ['::submitForm'],
     ];
 
+    $same = $this->bothDirections()
+      ? $this->t('<strong>Same innovation</strong>: both records are recorded as the same innovation, each on behalf of its own collection (%collection and %other). Nothing is merged or deleted, and ATIO innovations stay as they are; ATIO curators use the link when they next update the innovation.', ['%collection' => $collection->label(), '%other' => $this->collectionLabel($candidate)])
+      : $this->t('<strong>Same innovation</strong>: %collection records that its record is the same innovation as the other one. Nothing is merged or deleted, the other record is not changed, and ATIO innovations stay as they are; ATIO curators use the link when they next update the innovation.', ['%collection' => $collection->label()]);
     $form['legend'] = [
       '#theme' => 'item_list',
       '#items' => [
-        $this->t('<strong>Same innovation</strong>: %collection records that its record is the same innovation as the other one. Nothing is merged or deleted, the other record is not changed, and ATIO innovations stay as they are; ATIO curators use the link when they next update the innovation.', ['%collection' => $collection->label()]),
+        $same,
         $this->t('<strong>Not the same</strong>: the decision is recorded so this pair is not offered to %collection again.', ['%collection' => $collection->label()]),
       ],
     ];
@@ -259,6 +262,13 @@ final class ResolveForm extends FormBase {
   }
 
   /**
+   * Site-level curators decide for both records; collection curators for their own only.
+   */
+  private function bothDirections(): bool {
+    return $this->currentUser()->hasPermission('review sti duplicates');
+  }
+
+  /**
    * Returns a solution's collection label, or a dash.
    */
   private function collectionLabel(NodeInterface $solution): string {
@@ -280,7 +290,7 @@ final class ResolveForm extends FormBase {
 
     try {
       if ($trigger === 'same') {
-        $this->linker->decideSame($this->collection, $this->solution, $this->candidate);
+        $this->linker->decideSame($this->collection, $this->solution, $this->candidate, $this->bothDirections());
         $this->messenger()->addStatus($this->t('Recorded as the same innovation.'));
       }
       elseif ($trigger === 'different') {
