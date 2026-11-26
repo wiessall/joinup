@@ -1,0 +1,11 @@
+/* Drupal renders %-placeholders in translated strings as <em class="placeholder">,
+   which Bootstrap 5 styles as a loading skeleton (grey block). Undo that. */
+em.placeholder {
+  display: inline;
+  min-height: 0;
+  vertical-align: baseline;
+  cursor: auto;
+  background-color: transparent;
+  opacity: 1;
+  animation: none;
+}

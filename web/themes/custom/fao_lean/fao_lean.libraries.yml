@@ -12,6 +12,7 @@ global:
       css/base/fonts.css: {}
       css/base/icons.css: {}
       css/base/tokens.css: {}
+      css/base/drupal.css: {}
     layout:
       css/layout/layout.css: {}
     theme:
